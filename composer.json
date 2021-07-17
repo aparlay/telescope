@@ -1,0 +1,48 @@
+{
+    "name": "aparlay/core",
+    "description": "Core functionality share between Alua and Waptap",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Aparlay\\Core\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ramin Farmani",
+            "email": "ramin@aparlay.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.0",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-imagick": "*",
+        "ext-json": "*",
+        "ext-mongodb": "*",
+        "ext-openssl": "*",
+        "fideloper/proxy": "^4.4",
+        "fruitcake/laravel-cors": "^2.0",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "jenssegers/mongodb": "^3.8",
+        "laravel/framework": "^8.40",
+        "laravel/octane": "^1.0",
+        "laravel/socialite": "^5.2",
+        "laravel/telescope": "^4.6",
+        "laravel/tinker": "^2.5",
+        "spiral/roadrunner": "^2.0"
+    },
+    "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.9.1",
+        "facade/ignition": "^2.5",
+        "fakerphp/faker": "^1.9.1",
+        "laravel/sail": "^1.8",
+        "mockery/mockery": "^1.4.2",
+        "nunomaduro/collision": "^5.0",
+        "phpunit/phpunit": "^9.3.3",
+        "psalm/plugin-laravel": "^1.5",
+        "roave/security-advisories": "dev-latest",
+        "vimeo/psalm": "^4.8"
+    }
+}
