@@ -15,7 +15,8 @@
     "autoload": {
         "psr-4": {
             "Aparlay\\Core\\": "src",
-            "Aparlay\\Core\\Database\\Factories\\": "database/factories"
+            "Database\\Factories\\": "database/factories/",
+            "Aparlay\\Core\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
