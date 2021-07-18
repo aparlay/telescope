@@ -1,11 +1,13 @@
 /vendor/
 node_modules/
+app/storage/
+/.idea
+/.vagrant
 npm-debug.log
 yarn-error.log
 
 # Laravel 4 specific
 bootstrap/compiled.php
-app/storage/
 
 # Laravel 5 & Lumen specific
 public/storage
@@ -19,6 +21,4 @@ storage/*.key
 .env
 Homestead.yaml
 Homestead.json
-/.vagrant
 .phpunit.result.cache
-/.idea
