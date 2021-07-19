@@ -4,7 +4,9 @@ namespace Aparlay\Core\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Query\Builder;
 
 class Version extends Model
 {
@@ -57,4 +59,12 @@ class Version extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+    /**
+     * @return Builder
+     */
+    public static function find(): Builder
+    {
+        return DB::collection((new self())->collection);
+    }
 }

@@ -4,7 +4,9 @@ namespace Aparlay\Core\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
+use Jenssegers\Mongodb\Query\Builder;
 
 class User extends Authenticatable
 {
@@ -111,4 +113,12 @@ class User extends Authenticatable
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+    /**
+     * @return Builder
+     */
+    public static function find(): Builder
+    {
+        return DB::collection((new self())->collection);
+    }
 }
