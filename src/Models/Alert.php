@@ -8,7 +8,8 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class Alert extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     public const TYPE_USER = 0;
     public const TYPE_MEDIA_REMOVED = 20;

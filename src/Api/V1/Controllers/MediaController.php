@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
-use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

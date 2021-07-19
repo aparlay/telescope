@@ -8,7 +8,8 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class Transaction extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The collection associated with the model.

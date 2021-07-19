@@ -6,5 +6,4 @@ use Aparlay\Core\Models\Version as VersionBase;
 
 class Version extends VersionBase
 {
-
 }

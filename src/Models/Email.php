@@ -8,7 +8,8 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class Email extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     public const STATUS_QUEUED = 0;
     public const STATUS_SENT = 1;

@@ -8,7 +8,8 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class Media extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     public const VISIBILITY_PUBLIC = 1;
     public const VISIBILITY_PRIVATE = 0;

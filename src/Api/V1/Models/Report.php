@@ -6,5 +6,4 @@ use Aparlay\Core\Models\Report as ReportBase;
 
 class Report extends ReportBase
 {
-
 }

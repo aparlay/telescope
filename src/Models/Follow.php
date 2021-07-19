@@ -8,7 +8,8 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class Follow extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     public const STATUS_PENDING = 0;
     public const STATUS_ACCEPTED = 1;
