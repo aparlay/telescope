@@ -4,7 +4,6 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

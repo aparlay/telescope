@@ -6,5 +6,4 @@ use Aparlay\Core\Models\User as UserBase;
 
 class User extends UserBase
 {
-
 }

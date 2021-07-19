@@ -6,5 +6,4 @@ use Aparlay\Core\Models\MediaVisit as MediaVisitBase;
 
 class MediaVisit extends MediaVisitBase
 {
-
 }

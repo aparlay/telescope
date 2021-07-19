@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
-use Aparlay\Core\Models\Media;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
