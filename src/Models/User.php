@@ -1,15 +1,46 @@
 <?php
 
-namespace App\Models;
+namespace Aparlay\Core\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
+    public const TYPE_USER = 0;
+    public const TYPE_ADMIN = 1;
+
+    public const STATUS_PENDING = 0;
+    public const STATUS_VERIFIED = 1;
+    public const STATUS_ACTIVE = 2;
+    public const STATUS_SUSPENDED = 3;
+    public const STATUS_BLOCKED = 4;
+    public const STATUS_DEACTIVATED = 10;
+
+    public const GENDER_FEMALE = 0;
+    public const GENDER_MALE = 1;
+    public const GENDER_TRANSGENDER = 2;
+    public const GENDER_NOT_MENTION = 3;
+
+    public const INTERESTED_IN_FEMALE = 0;
+    public const INTERESTED_IN_MALE = 1;
+    public const INTERESTED_IN_TRANSGENDER = 2;
+    public const INTERESTED_IN_COUPLE = 3;
+
+    public const VISIBILITY_PUBLIC = 1;
+    public const VISIBILITY_PRIVATE = 0;
+
+    public const FEATURE_TIPS = 'tips';
+    public const FEATURE_DEMO = 'demo';
+
+    /**
+     * The collection associated with the model.
+     * @var string
+     */
+    protected $collection = 'users';
 
     /**
      * The attributes that are mass assignable.
