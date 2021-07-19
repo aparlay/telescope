@@ -5,7 +5,6 @@ namespace Aparlay\Core;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class CoreServiceProvider extends ServiceProvider
@@ -35,7 +34,6 @@ class CoreServiceProvider extends ServiceProvider
         include __DIR__ . '/routes/channels.php';
         include __DIR__ . '/routes/console.php';
     }
-
 
     /**
      * Configure the rate limiters for the application.

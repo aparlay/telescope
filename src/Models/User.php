@@ -8,7 +8,8 @@ use Jenssegers\Mongodb\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     public const TYPE_USER = 0;
     public const TYPE_ADMIN = 1;
