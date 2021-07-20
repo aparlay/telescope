@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use App\Models\Model;
+use Aparlay\Core\Models\MediaLike;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MediaLikeFactory extends Factory
@@ -12,7 +12,7 @@ class MediaLikeFactory extends Factory
      *
      * @var string
      */
-    protected $model = Model::class;
+    protected $model = MediaLike::class;
 
     /**
      * Define the model's default state.

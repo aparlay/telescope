@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use App\Models\Model;
+use Aparlay\Core\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -12,7 +12,7 @@ class OrderFactory extends Factory
      *
      * @var string
      */
-    protected $model = Model::class;
+    protected $model = Order::class;
 
     /**
      * Define the model's default state.

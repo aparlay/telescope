@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use App\Models\Model;
+use Aparlay\Core\Models\Email;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EmailFactory extends Factory
@@ -12,7 +12,7 @@ class EmailFactory extends Factory
      *
      * @var string
      */
-    protected $model = Model::class;
+    protected $model = Email::class;
 
     /**
      * Define the model's default state.

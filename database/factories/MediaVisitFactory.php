@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use App\Models\Model;
+use Aparlay\Core\Models\MediaVisit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MediaVisitFactory extends Factory
@@ -12,7 +12,7 @@ class MediaVisitFactory extends Factory
      *
      * @var string
      */
-    protected $model = Model::class;
+    protected $model = MediaVisit::class;
 
     /**
      * Define the model's default state.

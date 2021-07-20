@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use App\Models\Model;
+use Aparlay\Core\Models\Version;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class VersionFactory extends Factory
@@ -12,7 +12,7 @@ class VersionFactory extends Factory
      *
      * @var string
      */
-    protected $model = Model::class;
+    protected $model = Version::class;
 
     /**
      * Define the model's default state.

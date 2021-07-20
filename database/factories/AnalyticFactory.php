@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use App\Models\Model;
+use Aparlay\Core\Models\Analytic;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AnalyticFactory extends Factory
@@ -12,7 +12,7 @@ class AnalyticFactory extends Factory
      *
      * @var string
      */
-    protected $model = Model::class;
+    protected $model = Analytic::class;
 
     /**
      * Define the model's default state.

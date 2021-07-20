@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use App\Models\Model;
+use Aparlay\Core\Models\Block;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BlockFactory extends Factory
@@ -12,7 +12,7 @@ class BlockFactory extends Factory
      *
      * @var string
      */
-    protected $model = Model::class;
+    protected $model = Block::class;
 
     /**
      * Define the model's default state.

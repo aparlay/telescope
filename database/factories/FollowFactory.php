@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use App\Models\Model;
+use Aparlay\Core\Models\Follow;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class FollowFactory extends Factory
@@ -12,7 +12,7 @@ class FollowFactory extends Factory
      *
      * @var string
      */
-    protected $model = Model::class;
+    protected $model = Follow::class;
 
     /**
      * Define the model's default state.
