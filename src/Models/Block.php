@@ -52,7 +52,6 @@ class Block extends Model
         'created_at' => 'datetime',
     ];
 
-
     /**
      * Create a new factory instance for the model.
      *
