@@ -1,10 +1,7 @@
 <?php
 
-
 namespace Aparlay\Core\Models\Scopes;
 
-
-use Aparlay\Core\Models\Alert;
 use MongoDB\BSON\ObjectId;
 
 trait ReportScope
@@ -17,6 +14,7 @@ trait ReportScope
     public function scopeMedia($query, $mediaId): mixed
     {
         $mediaId = $mediaId instanceof ObjectId ? $mediaId : new ObjectId($mediaId);
+
         return $query->where('media_id', $mediaId);
     }
 
@@ -28,6 +26,7 @@ trait ReportScope
     public function scopeUser($query, $userId): mixed
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
         return $query->where('user_id', $userId);
     }
 }

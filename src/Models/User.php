@@ -5,9 +5,7 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
-use Jenssegers\Mongodb\Query\Builder;
 
 class User extends Authenticatable
 {

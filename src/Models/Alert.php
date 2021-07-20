@@ -2,10 +2,10 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Scopes\AlertScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Aparlay\Core\Models\Scopes\AlertScope;
 
 class Alert extends Model
 {
@@ -69,7 +69,6 @@ class Alert extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
-
 
     /**
      * @return array

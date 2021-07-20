@@ -1,13 +1,9 @@
 <?php
 
-
 namespace Aparlay\Core\Models\Scopes;
 
-
-use Aparlay\Core\Models\Alert;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
 
 trait MediaVisitScope
 {
@@ -19,6 +15,7 @@ trait MediaVisitScope
     public function scopeMedia($query, $mediaId): mixed
     {
         $mediaId = $mediaId instanceof ObjectId ? $mediaId : new ObjectId($mediaId);
+
         return $query->where('media_id', $mediaId);
     }
 
@@ -30,6 +27,7 @@ trait MediaVisitScope
     public function scopeUser($query, $userId): mixed
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
         return $query->where('user_id', $userId);
     }
 
