@@ -1,5 +1,14 @@
 <?php
 
+use Aparlay\Core\Api\V1\Controllers\AlertController;
+use Aparlay\Core\Api\V1\Controllers\BlockController;
+use Aparlay\Core\Api\V1\Controllers\FollowController;
+use Aparlay\Core\Api\V1\Controllers\MediaController;
+use Aparlay\Core\Api\V1\Controllers\MediaLikeController;
+use Aparlay\Core\Api\V1\Controllers\ReportController;
+use Aparlay\Core\Api\V1\Controllers\SiteController;
+use Aparlay\Core\Api\V1\Controllers\UserController;
+use Aparlay\Core\Api\V1\Controllers\VersionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,59 +28,53 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::prefix('v1')->middleware('api')->group(function () {
-    Route::prefix('media')->group(function () {
-        Route::match(['head', 'get'], '/', 'MediaController@index')->name('media.list');
-        Route::match(['head', 'get'], '/{media}', 'MediaController@show')->name('media.show');
-        Route::match(['get', 'post'], '/upload', 'MediaController@upload')->name('media.upload');
-        Route::post('/', 'MediaController@store')->name('media.create');
-        Route::delete('/{media}', 'MediaController@destroy')->name('media.delete');
-        Route::match(['put', 'patch'], '/{media}', 'MediaController@update')->name('media.update');
+Route::middleware('api')->prefix('v1')->group(function () {
+    Route::prefix('media')->name('media.')->group(function () {
+        Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
+        Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
+        Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
+        Route::post('/', [MediaController::class, 'store'])->name('create');
+        Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
+        Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
 
-        Route::put('/{media}/like', 'MediaLikeController@store')->name('media.like');
-        Route::delete('/{media}/like', 'MediaLikeController@destroy')->name('media.unlike');
+        Route::put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
+        Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
 
-        Route::post('/{media}/report', 'ReportController@media')->name('media.report');
+        Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
     });
 
-    Route::prefix('user')->group(function () {
-        Route::get('/{type}', 'UserController@index')
-            ->where(['type' => '(likes|blocks|followers|followings|hashtags)']);
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/{type}', [UserController::class, 'index'])
+            ->where(['type' => '(likes|blocks|followers|followings|hashtags)'])->name('list');
 
-        Route::put('/{user}/block', 'BlockController@store');
-        Route::delete('/{user}/block', 'BlockController@destroy');
-        Route::put('/{user}/follow', 'FollowController@store');
-        Route::delete('/{user}/follow', 'FollowController@destroy');
+        Route::put('/{user}/block', [BlockController::class, 'store'])->name('block');
+        Route::delete('/{user}/block', [BlockController::class, 'destroy'])->name('unblock');
 
-        Route::post('/{user}/report', 'ReportController@user');
+        Route::put('/{user}/follow', [FollowController::class, 'store'])->name('follow');
+        Route::delete('/{user}/follow', [FollowController::class, 'destroy'])->name('unfollow');
 
-        Route::get('/{user}/media', 'MediaController@listByUser');
-        Route::get('/{user}', 'UserController@show');
+        Route::post('/{user}/report', [ReportController::class, 'user'])->name('report');
+
+        Route::get('/{user}/media', [MediaController::class, 'listByUser'])->name('media_list');
+        Route::get('/{user}', [UserController::class, 'show'])->name('show');
     });
 
-    Route::prefix('me')->group(function () {
-        Route::get('/', 'UserController@me');
-        Route::match(['put', 'patch'], '/', 'UserController@update');
-        Route::delete('/', 'UserController@deactive');
-        Route::get('/token', 'UserController@token');
+    Route::prefix('me')->name('profie.')->group(function () {
+        Route::get('/', [UserController::class, 'me']);
+        Route::match(['put', 'patch'], '/', [UserController::class, 'update']);
+        Route::delete('/', [UserController::class, 'destroy']);
+        Route::get('/token', [UserController::class, 'token']);
     });
 
-    Route::prefix('alert')->group(function () {
-        Route::get('/', 'UserController@me');
-        Route::match(['put', 'patch'], '/', 'UserController@update');
-        Route::delete('/', 'UserController@deactive');
-        Route::get('/token', 'UserController@token');
-    });
-
-    Route::match(['put', 'patch'], '/{alert}', 'AlertController@update');
-    Route::match(['put', 'patch'], '/change-password', 'UserController@changePassword');
-    Route::match(['put', 'patch'], '/refresh-token', 'UserController@refreshToken');
-    Route::patch('/validate-otp', 'UserController@validateOtp');
-    Route::post('/request-otp', 'UserController@requestOtp');
-    Route::delete('/logout', 'UserController@logout');
-    Route::post('/login', 'UserController@login');
-    Route::post('/register', 'UserController@register');
-    Route::get('/version/{os}/{version}', 'VersionController@show');
-    Route::get('/cache', 'SiteController@cache');
-    Route::get('/health', 'SiteController@health');
+    Route::match(['put', 'patch'], '/{alert}', [AlertController::class, 'update'])->name('alert.update');
+    Route::match(['put', 'patch'], '/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
+    Route::match(['put', 'patch'], '/refresh-token', [UserController::class, 'refreshToken'])->name('user.refreshToken');
+    Route::patch('/validate-otp', [UserController::class, 'validateOtp'])->name('user.validateOtp');
+    Route::post('/request-otp', [UserController::class, 'requestOtp'])->name('user.requestOtp');
+    Route::delete('/logout', [UserController::class, 'logout'])->name('user.logout');
+    Route::post('/login', [UserController::class, 'login'])->name('user.login');
+    Route::post('/register', [UserController::class, 'register'])->name('user.register');
+    Route::get('/version/{os}/{version}', [VersionController::class, 'show'])->name('version.show');
+    Route::get('/cache', [SiteController::class, 'cache'])->name('site.cache');
+    Route::get('/health', [SiteController::class, 'health'])->name('site.health');
 });
