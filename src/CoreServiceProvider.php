@@ -32,15 +32,15 @@ class CoreServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/core.php' => config_path('core.php')
+                __DIR__ . '/../config/core.php' => config_path('core.php'),
             ], 'config');
 
             $this->publishes([
-                __DIR__ . '/../resources/views/admin' => base_path('resources/views/admin')
+                __DIR__ . '/../resources/views/admin' => base_path('resources/views/admin'),
             ], 'views');
 
             $this->commands([
-                CoreCommand::class
+                CoreCommand::class,
             ]);
         }
         $this->configureRateLimiting();
