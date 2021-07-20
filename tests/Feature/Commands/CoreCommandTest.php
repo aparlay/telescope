@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Aparlay\Core\Tests\Feature\Commands;
-
 
 class CoreCommandTest extends \Aparlay\Core\Tests\TestCase
 {
