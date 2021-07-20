@@ -16,7 +16,9 @@ class MediaController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'data' => Media::all()
+        ]);
     }
 
     /**

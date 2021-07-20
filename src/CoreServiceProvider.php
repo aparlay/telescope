@@ -22,6 +22,9 @@ class CoreServiceProvider extends ServiceProvider
         if ($this->app->isLocal()) {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
+        if ($this->app->runningUnitTests()) {
+            $this->mergeConfigFrom(__DIR__ . '/../config/database.php', 'database');
+        }
         $this->mergeConfigFrom(__DIR__ . '/../config/core.php', 'core');
     }
 
@@ -35,6 +38,7 @@ class CoreServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../config/core.php' => config_path('core.php'),
+                __DIR__ . '/../config/database.php' => config_path('database.php'),
             ], 'config');
 
             $this->publishes([
@@ -47,11 +51,15 @@ class CoreServiceProvider extends ServiceProvider
         }
         $this->configureRateLimiting();
 
-        include __DIR__ . '/../routes/api.php';
-        include __DIR__ . '/../routes/web.php';
-        include __DIR__ . '/../routes/admin.php';
-        include __DIR__ . '/../routes/channels.php';
-        include __DIR__ . '/../routes/console.php';
+        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/channels.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/console.php');
+
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'core');
     }
 
     /**

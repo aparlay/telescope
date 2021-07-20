@@ -3,8 +3,13 @@
 namespace Aparlay\Core\Tests\Feature\Api;
 
 use Aparlay\Core\Tests\TestCase;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ApiTestCase extends TestCase
 {
-    protected $baseUrl = 'http://127.0.0.1:8000';
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->app->make('config')->set('app.url', env('TEST_DOMAIN'));
+    }
 }

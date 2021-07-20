@@ -9,10 +9,7 @@ class MediaApiTest extends ApiTestCase
     /** @test */
     public function get_medias_id()
     {
-        $response = $this->withHeaders([
-            'X-DEVICE-ID' => 'random-string',
-        ])->get('/media');
-        $this->json('POST', 'media', $payload)
+        $this->withHeaders(['X-DEVICE-ID' => 'random-string'])->json('GET', '/v1/media', [])
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
