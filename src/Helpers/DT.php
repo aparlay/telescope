@@ -49,7 +49,7 @@ class DT
 
     public static function timestampToUtc($timestamp)
     {
-        return new UTCDatetime($timestamp*1000);
+        return new UTCDatetime($timestamp * 1000);
     }
 
     public static function utcToDateTime(UTCDateTime $dateTime)
