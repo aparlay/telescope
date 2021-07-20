@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Aparlay\Core\Models\Scopes;
 
 use Aparlay\Core\Models\Email;
@@ -18,6 +17,7 @@ trait EmailScope
     public function scopeUser($query, $userId): mixed
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
         return $query->where('user_id', $userId);
     }
 

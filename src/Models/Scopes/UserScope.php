@@ -1,11 +1,7 @@
 <?php
 
-
 namespace Aparlay\Core\Models\Scopes;
 
-
-use Aparlay\Core\Models\Alert;
-use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
@@ -72,7 +68,7 @@ trait UserScope
         return $query->where('status', '$in', [
             User::STATUS_PENDING,
             User::STATUS_VERIFIED,
-            User::STATUS_ACTIVE
+            User::STATUS_ACTIVE,
         ]);
     }
 
@@ -85,7 +81,7 @@ trait UserScope
         return $query->where('status', '$in', [
             User::STATUS_SUSPENDED,
             User::STATUS_BLOCKED,
-            User::STATUS_DEACTIVATED
+            User::STATUS_DEACTIVATED,
         ]);
     }
 
@@ -130,9 +126,10 @@ trait UserScope
      * @param  ObjectId|string  $userId
      * @return mixed
      */
-    public function scopeUser(Builder $query, ObjectId|string $userId): Builder
+    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
         return $query->where('user_id', $userId);
     }
 

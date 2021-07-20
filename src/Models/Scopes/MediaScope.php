@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Aparlay\Core\Models\Scopes;
-
 
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
@@ -19,9 +17,10 @@ trait MediaScope
      * @param  ObjectId|string  $creatorId
      * @return Builder
      */
-    public function scopeCreator(Builder $query, ObjectId|string $creatorId): Builder
+    public function scopeCreator(Builder $query, ObjectId | string $creatorId): Builder
     {
         $creatorId = $creatorId instanceof ObjectId ? $creatorId : new ObjectId($creatorId);
+
         return $query->where('creator._id', $creatorId);
     }
 
@@ -123,10 +122,11 @@ trait MediaScope
      * @param  ObjectId|string  $userId
      * @return Builder
      */
-    public function scopeFollowing(Builder $query, ObjectId|string $userId): Builder
+    public function scopeFollowing(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
         $user = User::where('_id', $userId)->first();
+
         return $query->where('creator._id', '$in', array_column($user['followings'], '_id'));
     }
 
@@ -135,9 +135,10 @@ trait MediaScope
      * @param  ObjectId|string  $userId
      * @return Builder
      */
-    public function scopeNotBlockedFor(Builder $query, ObjectId|string $userId): Builder
+    public function scopeNotBlockedFor(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
         return $query->where('blocked_user_ids', '$ne', $userId);
     }
 
@@ -157,7 +158,7 @@ trait MediaScope
      * @param  string  $deviceId
      * @return Builder
      */
-    public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId|string $userId, string $deviceId): Builder
+    public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId | string $userId, string $deviceId): Builder
     {
         $visitedIds = [];
         foreach (MediaVisit::select(['media_ids'])->user($userId)->column() as $mediaVisit) {
@@ -224,9 +225,10 @@ trait MediaScope
      * @param  ObjectId|string  $userId
      * @return mixed
      */
-    public function scopeUser(Builder $query, ObjectId|string $userId): Builder
+    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
         return $query->where('user_id', $userId);
     }
 
