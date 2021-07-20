@@ -10,8 +10,8 @@ use MongoDB\BSON\UTCDateTime;
 trait UserScope
 {
     /**
-     * @param Builder $query
-     * @param string $email
+     * @param  Builder  $query
+     * @param  string  $email
      * @return mixed
      */
     public function scopeEmail(Builder $query, string $email): Builder
@@ -20,8 +20,8 @@ trait UserScope
     }
 
     /**
-     * @param Builder $query
-     * @param string $phone
+     * @param  Builder  $query
+     * @param  string  $phone
      * @return mixed
      */
     public function scopePhoneNumber(Builder $query, string $phone): Builder
@@ -30,8 +30,8 @@ trait UserScope
     }
 
     /**
-     * @param Builder $query
-     * @param string $username
+     * @param  Builder  $query
+     * @param  string  $username
      * @return mixed
      */
     public function scopeUsername(Builder $query, string $username): Builder
@@ -40,7 +40,7 @@ trait UserScope
     }
 
     /**
-     * @param Builder $query
+     * @param  Builder  $query
      * @return mixed
      */
     public function scopeAdmin(Builder $query): Builder
@@ -126,11 +126,11 @@ trait UserScope
      * @param  ObjectId|string  $userId
      * @return mixed
      */
-    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
+    public function scopeUser(Builder $query, ObjectId|string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
-        return $query->where('user_id', $userId);
+        return $query->where('_id', $userId);
     }
 
     /**
