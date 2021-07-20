@@ -125,4 +125,80 @@ class User extends Authenticatable
     {
         return UserFactory::new();
     }
+
+
+
+    /**
+     * @return array
+     */
+    public static function getFeatures(): array
+    {
+        return [
+            self::FEATURE_TIPS => __('Tips'),
+            self::FEATURE_DEMO => __('Demo'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getGenders(): array
+    {
+        return [
+            self::GENDER_FEMALE => __('Female'),
+            self::GENDER_MALE => __('Male'),
+            self::GENDER_TRANSGENDER => __('Transgender'),
+            self::GENDER_NOT_MENTION => __('Not Mention'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getInterestedIns(): array
+    {
+        return [
+            self::INTERESTED_IN_FEMALE => __('Female'),
+            self::INTERESTED_IN_MALE => __('Male'),
+            self::INTERESTED_IN_TRANSGENDER => __('Transgender'),
+            self::INTERESTED_IN_COUPLE => __('Couple'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypes(): array
+    {
+        return [
+            self::TYPE_USER => __('User'),
+            self::TYPE_ADMIN => __('Admin'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getVisibilities(): array
+    {
+        return [
+            self::VISIBILITY_PRIVATE => __('Private'),
+            self::VISIBILITY_PUBLIC => __('Public'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            self::STATUS_PENDING => __('Pending'),
+            self::STATUS_VERIFIED => __('Verified'),
+            self::STATUS_ACTIVE => __('Active'),
+            self::STATUS_SUSPENDED => __('Suspended'),
+            self::STATUS_BLOCKED => __('Banned'),
+            self::STATUS_DEACTIVATED => __('Deleted'),
+        ];
+    }
 }

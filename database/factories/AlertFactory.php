@@ -6,6 +6,7 @@ use Aparlay\Core\Models\Alert;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use MongoDB\BSON\ObjectId;
 
 class AlertFactory extends Factory
 {
@@ -29,15 +30,15 @@ class AlertFactory extends Factory
                 return User::factory()->create()->_id;
             },
             'media_id' => function($alert) {
-                return Media::factory(['user_id' => $alert['user_id']])->create()->_id;
+                return Media::factory(['user_id' => new ObjectId($alert['user_id'])])->create()->_id;
             },
             'type' => $this->faker->randomElement(array_keys(Alert::getTypes())),
-            'status' => $this->faker->randomElement(array_keys(Alert::getTypes())),
+            'status' => $this->faker->randomElement(array_keys(Alert::getStatuses())),
             'created_by' => function($alert) {
-                return $alert['user_id'];
+                return new ObjectId($alert['user_id']);
             },
             'updated_by' => function($alert) {
-                return $alert['user_id'];
+                return new ObjectId($alert['user_id']);
             }
         ];
     }

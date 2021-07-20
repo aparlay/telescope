@@ -59,8 +59,6 @@ class Media extends Model
         'visits',
         'comment_count',
         'comments',
-        'visit_count',
-        'visits',
         'count_fields_updated_at',
         'visibility',
         'status',
@@ -68,7 +66,6 @@ class Media extends Model
         'hashtags',
         'people',
         'processing_log',
-        'count_fields_updated_at',
         'blocked_user_ids',
         'creator',
         'scores',
@@ -112,5 +109,29 @@ class Media extends Model
     protected static function newFactory(): Factory
     {
         return MediaFactory::new();
+    }
+
+    public static function getVisibilities()
+    {
+        return [
+            self::VISIBILITY_PRIVATE => 'Private',
+            self::VISIBILITY_PUBLIC => 'Public',
+        ];
+    }
+
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_QUEUED => 'Queued',
+            self::STATUS_UPLOADED => 'Uploaded',
+            self::STATUS_IN_PROGRESS => 'In-Progress',
+            self::STATUS_COMPLETED => 'Waiting For Review',
+            self::STATUS_FAILED => 'Failed',
+            self::STATUS_CONFIRMED => 'Confirmed',
+            self::STATUS_DENIED => 'Denied',
+            self::STATUS_ADMIN_DELETED => 'Deleted By Admin',
+            self::STATUS_USER_DELETED => 'Deleted',
+            self::STATUS_IN_REVIEW => 'Under review'
+        ];
     }
 }
