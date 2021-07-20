@@ -1,10 +1,5 @@
 # Core functionality share between Alua and Waptap
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/aparlay/core.svg?style=flat-square)](https://packagist.org/packages/aparlay/core)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/aparlay/core/run-tests?label=tests)](https://github.com/aparlay/core/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/aparlay/core/Check%20&%20fix%20styling?label=code%20style)](https://github.com/aparlay/core/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/aparlay/core.svg?style=flat-square)](https://packagist.org/packages/aparlay/core)
-
 ## Installation
 
 You can install the package via composer:
@@ -19,17 +14,7 @@ You can publish and run the migrations with:
 php artisan vendor:publish --provider="Aparlay\Core\CoreServiceProvider" --tag="core-migrations"
 php artisan migrate
 
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\AlertSeeder"
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\AnalyticSeeder"
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\BlockSeeder"
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\EmailSeeder"
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\FollowSeeder"
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\MediaSeeder"
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\MediaLikeSeeder"
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\MediaVisitSeeder"
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\ReportSeeder"
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\VersionSeeder"
-php artisan db:seed --class="\Aparlay\Core\Database\Seeders\UserSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\DatabaseSeeder"
 ```
 
 You can publish the config file with:
