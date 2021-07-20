@@ -10,6 +10,7 @@ use Illuminate\Support\ServiceProvider;
 
 class CoreServiceProvider extends ServiceProvider
 {
+    protected $defer = false;
     /**
      * Register services.
      *
@@ -45,11 +46,11 @@ class CoreServiceProvider extends ServiceProvider
         }
         $this->configureRateLimiting();
 
-        include __DIR__ . '/routes/api.php';
-        include __DIR__ . '/routes/web.php';
-        include __DIR__ . '/routes/admin.php';
-        include __DIR__ . '/routes/channels.php';
-        include __DIR__ . '/routes/console.php';
+        include __DIR__ . '/../routes/api.php';
+        include __DIR__ . '/../routes/web.php';
+        include __DIR__ . '/../routes/admin.php';
+        include __DIR__ . '/../routes/channels.php';
+        include __DIR__ . '/../routes/console.php';
     }
 
     /**

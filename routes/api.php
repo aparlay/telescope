@@ -19,19 +19,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware('api')->group(function () {
     Route::prefix('media')->group(function () {
-        Route::match(['head', 'get'], '/', 'MediaController@index');
-        Route::match(['head', 'get'], '/{media}', 'MediaController@show');
-        Route::match(['get', 'post'], '/upload', 'MediaController@upload');
-        Route::post('/', 'MediaController@store');
-        Route::delete('/{media}', 'MediaController@destroy');
-        Route::match(['put', 'patch'], '/{media}', 'MediaController@update');
+        Route::match(['head', 'get'], '/', 'MediaController@index')->name('media.list');
+        Route::match(['head', 'get'], '/{media}', 'MediaController@show')->name('media.show');
+        Route::match(['get', 'post'], '/upload', 'MediaController@upload')->name('media.upload');
+        Route::post('/', 'MediaController@store')->name('media.create');
+        Route::delete('/{media}', 'MediaController@destroy')->name('media.delete');
+        Route::match(['put', 'patch'], '/{media}', 'MediaController@update')->name('media.update');
 
-        Route::put('/{media}/like', 'MediaLikeController@store');
-        Route::delete('/{media}/like', 'MediaLikeController@destroy');
+        Route::put('/{media}/like', 'MediaLikeController@store')->name('media.like');
+        Route::delete('/{media}/like', 'MediaLikeController@destroy')->name('media.unlike');
 
-        Route::post('/{media}/report', 'ReportController@media');
+        Route::post('/{media}/report', 'ReportController@media')->name('media.report');
     });
 
     Route::prefix('user')->group(function () {
