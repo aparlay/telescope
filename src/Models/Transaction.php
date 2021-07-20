@@ -2,15 +2,12 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Database\Factories\ReportFactory;
 use Aparlay\Core\Database\Factories\TransactionFactory;
 use Aparlay\Core\Models\Scopes\TransactionScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Query\Builder;
 
 class Transaction extends Model
 {
