@@ -57,10 +57,13 @@ class Follow extends Model
     ];
 
     /**
-     * @return Builder
+     * @return array
      */
-    public static function find(): Builder
+    public static function getStatuses(): array
     {
-        return DB::collection((new self())->collection);
+        return [
+            self::STATUS_PENDING => __('Pending'),
+            self::STATUS_ACCEPTED => __('Accepted'),
+        ];
     }
 }

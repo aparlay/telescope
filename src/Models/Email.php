@@ -64,10 +64,25 @@ class Email extends Model
     ];
 
     /**
-     * @return Builder
+     * @return array
      */
-    public static function find(): Builder
+    public static function getStatuses(): array
     {
-        return DB::collection((new self())->collection);
+        return [
+            self::STATUS_QUEUED => __('Queued'),
+            self::STATUS_SENT => __('Sent'),
+            self::STATUS_OPENED => __('Opened'),
+            self::STATUS_FAILED => __('Failed'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypes(): array
+    {
+        return [
+            self::TYPE_OTP => __('OTP'),
+        ];
     }
 }

@@ -52,6 +52,7 @@
         "ext-json": "*",
         "ext-mongodb": "*",
         "ext-openssl": "*",
+        "ext-swoole": "*",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -60,8 +61,7 @@
         "laravel/octane": "^1.0",
         "laravel/socialite": "^5.2",
         "laravel/telescope": "^4.6",
-        "laravel/tinker": "^2.5",
-        "spiral/roadrunner": "^2.0"
+        "laravel/tinker": "^2.5"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9.1",
