@@ -14,6 +14,6 @@ class MediaLikeSeeder extends Seeder
      */
     public function run(): void
     {
-        MediaLike::factory(1000)->create();
+        MediaLike::factory()->count(1000)->create();
     }
 }

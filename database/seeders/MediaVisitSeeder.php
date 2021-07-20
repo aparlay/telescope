@@ -14,6 +14,6 @@ class MediaVisitSeeder extends Seeder
      */
     public function run(): void
     {
-        MediaVisit::factory(1000)->create();
+        MediaVisit::factory()->count(1000)->create();
     }
 }

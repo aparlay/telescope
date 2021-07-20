@@ -14,6 +14,6 @@ class AnalyticSeeder extends Seeder
      */
     public function run(): void
     {
-        Analytic::factory(100)->create();
+        Analytic::factory()->count(100)->create();
     }
 }

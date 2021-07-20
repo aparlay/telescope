@@ -14,6 +14,6 @@ class VersionSeeder extends Seeder
      */
     public function run(): void
     {
-        Version::factory(10)->create();
+        Version::factory()->count(100)->create();
     }
 }

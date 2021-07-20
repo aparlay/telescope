@@ -14,6 +14,6 @@ class EmailSeeder extends Seeder
      */
     public function run(): void
     {
-        Email::factory(100)->create();
+        Email::factory()->count(100)->create();
     }
 }
