@@ -27,10 +27,10 @@ class ReportFactory extends Factory
         return [
             'reason' => $this->faker->sentence(5),
             'user_id' => function () {
-                return User::factory()->create()->_id;
+                return new ObjectId(User::factory()->create()->_id);
             },
             'media_id' => function($alert) {
-                return Media::factory(['user_id' => new ObjectId($alert['user_id'])])->create()->_id;
+                return new ObjectId(Media::factory(['user_id' => new ObjectId($alert['user_id'])])->create()->_id);
             },
             'comment_id' => null,
             'type' => $this->faker->randomElement(array_keys(Report::getTypes())),

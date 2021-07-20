@@ -2,8 +2,11 @@
 
 namespace Aparlay\Core\Database\Factories;
 
+use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\Version;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use MongoDB\BSON\ObjectId;
 
 class VersionFactory extends Factory
 {
@@ -22,15 +25,17 @@ class VersionFactory extends Factory
     public function definition()
     {
         return [
-            'os' => $this->faker->sys,
-            'app',
-            'version',
-            'is_force_update',
-            'expired_at',
-            'created_by',
-            'updated_by',
-            'created_at',
-            'updated_at',
+            'os' => 'web',
+            'app' => 'waptap',
+            'version' => $this->faker->randomNumber(1),
+            'is_force_update' => $this->faker->boolean,
+            'expired_at' => DT::utcNow(),
+            'created_by' => function() {
+                return new ObjectId(User::factory()->create()->_id);
+            },
+            'updated_by' => function() {
+                return new ObjectId(User::factory()->create()->_id);
+            }
         ];
     }
 }

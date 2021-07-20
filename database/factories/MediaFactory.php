@@ -52,7 +52,7 @@ class MediaFactory extends Factory
             'processing_log' => [],
             'blocked_user_ids' => [],
             'user_id' => function () {
-                return User::factory()->create()->_id;
+                return new ObjectId(User::factory()->create()->_id);
             },
             'creator' => function ($model) {
                 $user = User::user($model['user_id'])->first();

@@ -26,10 +26,15 @@ class MediaVisitFactory extends Factory
     {
         return [
             'user_id' => function () {
-                return User::factory()->create()->_id;
+                return new ObjectId(User::factory()->create()->_id);
             },
             'media_ids' => function () {
-                return Media::select('_id')->inRandomOrder()->limit($this->faker->randomNumber(2))->value('_id');
+                $ids = [];
+                foreach (Media::select('_id')->inRandomOrder()->limit($this->faker->randomNumber(2))->value('_id') as $id) {
+                    $ids[] = new ObjectId($id);
+                }
+
+                return $ids;
             },
             'date' => $this->faker->date(),
         ];

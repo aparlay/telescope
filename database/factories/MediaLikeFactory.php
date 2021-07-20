@@ -26,10 +26,10 @@ class MediaLikeFactory extends Factory
     {
         return [
             'media_id' => function () {
-                return Media::factory()->create()->_id;
+                return new ObjectId(Media::factory()->create()->_id);
             },
             'user_id' => function () {
-                return User::factory()->create()->_id;
+                return new ObjectId(User::factory()->create()->_id);
             },
             'creator' => function ($model) {
                 $user = User::user($model['user_id'])->first();
