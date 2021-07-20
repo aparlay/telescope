@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Scopes\OrderScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ class Order extends Model
 {
     use HasFactory;
     use Notifiable;
+    use OrderScope;
 
     /**
      * The collection associated with the model.

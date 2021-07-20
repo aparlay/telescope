@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Scopes\MediaLikeScope;
+use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +14,7 @@ class MediaLike extends Model
 {
     use HasFactory;
     use Notifiable;
+    use MediaLikeScope;
 
     /**
      * The collection associated with the model.

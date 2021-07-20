@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Scopes\BlockScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ class Block extends Model
 {
     use HasFactory;
     use Notifiable;
+    use BlockScope;
 
     /**
      * The collection associated with the model.

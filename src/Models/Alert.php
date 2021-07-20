@@ -4,14 +4,14 @@ namespace Aparlay\Core\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Query\Builder;
+use Aparlay\Core\Models\Scopes\AlertScope;
 
 class Alert extends Model
 {
     use HasFactory;
     use Notifiable;
+    use AlertScope;
 
     public const TYPE_USER = 0;
     public const TYPE_MEDIA_REMOVED = 20;
@@ -70,11 +70,27 @@ class Alert extends Model
         'deleted_at' => 'datetime',
     ];
 
+
     /**
-     * @return Builder
+     * @return array
      */
-    public static function find(): Builder
+    public static function getStatuses(): array
     {
-        return DB::collection((new self())->collection);
+        return [
+            self::STATUS_NOT_VISITED => __('Not Visited'),
+            self::STATUS_VISITED => __('Visited'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypes(): array
+    {
+        return [
+            self::TYPE_MEDIA_NOTICED => __('Video Notice'),
+            self::TYPE_MEDIA_REMOVED => __('Video Removed'),
+            self::TYPE_USER => __('User'),
+        ];
     }
 }

@@ -87,10 +87,9 @@ class VersionController extends Controller
      */
     public function show(string $os, string $version): JsonResponse
     {
-        $models = Version::find()
-            ->where('os', $os)
-            ->where('app','waptap')
-            ->orderBy('version', 'desc')
+        $models = Version::os($os)
+            ->app('waptap')
+            ->latestFirst()
             ->get();
 
         if (empty($models)) {

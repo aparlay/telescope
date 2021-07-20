@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Scopes\EmailScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ class Email extends Model
 {
     use HasFactory;
     use Notifiable;
+    use EmailScope;
 
     public const STATUS_QUEUED = 0;
     public const STATUS_SENT = 1;

@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ class User extends Authenticatable
 {
     use HasFactory;
     use Notifiable;
+    use UserScope;
 
     public const TYPE_USER = 0;
     public const TYPE_ADMIN = 1;
@@ -113,12 +115,4 @@ class User extends Authenticatable
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
-
-    /**
-     * @return Builder
-     */
-    public static function find(): Builder
-    {
-        return DB::collection((new self())->collection);
-    }
 }

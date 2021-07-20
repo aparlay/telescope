@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Scopes\ReportScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ class Report extends Model
 {
     use HasFactory;
     use Notifiable;
+    use ReportScope;
 
     public const TYPE_USER = 0;
     public const TYPE_MEDIA = 1;

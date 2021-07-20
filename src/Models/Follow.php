@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Scopes\FollowScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ class Follow extends Model
 {
     use HasFactory;
     use Notifiable;
+    use FollowScope;
 
     public const STATUS_PENDING = 0;
     public const STATUS_ACCEPTED = 1;
