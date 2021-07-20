@@ -22,7 +22,15 @@ class VersionFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'os' => $this->faker->sys,
+            'app',
+            'version',
+            'is_force_update',
+            'expired_at',
+            'created_by',
+            'updated_by',
+            'created_at',
+            'updated_at',
         ];
     }
 }

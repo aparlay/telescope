@@ -73,6 +73,29 @@ class Report extends Model
     ];
 
     /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            self::STATUS_REPORTED => __('Reported'),
+            self::STATUS_REVISED => __('Revised'),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypes(): array
+    {
+        return [
+            self::TYPE_COMMENT => __('Comment'),
+            self::TYPE_MEDIA => __('Media'),
+            self::TYPE_USER => __('User'),
+        ];
+    }
+
+    /**
      * Create a new factory instance for the model.
      *
      * @return Factory

@@ -25,7 +25,6 @@ class MediaLikeFactory extends Factory
     public function definition()
     {
         return [
-            '_id',
             'media_id' => function () {
                 return Media::factory()->create()->_id;
             },

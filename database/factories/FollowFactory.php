@@ -3,7 +3,9 @@
 namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Models\Follow;
+use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use MongoDB\BSON\ObjectId;
 
 class FollowFactory extends Factory
 {
@@ -22,7 +24,24 @@ class FollowFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user' => function () {
+                $user = User::factory()->create();
+                return [
+                    '_id' => new ObjectId($user->_id),
+                    'username' => $user->username,
+                    'avatar' => $user->avatar,
+                ];
+            },
+            'creator' => function() {
+                $user = User::factory()->create();
+                return [
+                    '_id' => new ObjectId($user->_id),
+                    'username' => $user->username,
+                    'avatar' => $user->avatar,
+                ];
+            },
+            'is_deleted' => $this->faker->boolean(),
+            'status' => $this->faker->randomElement(array_keys(Follow::getStatuses())),
         ];
     }
 }

@@ -18,6 +18,17 @@ You can publish and run the migrations with:
 ```bash
 php artisan vendor:publish --provider="Aparlay\Core\CoreServiceProvider" --tag="core-migrations"
 php artisan migrate
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\AlertSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\AnalyticSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\BlockSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\EmailSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\FollowSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\MediaSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\MediaLikeSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\MediaVisitSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\ReportSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\VersionSeeder"
+php artisan db:seed --class="\Aparlay\Core\Database\Seeders\UserSeeder"
 ```
 
 You can publish the config file with:

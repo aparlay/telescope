@@ -2,8 +2,11 @@
 
 namespace Aparlay\Core\Database\Factories;
 
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
+use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use MongoDB\BSON\ObjectId;
 
 class MediaVisitFactory extends Factory
 {
@@ -22,7 +25,13 @@ class MediaVisitFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_id' => function () {
+                return User::factory()->create()->_id;
+            },
+            'media_ids' => function () {
+                return Media::select('_id')->inRandomOrder()->limit($this->faker->randomNumber(2))->value('_id');
+            },
+            'date' => $this->faker->date(),
         ];
     }
 }
