@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Models\Scopes\UserScope;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
@@ -113,4 +115,14 @@ class User extends Authenticatable
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
 }

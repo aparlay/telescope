@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Database\Factories\EmailFactory;
 use Aparlay\Core\Models\Scopes\EmailScope;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
@@ -82,5 +84,15 @@ class Email extends Model
         return [
             self::TYPE_OTP => __('OTP'),
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return EmailFactory::new();
     }
 }

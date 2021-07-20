@@ -2,12 +2,12 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Database\Factories\OrderFactory;
 use Aparlay\Core\Models\Scopes\OrderScope;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Query\Builder;
 
 class Order extends Model
 {
@@ -56,10 +56,12 @@ class Order extends Model
     ];
 
     /**
-     * @return Builder
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
      */
-    public static function find(): Builder
+    protected static function newFactory(): Factory
     {
-        return DB::collection((new self())->collection);
+        return OrderFactory::new();
     }
 }

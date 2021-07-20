@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Database\Factories\AnalyticFactory;
 use Aparlay\Core\Models\Scopes\AnalyticScope;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -61,5 +63,15 @@ class Analytic extends Model
     public static function find(): Builder
     {
         return DB::collection((new self())->collection);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return AnalyticFactory::new();
     }
 }

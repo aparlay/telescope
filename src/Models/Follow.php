@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Database\Factories\FollowFactory;
 use Aparlay\Core\Models\Scopes\FollowScope;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
@@ -63,5 +65,15 @@ class Follow extends Model
             self::STATUS_PENDING => __('Pending'),
             self::STATUS_ACCEPTED => __('Accepted'),
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return FollowFactory::new();
     }
 }

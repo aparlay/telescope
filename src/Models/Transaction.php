@@ -2,7 +2,10 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Database\Factories\ReportFactory;
+use Aparlay\Core\Database\Factories\TransactionFactory;
 use Aparlay\Core\Models\Scopes\TransactionScope;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -55,10 +58,12 @@ class Transaction extends Model
     ];
 
     /**
-     * @return Builder
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
      */
-    public static function find(): Builder
+    protected static function newFactory(): Factory
     {
-        return DB::collection((new self())->collection);
+        return TransactionFactory::new();
     }
 }
