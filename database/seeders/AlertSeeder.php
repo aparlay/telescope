@@ -14,6 +14,6 @@ class AlertSeeder extends Seeder
      */
     public function run(): void
     {
-        Alert::factory()->count(100)->create();
+        \Aparlay\Core\Models\Alert::factory()->count(100)->create();
     }
 }
