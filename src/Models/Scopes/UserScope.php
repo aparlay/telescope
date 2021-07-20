@@ -126,7 +126,7 @@ trait UserScope
      * @param  ObjectId|string  $userId
      * @return mixed
      */
-    public function scopeUser(Builder $query, ObjectId|string $userId): Builder
+    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
