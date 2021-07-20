@@ -11,6 +11,7 @@ use Illuminate\Support\ServiceProvider;
 class CoreServiceProvider extends ServiceProvider
 {
     protected $defer = false;
+
     /**
      * Register services.
      *
