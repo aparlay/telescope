@@ -98,7 +98,7 @@ class VersionController extends Controller
 
         $requireForceUpdate = false;
         foreach ($models as $model) {
-            if($model['is_force_update']) {
+            if ($model['is_force_update']) {
                 $compareResult = version_compare($version, $model['version']);
                 if ($compareResult === -1) {
                     $requireForceUpdate = true;
@@ -108,7 +108,7 @@ class VersionController extends Controller
 
         return response()->json([
             'require_force_update' => $requireForceUpdate,
-            'version' => $models[0]
+            'version' => $models[0],
         ]);
     }
 }
