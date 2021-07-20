@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Database\Factories\AlertFactory;
 use Aparlay\Core\Models\Scopes\AlertScope;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
@@ -91,5 +93,15 @@ class Alert extends Model
             self::TYPE_MEDIA_REMOVED => __('Video Removed'),
             self::TYPE_USER => __('User'),
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return AlertFactory::new();
     }
 }

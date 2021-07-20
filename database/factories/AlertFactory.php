@@ -14,7 +14,7 @@ class AlertFactory extends Factory
      *
      * @var string
      */
-    protected $model = \Aparlay\Core\Models\Alert::class;
+    protected $model = Alert::class;
 
     /**
      * Define the model's default state.
