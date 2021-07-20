@@ -131,7 +131,7 @@ class Media extends Model
             self::STATUS_DENIED => 'Denied',
             self::STATUS_ADMIN_DELETED => 'Deleted By Admin',
             self::STATUS_USER_DELETED => 'Deleted',
-            self::STATUS_IN_REVIEW => 'Under review'
+            self::STATUS_IN_REVIEW => 'Under review',
         ];
     }
 }
