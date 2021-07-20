@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Aparlay\Core\Tests\Feature\Commands;
-
 
 use Aparlay\Core\Tests\Feature\Api\ApiTestCase;
 
