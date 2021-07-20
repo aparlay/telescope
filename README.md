@@ -18,6 +18,7 @@ You can publish and run the migrations with:
 ```bash
 php artisan vendor:publish --provider="Aparlay\Core\CoreServiceProvider" --tag="core-migrations"
 php artisan migrate
+
 php artisan db:seed --class="\Aparlay\Core\Database\Seeders\AlertSeeder"
 php artisan db:seed --class="\Aparlay\Core\Database\Seeders\AnalyticSeeder"
 php artisan db:seed --class="\Aparlay\Core\Database\Seeders\BlockSeeder"

@@ -4,6 +4,7 @@ namespace Aparlay\Core\Database\Seeders;
 
 use Aparlay\Core\Models\Follow;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class FollowSeeder extends Seeder
 {
@@ -14,6 +15,7 @@ class FollowSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::collection('followers')->truncate();
         Follow::factory()->count(100)->create();
     }
 }
