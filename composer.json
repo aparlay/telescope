@@ -64,7 +64,9 @@
         "laravel/socialite": "^5.2",
         "laravel/telescope": "^4.6",
         "laravel/tinker": "^2.5",
-        "spatie/laravel-fractal": "^5.8"
+        "markrogoyski/math-php": "2.*",
+        "spatie/laravel-fractal": "^5.8",
+        "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9.1",
@@ -79,6 +81,10 @@
         "psalm/plugin-laravel": "^1.5",
         "roave/security-advisories": "dev-latest",
         "spatie/laravel-ray": "^1.23",
-        "vimeo/psalm": "^4.8"
+        "vimeo/psalm": "^4.8",
+        "jeroen-g/laravel-packager": "^2.5",
+        "laravel/dusk": "^6.15",
+        "laravel/envoy": "^2.7",
+        "orchestra/testbench": "^6.15"
     }
 }
