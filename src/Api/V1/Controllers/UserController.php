@@ -3,17 +3,17 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Block;
+use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
+use Illuminate\Http\Response;
 use JWTAuth;
 use Validator;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Aparlay\Core\Api\V1\Models\User;
 
 class UserController extends Controller
 {
     public $token = true;
+
     /**
      * Store a newly created resource in storage.
      *
@@ -123,14 +123,14 @@ class UserController extends Controller
     {
         $input = $request->only('username', 'password');
         $jwt_token = null;
-  
-        if (!$jwt_token = JWTAuth::attempt($input)) {
+
+        if (! $jwt_token = JWTAuth::attempt($input)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid Username or Password',
             ], Response::HTTP_UNAUTHORIZED);
         }
-  
+
         return response()->json([
             'success' => true,
             'token' => $jwt_token,
@@ -156,16 +156,15 @@ class UserController extends Controller
      */
     public function register(Request $request)
     {
-       
-        $validator = Validator::make($request->all(), [ 
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',
-            'password' => 'required',  
-            'c_password' => 'required|same:password', 
-        ]);  
-        
-        if ($validator->fails()) {  
-            return response()->json(['error'=>$validator->errors()], 401); 
+            'password' => 'required',
+            'c_password' => 'required|same:password',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
         }
 
         $user = new User();
@@ -176,10 +175,10 @@ class UserController extends Controller
         if ($this->token) {
             return $this->login($request);
         }
-  
+
         return response()->json([
             'success' => true,
-            'data' => $user
+            'data' => $user,
         ], Response::HTTP_OK);
     }
 }
