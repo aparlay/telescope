@@ -28,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('like-media', function ($user, $media) {
             $isBlocked = Block::select(['user._id'])->user($user->_id)->creator($media->created_by)->first();
-            if (!empty($isBlocked)) {
+            if (! empty($isBlocked)) {
                 return false;
             }
 
@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('report-media', function ($user, $media) {
             $isBlocked = Block::select(['user._id'])->user($user->_id)->creator($media->created_by)->first();
-            if (!empty($isBlocked)) {
+            if (! empty($isBlocked)) {
                 return false;
             }
 
@@ -46,7 +46,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('report-user', function ($user, $report) {
             $isBlocked = Block::select(['user._id'])->user($user->_id)->creator($report->_id)->first();
-            if (!empty($isBlocked)) {
+            if (! empty($isBlocked)) {
                 return false;
             }
 

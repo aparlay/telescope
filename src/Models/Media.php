@@ -3,13 +3,10 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Models\Alert;
-use Aparlay\Core\Api\V1\Models\MediaLike;
-use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
-use Cache;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -134,6 +131,7 @@ class Media extends Model
     public function setCreatorAttribute($creator)
     {
         $creator = User::user($creator['_id'])->first();
+
         return ['_id' => $creator->_id, 'username' => $creator->username, 'avatar' => $creator->avatar];
     }
 

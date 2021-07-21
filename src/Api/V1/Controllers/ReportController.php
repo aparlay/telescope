@@ -5,7 +5,6 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;

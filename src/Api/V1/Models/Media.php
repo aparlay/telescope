@@ -21,7 +21,8 @@ class Media extends MediaBase
         $message = $this->creator->slack_admin_url ?? 'A Guest user';
         $message .= ' reported ' . $this->slack_subject_admin_url;
         $message .= PHP_EOL . '_*Reason:*_ ' . $this->reason;
-        return (new SlackMessage)
+
+        return (new SlackMessage())
             ->from('Reporter', ':radioactive_sign:')
             ->to('#alua-report')
             ->content($message);
