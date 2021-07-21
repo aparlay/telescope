@@ -31,7 +31,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('api')->prefix('v1')->group(function () {
     Route::prefix('media')->name('media.')->group(function () {
         Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
-        Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
+        Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])
+            ->middleware('cache.headers:public;max_age=2628000;etag')->name('show');
         Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
         Route::post('/', [MediaController::class, 'store'])->name('create');
         Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');

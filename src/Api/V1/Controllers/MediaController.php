@@ -16,9 +16,7 @@ class MediaController extends Controller
      */
     public function index()
     {
-        return response()->json([
-            'data' => Media::all(),
-        ]);
+        return response()->format(Media::all());
     }
 
     /**
@@ -50,7 +48,7 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
-        //
+        return response()->format($media);
     }
 
     /**

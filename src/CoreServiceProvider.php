@@ -6,6 +6,7 @@ use Aparlay\Core\Commands\CoreCommand;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 
 class CoreServiceProvider extends ServiceProvider
@@ -60,6 +61,20 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'core');
+
+        Response::macro('format', function ($value, $message = '', $code = 200) {
+            $response = [
+                'data' => $value,
+                'status' => "OK",
+                'code' => $code,
+            ];
+
+            if (!empty($message)) {
+                $response['message'] = $message;
+            }
+
+            return Response::json($response);
+        });
     }
 
     /**
