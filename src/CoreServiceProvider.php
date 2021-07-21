@@ -65,7 +65,7 @@ class CoreServiceProvider extends ServiceProvider
         Response::macro('format', function ($value, $message = '', $code = 200) {
             $response = [
                 'data' => $value,
-                'status' => "OK",
+                'status' => $code < 400 ? 'OK' : 'ERROR',
                 'code' => $code,
             ];
 

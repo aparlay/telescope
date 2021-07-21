@@ -6,9 +6,32 @@ use Aparlay\Core\Database\Factories\ReportFactory;
 use Aparlay\Core\Models\Scopes\ReportScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
+use MongoDB\BSON\ObjectId;
 
+/**
+ * Class Report
+ * @package Aparlay\Core\Models
+ *
+ * @property ObjectId $_id
+ * @property ObjectId $user_id
+ * @property ObjectId $media_id
+ * @property ObjectId $comment_id
+ * @property int $type
+ * @property int $status
+ * @property string $reason
+ * @property ObjectId $created_by
+ * @property ObjectId $updated_by
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $deleted_at
+ *
+ * @property-read array $links
+ *
+ * @OA\Schema()
+ */
 class Report extends Model
 {
     use HasFactory;

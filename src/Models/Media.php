@@ -127,62 +127,14 @@ class Media extends Model
     ];
 
     /**
-     * Get the user's full name.
+     * Set the media's creator.
      *
-     * @return string
+     * @return array
      */
-    public function getCreatorAttribute($creator)
+    public function setCreatorAttribute($creator)
     {
-        $creator['_id'] = (string)$creator['_id'];
-
-        if (auth()->guest()) {
-            $creator['is_followed'] = false;
-            $creator['is_liked'] = false;
-
-            return $creator;
-        }
-        $user = auth()->user();
-        $creator['is_followed'] = isset($this->creator['_id'], $user->following[(string)$this->creator['_id']]);
-
-        return $creator;
-    }
-
-    /**
-     * Get the user's full name.
-     *
-     * @return bool
-     */
-    public function getIsLikedAttribute(): bool
-    {
-        if (auth()->guest()) {
-            return false;
-        }
-
-        $mediaLikeCacheKey = 'MediaLike.creator.' . auth()->user()->id;
-        $mediaLike = Cache::remember($mediaLikeCacheKey, 'cache.longDuration', function () {
-            return MediaLike::select(['media_id' => 1, '_id' => 0])->creator(auth()->user()->id)->pluck('media_id');
-        });
-
-        return isset($mediaLike[(string)$this->_id]);
-    }
-
-    /**
-     * Get the user's full name.
-     *
-     * @return bool
-     */
-    public function getIsVisitedAttribute(): bool
-    {
-        if (auth()->guest()) {
-            return false;
-        }
-
-        $mediaLikeCacheKey = 'MediaVisit.creator.' . auth()->user()->id;
-        $mediaLike = Cache::remember($mediaLikeCacheKey, 'cache.longDuration', function () {
-            return MediaVisit::select(['media_id' => 1, '_id' => 0])->creator(auth()->user()->id)->pluck('media_id');
-        });
-
-        return isset($mediaLike[(string)$this->_id]);
+        $creator = User::user($creator['_id'])->first();
+        return ['_id' => $creator->_id, 'username' => $creator->username, 'avatar' => $creator->avatar];
     }
 
     /**
