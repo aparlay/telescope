@@ -4,8 +4,8 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Models\MediaLike;
-use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
+use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
@@ -100,7 +100,7 @@ class Media extends Model
      * @var array
      */
     protected $hidden = [
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
@@ -202,7 +202,7 @@ class Media extends Model
      */
     public function getSkinScoreAttribute(): int
     {
-        if (!empty($this->scores)) {
+        if (! empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ($score['type'] === 'skin') {
                     return $score['score'];
@@ -220,7 +220,7 @@ class Media extends Model
      */
     public function getAwesomenessScoreAttribute(): int
     {
-        if (!empty($this->scores)) {
+        if (! empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ($score['type'] === 'awesomeness') {
                     return $score['score'];
@@ -238,7 +238,7 @@ class Media extends Model
      */
     public function getAlertsAttribute(): array
     {
-        if (!isset($this->creator['_id']) || auth()->guest() ||
+        if (! isset($this->creator['_id']) || auth()->guest() ||
             ((string)$this->creator['_id'] !== (string)auth()->user()->_id)) {
             return [];
         }
@@ -258,8 +258,8 @@ class Media extends Model
      */
     public function getTimeScoreAttribute(): int
     {
-
         $oldness = time() - DT::utcToTimestamp($this->created_at);
+
         return match (true) {
             $oldness <= 21600 => 10,
             $oldness <= 43200 => 9,
@@ -304,7 +304,7 @@ class Media extends Model
             return 3;
         }
 
-        $mean = array_sum($meanLikes)/count($meanLikes);
+        $mean = array_sum($meanLikes) / count($meanLikes);
         $z = Significance::zScore($this->like_count, $mean, $sigma);
 
         return match (true) {
@@ -321,6 +321,7 @@ class Media extends Model
             default => 0,
         };
     }
+
     /**
      * Get the user's full name.
      *
@@ -358,7 +359,7 @@ class Media extends Model
     {
         return [
             'self' => route('media.show', ['media' => $this]),
-            'index' => route('user.media_list', ['user' => User::user($this->created_by)->first()])
+            'index' => route('user.media_list', ['user' => User::user($this->created_by)->first()]),
         ];
     }
 

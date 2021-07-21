@@ -69,7 +69,7 @@ class CoreServiceProvider extends ServiceProvider
                 'code' => $code,
             ];
 
-            if (!empty($message)) {
+            if (! empty($message)) {
                 $response['message'] = $message;
             }
 
