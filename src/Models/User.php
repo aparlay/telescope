@@ -248,11 +248,12 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [
-            'device_id' => 'sss'
+            'device_id' => 'sss',
         ];
     }
 
-    public function getAuthPassword(){
+    public function getAuthPassword()
+    {
         return $this->password_hash;
     }
 }

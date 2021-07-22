@@ -7,7 +7,6 @@ use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Http\Request;
 
 use Illuminate\Http\Response;
-use JWTAuth;
 use Validator;
 
 class UserController extends Controller
