@@ -5,7 +5,42 @@ namespace Aparlay\Core\Api\V1\Models;
 use Aparlay\Core\Models\Media as MediaBase;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;
+use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
 
+/**
+ * Class Media
+ *
+ * @package Aparlay\Core\Api\V1\Models
+ * @property ObjectId $_id
+ * @property string $description
+ * @property string $location
+ * @property string $hash
+ * @property string $file
+ * @property string $mime_type
+ * @property integer $size
+ * @property integer $length
+ * @property integer $visibility
+ * @property integer $like_count
+ * @property integer $comment_count
+ * @property array $count_fields_updated_at
+ * @property array $likes
+ * @property array $comments
+ * @property integer $status
+ * @property array $hashtags
+ * @property array $people
+ * @property array $creator
+ * @property string $cover
+ * @property string $slug
+ * @property ObjectId $created_by
+ * @property UTCDateTime $created_at
+ * @property UTCDateTime $updated_at
+ * @property-read mixed $filename
+ * @property-read array $links
+ * @property-read bool $is_protected
+ *
+ * @OA\Schema()
+ */
 class Media extends MediaBase
 {
     use Notifiable;

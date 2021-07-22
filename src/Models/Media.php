@@ -3,13 +3,10 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Models\Alert;
-use Aparlay\Core\Api\V1\Models\MediaLike;
-use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
-use Cache;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +16,42 @@ use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
 use MathPHP\Statistics\Descriptive;
 use MathPHP\Statistics\Significance;
+use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
 
+/**
+ * Class Media
+ *
+ * @package Aparlay\Core\Models
+ * @property ObjectId $_id
+ * @property string $description
+ * @property string $location
+ * @property string $hash
+ * @property string $file
+ * @property string $mime_type
+ * @property integer $size
+ * @property integer $length
+ * @property integer $visibility
+ * @property integer $like_count
+ * @property integer $comment_count
+ * @property array $count_fields_updated_at
+ * @property array $likes
+ * @property array $comments
+ * @property integer $status
+ * @property array $hashtags
+ * @property array $people
+ * @property array $creator
+ * @property string $cover
+ * @property string $slug
+ * @property ObjectId $created_by
+ * @property UTCDateTime $created_at
+ * @property UTCDateTime $updated_at
+ * @property-read mixed $filename
+ * @property-read array $links
+ * @property-read bool $is_protected
+ *
+ * @OA\Schema()
+ */
 class Media extends Model
 {
     use HasFactory;

@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -12,19 +13,20 @@ class MediaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return response()->format(Media::all());
+        return $this->response(Media::all());
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @param  User  $user
+     * @return JsonResponse
      */
-    public function listByUser(User $user)
+    public function listByUser(User $user): JsonResponse
     {
         //
     }
@@ -33,9 +35,9 @@ class MediaController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         //
     }
@@ -44,11 +46,11 @@ class MediaController extends Controller
      * Display the specified resource.
      *
      * @param  Media  $media
-     * @return Response
+     * @return JsonResponse
      */
-    public function show(Media $media)
+    public function show(Media $media): JsonResponse
     {
-        return response()->format($media);
+        return $this->response($media);
     }
 
     /**
@@ -56,9 +58,9 @@ class MediaController extends Controller
      *
      * @param  Request  $request
      * @param  Media  $media
-     * @return Response
+     * @return JsonResponse
      */
-    public function update(Request $request, Media $media)
+    public function update(Request $request, Media $media): JsonResponse
     {
         //
     }
@@ -67,9 +69,9 @@ class MediaController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function upload(Request $request)
+    public function upload(Request $request): JsonResponse
     {
         //
     }
@@ -78,9 +80,9 @@ class MediaController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Media  $media
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy(Media $media)
+    public function destroy(Media $media): JsonResponse
     {
         //
     }

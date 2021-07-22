@@ -46,7 +46,7 @@ class ReportSent extends Notification
         $message .= PHP_EOL . '_*Reason:*_ ' . $notifiable->reason;
         return (new SlackMessage)
             ->from('Reporter', ':radioactive_sign:')
-            ->to('#alua-report')
+            ->to('#' . config('slack_report'))
             ->content($message);
     }
 

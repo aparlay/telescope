@@ -1,12 +1,16 @@
 <?php
 // config for Aparlay/Core/ClassName
+use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
+use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
+
 return [
 
+    'slack_report' => env('SLACK_REPORT_CHANNEL', 'report'),
     'providers' => [
         /*
          * Application Service Providers...
          */
-        Aparlay\Core\Providers\AuthServiceProvider::class,
-        Aparlay\Core\Providers\EventServiceProvider::class,
+        AuthServiceProvider::class,
+        EventServiceProvider::class,
     ],
 ];

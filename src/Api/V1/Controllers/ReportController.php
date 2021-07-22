@@ -5,7 +5,9 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Notifications\ReportSent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
@@ -18,12 +20,12 @@ class ReportController extends Controller
      *
      * @param  User  $user
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function user(User $user, Request $request)
+    public function user(User $user, Request $request): JsonResponse
     {
-        if (Gate::forUser(auth()->user())->denies('report-user', $user)) {
-            response()->format([], 'You cannot like this video at the moment.', 403);
+        if (Gate::forUser(auth()->user())->denies('interact', $user->_id)) {
+            $this->error('You cannot report this user at the moment.', [], 403);
         }
 
         $request->validate([
@@ -39,7 +41,7 @@ class ReportController extends Controller
         $model->save();
         auth()->user()->notify(new ReportSent($model));
 
-        return response()->format($model, '', 201);
+        return $this->response($model, '', 201);
     }
 
     /**
@@ -47,12 +49,12 @@ class ReportController extends Controller
      *
      * @param  Media  $media
      * @param  Request  $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function media(Media $media, Request $request)
+    public function media(Media $media, Request $request): JsonResponse
     {
-        if (Gate::forUser(auth()->user())->denies('report-media', $media)) {
-            response()->format([], 'You cannot like this video at the moment.', 403);
+        if (Gate::forUser(auth()->user())->denies('interact', $media->created_by)) {
+            $this->error('You cannot report this video at the moment.', [], 403);
         }
 
         $request->validate([
@@ -67,6 +69,6 @@ class ReportController extends Controller
         ]);
         $model->save();
 
-        return response()->format($model, '', 201);
+        return $this->response($model, '', 201);
     }
 }

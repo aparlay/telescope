@@ -1,6 +1,6 @@
 <?php
 
-namespace Aparlay\Core\Providers;
+namespace Aparlay\Core\Api\V1\Providers;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;

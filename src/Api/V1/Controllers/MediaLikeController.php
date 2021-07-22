@@ -4,13 +4,9 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
-use Aparlay\Core\Api\V1\Models\Report;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use MongoDB\BSON\ObjectId;
-use yii\base\BaseObject;
 
 class MediaLikeController extends Controller
 {
@@ -89,12 +85,12 @@ class MediaLikeController extends Controller
      * )
      *
      * @param  Media  $media
-     * @return Response
+     * @return JsonResponse
      */
-    public function store(Media $media)
+    public function store(Media $media): JsonResponse
     {
-        if (Gate::forUser(auth()->user())->denies('like-media', $media)) {
-            response()->format([], 'You cannot like this video at the moment.', 403);
+        if (Gate::forUser(auth()->user())->denies('interact', $media->created_by)) {
+            $this->error('You cannot like this video at the moment.', [], 403);
         }
 
         $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
@@ -105,10 +101,10 @@ class MediaLikeController extends Controller
                 'user_id' => new ObjectId(auth()->user()->_id),
             ]);
             $model->save();
-            return response()->format($model, '', 201);
+            return $this->response($model, '', 201);
         }
 
-        return response()->format($mediaLike, '', 200);
+        return $this->response($mediaLike, '', 200);
     }
 
     /**
@@ -185,15 +181,15 @@ class MediaLikeController extends Controller
      * )
      *
      * @param  Media  $media
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy(Media $media)
+    public function destroy(Media $media): JsonResponse
     {
         $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->firstOrFail();
         if ($mediaLike === null) {
             $mediaLike->delete();
         }
 
-        return response()->format([], '', 204);
+        return $this->response([], '', 204);
     }
 }

@@ -61,20 +61,6 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'core');
-
-        Response::macro('format', function ($value, $message = '', $code = 200) {
-            $response = [
-                'data' => $value,
-                'status' => $code < 400 ? 'OK' : 'ERROR',
-                'code' => $code,
-            ];
-
-            if (! empty($message)) {
-                $response['message'] = $message;
-            }
-
-            return Response::json($response);
-        });
     }
 
     /**
