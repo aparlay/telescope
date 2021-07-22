@@ -3,12 +3,12 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Block;
-use Illuminate\Http\Request;
-
-use Illuminate\Http\Response;
-use Validator;
 use Aparlay\Core\Api\V1\Models\User;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Validator;
 
 class AuthController extends Controller
 {
@@ -73,15 +73,17 @@ class AuthController extends Controller
      * @return Response
      */
     public function login(Request $request)
-    { 
-        $validator = Validator::make($request->all(), 
-                      [ 
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
                       'email' => 'required|email',
-                      'password' => 'required'
-                     ]);  
- 
-         if ($validator->fails()) {  
-            return response()->json(['error'=>$validator->errors()], 401); 
+                      'password' => 'required',
+                     ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
         }
 
         if (! $token = auth()->attempt($validator->validated())) {
@@ -98,19 +100,21 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), 
-                      [ 
+        $validator = Validator::make(
+            $request->all(),
+            [
                       'email' => 'required|email|unique:users|max:100',
                       'password' => 'required|min:8|max:20',
                       'gender' => 'required|numeric',
                       'username' => 'nullable|min:6|max:20',
                       'phone_number' => 'nullable|numeric',
-                     ]);  
- 
-         if ($validator->fails()) {  
-            return response()->json(['error'=>$validator->errors()], 401); 
-        }   
- 
+                     ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
         $user = new User();
         $user->email = $request->email;
         $user->password_hash = Hash::make($request->password);
@@ -120,10 +124,10 @@ class AuthController extends Controller
         $user->status = User::STATUS_PENDING;
         $user->visibility = User::VISIBILITY_PUBLIC;
         $user->save();
-  
+
         return response()->json([
             'success' => true,
-            'data' => $user
+            'data' => $user,
         ], Response::HTTP_OK);
     }
 
