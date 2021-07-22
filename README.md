@@ -19,11 +19,38 @@ php artisan octane:start --watch
 ```
 ## Technology stack requirements
 
-- Nginx
-- PHP 8+
-- MonogoDB 4.4+
-- Redis 6+
+### Nginx
 
+### PHP 8+
+
+```bash
+sudo apt update
+sudo apt -y upgrade
+sudo apt install lsb-release ca-certificates apt-transport-https software-properties-common -y
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
+sudo apt install php8.0 php8.0-amqp php8.0-common php8.0-gd php8.0-sqlite3 \
+php8.0-xsl php8.0-apcu php8.0-curl php8.0-gmp php8.0-opcache php8.0-redis \
+php8.0-igbinary php8.0-mbstring php8.0-bcmath php8.0-dev php8.0-imagick \
+php8.0-memcached php8.0-uuid php8.0-zip php8.0-bz2 php8.0-imap php8.0-mysql \
+php8.0-psr php8.0-cli php8.0-fpm php8.0-intl php8.0-oauth php8.0-xml
+php --version
+sudo pecl install swoole
+```
+
+### MonogoDB 4.4+
+```bash
+sudo apt install gnupg
+wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+sudo apt update
+sudo apt install -y mongodb-org
+```
+### Redis 6+
+```bash
+sudo apt update
+sudo apt install redis-server
+```
 
 ## Generate Self Signed SSL Certification
 
