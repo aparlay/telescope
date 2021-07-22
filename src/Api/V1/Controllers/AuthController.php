@@ -3,12 +3,9 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Block;
-use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Http\Request;
 
 use Illuminate\Http\Response;
-use JWTAuth;
-use Validator;
 
 class AuthController extends Controller
 {
@@ -76,7 +73,7 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (!$token = auth()->attempt($credentials)) {
+        if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -95,7 +92,6 @@ class AuthController extends Controller
 
         return $this->response(['message' => 'Success']);
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -120,7 +116,7 @@ class AuthController extends Controller
         return $this->response([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
         ]);
     }
 }
