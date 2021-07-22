@@ -101,6 +101,7 @@ class MediaLikeController extends Controller
                 'user_id' => new ObjectId(auth()->user()->_id),
             ]);
             $model->save();
+
             return $this->response($model, '', 201);
         }
 

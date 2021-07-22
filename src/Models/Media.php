@@ -166,6 +166,7 @@ class Media extends Model
     public function setCreatorAttribute($creator)
     {
         $creator = User::user($creator['_id'])->first();
+
         return ['_id' => $creator->_id, 'username' => $creator->username, 'avatar' => $creator->avatar];
     }
 
