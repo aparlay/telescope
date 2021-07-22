@@ -18,15 +18,15 @@ use MongoDB\BSON\UTCDateTime;
  * @property string $hash
  * @property string $file
  * @property string $mime_type
- * @property integer $size
- * @property integer $length
- * @property integer $visibility
- * @property integer $like_count
- * @property integer $comment_count
+ * @property int $size
+ * @property int $length
+ * @property int $visibility
+ * @property int $like_count
+ * @property int $comment_count
  * @property array $count_fields_updated_at
  * @property array $likes
  * @property array $comments
- * @property integer $status
+ * @property int $status
  * @property array $hashtags
  * @property array $people
  * @property array $creator
