@@ -30,7 +30,7 @@ class MediaVisitFactory extends Factory
             },
             'media_ids' => function () {
                 $ids = [];
-                foreach (Media::select('_id')->inRandomOrder()->limit($this->faker->randomNumber(2))->value('_id') as $id) {
+                foreach (Media::select('_id')->limit($this->faker->randomNumber(2))->pluck('_id') as $id) {
                     $ids[] = new ObjectId($id);
                 }
 
