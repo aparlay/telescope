@@ -1,6 +1,7 @@
 <?php
 
 use Aparlay\Core\Api\V1\Controllers\AlertController;
+use Aparlay\Core\Api\V1\Controllers\AuthController;
 use Aparlay\Core\Api\V1\Controllers\BlockController;
 use Aparlay\Core\Api\V1\Controllers\FollowController;
 use Aparlay\Core\Api\V1\Controllers\MediaController;
@@ -69,12 +70,14 @@ Route::middleware('api')->name('core.api.v1.')->prefix('v1')->group(function () 
 
     Route::match(['put', 'patch'], '/{alert}', [AlertController::class, 'update'])->name('alert.update');
     Route::match(['put', 'patch'], '/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
-    Route::match(['put', 'patch'], '/refresh-token', [UserController::class, 'refreshToken'])->name('user.refreshToken');
     Route::patch('/validate-otp', [UserController::class, 'validateOtp'])->name('user.validateOtp');
     Route::post('/request-otp', [UserController::class, 'requestOtp'])->name('user.requestOtp');
     Route::delete('/logout', [UserController::class, 'logout'])->name('user.logout');
-    Route::post('/login', [UserController::class, 'login'])->name('user.login');
-    Route::post('/register', [UserController::class, 'register'])->name('user.register');
+
+    Route::post('/login', [AuthController::class, 'login'])->name('user.login');
+    Route::post('/register', [AuthController::class, 'register'])->name('user.register');
+    Route::match(['put', 'patch'], '/refresh', [AuthController::class, 'refresh'])->name('user.refreshToken');
+
     Route::get('/version/{os}/{version}', [VersionController::class, 'show'])->name('version.show');
     Route::get('/cache', [SiteController::class, 'cache'])->name('site.cache');
     Route::get('/health', [SiteController::class, 'health'])->name('site.health');

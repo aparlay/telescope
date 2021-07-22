@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * User model
@@ -48,7 +49,7 @@ use MongoDB\BSON\UTCDateTime;
  * @OA\Schema()
  *
  */
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory;
     use Notifiable;
@@ -237,5 +238,21 @@ class User extends Authenticatable
             self::STATUS_BLOCKED => __('Banned'),
             self::STATUS_DEACTIVATED => __('Deleted'),
         ];
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [
+            'device_id' => 'sss'
+        ];
+    }
+
+    public function getAuthPassword(){
+        return $this->password_hash;
     }
 }
