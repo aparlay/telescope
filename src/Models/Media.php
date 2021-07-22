@@ -343,8 +343,8 @@ class Media extends Model
     public function getLinksAttribute(): array
     {
         return [
-            'self' => route('media.show', ['media' => $this]),
-            'index' => route('user.media_list', ['user' => User::user($this->created_by)->first()]),
+            'self' => route('core.api.v1.media.show', ['media' => $this]),
+            'index' => route('core.api.v1.user.media_list', ['user' => User::user($this->created_by)->first()]),
         ];
     }
 

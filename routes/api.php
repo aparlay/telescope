@@ -28,15 +28,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::middleware('api')->prefix('v1')->group(function () {
+Route::middleware('api')->name('core.api.v1.')->prefix('v1')->group(function () {
     Route::prefix('media')->name('media.')->group(function () {
         Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
-        Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])
-            ->middleware('cache.headers:public;max_age=2628000;etag')->name('show');
         Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
         Route::post('/', [MediaController::class, 'store'])->name('create');
         Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
+        Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])
+            ->middleware('cache.headers:public;max_age=2628000;etag')->name('show');
 
         Route::put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
         Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
