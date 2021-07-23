@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
 use Aparlay\Core\Api\V1\Models\User;
+use Illuminate\Contracts\Validation\Rule;
 
 class IsValidGender implements Rule
 {

@@ -3,19 +3,18 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Requests\UserRequest;
+use Aparlay\Core\Api\V1\Rules\IsValidGender;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
-use Aparlay\Core\Api\V1\Requests\UserRequest;
-use Aparlay\Core\Api\V1\Rules\IsValidGender;
 use Validator;
 
 class AuthController extends Controller
 {
-
     /**
      * Create a new AuthController instance.
      *
@@ -82,7 +81,7 @@ class AuthController extends Controller
                 'password' => 'required',
             ]
         );
-        
+
         if ($validator->fails()) {
             return $this->error(
                 __('The given data was invalid.'),
@@ -90,7 +89,7 @@ class AuthController extends Controller
                 Response::HTTP_UNPROCESSABLE_ENTITY
             );
         }
-        
+
         if (! $token = auth()->attempt($validator->validated())) {
             return $this->error(
                 __('Data Validation Failed'),
@@ -131,7 +130,7 @@ class AuthController extends Controller
                 'email' => ['nullable','email','unique:users','max:100', 'required_without:phone_number'],
                 'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
                 'password_confirmation' => ['required'],
-                'gender' => ['required','numeric', new IsValidGender],
+                'gender' => ['required','numeric', new IsValidGender()],
                 'username' => ['nullable','unique:users','min:6','max:20'],
                 'phone_number' => ['nullable','numeric','required_without:email'],
             ]
@@ -145,7 +144,8 @@ class AuthController extends Controller
             );
         }
 
-        $user = User::create(array_merge($request->all(),
+        $user = User::create(array_merge(
+            $request->all(),
             ['password_hash' => Hash::make($request->password)],
             ['status' => User::STATUS_PENDING],
             ['visibility' => User::VISIBILITY_PUBLIC]

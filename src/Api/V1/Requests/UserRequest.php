@@ -1,4 +1,5 @@
 <?php
+
 namespace Aparlay\Core\Api\V1\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
