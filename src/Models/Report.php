@@ -98,7 +98,7 @@ class Report extends Model
     /**
      * Get the phone associated with the report.
      */
-    public function media(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function media(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
     }
@@ -106,7 +106,7 @@ class Report extends Model
     /**
      * Get the user associated with the report.
      */
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -114,7 +114,7 @@ class Report extends Model
     /**
      * Get the user associated with the report.
      */
-    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }

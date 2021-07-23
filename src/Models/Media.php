@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Models\Alert;
-use Aparlay\Core\Models\User;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;

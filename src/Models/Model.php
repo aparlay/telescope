@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Aparlay\Core\Models;
 
 use Illuminate\Support\Facades\Auth;
