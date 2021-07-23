@@ -8,7 +8,6 @@ use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Jenssegers\Mongodb\Eloquent\Model;
 use MongoDB\BSON\ObjectId;
 
 /**

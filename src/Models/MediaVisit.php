@@ -7,7 +7,6 @@ use Aparlay\Core\Models\Scopes\MediaVisitScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Jenssegers\Mongodb\Eloquent\Model;
 
 class MediaVisit extends Model
 {
@@ -50,7 +49,7 @@ class MediaVisit extends Model
     protected $casts = [
         '_id' => 'string',
         'user_id' => 'string',
-        'created_at' => 'datetime',
+        'created_at' => 'timestamp',
     ];
 
     /**

@@ -7,7 +7,6 @@ use Aparlay\Core\Models\Scopes\BlockScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Jenssegers\Mongodb\Eloquent\Model;
 
 class Block extends Model
 {

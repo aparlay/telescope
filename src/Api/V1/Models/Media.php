@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Models;
 use Aparlay\Core\Models\Media as MediaBase;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
@@ -116,7 +117,7 @@ class Media extends MediaBase
 
         $mediaLikeCacheKey = 'MediaVisit.creator.' . auth()->user()->id;
         $mediaLike = Cache::remember($mediaLikeCacheKey, 'cache.longDuration', function () {
-            return MediaVisit::select(['media_id' => 1, '_id' => 0])->creator(auth()->user()->id)->pluck('media_id');
+            return MediaVisit::select(['media_id' => 1, '_id' => 0])->user(auth()->user()->id)->pluck('media_id');
         });
 
         return isset($mediaLike[(string)$this->_id]);

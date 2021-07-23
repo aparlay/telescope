@@ -7,7 +7,6 @@ use Aparlay\Core\Models\Scopes\OrderScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Jenssegers\Mongodb\Eloquent\Model;
 
 class Order extends Model
 {

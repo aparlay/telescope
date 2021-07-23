@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Api\V1\Models\Alert;
-use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Alert;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
@@ -157,6 +157,14 @@ class Media extends Model
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     /**
      * Set the media's creator.

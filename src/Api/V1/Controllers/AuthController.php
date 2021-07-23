@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
-use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -82,7 +81,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return $this->error(
-                __('Data Validation Failed'),
+                __('The given data was invalid.'),
                 $validator->errors()->toArray(),
                 Response::HTTP_UNPROCESSABLE_ENTITY
             );

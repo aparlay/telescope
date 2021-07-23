@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -89,10 +90,34 @@ class Report extends Model
         'comment_id' => 'string',
         'created_by' => 'string',
         'updated_by' => 'string',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime',
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp',
+        'deleted_at' => 'timestamp',
     ];
+
+    /**
+     * Get the phone associated with the report.
+     */
+    public function media(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'media_id');
+    }
+
+    /**
+     * Get the user associated with the report.
+     */
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get the user associated with the report.
+     */
+    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
     /**
      * @return array
@@ -117,6 +142,15 @@ class Report extends Model
         ];
     }
 
+    public function getSlackSubjectAdminUrlAttribute()
+    {
+        return match ($this->type) {
+            self::TYPE_USER => $this->user->slack_admin_url,
+            self::TYPE_MEDIA => $this->media->slack_admin_url,
+            default => '',
+        };
+    }
+
     /**
      * Create a new factory instance for the model.
      *
@@ -125,5 +159,16 @@ class Report extends Model
     protected static function newFactory(): Factory
     {
         return ReportFactory::new();
+    }
+
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForSlack($notification)
+    {
+        return config('app.slack_webhook_url');
     }
 }

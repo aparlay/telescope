@@ -3,10 +3,11 @@
 namespace Aparlay\Core\Api\V1\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class ReportSent extends Notification
+class ReportSent extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -44,9 +45,9 @@ class ReportSent extends Notification
         $message .= PHP_EOL . '_*Reason:*_ ' . $notifiable->reason;
 
         return (new SlackMessage())
-            ->from('Reporter', ':radioactive_sign:')
-            ->to('#' . config('slack_report'))
-            ->content($message);
+            ->to('waptap-testing')
+            ->content($message)
+            ->success();
     }
 
     /**
@@ -58,7 +59,8 @@ class ReportSent extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'title' => 'test',
+            'description' => 'd'
         ];
     }
 }

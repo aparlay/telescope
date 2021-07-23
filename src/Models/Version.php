@@ -7,7 +7,6 @@ use Aparlay\Core\Models\Scopes\VersionScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Jenssegers\Mongodb\Eloquent\Model;
 
 class Version extends Model
 {

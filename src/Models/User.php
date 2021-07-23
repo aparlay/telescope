@@ -156,6 +156,16 @@ class User extends Authenticatable implements JWTSubject
         'deleted_at' => 'datetime',
     ];
 
+    public function getSlackAdminUrlAttribute()
+    {
+        return "<{$this->admin_url}|@{$this->username}>";
+    }
+
+    public function getAdminUrlAttribute()
+    {
+        return config('app.adminUrls.profile') . $this->_id;
+    }
+
     /**
      * Create a new factory instance for the model.
      *
@@ -255,5 +265,16 @@ class User extends Authenticatable implements JWTSubject
     public function getAuthPassword()
     {
         return $this->password_hash;
+    }
+
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForSlack($notification)
+    {
+        return config('slack_webhook');
     }
 }
