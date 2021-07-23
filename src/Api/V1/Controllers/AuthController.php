@@ -87,7 +87,7 @@ class AuthController extends Controller
             );
         }
 
-        if (!$token = auth()->attempt($validator->validated())) {
+        if (! $token = auth()->attempt($validator->validated())) {
             return $this->error(
                 __('Data Validation Failed'),
                 $validator->errors()->toArray(),
