@@ -1,10 +1,12 @@
-## Setup project
+# Alua Backend
 
+## Docker based env
+## Setup Project
 Please follow the steps:
-
 ```bash
 cd {WEB_ROOT_DIR}
 mkdir "aparlay"
+cd aparlay
 git clone git@github.com:aparlay/core.git
 git clone git@github.com:aparlay/alua.git
 git clone git@github.com:aparlay/waptap.git
@@ -13,10 +15,14 @@ composer install
 cd ../alua
 composer install
 mkdir -p packages/Aparlay
-ln -s {WEB_ROOT_DIR}/core {WEB_ROOT_DIR}/alua/packages/Aparlay/Core
+cd packages/Aparlay
+ln -s ../../../core Core
 
-php artisan octane:start --watch
+cd {WEB_ROOT_DIR}/alua
+./vendor/bin/sail build --no-cache
+./vendor/bin/sail up -d
 ```
+
 ## Technology stack requirements
 
 ### Nginx
@@ -162,4 +168,25 @@ server {
     server_name api.alua.test;
     return 301 https://$host$request_uri;
 }
+```
+## Setup Project
+
+Please follow the steps:
+
+```bash
+cd {WEB_ROOT_DIR}
+mkdir "aparlay"
+git clone git@github.com:aparlay/core.git
+git clone git@github.com:aparlay/alua.git
+git clone git@github.com:aparlay/waptap.git
+cd core
+composer install
+php artisan db:seed
+cd ../alua
+composer install
+mkdir -p packages/Aparlay
+cd packages/Aparlay
+ln -s ../../../core Core
+
+php artisan octane:start --watch
 ```
