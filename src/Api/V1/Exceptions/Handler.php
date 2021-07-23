@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
      * @return JsonResponse|Response|\Symfony\Component\HttpFoundation\Response
      * @throws Throwable
      */
-    public function render($request, Exception|Throwable $exception)
+    public function render($request, Exception | Throwable $exception)
     {
         // detect instance
         if ($exception instanceof UnauthorizedHttpException) {

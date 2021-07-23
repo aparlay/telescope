@@ -60,7 +60,7 @@ class ReportSent extends Notification implements ShouldQueue
     {
         return [
             'title' => 'test',
-            'description' => 'd'
+            'description' => 'd',
         ];
     }
 }
