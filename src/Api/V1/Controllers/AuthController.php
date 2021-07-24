@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\UserRequest;
 use Aparlay\Core\Api\V1\Rules\IsValidGender;
+use Aparlay\Core\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,14 +16,16 @@ use Validator;
 
 class AuthController extends Controller
 {
+    protected $userService;
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserService $userService)
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->userService = $userService;
     }
 
     /**
@@ -77,7 +80,7 @@ class AuthController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'email' => 'required|email',
+                'username' => 'required',
                 'password' => 'required',
             ]
         );
@@ -90,15 +93,21 @@ class AuthController extends Controller
             );
         }
 
-        if (! $token = auth()->attempt($validator->validated())) {
+        $login_type = filter_var( $request->username, FILTER_VALIDATE_EMAIL ) ? 'email' : 'phone_number';
+
+        $credentials = [$login_type => $request->username, 'password'=>$request->password];
+
+        if ($token = auth()->attempt($credentials)) {
+            if(!$this->userService->requireOtp(auth()->user(), $login_type)){
+                return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
+            }
+        } else {
             return $this->error(
                 __('Data Validation Failed'),
                 $validator->errors()->toArray(),
                 Response::HTTP_UNAUTHORIZED
             );
         }
-
-        return $this->response($this->respondWithToken($token));
     }
 
     /**
@@ -112,8 +121,9 @@ class AuthController extends Controller
     {
         return [
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'token_expired_at' => auth()->factory()->getTTL() * 60,
+            'refresh_token' => $token,
+            'refresh_token_expired_at' => auth()->factory()->getTTL() * 60,
         ];
     }
 
