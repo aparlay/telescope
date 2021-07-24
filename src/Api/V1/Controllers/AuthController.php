@@ -17,6 +17,7 @@ use Validator;
 class AuthController extends Controller
 {
     protected $userService;
+
     /**
      * Create a new AuthController instance.
      *
@@ -93,13 +94,13 @@ class AuthController extends Controller
             );
         }
 
-        $login_type = filter_var( $request->username, FILTER_VALIDATE_EMAIL ) ? 'email' : 'phone_number';
+        $login_type = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
 
-        $credentials = [$login_type => $request->username, 'password'=>$request->password];
+        $credentials = [$login_type => $request->username, 'password' => $request->password];
 
         if ($token = auth()->attempt($credentials)) {
-            if(!$this->userService->requireOtp(auth()->user(), $login_type)){
-                return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
+            if (! $this->userService->requireOtp(auth()->user(), $login_type)) {
+                return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message' => 'Entity has been created successfully!'], Response::HTTP_OK);
             }
         } else {
             return $this->error(
