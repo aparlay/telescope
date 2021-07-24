@@ -3,10 +3,13 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Requests\UserRequest;
+use Aparlay\Core\Api\V1\Rules\IsValidGender;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Validator;
 
@@ -119,16 +122,17 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function register(Request $request)
+    public function register(UserRequest $request)
     {
         $validator = Validator::make(
             $request->all(),
             [
-                'email' => 'required|email|unique:users|max:100',
-                'password' => 'required|min:8|max:20',
-                'gender' => 'required|numeric',
-                'username' => 'nullable|min:6|max:20',
-                'phone_number' => 'nullable|numeric',
+                'email' => ['nullable','email','unique:users','max:100', 'required_without:phone_number'],
+                'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+                'password_confirmation' => ['required'],
+                'gender' => ['required','numeric', new IsValidGender()],
+                'username' => ['nullable','unique:users','min:6','max:20'],
+                'phone_number' => ['nullable','numeric','required_without:email'],
             ]
         );
 
@@ -140,15 +144,12 @@ class AuthController extends Controller
             );
         }
 
-        $user = new User();
-        $user->email = $request->email;
-        $user->password_hash = Hash::make($request->password);
-        $user->username = ($request->username) ?: null;
-        $user->phone_number = ($request->phone_number) ?: null;
-        $user->gender = $request->gender;
-        $user->status = User::STATUS_PENDING;
-        $user->visibility = User::VISIBILITY_PUBLIC;
-        $user->save();
+        $user = User::create(array_merge(
+            $request->all(),
+            ['password_hash' => Hash::make($request->password)],
+            ['status' => User::STATUS_PENDING],
+            ['visibility' => User::VISIBILITY_PUBLIC]
+        ));
 
         return $this->response(['success' => true, 'data' => $user], '', Response::HTTP_OK);
     }
