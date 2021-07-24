@@ -48,12 +48,14 @@ class UserRequest extends FormRequest
             switch ($this->gender) {
                 case User::GENDER_FEMALE:
                     $filename = 'default_fm_' . random_int(1, 60) . '.png';
+
                     break;
                 case User::GENDER_MALE:
-                    $filename = 'default_m_' . random_int(1,120)  . '.png';
+                    $filename = 'default_m_' . random_int(1, 120)  . '.png';
+
                     break;
                 default:
-                    $filename = (((bool)random_int(0, 1)) ? 'default_m_' . random_int(1,120) : 'default_fm_' . random_int(1, 60)) . '.png';
+                    $filename = (((bool)random_int(0, 1)) ? 'default_m_' . random_int(1, 120) : 'default_fm_' . random_int(1, 60)) . '.png';
             }
             $this->avatar = config('app.cdn.avatars') . $filename;
         }
