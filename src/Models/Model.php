@@ -16,12 +16,12 @@ class Model extends \Jenssegers\Mongodb\Eloquent\Model
 
         static::creating(function ($model) {
             $loggedInUser = Auth::user();
-            $model->created_by = is_object($loggedInUser) ? new ObjectId($loggedInUser->_id) : null;
-            $model->updated_by = is_object($loggedInUser) ? new ObjectId($loggedInUser->_id) : null;
+            $model->created_by = is_object($loggedInUser) ? new ObjectId($loggedInUser->_id) : $model->created_by;
+            $model->updated_by = is_object($loggedInUser) ? new ObjectId($loggedInUser->_id) : $model->updated_by;
         });
 
         static::updating(function ($model) {
-            $model->updated_by = is_object($loggedInUser = Auth::user()) ? new ObjectId($loggedInUser->_id) : null;
+            $model->updated_by = is_object($loggedInUser = Auth::user()) ? new ObjectId($loggedInUser->_id) : $model->updated_by;
         });
     }
 }

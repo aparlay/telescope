@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,11 +24,11 @@ class MediaLikeFactory extends Factory
     public function definition()
     {
         return [
-            'media_id' => function () {
-                return new ObjectId(Media::factory()->create()->_id);
+            'media_id' => function ($model) {
+                return new ObjectId($model['media_id']);
             },
-            'user_id' => function () {
-                return new ObjectId(User::factory()->create()->_id);
+            'user_id' => function ($model) {
+                return new ObjectId($model['user_id']);
             },
             'creator' => function ($model) {
                 $user = User::user($model['user_id'])->first();
@@ -38,6 +37,12 @@ class MediaLikeFactory extends Factory
                     'username' => $user->username,
                     'avatar' => $user->avatar,
                 ];
+            },
+            'created_by' => function ($model) {
+                return new ObjectId($model['user_id']);
+            },
+            'updated_by' => function ($model) {
+                return new ObjectId($model['user_id']);
             },
         ];
     }
