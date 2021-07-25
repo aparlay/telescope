@@ -2,9 +2,10 @@
 
 namespace Aparlay\Core\Database\Seeders;
 
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\Report;
+use Aparlay\Core\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ReportSeeder extends Seeder
 {
@@ -15,7 +16,9 @@ class ReportSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::collection('reports')->truncate();
-        Report::factory()->count(100)->create();
+        Report::factory()->count(20)
+            ->for(User::factory()->create(), 'userObj')
+            ->for(Media::factory()->forUserObj()->create(), 'mediaObj')
+            ->create();
     }
 }

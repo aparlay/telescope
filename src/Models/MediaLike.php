@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Database\Factories\MediaLikeFactory;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -36,7 +35,7 @@ class MediaLike extends Model
      * The collection associated with the model.
      * @var string
      */
-    protected $collection = 'media_visits';
+    protected $collection = 'media_likes';
 
     /**
      * The attributes that are mass assignable.
@@ -49,7 +48,16 @@ class MediaLike extends Model
         'user_id',
         'creator',
         'created_at',
+        'created_by',
+        'updated_by',
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -66,44 +74,25 @@ class MediaLike extends Model
      */
     protected $casts = [
         '_id' => 'string',
-        'media_id' => 'string',
-        'user_id' => 'string',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
 
     /**
-     * Get the user's full name.
-     *
-     * @return string
+     * Get the phone associated with the user.
      */
-    public function getCreatorAttribute($creator)
+    public function userObj()
     {
-        $creator['_id'] = (string)$creator['_id'];
-
-        if (auth()->guest()) {
-            $creator['is_followed'] = false;
-            $creator['is_liked'] = false;
-
-            return $creator;
-        }
-        $user = auth()->user();
-        $creator['is_followed'] = isset($this->creator['_id'], $user->following[(string)$this->creator['_id']]);
-
-        return $creator;
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
-     * Set the mediaLike's creator.
-     *
-     * @return array
+     * Get the phone associated with the user.
      */
-    public function setCreatorAttribute($creator)
+    public function mediaObj()
     {
-        $creator = User::user($creator['_id'])->first();
-
-        return ['_id' => $creator->_id, 'username' => $creator->username, 'avatar' => $creator->avatar];
+        return $this->belongsTo(Media::class, 'media_id');
     }
 
     /**

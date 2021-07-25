@@ -4,7 +4,6 @@ namespace Aparlay\Core\Database\Seeders;
 
 use Aparlay\Core\Models\Alert;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class AlertSeeder extends Seeder
 {
@@ -15,7 +14,6 @@ class AlertSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::collection('alerts')->truncate();
-        Alert::factory()->count(100)->create();
+        Alert::factory()->count(20)->create();
     }
 }

@@ -3,8 +3,8 @@
 namespace Aparlay\Core\Database\Seeders;
 
 use Aparlay\Core\Models\MediaVisit;
+use Aparlay\Core\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class MediaVisitSeeder extends Seeder
 {
@@ -15,7 +15,6 @@ class MediaVisitSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::collection('media_visits')->truncate();
-        MediaVisit::factory()->count(1000)->create();
+        MediaVisit::factory()->count(20)->for(User::factory()->create(), 'userObj')->create();
     }
 }

@@ -45,6 +45,7 @@ use MongoDB\BSON\UTCDateTime;
 class Media extends MediaBase
 {
     use Notifiable;
+    use CreatorFieldTrait;
 
     /**
      * Get the Slack representation of the notification.
