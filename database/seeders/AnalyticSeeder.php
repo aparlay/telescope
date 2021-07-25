@@ -4,7 +4,6 @@ namespace Aparlay\Core\Database\Seeders;
 
 use Aparlay\Core\Models\Analytic;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class AnalyticSeeder extends Seeder
 {
@@ -15,7 +14,6 @@ class AnalyticSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::collection('analytics')->truncate();
-        Analytic::factory()->count(100)->create();
+        Analytic::factory()->count(20)->create();
     }
 }

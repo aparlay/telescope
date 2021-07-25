@@ -9,7 +9,6 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Jenssegers\Mongodb\Eloquent\Model;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
 use MathPHP\Statistics\Descriptive;
@@ -159,21 +158,9 @@ class Media extends Model
     /**
      * Get the phone associated with the user.
      */
-    public function user()
+    public function userObj()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * Set the media's creator.
-     *
-     * @return array
-     */
-    public function setCreatorAttribute($creator)
-    {
-        $creator = User::user($creator['_id'])->first();
-
-        return ['_id' => $creator->_id, 'username' => $creator->username, 'avatar' => $creator->avatar];
     }
 
     /**
@@ -350,7 +337,7 @@ class Media extends Model
     {
         return [
             'self' => route('core.api.v1.media.show', ['media' => $this]),
-            'index' => route('core.api.v1.user.media_list', ['user' => User::user($this->created_by)->first()]),
+            //'index' => route('core.api.v1.user.media_list', ['user' => $this->created_by]),
         ];
     }
 

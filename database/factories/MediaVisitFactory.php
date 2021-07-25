@@ -4,7 +4,6 @@ namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
-use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use MongoDB\BSON\ObjectId;
 
@@ -25,8 +24,8 @@ class MediaVisitFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => function () {
-                return new ObjectId(User::factory()->create()->_id);
+            'user_id' => function ($model) {
+                return new ObjectId($model['user_id']);
             },
             'media_ids' => function () {
                 $ids = [];
@@ -37,6 +36,12 @@ class MediaVisitFactory extends Factory
                 return $ids;
             },
             'date' => $this->faker->date(),
+            'created_by' => function ($model) {
+                return new ObjectId($model['user_id']);
+            },
+            'updated_by' => function ($model) {
+                return new ObjectId($model['user_id']);
+            },
         ];
     }
 }
