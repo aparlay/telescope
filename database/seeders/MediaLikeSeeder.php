@@ -2,9 +2,10 @@
 
 namespace Aparlay\Core\Database\Seeders;
 
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
+use Aparlay\Core\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class MediaLikeSeeder extends Seeder
 {
@@ -15,7 +16,10 @@ class MediaLikeSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::collection('media_likes')->truncate();
-        MediaLike::factory()->count(1000)->create();
+        MediaLike::factory()
+            ->count(20)
+            ->for(User::factory()->create(), 'userObj')
+            ->for(Media::factory()->for(User::factory()->create(), 'userObj')->create(), 'mediaObj')
+            ->create();
     }
 }

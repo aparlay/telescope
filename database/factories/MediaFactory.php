@@ -51,8 +51,8 @@ class MediaFactory extends Factory
             'people' => [],
             'processing_log' => [],
             'blocked_user_ids' => [],
-            'user_id' => function () {
-                return new ObjectId(User::factory()->create()->_id);
+            'user_id' => function ($model) {
+                return new ObjectId($model['user_id']);
             },
             'creator' => function ($model) {
                 $user = User::user($model['user_id'])->first();
@@ -65,11 +65,11 @@ class MediaFactory extends Factory
             'scores' => [],
             'sort_score' => $this->faker->randomNumber(4),
             'slug' => Str::random(6),
-            'created_by' => function ($alert) {
-                return new ObjectId($alert['user_id']);
+            'created_by' => function ($model) {
+                return new ObjectId($model['user_id']);
             },
-            'updated_by' => function ($alert) {
-                return new ObjectId($alert['user_id']);
+            'updated_by' => function ($model) {
+                return new ObjectId($model['user_id']);
             }
         ];
     }

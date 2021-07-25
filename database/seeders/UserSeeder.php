@@ -4,7 +4,6 @@ namespace Aparlay\Core\Database\Seeders;
 
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -15,7 +14,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::collection('users')->truncate();
-        User::factory()->count(100)->create();
+        User::factory()->count(20)->create();
     }
 }
