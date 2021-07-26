@@ -31,6 +31,8 @@ class MediaVisit extends Model
         'media_ids',
         'date',
         'created_at',
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -48,9 +50,16 @@ class MediaVisit extends Model
      */
     protected $casts = [
         '_id' => 'string',
-        'user_id' => 'string',
         'created_at' => 'timestamp',
     ];
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function userObj()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     /**
      * Create a new factory instance for the model.

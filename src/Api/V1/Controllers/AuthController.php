@@ -4,28 +4,31 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\UserRequest;
-use Aparlay\Core\Api\V1\Rules\IsValidGender;
+use Aparlay\Core\Api\V1\Requests\LoginRequest;
+use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Validator;
 
 class AuthController extends Controller
 {
     protected $userService;
+
+    protected $userRepository;
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, UserRepository $userRepository)
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
         $this->userService = $userService;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -75,25 +78,8 @@ class AuthController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function login(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'username'  => 'required',
-                'password'  => 'required',
-                'otp'       => 'nullable'
-            ]
-        );
-
-        if ($validator->fails()) {
-            return $this->error(
-                __('The given data was invalid.'),
-                $validator->errors()->toArray(),
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
-        }
-
+    public function login(LoginRequest $request)
+    {   
         $loginEntity = $this->getLoginEntity($request->username);
 
         $credentials = [$loginEntity => $request->username, 'password'=>$request->password];
@@ -155,6 +141,7 @@ class AuthController extends Controller
         ];
     }
 
+
     /**
      * Register a User.
      *
@@ -162,26 +149,6 @@ class AuthController extends Controller
      */
     public function register(UserRequest $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'email' => ['nullable','email','unique:users','max:100', 'required_without:phone_number'],
-                'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
-                'password_confirmation' => ['required'],
-                'gender' => ['required','numeric', new IsValidGender()],
-                'username' => ['nullable','unique:users','min:6','max:20'],
-                'phone_number' => ['nullable','numeric','required_without:email'],
-            ]
-        );
-
-        if ($validator->fails()) {
-            return $this->error(
-                __('Data Validation Failed'),
-                $validator->errors()->toArray(),
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
-        }
-
         $user = User::create(array_merge(
             $request->all(),
             ['password_hash' => Hash::make($request->password)],

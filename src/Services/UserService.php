@@ -53,7 +53,7 @@ class UserService
             $result = [
                 'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
             ];
-
+            
             $otp = (new Otp())->generate($this->email, $this->device_id);
             if (!$otp->hasErrors()) {
                 return $otp->send();

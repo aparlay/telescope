@@ -102,6 +102,7 @@ class MediaLikeController extends Controller
                 'user_id' => new ObjectId(auth()->user()->_id),
             ]);
             $model->save();
+            $model->refresh();
 
             return $this->response($model, '', Response::HTTP_CREATED);
         }
@@ -187,7 +188,7 @@ class MediaLikeController extends Controller
      */
     public function destroy(Media $media): JsonResponse
     {
-        $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->firstOrFail();
+        $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
         if ($mediaLike !== null) {
             $mediaLike->delete();
         }

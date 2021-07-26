@@ -95,20 +95,21 @@ class Report extends Model
         'deleted_at' => 'timestamp',
     ];
 
+
     /**
-     * Get the phone associated with the report.
+     * Get the phone associated with the user.
      */
-    public function media(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function userObj()
     {
-        return $this->belongsTo(Media::class, 'media_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
-     * Get the user associated with the report.
+     * Get the phone associated with the user.
      */
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function mediaObj()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Media::class, 'media_id');
     }
 
     /**
@@ -145,8 +146,8 @@ class Report extends Model
     public function getSlackSubjectAdminUrlAttribute()
     {
         return match ($this->type) {
-            self::TYPE_USER => $this->user->slack_admin_url,
-            self::TYPE_MEDIA => $this->media->slack_admin_url,
+            self::TYPE_USER => $this->userObj->slack_admin_url,
+            self::TYPE_MEDIA => $this->mediaObj->slack_admin_url,
             default => '',
         };
     }
