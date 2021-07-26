@@ -5,6 +5,8 @@ namespace Aparlay\Core\Api\V1\Requests;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -25,7 +27,14 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        return [];
+        return [
+            'email' => ['nullable','email','unique:users','max:100', 'required_without:phone_number'],
+            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+            'password_confirmation' => ['required'],
+            'gender' => ['required','numeric', Rule::in(array_keys(User::getGenders()))],
+            'username' => ['nullable','unique:users','min:6','max:20'],
+            'phone_number' => ['nullable','numeric','required_without:email'],
+        ];
     }
 
     /**

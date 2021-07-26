@@ -8,8 +8,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Validator;
 
@@ -117,6 +115,7 @@ class AuthController extends Controller
         ];
     }
 
+
     /**
      * Register a User.
      *
@@ -124,26 +123,6 @@ class AuthController extends Controller
      */
     public function register(UserRequest $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'email' => ['nullable','email','unique:users','max:100', 'required_without:phone_number'],
-                'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
-                'password_confirmation' => ['required'],
-                'gender' => ['required','numeric', Rule::in(array_keys(User::getGenders()))],
-                'username' => ['nullable','unique:users','min:6','max:20'],
-                'phone_number' => ['nullable','numeric','required_without:email'],
-            ]
-        );
-
-        if ($validator->fails()) {
-            return $this->error(
-                __('Data Validation Failed'),
-                $validator->errors()->toArray(),
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
-        }
-
         $user = User::create(array_merge(
             $request->all(),
             ['password_hash' => Hash::make($request->password)],
