@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Requests;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Helpers\Cdn;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
@@ -33,7 +34,7 @@ class UserRequest extends FormRequest
      * Set the avatar, based on gender
      */
     public function prepareForValidation()
-    {
+    { 
         /** Set email or phone basd on the usernmae format */
         if (strpos($this->username, '@') !== false) {
             $this->email = $this->username;
@@ -57,7 +58,8 @@ class UserRequest extends FormRequest
                 default:
                     $filename = (((bool)random_int(0, 1)) ? 'default_m_' . random_int(1, 120) : 'default_fm_' . random_int(1, 60)) . '.png';
             }
-            $this->avatar = config('app.cdn.avatars') . $filename;
+            
+            $this->avatar = Cdn::avatar($filename);
         }
 
         /** Set the request parameters implemented above */
