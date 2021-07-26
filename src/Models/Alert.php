@@ -4,10 +4,39 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\AlertFactory;
 use Aparlay\Core\Models\Scopes\AlertScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Relations\BelongsTo;
+use MongoDB\BSON\ObjectId;
 
+/**
+ * Class Alert
+ * @package Aparlay\Core\Models
+ *
+ * @property ObjectId $_id
+ * @property ObjectId $user_id
+ * @property ObjectId $media_id
+ * @property string $reason
+ * @property int $status
+ * @property int $type
+ * @property ObjectId $created_by
+ * @property ObjectId $updated_by
+ * @property string $created_at
+ * @property string $updated_at
+ *
+ * @property-read User $userObj
+ * @property-read Media $mediaObj
+ * @property-read User $creator
+ * @property-read string $slack_subject_admin_url
+ * @property string $aliasModel
+ *
+ * @method static|self|Builder visited() get visited alerts
+ * @method static|self|Builder notVisited() get not visited alerts
+ * @method static|self|Builder media(ObjectId|string $mediaId) get media alerts
+ * @method static|self|Builder user(ObjectId|string $userId) get user alerts
+ */
 class Alert extends Model
 {
     use HasFactory;
@@ -62,10 +91,6 @@ class Alert extends Model
      */
     protected $casts = [
         '_id' => 'string',
-        'user_id' => 'string',
-        'media_id' => 'string',
-        'created_by' => 'string',
-        'updated_by' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
@@ -92,6 +117,22 @@ class Alert extends Model
             self::TYPE_MEDIA_REMOVED => __('Video Removed'),
             self::TYPE_USER => __('User'),
         ];
+    }
+
+    /**
+     * Get the user associated with the alert.
+     */
+    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get the media associated with the alert.
+     */
+    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'media_id');
     }
 
     /**

@@ -31,7 +31,7 @@ trait AlertScope
      * @param  ObjectId|string  $mediaId
      * @return Builder
      */
-    public function scopeMedia(Builder $query, ObjectId | string $mediaId): Builder
+    public function scopeMedia(Builder $query, ObjectId|string $mediaId): Builder
     {
         $mediaId = $mediaId instanceof ObjectId ? $mediaId : new ObjectId($mediaId);
 
@@ -43,7 +43,7 @@ trait AlertScope
      * @param  ObjectId|string  $userId
      * @return Builder
      */
-    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
+    public function scopeUser(Builder $query, ObjectId|string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 

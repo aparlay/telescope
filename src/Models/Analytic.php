@@ -9,7 +9,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Jenssegers\Mongodb\Query\Builder;
+use MongoDB\BSON\UTCDateTime;
 
+/**
+ * Class Analytic
+ * @package Aparlay\Core\Models
+ *
+ * @property-read null $user_id
+ * @property-read User $userObj
+ *
+ * @method static|self|\Illuminate\Database\Eloquent\Builder days(int $days) get days of analytics
+ * @method static|self|Builder date(UTCDateTime $start, UTCDateTime $end) get analytics by date
+ */
 class Analytic extends Model
 {
     use HasFactory;
@@ -56,12 +67,13 @@ class Analytic extends Model
         'updated_at' => 'datetime',
     ];
 
+
     /**
-     * @return Builder
+     * Get the phone associated with the user.
      */
-    public static function find(): Builder
+    public function userObj()
     {
-        return DB::collection((new self())->collection);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
