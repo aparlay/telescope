@@ -80,8 +80,9 @@ class AuthController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'username' => 'required',
-                'password' => 'required',
+                'username'  => 'required',
+                'password'  => 'required',
+                'otp'       => 'nullable'
             ]
         );
 
@@ -93,12 +94,28 @@ class AuthController extends Controller
             );
         }
 
-        $login_type = filter_var( $request->username, FILTER_VALIDATE_EMAIL ) ? 'email' : 'phone_number';
+        $loginEntity = $this->getLoginEntity($request->username);
 
-        $credentials = [$login_type => $request->username, 'password'=>$request->password];
+        $credentials = [$loginEntity => $request->username, 'password'=>$request->password];
 
         if ($token = auth()->attempt($credentials)) {
-            if(!$this->userService->requireOtp(auth()->user(), $login_type)){
+
+            $user = auth()->user();
+            if($error = $this->userService->isUserEligible($user)) {
+                return $this->error(
+                    __($error),
+                    $validator->errors()->toArray(),
+                    Response::HTTP_UNPROCESSABLE_ENTITY
+                );
+            }
+
+            if(empty($request->otp) && $user->status == User::STATUS_PENDING) {
+                $this->userService->sendOtp($user, $loginEntity);
+            } else if(!empty($request->otp) && $user->status == User::STATUS_PENDING) {
+                $user = $this->userService->validateOtp($user);
+            }
+
+            if($user->status == User::STatusApproved) {
                 return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
             }
         } else {
@@ -107,6 +124,17 @@ class AuthController extends Controller
                 $validator->errors()->toArray(),
                 Response::HTTP_UNAUTHORIZED
             );
+        }
+    }
+
+    private function getLoginEntity($username) {
+        switch($username) {
+            case filter_var( $username, FILTER_VALIDATE_EMAIL ):
+                return "email";
+            case is_numeric($username):
+                return "phone_number";
+            default:
+                return "username";
         }
     }
 
