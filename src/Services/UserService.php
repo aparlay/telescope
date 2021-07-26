@@ -2,9 +2,6 @@
 
 namespace Aparlay\Core\Services;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Controllers;
 

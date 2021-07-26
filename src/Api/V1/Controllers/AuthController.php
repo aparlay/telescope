@@ -19,6 +19,7 @@ class AuthController extends Controller
     protected $userService;
 
     protected $userRepository;
+
     /**
      * Create a new AuthController instance.
      *
@@ -95,32 +96,24 @@ class AuthController extends Controller
                 );
             }
 
+            return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
+
+            /** COMMENTED BECAUSE IN PROGRESS */
+            /*
             if(empty($request->otp) && $user->status == User::STATUS_PENDING) {
                 $this->userService->sendOtp($user, $loginEntity);
             } else if(!empty($request->otp) && $user->status == User::STATUS_PENDING) {
                 $user = $this->userService->validateOtp($user);
             }
-
-            if($user->status == User::STatusApproved) {
+            if($user->status == User::STATUS_APPROVED) {
                 return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
-            }
+            }*/
         } else {
             return $this->error(
                 __('Data Validation Failed'),
                 $validator->errors()->toArray(),
                 Response::HTTP_UNAUTHORIZED
             );
-        }
-    }
-
-    private function getLoginEntity($username) {
-        switch($username) {
-            case filter_var( $username, FILTER_VALIDATE_EMAIL ):
-                return "email";
-            case is_numeric($username):
-                return "phone_number";
-            default:
-                return "username";
         }
     }
 
@@ -140,7 +133,6 @@ class AuthController extends Controller
             'refresh_token_expired_at' => auth()->factory()->getTTL() * 60,
         ];
     }
-
 
     /**
      * Register a User.
@@ -179,5 +171,23 @@ class AuthController extends Controller
     public function refresh(): JsonResponse
     {
         return $this->response($this->respondWithToken(auth()->refresh()));
+    }
+
+    /**
+     * Responsible for returning Login Entity (email or phone_number or username) based on the input username
+     *
+     * @param  string  $username
+     *
+     * @return string
+     */
+    private function getLoginEntity($username) {
+        switch($username) {
+            case filter_var( $username, FILTER_VALIDATE_EMAIL ):
+                return "email";
+            case is_numeric($username):
+                return "phone_number";
+            default:
+                return "username";
+        }
     }
 }
