@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Api\V1\Requests\UserRequest;
+use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -121,7 +121,7 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function register(UserRequest $request)
+    public function register(RegisterRequest $request)
     {
         $user = User::create(array_merge(
             $request->all(),

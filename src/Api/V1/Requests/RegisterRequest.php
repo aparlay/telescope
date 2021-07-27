@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,12 +28,11 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['nullable','email','unique:users','max:100', 'required_without:phone_number'],
-            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
-            'password_confirmation' => ['required'],
-            'gender' => ['required','numeric', Rule::in(array_keys(User::getGenders()))],
-            'username' => ['nullable','unique:users','min:6','max:20'],
+            'email' => ['nullable','email','unique:users','max:255', 'required_without:phone_number'],
             'phone_number' => ['nullable','numeric','required_without:email'],
+            'password' => ['required', Password::min(8)->letters()->numbers()],
+            'gender' => [Rule::in(array_keys(User::getGenders()))],
+            'username' => ['nullable','unique:users'],
         ];
     }
 
@@ -52,6 +51,11 @@ class UserRequest extends FormRequest
             $this->phone_number = $this->username;
         }
         $this->username = uniqid('', false);
+
+        /** Set gender by default value */
+        if(empty($this->gender)){
+            $this->gender = User::GENDER_MALE;
+        }
 
         /** Set avatar based on Gender */
         if (empty($this->avatar)) {
@@ -77,6 +81,7 @@ class UserRequest extends FormRequest
             'email' => $this->email,
             'phone_number' => $this->phone_number,
             'avatar' => $this->avatar,
+            'gender' => $this->gender,
         ]);
     }
 }
