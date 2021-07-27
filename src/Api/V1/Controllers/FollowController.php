@@ -4,7 +4,6 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use MongoDB\BSON\ObjectId;
@@ -84,9 +83,9 @@ class FollowController extends Controller
      * )
      *
      * @param  User  $user
-     * @return JsonResponse
+     * @return Response
      */
-    public function store(User $user): JsonResponse
+    public function store(User $user): Response
     {
         if (Gate::forUser(auth()->user())->denies('interact', $user->_id)) {
             $this->error('You cannot follow at the moment.', [], Response::HTTP_FORBIDDEN);
@@ -178,9 +177,9 @@ class FollowController extends Controller
      * )
      *
      * @param  User  $user
-     * @return JsonResponse
+     * @return Response
      */
-    public function destroy(User $user): JsonResponse
+    public function destroy(User $user): Response
     {
         $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->first();
         if ($follow !== null) {

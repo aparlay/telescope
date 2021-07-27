@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Version;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class VersionController extends Controller
 {
@@ -83,9 +83,9 @@ class VersionController extends Controller
      *
      * @param string $os
      * @param string $version
-     * @return JsonResponse
+     * @return Response
      */
-    public function show(string $os, string $version): JsonResponse
+    public function show(string $os, string $version): Response
     {
         $models = Version::os($os)
             ->app('waptap')

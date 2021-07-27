@@ -5,7 +5,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -20,9 +20,9 @@ class Controller extends BaseController
      * @param $result
      * @param  string  $message
      * @param  int  $code
-     * @return JsonResponse
+     * @return Response
      */
-    public function response($result, string $message = '', int $code = 200): JsonResponse
+    public function response($result, string $message = '', int $code = 200): Response
     {
         $response = [
             'code' => $code,
@@ -34,7 +34,7 @@ class Controller extends BaseController
             $response['message'] = $message;
         }
 
-        return response()->json($response, $code);
+        return response($response, $code);
     }
 
     /**
@@ -44,9 +44,9 @@ class Controller extends BaseController
      * @param  array  $errorMessages
      * @param  int  $code
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function error($error, array $errorMessages = [], int $code = 400): JsonResponse
+    public function error($error, array $errorMessages = [], int $code = 400): Response
     {
         $response = [
             'code' => $code,
@@ -58,6 +58,6 @@ class Controller extends BaseController
             $response['data'] = $errorMessages;
         }
 
-        return response()->json($response, $code);
+        return response($response, $code);
     }
 }

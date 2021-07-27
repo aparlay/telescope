@@ -2,35 +2,23 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Database\Factories\AnalyticFactory;
-use Aparlay\Core\Models\Scopes\AnalyticScope;
-use Illuminate\Database\Eloquent\Builder;
+use Aparlay\Core\Database\Factories\OrderFactory;
+use Aparlay\Core\Models\Scopes\OtpScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use MongoDB\BSON\UTCDateTime;
 
-/**
- * Class Analytic
- * @package Aparlay\Core\Models
- *
- * @property-read null $user_id
- * @property-read User $userObj
- *
- * @method static|self|Builder days(int $days) get days of analytics
- * @method static|self|Builder date(UTCDateTime $start, UTCDateTime $end) get analytics by date
- */
-class Analytic extends Model
+class Otp extends Model
 {
     use HasFactory;
     use Notifiable;
-    use AnalyticScope;
+    use OtpScope;
 
     /**
      * The collection associated with the model.
      * @var string
      */
-    protected $collection = 'analytics';
+    protected $collection = 'otps';
 
     /**
      * The attributes that are mass assignable.
@@ -39,10 +27,13 @@ class Analytic extends Model
      */
     protected $fillable = [
         '_id',
-        'date',
-        'media',
-        'user',
-        'email',
+        'identity',
+        'otp',
+        'device_id',
+        'type',
+        'validated',
+        'incorrect',
+        'expired_at',
         'created_at',
         'updated_at',
     ];
@@ -53,6 +44,7 @@ class Analytic extends Model
      * @var array
      */
     protected $hidden = [
+
     ];
 
     /**
@@ -64,16 +56,8 @@ class Analytic extends Model
         '_id' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
-
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function userObj()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
 
     /**
      * Create a new factory instance for the model.
@@ -82,6 +66,6 @@ class Analytic extends Model
      */
     protected static function newFactory(): Factory
     {
-        return AnalyticFactory::new();
+        return OrderFactory::new();
     }
 }
