@@ -89,7 +89,7 @@ class FollowController extends Controller
     public function store(User $user): JsonResponse
     {
         if (Gate::forUser(auth()->user())->denies('interact', $user->_id)) {
-            $this->error('You cannot like this video at the moment.', [], Response::HTTP_FORBIDDEN);
+            $this->error('You cannot follow at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
         $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->first();
@@ -182,7 +182,7 @@ class FollowController extends Controller
      */
     public function destroy(User $user): JsonResponse
     {
-        $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->firstOrFail();
+        $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->first();
         if ($follow !== null) {
             $follow->delete();
         }
