@@ -50,7 +50,14 @@ class UserFactory extends Factory
             'followed_hashtag_count' => $this->faker->randomDigit(),
             'like_count' => $this->faker->randomDigit(),
             'media_count' => $this->faker->randomDigit(),
-            'count_fields_updated_at' => $this->faker->randomDigit(),
+            'count_fields_updated_at' => [
+                'followers' => DT::utcNow(),
+                'followings' => DT::utcNow(),
+                'blocks' => DT::utcNow(),
+                'likes' => DT::utcNow(),
+                'hashtags' => DT::utcNow(),
+                'medias' => DT::utcNow()
+            ],
             'blocks' => [],
             'likes' => [],
             'followers' => [],
