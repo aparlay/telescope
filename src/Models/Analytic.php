@@ -4,11 +4,10 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\AnalyticFactory;
 use Aparlay\Core\Models\Scopes\AnalyticScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
-use Jenssegers\Mongodb\Query\Builder;
 use MongoDB\BSON\UTCDateTime;
 
 /**
@@ -18,7 +17,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read null $user_id
  * @property-read User $userObj
  *
- * @method static|self|\Illuminate\Database\Eloquent\Builder days(int $days) get days of analytics
+ * @method static|self|Builder days(int $days) get days of analytics
  * @method static|self|Builder date(UTCDateTime $start, UTCDateTime $end) get analytics by date
  */
 class Analytic extends Model

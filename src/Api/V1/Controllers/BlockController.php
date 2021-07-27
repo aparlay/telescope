@@ -83,9 +83,9 @@ class BlockController extends Controller
      * )
      *
      * @param  User  $user
-     * @return JsonResponse
+     * @return Response
      */
-    public function store(User $user): JsonResponse
+    public function store(User $user): Response
     {
         $block = Block::user($user->_id)->creator(auth()->user()->_id)->first();
         if ($block === null) {
@@ -173,9 +173,9 @@ class BlockController extends Controller
      * )
      *
      * @param  User  $user
-     * @return JsonResponse
+     * @return Response
      */
-    public function destroy(User $user): JsonResponse
+    public function destroy(User $user): Response
     {
         $block = Block::user($user->_id)->creator(auth()->user()->_id)->firstOrFail();
         if ($block !== null) {

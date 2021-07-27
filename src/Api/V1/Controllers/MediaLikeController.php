@@ -4,7 +4,6 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use MongoDB\BSON\ObjectId;
@@ -86,9 +85,9 @@ class MediaLikeController extends Controller
      * )
      *
      * @param  Media  $media
-     * @return JsonResponse
+     * @return Response
      */
-    public function store(Media $media): JsonResponse
+    public function store(Media $media): Response
     {
         if (Gate::forUser(auth()->user())->denies('interact', $media->created_by)) {
             $this->error('You cannot like this video at the moment.', [], Response::HTTP_FORBIDDEN);
@@ -184,9 +183,9 @@ class MediaLikeController extends Controller
      * )
      *
      * @param  Media  $media
-     * @return JsonResponse
+     * @return Response
      */
-    public function destroy(Media $media): JsonResponse
+    public function destroy(Media $media): Response
     {
         $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
         if ($mediaLike !== null) {

@@ -139,7 +139,6 @@ class Media extends Model
      */
     protected $appends = ['cover', 'is_liked', 'is_visited', 'is_adult', 'alerts', '_links'];
 
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -149,11 +148,20 @@ class Media extends Model
         '_id' => 'string',
         'email_verified_at' => 'datetime',
         'phone_number_verified_at' => 'datetime',
-        'count_fields_updated_at' => 'timestamp',
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
         'deleted_at' => 'timestamp',
     ];
+
+    public function getCountFieldsUpdatedAtAttribute($attributeValue)
+    {
+        foreach ($attributeValue as $field => $value) {
+            /** MongoDB\BSON\UTCDateTime $value */
+            $attributeValue[$field] = $value->toDateTime()->getTimestamp();
+        }
+
+        return $attributeValue;
+    }
 
     /**
      * Get the phone associated with the user.
@@ -222,7 +230,7 @@ class Media extends Model
         }
 
         $result = [];
-        foreach (Alert::media($this->_id)->notVisited()->all() as $alert) {
+        foreach (Alert::media($this->_id)->notVisited()->get() as $alert) {
             $result[] = $alert->toArray(['_id', 'title', 'reason', 'created_at']);
         }
 
