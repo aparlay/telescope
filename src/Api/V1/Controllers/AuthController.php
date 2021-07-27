@@ -11,8 +11,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
-use Validator;
 
 class AuthController extends Controller
 {
@@ -81,7 +79,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {   
-        $loginEntity = $this->getLoginEntity($request->username);
+        $loginEntity = $this->userService->findIdentity($request->username);
 
         $credentials = [$loginEntity => $request->username, 'password'=>$request->password];
 
@@ -89,17 +87,13 @@ class AuthController extends Controller
 
             $user = auth()->user();
             if($error = $this->userService->isUserEligible($user)) {
-                return $this->error(
-                    __($error),
-                    $validator->errors()->toArray(),
-                    Response::HTTP_UNPROCESSABLE_ENTITY
-                );
+                return $this->error($error, [], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
             return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
 
             /** COMMENTED BECAUSE IN PROGRESS */
-            /*
+            /* 
             if(empty($request->otp) && $user->status == User::STATUS_PENDING) {
                 $this->userService->sendOtp($user, $loginEntity);
             } else if(!empty($request->otp) && $user->status == User::STATUS_PENDING) {
@@ -107,13 +101,11 @@ class AuthController extends Controller
             }
             if($user->status == User::STATUS_APPROVED) {
                 return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
-            }*/
+            } 
+            */
+            
         } else {
-            return $this->error(
-                __('Data Validation Failed'),
-                $validator->errors()->toArray(),
-                Response::HTTP_UNAUTHORIZED
-            );
+            return $this->error('Data Validation Failed', [], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -171,23 +163,5 @@ class AuthController extends Controller
     public function refresh(): JsonResponse
     {
         return $this->response($this->respondWithToken(auth()->refresh()));
-    }
-
-    /**
-     * Responsible for returning Login Entity (email or phone_number or username) based on the input username
-     *
-     * @param  string  $username
-     *
-     * @return string
-     */
-    private function getLoginEntity($username) {
-        switch($username) {
-            case filter_var( $username, FILTER_VALIDATE_EMAIL ):
-                return "email";
-            case is_numeric($username):
-                return "phone_number";
-            default:
-                return "username";
-        }
     }
 }
