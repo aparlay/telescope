@@ -16,6 +16,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
+        "jenssegers/mongodb": "^3.8",
         "laravel/framework": "^8.29",
         "symfony/var-dumper": "^5.0"
     },
