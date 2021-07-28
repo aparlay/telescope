@@ -3,12 +3,11 @@
 namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Repositories\UserRepository;
+use Aparlay\Core\Services\OtpService;
 use Aparlay\Core\Api\V1\Controllers;
 use Illuminate\Validation\ValidationException;
 use Validator;
-use Swift_SmtpTransport;
-use Swift_Mailer;
-use Swift_Message;
 
 class UserService
 {
@@ -49,8 +48,11 @@ class UserService
 
     /**
      * send otp if status in pending and request otp is null
+     * @param array $user
+     * @param string $loginEntity
+     * @param string $deviceId
      */
-    public function sendOtp($user, $loginEntity)
+    public function requireOtp($user, $loginEntity, $deviceId)
     {
         if ($loginEntity == 'phone_number') {
             $result = [
@@ -59,44 +61,91 @@ class UserService
                 // 'sms_content' => Yii::t('app', Yii::$app->params['sms']['messages']['otp']),
             ];
 
-            $otp = (new Otp())->generate($this->phone_number, $this->device_id);
-
-            if (!$otp->hasErrors()) {
-                return $otp->send();
-            }
-
         } elseif ($loginEntity == 'email') {
             $result = [
                 'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
             ];
-            try {
-
-                $transport = (new Swift_SmtpTransport(env('MAIL_HOST'), env('MAIL_PORT')))
-                            ->setUsername(env('MAIL_USERNAME'))
-                            ->setEncryption(env('MAIL_ENCRYPTION'))
-                            ->setPassword(env('MAIL_PASSWORD'));
-
-                // Create the Mailer using your created Transport
-                $mailer = new Swift_Mailer($transport);
-
-                // Create a message
-                $message = (new Swift_Message('Wonderful Subject'))
-                ->setFrom(['john@doe.com' => 'John Doe'])
-                ->setTo(['receiver@yopmail.com'])
-                ->setBody('Here is the message itself');
-
-                // Send the message
-                $result = $mailer->send($message);
-             
-                echo 'Email has been sent.';
-            } catch(Exception $e) {
-                echo $e->getMessage();
-            }
-            
-           // $otp = (new Otp())->generate($this->email, $this->device_id);
-            if (!$otp->hasErrors()) {
-                return $otp->send();
-            }
         }
+
+        if ($this->sendOtp($loginEntity, $user, $deviceId)) {
+            //Yii::$app->response->statusCode = 418;
+            return $result;
+        }
+    }
+
+    /**
+     * @return bool
+     * @param string $loginEntity
+     * @param array $user
+     * @param string $deviceId
+     */
+    public function sendOtp($loginEntity, $user, $deviceId)
+    {
+        return ($loginEntity == 'phone_number')? $this->sendSmsOtp($user['phone_number'], $deviceId) : $this->sendEmailOtp($user['email'], $deviceId);
+    }
+
+     /**
+     * Logs in a user using the provided phone_number.
+     *
+     * @return bool whether the user is sending otp in successfully
+     * @param string $userEmail
+     * @param string $deviceId
+     */
+    public function sendEmailOtp($userEmail, $deviceId)
+    {
+        // if ($this->validate()) {
+            $user = UserRepository::findByEmail($userEmail);
+            if ($user !== null) {
+                $otp = OtpService::generate($userEmail, $deviceId);
+                if ($otp) {
+                    return OtpService::send($otp);
+                }
+
+                $this->addErrors($otp->errors);
+            }
+            return true;
+        // }
+
+        // return false;
+    }
+
+    /**
+     * Logs in a user using the provided phone_number.
+     *
+     * @return bool whether the user is sending otp in successfully
+     * @param number $userMobile
+     * @param string $deviceId
+     */
+    public function sendSmsOtp($userMobile, $deviceId)
+    {
+        // if ($this->validate()) {
+            $user = UserRepository::findByPhoneNumber($this->phone_number);
+            if ($user !== null) {
+                $otp = OtpService::generate($this->phone_number, $this->device_id);
+
+                if ($otp) {
+                    return OtpService::send($otp);
+                }
+
+                $this->addErrors($otp->errors);
+            }
+            return true;
+        // }
+
+        // return false;
+    }
+
+    /**
+     * @param string $otp
+     */
+    public static function send($otp)
+    {
+        if ($otp['type'] === Otp::TYPE_EMAIL) {
+            $this->sendByEmail($otp);
+        } else {
+            $this->sendBySMS($otp);
+        }
+
+        return true;
     }
 }

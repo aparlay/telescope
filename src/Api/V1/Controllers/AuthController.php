@@ -77,12 +77,12 @@ class AuthController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function login(LoginRequest $request)
+    public function login(Request $request)
     {   
         $loginEntity = $this->userService->findIdentity($request->username);
 
         $credentials = [$loginEntity => $request->username, 'password'=>$request->password];
-
+        
         if ($token = auth()->attempt($credentials)) {
 
             $user = auth()->user();
@@ -90,19 +90,21 @@ class AuthController extends Controller
                 return $this->error($error, [], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
-            return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
+            //return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
 
             /** COMMENTED BECAUSE IN PROGRESS */
-            /* 
-            if(empty($request->otp) && $user->status == User::STATUS_PENDING) {
-                $this->userService->sendOtp($user, $loginEntity);
+            /* */
+            $deviceId = $request->headers->get('X-DEVICE-ID');
+            $otpSetting = json_decode($user['setting'], true);
+            if(empty($request->otp) || $user->status == User::STATUS_PENDING || $otpSetting['otp'] == true) {
+                return $this->userService->requireOtp($user, $loginEntity, $deviceId);
             } else if(!empty($request->otp) && $user->status == User::STATUS_PENDING) {
                 $user = $this->userService->validateOtp($user);
             }
-            if($user->status == User::STATUS_APPROVED) {
+            if($user->status == User::STATUS_VERIFIED) {
                 return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
             } 
-            */
+            
             
         } else {
             return $this->error('Data Validation Failed', [], Response::HTTP_UNAUTHORIZED);

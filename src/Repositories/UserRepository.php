@@ -13,4 +13,14 @@ class UserRepository
         return User::all();
     }
 
+    public static function findByEmail($email)
+    {
+        $user = User::Where('email', $email)->first();
+        if($user)
+        {
+            return $user->toArray();
+        }
+        return false;
+    }
+
 }
