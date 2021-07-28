@@ -6,9 +6,8 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Notifications\ReportSent;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -100,9 +99,9 @@ class ReportController extends Controller
      *
      * @param  User  $user
      * @param  Request  $request
-     * @return JsonResponse
+     * @return Response
      */
-    public function user(User $user, Request $request): JsonResponse
+    public function user(User $user, Request $request): Response
     {
         if (($loggedInUser = Auth::user()) && Gate::forUser($loggedInUser)->denies('interact', $user->_id)) {
             $this->error('You cannot report this user at the moment.', [], Response::HTTP_FORBIDDEN);
@@ -219,9 +218,9 @@ class ReportController extends Controller
      *
      * @param  Media  $media
      * @param  Request  $request
-     * @return JsonResponse
+     * @return Response
      */
-    public function media(Media $media, Request $request): JsonResponse
+    public function media(Media $media, Request $request): Response
     {
         if (($loggedInUser = Auth::user()) && Gate::forUser($loggedInUser)->denies('interact', $media->created_by)) {
             $this->error('You cannot report this video at the moment.', [], Response::HTTP_FORBIDDEN);

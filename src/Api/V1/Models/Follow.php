@@ -6,4 +6,6 @@ use Aparlay\Core\Models\Follow as FollowBase;
 
 class Follow extends FollowBase
 {
+    use UserFieldTrait;
+    use CreatorFieldTrait;
 }

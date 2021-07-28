@@ -32,7 +32,7 @@ trait CreatorFieldTrait
     /**
      * Set the mediaLike's creator.
      *
-     * @return array
+     * @return void
      */
     public function setCreatorAttribute($creator)
     {
