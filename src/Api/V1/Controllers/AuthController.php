@@ -77,7 +77,7 @@ class AuthController extends Controller
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {   
         $loginEntity = $this->userService->findIdentity($request->username);
 

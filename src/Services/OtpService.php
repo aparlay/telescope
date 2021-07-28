@@ -33,10 +33,7 @@ class OtpService
             foreach ($previousOTP as $model) {
                 if (strpos('expired_', $model->otp) === false) {
                     // we do not delete them to can understand limit of 4 otp
-                    $model->otp = 'expired_' . random_int('1000', '9999'
-                        // Yii::$app->params['otp']['length']['min'],
-                        // Yii::$app->params['otp']['length']['max'],
-                    );
+                    $model->otp = 'expired_' . random_int('1000', '9999');
                     $model->save();
 
                 }
@@ -52,8 +49,6 @@ class OtpService
 
         if (!$otp->save()) {
             return $this->error('Failed to create the object for unknown reason.', [], Response::HTTP_BAD_REQUEST);
-            // Yii::error($this->errors);
-            // throw new UnprocessableEntityHttpException('Failed to create the object for unknown reason.');
         }
 
         // need to check
