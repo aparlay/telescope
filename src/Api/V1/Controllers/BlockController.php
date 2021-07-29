@@ -4,8 +4,8 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
 use MongoDB\BSON\ObjectId;
 
 class BlockController extends Controller
@@ -87,10 +87,6 @@ class BlockController extends Controller
      */
     public function store(User $user): Response
     {
-        if (Gate::forUser(auth()->user())->denies('interact', $user->_id)) {
-            $this->error('You cannot block at the moment.', [], Response::HTTP_FORBIDDEN);
-        }
-
         $block = Block::user($user->_id)->creator(auth()->user()->_id)->first();
         if ($block === null) {
             $model = new Block([
@@ -181,7 +177,7 @@ class BlockController extends Controller
      */
     public function destroy(User $user): Response
     {
-        $block = Block::user($user->_id)->creator(auth()->user()->_id)->first();
+        $block = Block::user($user->_id)->creator(auth()->user()->_id)->firstOrFail();
         if ($block !== null) {
             $block->delete();
         }
