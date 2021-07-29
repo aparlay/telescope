@@ -83,11 +83,6 @@ class Report extends Model
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
-        'comment_id' => 'string',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp',
-        'deleted_at' => 'timestamp',
     ];
 
 
