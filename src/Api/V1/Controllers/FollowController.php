@@ -4,6 +4,8 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Resources\FollowResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use MongoDB\BSON\ObjectId;
@@ -93,16 +95,16 @@ class FollowController extends Controller
 
         $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->first();
         if ($follow === null) {
-            $model = new Follow([
+            $follow = new Follow([
                 'user' => ['_id' => new ObjectId($user->_id)],
                 'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
             ]);
-            $model->save();
+            $follow->save();
 
-            return $this->response($model, '', Response::HTTP_CREATED);
+            return $this->response(new FollowResource($follow), '', Response::HTTP_CREATED);
         }
 
-        return $this->response($follow, '', Response::HTTP_OK);
+        return $this->response(new FollowResource($follow), '', Response::HTTP_OK);
     }
 
     /**

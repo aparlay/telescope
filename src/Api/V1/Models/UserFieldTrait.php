@@ -6,30 +6,8 @@ use MongoDB\BSON\ObjectId;
 
 trait UserFieldTrait
 {
-
     /**
-     * Get the follow simple user object
-     *
-     * @return array
-     */
-    public function getUserAttribute($userObj)
-    {
-        $userObj['_id'] = (string) $userObj['_id'];
-
-        if (auth()->guest()) {
-            $userObj['is_followed'] = false;
-
-            return $userObj;
-        }
-
-        $user = auth()->user();
-        $userObj['is_followed'] = isset($this->creator['_id'], $user->following[(string) $this->creator['_id']]);
-
-        return $userObj;
-    }
-
-    /**
-     * Set the follow's creator.
+     * Set the follow user attribute.
      *
      * @return void
      */

@@ -63,7 +63,6 @@ class Follow extends Model
      * @var array
      */
     protected $hidden = [
-        'userObj', 'creatorObj'
     ];
 
     /**
@@ -72,10 +71,6 @@ class Follow extends Model
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp',
-        'deleted_at' => 'timestamp',
     ];
 
     /**
