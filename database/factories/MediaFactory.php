@@ -43,7 +43,14 @@ class MediaFactory extends Factory
             'visits' => [],
             'comment_count' => $this->faker->randomDigitNotZero(),
             'comments' => [],
-            'count_fields_updated_at' => DT::utcNow(),
+            'count_fields_updated_at' => [
+                'followers' => DT::utcNow(),
+                'followings' => DT::utcNow(),
+                'blocks' => DT::utcNow(),
+                'likes' => DT::utcNow(),
+                'hashtags' => DT::utcNow(),
+                'medias' => DT::utcNow()
+            ],
             'visibility' => $this->faker->randomElement(array_keys(Media::getVisibilities())),
             'status' => $this->faker->randomElement(array_keys(Media::getStatuses())),
             'is_music_licensed' => $this->faker->boolean(),

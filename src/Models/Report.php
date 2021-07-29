@@ -7,7 +7,6 @@ use Aparlay\Core\Models\Scopes\ReportScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
@@ -84,15 +83,6 @@ class Report extends Model
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
-        'user_id' => 'string',
-        'media_id' => 'string',
-        'comment_id' => 'string',
-        'created_by' => 'string',
-        'updated_by' => 'string',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp',
-        'deleted_at' => 'timestamp',
     ];
 
 

@@ -68,27 +68,6 @@ class Media extends MediaBase
     /**
      * Get the user's full name.
      *
-     * @return string
-     */
-    public function getCreatorAttribute($creator)
-    {
-        $creator['_id'] = (string)$creator['_id'];
-
-        if (auth()->guest()) {
-            $creator['is_followed'] = false;
-            $creator['is_liked'] = false;
-
-            return $creator;
-        }
-        $user = auth()->user();
-        $creator['is_followed'] = isset($this->creator['_id'], $user->following[(string)$this->creator['_id']]);
-
-        return $creator;
-    }
-
-    /**
-     * Get the user's full name.
-     *
      * @return bool
      */
     public function getIsLikedAttribute(): bool
@@ -122,5 +101,13 @@ class Media extends MediaBase
         });
 
         return isset($mediaLike[(string)$this->_id]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilenameAttribute(): string
+    {
+        return basename($this->file, '.' . pathinfo($this->file, PATHINFO_EXTENSION));
     }
 }

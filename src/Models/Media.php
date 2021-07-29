@@ -137,8 +137,7 @@ class Media extends Model
      *
      * @var array
      */
-    protected $appends = ['cover', 'is_liked', 'is_visited', 'is_adult', 'alerts', '_links'];
-
+    protected $appends = [];
 
     /**
      * The attributes that should be cast to native types.
@@ -146,14 +145,17 @@ class Media extends Model
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
-        'email_verified_at' => 'datetime',
-        'phone_number_verified_at' => 'datetime',
-        'count_fields_updated_at' => 'timestamp',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp',
-        'deleted_at' => 'timestamp',
     ];
+
+    public function getCountFieldsUpdatedAtAttribute($attributeValue)
+    {
+        foreach ($attributeValue as $field => $value) {
+            /** MongoDB\BSON\UTCDateTime $value */
+            $attributeValue[$field] = $value->toDateTime()->getTimestamp();
+        }
+
+        return $attributeValue;
+    }
 
     /**
      * Get the phone associated with the user.
@@ -214,19 +216,14 @@ class Media extends Model
      *
      * @return array
      */
-    public function getAlertsAttribute(): array
+    public function getAlertsAttribute()
     {
-        if (! isset($this->creator['_id']) || auth()->guest() ||
-            ((string)$this->creator['_id'] !== (string)auth()->user()->_id)) {
+        if (auth()->guest()) {
             return [];
         }
 
-        $result = [];
-        foreach (Alert::media($this->_id)->notVisited()->all() as $alert) {
-            $result[] = $alert->toArray(['_id', 'title', 'reason', 'created_at']);
-        }
 
-        return $result;
+        return Alert::media($this->_id)->user(auth()->user()->_id)->notVisited()->get();
     }
 
     /**
@@ -303,16 +300,6 @@ class Media extends Model
     /**
      * Get the user's full name.
      *
-     * @return string
-     */
-    public function getCoverAttribute($value)
-    {
-        return config('cdn.covers') . ($this->is_completed ? $this->filename . '.jpg' : 'default.jpg');
-    }
-
-    /**
-     * Get the user's full name.
-     *
      * @return bool
      */
     public function getIsCompletedAttribute(): bool
@@ -327,18 +314,6 @@ class Media extends Model
     public function setSlugAttribute(): string
     {
         return $this->attributes['slug'] = $this->generateSlug(6);
-    }
-
-    /**
-     * @return array
-     * @throws Exception
-     */
-    public function getLinksAttribute(): array
-    {
-        return [
-            'self' => route('core.api.v1.media.show', ['media' => $this]),
-            //'index' => route('core.api.v1.user.media_list', ['user' => $this->created_by]),
-        ];
     }
 
     /**
@@ -366,24 +341,24 @@ class Media extends Model
     public static function getVisibilities()
     {
         return [
-            self::VISIBILITY_PRIVATE => 'Private',
-            self::VISIBILITY_PUBLIC => 'Public',
+            self::VISIBILITY_PRIVATE => __('Private'),
+            self::VISIBILITY_PUBLIC => __('Public'),
         ];
     }
 
     public static function getStatuses()
     {
         return [
-            self::STATUS_QUEUED => 'Queued',
-            self::STATUS_UPLOADED => 'Uploaded',
-            self::STATUS_IN_PROGRESS => 'In-Progress',
-            self::STATUS_COMPLETED => 'Waiting For Review',
-            self::STATUS_FAILED => 'Failed',
-            self::STATUS_CONFIRMED => 'Confirmed',
-            self::STATUS_DENIED => 'Denied',
-            self::STATUS_ADMIN_DELETED => 'Deleted By Admin',
-            self::STATUS_USER_DELETED => 'Deleted',
-            self::STATUS_IN_REVIEW => 'Under review',
+            self::STATUS_QUEUED => __('Queued'),
+            self::STATUS_UPLOADED => __('Uploaded'),
+            self::STATUS_IN_PROGRESS => __('In-Progress'),
+            self::STATUS_COMPLETED => __('Waiting For Review'),
+            self::STATUS_FAILED => __('Failed'),
+            self::STATUS_CONFIRMED => __('Confirmed'),
+            self::STATUS_DENIED => __('Denied'),
+            self::STATUS_ADMIN_DELETED => __('Deleted By Admin'),
+            self::STATUS_USER_DELETED => __('Deleted'),
+            self::STATUS_IN_REVIEW => __('Under review'),
         ];
     }
 }

@@ -27,18 +27,18 @@ class ReportFactory extends Factory
             'user_id' => function ($report) {
                 return new ObjectId($report['user_id']);
             },
-            'media_id' => function($report) {
+            'media_id' => function ($report) {
                 return new ObjectId($report['media_id']);
             },
             'comment_id' => null,
             'type' => $this->faker->randomElement(array_keys(Report::getTypes())),
             'status' => $this->faker->randomElement(array_keys(Report::getStatuses())),
-            'created_by' => function($report) {
+            'created_by' => function ($report) {
                 return new ObjectId($report['user_id']);
             },
-            'updated_by' => function($alert) {
+            'updated_by' => function ($report) {
                 return new ObjectId($report['user_id']);
-            }
+            },
         ];
     }
 }

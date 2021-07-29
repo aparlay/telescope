@@ -4,10 +4,13 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\MediaLikeFactory;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class MediaLike
@@ -22,8 +25,13 @@ use MongoDB\BSON\ObjectId;
  *
  * @property-read User $creatorObj
  * @property-read null|mixed $creator_id
- * @property-read Media $media
+ * @property-read Media $mediaObj
  * @property-read User $userObj
+ *
+ * @method static|self|Builder media(ObjectId|string $mediaId) get liked media
+ * @method static|self|Builder user(ObjectId|string $userId) get user who liked media
+ * @method static|self|Builder creator(ObjectId|string $creatorId) get creator user who liked media
+ * @method static|self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
  */
 class MediaLike extends Model
 {
@@ -73,24 +81,20 @@ class MediaLike extends Model
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
-        'created_at' => 'timestamp',
-        'updated_at' => 'timestamp',
-        'deleted_at' => 'timestamp',
     ];
 
     /**
-     * Get the phone associated with the user.
+     * Get the user associated with the alert.
      */
-    public function userObj()
+    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
-     * Get the phone associated with the user.
+     * Get the media associated with the alert.
      */
-    public function mediaObj()
+    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
     }

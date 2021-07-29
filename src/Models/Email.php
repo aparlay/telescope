@@ -4,10 +4,25 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\EmailFactory;
 use Aparlay\Core\Models\Scopes\EmailScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use MongoDB\BSON\ObjectId;
 
+/**
+ * Class Email
+ * @package Aparlay\Core\Models
+ *
+ * @property int $status
+ * @property-read null $user_id
+ * @property-read User $userObj
+ *
+ * @method static|self|Builder visited() get visited alerts
+ * @method static|self|Builder notVisited() get not visited alerts
+ * @method static|self|Builder media(ObjectId|string $mediaId) get media alerts
+ * @method static|self|Builder user(ObjectId|string $userId) get user alerts
+ */
 class Email extends Model
 {
     use HasFactory;

@@ -4,7 +4,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
-use Illuminate\Http\JsonResponse;
+use Aparlay\Core\Api\V1\Resources\MediaLikeResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use MongoDB\BSON\ObjectId;
@@ -86,9 +86,9 @@ class MediaLikeController extends Controller
      * )
      *
      * @param  Media  $media
-     * @return JsonResponse
+     * @return Response
      */
-    public function store(Media $media): JsonResponse
+    public function store(Media $media): Response
     {
         if (Gate::forUser(auth()->user())->denies('interact', $media->created_by)) {
             $this->error('You cannot like this video at the moment.', [], Response::HTTP_FORBIDDEN);
@@ -96,18 +96,18 @@ class MediaLikeController extends Controller
 
         $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
         if ($mediaLike === null) {
-            $model = new MediaLike([
+            $mediaLike = new MediaLike([
                 'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
                 'media_id' => new ObjectId($media->_id),
                 'user_id' => new ObjectId(auth()->user()->_id),
             ]);
-            $model->save();
-            $model->refresh();
+            $mediaLike->save();
+            $mediaLike->refresh();
 
-            return $this->response($model, '', Response::HTTP_CREATED);
+            return $this->response(new MediaLikeResource($mediaLike), '', Response::HTTP_CREATED);
         }
 
-        return $this->response($mediaLike, '', Response::HTTP_OK);
+        return $this->response(new MediaLikeResource($mediaLike), '', Response::HTTP_OK);
     }
 
     /**
@@ -184,9 +184,9 @@ class MediaLikeController extends Controller
      * )
      *
      * @param  Media  $media
-     * @return JsonResponse
+     * @return Response
      */
-    public function destroy(Media $media): JsonResponse
+    public function destroy(Media $media): Response
     {
         $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
         if ($mediaLike !== null) {

@@ -3,11 +3,31 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\FollowFactory;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\FollowScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use MongoDB\BSON\ObjectId;
 
+/**
+ * Class Follow
+ * @package Aparlay\Core\Models
+ *
+ * @property ObjectId $_id
+ * @property string $hashtag
+ * @property int $status
+ * @property array $user
+ * @property array $creator
+ * @property bool $is_deleted
+ * @property string $created_at
+ *
+ * @property-read User $creatorObj
+ * @property-read User $userObj
+ * @property-read null|mixed $creator_id
+ * @property-read null|mixed $user_id
+ * @property string $aliasModel
+ */
 class Follow extends Model
 {
     use HasFactory;
@@ -51,9 +71,83 @@ class Follow extends Model
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
-        'created_at' => 'datetime',
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::created(function ($follow) {
+            $follow->userObj->follower_count++;
+            $follow->userObj->addToSet('followers', [
+                '_id' => new ObjectId($follow->creator['_id']),
+                'username' => $follow->creator['username'],
+                'avatar' => $follow->creator['avatar']
+            ], 10);
+            $follow->userObj->count_fields_updated_at = array_merge(
+                $follow->userObj->count_fields_updated_at,
+                ['followers' => DT::utcNow()]
+            );
+            $follow->userObj->save();
+
+            $follow->creatorObj->following_count++;
+            $follow->creatorObj->addToSet('followings', [
+                '_id' => new ObjectId($follow->user['_id']),
+                'username' => $follow->user['username'],
+                'avatar' => $follow->user['avatar']
+            ]);
+            $follow->creatorObj->count_fields_updated_at = array_merge(
+                $follow->creatorObj->count_fields_updated_at,
+                ['followings' => DT::utcNow()]
+            );
+            $follow->creatorObj->save();
+        });
+
+        static::deleted(function ($follow) {
+            $follow->userObj->follower_count--;
+            $follow->userObj->removeFromSet('followers', [
+                '_id' => new ObjectId($follow->creator['_id']),
+                'username' => $follow->creator['username'],
+                'avatar' => $follow->creator['avatar']
+            ]);
+            $follow->userObj->count_fields_updated_at = array_merge(
+                $follow->userObj->count_fields_updated_at,
+                ['followers' => DT::utcNow()]
+            );
+            $follow->userObj->save();
+
+            $follow->creatorObj->following_count--;
+            $follow->creatorObj->removeFromSet('followings', [
+                '_id' => new ObjectId($follow->user['_id']),
+                'username' => $follow->user['username'],
+                'avatar' => $follow->user['avatar']
+            ]);
+            $follow->creatorObj->count_fields_updated_at = array_merge(
+                $follow->creatorObj->count_fields_updated_at,
+                ['followings' => DT::utcNow()]
+            );
+            $follow->creatorObj->save();
+        });
+    }
+
+    /**
+     * Get the user associated with the follow.
+     */
+    public function userObj()
+    {
+        return $this->belongsTo(User::class, 'user._id');
+    }
+
+    /**
+     * Get the creator associated with the follow.
+     */
+    public function creatorObj()
+    {
+        return $this->belongsTo(User::class, 'creator._id');
+    }
 
     /**
      * @return array

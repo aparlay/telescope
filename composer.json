@@ -45,6 +45,12 @@
             }
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:aparlay/telescope.git"
+        }
+    ],
     "require": {
         "php": "^8.0",
         "ext-curl": "*",
@@ -62,11 +68,11 @@
         "laravel/octane": "^1.0",
         "laravel/slack-notification-channel": "^2.3",
         "laravel/socialite": "^5.2",
-        "laravel/telescope": "^4.6",
         "laravel/tinker": "^2.5",
         "markrogoyski/math-php": "2.*",
         "spatie/laravel-fractal": "^5.8",
-        "tymon/jwt-auth": "dev-develop"
+        "tymon/jwt-auth": "dev-develop",
+        "aparlay/telescope": "^4.6.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9.1",
