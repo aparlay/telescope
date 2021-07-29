@@ -90,7 +90,7 @@ class FollowController extends Controller
     public function store(User $user): Response
     {
         if (Gate::forUser(auth()->user())->denies('interact', $user->_id)) {
-            $this->error('You cannot like this video at the moment.', [], Response::HTTP_FORBIDDEN);
+            $this->error('You cannot follow this user at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
         $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->first();
