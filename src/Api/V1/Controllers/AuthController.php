@@ -8,7 +8,6 @@ use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Validator;
 
@@ -124,13 +123,7 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        $user = User::create(array_merge(
-            $request->all(),
-            ['password_hash' => Hash::make($request->password)],
-            ['status' => User::STATUS_PENDING],
-            ['visibility' => User::VISIBILITY_PUBLIC]
-        ));
-
+        $user = User::create($request->all());
         return $this->response(new RegisterResource($user), 'Entity has been created successfully!', Response::HTTP_CREATED);
     }
 

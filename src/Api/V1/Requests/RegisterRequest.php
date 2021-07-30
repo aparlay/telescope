@@ -5,8 +5,9 @@ namespace Aparlay\Core\Api\V1\Requests;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends FormRequest
 {
@@ -29,10 +30,10 @@ class RegisterRequest extends FormRequest
     {
         return [
             'email' => ['nullable','email','unique:users','max:255', 'required_without:phone_number'],
-            'phone_number' => ['nullable','numeric','required_without:email'],
+            'phone_number' => ['nullable','numeric','digits:10','unique:users','required_without:email'],
             'password' => ['required', Password::min(8)->letters()->numbers()],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
-            'username' => ['nullable','unique:users'],
+            'username' => ['nullable','max:255'],
         ];
     }
 
@@ -75,13 +76,20 @@ class RegisterRequest extends FormRequest
             $this->avatar = Cdn::avatar($filename);
         }
 
-        /** Set the request parameters implemented above */
+        /** Set the Default Values and required input parameters */
         $this->merge([
-            'username' => $this->username,
-            'email' => $this->email,
+            'username' => trim($this->username),
+            'email' => strtolower(trim($this->email)),
             'phone_number' => $this->phone_number,
             'avatar' => $this->avatar,
             'gender' => $this->gender,
+            'password_hash' => Hash::make($this->password),
+            'status' => User::STATUS_PENDING,
+            'visibility' => User::VISIBILITY_PUBLIC,
+            'interested_in' => User::INTERESTED_IN_FEMALE,
+            'email_verified' => false,
+            'phone_number_verified' => false,
+            'type' => User::TYPE_USER
         ]);
     }
 }
