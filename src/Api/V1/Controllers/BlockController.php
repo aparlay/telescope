@@ -178,7 +178,7 @@ class BlockController extends Controller
      */
     public function destroy(User $user): Response
     {
-        $block = Block::user($user->_id)->creator(auth()->user()->_id)->first();
+        $block = Block::user($user->_id)->creator(auth()->user()->_id)->firstOrFail();
         if ($block !== null) {
             $block->delete();
         }
