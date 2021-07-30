@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Providers;
 
 use Aparlay\Core\Api\V1\Models\Block;
+use Aparlay\Core\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -26,8 +27,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('interact', function ($user, $userId) {
-            return ! Block::select(['user._id'])->user($user->_id)->creator($userId)->exist();
+        Gate::define('interact', function (User $user, $creatorId) {
+            return !Block::select(['user._id'])->user($user->_id)->creator($creatorId)->exists();
         });
     }
 }

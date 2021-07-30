@@ -5,6 +5,7 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Database\Factories\BlockFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\BlockScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;

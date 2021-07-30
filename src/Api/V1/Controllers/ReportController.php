@@ -106,7 +106,7 @@ class ReportController extends Controller
     public function user(User $user, Request $request): Response
     {
         if (($loggedInUser = Auth::user()) && Gate::forUser($loggedInUser)->denies('interact', $user->_id)) {
-            $this->error('You cannot report this user at the moment.', [], Response::HTTP_FORBIDDEN);
+            return $this->error('You cannot report this user at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
         $validator = Validator::make(
@@ -225,7 +225,7 @@ class ReportController extends Controller
     public function media(Media $media, Request $request): Response
     {
         if (($loggedInUser = Auth::user()) && Gate::forUser($loggedInUser)->denies('interact', $media->created_by)) {
-            $this->error('You cannot report this video at the moment.', [], Response::HTTP_FORBIDDEN);
+            return $this->error('You cannot report this video at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
         $validator = Validator::make(
