@@ -341,4 +341,18 @@ class User extends Authenticatable implements JWTSubject
 
         $this->attributes['count_fields_updated_at'] = $attributeValue;
     }
+
+    /**
+     * Get the media's skin score.
+     *
+     * @return array
+     */
+    public function getAlertsAttribute()
+    {
+        if (auth()->guest() || ((string) $this->_id !== (string) auth()->user()->_id)) {
+            return [];
+        }
+
+        return Alert::user(auth()->user()->_id)->notVisited()->get();
+    }
 }

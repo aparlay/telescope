@@ -102,4 +102,12 @@ class Media extends MediaBase
 
         return isset($mediaLike[(string)$this->_id]);
     }
+
+    /**
+     * @return string
+     */
+    public function getFilenameAttribute(): string
+    {
+        return basename($this->file, '.' . pathinfo($this->file, PATHINFO_EXTENSION));
+    }
 }
