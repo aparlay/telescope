@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
+use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -130,7 +131,7 @@ class AuthController extends Controller
             ['visibility' => User::VISIBILITY_PUBLIC]
         ));
 
-        return $this->response(['success' => true, 'data' => $user], '', Response::HTTP_OK);
+        return $this->response(new RegisterResource($user), 'Entity has been created successfully!', Response::HTTP_CREATED);
     }
 
     /**
