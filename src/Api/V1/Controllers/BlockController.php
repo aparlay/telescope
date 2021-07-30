@@ -88,10 +88,6 @@ class BlockController extends Controller
      */
     public function store(User $user): Response
     {
-        if (Gate::forUser(auth()->user())->denies('interact', $user->_id)) {
-            $this->error('You cannot block at the moment.', [], Response::HTTP_FORBIDDEN);
-        }
-
         $block = Block::user($user->_id)->creator(auth()->user()->_id)->first();
         if ($block === null) {
             $block = new Block([
