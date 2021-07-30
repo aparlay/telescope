@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
+/**
+ * @property string email
+ * @property string phone_number
+ * @property string username
+ * @property string password
+ * @property string gender
+ */
 class RegisterRequest extends FormRequest
 {
     /**
@@ -29,11 +36,11 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['nullable','email','unique:users','max:255', 'required_without:phone_number'],
-            'phone_number' => ['nullable','numeric','digits:10','unique:users','required_without:email'],
+            'email' => ['nullable', 'email', 'unique:users', 'max:255', 'required_without:phone_number'],
+            'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
             'password' => ['required', Password::min(8)->letters()->numbers()],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
-            'username' => ['nullable','max:255'],
+            'username' => ['nullable', 'max:255'],
         ];
     }
 
@@ -41,42 +48,38 @@ class RegisterRequest extends FormRequest
      * This function is responsible to perform pre-validation tasks like
      * Set the email or phone, based on username
      * Set the avatar, based on gender
+     * @throws \Exception
      */
     public function prepareForValidation()
-    { 
+    {
         /** Set email or phone basd on the usernmae format */
-        if (strpos($this->username, '@') !== false) {
+        if (str_contains($this->username, '@')) {
             $this->email = $this->username;
         }
-        if ((int)$this->username > 100000) {
+
+        if ((int) $this->username > 100000) {
             $this->phone_number = $this->username;
         }
+
         $this->username = uniqid('', false);
 
         /** Set gender by default value */
-        if(empty($this->gender)){
-            $this->gender = User::GENDER_MALE;
-        }
+        $this->gender = !empty($this->gender) ? $this->gender : User::GENDER_MALE;
 
         /** Set avatar based on Gender */
         if (empty($this->avatar)) {
-            switch ($this->gender) {
-                case User::GENDER_FEMALE:
-                    $filename = 'default_fm_' . random_int(1, 60) . '.png';
+            $femaleFilename = 'default_fm_'.random_int(1, 60).'.png';
+            $maleFilename = 'default_m_'.random_int(1, 120).'.png';
+            $filename = match ($this->gender) {
+                User::GENDER_FEMALE => $femaleFilename,
+                User::GENDER_MALE => $maleFilename,
+                default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
+            };
 
-                    break;
-                case User::GENDER_MALE:
-                    $filename = 'default_m_' . random_int(1, 120)  . '.png';
-
-                    break;
-                default:
-                    $filename = (((bool)random_int(0, 1)) ? 'default_m_' . random_int(1, 120) : 'default_fm_' . random_int(1, 60)) . '.png';
-            }
-            
             $this->avatar = Cdn::avatar($filename);
         }
 
-        /** Set the Default Values and required input parameters */
+        /** Set the Default Values and required to be input parameters */
         $this->merge([
             'username' => trim($this->username),
             'email' => strtolower(trim($this->email)),
@@ -89,7 +92,27 @@ class RegisterRequest extends FormRequest
             'interested_in' => User::INTERESTED_IN_FEMALE,
             'email_verified' => false,
             'phone_number_verified' => false,
-            'type' => User::TYPE_USER
+            'type' => User::TYPE_USER,
+            'full_name' => null,
+            'promo_link' => null,
+            'followers' => [],
+            'followings' => [],
+            'likes' => [],
+            'blocks' => [],
+            'followed_hashtags' => [],
+            'medias' => [],
+            'count_fields_updated_at' => [],
+            'setting' => [
+                'otp' => false,
+                'notifications' => [
+                    'unread_message_alerts' => false,
+                    'new_followers' => false,
+                    'news_and_updates' => false,
+                    'tips' => false,
+                    'new_subscribers' => false
+                ]
+            ],
+            'features' => array_fill_keys(array_keys(User::getFeatures()), false),
         ]);
     }
 }
