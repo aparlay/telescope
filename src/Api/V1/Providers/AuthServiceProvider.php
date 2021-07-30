@@ -27,7 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('interact', function ($user, $userId) {
-            return ! Block::select(['user._id'])->user($user->_id)->creator($userId)->exist();
+            return ! Block::select(['user._id'])->user($user->_id)->creator($userId)->exists();
         });
     }
 }
