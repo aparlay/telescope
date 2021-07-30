@@ -3,8 +3,8 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\BlockFactory;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\BlockScope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -71,9 +71,59 @@ class Block extends Model
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
-        'created_at' => 'datetime',
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::created(function ($block) {
+            $block->creatorObj->block_count++;
+            $block->creatorObj->addToSet('blocks', [
+                '_id' => new ObjectId($block->user['_id']),
+                'username' => $block->user['username'],
+                'avatar' => $block->user['avatar']
+            ]);
+            $block->creatorObj->count_fields_updated_at = array_merge(
+                $block->creatorObj->count_fields_updated_at,
+                ['blocks' => DT::utcNow()]
+            );
+            $block->creatorObj->save();
+        });
+
+        static::deleted(function ($block) {
+            $block->creatorObj->block_count--;
+            $block->creatorObj->removeFromSet('blocks', [
+                '_id' => new ObjectId($block->user['_id']),
+                'username' => $block->user['username'],
+                'avatar' => $block->user['avatar']
+            ]);
+            $block->creatorObj->count_fields_updated_at = array_merge(
+                $block->creatorObj->count_fields_updated_at,
+                ['blocks' => DT::utcNow()]
+            );
+            $block->creatorObj->save();
+        });
+    }
+
+    /**
+     * Get the user associated with the follow.
+     */
+    public function userObj()
+    {
+        return $this->belongsTo(User::class, 'user._id');
+    }
+
+    /**
+     * Get the creator associated with the follow.
+     */
+    public function creatorObj()
+    {
+        return $this->belongsTo(User::class, 'creator._id');
+    }
 
     /**
      * Create a new factory instance for the model.
