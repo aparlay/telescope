@@ -3,10 +3,11 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Requests\RegisterRequest;
+use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Validator;
 
@@ -114,43 +115,16 @@ class AuthController extends Controller
         ];
     }
 
+
     /**
      * Register a User.
      *
      * @return JsonResponse
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'email' => 'required|email|unique:users|max:100',
-                'password' => 'required|min:8|max:20',
-                'gender' => 'required|numeric',
-                'username' => 'nullable|min:6|max:20',
-                'phone_number' => 'nullable|numeric',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return $this->error(
-                __('Data Validation Failed'),
-                $validator->errors()->toArray(),
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
-        }
-
-        $user = new User();
-        $user->email = $request->email;
-        $user->password_hash = Hash::make($request->password);
-        $user->username = ($request->username) ?: null;
-        $user->phone_number = ($request->phone_number) ?: null;
-        $user->gender = $request->gender;
-        $user->status = User::STATUS_PENDING;
-        $user->visibility = User::VISIBILITY_PUBLIC;
-        $user->save();
-
-        return $this->response(['success' => true, 'data' => $user], '', Response::HTTP_OK);
+        $user = User::create($request->all());
+        return $this->response(new RegisterResource($user), 'Entity has been created successfully!', Response::HTTP_CREATED);
     }
 
     /**

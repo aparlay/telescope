@@ -28,6 +28,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $avatar
  * @property int $status
  * @property int $visibility
+ * @property int $interested_in
  * @property int $block_count
  * @property int $follower_count
  * @property int $following_count
