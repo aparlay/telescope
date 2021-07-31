@@ -36,7 +36,7 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required','email','unique:users', 'max:255'],
+            'email' => ['required','email:rfc,dns','unique:users', 'max:255'],
             'phone_number' => ['nullable','numeric','digits:10','unique:users'],
             'password' => ['required', Password::min(8)->letters()->numbers()],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
@@ -64,7 +64,7 @@ class RegisterRequest extends FormRequest
         $this->username = uniqid('', false);
 
         /** Set gender by default value */
-        $this->gender = !empty($this->gender) ? $this->gender : User::GENDER_MALE;
+        $this->gender = isset($this->gender) ? (int) $this->gender : User::GENDER_MALE;
 
         /** Set avatar based on Gender */
         if (empty($this->avatar)) {
@@ -75,7 +75,6 @@ class RegisterRequest extends FormRequest
                 User::GENDER_MALE => $maleFilename,
                 default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
             };
-
             $this->avatar = Cdn::avatar($filename);
         }
 
