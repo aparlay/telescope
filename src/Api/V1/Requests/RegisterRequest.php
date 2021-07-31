@@ -29,8 +29,8 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['nullable','email','unique:users','max:255', 'required_without:phone_number'],
-            'phone_number' => ['nullable','numeric','digits:10','unique:users','required_without:email'],
+            'email' => ['required','email','unique:users', 'max:255'],
+            'phone_number' => ['nullable','numeric','digits:10','unique:users'],
             'password' => ['required', Password::min(8)->letters()->numbers()],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
             'username' => ['nullable','max:255'],
