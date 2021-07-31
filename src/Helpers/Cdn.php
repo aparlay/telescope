@@ -63,6 +63,6 @@ class Cdn
             return $url;
         }
 
-        return config('app.cdn.covers').$url;
+        return config('app.cdn.videos').$url;
     }
 }
