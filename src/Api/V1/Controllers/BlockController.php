@@ -6,7 +6,6 @@ use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Resources\BlockResource;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
 use MongoDB\BSON\ObjectId;
 
 class BlockController extends Controller
@@ -91,9 +90,9 @@ class BlockController extends Controller
         $block = Block::user($user->_id)->creator(auth()->user()->_id)->first();
         if ($block === null) {
             $block = new Block([
-                'user' => ['_id' => new ObjectId($user->_id)],
-                'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
-            ]);
+                                   'user' => ['_id' => new ObjectId($user->_id)],
+                                   'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
+                               ]);
             $block->save();
 
             return $this->response(new BlockResource($block), '', Response::HTTP_CREATED);

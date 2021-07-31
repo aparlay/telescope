@@ -17,7 +17,7 @@ trait MediaScope
      * @param  ObjectId|string  $creatorId
      * @return Builder
      */
-    public function scopeCreator(Builder $query, ObjectId | string $creatorId): Builder
+    public function scopeCreator(Builder $query, ObjectId|string $creatorId): Builder
     {
         $creatorId = $creatorId instanceof ObjectId ? $creatorId : new ObjectId($creatorId);
 
@@ -122,7 +122,7 @@ trait MediaScope
      * @param  ObjectId|string  $userId
      * @return Builder
      */
-    public function scopeFollowing(Builder $query, ObjectId | string $userId): Builder
+    public function scopeFollowing(Builder $query, ObjectId|string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
         $user = User::where('_id', $userId)->first();
@@ -135,7 +135,7 @@ trait MediaScope
      * @param  ObjectId|string  $userId
      * @return Builder
      */
-    public function scopeNotBlockedFor(Builder $query, ObjectId | string $userId): Builder
+    public function scopeNotBlockedFor(Builder $query, ObjectId|string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
@@ -158,7 +158,7 @@ trait MediaScope
      * @param  string  $deviceId
      * @return Builder
      */
-    public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId | string $userId, string $deviceId): Builder
+    public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId|string $userId, string $deviceId): Builder
     {
         $visitedIds = [];
         foreach (MediaVisit::select(['media_ids'])->user($userId)->column() as $mediaVisit) {
@@ -225,7 +225,7 @@ trait MediaScope
      * @param  ObjectId|string  $userId
      * @return mixed
      */
-    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
+    public function scopeUser(Builder $query, ObjectId|string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 

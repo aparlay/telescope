@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Models\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
-use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 trait AnalyticScope

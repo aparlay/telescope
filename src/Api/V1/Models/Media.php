@@ -56,8 +56,8 @@ class Media extends MediaBase
     public function toSlack($notifiable)
     {
         $message = $this->creator->slack_admin_url ?? 'A Guest user';
-        $message .= ' reported ' . $this->slack_subject_admin_url;
-        $message .= PHP_EOL . '_*Reason:*_ ' . $this->reason;
+        $message .= ' reported '.$this->slack_subject_admin_url;
+        $message .= PHP_EOL.'_*Reason:*_ '.$this->reason;
 
         return (new SlackMessage())
             ->from('Reporter', ':radioactive_sign:')
@@ -76,7 +76,7 @@ class Media extends MediaBase
             return false;
         }
 
-        $mediaLikeCacheKey = 'MediaLike.creator.' . auth()->user()->id;
+        $mediaLikeCacheKey = 'MediaLike.creator.'.auth()->user()->id;
         $mediaLike = Cache::remember($mediaLikeCacheKey, 'cache.longDuration', function () {
             return MediaLike::select(['media_id' => 1, '_id' => 0])->creator(auth()->user()->id)->pluck('media_id');
         });
@@ -95,7 +95,7 @@ class Media extends MediaBase
             return false;
         }
 
-        $mediaLikeCacheKey = 'MediaVisit.creator.' . auth()->user()->id;
+        $mediaLikeCacheKey = 'MediaVisit.creator.'.auth()->user()->id;
         $mediaLike = Cache::remember($mediaLikeCacheKey, 'cache.longDuration', function () {
             return MediaVisit::select(['media_id' => 1, '_id' => 0])->user(auth()->user()->id)->pluck('media_id');
         });
@@ -108,6 +108,6 @@ class Media extends MediaBase
      */
     public function getFilenameAttribute(): string
     {
-        return basename($this->file, '.' . pathinfo($this->file, PATHINFO_EXTENSION));
+        return basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION));
     }
 }

@@ -2,14 +2,11 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Models\Block;
-use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -47,7 +44,7 @@ class UpdateMedia implements ShouldQueue
     {
         $this->attributes = $attributes;
         if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__ . PHP_EOL . 'User not found!');
+            throw new Exception(__CLASS__.PHP_EOL.'User not found!');
         }
     }
 

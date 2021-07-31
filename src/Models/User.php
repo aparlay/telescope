@@ -8,6 +8,7 @@ use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -158,26 +159,6 @@ class User extends Authenticatable implements JWTSubject
         'deleted_at' => 'datetime',
     ];
 
-    public function getSlackAdminUrlAttribute()
-    {
-        return "<{$this->admin_url}|@{$this->username}>";
-    }
-
-    public function getAdminUrlAttribute()
-    {
-        return config('app.adminUrls.profile') . $this->_id;
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     *
-     * @return Factory
-     */
-    protected static function newFactory(): Factory
-    {
-        return UserFactory::new();
-    }
-
     /**
      * @return array
      */
@@ -252,6 +233,26 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
+
+    public function getSlackAdminUrlAttribute()
+    {
+        return "<{$this->admin_url}|@{$this->username}>";
+    }
+
+    public function getAdminUrlAttribute()
+    {
+        return config('app.adminUrls.profile').$this->_id;
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -272,7 +273,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Route notifications for the Slack channel.
      *
-     * @param  \Illuminate\Notifications\Notification  $notification
+     * @param  Notification  $notification
      * @return string
      */
     public function routeNotificationForSlack($notification)
@@ -282,8 +283,8 @@ class User extends Authenticatable implements JWTSubject
 
 
     /**
-     * @param string $attribute
-     * @param mixed $item
+     * @param  string  $attribute
+     * @param  mixed  $item
      * @param  int|null  $length
      */
     public function addToSet(string $attribute, mixed $item, int $length = null): void
@@ -304,8 +305,8 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * @param string $attribute
-     * @param mixed $item
+     * @param  string  $attribute
+     * @param  mixed  $item
      */
     public function removeFromSet(string $attribute, mixed $item): void
     {
@@ -350,7 +351,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getAlertsAttribute()
     {
-        if (auth()->guest() || ((string) $this->_id !== (string) auth()->user()->_id)) {
+        if (auth()->guest() || ((string)$this->_id !== (string)auth()->user()->_id)) {
             return [];
         }
 

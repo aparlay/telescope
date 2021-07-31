@@ -2,13 +2,13 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\FileExistsException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -47,7 +47,7 @@ class UploadAvatar implements ShouldQueue
     {
         $this->file = $file;
         if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__ . PHP_EOL . 'User not found!');
+            throw new Exception(__CLASS__.PHP_EOL.'User not found!');
         }
     }
 
@@ -66,7 +66,7 @@ class UploadAvatar implements ShouldQueue
 
 
         $this->user->avatar = Cdn::avatar($this->file);
-        $this->user->save(false, ['avatar']);
+        $this->user->save();
     }
 
     public function failed(Throwable $exception)

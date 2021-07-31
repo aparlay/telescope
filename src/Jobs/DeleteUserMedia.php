@@ -42,7 +42,7 @@ class DeleteUserMedia implements ShouldBeUnique
     public function __construct(string $mediaId, string $userId)
     {
         if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__ . PHP_EOL . 'User not found!');
+            throw new Exception(__CLASS__.PHP_EOL.'User not found!');
         }
     }
 

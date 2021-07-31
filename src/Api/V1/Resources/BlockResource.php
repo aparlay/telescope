@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class BlockResource extends JsonResource
 {
     use SimpleUserTrait;
+
     /**
      * Transform the resource into an array.
      *

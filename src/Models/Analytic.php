@@ -17,8 +17,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read null $user_id
  * @property-read User $userObj
  *
- * @method static|self|Builder days(int $days) get days of analytics
- * @method static|self|Builder date(UTCDateTime $start, UTCDateTime $end) get analytics by date
+ * @method static |self|Builder days(int $days) get days of analytics
+ * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get analytics by date
  */
 class Analytic extends Model
 {
@@ -66,15 +66,6 @@ class Analytic extends Model
         'updated_at' => 'datetime',
     ];
 
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function userObj()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
     /**
      * Create a new factory instance for the model.
      *
@@ -83,5 +74,13 @@ class Analytic extends Model
     protected static function newFactory(): Factory
     {
         return AnalyticFactory::new();
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function userObj()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

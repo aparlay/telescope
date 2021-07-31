@@ -97,10 +97,10 @@ class MediaLikeController extends Controller
         $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
         if ($mediaLike === null) {
             $mediaLike = new MediaLike([
-                'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
-                'media_id' => new ObjectId($media->_id),
-                'user_id' => new ObjectId(auth()->user()->_id),
-            ]);
+                                           'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
+                                           'media_id' => new ObjectId($media->_id),
+                                           'user_id' => new ObjectId(auth()->user()->_id),
+                                       ]);
             $mediaLike->save();
             $mediaLike->refresh();
 

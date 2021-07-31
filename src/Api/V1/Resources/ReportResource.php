@@ -17,10 +17,10 @@ class ReportResource extends JsonResource
     public function toArray($request)
     {
         return [
-            '_id' => (string) $this->_id,
-            'media_id' => (string) $this->media_id,
-            'user_id' => (string) $this->user_id,
-            'comment_id' => (string) $this->comment_id,
+            '_id' => (string)$this->_id,
+            'media_id' => (string)$this->media_id,
+            'user_id' => (string)$this->user_id,
+            'comment_id' => (string)$this->comment_id,
             'reason' => $this->reason,
             'type' => Report::getTypes()[$this->type],
             'status' => Report::getStatuses()[$this->status],

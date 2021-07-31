@@ -81,8 +81,8 @@ class VersionController extends Controller
      * )
      *
      *
-     * @param string $os
-     * @param string $version
+     * @param  string  $os
+     * @param  string  $version
      * @return Response
      */
     public function show(string $os, string $version): Response
@@ -107,8 +107,8 @@ class VersionController extends Controller
         }
 
         return response()->json([
-            'require_force_update' => $requireForceUpdate,
-            'version' => $models[0],
-        ]);
+                                    'require_force_update' => $requireForceUpdate,
+                                    'version' => $models[0],
+                                ]);
     }
 }
