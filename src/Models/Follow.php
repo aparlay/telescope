@@ -5,6 +5,7 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Database\Factories\FollowFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\FollowScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -27,6 +28,9 @@ use MongoDB\BSON\ObjectId;
  * @property-read null|mixed $creator_id
  * @property-read null|mixed $user_id
  * @property string $aliasModel
+ *
+ * @method static|self|Builder creator(ObjectId|string $userId) get creator user
+ * @method static|self|Builder user(ObjectId|string $userId) get blocked user
  */
 class Follow extends Model
 {

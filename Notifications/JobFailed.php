@@ -1,25 +1,31 @@
 <?php
 
-namespace Aparlay\Core\Api\V1\Notifications;
+namespace Aparlay\Core\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class ReportSent extends Notification implements ShouldQueue
+class JobFailed extends Notification
 {
     use Queueable;
+
+    public string $job;
+    public int $tried;
+    public string $exception;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(string $job, int $tried, string $exception)
     {
-        //
+        $this->job = $job;
+        $this->tried = $tried;
+        $this->exception = $exception;
     }
+
 
     /**
      * Get the notification's delivery channels.
@@ -40,13 +46,25 @@ class ReportSent extends Notification implements ShouldQueue
      */
     public function toSlack($notifiable)
     {
-        $message = $notifiable->creator->slack_admin_url ?? 'A Guest user';
-        $message .= ' reported ' . $notifiable->slack_subject_admin_url;
-        $message .= PHP_EOL . '_*Reason:*_ ' . $notifiable->reason;
+        $message = $this->job .' failed after ' . $this->tried . ' attempts.';
+        $message .= PHP_EOL . '_*Exceptions:*_ ' . !empty($this->exception) ? $this->exception : ' attempts done.';
 
         return (new SlackMessage())
             ->to('waptap-testing')
             ->content($message)
             ->success();
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toArray($notifiable)
+    {
+        return [
+            //
+        ];
     }
 }

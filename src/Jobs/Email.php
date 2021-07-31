@@ -13,6 +13,21 @@ class Email implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+
+    /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public int $tries = 10;
+
+    /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     *
+     * @var int
+     */
+    public int $maxExceptions = 3;
+
     /**
      * Create a new job instance.
      *
@@ -20,7 +35,6 @@ class Email implements ShouldQueue
      */
     public function __construct()
     {
-        //
     }
 
     /**
@@ -30,6 +44,7 @@ class Email implements ShouldQueue
      */
     public function handle()
     {
-        //
     }
+
+
 }

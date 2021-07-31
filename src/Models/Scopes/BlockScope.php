@@ -35,7 +35,7 @@ trait BlockScope
      * @param  Builder  $query
      * @return Builder
      */
-    public function scopeDeleted(Builder $query): Builder
+    public function scopeIsDeleted(Builder $query): Builder
     {
         return $query->where('is_deleted', true);
     }
@@ -44,7 +44,7 @@ trait BlockScope
      * @param  Builder  $query
      * @return Builder
      */
-    public function scopeNotDeleted(Builder $query): Builder
+    public function scopeIsNotDeleted(Builder $query): Builder
     {
         return $query->where('is_deleted', false);
     }

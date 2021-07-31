@@ -28,8 +28,8 @@ use MongoDB\BSON\ObjectId;
  * @property-read null|mixed $user_id
  * @property string $aliasModel
  *
- * @method static|self|Builder deleted() get deleted blocks
- * @method static|self|Builder notDeleted() get not deleted blocks
+ * @method static|self|Builder isDeleted() get deleted blocks
+ * @method static|self|Builder isNotDeleted() get not deleted blocks
  * @method static|self|Builder creator(ObjectId|string $userId) get creator user
  * @method static|self|Builder user(ObjectId|string $userId) get blocked user
  */

@@ -6,6 +6,7 @@ use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -48,6 +49,9 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read bool $is_protected
  *
  * @OA\Schema()
+ *
+ * @method static|self|Builder creator(ObjectId|string $userId) get creator user
+ * @method static|self|Builder user(ObjectId|string $userId) get blocked user
  */
 class Media extends Model
 {
