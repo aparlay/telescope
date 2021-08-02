@@ -77,14 +77,15 @@ class AuthController extends Controller
         $loginEntity = UserService::findIdentity($request->username);
 
         /** Prepare Credentials and attempt the login */
-        $credentials = [$loginEntity => $request->username, 'password'=>$request->password];        
+        $credentials = [$loginEntity => $request->username, 'password' => $request->password];
         if ($token = auth()->attempt($credentials)) {
 
             /** Check the account status and through exception for suspended/banned/NotFound account */
-            if(UserService::isUserEligible(auth()->user())) {
+            if (UserService::isUserEligible(auth()->user())) {
 
                 /** Prepare and return the json response */
-                return $this->response($this->respondWithToken($token), 'Entity has been created successfully!', Response::HTTP_OK);
+                $successMessage = 'Entity has been created successfully!';
+                return $this->response($this->respondWithToken($token), $successMessage, Response::HTTP_OK);
             }
         } else {
             /** Through exception in case of invalid username/password. */
