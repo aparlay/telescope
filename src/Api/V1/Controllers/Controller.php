@@ -30,7 +30,7 @@ class Controller extends BaseController
             'data' => $result,
         ];
 
-        if (! empty($message)) {
+        if (!empty($message)) {
             $response['message'] = $message;
         }
 
@@ -54,7 +54,7 @@ class Controller extends BaseController
             'message' => $error,
         ];
 
-        if (! empty($errorMessages)) {
+        if (!empty($errorMessages)) {
             $response['data'] = $errorMessages;
         }
 

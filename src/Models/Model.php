@@ -31,13 +31,15 @@ class Model extends \Jenssegers\Mongodb\Eloquent\Model
         });
 
         static::updating(function ($model) {
-            $model->updated_by = !is_null($loggedInUser = Auth::user()) ? new ObjectId($loggedInUser->_id) : $model->updated_by;
+            $model->updated_by = !is_null($loggedInUser = Auth::user()) ? new ObjectId(
+                $loggedInUser->_id
+            ) : $model->updated_by;
         });
     }
 
     /**
-     * @param string $attribute
-     * @param mixed $item
+     * @param  string  $attribute
+     * @param  mixed  $item
      * @param  int|null  $length
      */
     public function addToSet(string $attribute, mixed $item, int $length = null): void
@@ -58,8 +60,8 @@ class Model extends \Jenssegers\Mongodb\Eloquent\Model
     }
 
     /**
-     * @param string $attribute
-     * @param mixed $item
+     * @param  string  $attribute
+     * @param  mixed  $item
      */
     public function removeFromSet(string $attribute, mixed $item): void
     {

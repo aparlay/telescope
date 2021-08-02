@@ -117,7 +117,11 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = User::create($request->all());
-        return $this->response(new RegisterResource($user), 'Entity has been created successfully!', Response::HTTP_CREATED);
+        return $this->response(
+            new RegisterResource($user),
+            'Entity has been created successfully!',
+            Response::HTTP_CREATED
+        );
     }
 
     /**

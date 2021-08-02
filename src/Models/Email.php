@@ -18,10 +18,10 @@ use MongoDB\BSON\ObjectId;
  * @property-read null $user_id
  * @property-read User $userObj
  *
- * @method static|self|Builder visited() get visited alerts
- * @method static|self|Builder notVisited() get not visited alerts
- * @method static|self|Builder media(ObjectId|string $mediaId) get media alerts
- * @method static|self|Builder user(ObjectId|string $userId) get user alerts
+ * @method static |self|Builder visited() get visited alerts
+ * @method static |self|Builder notVisited() get not visited alerts
+ * @method static |self|Builder media(ObjectId|string $mediaId) get media alerts
+ * @method static |self|Builder user(ObjectId|string $userId) get user alerts
  */
 class Email extends Model
 {

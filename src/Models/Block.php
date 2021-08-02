@@ -28,10 +28,10 @@ use MongoDB\BSON\ObjectId;
  * @property-read null|mixed $user_id
  * @property string $aliasModel
  *
- * @method static|self|Builder deleted() get deleted blocks
- * @method static|self|Builder notDeleted() get not deleted blocks
- * @method static|self|Builder creator(ObjectId|string $userId) get creator user
- * @method static|self|Builder user(ObjectId|string $userId) get blocked user
+ * @method static |self|Builder isDeleted() get deleted blocks
+ * @method static |self|Builder isNotDeleted() get not deleted blocks
+ * @method static |self|Builder creator(ObjectId|string $userId) get creator user
+ * @method static |self|Builder user(ObjectId|string $userId) get blocked user
  */
 class Block extends Model
 {
@@ -86,7 +86,7 @@ class Block extends Model
             $block->creatorObj->addToSet('blocks', [
                 '_id' => new ObjectId($block->user['_id']),
                 'username' => $block->user['username'],
-                'avatar' => $block->user['avatar']
+                'avatar' => $block->user['avatar'],
             ]);
             $block->creatorObj->count_fields_updated_at = array_merge(
                 $block->creatorObj->count_fields_updated_at,
@@ -100,7 +100,7 @@ class Block extends Model
             $block->creatorObj->removeFromSet('blocks', [
                 '_id' => new ObjectId($block->user['_id']),
                 'username' => $block->user['username'],
-                'avatar' => $block->user['avatar']
+                'avatar' => $block->user['avatar'],
             ]);
             $block->creatorObj->count_fields_updated_at = array_merge(
                 $block->creatorObj->count_fields_updated_at,
@@ -108,6 +108,16 @@ class Block extends Model
             );
             $block->creatorObj->save();
         });
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return BlockFactory::new();
     }
 
     /**
@@ -124,15 +134,5 @@ class Block extends Model
     public function creatorObj()
     {
         return $this->belongsTo(User::class, 'creator._id');
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     *
-     * @return Factory
-     */
-    protected static function newFactory(): Factory
-    {
-        return BlockFactory::new();
     }
 }

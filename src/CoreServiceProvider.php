@@ -3,6 +3,8 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Commands\CoreCommand;
+use App\Providers\TelescopeServiceProvider;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -20,12 +22,12 @@ class CoreServiceProvider extends ServiceProvider
     public function register()
     {
         if ($this->app->isLocal()) {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+            $this->app->register(IdeHelperServiceProvider::class);
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
-            $this->app->register(\App\Providers\TelescopeServiceProvider::class);
+            $this->app->register(TelescopeServiceProvider::class);
         }
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/core.php', 'core');
+        $this->mergeConfigFrom(__DIR__.'/../config/core.php', 'core');
     }
 
     /**
@@ -37,16 +39,16 @@ class CoreServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/core.php' => config_path('core.php'),
-            ], 'config');
+                                 __DIR__.'/../config/core.php' => config_path('core.php'),
+                             ], 'config');
 
             $this->publishes([
-                __DIR__ . '/../resources/views/admin' => base_path('resources/views/admin'),
-            ], 'views');
+                                 __DIR__.'/../resources/views/admin' => base_path('resources/views/admin'),
+                             ], 'views');
 
             $this->commands([
-                CoreCommand::class,
-            ]);
+                                CoreCommand::class,
+                            ]);
         }
         $this->configureRateLimiting();
 
