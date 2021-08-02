@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\MediaLikeFactory;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -82,6 +83,48 @@ class MediaLike extends Model
      */
     protected $casts = [
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::created(function ($like) {
+            $like->mediaObj->like_count++;
+            $like->mediaObj->addToSet('likes', [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ]);
+            $like->mediaObj->count_fields_updated_at = array_merge(
+                $like->mediaObj->count_fields_updated_at,
+                ['likes' => DT::utcNow()]
+            );
+            $like->mediaObj->save();
+
+            $like->mediaObj->userObj->like_count++;
+            $like->mediaObj->userObj->save();
+        });
+
+        static::deleted(function ($like) {
+            $like->mediaObj->like_count--;
+            $like->mediaObj->removeFromSet('likes', [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ]);
+            $like->mediaObj->count_fields_updated_at = array_merge(
+                $like->mediaObj->count_fields_updated_at,
+                ['likes' => DT::utcNow()]
+            );
+            $like->mediaObj->save();
+
+            $like->mediaObj->userObj->like_count--;
+            $like->mediaObj->userObj->save();
+        });
+    }
 
     /**
      * Create a new factory instance for the model.

@@ -189,10 +189,20 @@ class Media extends Model
     {
         foreach ($attributeValue as $field => $value) {
             /** MongoDB\BSON\UTCDateTime $value */
-            $attributeValue[$field] = $value->toDateTime()->getTimestamp();
+            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value->toDateTime()->getTimestamp() : $value;
         }
 
         return $attributeValue;
+    }
+
+    public function setCountFieldsUpdatedAtAttribute($attributeValue)
+    {
+        foreach ($attributeValue as $field => $value) {
+            /** MongoDB\BSON\UTCDateTime $value */
+            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value : DT::timestampToUtc($value);
+        }
+
+        $this->attributes['count_fields_updated_at'] = $attributeValue;
     }
 
     /**
@@ -368,5 +378,47 @@ class Media extends Model
         $slug = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
 
         return (self::slug($slug)->first() === null) ? $slug : $this->generateSlug($length);
+    }
+
+    /**
+     * @param  string  $attribute
+     * @param  mixed  $item
+     * @param  int|null  $length
+     */
+    public function addToSet(string $attribute, mixed $item, int $length = null): void
+    {
+        if (!is_array($this->$attribute)) {
+            $this->$attribute = [];
+        }
+        $values = $this->$attribute;
+        if (!in_array($item, $values, false)) {
+            array_unshift($values, $item);
+        }
+
+        if ($length !== null) {
+            $values = array_slice($values, 0, $length);
+        }
+
+        $this->$attribute = $values;
+    }
+
+    /**
+     * @param  string  $attribute
+     * @param  mixed  $item
+     */
+    public function removeFromSet(string $attribute, mixed $item): void
+    {
+        if (!is_array($this->$attribute)) {
+            $this->$attribute = [];
+        }
+        $values = $this->$attribute;
+        if (($key = array_search($item, $values, false)) !== false) {
+            unset($values[$key]);
+            if (is_int($key)) {
+                $values = array_values($values);
+            }
+        }
+
+        $this->$attribute = $values;
     }
 }
