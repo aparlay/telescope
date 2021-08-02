@@ -11,11 +11,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
-{
+{   
     protected $userService;
-
     protected $userRepository;
 
     /**
@@ -24,7 +24,7 @@ class AuthController extends Controller
      * @return void
      */
     public function __construct(UserService $userService, UserRepository $userRepository)
-    {
+    {   
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
         $this->userService = $userService;
         $this->userRepository = $userRepository;
@@ -78,41 +78,28 @@ class AuthController extends Controller
      * @throws ValidationException
      */
     public function login(LoginRequest $request)
-    {   
-        $loginEntity = $this->userService->findIdentity($request->username);
+    {
+        /** Find the loginEntity (Email/PhoneNumber/Username) based on username */
+        $loginEntity = UserService::findIdentity($request->username);
 
-        $credentials = [$loginEntity => $request->username, 'password'=>$request->password];
-        
+        /** Prepare Credentials and attempt the login */
+        $credentials = [$loginEntity => $request->username, 'password'=>$request->password];        
         if ($token = auth()->attempt($credentials)) {
 
-            $user = auth()->user();
-            if($error = $this->userService->isUserEligible($user)) {
-                return $this->error($error, [], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
+            /** Check the account status and through exception for suspended/banned/NotFound account */
+            if(UserService::isUserEligible(auth()->user())) {
 
-            //return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
-
-            /** COMMENTED BECAUSE IN PROGRESS */
-            /* */
-            $deviceId = $request->headers->get('X-DEVICE-ID');
-            $otpSetting = json_decode($user['setting'], true);
-            if(empty($request->otp) || $user->status == User::STATUS_PENDING || $otpSetting['otp'] == true) {
-                return $this->userService->requireOtp($user, $loginEntity, $deviceId);
-            } else if(!empty($request->otp) && $user->status == User::STATUS_PENDING) {
-                $user = $this->userService->validateOtp($user);
+                /** Prepare and return the json response */
+                return $this->response($this->respondWithToken($token), 'Entity has been created successfully!', Response::HTTP_OK);
             }
-            if($user->status == User::STATUS_VERIFIED) {
-                return $this->response(['success' => true, 'data' => $this->respondWithToken($token), 'message'=> 'Entity has been created successfully!'], Response::HTTP_OK);
-            } 
-            
-            
         } else {
-            return $this->error('Data Validation Failed', [], Response::HTTP_UNAUTHORIZED);
+            /** Through exception in case of invalid username/password. */
+            throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
         }
     }
 
     /**
-     * Get the token array structure.
+     * Responsible to prepare the json response containing token and expiry
      *
      * @param  string  $token
      *
