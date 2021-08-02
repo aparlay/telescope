@@ -6,6 +6,8 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Notifications\ReportSent;
+use Aparlay\Core\Api\V1\Resources\ReportResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,7 +106,7 @@ class ReportController extends Controller
     public function user(User $user, Request $request): Response
     {
         if (($loggedInUser = Auth::user()) && Gate::forUser($loggedInUser)->denies('interact', $user->_id)) {
-            $this->error('You cannot report this user at the moment.', [], Response::HTTP_FORBIDDEN);
+            return $this->error('You cannot report this user at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
         $validator = Validator::make(
@@ -131,7 +133,7 @@ class ReportController extends Controller
         $model->save();
         $model->notify(new ReportSent());
 
-        return $this->response($model, '', Response::HTTP_CREATED);
+        return $this->response(new ReportResource($model), '', Response::HTTP_CREATED);
     }
 
     /**
@@ -223,7 +225,7 @@ class ReportController extends Controller
     public function media(Media $media, Request $request): Response
     {
         if (($loggedInUser = Auth::user()) && Gate::forUser($loggedInUser)->denies('interact', $media->created_by)) {
-            $this->error('You cannot report this video at the moment.', [], Response::HTTP_FORBIDDEN);
+            return $this->error('You cannot report this video at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
         $validator = Validator::make(
@@ -246,11 +248,10 @@ class ReportController extends Controller
             'type' => Report::TYPE_MEDIA,
             'status' => Report::STATUS_REPORTED,
             'media_id' => new ObjectId($media->_id),
-            'media_id' => new ObjectId($media->_id),
         ]);
         $model->save();
         $model->notify(new ReportSent());
 
-        return $this->response($model, '', Response::HTTP_CREATED);
+        return $this->response(new ReportResource($model), '', Response::HTTP_CREATED);
     }
 }

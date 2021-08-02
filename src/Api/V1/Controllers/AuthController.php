@@ -3,31 +3,25 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Api\V1\Requests\UserRequest;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
-use Aparlay\Core\Repositories\UserRepository;
+use Aparlay\Core\Api\V1\Requests\RegisterRequest;
+use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
-{   
-    protected $userService;
-    protected $userRepository;
-
+{
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct(UserService $userService, UserRepository $userRepository)
-    {   
+    public function __construct()
+    {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
-        $this->userService = $userService;
-        $this->userRepository = $userRepository;
     }
 
     /**
@@ -120,16 +114,10 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function register(UserRequest $request)
+    public function register(RegisterRequest $request)
     {
-        $user = User::create(array_merge(
-            $request->all(),
-            ['password_hash' => Hash::make($request->password)],
-            ['status' => User::STATUS_PENDING],
-            ['visibility' => User::VISIBILITY_PUBLIC]
-        ));
-
-        return $this->response(['success' => true, 'data' => $user], '', Response::HTTP_OK);
+        $user = User::create($request->all());
+        return $this->response(new RegisterResource($user), 'Entity has been created successfully!', Response::HTTP_CREATED);
     }
 
     /**

@@ -4,6 +4,8 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Resources\FollowResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use MongoDB\BSON\ObjectId;
@@ -88,21 +90,21 @@ class FollowController extends Controller
     public function store(User $user): Response
     {
         if (Gate::forUser(auth()->user())->denies('interact', $user->_id)) {
-            $this->error('You cannot like this video at the moment.', [], Response::HTTP_FORBIDDEN);
+            return $this->error('You cannot follow this user at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
         $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->first();
         if ($follow === null) {
-            $model = new Follow([
+            $follow = new Follow([
                 'user' => ['_id' => new ObjectId($user->_id)],
                 'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
             ]);
-            $model->save();
+            $follow->save();
 
-            return $this->response($model, '', Response::HTTP_CREATED);
+            return $this->response(new FollowResource($follow), '', Response::HTTP_CREATED);
         }
 
-        return $this->response($follow, '', Response::HTTP_OK);
+        return $this->response(new FollowResource($follow), '', Response::HTTP_OK);
     }
 
     /**

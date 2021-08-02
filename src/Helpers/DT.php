@@ -35,11 +35,20 @@ class DT
 
     /**
      * @param $utcDateTime
-     * @return float|int
+     * @return int
      */
     public static function utcToTimestamp($utcDateTime)
     {
         return (string)$utcDateTime / 1000;
+    }
+
+    /**
+     * @param UTCDateTime $utcDateTime
+     * @return int
+     */
+    public static function utcToMillisec(UTCDateTime $utcDateTime)
+    {
+        return $utcDateTime->milliseconds;
     }
 
     public static function strToUtc(string $offset)

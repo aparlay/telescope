@@ -28,6 +28,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $avatar
  * @property int $status
  * @property int $visibility
+ * @property int $interested_in
  * @property int $block_count
  * @property int $follower_count
  * @property int $following_count
@@ -340,5 +341,19 @@ class User extends Authenticatable implements JWTSubject
         }
 
         $this->attributes['count_fields_updated_at'] = $attributeValue;
+    }
+
+    /**
+     * Get the media's skin score.
+     *
+     * @return array
+     */
+    public function getAlertsAttribute()
+    {
+        if (auth()->guest() || ((string) $this->_id !== (string) auth()->user()->_id)) {
+            return [];
+        }
+
+        return Alert::user(auth()->user()->_id)->notVisited()->get();
     }
 }

@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
@@ -49,7 +50,7 @@ class MediaController extends Controller
      */
     public function show(Media $media): Response
     {
-        return $this->response($media);
+        return $this->response(new MediaResource($media));
     }
 
     /**
