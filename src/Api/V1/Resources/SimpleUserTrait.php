@@ -2,6 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Aparlay\Core\Helpers\Cdn;
+use Exception;
+
 trait SimpleUserTrait
 {
     /**
@@ -10,19 +13,20 @@ trait SimpleUserTrait
      * @param  array  $userArray
      * @param  string[]  $fields
      * @return array
+     * @throws Exception
      */
     public function createSimpleUser(
         array $userArray,
         array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked']
     ): array {
         $user = auth()->user();
-        $userArray['_id'] = (string) $userArray['_id'];
-        $userArray['avatar'] = (string) $userArray['avatar']; // TODO use Cdn() facade
+        $userArray['_id'] = (string)$userArray['_id'];
+        $userArray['avatar'] = Cdn::avatar((string)$userArray['avatar']);
         $userArray['is_followed'] = false;
         $userArray['is_liked'] = false;
         if ($user) {
-            $userArray['is_followed'] = isset($this->creator['_id'], $user->following[(string) $this->creator['_id']]);
-            $userArray['is_liked'] = (string) $this->creator['_id'] === (string) $user->_id;
+            $userArray['is_followed'] = isset($this->creator['_id'], $user->following[(string)$this->creator['_id']]);
+            $userArray['is_liked'] = (string)$this->creator['_id'] === (string)$user->_id;
         }
 
         $output = [];

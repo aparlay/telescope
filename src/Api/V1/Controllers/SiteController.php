@@ -4,7 +4,6 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class SiteController extends Controller
 {
@@ -70,11 +69,11 @@ class SiteController extends Controller
         $percentUsed = $current * 100 / $value;
 
         return response()->json([
-            'current' => $current,
-            'max' => $value,
-            'percent' => $percentUsed,
-            'ttl' => $ttl,
-        ]);
+                                    'current' => $current,
+                                    'max' => $value,
+                                    'percent' => $percentUsed,
+                                    'ttl' => $ttl,
+                                ]);
     }
 
     /**
@@ -123,6 +122,6 @@ class SiteController extends Controller
     public function health(Request $request)
     {
         return response()->json([
-        ]);
+                                ]);
     }
 }

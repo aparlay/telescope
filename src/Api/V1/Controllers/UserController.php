@@ -5,7 +5,6 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Http\Request;
-
 use Illuminate\Http\Response;
 use Validator;
 
@@ -86,8 +85,8 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'success' => true,
-            'data' => $user,
-        ], Response::HTTP_OK);
+                                    'success' => true,
+                                    'data' => $user,
+                                ], Response::HTTP_OK);
     }
 }

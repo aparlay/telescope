@@ -22,3 +22,4 @@ storage/*.key
 Homestead.yaml
 Homestead.json
 .phpunit.result.cache
+.php-cs-fixer.cache

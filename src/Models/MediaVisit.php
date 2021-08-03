@@ -54,14 +54,6 @@ class MediaVisit extends Model
     ];
 
     /**
-     * Get the phone associated with the user.
-     */
-    public function userObj()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
      * Create a new factory instance for the model.
      *
      * @return Factory
@@ -69,5 +61,13 @@ class MediaVisit extends Model
     protected static function newFactory(): Factory
     {
         return MediaVisitFactory::new();
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function userObj()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

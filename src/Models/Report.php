@@ -7,6 +7,7 @@ use Aparlay\Core\Models\Scopes\ReportScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
@@ -85,31 +86,6 @@ class Report extends Model
     protected $casts = [
     ];
 
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function userObj()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * Get the phone associated with the user.
-     */
-    public function mediaObj()
-    {
-        return $this->belongsTo(Media::class, 'media_id');
-    }
-
-    /**
-     * Get the user associated with the report.
-     */
-    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
     /**
      * @return array
      */
@@ -133,15 +109,6 @@ class Report extends Model
         ];
     }
 
-    public function getSlackSubjectAdminUrlAttribute()
-    {
-        return match ($this->type) {
-            self::TYPE_USER => $this->userObj->slack_admin_url,
-            self::TYPE_MEDIA => $this->mediaObj->slack_admin_url,
-            default => '',
-        };
-    }
-
     /**
      * Create a new factory instance for the model.
      *
@@ -153,9 +120,42 @@ class Report extends Model
     }
 
     /**
+     * Get the phone associated with the user.
+     */
+    public function userObj()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function mediaObj()
+    {
+        return $this->belongsTo(Media::class, 'media_id');
+    }
+
+    /**
+     * Get the user associated with the report.
+     */
+    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function getSlackSubjectAdminUrlAttribute()
+    {
+        return match ($this->type) {
+            self::TYPE_USER => $this->userObj->slack_admin_url,
+            self::TYPE_MEDIA => $this->mediaObj->slack_admin_url,
+            default => '',
+        };
+    }
+
+    /**
      * Route notifications for the Slack channel.
      *
-     * @param  \Illuminate\Notifications\Notification  $notification
+     * @param  Notification  $notification
      * @return string
      */
     public function routeNotificationForSlack($notification)

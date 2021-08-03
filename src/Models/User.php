@@ -8,6 +8,7 @@ use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -28,6 +29,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $avatar
  * @property int $status
  * @property int $visibility
+ * @property int $interested_in
  * @property int $block_count
  * @property int $follower_count
  * @property int $following_count
@@ -157,26 +159,6 @@ class User extends Authenticatable implements JWTSubject
         'deleted_at' => 'datetime',
     ];
 
-    public function getSlackAdminUrlAttribute()
-    {
-        return "<{$this->admin_url}|@{$this->username}>";
-    }
-
-    public function getAdminUrlAttribute()
-    {
-        return config('app.adminUrls.profile') . $this->_id;
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     *
-     * @return Factory
-     */
-    protected static function newFactory(): Factory
-    {
-        return UserFactory::new();
-    }
-
     /**
      * @return array
      */
@@ -251,6 +233,26 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
+
+    public function getSlackAdminUrlAttribute()
+    {
+        return "<{$this->admin_url}|@{$this->username}>";
+    }
+
+    public function getAdminUrlAttribute()
+    {
+        return config('app.adminUrls.profile').$this->_id;
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -271,18 +273,18 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Route notifications for the Slack channel.
      *
-     * @param  \Illuminate\Notifications\Notification  $notification
+     * @param  Notification  $notification
      * @return string
      */
     public function routeNotificationForSlack($notification)
     {
-        return config('slack_webhook');
+        return config('app.slack_webhook_url');
     }
 
 
     /**
-     * @param string $attribute
-     * @param mixed $item
+     * @param  string  $attribute
+     * @param  mixed  $item
      * @param  int|null  $length
      */
     public function addToSet(string $attribute, mixed $item, int $length = null): void
@@ -303,8 +305,8 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * @param string $attribute
-     * @param mixed $item
+     * @param  string  $attribute
+     * @param  mixed  $item
      */
     public function removeFromSet(string $attribute, mixed $item): void
     {
@@ -340,5 +342,19 @@ class User extends Authenticatable implements JWTSubject
         }
 
         $this->attributes['count_fields_updated_at'] = $attributeValue;
+    }
+
+    /**
+     * Get the media's skin score.
+     *
+     * @return array
+     */
+    public function getAlertsAttribute()
+    {
+        if (auth()->guest() || ((string)$this->_id !== (string)auth()->user()->_id)) {
+            return [];
+        }
+
+        return Alert::user(auth()->user()->_id)->notVisited()->get();
     }
 }

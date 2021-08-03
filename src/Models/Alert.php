@@ -32,10 +32,10 @@ use MongoDB\BSON\ObjectId;
  * @property-read string $slack_subject_admin_url
  * @property string $aliasModel
  *
- * @method static|self|Builder visited() get visited alerts
- * @method static|self|Builder notVisited() get not visited alerts
- * @method static|self|Builder media(ObjectId|string $mediaId) get media alerts
- * @method static|self|Builder user(ObjectId|string $userId) get user alerts
+ * @method static |self|Builder visited() get visited alerts
+ * @method static |self|Builder notVisited() get not visited alerts
+ * @method static |self|Builder media(ObjectId|string $mediaId) get media alerts
+ * @method static |self|Builder user(ObjectId|string $userId) get user alerts
  */
 class Alert extends Model
 {
@@ -120,6 +120,16 @@ class Alert extends Model
     }
 
     /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return AlertFactory::new();
+    }
+
+    /**
      * Get the user associated with the alert.
      */
     public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
@@ -133,15 +143,5 @@ class Alert extends Model
     public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     *
-     * @return Factory
-     */
-    protected static function newFactory(): Factory
-    {
-        return AlertFactory::new();
     }
 }

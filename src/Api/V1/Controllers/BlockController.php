@@ -4,7 +4,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
-use Illuminate\Http\JsonResponse;
+use Aparlay\Core\Api\V1\Resources\BlockResource;
 use Illuminate\Http\Response;
 use MongoDB\BSON\ObjectId;
 
@@ -89,16 +89,16 @@ class BlockController extends Controller
     {
         $block = Block::user($user->_id)->creator(auth()->user()->_id)->first();
         if ($block === null) {
-            $model = new Block([
-                'user' => ['_id' => new ObjectId($user->_id)],
-                'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
-            ]);
-            $model->save();
+            $block = new Block([
+                                   'user' => ['_id' => new ObjectId($user->_id)],
+                                   'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
+                               ]);
+            $block->save();
 
-            return $this->response($model, '', Response::HTTP_CREATED);
+            return $this->response(new BlockResource($block), '', Response::HTTP_CREATED);
         }
 
-        return $this->response($block, '', Response::HTTP_OK);
+        return $this->response(new BlockResource($block), '', Response::HTTP_OK);
     }
 
     /**

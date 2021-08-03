@@ -20,13 +20,13 @@ class DT
      */
     public static function utcDateTime($config): UTCDateTime
     {
-        $pastTimestampString[] = ($config['y'] ?? 0) . ' years';
-        $pastTimestampString[] = ($config['mm'] ?? 0) . ' months';
-        $pastTimestampString[] = ($config['w'] ?? 0) . ' weeks';
-        $pastTimestampString[] = ($config['d'] ?? 0) . ' days';
-        $pastTimestampString[] = ($config['h'] ?? 0) . ' hours';
-        $pastTimestampString[] = ($config['m'] ?? 0) . ' minutes';
-        $pastTimestampString[] = ($config['s'] ?? 0) . ' seconds';
+        $pastTimestampString[] = ($config['y'] ?? 0).' years';
+        $pastTimestampString[] = ($config['mm'] ?? 0).' months';
+        $pastTimestampString[] = ($config['w'] ?? 0).' weeks';
+        $pastTimestampString[] = ($config['d'] ?? 0).' days';
+        $pastTimestampString[] = ($config['h'] ?? 0).' hours';
+        $pastTimestampString[] = ($config['m'] ?? 0).' minutes';
+        $pastTimestampString[] = ($config['s'] ?? 0).' seconds';
 
         $pastTimestamp = strtotime(implode(' ', $pastTimestampString));
 
@@ -43,7 +43,7 @@ class DT
     }
 
     /**
-     * @param UTCDateTime $utcDateTime
+     * @param  UTCDateTime  $utcDateTime
      * @return int
      */
     public static function utcToMillisec(UTCDateTime $utcDateTime)

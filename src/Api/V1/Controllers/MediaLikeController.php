@@ -91,16 +91,16 @@ class MediaLikeController extends Controller
     public function store(Media $media): Response
     {
         if (Gate::forUser(auth()->user())->denies('interact', $media->created_by)) {
-            $this->error('You cannot like this video at the moment.', [], Response::HTTP_FORBIDDEN);
+            return $this->error('You cannot like this video at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
         $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
         if ($mediaLike === null) {
             $mediaLike = new MediaLike([
-                'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
-                'media_id' => new ObjectId($media->_id),
-                'user_id' => new ObjectId(auth()->user()->_id),
-            ]);
+                                           'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
+                                           'media_id' => new ObjectId($media->_id),
+                                           'user_id' => new ObjectId(auth()->user()->_id),
+                                       ]);
             $mediaLike->save();
             $mediaLike->refresh();
 

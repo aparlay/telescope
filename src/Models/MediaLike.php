@@ -28,10 +28,10 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read Media $mediaObj
  * @property-read User $userObj
  *
- * @method static|self|Builder media(ObjectId|string $mediaId) get liked media
- * @method static|self|Builder user(ObjectId|string $userId) get user who liked media
- * @method static|self|Builder creator(ObjectId|string $creatorId) get creator user who liked media
- * @method static|self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
+ * @method static |self|Builder media(ObjectId|string $mediaId) get liked media
+ * @method static |self|Builder user(ObjectId|string $userId) get user who liked media
+ * @method static |self|Builder creator(ObjectId|string $creatorId) get creator user who liked media
+ * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
  */
 class MediaLike extends Model
 {
@@ -84,6 +84,16 @@ class MediaLike extends Model
     ];
 
     /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return MediaLikeFactory::new();
+    }
+
+    /**
      * Get the user associated with the alert.
      */
     public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
@@ -97,15 +107,5 @@ class MediaLike extends Model
     public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     *
-     * @return Factory
-     */
-    protected static function newFactory(): Factory
-    {
-        return MediaLikeFactory::new();
     }
 }

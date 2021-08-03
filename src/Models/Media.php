@@ -6,6 +6,7 @@ use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -48,6 +49,9 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read bool $is_protected
  *
  * @OA\Schema()
+ *
+ * @method static |self|Builder creator(ObjectId|string $userId) get creator user
+ * @method static |self|Builder user(ObjectId|string $userId) get blocked user
  */
 class Media extends Model
 {
@@ -147,6 +151,40 @@ class Media extends Model
     protected $casts = [
     ];
 
+    public static function getVisibilities()
+    {
+        return [
+            self::VISIBILITY_PRIVATE => __('Private'),
+            self::VISIBILITY_PUBLIC => __('Public'),
+        ];
+    }
+
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_QUEUED => __('Queued'),
+            self::STATUS_UPLOADED => __('Uploaded'),
+            self::STATUS_IN_PROGRESS => __('In-Progress'),
+            self::STATUS_COMPLETED => __('Waiting For Review'),
+            self::STATUS_FAILED => __('Failed'),
+            self::STATUS_CONFIRMED => __('Confirmed'),
+            self::STATUS_DENIED => __('Denied'),
+            self::STATUS_ADMIN_DELETED => __('Deleted By Admin'),
+            self::STATUS_USER_DELETED => __('Deleted'),
+            self::STATUS_IN_REVIEW => __('Under review'),
+        ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return MediaFactory::new();
+    }
+
     public function getCountFieldsUpdatedAtAttribute($attributeValue)
     {
         foreach ($attributeValue as $field => $value) {
@@ -182,7 +220,7 @@ class Media extends Model
      */
     public function getSkinScoreAttribute(): int
     {
-        if (! empty($this->scores)) {
+        if (!empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ($score['type'] === 'skin') {
                     return $score['score'];
@@ -200,7 +238,7 @@ class Media extends Model
      */
     public function getAwesomenessScoreAttribute(): int
     {
-        if (! empty($this->scores)) {
+        if (!empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ($score['type'] === 'awesomeness') {
                     return $score['score'];
@@ -304,7 +342,11 @@ class Media extends Model
      */
     public function getIsCompletedAttribute(): bool
     {
-        return in_array($this->status, [self::STATUS_COMPLETED, self::STATUS_CONFIRMED, self::STATUS_ADMIN_DELETED], true);
+        return in_array(
+            $this->status,
+            [self::STATUS_COMPLETED, self::STATUS_CONFIRMED, self::STATUS_ADMIN_DELETED],
+            true
+        );
     }
 
     /**
@@ -317,7 +359,7 @@ class Media extends Model
     }
 
     /**
-     * @param int $length
+     * @param  int  $length
      * @return string
      * @throws Exception
      */
@@ -326,39 +368,5 @@ class Media extends Model
         $slug = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
 
         return (self::slug($slug)->first() === null) ? $slug : $this->generateSlug($length);
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     *
-     * @return Factory
-     */
-    protected static function newFactory(): Factory
-    {
-        return MediaFactory::new();
-    }
-
-    public static function getVisibilities()
-    {
-        return [
-            self::VISIBILITY_PRIVATE => __('Private'),
-            self::VISIBILITY_PUBLIC => __('Public'),
-        ];
-    }
-
-    public static function getStatuses()
-    {
-        return [
-            self::STATUS_QUEUED => __('Queued'),
-            self::STATUS_UPLOADED => __('Uploaded'),
-            self::STATUS_IN_PROGRESS => __('In-Progress'),
-            self::STATUS_COMPLETED => __('Waiting For Review'),
-            self::STATUS_FAILED => __('Failed'),
-            self::STATUS_CONFIRMED => __('Confirmed'),
-            self::STATUS_DENIED => __('Denied'),
-            self::STATUS_ADMIN_DELETED => __('Deleted By Admin'),
-            self::STATUS_USER_DELETED => __('Deleted'),
-            self::STATUS_IN_REVIEW => __('Under review'),
-        ];
     }
 }

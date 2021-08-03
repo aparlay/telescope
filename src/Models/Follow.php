@@ -5,6 +5,7 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Database\Factories\FollowFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\FollowScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -27,6 +28,9 @@ use MongoDB\BSON\ObjectId;
  * @property-read null|mixed $creator_id
  * @property-read null|mixed $user_id
  * @property string $aliasModel
+ *
+ * @method static |self|Builder creator(ObjectId|string $userId) get creator user
+ * @method static |self|Builder user(ObjectId|string $userId) get blocked user
  */
 class Follow extends Model
 {
@@ -74,6 +78,17 @@ class Follow extends Model
     ];
 
     /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            self::STATUS_PENDING => __('Pending'),
+            self::STATUS_ACCEPTED => __('Accepted'),
+        ];
+    }
+
+    /**
      * The "booted" method of the model.
      *
      * @return void
@@ -85,7 +100,7 @@ class Follow extends Model
             $follow->userObj->addToSet('followers', [
                 '_id' => new ObjectId($follow->creator['_id']),
                 'username' => $follow->creator['username'],
-                'avatar' => $follow->creator['avatar']
+                'avatar' => $follow->creator['avatar'],
             ], 10);
             $follow->userObj->count_fields_updated_at = array_merge(
                 $follow->userObj->count_fields_updated_at,
@@ -97,7 +112,7 @@ class Follow extends Model
             $follow->creatorObj->addToSet('followings', [
                 '_id' => new ObjectId($follow->user['_id']),
                 'username' => $follow->user['username'],
-                'avatar' => $follow->user['avatar']
+                'avatar' => $follow->user['avatar'],
             ]);
             $follow->creatorObj->count_fields_updated_at = array_merge(
                 $follow->creatorObj->count_fields_updated_at,
@@ -111,7 +126,7 @@ class Follow extends Model
             $follow->userObj->removeFromSet('followers', [
                 '_id' => new ObjectId($follow->creator['_id']),
                 'username' => $follow->creator['username'],
-                'avatar' => $follow->creator['avatar']
+                'avatar' => $follow->creator['avatar'],
             ]);
             $follow->userObj->count_fields_updated_at = array_merge(
                 $follow->userObj->count_fields_updated_at,
@@ -123,7 +138,7 @@ class Follow extends Model
             $follow->creatorObj->removeFromSet('followings', [
                 '_id' => new ObjectId($follow->user['_id']),
                 'username' => $follow->user['username'],
-                'avatar' => $follow->user['avatar']
+                'avatar' => $follow->user['avatar'],
             ]);
             $follow->creatorObj->count_fields_updated_at = array_merge(
                 $follow->creatorObj->count_fields_updated_at,
@@ -131,6 +146,16 @@ class Follow extends Model
             );
             $follow->creatorObj->save();
         });
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return Factory
+     */
+    protected static function newFactory(): Factory
+    {
+        return FollowFactory::new();
     }
 
     /**
@@ -147,26 +172,5 @@ class Follow extends Model
     public function creatorObj()
     {
         return $this->belongsTo(User::class, 'creator._id');
-    }
-
-    /**
-     * @return array
-     */
-    public static function getStatuses(): array
-    {
-        return [
-            self::STATUS_PENDING => __('Pending'),
-            self::STATUS_ACCEPTED => __('Accepted'),
-        ];
-    }
-
-    /**
-     * Create a new factory instance for the model.
-     *
-     * @return Factory
-     */
-    protected static function newFactory(): Factory
-    {
-        return FollowFactory::new();
     }
 }
