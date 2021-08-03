@@ -189,10 +189,20 @@ class Media extends Model
     {
         foreach ($attributeValue as $field => $value) {
             /** MongoDB\BSON\UTCDateTime $value */
-            $attributeValue[$field] = $value->toDateTime()->getTimestamp();
+            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value->toDateTime()->getTimestamp() : $value;
         }
 
         return $attributeValue;
+    }
+
+    public function setCountFieldsUpdatedAtAttribute($attributeValue)
+    {
+        foreach ($attributeValue as $field => $value) {
+            /** MongoDB\BSON\UTCDateTime $value */
+            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value : DT::timestampToUtc($value);
+        }
+
+        $this->attributes['count_fields_updated_at'] = $attributeValue;
     }
 
     /**
