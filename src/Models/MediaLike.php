@@ -92,55 +92,59 @@ class MediaLike extends Model
     protected static function booted()
     {
         static::created(function ($like) {
-            $like->mediaObj->like_count++;
-            $like->mediaObj->addToSet('likes', [
+            $media = $like->mediaObj;
+            $media->like_count++;
+            $media->addToSet('likes', [
                 '_id' => new ObjectId($like->creator['_id']),
                 'username' => $like->creator['username'],
                 'avatar' => $like->creator['avatar'],
-            ]);
-            $like->mediaObj->count_fields_updated_at = array_merge(
-                $like->mediaObj->count_fields_updated_at,
+            ], 10);
+            $media->count_fields_updated_at = array_merge(
+                $media->count_fields_updated_at,
                 ['likes' => DT::utcNow()]
             );
-            $like->mediaObj->save();
+            $media->save();
 
-            $like->mediaObj->userObj->like_count++;
-            $like->mediaObj->userObj->addToSet('likes', [
+            $user = $media->userObj;
+            $user->like_count++;
+            $user->addToSet('likes', [
                 '_id' => new ObjectId($like->creator['_id']),
                 'username' => $like->creator['username'],
                 'avatar' => $like->creator['avatar'],
-            ]);
-            $like->mediaObj->userObj->count_fields_updated_at = array_merge(
-                $like->mediaObj->userObj->count_fields_updated_at,
+            ], 10);
+            $user->count_fields_updated_at = array_merge(
+                $user->count_fields_updated_at,
                 ['likes' => DT::utcNow()]
             );
-            $like->mediaObj->userObj->save();
+            $user->save();
         });
 
         static::deleted(function ($like) {
-            $like->mediaObj->like_count--;
-            $like->mediaObj->removeFromSet('likes', [
+            $media = $like->mediaObj;
+            $media->like_count--;
+            $media->removeFromSet('likes', [
                 '_id' => new ObjectId($like->creator['_id']),
                 'username' => $like->creator['username'],
                 'avatar' => $like->creator['avatar'],
             ]);
-            $like->mediaObj->count_fields_updated_at = array_merge(
-                $like->mediaObj->count_fields_updated_at,
+            $media->count_fields_updated_at = array_merge(
+                $media->count_fields_updated_at,
                 ['likes' => DT::utcNow()]
             );
-            $like->mediaObj->save();
+            $media->save();
 
-            $like->mediaObj->userObj->like_count--;
-            $like->mediaObj->userObj->removeFromSet('likes', [
+            $user = $media->userObj;
+            $user->like_count--;
+            $user->removeFromSet('likes', [
                 '_id' => new ObjectId($like->creator['_id']),
                 'username' => $like->creator['username'],
                 'avatar' => $like->creator['avatar'],
             ]);
-            $like->mediaObj->userObj->count_fields_updated_at = array_merge(
-                $like->mediaObj->userObj->count_fields_updated_at,
+            $user->count_fields_updated_at = array_merge(
+                $user->count_fields_updated_at,
                 ['likes' => DT::utcNow()]
             );
-            $like->mediaObj->userObj->save();
+            $user->save();
         });
     }
 
