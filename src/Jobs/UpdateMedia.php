@@ -35,6 +35,13 @@ class UpdateMedia implements ShouldQueue
     public int $maxExceptions = 3;
 
     /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int|array
+     */
+    public $backoff = 30;
+
+    /**
      * Create a new job instance.
      *
      * @return void

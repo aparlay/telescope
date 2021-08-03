@@ -12,13 +12,12 @@ class Email implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-
     /**
      * The number of times the job may be attempted.
      *
      * @var int
      */
-    public int $tries = 10;
+    public int $tries = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -26,6 +25,13 @@ class Email implements ShouldQueue
      * @var int
      */
     public int $maxExceptions = 3;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int|array
+     */
+    public $backoff = 10;
 
     /**
      * Create a new job instance.

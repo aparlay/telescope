@@ -34,6 +34,13 @@ class DeleteAvatar implements ShouldQueue
     public int $maxExceptions = 3;
 
     /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int|array
+     */
+    public $backoff = [60, 300, 1800, 3600];
+
+    /**
      * Create a new job instance.
      *
      * @return void
