@@ -74,7 +74,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         /** Find the loginEntity (Email/PhoneNumber/Username) based on username */
-        $loginEntity = UserService::findIdentity($request->username);
+        $loginEntity = UserService::getIdentityType($request->username);
 
         /** Prepare Credentials and attempt the login */
         $credentials = [$loginEntity => $request->username, 'password' => $request->password];
@@ -84,8 +84,7 @@ class AuthController extends Controller
             if (UserService::isUserEligible(auth()->user())) {
 
                 /** Prepare and return the json response */
-                $successMessage = 'Entity has been created successfully!';
-                return $this->response($this->respondWithToken($token), $successMessage, Response::HTTP_OK);
+                return $this->response($this->respondWithToken($token));
             }
         } else {
             /** Through exception in case of invalid username/password. */

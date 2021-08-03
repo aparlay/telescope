@@ -3,11 +3,7 @@
 namespace Aparlay\Core\Services;
 
 use App\Models\User;
-use Aparlay\Core\Api\V1\Requests\LoginRequest;
-use Aparlay\Core\Repositories\UserRepository;
-use Aparlay\Core\Api\V1\Controllers;
 use Illuminate\Validation\ValidationException;
-use Validator;
 
 class UserService
 {
@@ -16,7 +12,7 @@ class UserService
      * @param string $identity
      * @return String
      */
-    public static function findIdentity(string $identity)
+    public static function getIdentityType(string $identity)
     {
         /** Find identity */
         switch ($identity) {
