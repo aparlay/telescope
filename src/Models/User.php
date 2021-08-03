@@ -250,7 +250,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getAdminUrlAttribute()
     {
-        return config('app.adminUrls.profile').$this->_id;
+        return config('app.adminUrls.profile') . $this->_id;
     }
 
     public function getJWTIdentifier()
@@ -356,5 +356,10 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return Alert::user(auth()->user()->_id)->notVisited()->get();
+    }
+    
+    public function getUserSetting()
+    {
+        return (object) $this->setting;
     }
 }

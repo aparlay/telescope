@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
+use Aparlay\Core\Services\OtpService;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,11 +15,12 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+
     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
+    * Create a new AuthController instance.
+    *
+    * @return void
+    */
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
@@ -78,11 +80,35 @@ class AuthController extends Controller
 
         /** Prepare Credentials and attempt the login */
         $credentials = [$loginEntity => $request->username, 'password' => $request->password];
+        $isValidLogin = false;
         if ($token = auth()->attempt($credentials)) {
 
             /** Check the account status and through exception for suspended/banned/NotFound account */
+            $user = auth()->user();
             if (UserService::isUserEligible(auth()->user())) {
+                
+                $deviceId = $request->headers->get('X-DEVICE-ID');
+                if (UserService::isOtpRequire($user, $request)) {
 
+                    return OtpService::sendOtp($user, $loginEntity, $deviceId);
+
+                } elseif ($request->otp) {
+
+                    if (!OtpService::validateOtp($request->otp, $request->username, true)) {
+                        /** Through exception in case of invalid username/password. */
+                        throw ValidationException::withMessages(['code' => ['Invalid code.']]);
+                    } else {
+                        UserService::verified($user, $request);
+                        $isValidLogin = true;
+                    }
+                }
+            }
+        
+            if ($user->status == User::STATUS_VERIFIED) {
+                $isValidLogin = true;
+            }
+
+            if ($isValidLogin) {
                 /** Prepare and return the json response */
                 $successMessage = 'Entity has been created successfully!';
                 return $this->response($this->respondWithToken($token), $successMessage, Response::HTTP_OK);
