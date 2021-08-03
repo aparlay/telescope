@@ -105,6 +105,15 @@ class MediaLike extends Model
             $like->mediaObj->save();
 
             $like->mediaObj->userObj->like_count++;
+            $like->mediaObj->userObj->addToSet('likes', [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ]);
+            $like->mediaObj->userObj->count_fields_updated_at = array_merge(
+                $like->mediaObj->userObj->count_fields_updated_at,
+                ['likes' => DT::utcNow()]
+            );
             $like->mediaObj->userObj->save();
         });
 
@@ -122,6 +131,15 @@ class MediaLike extends Model
             $like->mediaObj->save();
 
             $like->mediaObj->userObj->like_count--;
+            $like->mediaObj->userObj->removeFromSet('likes', [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ]);
+            $like->mediaObj->userObj->count_fields_updated_at = array_merge(
+                $like->mediaObj->userObj->count_fields_updated_at,
+                ['likes' => DT::utcNow()]
+            );
             $like->mediaObj->userObj->save();
         });
     }
