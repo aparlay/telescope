@@ -78,11 +78,11 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        /** Find the loginEntity (Email/PhoneNumber/Username) based on username */
-        $loginEntity = UserService::getIdentityType($request->username);
+        /** Find the identityField (Email/PhoneNumber/Username) based on username */
+        $identityField = UserService::getIdentityType($request->username);
 
         /** Prepare Credentials and attempt the login */
-        $credentials = [$loginEntity => $request->username, 'password' => $request->password];
+        $credentials = [$identityField => $request->username, 'password' => $request->password];
         if (!($token = auth()->attempt($credentials))) {
             throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
         }
