@@ -10,7 +10,10 @@ use Illuminate\Queue\SerializesModels;
 
 class ReprocessMedia implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -19,7 +22,6 @@ class ReprocessMedia implements ShouldQueue
      */
     public function __construct()
     {
-        //
     }
 
     /**
@@ -29,6 +31,5 @@ class ReprocessMedia implements ShouldQueue
      */
     public function handle()
     {
-        //
     }
 }

@@ -12,13 +12,14 @@ class FollowResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         return [
-            '_id' => (string)$this->_id,
+            '_id' => (string) $this->_id,
             'creator' => $this->createSimpleUser($this->creator, ['_id', 'username', 'avatar', 'is_followed']),
             'user' => $this->createSimpleUser($this->user, ['_id', 'username', 'avatar', 'is_followed']),
             'created_at' => $this->created_at->valueOf(),

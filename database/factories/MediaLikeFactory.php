@@ -32,6 +32,7 @@ class MediaLikeFactory extends Factory
             },
             'creator' => function ($model) {
                 $user = User::user($model['user_id'])->first();
+
                 return [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,

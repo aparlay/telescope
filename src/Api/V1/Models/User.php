@@ -7,41 +7,40 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * User model
+ * User model.
  *
- * @property ObjectId $_id
- * @property string $username
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $email
- * @property bool $email_verified
- * @property string $phone_number
- * @property bool $phone_number_verified
- * @property string $auth_key
- * @property string $avatar
- * @property int $status
- * @property int $visibility
- * @property int $block_count
- * @property int $follower_count
- * @property int $following_count
- * @property int $like_count
- * @property int $followed_hashtag_count
- * @property int $media_count
+ * @property ObjectId    $_id
+ * @property string      $username
+ * @property string      $password_hash
+ * @property string      $password_reset_token
+ * @property string      $email
+ * @property bool        $email_verified
+ * @property string      $phone_number
+ * @property bool        $phone_number_verified
+ * @property string      $auth_key
+ * @property string      $avatar
+ * @property int         $status
+ * @property int         $visibility
+ * @property int         $block_count
+ * @property int         $follower_count
+ * @property int         $following_count
+ * @property int         $like_count
+ * @property int         $followed_hashtag_count
+ * @property int         $media_count
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
- * @property array $setting
- * @property array $features
- * @property-read mixed $authLogs
- * @property-read mixed $id
- * @property-write string $passwordHashField
- * @property-read string $authKey
- * @property-read array $links
- * @property-read bool $require_otp
- * @property-read bool $is_protected
- * @property array $defaultSetting
+ * @property array       $setting
+ * @property array       $features
+ * @property mixed       $authLogs
+ * @property mixed       $id
+ * @property string      $passwordHashField
+ * @property string      $authKey
+ * @property array       $links
+ * @property bool        $require_otp
+ * @property bool        $is_protected
+ * @property array       $defaultSetting
  *
  * @OA\Schema()
- *
  */
 class User extends UserBase
 {

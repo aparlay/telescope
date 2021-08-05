@@ -17,22 +17,22 @@ use Throwable;
 
 class UpdateAvatar implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public string $avatar;
+
     public User $user;
 
     /**
      * The number of times the job may be attempted.
-     *
-     * @var int
      */
     public int $tries = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
-     *
-     * @var int
      */
     public int $maxExceptions = 3;
 
@@ -47,6 +47,7 @@ class UpdateAvatar implements ShouldQueue
      * Create a new job instance.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function __construct(string $avatar, string $userId)

@@ -81,14 +81,11 @@ class BlockController extends Controller
      *         @OA\JsonContent(ref="#/components/schemas/429"),
      *     ),
      * )
-     *
-     * @param  User  $user
-     * @return Response
      */
     public function store(User $user): Response
     {
         $block = Block::user($user->_id)->creator(auth()->user()->_id)->first();
-        if ($block === null) {
+        if (null === $block) {
             $block = new Block([
                                    'user' => ['_id' => new ObjectId($user->_id)],
                                    'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
@@ -171,14 +168,11 @@ class BlockController extends Controller
      *         @OA\JsonContent(ref="#/components/schemas/429"),
      *     ),
      * )
-     *
-     * @param  User  $user
-     * @return Response
      */
     public function destroy(User $user): Response
     {
         $block = Block::user($user->_id)->creator(auth()->user()->_id)->firstOrFail();
-        if ($block !== null) {
+        if (null !== $block) {
             $block->delete();
         }
 

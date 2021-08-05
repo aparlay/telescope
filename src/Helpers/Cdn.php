@@ -6,11 +6,9 @@ use Exception;
 
 class Cdn
 {
-
     /**
-     * Responsible for returning the avatar URL based on filename if cdn is enabled
-     * @param  string  $url
-     * @return string
+     * Responsible for returning the avatar URL based on filename if cdn is enabled.
+     *
      * @throws Exception
      */
     public static function avatar(string $url): string
@@ -19,19 +17,18 @@ class Cdn
             throw new Exception('Url is missing');
         }
 
-        /** Return the input file url if cdn is not enabled */
-        if (!config('app.cdn.enabled')) {
+        /* Return the input file url if cdn is not enabled */
+        if (! config('app.cdn.enabled')) {
             return $url;
         }
 
-        /** Prepend the CDN Server Url and return the file url */
+        /* Prepend the CDN Server Url and return the file url */
         return config('app.cdn.avatars').$url;
     }
 
     /**
-     * Responsible for returning the avatar URL based on filename if cdn is enabled
-     * @param  string  $url
-     * @return string
+     * Responsible for returning the avatar URL based on filename if cdn is enabled.
+     *
      * @throws Exception
      */
     public static function cover(string $url): string
@@ -40,7 +37,7 @@ class Cdn
             throw new Exception('Url is missing');
         }
 
-        if (!config('app.cdn.enabled')) {
+        if (! config('app.cdn.enabled')) {
             return $url;
         }
 
@@ -48,9 +45,8 @@ class Cdn
     }
 
     /**
-     * Responsible for returning the avatar URL based on filename if cdn is enabled
-     * @param  string  $url
-     * @return string
+     * Responsible for returning the avatar URL based on filename if cdn is enabled.
+     *
      * @throws Exception
      */
     public static function video(string $url): string
@@ -59,7 +55,7 @@ class Cdn
             throw new Exception('Url is missing');
         }
 
-        if (!config('app.cdn.enabled')) {
+        if (! config('app.cdn.enabled')) {
             return $url;
         }
 

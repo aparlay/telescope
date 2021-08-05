@@ -14,24 +14,22 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class MediaLike
- * @package Aparlay\Core\Models
+ * Class MediaLike.
  *
- * @property ObjectId $_id
- * @property string $hashtag
- * @property ObjectId $media_id
- * @property ObjectId $user_id
- * @property array $creator
- * @property string $created_at
+ * @property ObjectId   $_id
+ * @property string     $hashtag
+ * @property ObjectId   $media_id
+ * @property ObjectId   $user_id
+ * @property array      $creator
+ * @property string     $created_at
+ * @property User       $creatorObj
+ * @property mixed|null $creator_id
+ * @property Media      $mediaObj
+ * @property User       $userObj
  *
- * @property-read User $creatorObj
- * @property-read null|mixed $creator_id
- * @property-read Media $mediaObj
- * @property-read User $userObj
- *
- * @method static |self|Builder media(ObjectId|string $mediaId) get liked media
- * @method static |self|Builder user(ObjectId|string $userId) get user who liked media
- * @method static |self|Builder creator(ObjectId|string $creatorId) get creator user who liked media
+ * @method static |self|Builder media(ObjectId|string $mediaId)            get liked media
+ * @method static |self|Builder user(ObjectId|string $userId)              get user who liked media
+ * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
  * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
  */
 class MediaLike extends Model
@@ -42,6 +40,7 @@ class MediaLike extends Model
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'media_likes';
@@ -150,8 +149,6 @@ class MediaLike extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {
@@ -161,7 +158,7 @@ class MediaLike extends Model
     /**
      * Get the user associated with the alert.
      */
-    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -169,7 +166,7 @@ class MediaLike extends Model
     /**
      * Get the media associated with the alert.
      */
-    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
     }

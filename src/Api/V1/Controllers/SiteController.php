@@ -9,6 +9,7 @@ class SiteController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * @OA\Get(
      *     path="/v1/cache",
      *     tags={"site"},
@@ -57,7 +58,7 @@ class SiteController extends Controller
         $value = trim($value);
         $last = strtolower(substr($value, -1));
         if (in_array($last, ['g', 'm', 'k'], true)) {
-            $value = (int)substr($value, 0, -1);
+            $value = (int) substr($value, 0, -1);
 
             $value *= match ($last) {
                 'g' => 1024 * 1024 * 1024,
@@ -78,6 +79,7 @@ class SiteController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
      * @OA\Get(
      *     path="/v1/health",
      *     tags={"site"},
@@ -116,7 +118,6 @@ class SiteController extends Controller
      *     ),
      * )
      *
-     * @param  Request  $request
      * @return JsonResponse
      */
     public function health(Request $request)

@@ -18,40 +18,39 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class Media
+ * Class Media.
  *
- * @package Aparlay\Core\Models
- * @property ObjectId $_id
- * @property string $description
- * @property string $location
- * @property string $hash
- * @property string $file
- * @property string $mime_type
- * @property int $size
- * @property int $length
- * @property int $visibility
- * @property int $like_count
- * @property int $comment_count
- * @property array $count_fields_updated_at
- * @property array $likes
- * @property array $comments
- * @property int $status
- * @property array $hashtags
- * @property array $people
- * @property array $creator
- * @property string $cover
- * @property string $slug
- * @property ObjectId $created_by
+ * @property ObjectId    $_id
+ * @property string      $description
+ * @property string      $location
+ * @property string      $hash
+ * @property string      $file
+ * @property string      $mime_type
+ * @property int         $size
+ * @property int         $length
+ * @property int         $visibility
+ * @property int         $like_count
+ * @property int         $comment_count
+ * @property array       $count_fields_updated_at
+ * @property array       $likes
+ * @property array       $comments
+ * @property int         $status
+ * @property array       $hashtags
+ * @property array       $people
+ * @property array       $creator
+ * @property string      $cover
+ * @property string      $slug
+ * @property ObjectId    $created_by
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
- * @property-read mixed $filename
- * @property-read array $links
- * @property-read bool $is_protected
+ * @property mixed       $filename
+ * @property array       $links
+ * @property bool        $is_protected
  *
  * @OA\Schema()
  *
  * @method static |self|Builder creator(ObjectId|string $userId) get creator user
- * @method static |self|Builder user(ObjectId|string $userId) get blocked user
+ * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
  */
 class Media extends Model
 {
@@ -60,29 +59,38 @@ class Media extends Model
     use MediaScope;
 
     public const VISIBILITY_PUBLIC = 1;
+
     public const VISIBILITY_PRIVATE = 0;
 
     public const STATUS_QUEUED = 0;
+
     public const STATUS_UPLOADED = 1;
+
     public const STATUS_IN_PROGRESS = 2;
+
     public const STATUS_COMPLETED = 3;
+
     public const STATUS_FAILED = 4;
+
     public const STATUS_CONFIRMED = 5;
+
     public const STATUS_DENIED = 6;
+
     public const STATUS_IN_REVIEW = 7;
+
     public const STATUS_ADMIN_DELETED = 9;
+
     public const STATUS_USER_DELETED = 10;
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'medias';
 
-    /**
-     * @var string
-     */
     protected string $path = '';
+
     protected string $cover = '';
 
     /**
@@ -177,8 +185,6 @@ class Media extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {
@@ -188,7 +194,7 @@ class Media extends Model
     public function getCountFieldsUpdatedAtAttribute($attributeValue)
     {
         foreach ($attributeValue as $field => $value) {
-            /** MongoDB\BSON\UTCDateTime $value */
+            /* MongoDB\BSON\UTCDateTime $value */
             $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value->toDateTime()->getTimestamp() : $value;
         }
 
@@ -198,7 +204,7 @@ class Media extends Model
     public function setCountFieldsUpdatedAtAttribute($attributeValue)
     {
         foreach ($attributeValue as $field => $value) {
-            /** MongoDB\BSON\UTCDateTime $value */
+            /* MongoDB\BSON\UTCDateTime $value */
             $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value : DT::timestampToUtc($value);
         }
 
@@ -215,8 +221,6 @@ class Media extends Model
 
     /**
      * Get the user's full name.
-     *
-     * @return bool
      */
     public function getIsAdultAttribute(): bool
     {
@@ -225,14 +229,12 @@ class Media extends Model
 
     /**
      * Get the media's skin score.
-     *
-     * @return int
      */
     public function getSkinScoreAttribute(): int
     {
-        if (!empty($this->scores)) {
+        if (! empty($this->scores)) {
             foreach ($this->scores as $score) {
-                if ($score['type'] === 'skin') {
+                if ('skin' === $score['type']) {
                     return $score['score'];
                 }
             }
@@ -243,14 +245,12 @@ class Media extends Model
 
     /**
      * Get the media's skin score.
-     *
-     * @return int
      */
     public function getAwesomenessScoreAttribute(): int
     {
-        if (!empty($this->scores)) {
+        if (! empty($this->scores)) {
             foreach ($this->scores as $score) {
-                if ($score['type'] === 'awesomeness') {
+                if ('awesomeness' === $score['type']) {
                     return $score['score'];
                 }
             }
@@ -270,14 +270,11 @@ class Media extends Model
             return [];
         }
 
-
         return Alert::media($this->_id)->user(auth()->user()->_id)->notVisited()->get();
     }
 
     /**
      * Get the media's skin score.
-     *
-     * @return int
      */
     public function getTimeScoreAttribute(): int
     {
@@ -300,7 +297,6 @@ class Media extends Model
     /**
      * Get the media's skin score.
      *
-     * @return int
      * @throws BadDataException
      * @throws OutOfBoundsException
      */
@@ -312,18 +308,18 @@ class Media extends Model
         $endUtc = DT::timestampToUtc($timestamp + $windowDuration);
         $meanLikes = [];
         foreach (Analytic::date($startUtc, $endUtc)->get() as $analytic) {
-            if (isset($analytic['media']['mean_likes']) && $analytic['media']['mean_likes'] !== 0) {
+            if (isset($analytic['media']['mean_likes']) && 0 !== $analytic['media']['mean_likes']) {
                 $meanLikes[] = $analytic['media']['mean_likes'];
             }
         }
 
-        if (empty($meanLikes) || (int)$this->like_count === 0) {
+        if (empty($meanLikes) || 0 === (int) $this->like_count) {
             return 0;
         }
 
         $sigma = Descriptive::sd($meanLikes, true);
 
-        if ($sigma == 0) {
+        if (0 == $sigma) {
             return 3;
         }
 
@@ -347,8 +343,6 @@ class Media extends Model
 
     /**
      * Get the user's full name.
-     *
-     * @return bool
      */
     public function getIsCompletedAttribute(): bool
     {
@@ -360,7 +354,6 @@ class Media extends Model
     }
 
     /**
-     * @return string
      * @throws Exception
      */
     public function setSlugAttribute(): string
@@ -369,14 +362,12 @@ class Media extends Model
     }
 
     /**
-     * @param  int  $length
-     * @return string
      * @throws Exception
      */
     public function generateSlug(int $length): string
     {
-        $slug = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+        $slug = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
 
-        return (self::slug($slug)->first() === null) ? $slug : $this->generateSlug($length);
+        return (null === self::slug($slug)->first()) ? $slug : $this->generateSlug($length);
     }
 }

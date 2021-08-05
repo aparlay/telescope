@@ -8,8 +8,8 @@ use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -31,7 +31,6 @@ class AuthController extends Controller
      */
     public function token()
     {
-        //
     }
 
     /**
@@ -41,7 +40,6 @@ class AuthController extends Controller
      */
     public function changePassword()
     {
-        //
     }
 
     /**
@@ -51,7 +49,6 @@ class AuthController extends Controller
      */
     public function validateOtp()
     {
-        //
     }
 
     /**
@@ -61,14 +58,13 @@ class AuthController extends Controller
      */
     public function requestOtp()
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return Response|void
+     *
      * @throws ValidationException
      */
     public function login(LoginRequest $request)
@@ -79,25 +75,19 @@ class AuthController extends Controller
         /** Prepare Credentials and attempt the login */
         $credentials = [$identityField => $request->username, 'password' => $request->password];
         if ($token = auth()->attempt($credentials)) {
-
-            /** Check the account status and through exception for suspended/banned/NotFound account */
+            /* Check the account status and through exception for suspended/banned/NotFound account */
             if (UserService::isUserEligible(auth()->user())) {
 
-                /** Prepare and return the json response */
-                return $this->response($this->respondWithToken($token));
+                return $this->response($result)->cookie($cookie1)->cookie($cookie2)->cookie($cookie3);
             }
         } else {
-            /** Through exception in case of invalid username/password. */
+            /* Through exception in case of invalid username/password. */
             throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
         }
     }
 
     /**
-     * Responsible to prepare the json response containing token and expiry
-     *
-     * @param  string  $token
-     *
-     * @return array
+     * Responsible to prepare the json response containing token and expiry.
      */
     protected function respondWithToken(string $token): array
     {
@@ -111,12 +101,11 @@ class AuthController extends Controller
 
     /**
      * Register a User.
-     *
-     * @return JsonResponse
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): Response
     {
         $user = User::create($request->all());
+
         return $this->response(
             new RegisterResource($user),
             'Entity has been created successfully!',
@@ -126,10 +115,8 @@ class AuthController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @return JsonResponse
      */
-    public function logout()
+    public function logout(): Response
     {
         auth()->logout();
 
@@ -138,10 +125,8 @@ class AuthController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @return JsonResponse
      */
-    public function refresh(): JsonResponse
+    public function refresh(): Response
     {
         return $this->response($this->respondWithToken(auth()->refresh()));
     }

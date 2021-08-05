@@ -11,17 +11,16 @@ use Illuminate\Notifications\Notifiable;
 use MongoDB\BSON\ObjectId;
 
 /**
- * Class Email
- * @package Aparlay\Core\Models
+ * Class Email.
  *
- * @property int $status
- * @property-read null $user_id
- * @property-read User $userObj
+ * @property int  $status
+ * @property null $user_id
+ * @property User $userObj
  *
- * @method static |self|Builder visited() get visited alerts
- * @method static |self|Builder notVisited() get not visited alerts
+ * @method static |self|Builder visited()                       get visited alerts
+ * @method static |self|Builder notVisited()                    get not visited alerts
  * @method static |self|Builder media(ObjectId|string $mediaId) get media alerts
- * @method static |self|Builder user(ObjectId|string $userId) get user alerts
+ * @method static |self|Builder user(ObjectId|string $userId)   get user alerts
  */
 class Email extends Model
 {
@@ -30,14 +29,18 @@ class Email extends Model
     use EmailScope;
 
     public const STATUS_QUEUED = 0;
+
     public const STATUS_SENT = 1;
+
     public const STATUS_OPENED = 2;
+
     public const STATUS_FAILED = 3;
 
     public const TYPE_OTP = 0;
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'emails';
@@ -77,9 +80,6 @@ class Email extends Model
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [
@@ -90,9 +90,6 @@ class Email extends Model
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getTypes(): array
     {
         return [
@@ -102,8 +99,6 @@ class Email extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {

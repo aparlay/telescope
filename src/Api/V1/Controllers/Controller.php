@@ -18,11 +18,8 @@ class Controller extends BaseController
      * success response method.
      *
      * @param $result
-     * @param  string  $message
-     * @param  int  $code
-     * @return Response
      */
-    public function response($result, string $message = '', int $code = 200): Response
+    public function response($result, string $message = '', int $code = 200, array $headers = []): Response
     {
         $response = [
             'code' => $code,
@@ -30,23 +27,19 @@ class Controller extends BaseController
             'data' => $result,
         ];
 
-        if (!empty($message)) {
+        if (! empty($message)) {
             $response['message'] = $message;
         }
 
-        return response($response, $code);
+        return response($response, $code, $headers);
     }
 
     /**
      * return error response.
      *
      * @param $error
-     * @param  array  $errorMessages
-     * @param  int  $code
-     *
-     * @return Response
      */
-    public function error($error, array $errorMessages = [], int $code = 400): Response
+    public function error($error, array $errorMessages = [], int $code = 400, array $headers = []): Response
     {
         $response = [
             'code' => $code,
@@ -54,10 +47,10 @@ class Controller extends BaseController
             'message' => $error,
         ];
 
-        if (!empty($errorMessages)) {
+        if (! empty($errorMessages)) {
             $response['data'] = $errorMessages;
         }
 
-        return response($response, $code);
+        return response($response, $code, $headers);
     }
 }

@@ -56,7 +56,7 @@ class UserFactory extends Factory
                 'blocks' => DT::utcNow(),
                 'likes' => DT::utcNow(),
                 'hashtags' => DT::utcNow(),
-                'medias' => DT::utcNow()
+                'medias' => DT::utcNow(),
             ],
             'blocks' => [],
             'likes' => [],

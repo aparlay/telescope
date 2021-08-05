@@ -29,17 +29,17 @@ class AlertFactory extends Factory
             'user_id' => function () {
                 return new ObjectId(User::factory()->create()->_id);
             },
-            'media_id' => function($alert) {
+            'media_id' => function ($alert) {
                 return new ObjectId(Media::factory(['user_id' => new ObjectId($alert['user_id'])])->create()->_id);
             },
             'type' => $this->faker->randomElement(array_keys(Alert::getTypes())),
             'status' => $this->faker->randomElement(array_keys(Alert::getStatuses())),
-            'created_by' => function($alert) {
+            'created_by' => function ($alert) {
                 return new ObjectId($alert['user_id']);
             },
-            'updated_by' => function($alert) {
+            'updated_by' => function ($alert) {
                 return new ObjectId($alert['user_id']);
-            }
+            },
         ];
     }
 }

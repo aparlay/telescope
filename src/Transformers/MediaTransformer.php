@@ -7,21 +7,21 @@ use League\Fractal\TransformerAbstract;
 class MediaTransformer extends TransformerAbstract
 {
     /**
-     * List of resources to automatically include
+     * List of resources to automatically include.
      *
      * @var array
      */
     protected $defaultIncludes = [
-        //
+
     ];
 
     /**
-     * List of resources possible to include
+     * List of resources possible to include.
      *
      * @var array
      */
     protected $availableIncludes = [
-        //
+
     ];
 
     /**
@@ -32,7 +32,7 @@ class MediaTransformer extends TransformerAbstract
     public function transform()
     {
         return [
-            //
+
         ];
     }
 }

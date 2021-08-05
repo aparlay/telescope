@@ -18,13 +18,13 @@ class ReportSent extends Notification implements ShouldQueue
      */
     public function __construct()
     {
-        //
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -35,7 +35,8 @@ class ReportSent extends Notification implements ShouldQueue
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable)

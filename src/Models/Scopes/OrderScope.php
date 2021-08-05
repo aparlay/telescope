@@ -9,7 +9,6 @@ trait OrderScope
 {
     /**
      * @param $query
-     * @return mixed
      */
     public function scopeVisited($query): mixed
     {
@@ -18,7 +17,6 @@ trait OrderScope
 
     /**
      * @param $query
-     * @return mixed
      */
     public function scopeNotVisited($query): mixed
     {
@@ -28,7 +26,6 @@ trait OrderScope
     /**
      * @param $query
      * @param $mediaId
-     * @return mixed
      */
     public function scopeMedia($query, $mediaId): mixed
     {
@@ -40,7 +37,6 @@ trait OrderScope
     /**
      * @param $query
      * @param $userId
-     * @return mixed
      */
     public function scopeUser($query, $userId): mixed
     {

@@ -9,6 +9,7 @@ class VersionController extends Controller
 {
     /**
      * Display the specified resource.
+     *
      * @OA\Get(
      *     path="/v1/version/{os}/{version}",
      *     tags={"site"},
@@ -79,11 +80,6 @@ class VersionController extends Controller
      *         @OA\JsonContent(ref="#/components/schemas/429"),
      *     ),
      * )
-     *
-     *
-     * @param  string  $os
-     * @param  string  $version
-     * @return Response
      */
     public function show(string $os, string $version): Response
     {
@@ -100,7 +96,7 @@ class VersionController extends Controller
         foreach ($models as $model) {
             if ($model['is_force_update']) {
                 $compareResult = version_compare($version, $model['version']);
-                if ($compareResult === -1) {
+                if (-1 === $compareResult) {
                     $requireForceUpdate = true;
                 }
             }

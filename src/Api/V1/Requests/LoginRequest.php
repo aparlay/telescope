@@ -25,9 +25,9 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'username'  => 'required',
-            'password'  => 'required',
-            'otp'       => 'nullable'
+            'username' => 'required',
+            'password' => 'required',
+            'otp' => 'nullable',
         ];
     }
 }

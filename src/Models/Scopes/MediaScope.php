@@ -13,75 +13,45 @@ use MongoDB\BSON\UTCDateTime;
 trait MediaScope
 {
     /**
-     * @param  Builder  $query
-     * @param  ObjectId|string  $creatorId
-     * @return Builder
+     * @param ObjectId|string $creatorId
      */
-    public function scopeCreator(Builder $query, ObjectId|string $creatorId): Builder
+    public function scopeCreator(Builder $query, ObjectId | string $creatorId): Builder
     {
         $creatorId = $creatorId instanceof ObjectId ? $creatorId : new ObjectId($creatorId);
 
         return $query->where('creator._id', $creatorId);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeCompleted(Builder $query): Builder
     {
         return $query->where('status', Media::STATUS_COMPLETED);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeConfirmed(Builder $query): Builder
     {
         return $query->where('status', Media::STATUS_CONFIRMED);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeDenied(Builder $query): Builder
     {
         return $query->where('status', Media::STATUS_DENIED);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeIsDeleted(Builder $query): Builder
     {
         return $query->where('status', Media::STATUS_DENIED);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeInReview(Builder $query): Builder
     {
         return $query->where('status', Media::STATUS_IN_REVIEW);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeFailed(Builder $query): Builder
     {
         return $query->where('status', Media::STATUS_FAILED);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeAvailableForOwner(Builder $query): Builder
     {
         return $query->where('status', '$in', [
@@ -95,10 +65,6 @@ trait MediaScope
         ]);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeAvailableForFollower(Builder $query): Builder
     {
         return $query->where('status', '$in', [
@@ -107,22 +73,15 @@ trait MediaScope
         ]);
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  int  $status
-     * @return Builder
-     */
     public function scopeStatus(Builder $query, int $status): Builder
     {
         return $query->where('status', $status);
     }
 
     /**
-     * @param  Builder  $query
-     * @param  ObjectId|string  $userId
-     * @return Builder
+     * @param ObjectId|string $userId
      */
-    public function scopeFollowing(Builder $query, ObjectId|string $userId): Builder
+    public function scopeFollowing(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
         $user = User::where('_id', $userId)->first();
@@ -131,34 +90,24 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder  $query
-     * @param  ObjectId|string  $userId
-     * @return Builder
+     * @param ObjectId|string $userId
      */
-    public function scopeNotBlockedFor(Builder $query, ObjectId|string $userId): Builder
+    public function scopeNotBlockedFor(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
         return $query->where('blocked_user_ids', '$ne', $userId);
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  string  $slug
-     * @return Builder
-     */
     public function scopeSlug(Builder $query, string $slug): Builder
     {
         return $query->where('slug', $slug);
     }
 
     /**
-     * @param  Builder  $query
-     * @param  ObjectId|string  $userId
-     * @param  string  $deviceId
-     * @return Builder
+     * @param ObjectId|string $userId
      */
-    public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId|string $userId, string $deviceId): Builder
+    public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId | string $userId, string $deviceId): Builder
     {
         $visitedIds = [];
         foreach (MediaVisit::select(['media_ids'])->user($userId)->column() as $mediaVisit) {
@@ -173,11 +122,6 @@ trait MediaScope
         return $query->where('_id', '$nin', $visitedIds);
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  string  $deviceId
-     * @return Builder
-     */
     public function scopeNotVisitedByDevice(Builder $query, string $deviceId): Builder
     {
         if (empty($deviceId)) {
@@ -193,62 +137,44 @@ trait MediaScope
         return $query;
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopePublic(Builder $query): Builder
     {
         return $query->where('visibility', Media::VISIBILITY_PUBLIC);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopePrivate(Builder $query): Builder
     {
         return $query->where('visibility', Media::VISIBILITY_PRIVATE);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeLicensed(Builder $query): Builder
     {
         return $query->where('is_music_licensed', true);
     }
 
     /**
-     * @param  Builder  $query
-     * @param  ObjectId|string  $userId
+     * @param ObjectId|string $userId
+     *
      * @return mixed
      */
-    public function scopeUser(Builder $query, ObjectId|string $userId): Builder
+    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
         return $query->where('user_id', $userId);
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  UTCDateTime|null  $start
-     * @param  UTCDateTime|null  $end
-     * @return Builder
-     */
     public function scopeDate(Builder $query, UTCDateTime $start = null, UTCDateTime $end = null): Builder
     {
-        if ($start !== null && $end !== null) {
+        if (null !== $start && null !== $end) {
             return $query->whereBetween('created_at', [$start, $end]);
         }
 
-        if ($start !== null) {
+        if (null !== $start) {
             return $query->where('created_at', '$gte', $start);
         }
 
-        if ($end !== null) {
+        if (null !== $end) {
             return $query->where('created_at', '$lte', $end);
         }
 
@@ -257,7 +183,6 @@ trait MediaScope
 
     /**
      * @param $query
-     * @return mixed
      */
     public function scopeRecentFirst($query): mixed
     {
@@ -266,7 +191,6 @@ trait MediaScope
 
     /**
      * @param $query
-     * @return mixed
      */
     public function scopeSort($query): mixed
     {

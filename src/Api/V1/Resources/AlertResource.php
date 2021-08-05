@@ -12,12 +12,13 @@ class AlertResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  Request  $request
+     *
      * @return array
      */
     public function toArray($request)
     {
         return [
-            '_id' => (string)$this->_id,
+            '_id' => (string) $this->_id,
             'title' => $this->title,
             'reason' => $this->reason,
             'created_at' => DT::utcToTimestamp($this->created_at),

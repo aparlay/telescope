@@ -5,8 +5,7 @@ namespace Aparlay\Core\Api\V1\Models;
 use Aparlay\Core\Models\MediaLike as MediaLikeBase;
 
 /**
- * Class MediaLike
- * @package Aparlay\Core\Api\V1\Models
+ * Class MediaLike.
  */
 class MediaLike extends MediaLikeBase
 {
