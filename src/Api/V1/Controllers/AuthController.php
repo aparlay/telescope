@@ -77,7 +77,6 @@ class AuthController extends Controller
         if ($token = auth()->attempt($credentials)) {
             /* Check the account status and through exception for suspended/banned/NotFound account */
             if (UserService::isUserEligible(auth()->user())) {
-
                 return $this->response($result)->cookie($cookie1)->cookie($cookie2)->cookie($cookie3);
             }
         } else {
