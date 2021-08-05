@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -34,12 +35,15 @@ class MediaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param MediaRequest $request
      * @return Response
      */
-    public function store(Request $request): Response
+    public function store(MediaRequest $request): Response
     {
-        //
+        $media = Media::create($request->all());
+        $media->refresh();
+
+        return $this->response(new MediaResource($media), '', Response::HTTP_CREATED);
     }
 
     /**

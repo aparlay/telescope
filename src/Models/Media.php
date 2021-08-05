@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\Follow;
+use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
@@ -9,6 +11,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Http\Client\Request;
 use Illuminate\Notifications\Notifiable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -58,6 +61,7 @@ class Media extends Model
     use HasFactory;
     use Notifiable;
     use MediaScope;
+    use SimpleUserTrait;
 
     public const VISIBILITY_PUBLIC = 1;
     public const VISIBILITY_PRIVATE = 0;
@@ -150,6 +154,41 @@ class Media extends Model
      */
     protected $casts = [
     ];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::creating(function ($media) {
+
+            $media->parseDescription();
+
+            $user = auth()->user();
+            $media->creator = [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ];
+            $media->visibility = $user->visibility;
+
+            $fileName = time() . '.' . $media->file->extension();
+
+            $media->file->move(public_path('uploads'), $fileName);
+
+            $this->slug = $this->generateSlug();
+
+            if ($this->status === self::STATUS_DENIED) {
+                $this->visibility = self::VISIBILITY_PRIVATE;
+            }
+        });
+
+        static::deleted(function ($media) {
+
+        });
+    }
 
     public static function getVisibilities()
     {
@@ -368,5 +407,56 @@ class Media extends Model
         $slug = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
 
         return (self::slug($slug)->first() === null) ? $slug : $this->generateSlug($length);
+    }
+
+    /**
+     * store media tags
+     */
+    public function parseDescription()
+    {
+        $description = trim($this->description);
+        $tags = $people = [];
+        foreach (explode(' ', $description) as $item) {
+            if (isset($item[0]) && $item[0] === '#' && substr_count($item, '#') === 1) {
+                $tags[] = substr($item, 1);
+            }
+            if (isset($item[0]) && $item[0] === '@' && substr_count($item, '@') === 1) {
+                $people[] = substr($item, 1);
+            }
+        }
+        $this->hashtags = array_slice($tags, 0, 20);
+        $people = array_slice($people, 0, 20);
+        $users = [];
+        foreach (User::select(['username', 'avatar', '_id'])->username($people)->limit(20)->asArray()->all() as $user) {
+            $users[] = $this->createSimpleUser($user);
+        }
+        $this->people = $users;
+    }
+
+    /**
+     * store media tags
+     * @param ObjectId|null $userId
+     * @return mixed
+     */
+    public function isVisibleBy(ObjectId $userId = null)
+    {
+        if ($this->visibility === self::VISIBILITY_PUBLIC) {
+            return true;
+        }
+
+        if ($this->visibility === self::VISIBILITY_PRIVATE && $userId === null) {
+            return false;
+        }
+
+        $isFollowed = Follow::select(['created_by', '_id'])
+            ->creator($userId)
+            ->user($this->created_by)
+            ->accepted()
+            ->exists();
+        if (!empty($isFollowed)) {
+            return true;
+        }
+
+        return false;
     }
 }
