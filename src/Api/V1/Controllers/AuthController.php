@@ -2,10 +2,12 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
-use Aparlay\Core\Api\V1\Models\User;
+use App\Models\User;
+// use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
+use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\JsonResponse;
@@ -24,6 +26,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->userRepo = new UserRepository();
     }
 
     /**
@@ -76,47 +79,31 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         /** Find the loginEntity (Email/PhoneNumber/Username) based on username */
-        $loginEntity = UserService::findIdentity($request->username);
+        $loginEntity = UserService::getIdentityType($request->username);
 
         /** Prepare Credentials and attempt the login */
         $credentials = [$loginEntity => $request->username, 'password' => $request->password];
-        $isValidLogin = false;
-        if ($token = auth()->attempt($credentials)) {
-
-            /** Check the account status and through exception for suspended/banned/NotFound account */
-            $user = auth()->user();
-            if (UserService::isUserEligible(auth()->user())) {
-                
-                $deviceId = $request->headers->get('X-DEVICE-ID');
-                if (UserService::isOtpRequire($user, $request)) {
-
-                    return OtpService::sendOtp($user, $loginEntity, $deviceId);
-
-                } elseif ($request->otp) {
-
-                    if (!OtpService::validateOtp($request->otp, $request->username, true)) {
-                        /** Through exception in case of invalid username/password. */
-                        throw ValidationException::withMessages(['code' => ['Invalid code.']]);
-                    } else {
-                        UserService::verified($user, $request);
-                        $isValidLogin = true;
-                    }
-                }
-            }
-        
-            if ($user->status == User::STATUS_VERIFIED) {
-                $isValidLogin = true;
-            }
-
-            if ($isValidLogin) {
-                /** Prepare and return the json response */
-                $successMessage = 'Entity has been created successfully!';
-                return $this->response($this->respondWithToken($token), $successMessage, Response::HTTP_OK);
-            }
-        } else {
-            /** Through exception in case of invalid username/password. */
+        if (!($token = auth()->attempt($credentials))) {
             throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
         }
+
+        /** Through exception for suspended/banned/NotFound accounts */
+        $user = auth()->user();
+        $elligible = UserService::isUserEligible($user);
+
+        $deviceId = $request->headers->get('X-DEVICE-ID');
+        
+        if (UserService::isUnverified($user)) {
+            if ($request->otp) {
+                OtpService::validateOtp($request->otp, $request->username);
+                $this->userRepo->verify($user);
+            } else {
+                return OtpService::sendOtp($user, $loginEntity, $deviceId);
+            }
+        }
+
+        /** Prepare and return the json response */
+        return $this->response($this->respondWithToken($token));
     }
 
     /**
@@ -144,6 +131,13 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = User::create($request->all());
+        if ($user) {
+            $deviceId = $request->headers->get('X-DEVICE-ID');
+            $identity = $user->phone_number ?? $user->email;
+            /** Find the loginEntity (Email/PhoneNumber/Username) based on username */
+            $loginEntity = UserService::getIdentityType($identity);
+            OtpService::sendOtp($user, $loginEntity, $deviceId);
+        }
         return $this->response(
             new RegisterResource($user),
             'Entity has been created successfully!',

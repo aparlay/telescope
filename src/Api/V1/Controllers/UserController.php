@@ -55,38 +55,4 @@ class UserController extends Controller
     {
         //
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
-
-        $user = new User();
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->save();
-
-        if ($this->token) {
-            return $this->login($request);
-        }
-
-        return response()->json([
-                                    'success' => true,
-                                    'data' => $user,
-                                ], Response::HTTP_OK);
-    }
 }

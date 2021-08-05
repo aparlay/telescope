@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\View;
 
 class SendEmail extends Mailable
 {
-    use Queueable, SerializesModels;
-    public $subject;
-    protected $params;
+    use Queueable;
+    use SerializesModels;
 
-    public function __construct($subject, $params)
-    {   
-        $this->subject = $subject;
-        $this->params = $params;
+    protected $content;
+
+    public function __construct($content)
+    {
+        $this->content = $content;
         $this->build();
     }
 
@@ -27,10 +27,30 @@ class SendEmail extends Mailable
      * @return $this
      */
     public function build()
-    {   
-        View::addNamespace('newview', base_path().'/packages/Aparlay/Core/resources/views');
+    {
+        $template = $this->getTemplate($this->content['email_type']);
 
-        return $this->subject($this->subject)
-            ->view('newview::email')->with(['otp' => $this->params['otp'], 'tracking_url'=> $this->params['tracking_url']]);
+        return $this->subject($this->content['subject'])
+            ->view($template)
+            ->with($this->content['email_template_params']);
+    }
+
+    /**
+     * Responsible to return the email template based on email type
+     * @param String $type
+     * @return String
+     */
+    public function getTemplate(string $type)
+    {
+        View::addNamespace('template', base_path() . '/packages/Aparlay/Core/resources/views');
+        switch ($type) {
+            case 'email_verification':
+                return 'template::email_verification_template';
+                break;
+            
+            default:
+                return '';
+                break;
+        }
     }
 }

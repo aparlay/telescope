@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" title="">
 <head>
@@ -365,57 +364,64 @@
     </style>
 </head>
 <body class="">
-<span class="preheader">---</span>
-<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
-    <tr>
-        <td>&nbsp;</td>
-        <td class="container">
-            <div class="content">
-                <!-- START CENTERED WHITE CONTAINER -->
-                <table role="presentation" class="main">
+    <span class="preheader">---</span>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+        <tr>
+            <td>&nbsp;</td>
+            <td class="container">
+                <div class="content">
 
-                    <!-- START MAIN CONTENT AREA -->
-                    <tr>
-                        <td class="wrapper">
-                            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                <tr>
-                                    <img src="http://assets.waptap.com/web/waptap.png" alt="Waptap" width="126"
-                                         height="96" border="0" style="margin: 20px auto">
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h2>Email Verification</h2>
-                                        <p>When prompted, enter this code on Waptap to verify your account</p>
-                                        <p style="font-size: xx-large"><?= $otp; ?></p>
-                                        <hr/>
-                                        <p class="undernote">
-                                            <b>If you did not make this request, please contact us at</b>
-                                            <a href="mailto: support@waptap.com">support@waptap.com</a>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+                    <!-- START CENTERED WHITE CONTAINER -->
+                    <table role="presentation" class="main">
 
-                    <!-- END MAIN CONTENT AREA -->
-                </table>
-                <!-- END CENTERED WHITE CONTAINER -->
-                <!-- START FOOTER -->
-                <div class="footer">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                        <!-- START MAIN CONTENT AREA -->
                         <tr>
-                           
+                            <td class="wrapper">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <img src="http://assets.waptap.com/web/waptap.png" alt="Waptap" width="126"
+                                            height="96" border="0" style="margin: 20px auto">
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <h2>Email Verification</h2>
+                                            <p>When prompted, enter this code on Waptap to verify your account</p>
+                                            <p style="font-size: xx-large">{{$otp}}</p>
+                                            <hr/>
+                                            <p class="undernote">
+                                                <b>If you did not make this request, please contact us at</b>
+                                                <a href="mailto: support@waptap.com">support@waptap.com</a>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
+                        <!-- END MAIN CONTENT AREA -->
+
                     </table>
+                    <!-- END CENTERED WHITE CONTAINER -->
+
+                    <!-- START FOOTER -->
+                    <div class="footer">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="content-block">
+                                    Zorg Media Inc, 8 The Green STE A
+                                    <br>
+                                    Dover, DE 19901 United States
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- END FOOTER -->
+                    
                 </div>
-                <!-- END FOOTER -->
-            </div>
-        </td>
-        <td>&nbsp;</td>
-    </tr>
-</table>
-<img src="{{ URL::to($tracking_url) }}">
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    <img src="{{ URL::to($tracking_url) }}">
 </body>
 </html>
 

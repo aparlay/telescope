@@ -13,11 +13,12 @@ use Mail;
 
 class Email implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
-    protected $send_mail;
-    protected $subject;
-    protected $params;
+    protected $emailContent;
 
     /**
      * The number of times the job may be attempted.
@@ -38,12 +39,10 @@ class Email implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($send_mail, $subject, $params)
+    public function __construct($emailContent)
     {
-        $this->send_mail = $send_mail;
-        $this->subject = $subject;
-        $this->params = $params;
-        $this->handle($send_mail);
+        $this->emailContent = $emailContent;
+        $this->handle($emailContent['identity']);
     }
 
     /**
@@ -53,7 +52,7 @@ class Email implements ShouldQueue
      */
     public function handle($send_mail)
     {
-        $email = new SendEmail($this->subject, $this->params);
-        Mail::to($this->send_mail)->send($email);
+        $email = new SendEmail($this->emailContent);
+        Mail::to($send_mail)->send($email);
     }
 }

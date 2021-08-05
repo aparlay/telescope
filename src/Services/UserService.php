@@ -9,7 +9,6 @@ use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
 use Aparlay\Core\Api\V1\Controllers;
 use Illuminate\Validation\ValidationException;
-use Validator;
 
 class UserService
 {
@@ -18,7 +17,7 @@ class UserService
      * @param string $identity
      * @return String
      */
-    public static function findIdentity(string $identity)
+    public static function getIdentityType(string $identity)
     {
         /** Find identity */
         switch ($identity) {
@@ -58,46 +57,11 @@ class UserService
     /**
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings
      * @param User $user
-     * @param LoginRequest $request
      * @return Boolean
      */
-    public static function isOTPRequired(User $user, LoginRequest $request)
+    public static function isUnverified(User $user)
     {
-        /** OTP is required in case "OTP Setting is enabled AND user status is pending AND otp not found in request" */
-        return ($user->getUserSetting()->otp && $user->status === User::STATUS_PENDING && !$request->otp);
-    }
-
-    /**
-     * Responsible for change status, based on varified otp
-     * @param User $user
-     * @param LoginRequest $request
-     * @return Boolean
-     */
-    public static function verified(User $user, LoginRequest $request)
-    {
-        if ($user->status === User::STATUS_PENDING) {
-            $user = UserService::findByProvidedIdentity($request->username);
-            $user->status = User::STATUS_VERIFIED;
-            $user->email_verified = true;
-            $user->save(['status', 'email_verified']);
-        }
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $usernameField
-     * @return static|null
-     */
-    public static function findByProvidedIdentity(string $usernameField)
-    {
-        switch ($usernameField) {
-            case filter_var($usernameField, FILTER_VALIDATE_EMAIL):
-                return UserRepository::findByEmail($usernameField);
-            case is_numeric($usernameField):
-                return UserRepository::findByPhoneNumber($usernameField);
-            default:
-                return UserRepository::findByUsername($usernameField);
-        }
+        /** User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
+        return ($user->getUserSetting()->otp && $user->status === User::STATUS_PENDING);
     }
 }
