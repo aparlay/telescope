@@ -77,6 +77,18 @@ class AuthController extends Controller
         if ($token = auth()->attempt($credentials)) {
             /* Check the account status and through exception for suspended/banned/NotFound account */
             if (UserService::isUserEligible(auth()->user())) {
+                $result = $this->respondWithToken($token);
+                $cookie1 = Cookie::make('__Secure_token', $result['access_token'], $result['token_expired_at'] / 60);
+                $cookie2 = Cookie::make(
+                    '__Secure_refresh_token',
+                    $result['refresh_token'],
+                    $result['refresh_token_expired_at'] / 60
+                );
+                $cookie3 = Cookie::make(
+                    '__Secure_username',
+                    auth()->user()->username,
+                    $result['refresh_token_expired_at'] / 60
+                );
 
                 return $this->response($result)->cookie($cookie1)->cookie($cookie2)->cookie($cookie3);
             }
@@ -119,6 +131,10 @@ class AuthController extends Controller
     public function logout(): Response
     {
         auth()->logout();
+
+        Cookie::forget('__Secure_token');
+        Cookie::forget('__Secure_refresh_token');
+        Cookie::forget('__Secure_username');
 
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
