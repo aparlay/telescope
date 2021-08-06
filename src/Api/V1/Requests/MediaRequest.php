@@ -33,6 +33,7 @@ class MediaRequest extends FormRequest
         return [
             'description' => ['required', 'string'],
             'file' => ['required', 'file', 'mimes:mp4,m4v,mov,avi,webem', 'max:' . 1024 * 1024 * 300],
+            'visibility' => ['nullable', 'integer'],
         ];
     }
 }

@@ -38,7 +38,7 @@ class MediaController extends Controller
         $user = auth()->user();
 
         $media = new Media([
-            'visibility' => $user->visibility,
+            'visibility' => $request->input('visibility', 0),
             'creator' => [
                 '_id' => new ObjectId($user->_id),
                 'username' => $user->username,
