@@ -4,7 +4,6 @@ namespace Aparlay\Core\Api\V1\Requests;
 
 use Aparlay\Core\Api\V1\Models\Otp;
 use Aparlay\Core\Helpers\DT;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 

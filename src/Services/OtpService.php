@@ -4,19 +4,16 @@ namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Api\V1\Requests\OtpRequest;
 use Aparlay\Core\Api\V1\Requests\EmailRequest;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\Email as EmailJob;
 use Aparlay\Core\Models\Login;
 use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Scopes\OtpScope;
 use Aparlay\Core\Services\EmailService;
-use Aparlay\Core\Services\UserService;
-use App\Exceptions\InvalidOtpException;
+use App\Exceptions\OTPException;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
@@ -27,27 +24,19 @@ class OtpService
      * @param User $user
      * @param string $loginEntity
      * @param string $deviceId
+     * @throws OTPException
      */
     public static function sendOtp(User $user, string $loginEntity, string $deviceId)
     {
         if ($loginEntity === Login::IDENTITY_PHONE_NUMBER) {
-            return response([
-                'data' => [
-                    'message' => 'If you enter your phone number correctly you will receive an OTP sms soon.'],
-                    'sms_numbers' => $user['phone_number']
-                ], Response::HTTP_OK);
+            throw new OTPException('OTP has been sent.', null, null, 418, [
+                'message' => 'If you enter your phone number correctly you will receive an OTP sms soon.',
+                'sms_numbers' => $user['phone_number'],
+            ]);
         } elseif ($loginEntity === Login::IDENTITY_EMAIL) {
             if ($otp = self::generateOtp($user->email, $deviceId)) {
                 if (self::sendByEmail($user, $otp)) {
-                    throw new InvalidOtpException([
-                        'data' => [
-                            'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.'
-                        ]], 418);
-
-                        // $data = [
-                        //     'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.'
-                        // ];
-                        // throw new InvalidOtpException('OTP has been sent.', null, null , 418, $data);
+                    throw new OTPException('OTP has been sent.', null, null, 418, ['message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.']);
                 }
             }
         }
@@ -65,7 +54,7 @@ class OtpService
         $previousOTP = Otp::FilterByIdentity($identity)->get();
 
         if (count($previousOTP) > 4) {
-            throw new InvalidOtpException('You cannot create more OTP, please wait a while to receive an otp or try again later.');
+            throw new OTPException('You cannot create more OTP, please wait a while to receive an otp or try again later.', null, null, 422);
         }
 
         // Expire all the Previous OTPs of the given user
@@ -155,17 +144,17 @@ class OtpService
     {
         // Validate the otp for the given user
         $limit = config('app.otp.invalid_attempt_limit');
-        $model = Otp::OtpIdentity($otp, $identity, $limit)->get();        
-        if ($model) {
-            self::expireOtp(new Object($model));
+        $model = Otp::OtpIdentity($otp, $identity, $limit)->get();
+        if (!$model->isEmpty()) {
+            self::expireOtp((object) $model);
             return true;
         }
 
         // Increment the incorrect otp attempt by 1 then through the error
-        // Otp::where('identity', '=', $identity)->increment('incorrect', 1);
         Otp::OtpIncorrect($identity)->increment('incorrect', 1);
+        
         throw ValidationException::withMessages([
-            'code' => ['Invalid code.']
+            'otp' => ['Incorrect otp.']
         ]);
     }
 }

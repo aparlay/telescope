@@ -2,14 +2,14 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
-use App\Models\User;
-// use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
 use Aparlay\Core\Services\UserService;
+use App\Exceptions\OTPException;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -70,7 +70,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Login a user.
      *
      * @param  Request  $request
      * @return JsonResponse
@@ -98,7 +98,7 @@ class AuthController extends Controller
                 OtpService::validateOtp($request->otp, $request->username);
                 $this->userRepo->verify($user);
             } else {
-                return OtpService::sendOtp($user, $loginEntity, $deviceId);
+                return OtpService::sendOtp($user, $identityField, $deviceId);
             }
         }
 
@@ -134,9 +134,15 @@ class AuthController extends Controller
         if ($user) {
             $deviceId = $request->headers->get('X-DEVICE-ID');
             $identity = $user->phone_number ?? $user->email;
-            /** Find the loginEntity (Email/PhoneNumber/Username) based on username */
-            $loginEntity = UserService::getIdentityType($identity);
-            OtpService::sendOtp($user, $loginEntity, $deviceId);
+
+            /** Find the identityField (Email/PhoneNumber/Username) based on username */
+            $identityField = UserService::getIdentityType($identity);
+            if (UserService::isUnverified($user)) {
+                try {
+                    OtpService::sendOtp($user, $identityField, $deviceId);
+                } catch (OTPException $e) {
+                }
+            }
         }
         return $this->response(
             new RegisterResource($user),
