@@ -42,23 +42,22 @@ class MediaController extends Controller
             'creator' => [
                 '_id' => new ObjectId($user->_id),
                 'username' => $user->username,
-                'avatar' => $user->avatar
+                'avatar' => $user->avatar,
             ],
-            'description' => $request->input('description')
+            'description' => $request->input('description'),
         ]);
 
         if ($request->hasFile('file')) {
             $file = $request->file;
 
-            $media->file = uniqid('tmp_', true) . '.' . $file->extension();
-            $fileName = time() . '.' . $file->extension();
+            $media->file = uniqid('tmp_', true).'.'.$file->extension();
+            $fileName = time().'.'.$file->extension();
 
-            if (!$file->storeAs('uploads', $fileName)) {
+            if (! $file->storeAs('uploads', $fileName)) {
                 return $this->error(__('Cannot upload the file.'));
             }
-
-        } else if (!empty($media->file)
-            && !file_exists(public_path('uploads') . '/' . $media->file)) {
+        } elseif (! empty($media->file)
+            && ! file_exists(public_path('uploads').'/'.$media->file)) {
             return $this->error(__('Uploaded file does not exists.'));
         }
 

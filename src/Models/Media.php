@@ -202,7 +202,7 @@ class Media extends Model
             if ($media->wasChanged('status')) {
                 $creatorUserMedias = $creatorUser->medias;
                 foreach ($creatorUserMedias as $creatorUserMedia) {
-                    if ((string)$creatorUserMedia['_id'] === (string)$media->_id) {
+                    if ((string) $creatorUserMedia['_id'] === (string) $media->_id) {
                         $creatorUser->removeFromSet('medias', $creatorUserMedia);
                     }
                 }
@@ -211,9 +211,9 @@ class Media extends Model
                 $medias = [];
                 $completedMedias = self::creator($media->created_by)->completed()->recentFirst()->limit(30)->asArray()->all();
                 foreach ($completedMedias as $completedMedia) {
-                    $basename = basename($completedMedia['file'], '.' . pathinfo($completedMedia['file'], PATHINFO_EXTENSION));
-                    $file = config('app.cdn.videos') . $completedMedia['file'];
-                    $cover = config('app.cdn.covers') . $basename . '.jpg';
+                    $basename = basename($completedMedia['file'], '.'.pathinfo($completedMedia['file'], PATHINFO_EXTENSION));
+                    $file = config('app.cdn.videos').$completedMedia['file'];
+                    $cover = config('app.cdn.covers').$basename.'.jpg';
                     $medias[] = ['_id' => new ObjectId($completedMedia['_id']), 'file' => $file, 'cover' => $cover, 'status' => $completedMedia['status']];
                 }
                 $creatorUser->medias = $medias;
@@ -234,8 +234,8 @@ class Media extends Model
 
                 $creatorUser->media_count--;
 
-                $file = config('app.cdn.videos') . $media->file;
-                $cover = config('app.cdn.covers') . $media->filename . '.jpg';
+                $file = config('app.cdn.videos').$media->file;
+                $cover = config('app.cdn.covers').$media->filename.'.jpg';
                 $creatorUser->removeFromSet('medias', ['_id' => $media->_id, 'file' => $file, 'cover' => $cover, 'status' => $media->status]);
                 $creatorUser->count_fields_updated_at = array_merge(
                     $creatorUser->count_fields_updated_at,
@@ -246,7 +246,7 @@ class Media extends Model
                 dispatch((new DeleteMediaLike($media->id, $creatorUser->_id))->onQueue('low'));
             }
 
-            dispatch((new UploadMedia($media->file, (string)$media->_id))->onQueue('high'));
+            dispatch((new UploadMedia($media->file, (string) $media->_id))->onQueue('high'));
 
             if ($media->wasChanged('status') && $media->status === self::STATUS_CONFIRMED) {
                 /*
@@ -473,7 +473,7 @@ class Media extends Model
     }
 
     /**
-     * store media tags
+     * store media tags.
      */
     public function parseDescription()
     {
@@ -498,7 +498,7 @@ class Media extends Model
     }
 
     /**
-     * store media tags
+     * store media tags.
      * @param ObjectId|null $userId
      * @return mixed
      */
@@ -517,7 +517,7 @@ class Media extends Model
             ->user($this->created_by)
             ->accepted()
             ->exists();
-        if (!empty($isFollowed)) {
+        if (! empty($isFollowed)) {
             return true;
         }
 

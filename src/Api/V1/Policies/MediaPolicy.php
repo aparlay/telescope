@@ -49,7 +49,7 @@ class MediaPolicy
     {
         $userId = $user->_id ?? null;
 
-        return ($userId === null || (string)$media->created_by !== (string)$userId)
+        return ($userId === null || (string) $media->created_by !== (string) $userId)
             ? Response::allow()
             : Response::deny('You can only update media that you\'ve created.');
     }
@@ -65,7 +65,7 @@ class MediaPolicy
     {
         $userId = $user->_id ?? null;
 
-        if ($userId === null || (string)$media->created_by !== (string)$userId) {
+        if ($userId === null || (string) $media->created_by !== (string) $userId) {
             return Response::deny('You can only delete media that you\'ve created.');
         }
 
