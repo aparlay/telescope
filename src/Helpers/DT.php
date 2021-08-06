@@ -6,9 +6,6 @@ use MongoDB\BSON\UTCDateTime;
 
 class DT
 {
-    /**
-     * @return UTCDateTime
-     */
     public static function utcNow(): UTCDateTime
     {
         return new UTCDatetime();
@@ -16,7 +13,6 @@ class DT
 
     /**
      * @param $config
-     * @return UTCDateTime
      */
     public static function utcDateTime($config): UTCDateTime
     {
@@ -35,15 +31,15 @@ class DT
 
     /**
      * @param $utcDateTime
+     *
      * @return int
      */
     public static function utcToTimestamp($utcDateTime)
     {
-        return (string)$utcDateTime / 1000;
+        return (string) $utcDateTime / 1000;
     }
 
     /**
-     * @param  UTCDateTime  $utcDateTime
      * @return int
      */
     public static function utcToMillisec(UTCDateTime $utcDateTime)

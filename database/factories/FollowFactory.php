@@ -26,14 +26,16 @@ class FollowFactory extends Factory
         return [
             'user' => function () {
                 $user = User::factory()->create();
+
                 return [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
                     'avatar' => $user->avatar,
                 ];
             },
-            'creator' => function() {
+            'creator' => function () {
                 $user = User::factory()->create();
+
                 return [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,

@@ -30,7 +30,7 @@ class MediaFactory extends Factory
             'notes' => $this->faker->sentence(5),
             'location' => null,
             'hash' => $this->faker->sha1(),
-            'file' => Str::random(10) . '.mp4',
+            'file' => Str::random(10).'.mp4',
             'files_history' => [],
             'mime_type' => 'video/mp4',
             'size' => $this->faker->randomDigitNotZero(),
@@ -49,7 +49,7 @@ class MediaFactory extends Factory
                 'blocks' => DT::utcNow(),
                 'likes' => DT::utcNow(),
                 'hashtags' => DT::utcNow(),
-                'medias' => DT::utcNow()
+                'medias' => DT::utcNow(),
             ],
             'visibility' => $this->faker->randomElement(array_keys(Media::getVisibilities())),
             'status' => $this->faker->randomElement(array_keys(Media::getStatuses())),
@@ -63,6 +63,7 @@ class MediaFactory extends Factory
             },
             'creator' => function ($model) {
                 $user = User::user($model['user_id'])->first();
+
                 return [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
@@ -77,7 +78,7 @@ class MediaFactory extends Factory
             },
             'updated_by' => function ($model) {
                 return new ObjectId($model['user_id']);
-            }
+            },
         ];
     }
 }

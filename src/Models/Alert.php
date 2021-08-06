@@ -12,8 +12,7 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
 /**
- * Class Alert
- * @package Aparlay\Core\Models
+ * Class Alert.
  *
  * @property ObjectId $_id
  * @property ObjectId $user_id
@@ -25,17 +24,16 @@ use MongoDB\BSON\ObjectId;
  * @property ObjectId $updated_by
  * @property string $created_at
  * @property string $updated_at
- *
- * @property-read User $userObj
- * @property-read Media $mediaObj
- * @property-read User $creator
- * @property-read string $slack_subject_admin_url
+ * @property User $userObj
+ * @property Media $mediaObj
+ * @property User $creator
+ * @property string $slack_subject_admin_url
  * @property string $aliasModel
  *
- * @method static |self|Builder visited() get visited alerts
- * @method static |self|Builder notVisited() get not visited alerts
+ * @method static |self|Builder visited()                       get visited alerts
+ * @method static |self|Builder notVisited()                    get not visited alerts
  * @method static |self|Builder media(ObjectId|string $mediaId) get media alerts
- * @method static |self|Builder user(ObjectId|string $userId) get user alerts
+ * @method static |self|Builder user(ObjectId|string $userId)   get user alerts
  */
 class Alert extends Model
 {
@@ -44,14 +42,18 @@ class Alert extends Model
     use AlertScope;
 
     public const TYPE_USER = 0;
+
     public const TYPE_MEDIA_REMOVED = 20;
+
     public const TYPE_MEDIA_NOTICED = 21;
 
     public const STATUS_NOT_VISITED = 0;
+
     public const STATUS_VISITED = 1;
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'alerts';
@@ -96,9 +98,6 @@ class Alert extends Model
         'deleted_at' => 'timestamp',
     ];
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [
@@ -107,9 +106,6 @@ class Alert extends Model
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getTypes(): array
     {
         return [
@@ -121,8 +117,6 @@ class Alert extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {
@@ -132,7 +126,7 @@ class Alert extends Model
     /**
      * Get the user associated with the alert.
      */
-    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -140,7 +134,7 @@ class Alert extends Model
     /**
      * Get the media associated with the alert.
      */
-    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
     }

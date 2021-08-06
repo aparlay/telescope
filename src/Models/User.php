@@ -15,42 +15,41 @@ use MongoDB\BSON\UTCDateTime;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
- * User model
+ * User model.
  *
- * @property ObjectId $_id
- * @property string $username
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $email
- * @property bool $email_verified
- * @property string $phone_number
- * @property bool $phone_number_verified
- * @property string $auth_key
- * @property string $avatar
- * @property int $status
- * @property int $visibility
- * @property int $interested_in
- * @property int $block_count
- * @property int $follower_count
- * @property int $following_count
- * @property int $like_count
- * @property int $followed_hashtag_count
- * @property int $media_count
+ * @property ObjectId    $_id
+ * @property string      $username
+ * @property string      $password_hash
+ * @property string      $password_reset_token
+ * @property string      $email
+ * @property bool        $email_verified
+ * @property string      $phone_number
+ * @property bool        $phone_number_verified
+ * @property string      $auth_key
+ * @property string      $avatar
+ * @property int         $status
+ * @property int         $visibility
+ * @property int         $interested_in
+ * @property int         $block_count
+ * @property int         $follower_count
+ * @property int         $following_count
+ * @property int         $like_count
+ * @property int         $followed_hashtag_count
+ * @property int         $media_count
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
- * @property array $setting
- * @property array $features
- * @property-read mixed $authLogs
- * @property-read mixed $id
- * @property-write string $passwordHashField
- * @property-read string $authKey
- * @property-read array $links
- * @property-read bool $require_otp
- * @property-read bool $is_protected
- * @property array $defaultSetting
+ * @property array       $setting
+ * @property array       $features
+ * @property mixed       $authLogs
+ * @property mixed       $id
+ * @property string      $passwordHashField
+ * @property string      $authKey
+ * @property array       $links
+ * @property bool        $require_otp
+ * @property bool        $is_protected
+ * @property array       $defaultSetting
  *
  * @OA\Schema()
- *
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -59,33 +58,48 @@ class User extends Authenticatable implements JWTSubject
     use UserScope;
 
     public const TYPE_USER = 0;
+
     public const TYPE_ADMIN = 1;
 
     public const STATUS_PENDING = 0;
+
     public const STATUS_VERIFIED = 1;
+
     public const STATUS_ACTIVE = 2;
+
     public const STATUS_SUSPENDED = 3;
+
     public const STATUS_BLOCKED = 4;
+
     public const STATUS_DEACTIVATED = 10;
 
     public const GENDER_FEMALE = 0;
+
     public const GENDER_MALE = 1;
+
     public const GENDER_TRANSGENDER = 2;
+
     public const GENDER_NOT_MENTION = 3;
 
     public const INTERESTED_IN_FEMALE = 0;
+
     public const INTERESTED_IN_MALE = 1;
+
     public const INTERESTED_IN_TRANSGENDER = 2;
+
     public const INTERESTED_IN_COUPLE = 3;
 
     public const VISIBILITY_PUBLIC = 1;
+
     public const VISIBILITY_PRIVATE = 0;
 
     public const FEATURE_TIPS = 'tips';
+
     public const FEATURE_DEMO = 'demo';
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'users';
@@ -159,9 +173,6 @@ class User extends Authenticatable implements JWTSubject
         'deleted_at' => 'datetime',
     ];
 
-    /**
-     * @return array
-     */
     public static function getFeatures(): array
     {
         return [
@@ -170,9 +181,6 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getGenders(): array
     {
         return [
@@ -183,9 +191,6 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getInterestedIns(): array
     {
         return [
@@ -196,9 +201,6 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getTypes(): array
     {
         return [
@@ -207,9 +209,6 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getVisibilities(): array
     {
         return [
@@ -218,9 +217,6 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [
@@ -235,8 +231,6 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {
@@ -273,7 +267,8 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Route notifications for the Slack channel.
      *
-     * @param  Notification  $notification
+     * @param Notification $notification
+     *
      * @return string
      */
     public function routeNotificationForSlack($notification)
@@ -281,36 +276,26 @@ class User extends Authenticatable implements JWTSubject
         return config('app.slack_webhook_url');
     }
 
-
-    /**
-     * @param  string  $attribute
-     * @param  mixed  $item
-     * @param  int|null  $length
-     */
     public function addToSet(string $attribute, mixed $item, int $length = null): void
     {
-        if (!is_array($this->$attribute)) {
+        if (! is_array($this->$attribute)) {
             $this->$attribute = [];
         }
         $values = $this->$attribute;
-        if (!in_array($item, $values, false)) {
+        if (! in_array($item, $values, false)) {
             array_unshift($values, $item);
         }
 
-        if ($length !== null) {
+        if (null !== $length) {
             $values = array_slice($values, 0, $length);
         }
 
         $this->$attribute = $values;
     }
 
-    /**
-     * @param  string  $attribute
-     * @param  mixed  $item
-     */
     public function removeFromSet(string $attribute, mixed $item): void
     {
-        if (!is_array($this->$attribute)) {
+        if (! is_array($this->$attribute)) {
             $this->$attribute = [];
         }
         $values = $this->$attribute;
@@ -327,7 +312,7 @@ class User extends Authenticatable implements JWTSubject
     public function getCountFieldsUpdatedAtAttribute($attributeValue)
     {
         foreach ($attributeValue as $field => $value) {
-            /** MongoDB\BSON\UTCDateTime $value */
+            /* MongoDB\BSON\UTCDateTime $value */
             $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value->toDateTime()->getTimestamp() : $value;
         }
 
@@ -337,7 +322,7 @@ class User extends Authenticatable implements JWTSubject
     public function setCountFieldsUpdatedAtAttribute($attributeValue)
     {
         foreach ($attributeValue as $field => $value) {
-            /** MongoDB\BSON\UTCDateTime $value */
+            /* MongoDB\BSON\UTCDateTime $value */
             $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value : DT::timestampToUtc($value);
         }
 
@@ -351,7 +336,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getAlertsAttribute()
     {
-        if (auth()->guest() || ((string)$this->_id !== (string)auth()->user()->_id)) {
+        if (auth()->guest() || ((string) $this->_id !== (string) auth()->user()->_id)) {
             return [];
         }
 

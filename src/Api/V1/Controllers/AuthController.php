@@ -11,8 +11,8 @@ use Aparlay\Core\Services\UserService;
 use App\Exceptions\OTPException;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -36,7 +36,6 @@ class AuthController extends Controller
      */
     public function token()
     {
-        //
     }
 
     /**
@@ -46,7 +45,6 @@ class AuthController extends Controller
      */
     public function changePassword()
     {
-        //
     }
 
     /**
@@ -56,7 +54,6 @@ class AuthController extends Controller
      */
     public function validateOtp()
     {
-        //
     }
 
     /**
@@ -66,14 +63,13 @@ class AuthController extends Controller
      */
     public function requestOtp()
     {
-        //
     }
 
     /**
      * Login a user.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return Response|void
+     *
      * @throws ValidationException
      */
     public function login(LoginRequest $request)
@@ -103,15 +99,28 @@ class AuthController extends Controller
         }
 
         /** Prepare and return the json response */
-        return $this->response($this->respondWithToken($token));
+        $result = $this->respondWithToken($token);
+        $cookie1 = Cookie::make(
+            '__Secure_token',
+            $result['access_token'],
+            $result['token_expired_at'] / 60
+        );
+        $cookie2 = Cookie::make(
+            '__Secure_refresh_token',
+            $result['refresh_token'],
+            $result['refresh_token_expired_at'] / 60
+        );
+        $cookie3 = Cookie::make(
+            '__Secure_username',
+            auth()->user()->username,
+            $result['refresh_token_expired_at'] / 60
+        );
+
+        return $this->response($result)->cookie($cookie1)->cookie($cookie2)->cookie($cookie3);
     }
 
     /**
-     * Responsible to prepare the json response containing token and expiry
-     *
-     * @param  string  $token
-     *
-     * @return array
+     * Responsible to prepare the json response containing token and expiry.
      */
     protected function respondWithToken(string $token): array
     {
@@ -125,10 +134,8 @@ class AuthController extends Controller
 
     /**
      * Register a User.
-     *
-     * @return JsonResponse
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): Response
     {
         $user = User::create($request->all());
         if ($user) {
@@ -153,22 +160,22 @@ class AuthController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @return JsonResponse
      */
-    public function logout()
+    public function logout(): Response
     {
         auth()->logout();
+
+        Cookie::forget('__Secure_token');
+        Cookie::forget('__Secure_refresh_token');
+        Cookie::forget('__Secure_username');
 
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @return JsonResponse
      */
-    public function refresh(): JsonResponse
+    public function refresh(): Response
     {
         return $this->response($this->respondWithToken(auth()->refresh()));
     }

@@ -30,12 +30,12 @@ class VersionFactory extends Factory
             'version' => $this->faker->randomNumber(1),
             'is_force_update' => $this->faker->boolean,
             'expired_at' => DT::utcNow(),
-            'created_by' => function() {
+            'created_by' => function () {
                 return new ObjectId(User::factory()->create()->_id);
             },
-            'updated_by' => function() {
+            'updated_by' => function () {
                 return new ObjectId(User::factory()->create()->_id);
-            }
+            },
         ];
     }
 }

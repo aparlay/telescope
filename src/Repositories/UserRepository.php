@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Repositories;
 
-use Aparlay\Core\Models\User;
-
 class UserRepository
 {
     public function verify(User $user) {

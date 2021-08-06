@@ -15,28 +15,35 @@ use Throwable;
 
 class DeleteUserMedia implements ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public User $user;
 
     /**
      * The number of times the job may be attempted.
-     *
-     * @var int
      */
-    public int $tries = 10;
+    public int $tries = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
-     *
-     * @var int
      */
     public int $maxExceptions = 3;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int|array
+     */
+    public $backoff = 300;
 
     /**
      * Create a new job instance.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function __construct(string $mediaId, string $userId)
@@ -48,8 +55,6 @@ class DeleteUserMedia implements ShouldBeUnique
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
     public function handle(): void
     {
@@ -61,9 +66,6 @@ class DeleteUserMedia implements ShouldBeUnique
         });
     }
 
-    /**
-     * @param  Throwable  $exception
-     */
     public function failed(Throwable $exception): void
     {
         $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));

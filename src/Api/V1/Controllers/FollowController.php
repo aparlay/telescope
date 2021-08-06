@@ -82,9 +82,6 @@ class FollowController extends Controller
      *         @OA\JsonContent(ref="#/components/schemas/429"),
      *     ),
      * )
-     *
-     * @param  User  $user
-     * @return Response
      */
     public function store(User $user): Response
     {
@@ -93,11 +90,11 @@ class FollowController extends Controller
         }
 
         $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->first();
-        if ($follow === null) {
+        if (null === $follow) {
             $follow = new Follow([
-                                     'user' => ['_id' => new ObjectId($user->_id)],
-                                     'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
-                                 ]);
+                'user' => ['_id' => new ObjectId($user->_id)],
+                'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
+            ]);
             $follow->save();
 
             return $this->response(new FollowResource($follow), '', Response::HTTP_CREATED);
@@ -176,16 +173,11 @@ class FollowController extends Controller
      *         @OA\JsonContent(ref="#/components/schemas/429"),
      *     ),
      * )
-     *
-     * @param  User  $user
-     * @return Response
      */
     public function destroy(User $user): Response
     {
         $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->firstOrFail();
-        if ($follow !== null) {
-            $follow->delete();
-        }
+        $follow?->delete();
 
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }

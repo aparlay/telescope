@@ -48,26 +48,27 @@ class RegisterRequest extends FormRequest
     /**
      * This function is responsible to perform pre-validation tasks like
      * Set the email or phone, based on username
-     * Set the avatar, based on gender
+     * Set the avatar, based on gender.
+     *
      * @throws Exception
      */
     public function prepareForValidation()
     {
-        /** Set email or phone basd on the usernmae format */
+        /* Set email or phone basd on the usernmae format */
         if (str_contains($this->username, '@')) {
             $this->email = $this->username;
         }
 
-        if ((int)$this->username > 100000) {
+        if ((int) $this->username > 100000) {
             $this->phone_number = $this->username;
         }
 
         $this->username = uniqid('', false);
 
-        /** Set gender by default value */
-        $this->gender = isset($this->gender) ? (int)$this->gender : User::GENDER_MALE;
+        /* Set gender by default value */
+        $this->gender = isset($this->gender) ? (int) $this->gender : User::GENDER_MALE;
 
-        /** Set avatar based on Gender */
+        /* Set avatar based on Gender */
         if (empty($this->avatar)) {
             $femaleFilename = 'default_fm_' . random_int(1, 60) . '.png';
             $maleFilename = 'default_m_' . random_int(1, 120) . '.png';
@@ -79,7 +80,7 @@ class RegisterRequest extends FormRequest
                 $this->avatar = Cdn::avatar($filename);
         }
 
-        /** Set the Default Values and required to be input parameters */
+        /* Set the Default Values and required to be input parameters */
         $this->merge([
             'username' => trim($this->username),
             'email' => strtolower(trim($this->email)),

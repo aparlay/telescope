@@ -15,44 +15,36 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      * @return Response
      */
     public function index(Request $request)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Block  $media
      * @return Response
      */
     public function me(Block $media)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Block  $media
      * @return Response
      */
     public function destroy(Block $media)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Block  $media
      * @return Response
      */
     public function update(Block $media)
     {
-        //
     }
 }

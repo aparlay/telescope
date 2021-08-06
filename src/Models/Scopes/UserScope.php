@@ -10,8 +10,6 @@ use MongoDB\BSON\UTCDateTime;
 trait UserScope
 {
     /**
-     * @param  Builder  $query
-     * @param  string  $email
      * @return mixed
      */
     public function scopeEmail(Builder $query, string $email): Builder
@@ -20,8 +18,6 @@ trait UserScope
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string  $phone
      * @return mixed
      */
     public function scopePhoneNumber(Builder $query, string $phone): Builder
@@ -30,8 +26,6 @@ trait UserScope
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string  $username
      * @return mixed
      */
     public function scopeUsername(Builder $query, string $username): Builder
@@ -40,7 +34,6 @@ trait UserScope
     }
 
     /**
-     * @param  Builder  $query
      * @return mixed
      */
     public function scopeAdmin(Builder $query): Builder
@@ -49,8 +42,6 @@ trait UserScope
     }
 
     /**
-     * @param  Builder  $query
-     * @param  UTCDateTime  $since
      * @return mixed
      */
     public function scopePendingSince(Builder $query, UTCDateTime $since): Builder
@@ -59,10 +50,6 @@ trait UserScope
             ->where('hide_moderation_till', '$gte', $since);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeEnable(Builder $query): Builder
     {
         return $query->where('status', '$in', [
@@ -72,10 +59,6 @@ trait UserScope
         ]);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeDisable(Builder $query): Builder
     {
         return $query->where('status', '$in', [
@@ -85,71 +68,49 @@ trait UserScope
         ]);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopePrivate(Builder $query): Builder
     {
         return $query->where('visibility', User::VISIBILITY_PRIVATE);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopePublic(Builder $query): Builder
     {
         return $query->where('visibility', User::VISIBILITY_PUBLIC);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopePending(Builder $query): Builder
     {
         return $query->where('status', User::STATUS_PENDING);
     }
 
-    /**
-     * @param  Builder  $query
-     * @return Builder
-     */
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', User::STATUS_ACTIVE);
     }
 
     /**
-     * @param  Builder  $query
-     * @param  ObjectId|string  $userId
+     * @param ObjectId|string $userId
+     *
      * @return mixed
      */
-    public function scopeUser(Builder $query, ObjectId|string $userId): Builder
+    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
         return $query->where('_id', $userId);
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  UTCDateTime|null  $start
-     * @param  UTCDateTime|null  $end
-     * @return Builder
-     */
     public function scopeDate(Builder $query, UTCDateTime $start = null, UTCDateTime $end = null): Builder
     {
-        if ($start !== null && $end !== null) {
+        if (null !== $start && null !== $end) {
             return $query->whereBetween('created_at', [$start, $end]);
         }
 
-        if ($start !== null) {
+        if (null !== $start) {
             return $query->where('created_at', '$gte', $start);
         }
 
-        if ($end !== null) {
+        if (null !== $end) {
             return $query->where('created_at', '$lte', $end);
         }
 
@@ -158,7 +119,6 @@ trait UserScope
 
     /**
      * @param $query
-     * @return mixed
      */
     public function scopeRecentFirst($query): mixed
     {

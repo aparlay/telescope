@@ -14,8 +14,10 @@ class MediaResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return array
+     *
      * @throws \Exception
      */
     public function toArray($request)
@@ -36,7 +38,7 @@ class MediaResource extends JsonResource
         }
 
         return [
-            '_id' => (string)$this->_id,
+            '_id' => (string) $this->_id,
             'description' => $this->description,
             'hash' => $this->hash,
             'size' => $this->size,
@@ -49,19 +51,19 @@ class MediaResource extends JsonResource
             'file' => $this->file, // TODO use Cdn
             'cover' => Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg'),
             'creator' => $this->createSimpleUser($this->creator),
-            'is_liked' => (bool)$this->is_liked,
-            'is_visited' => (bool)$this->is_visited,
-            'is_adult' => (bool)$this->is_adult,
-            'like_count' => (int)$this->like_count,
+            'is_liked' => (bool) $this->is_liked,
+            'is_visited' => (bool) $this->is_visited,
+            'is_adult' => (bool) $this->is_adult,
+            'like_count' => (int) $this->like_count,
             'likes' => $likes,
-            'visit_count' => (int)$this->visit_count,
+            'visit_count' => (int) $this->visit_count,
             'visits' => $visits,
-            'comment_count' => (int)$this->comment_count,
+            'comment_count' => (int) $this->comment_count,
             'comments' => [],
             'slug' => $this->slug,
             'alerts' => AlertResource::collection($this->alerts),
-            'created_by' => (string)$this->created_by,
-            'updated_by' => (string)$this->updated_by,
+            'created_by' => (string) $this->created_by,
+            'updated_by' => (string) $this->updated_by,
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [

@@ -12,23 +12,21 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
 /**
- * Class Report
- * @package Aparlay\Core\Models
+ * Class Report.
  *
  * @property ObjectId $_id
  * @property ObjectId $user_id
  * @property ObjectId $media_id
  * @property ObjectId $comment_id
- * @property int $type
- * @property int $status
- * @property string $reason
+ * @property int      $type
+ * @property int      $status
+ * @property string   $reason
  * @property ObjectId $created_by
  * @property ObjectId $updated_by
- * @property string $created_at
- * @property string $updated_at
- * @property string $deleted_at
- *
- * @property-read array $links
+ * @property string   $created_at
+ * @property string   $updated_at
+ * @property string   $deleted_at
+ * @property array    $links
  *
  * @OA\Schema()
  */
@@ -39,14 +37,18 @@ class Report extends Model
     use ReportScope;
 
     public const TYPE_USER = 0;
+
     public const TYPE_MEDIA = 1;
+
     public const TYPE_COMMENT = 2;
 
     public const STATUS_REPORTED = 0;
+
     public const STATUS_REVISED = 1;
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'reports';
@@ -86,9 +88,6 @@ class Report extends Model
     protected $casts = [
     ];
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [
@@ -97,9 +96,6 @@ class Report extends Model
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getTypes(): array
     {
         return [
@@ -111,8 +107,6 @@ class Report extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {
@@ -138,7 +132,7 @@ class Report extends Model
     /**
      * Get the user associated with the report.
      */
-    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
@@ -155,7 +149,8 @@ class Report extends Model
     /**
      * Route notifications for the Slack channel.
      *
-     * @param  Notification  $notification
+     * @param Notification $notification
+     *
      * @return string
      */
     public function routeNotificationForSlack($notification)
