@@ -16,6 +16,7 @@ class Transaction extends Model
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'transactions';
@@ -55,8 +56,6 @@ class Transaction extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {

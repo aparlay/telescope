@@ -4,8 +4,10 @@ namespace Aparlay\Core\Tests;
 
 class ExampleTest extends TestCase
 {
-    /** @test */
-    public function true_is_true()
+    /**
+     * @test
+     */
+    public function trueIsTrue()
     {
         $this->assertTrue(true);
     }

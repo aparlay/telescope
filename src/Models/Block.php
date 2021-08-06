@@ -12,26 +12,24 @@ use Illuminate\Notifications\Notifiable;
 use MongoDB\BSON\ObjectId;
 
 /**
- * Class Block
- * @package Aparlay\Core\Models
+ * Class Block.
  *
- * @property ObjectId $_id
- * @property string $hashtag
- * @property array $user
- * @property array $creator
- * @property bool $is_deleted
- * @property string $created_at
+ * @property ObjectId   $_id
+ * @property string     $hashtag
+ * @property array      $user
+ * @property array      $creator
+ * @property bool       $is_deleted
+ * @property string     $created_at
+ * @property User       $creatorObj
+ * @property User       $userObj
+ * @property mixed|null $creator_id
+ * @property mixed|null $user_id
+ * @property string     $aliasModel
  *
- * @property-read User $creatorObj
- * @property-read User $userObj
- * @property-read null|mixed $creator_id
- * @property-read null|mixed $user_id
- * @property string $aliasModel
- *
- * @method static |self|Builder isDeleted() get deleted blocks
- * @method static |self|Builder isNotDeleted() get not deleted blocks
+ * @method static |self|Builder isDeleted()                      get deleted blocks
+ * @method static |self|Builder isNotDeleted()                   get not deleted blocks
  * @method static |self|Builder creator(ObjectId|string $userId) get creator user
- * @method static |self|Builder user(ObjectId|string $userId) get blocked user
+ * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
  */
 class Block extends Model
 {
@@ -41,6 +39,7 @@ class Block extends Model
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'user_blocks';
@@ -112,8 +111,6 @@ class Block extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {

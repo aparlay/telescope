@@ -16,6 +16,7 @@ class Otp extends Model
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'otps';
@@ -61,8 +62,6 @@ class Otp extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {

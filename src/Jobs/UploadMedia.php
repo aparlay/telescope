@@ -10,7 +10,10 @@ use Illuminate\Queue\SerializesModels;
 
 class UploadMedia implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public $file;
     public $media_id;
@@ -22,7 +25,6 @@ class UploadMedia implements ShouldQueue
      */
     public function __construct(string $file, string $media_id)
     {
-        //
     }
 
     /**
@@ -32,6 +34,5 @@ class UploadMedia implements ShouldQueue
      */
     public function handle()
     {
-        //
     }
 }

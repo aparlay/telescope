@@ -7,11 +7,6 @@ use MongoDB\BSON\UTCDateTime;
 
 trait AnalyticScope
 {
-    /**
-     * @param  Builder  $query
-     * @param  int  $days
-     * @return Builder
-     */
     public function scopeDays(Builder $query, int $days): Builder
     {
         $in = [];
@@ -23,12 +18,6 @@ trait AnalyticScope
         return $query->where('date', '$in', array_keys($in));
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  UTCDateTime  $start
-     * @param  UTCDateTime  $end
-     * @return Builder
-     */
     public function scopeDate(Builder $query, UTCDateTime $start, UTCDateTime $end): Builder
     {
         return $query->whereBetween('created_at', [$start, $end]);

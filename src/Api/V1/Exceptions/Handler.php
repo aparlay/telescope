@@ -21,7 +21,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+
     ];
 
     /**
@@ -43,17 +43,18 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            //
         });
     }
 
     /**
-     * @param  Request  $request
-     * @param  Exception|Throwable  $exception
+     * @param Request             $request
+     * @param Exception|Throwable $exception
+     *
      * @return JsonResponse|Response|\Symfony\Component\HttpFoundation\Response
+     *
      * @throws Throwable
      */
-    public function render($request, Exception|Throwable $exception)
+    public function render($request, Exception | Throwable $exception)
     {
         // detect instance
         if ($exception instanceof UnauthorizedHttpException) {

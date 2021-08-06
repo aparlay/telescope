@@ -18,29 +18,37 @@ use Throwable;
 
 class UploadAvatar implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public User $user;
+
     public string $file;
 
     /**
      * The number of times the job may be attempted.
-     *
-     * @var int
      */
-    public int $tries = 10;
+    public int $tries = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
-     *
-     * @var int
      */
     public int $maxExceptions = 3;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int|array
+     */
+    public $backoff = 30;
 
     /**
      * Create a new job instance.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function __construct(string $userId, string $file)
@@ -55,6 +63,7 @@ class UploadAvatar implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     *
      * @throws FileExistsException
      * @throws FileNotFoundException
      */
@@ -63,7 +72,6 @@ class UploadAvatar implements ShouldQueue
         $resource = Storage::disk('upload')->readStream($this->file);
         Storage::disk('b2-avatars')->writeStream($this->file, $resource);
         Storage::disk('gc-avatars')->writeStream($this->file, $resource);
-
 
         $this->user->avatar = Cdn::avatar($this->file);
         $this->user->save();

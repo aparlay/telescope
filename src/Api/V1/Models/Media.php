@@ -10,35 +10,34 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class Media
+ * Class Media.
  *
- * @package Aparlay\Core\Api\V1\Models
- * @property ObjectId $_id
- * @property string $description
- * @property string $location
- * @property string $hash
- * @property string $file
- * @property string $mime_type
- * @property int $size
- * @property int $length
- * @property int $visibility
- * @property int $like_count
- * @property int $comment_count
- * @property array $count_fields_updated_at
- * @property array $likes
- * @property array $comments
- * @property int $status
- * @property array $hashtags
- * @property array $people
- * @property array $creator
- * @property string $cover
- * @property string $slug
- * @property ObjectId $created_by
+ * @property ObjectId    $_id
+ * @property string      $description
+ * @property string      $location
+ * @property string      $hash
+ * @property string      $file
+ * @property string      $mime_type
+ * @property int         $size
+ * @property int         $length
+ * @property int         $visibility
+ * @property int         $like_count
+ * @property int         $comment_count
+ * @property array       $count_fields_updated_at
+ * @property array       $likes
+ * @property array       $comments
+ * @property int         $status
+ * @property array       $hashtags
+ * @property array       $people
+ * @property array       $creator
+ * @property string      $cover
+ * @property string      $slug
+ * @property ObjectId    $created_by
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
- * @property-read mixed $filename
- * @property-read array $links
- * @property-read bool $is_protected
+ * @property mixed       $filename
+ * @property array       $links
+ * @property bool        $is_protected
  *
  * @OA\Schema()
  */
@@ -50,7 +49,8 @@ class Media extends MediaBase
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable)
@@ -67,8 +67,6 @@ class Media extends MediaBase
 
     /**
      * Get the user's full name.
-     *
-     * @return bool
      */
     public function getIsLikedAttribute(): bool
     {
@@ -81,13 +79,11 @@ class Media extends MediaBase
             return MediaLike::select(['media_id' => 1, '_id' => 0])->creator(auth()->user()->id)->pluck('media_id');
         });
 
-        return isset($mediaLike[(string)$this->_id]);
+        return isset($mediaLike[(string) $this->_id]);
     }
 
     /**
      * Get the user's full name.
-     *
-     * @return bool
      */
     public function getIsVisitedAttribute(): bool
     {
@@ -100,12 +96,9 @@ class Media extends MediaBase
             return MediaVisit::select(['media_id' => 1, '_id' => 0])->user(auth()->user()->id)->pluck('media_id');
         });
 
-        return isset($mediaLike[(string)$this->_id]);
+        return isset($mediaLike[(string) $this->_id]);
     }
 
-    /**
-     * @return string
-     */
     public function getFilenameAttribute(): string
     {
         return basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION));

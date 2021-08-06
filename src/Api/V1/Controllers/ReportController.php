@@ -18,6 +18,7 @@ class ReportController extends Controller
 {
     /**
      * Store a newly created resource in storage.
+     *
      * @OA\POST(
      *     path="/v1/user/{id}/report",
      *     tags={"user"},
@@ -97,10 +98,6 @@ class ReportController extends Controller
      *         @OA\JsonContent(ref="#/components/schemas/429"),
      *     ),
      * )
-     *
-     * @param  User  $user
-     * @param  Request  $request
-     * @return Response
      */
     public function user(User $user, Request $request): Response
     {
@@ -137,6 +134,7 @@ class ReportController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
      * @OA\POST(
      *     path="/v1/media/{id}/report",
      *     tags={"media"},
@@ -216,10 +214,6 @@ class ReportController extends Controller
      *         @OA\JsonContent(ref="#/components/schemas/429"),
      *     ),
      * )
-     *
-     * @param  Media  $media
-     * @param  Request  $request
-     * @return Response
      */
     public function media(Media $media, Request $request): Response
     {

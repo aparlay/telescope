@@ -84,9 +84,6 @@ class MediaLikeController extends Controller
      *         @OA\JsonContent(ref="#/components/schemas/429"),
      *     ),
      * )
-     *
-     * @param  Media  $media
-     * @return Response
      */
     public function store(Media $media): Response
     {
@@ -95,7 +92,7 @@ class MediaLikeController extends Controller
         }
 
         $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
-        if ($mediaLike === null) {
+        if (null === $mediaLike) {
             $mediaLike = new MediaLike([
                                            'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
                                            'media_id' => new ObjectId($media->_id),
@@ -182,14 +179,11 @@ class MediaLikeController extends Controller
      *         @OA\JsonContent(ref="#/components/schemas/429"),
      *     ),
      * )
-     *
-     * @param  Media  $media
-     * @return Response
      */
     public function destroy(Media $media): Response
     {
         $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
-        if ($mediaLike !== null) {
+        if (null !== $mediaLike) {
             $mediaLike->delete();
         }
 

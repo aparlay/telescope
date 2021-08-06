@@ -15,10 +15,12 @@ class Version extends Model
     use VersionScope;
 
     public const OS_ANDROID = 'android';
+
     public const OS_IOS = 'ios';
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'versions';
@@ -63,8 +65,6 @@ class Version extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {

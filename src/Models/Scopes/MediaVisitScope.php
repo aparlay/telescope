@@ -10,7 +10,6 @@ trait MediaVisitScope
     /**
      * @param $query
      * @param $mediaId
-     * @return mixed
      */
     public function scopeMedia($query, $mediaId): mixed
     {
@@ -22,7 +21,6 @@ trait MediaVisitScope
     /**
      * @param $query
      * @param $userId
-     * @return mixed
      */
     public function scopeUser($query, $userId): mixed
     {
@@ -31,11 +29,6 @@ trait MediaVisitScope
         return $query->where('user_id', $userId);
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  string  $date
-     * @return Builder
-     */
     public function scopeDate(Builder $query, string $date): Builder
     {
         return $query->where('date', $date);

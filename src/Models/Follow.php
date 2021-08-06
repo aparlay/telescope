@@ -12,25 +12,23 @@ use Illuminate\Notifications\Notifiable;
 use MongoDB\BSON\ObjectId;
 
 /**
- * Class Follow
- * @package Aparlay\Core\Models
+ * Class Follow.
  *
- * @property ObjectId $_id
- * @property string $hashtag
- * @property int $status
- * @property array $user
- * @property array $creator
- * @property bool $is_deleted
- * @property string $created_at
- *
- * @property-read User $creatorObj
- * @property-read User $userObj
- * @property-read null|mixed $creator_id
- * @property-read null|mixed $user_id
- * @property string $aliasModel
+ * @property ObjectId   $_id
+ * @property string     $hashtag
+ * @property int        $status
+ * @property array      $user
+ * @property array      $creator
+ * @property bool       $is_deleted
+ * @property string     $created_at
+ * @property User       $creatorObj
+ * @property User       $userObj
+ * @property mixed|null $creator_id
+ * @property mixed|null $user_id
+ * @property string     $aliasModel
  *
  * @method static |self|Builder creator(ObjectId|string $userId) get creator user
- * @method static |self|Builder user(ObjectId|string $userId) get blocked user
+ * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
  */
 class Follow extends Model
 {
@@ -39,10 +37,12 @@ class Follow extends Model
     use FollowScope;
 
     public const STATUS_PENDING = 0;
+
     public const STATUS_ACCEPTED = 1;
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'user_follows';
@@ -77,9 +77,6 @@ class Follow extends Model
     protected $casts = [
     ];
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [
@@ -150,8 +147,6 @@ class Follow extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {

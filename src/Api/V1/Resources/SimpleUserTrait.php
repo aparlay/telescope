@@ -10,9 +10,8 @@ trait SimpleUserTrait
     /**
      * Create the simple user attribute.
      *
-     * @param  array  $userArray
-     * @param  string[]  $fields
-     * @return array
+     * @param string[] $fields
+     *
      * @throws Exception
      */
     public function createSimpleUser(
@@ -20,13 +19,13 @@ trait SimpleUserTrait
         array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked']
     ): array {
         $user = auth()->user();
-        $userArray['_id'] = (string)$userArray['_id'];
-        $userArray['avatar'] = Cdn::avatar((string)$userArray['avatar']);
+        $userArray['_id'] = (string) $userArray['_id'];
+        $userArray['avatar'] = Cdn::avatar((string) $userArray['avatar']);
         $userArray['is_followed'] = false;
         $userArray['is_liked'] = false;
         if ($user) {
-            $userArray['is_followed'] = isset($this->creator['_id'], $user->following[(string)$this->creator['_id']]);
-            $userArray['is_liked'] = (string)$this->creator['_id'] === (string)$user->_id;
+            $userArray['is_followed'] = isset($this->creator['_id'], $user->following[(string) $this->creator['_id']]);
+            $userArray['is_liked'] = (string) $this->creator['_id'] === (string) $user->_id;
         }
 
         $output = [];

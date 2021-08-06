@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\MediaLikeFactory;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -13,24 +14,22 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class MediaLike
- * @package Aparlay\Core\Models
+ * Class MediaLike.
  *
- * @property ObjectId $_id
- * @property string $hashtag
- * @property ObjectId $media_id
- * @property ObjectId $user_id
- * @property array $creator
- * @property string $created_at
+ * @property ObjectId   $_id
+ * @property string     $hashtag
+ * @property ObjectId   $media_id
+ * @property ObjectId   $user_id
+ * @property array      $creator
+ * @property string     $created_at
+ * @property User       $creatorObj
+ * @property mixed|null $creator_id
+ * @property Media      $mediaObj
+ * @property User       $userObj
  *
- * @property-read User $creatorObj
- * @property-read null|mixed $creator_id
- * @property-read Media $mediaObj
- * @property-read User $userObj
- *
- * @method static |self|Builder media(ObjectId|string $mediaId) get liked media
- * @method static |self|Builder user(ObjectId|string $userId) get user who liked media
- * @method static |self|Builder creator(ObjectId|string $creatorId) get creator user who liked media
+ * @method static |self|Builder media(ObjectId|string $mediaId)            get liked media
+ * @method static |self|Builder user(ObjectId|string $userId)              get user who liked media
+ * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
  * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
  */
 class MediaLike extends Model
@@ -41,6 +40,7 @@ class MediaLike extends Model
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'media_likes';
@@ -84,9 +84,71 @@ class MediaLike extends Model
     ];
 
     /**
-     * Create a new factory instance for the model.
+     * The "booted" method of the model.
      *
-     * @return Factory
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::created(function ($like) {
+            $media = $like->mediaObj;
+            $media->like_count++;
+            $media->addToSet('likes', [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ], 10);
+            $media->count_fields_updated_at = array_merge(
+                $media->count_fields_updated_at,
+                ['likes' => DT::utcNow()]
+            );
+            $media->save();
+
+            $user = $media->userObj;
+            $user->like_count++;
+            $user->addToSet('likes', [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ], 10);
+            $user->count_fields_updated_at = array_merge(
+                $user->count_fields_updated_at,
+                ['likes' => DT::utcNow()]
+            );
+            $user->save();
+        });
+
+        static::deleted(function ($like) {
+            $media = $like->mediaObj;
+            $media->like_count--;
+            $media->removeFromSet('likes', [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ]);
+            $media->count_fields_updated_at = array_merge(
+                $media->count_fields_updated_at,
+                ['likes' => DT::utcNow()]
+            );
+            $media->save();
+
+            $user = $media->userObj;
+            $user->like_count--;
+            $user->removeFromSet('likes', [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ]);
+            $user->count_fields_updated_at = array_merge(
+                $user->count_fields_updated_at,
+                ['likes' => DT::utcNow()]
+            );
+            $user->save();
+        });
+    }
+
+    /**
+     * Create a new factory instance for the model.
      */
     protected static function newFactory(): Factory
     {
@@ -96,7 +158,7 @@ class MediaLike extends Model
     /**
      * Get the user associated with the alert.
      */
-    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -104,7 +166,7 @@ class MediaLike extends Model
     /**
      * Get the media associated with the alert.
      */
-    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
     }

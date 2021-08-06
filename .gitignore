@@ -5,6 +5,8 @@ app/storage/
 /.vagrant
 npm-debug.log
 yarn-error.log
+/build
+/storage/logs
 
 # Laravel 4 specific
 bootstrap/compiled.php

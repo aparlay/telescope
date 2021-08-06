@@ -11,13 +11,12 @@ use Illuminate\Notifications\Notifiable;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class Analytic
- * @package Aparlay\Core\Models
+ * Class Analytic.
  *
- * @property-read null $user_id
- * @property-read User $userObj
+ * @property null $user_id
+ * @property User $userObj
  *
- * @method static |self|Builder days(int $days) get days of analytics
+ * @method static |self|Builder days(int $days)                            get days of analytics
  * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get analytics by date
  */
 class Analytic extends Model
@@ -28,6 +27,7 @@ class Analytic extends Model
 
     /**
      * The collection associated with the model.
+     *
      * @var string
      */
     protected $collection = 'analytics';
@@ -68,8 +68,6 @@ class Analytic extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory
     {

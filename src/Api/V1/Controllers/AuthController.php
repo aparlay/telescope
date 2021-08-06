@@ -3,13 +3,14 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
+use Aparlay\Core\Services\UserService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
-use Validator;
 
 class AuthController extends Controller
 {
@@ -30,7 +31,6 @@ class AuthController extends Controller
      */
     public function token()
     {
-        //
     }
 
     /**
@@ -40,7 +40,6 @@ class AuthController extends Controller
      */
     public function changePassword()
     {
-        //
     }
 
     /**
@@ -50,7 +49,6 @@ class AuthController extends Controller
      */
     public function validateOtp()
     {
-        //
     }
 
     /**
@@ -60,70 +58,70 @@ class AuthController extends Controller
      */
     public function requestOtp()
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @return Response|void
+     *
      * @throws ValidationException
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'email' => 'required|email',
-                'password' => 'required',
-            ]
-        );
+        /** Find the identityField (Email/PhoneNumber/Username) based on username */
+        $identityField = UserService::getIdentityType($request->username);
 
-        if ($validator->fails()) {
-            return $this->error(
-                __('The given data was invalid.'),
-                $validator->errors()->toArray(),
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
+        /** Prepare Credentials and attempt the login */
+        $credentials = [$identityField => $request->username, 'password' => $request->password];
+        if ($token = auth()->attempt($credentials)) {
+            /* Check the account status and through exception for suspended/banned/NotFound account */
+            if (UserService::isUserEligible(auth()->user())) {
+                $result = $this->respondWithToken($token);
+                $cookie1 = Cookie::make(
+                    '__Secure_token',
+                    $result['access_token'],
+                    $result['token_expired_at'] / 60
+                );
+                $cookie2 = Cookie::make(
+                    '__Secure_refresh_token',
+                    $result['refresh_token'],
+                    $result['refresh_token_expired_at'] / 60
+                );
+                $cookie3 = Cookie::make(
+                    '__Secure_username',
+                    auth()->user()->username,
+                    $result['refresh_token_expired_at'] / 60
+                );
+
+                return $this->response($result)->cookie($cookie1)->cookie($cookie2)->cookie($cookie3);
+            }
+        } else {
+            /* Through exception in case of invalid username/password. */
+            throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
         }
-
-        if (!$token = auth()->attempt($validator->validated())) {
-            return $this->error(
-                __('Data Validation Failed'),
-                $validator->errors()->toArray(),
-                Response::HTTP_UNAUTHORIZED
-            );
-        }
-
-        return $this->response($this->respondWithToken($token));
     }
 
     /**
-     * Get the token array structure.
-     *
-     * @param  string  $token
-     *
-     * @return array
+     * Responsible to prepare the json response containing token and expiry.
      */
     protected function respondWithToken(string $token): array
     {
         return [
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'token_expired_at' => auth()->factory()->getTTL() * 60,
+            'refresh_token' => $token,
+            'refresh_token_expired_at' => auth()->factory()->getTTL() * 60,
         ];
     }
 
-
     /**
      * Register a User.
-     *
-     * @return JsonResponse
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): Response
     {
         $user = User::create($request->all());
+
         return $this->response(
             new RegisterResource($user),
             'Entity has been created successfully!',
@@ -133,22 +131,22 @@ class AuthController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @return JsonResponse
      */
-    public function logout()
+    public function logout(): Response
     {
         auth()->logout();
+
+        Cookie::forget('__Secure_token');
+        Cookie::forget('__Secure_refresh_token');
+        Cookie::forget('__Secure_username');
 
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @return JsonResponse
      */
-    public function refresh(): JsonResponse
+    public function refresh(): Response
     {
         return $this->response($this->respondWithToken(auth()->refresh()));
     }

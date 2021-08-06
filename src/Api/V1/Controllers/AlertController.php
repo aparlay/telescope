@@ -11,23 +11,18 @@ class AlertController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Alert  $user
-     * @param  Request  $request
      * @return Response
      */
     public function update(Alert $user, Request $request)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Alert  $media
      * @return Response
      */
     public function destroy(Alert $media)
     {
-        //
     }
 }
