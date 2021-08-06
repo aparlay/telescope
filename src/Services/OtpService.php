@@ -36,7 +36,9 @@ class OtpService
         } elseif ($loginEntity === Login::IDENTITY_EMAIL) {
             if ($otp = self::generateOtp($user->email, $deviceId)) {
                 if (self::sendByEmail($user, $otp)) {
-                    throw new OTPException('OTP has been sent.', null, null, 418, ['message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.']);
+                    throw new OTPException('OTP has been sent.', null, null, 418, [
+                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.'
+                    ]);
                 }
             }
         }
