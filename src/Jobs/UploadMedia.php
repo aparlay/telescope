@@ -12,12 +12,15 @@ class UploadMedia implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $file;
+    public $media_id;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(string $file, string $media_id)
     {
         //
     }

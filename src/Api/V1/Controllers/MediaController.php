@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use MongoDB\BSON\ObjectId;
 
 class MediaController extends Controller
 {
@@ -40,7 +41,34 @@ class MediaController extends Controller
      */
     public function store(MediaRequest $request): Response
     {
-        $media = Media::create($request->all());
+        $user = auth()->user();
+
+        $media = new Media([
+            'visibility' => $user->visibility,
+            'creator' => [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar
+            ],
+            'description' => $request->input('description')
+        ]);
+
+        if ($request->hasFile('file')) {
+            $file = $request->file;
+
+            $media->file = uniqid('tmp_', true) . '.' . $file->extension();
+            $fileName = time() . '.' . $file->extension();
+
+            if (!$file->storeAs('uploads', $fileName)) {
+                return $this->error(__('Cannot upload the file.'));
+            }
+
+        } else if (!empty($media->file)
+            && !file_exists(public_path('uploads') . '/' . $media->file)) {
+            return $this->error(__('Uploaded file does not exists.'));
+        }
+
+        $media->save();
         $media->refresh();
 
         return $this->response(new MediaResource($media), '', Response::HTTP_CREATED);

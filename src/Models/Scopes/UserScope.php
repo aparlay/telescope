@@ -41,6 +41,16 @@ trait UserScope
 
     /**
      * @param  Builder  $query
+     * @param  array  $usernames
+     * @return mixed
+     */
+    public function scopeUsernames(Builder $query, array $usernames): Builder
+    {
+        return $query->whereIn('username', $usernames);
+    }
+
+    /**
+     * @param  Builder  $query
      * @return mixed
      */
     public function scopeAdmin(Builder $query): Builder
