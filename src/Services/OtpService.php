@@ -2,25 +2,25 @@
 
 namespace Aparlay\Core\Services;
 
-use Aparlay\Core\Api\V1\Requests\OtpRequest;
 use Aparlay\Core\Api\V1\Requests\EmailRequest;
+use Aparlay\Core\Api\V1\Requests\OtpRequest;
 use Aparlay\Core\Jobs\Email as EmailJob;
+use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Login;
 use Aparlay\Core\Models\Otp;
-use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Scopes\OtpScope;
 use Aparlay\Core\Services\EmailService;
 use App\Exceptions\OTPException;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Http\Request;
 
 class OtpService
 {
     /**
-     * send otp if status in pending and request otp is null
+     * send otp if status in pending and request otp is null.
      * @param User $user
      * @param string $loginEntity
      * @param string $deviceId
@@ -37,7 +37,7 @@ class OtpService
             if ($otp = self::generateOtp($user->email, $deviceId)) {
                 if (self::sendByEmail($user, $otp)) {
                     throw new OTPException('OTP has been sent.', null, null, 418, [
-                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.'
+                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
                     ]);
                 }
             }
@@ -45,10 +45,10 @@ class OtpService
     }
 
     /**
-     * Generate OTP
+     * Generate OTP.
      * @param string $identity
      * @param string $device_id
-     * @return Array
+     * @return array
      * @throws \ValidationException
      */
     public static function generateOtp(string $identity, string $device_id = null)
@@ -69,25 +69,26 @@ class OtpService
         ];
         $request = new OtpRequest((array) $request);
         $otp = self::create($request);
-        
+
         return $otp;
     }
 
     /**
-     * Expire the previous OTPs
-     * @param Object $otps
-     * @return Boolean|Void
+     * Expire the previous OTPs.
+     * @param object $otps
+     * @return bool|void
      */
     public static function expireOtp(object $otps)
     {
         if (count($otps) > 0) {
             foreach ($otps as $model) {
                 if (strpos($model->otp, 'expired_') === false) {
-                    $model->otp = 'expired_' . random_int(
+                    $model->otp = 'expired_'.random_int(
                         config('app.otp.length.min'),
                         config('app.otp.length.max')
                     );
                     $model->save();
+
                     return true;
                 }
             }
@@ -95,19 +96,20 @@ class OtpService
     }
 
     /**
-     * Create OTP
+     * Create OTP.
      * @param OtpRequest $request
      */
     public static function create(OtpRequest $request)
     {
         $request->prepareForValidation();
+
         return Otp::create($request->all());
     }
 
     /**
-     * Send OTP by email
+     * Send OTP by email.
      * @param User $user
-     * @param Object $otp
+     * @param object $otp
      */
     public static function sendByEmail(User $user, object $otp)
     {
@@ -121,25 +123,25 @@ class OtpService
 
         /** Prepare email content and dispatch the job to schedule the email */
         $content = [
-            'subject' => $otp->otp . ' is your verification code',
+            'subject' => $otp->otp.' is your verification code',
             'identity' => $otp->identity,
             'email_template_params' => [
                 'otp' => $otp->otp,
                 'otpLink' => '',
-                'tracking_url' => config('app.frontendUrl') . '/t/' . $otp->_id,
+                'tracking_url' => config('app.frontendUrl').'/t/'.$otp->_id,
             ],
-            'email_type' => 'email_verification'
+            'email_type' => 'email_verification',
         ];
-        
+
         if (new EmailJob($content)) {
             return true;
         }
     }
 
     /**
-     * @param String $otp
-     * @param String $identity
-     * @return Boolean
+     * @param string $otp
+     * @param string $identity
+     * @return bool
      * @throws ValidationException
      */
     public static function validateOtp(string $otp, string $identity)
@@ -147,16 +149,17 @@ class OtpService
         // Validate the otp for the given user
         $limit = config('app.otp.invalid_attempt_limit');
         $model = Otp::OtpIdentity($otp, $identity, $limit)->get();
-        if (!$model->isEmpty()) {
+        if (! $model->isEmpty()) {
             self::expireOtp((object) $model);
+
             return true;
         }
 
         // Increment the incorrect otp attempt by 1 then through the error
         Otp::OtpIncorrect($identity)->increment('incorrect', 1);
-        
+
         throw ValidationException::withMessages([
-            'otp' => ['Incorrect otp.']
+            'otp' => ['Incorrect otp.'],
         ]);
     }
 }

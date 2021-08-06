@@ -70,14 +70,14 @@ class RegisterRequest extends FormRequest
 
         /* Set avatar based on Gender */
         if (empty($this->avatar)) {
-            $femaleFilename = 'default_fm_' . random_int(1, 60) . '.png';
-            $maleFilename = 'default_m_' . random_int(1, 120) . '.png';
+            $femaleFilename = 'default_fm_'.random_int(1, 60).'.png';
+            $maleFilename = 'default_m_'.random_int(1, 120).'.png';
             $filename = match ($this->gender) {
                 User::GENDER_FEMALE => $femaleFilename,
                 User::GENDER_MALE => $maleFilename,
             default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
             };
-                $this->avatar = Cdn::avatar($filename);
+            $this->avatar = Cdn::avatar($filename);
         }
 
         /* Set the Default Values and required to be input parameters */

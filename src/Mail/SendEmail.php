@@ -36,18 +36,18 @@ class SendEmail extends Mailable
     }
 
     /**
-     * Responsible to return the email template based on email type
-     * @param String $type
-     * @return String
+     * Responsible to return the email template based on email type.
+     * @param string $type
+     * @return string
      */
     public function getTemplate(string $type)
     {
-        View::addNamespace('template', base_path() . '/packages/Aparlay/Core/resources/views');
+        View::addNamespace('template', base_path().'/packages/Aparlay/Core/resources/views');
         switch ($type) {
             case 'email_verification':
                 return 'template::email_verification_template';
                 break;
-            
+
             default:
                 return '';
                 break;

@@ -31,13 +31,13 @@ class EmailRequest extends Request
     }
 
     /**
-     * This function is responsible to prepare the default value of Email table columns
+     * This function is responsible to prepare the default value of Email table columns.
      */
     public function prepareForValidation()
     {
         $this->user = (object) $this->user;
-        
-        /** Set the Default Values and required to be input parameters */
+
+        /* Set the Default Values and required to be input parameters */
         $this->merge([
                 'to' => $this->to,
                 'user' => [

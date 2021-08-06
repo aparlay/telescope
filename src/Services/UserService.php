@@ -2,12 +2,12 @@
 
 namespace Aparlay\Core\Services;
 
-use Aparlay\Core\Models\Login;
-use App\Models\User;
+use Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
+use Aparlay\Core\Models\Login;
 use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
-use Aparlay\Core\Api\V1\Controllers;
+use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Validation\ValidationException;
 
@@ -45,15 +45,15 @@ class UserService
         switch ($user->status) {
             case User::STATUS_SUSPENDED:
                 throw ValidationException::withMessages([
-                    'Account' => ['This account has been suspended.']
+                    'Account' => ['This account has been suspended.'],
                 ]);
             case User::STATUS_BLOCKED:
                 throw ValidationException::withMessages([
-                    'Account' => ['This account has been banned.']
+                    'Account' => ['This account has been banned.'],
                 ]);
             case User::STATUS_DEACTIVATED:
                 throw ValidationException::withMessages([
-                    'Account' => ['Your user account not found or does not match with password.']
+                    'Account' => ['Your user account not found or does not match with password.'],
                 ]);
             default:
                 return true;
@@ -63,13 +63,13 @@ class UserService
     }
 
     /**
-     * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings
+     * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
      * @param User $user
-     * @return Boolean
+     * @return bool
      */
     public static function isUnverified(User $user)
     {
-        /** User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
-        return ($user->getUserSetting()->otp && $user->status === User::STATUS_PENDING);
+        /* User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
+        return $user->getUserSetting()->otp && $user->status === User::STATUS_PENDING;
     }
 }
