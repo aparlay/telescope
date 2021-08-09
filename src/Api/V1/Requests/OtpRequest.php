@@ -49,7 +49,7 @@ class OtpRequest extends Request
             'type'          => Str::contains($this->identity, '@') ? Otp::TYPE_EMAIL : Otp::TYPE_SMS,
             'device_id'     => $this->device_id,
             'incorrect'     => 0,
-            'validated'     => false
+            'validated'     => false,
         ]);
     }
 }

@@ -77,7 +77,7 @@ class OtpService
         if (count($otps) > 0) {
             foreach ($otps as $model) {
                 if (strpos($model->otp, 'expired_') === false) {
-                    $model->otp = 'expired_' . random_int(
+                    $model->otp = 'expired_'.random_int(
                         config('app.otp.length.min'),
                         config('app.otp.length.max')
                     );
@@ -144,13 +144,14 @@ class OtpService
         $limit = config('app.otp.invalid_attempt_limit');
         $limit--;
         $model = Otp::OtpIdentity($otp, $identity, $limit)->get();
-        if (!$model->isEmpty()) {
+        if (! $model->isEmpty()) {
             if ($validateOnly) {
                 $model->validated = true;
                 $model->save();
             } else {
                 $model->delete();
             }
+
             return true;
         }
 

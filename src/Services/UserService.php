@@ -69,7 +69,7 @@ class UserService
      */
     public static function isUnverified(User $user)
     {
-        /** User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
-        return ($user->getSetting()->otp && $user->status === User::STATUS_PENDING);
+        /* User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
+        return $user->getSetting()->otp && $user->status === User::STATUS_PENDING;
     }
 }
