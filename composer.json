@@ -44,7 +44,7 @@
                 "Core": "Aparlay\\Core\\CoreFacade"
             },
             "dont-discover": [
-                "barryvdh/laravel-ide-helper",
+                "barryvdh/laravel-ide-helper"
             ]
         }
     },
