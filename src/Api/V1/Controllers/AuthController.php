@@ -7,7 +7,6 @@ use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Services\UserService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
@@ -27,37 +26,41 @@ class AuthController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function token()
+    public function token(): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function changePassword()
+    public function changePassword(): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function validateOtp()
+    public function validateOtp(): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function requestOtp()
+    public function requestOtp(): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
