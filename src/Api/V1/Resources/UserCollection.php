@@ -16,7 +16,7 @@ class UserCollection extends ResourceCollection
      *
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request): array|Arrayable|JsonSerializable
+    public function toArray($request): array | Arrayable | JsonSerializable
     {
         return parent::toArray($request);
     }
