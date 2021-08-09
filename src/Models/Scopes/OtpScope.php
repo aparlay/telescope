@@ -36,6 +36,7 @@ trait OtpScope
      */
     public function scopeOtpIdentity(Builder $query, string $otp, string $identity, int $limit): Builder
     {
-        return $query->where(['otp' => $otp, 'identity' => $identity])->where('incorrect', '<', $limit);
+        return $query->where(['otp' => $otp, 'identity' => $identity, 'incorrect' => ['$in' => range(0, $limit)]]);
+
     }
 }

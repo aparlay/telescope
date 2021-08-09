@@ -29,7 +29,6 @@ class SendEmail extends Mailable
     public function build()
     {
         $template = $this->getTemplate($this->content['email_type']);
-
         return $this->subject($this->content['subject'])
             ->view($template)
             ->with($this->content['email_template_params']);
@@ -42,10 +41,13 @@ class SendEmail extends Mailable
      */
     public function getTemplate(string $type)
     {
-        View::addNamespace('template', base_path() . '/packages/Aparlay/Core/resources/views');
         switch ($type) {
             case 'email_verification':
-                return 'template::email_verification_template';
+                if (config('app.email.template_urls.email_verification_template') && view()->exists(config('app.email.template_urls.email_verification_template'))) {
+                    return 'email_verification_template';
+                } else {
+                    return 'default_view::email_verification_template';
+                }
                 break;
             
             default:

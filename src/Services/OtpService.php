@@ -142,13 +142,19 @@ class OtpService
      * @return Boolean
      * @throws ValidationException
      */
-    public static function validateOtp(string $otp, string $identity)
+    public static function validateOtp(string $otp, string $identity, bool $validateOnly = false, bool $checkValidated = false)
     {
         // Validate the otp for the given user
         $limit = config('app.otp.invalid_attempt_limit');
+        $limit--;
         $model = Otp::OtpIdentity($otp, $identity, $limit)->get();
         if (!$model->isEmpty()) {
-            self::expireOtp((object) $model);
+            if ($validateOnly) {
+                $model->validated = true;
+                $model->save();
+            } else {
+                $model->delete();
+            }
             return true;
         }
 

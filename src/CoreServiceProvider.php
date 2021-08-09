@@ -27,7 +27,7 @@ class CoreServiceProvider extends ServiceProvider
             $this->app->register(TelescopeServiceProvider::class);
         }
 
-        $this->mergeConfigFrom(__DIR__.'/../config/core.php', 'core');
+        $this->mergeConfigFrom(__DIR__ . '/../config/core.php', 'core');
     }
 
     /**
@@ -39,28 +39,31 @@ class CoreServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                                 __DIR__.'/../config/core.php' => config_path('core.php'),
+                                 __DIR__ . '/../config/core.php' => config_path('core.php'),
                              ], 'config');
 
             $this->publishes([
-                                 __DIR__.'/../resources/views/admin' => base_path('resources/views/admin'),
+                                 __DIR__ . '/../resources/views/admin' => base_path('resources/views/admin'),
                              ], 'views');
 
             $this->commands([
                                 CoreCommand::class,
                             ]);
         }
+
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'default_view');
+
         $this->configureRateLimiting();
 
-        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/channels.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/console.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/admin.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/channels.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/console.php');
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'core');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'core');
     }
 
     /**

@@ -379,18 +379,18 @@
                             <td class="wrapper">
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <img src="http://assets.waptap.com/web/waptap.png" alt="Waptap" width="126"
+                                        <img src="" alt="" width="126"
                                             height="96" border="0" style="margin: 20px auto">
                                     </tr>
                                     <tr>
                                         <td>
                                             <h2>Email Verification</h2>
-                                            <p>When prompted, enter this code on Waptap to verify your account</p>
+                                            <p>When prompted, enter this code on app to verify your account</p>
                                             <p style="font-size: xx-large">{{$otp}}</p>
                                             <hr/>
                                             <p class="undernote">
                                                 <b>If you did not make this request, please contact us at</b>
-                                                <a href="mailto: support@waptap.com">support@waptap.com</a>
+                                                <a href="">support@app.com</a>
                                             </p>
                                         </td>
                                     </tr>

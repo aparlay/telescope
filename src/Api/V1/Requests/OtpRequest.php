@@ -48,7 +48,8 @@ class OtpRequest extends Request
             'expired_at'    => DT::utcDateTime(['s' => config('app.otp.duration')]),
             'type'          => Str::contains($this->identity, '@') ? Otp::TYPE_EMAIL : Otp::TYPE_SMS,
             'device_id'     => $this->device_id,
-            'incorrect'     => 0
+            'incorrect'     => 0,
+            'validated'     => false
         ]);
     }
 }
