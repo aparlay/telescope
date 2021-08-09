@@ -26,7 +26,6 @@ class JobFailed extends Notification
         $this->exception = $exception;
     }
 
-
     /**
      * Get the notification's delivery channels.
      *
@@ -46,8 +45,8 @@ class JobFailed extends Notification
      */
     public function toSlack($notifiable)
     {
-        $message = $this->job .' failed after ' . $this->tried . ' attempts.';
-        $message .= PHP_EOL . '_*Exceptions:*_ ' . !empty($this->exception) ? $this->exception : ' attempts done.';
+        $message = $this->job.' failed after '.$this->tried.' attempts.';
+        $message .= PHP_EOL.'_*Exceptions:*_ '.! empty($this->exception) ? $this->exception : ' attempts done.';
 
         return (new SlackMessage())
             ->to('waptap-testing')
