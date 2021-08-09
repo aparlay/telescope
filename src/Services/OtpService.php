@@ -10,7 +10,6 @@ use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Scopes\OtpScope;
 use Aparlay\Core\Services\EmailService;
-use App\Exceptions\OTPException;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -24,21 +23,16 @@ class OtpService
      * @param User $user
      * @param string $loginEntity
      * @param string $deviceId
-     * @throws OTPException
+     * @return string|void
      */
     public static function sendOtp(User $user, string $loginEntity, string $deviceId)
     {
         if ($loginEntity === Login::IDENTITY_PHONE_NUMBER) {
-            throw new OTPException('OTP has been sent.', null, null, 418, [
-                'message' => 'If you enter your phone number correctly you will receive an OTP sms soon.',
-                'sms_numbers' => $user['phone_number'],
-            ]);
+            return 'If you enter your phone number correctly you will receive an OTP sms soon.';
         } elseif ($loginEntity === Login::IDENTITY_EMAIL) {
             if ($otp = self::generateOtp($user->email, $deviceId)) {
                 if (self::sendByEmail($user, $otp)) {
-                    throw new OTPException('OTP has been sent.', null, null, 418, [
-                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.'
-                    ]);
+                    return 'If you enter your email correctly you will receive an OTP email in your inbox soon.';
                 }
             }
         }
@@ -56,7 +50,7 @@ class OtpService
         $previousOTP = Otp::FilterByIdentity($identity)->get();
 
         if (count($previousOTP) > 4) {
-            throw new OTPException('You cannot create more OTP, please wait a while to receive an otp or try again later.', null, null, 422);
+            // throw new OTPException('You cannot create more OTP, please wait a while to receive an otp or try again later.', null, null, 422);
         }
 
         // Expire all the Previous OTPs of the given user

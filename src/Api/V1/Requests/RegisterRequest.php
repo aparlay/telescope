@@ -103,7 +103,7 @@ class RegisterRequest extends FormRequest
             'followed_hashtags' => [],
             'medias' => [],
             'count_fields_updated_at' => [],
-            'setting' => (object) [
+            'setting' => [
                 'otp' => config('app.otp.enabled'),
                 'notifications' => [
                     'unread_message_alerts' => false,
