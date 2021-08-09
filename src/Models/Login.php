@@ -3,10 +3,9 @@
 namespace Aparlay\Core\Models;
 
 /**
- * Login model
+ * Login model.
  *
  * @OA\Schema()
- *
  */
 class Login extends Model
 {

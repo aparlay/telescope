@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait OtpScope
 {
-      /**
+    /**
      * @param  Builder  $query
      * @param  string  $identity
      * @return mixed
@@ -16,7 +16,7 @@ trait OtpScope
     {
         return $query->where(['identity' => $identity]);
     }
-    
+
     /**
      * @param  Builder  $query
      * @param  string  $identity

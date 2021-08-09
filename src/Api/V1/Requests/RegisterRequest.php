@@ -77,6 +77,7 @@ class RegisterRequest extends FormRequest
                 User::GENDER_MALE => $maleFilename,
             default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
             };
+
                 $this->avatar = Cdn::avatar($filename);
         }
 

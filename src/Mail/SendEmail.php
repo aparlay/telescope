@@ -35,9 +35,9 @@ class SendEmail extends Mailable
     }
 
     /**
-     * Responsible to return the email template based on email type
-     * @param String $type
-     * @return String
+     * Responsible to return the email template based on email type.
+     * @param string $type
+     * @return string
      */
     public function getTemplate(string $type)
     {
@@ -49,7 +49,7 @@ class SendEmail extends Mailable
                     return 'default_view::email_verification_template';
                 }
                 break;
-            
+
             default:
                 return '';
                 break;

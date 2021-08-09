@@ -8,7 +8,7 @@ use Aparlay\Core\Models\Email;
 class EmailService
 {
     /**
-     * save Email
+     * save Email.
      * @param EmailRequest $request
      * @return void
      */

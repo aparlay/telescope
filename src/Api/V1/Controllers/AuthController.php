@@ -16,12 +16,11 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-
     /**
-    * Create a new AuthController instance.
-    *
-    * @return void
-    */
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
@@ -78,7 +77,7 @@ class AuthController extends Controller
 
         /** Prepare Credentials and attempt the login */
         $credentials = [$identityField => $request->username, 'password' => $request->password];
-        if (!($token = auth()->attempt($credentials))) {
+        if (! ($token = auth()->attempt($credentials))) {
             throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
         }
 
@@ -86,7 +85,7 @@ class AuthController extends Controller
         $user = auth()->user();
         $elligible = UserService::isUserEligible($user);
         $deviceId = $request->headers->get('X-DEVICE-ID');
-        
+
         if (UserService::isUnverified($user)) {
             if ($request->otp) {
                 OtpService::validateOtp($request->otp, $request->username);
@@ -155,6 +154,7 @@ class AuthController extends Controller
                 }
             }
         }
+
         return $this->response(
             new RegisterResource($user),
             'Entity has been created successfully!',

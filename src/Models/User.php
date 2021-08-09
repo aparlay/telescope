@@ -244,7 +244,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getAdminUrlAttribute()
     {
-        return config('app.adminUrls.profile') . $this->_id;
+        return config('app.adminUrls.profile').$this->_id;
     }
 
     public function getJWTIdentifier()

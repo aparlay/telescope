@@ -34,14 +34,14 @@ class OtpRequest extends Request
     }
 
     /**
-     * This function is responsible to prepare the default value of OTP table columns
+     * This function is responsible to prepare the default value of OTP table columns.
      */
     public function prepareForValidation()
     {
-        /** Set the Default Values and required to be input parameters */
+        /* Set the Default Values and required to be input parameters */
         $this->merge([
             'identity'      => $this->identity,
-            'otp'           => (string)random_int(
+            'otp'           => (string) random_int(
                 config('app.otp.length.min'),
                 config('app.otp.length.max')
             ),
