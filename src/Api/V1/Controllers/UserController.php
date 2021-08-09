@@ -84,6 +84,6 @@ class UserController extends Controller
             return $this->login($request);
         }
 
-        return $this->response($user,'',  Response::HTTP_OK);
+        return $this->response($user, '', Response::HTTP_OK);
     }
 }
