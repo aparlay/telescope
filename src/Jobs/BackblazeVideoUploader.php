@@ -48,11 +48,11 @@ class BackblazeVideoUploader implements ShouldQueue
     public function __construct(string $userId, string $mediaId, string $file)
     {
         if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__ . PHP_EOL . 'User not found with id ' . $userId);
+            throw new Exception(__CLASS__.PHP_EOL.'User not found with id '.$userId);
         }
 
         if (($this->media = Media::media($mediaId)->first()) === null) {
-            throw new Exception(__CLASS__ . PHP_EOL . 'Media not found with id ' . $userId);
+            throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$userId);
         }
 
         $this->file = $file;
