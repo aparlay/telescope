@@ -2,8 +2,10 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use JsonSerializable;
 
 class ReportCollection extends ResourceCollection
 {
@@ -12,9 +14,9 @@ class ReportCollection extends ResourceCollection
      *
      * @param Request $request
      *
-     * @return array
+     * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request): array | Arrayable | JsonSerializable
     {
         return parent::toArray($request);
     }

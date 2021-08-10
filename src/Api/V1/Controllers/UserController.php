@@ -15,45 +15,54 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param  Request  $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Block  $media
      * @return Response
      */
-    public function me(Block $media)
+    public function me(Block $media): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Block  $media
      * @return Response
      */
-    public function destroy(Block $media)
+    public function destroy(Block $media): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Block  $media
      * @return Response
      */
-    public function update(Block $media)
+    public function update(Block $media): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Request  $request
      * @return Response
      */
-    public function register(Request $request)
+    public function register(Request $request): Response
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
@@ -63,7 +72,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            return $this->error('validation failed', ['error' => $validator->errors()], Response::HTTP_UNAUTHORIZED);
         }
 
         $user = new User();
@@ -75,9 +84,6 @@ class UserController extends Controller
             return $this->login($request);
         }
 
-        return response()->json([
-                                    'success' => true,
-                                    'data' => $user,
-                                ], Response::HTTP_OK);
+        return $this->response($user, '', Response::HTTP_OK);
     }
 }

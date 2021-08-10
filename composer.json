@@ -42,7 +42,10 @@
             ],
             "aliases": {
                 "Core": "Aparlay\\Core\\CoreFacade"
-            }
+            },
+            "dont-discover": [
+                "barryvdh/laravel-ide-helper"
+            ]
         }
     },
     "repositories": [
