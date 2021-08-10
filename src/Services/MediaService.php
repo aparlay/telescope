@@ -11,23 +11,6 @@ use MongoDB\BSON\ObjectId;
 
 class MediaService
 {
-    public static function create(MediaRequest $request): Media
-    {
-        $user = auth()->user();
-
-        $media = new Media([
-            'visibility' => $request->input('visibility', 0),
-            'creator' => [
-                '_id' => new ObjectId($user->_id),
-                'username' => $user->username,
-                'avatar' => $user->avatar,
-            ],
-            'description' => $request->input('description'),
-        ]);
-
-        return $media;
-    }
-
     /**
      * @param int $length
      * @return string
@@ -66,32 +49,5 @@ class MediaService
         $media->people = $users;
 
         return $media;
-    }
-
-    /**
-     * @param ObjectId|null $userId
-     * @param Media $media
-     * @return bool
-     */
-    public static function isVisibleBy(ObjectId $userId = null, Media $media): bool
-    {
-        if ($media->visibility === Media::VISIBILITY_PUBLIC) {
-            return true;
-        }
-
-        if ($media->visibility === Media::VISIBILITY_PRIVATE && $userId === null) {
-            return false;
-        }
-
-        $isFollowed = Follow::select(['created_by', '_id'])
-            ->creator($userId)
-            ->user($media->created_by)
-            ->accepted()
-            ->exists();
-        if (! empty($isFollowed)) {
-            return true;
-        }
-
-        return false;
     }
 }

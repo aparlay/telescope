@@ -7,8 +7,10 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Repositories\MediaRepository;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use MongoDB\BSON\ObjectId;
 
 class MediaController extends Controller
 {
@@ -17,6 +19,7 @@ class MediaController extends Controller
     public function __construct(MediaRepository $repository)
     {
         $this->repository = $repository;
+        $this->authorizeResource(Media::class, 'media');
     }
 
     /**
@@ -24,7 +27,7 @@ class MediaController extends Controller
      */
     public function index(): Response
     {
-        return $this->response($this->repository->getMedias());
+        return $this->response(Media::all());
     }
 
     /**
@@ -42,7 +45,17 @@ class MediaController extends Controller
      */
     public function store(MediaRequest $request): Response
     {
-        $media = $this->repository->create($request);
+        $user = auth()->user();
+
+        $media = new Media([
+            'visibility'  => $request->input('visibility', 0),
+            'creator'     => [
+                '_id'      => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar'   => $user->avatar,
+            ],
+            'description' => $request->input('description'),
+        ]);
 
         if ($request->hasFile('file')) {
             $file = $request->file;
@@ -50,11 +63,11 @@ class MediaController extends Controller
             $media->file = uniqid('tmp_', true).'.'.$file->extension();
             $fileName = time().'.'.$file->extension();
 
-            if (! $file->storeAs('uploads', $fileName)) {
+            if (! $file->storeAs('upload', $fileName)) {
                 return $this->error(__('Cannot upload the file.'));
             }
         } elseif (! empty($media->file)
-            && ! file_exists(public_path('uploads').'/'.$media->file)) {
+            && ! file_exists(public_path('upload').'/'.$media->file)) {
             return $this->error(__('Uploaded file does not exists.'));
         }
 

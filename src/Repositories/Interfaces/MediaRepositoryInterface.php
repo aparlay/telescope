@@ -3,22 +3,14 @@
 namespace Aparlay\Core\Repositories\Interfaces;
 
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Requests\MediaRequest;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Response;
+use MongoDB\BSON\ObjectId;
 
 interface MediaRepositoryInterface
 {
     /**
-     * Display a listing of the resource.
+     * @param ObjectId|null $userId
+     * @param Media $media
+     * @return bool
      */
-    public function getMedias(): array | Collection;
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param MediaRequest $request
-     * @return Response
-     */
-    public function create(MediaRequest $request): Media;
+    public function getIsVisibleBy(ObjectId|null $userId, Media $media): bool;
 }

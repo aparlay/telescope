@@ -2,21 +2,37 @@
 
 namespace Aparlay\Core\Repositories;
 
+use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Repositories\Interfaces\MediaRepositoryInterface;
-use Aparlay\Core\Services\MediaService;
-use Illuminate\Database\Eloquent\Collection;
+use MongoDB\BSON\ObjectId;
 
 class MediaRepository implements MediaRepositoryInterface
 {
-    public function getMedias(): array | Collection
+    /**
+     * @param ObjectId|null $userId
+     * @param Media $media
+     * @return bool
+     */
+    public function getIsVisibleBy(ObjectId|null $userId, Media $media): bool
     {
-        return Media::all();
-    }
+        if ($media->visibility === Media::VISIBILITY_PUBLIC) {
+            return true;
+        }
 
-    public function create(MediaRequest $request): Media
-    {
-        return MediaService::create($request);
+        if ($media->visibility === Media::VISIBILITY_PRIVATE && $userId === null) {
+            return false;
+        }
+
+        $isFollowed = Follow::select(['created_by', '_id'])
+            ->creator($userId)
+            ->user($media->created_by)
+            ->accepted()
+            ->exists();
+        if (! empty($isFollowed)) {
+            return true;
+        }
+
+        return false;
     }
 }

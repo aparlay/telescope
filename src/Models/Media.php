@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
@@ -52,6 +51,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property mixed       $filename
  * @property array       $links
  * @property bool        $is_protected
+ * @property User        $userObj
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
@@ -184,7 +184,7 @@ class Media extends Model
      */
     protected static function booted()
     {
-        static::creating(function ($media) {
+        static::creating(function (Media $media) {
             MediaService::parseDescription($media);
             $media->slug = MediaService::generateSlug(6);
 
@@ -197,7 +197,7 @@ class Media extends Model
             }
         });
 
-        static::created(function ($media) {
+        static::created(function (Media $media) {
             $creatorUser = $media->userObj;
 
             if ($media->wasChanged('status')) {

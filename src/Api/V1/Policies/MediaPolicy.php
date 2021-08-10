@@ -4,13 +4,20 @@ namespace Aparlay\Core\Api\V1\Policies;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Services\MediaService;
+use Aparlay\Core\Repositories\MediaRepository;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Http\Response;
+use Illuminate\Auth\Access\Response;
 
 class MediaPolicy
 {
     use HandlesAuthorization;
+
+    public $repository;
+
+    public function __construct(MediaRepository $repository)
+    {
+        $this->repository = $repository;
+    }
 
     /**
      * Determine whether the user can view the model.
@@ -19,11 +26,12 @@ class MediaPolicy
      * @param  \Aparlay\Core\Api\V1\Models\Media  $media
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Media $media)
+    public function view(User|null $user, Media $media)
     {
-        return MediaService::isVisibleBy($user->_id, $media)
+        $userId = $user?->_id;
+        return $this->repository->getIsVisibleBy($userId, $media)
             ? Response::allow()
-            : Response::deny('You can only view media that you\'ve created.');
+            : Response::deny(__('You can only view media that you\'ve created.'));
     }
 
     /**
@@ -32,11 +40,11 @@ class MediaPolicy
      * @param  \Aparlay\Core\Api\V1\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create()
     {
         return auth()->user()->status !== User::STATUS_PENDING
             ? Response::allow()
-            : Response::deny('You need to complete registration first!');
+            : Response::deny(__('You need to complete registration first!'));
     }
 
     /**
@@ -52,7 +60,7 @@ class MediaPolicy
 
         return ($userId === null || (string) $media->created_by !== (string) $userId)
             ? Response::allow()
-            : Response::deny('You can only update media that you\'ve created.');
+            : Response::deny(__('You can only update media that you\'ve created.'));
     }
 
     /**
@@ -67,11 +75,11 @@ class MediaPolicy
         $userId = $user->_id ?? null;
 
         if ($userId === null || (string) $media->created_by !== (string) $userId) {
-            return Response::deny('You can only delete media that you\'ve created.');
+            return Response::deny(__('You can only delete media that you\'ve created.'));
         }
 
         if ($media->is_protected) {
-            return Response::deny('Video is protected and you cannot delete it.');
+            return Response::deny(__('Video is protected and you cannot delete it.'));
         }
 
         return Response::allow();
