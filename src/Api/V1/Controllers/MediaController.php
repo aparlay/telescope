@@ -14,7 +14,8 @@ class MediaController extends Controller
 {
     public $repository;
 
-    public function __construct(MediaRepository $repository) {
+    public function __construct(MediaRepository $repository)
+    {
         $this->repository = $repository;
     }
 

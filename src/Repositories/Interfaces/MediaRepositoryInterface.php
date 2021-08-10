@@ -12,7 +12,7 @@ interface MediaRepositoryInterface
     /**
      * Display a listing of the resource.
      */
-    public function getMedias(): array|Collection;
+    public function getMedias(): array | Collection;
 
     /**
      * Store a newly created resource in storage.

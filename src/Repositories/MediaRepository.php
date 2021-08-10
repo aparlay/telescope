@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class MediaRepository implements MediaRepositoryInterface
 {
-    public function getMedias(): array|Collection
+    public function getMedias(): array | Collection
     {
         return Media::all();
     }
