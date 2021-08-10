@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Policies;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Services\MediaService;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Http\Response;
 
@@ -20,7 +21,7 @@ class MediaPolicy
      */
     public function view(User $user, Media $media)
     {
-        return $media->isVisibleBy($user->_id)
+        return MediaService::isVisibleBy($user->_id, $media)
             ? Response::allow()
             : Response::deny('You can only view media that you\'ve created.');
     }

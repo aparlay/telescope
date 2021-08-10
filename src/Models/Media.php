@@ -5,20 +5,17 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Database\Factories\MediaFactory;
-use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaLike;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Scopes\MediaScope;
+use Aparlay\Core\Services\MediaService;
 use Exception;
-use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
 use MathPHP\Statistics\Descriptive;
@@ -188,8 +185,8 @@ class Media extends Model
     protected static function booted()
     {
         static::creating(function ($media) {
-            $media->parseDescription();
-            $media->slug = $media->generateSlug(6);
+            MediaService::parseDescription($media);
+            $media->slug = MediaService::generateSlug(6);
 
             if ($media->wasChanged('file') && strpos($media->file, config('app.cdn.videos')) !== false) {
                 $media->file = str_replace(config('app.cdn.videos'), '', $media->file);
@@ -463,68 +460,6 @@ class Media extends Model
      */
     public function setSlugAttribute(): string
     {
-        return $this->attributes['slug'] = $this->generateSlug(6);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function generateSlug(int $length): string
-    {
-        $slug = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
-
-        return (null === self::slug($slug)->first()) ? $slug : $this->generateSlug($length);
-    }
-
-    /**
-     * store media tags.
-     */
-    public function parseDescription()
-    {
-        $description = trim($this->description);
-        $tags = $people = [];
-        foreach (explode(' ', $description) as $item) {
-            if (isset($item[0]) && $item[0] === '#' && substr_count($item, '#') === 1) {
-                $tags[] = substr($item, 1);
-            }
-            if (isset($item[0]) && $item[0] === '@' && substr_count($item, '@') === 1) {
-                $people[] = substr($item, 1);
-            }
-        }
-        $this->hashtags = array_slice($tags, 0, 20);
-        $people = array_slice($people, 0, 20);
-        $users = [];
-        $usersQuery = User::select(['username', 'avatar', '_id'])->usernames($people)->limit(20)->get();
-        foreach ($usersQuery->toArray() as $user) {
-            $users[] = $this->createSimpleUser($user);
-        }
-        $this->people = $users;
-    }
-
-    /**
-     * store media tags.
-     * @param ObjectId|null $userId
-     * @return mixed
-     */
-    public function isVisibleBy(ObjectId $userId = null)
-    {
-        if ($this->visibility === self::VISIBILITY_PUBLIC) {
-            return true;
-        }
-
-        if ($this->visibility === self::VISIBILITY_PRIVATE && $userId === null) {
-            return false;
-        }
-
-        $isFollowed = Follow::select(['created_by', '_id'])
-            ->creator($userId)
-            ->user($this->created_by)
-            ->accepted()
-            ->exists();
-        if (! empty($isFollowed)) {
-            return true;
-        }
-
-        return false;
+        return $this->attributes['slug'] = MediaService::generateSlug(6);
     }
 }

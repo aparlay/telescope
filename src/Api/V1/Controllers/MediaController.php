@@ -6,18 +6,24 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
+use Aparlay\Core\Repositories\MediaRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use MongoDB\BSON\ObjectId;
 
 class MediaController extends Controller
 {
+    public $repository;
+
+    public function __construct(MediaRepository $repository) {
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
-        return $this->response(Media::all());
+        return $this->response($this->repository->getMedias());
     }
 
     /**
@@ -35,17 +41,7 @@ class MediaController extends Controller
      */
     public function store(MediaRequest $request): Response
     {
-        $user = auth()->user();
-
-        $media = new Media([
-            'visibility' => $request->input('visibility', 0),
-            'creator' => [
-                '_id' => new ObjectId($user->_id),
-                'username' => $user->username,
-                'avatar' => $user->avatar,
-            ],
-            'description' => $request->input('description'),
-        ]);
+        $media = $this->repository->create($request);
 
         if ($request->hasFile('file')) {
             $file = $request->file;
