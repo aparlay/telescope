@@ -41,7 +41,7 @@ trait OtpScope
             'otp' => $otp,
             'identity' => $identity,
             'validated' => $checkValidated,
-            'incorrect' => ['$in' => range(0, $limit)]
+            'incorrect' => ['$in' => range(0, $limit)],
         ]);
     }
 }

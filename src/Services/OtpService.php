@@ -61,6 +61,7 @@ class OtpService
             'identity'      => $identity,
             'device_id'     => $device_id,
         ];
+
         return OtpRepository::create($request);
     }
 
