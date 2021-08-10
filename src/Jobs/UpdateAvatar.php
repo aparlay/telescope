@@ -54,7 +54,7 @@ class UpdateAvatar implements ShouldQueue
     {
         $this->avatar = $avatar;
         if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'User not found!');
+            throw new Exception(__CLASS__ . PHP_EOL . 'User not found!');
         }
     }
 

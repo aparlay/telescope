@@ -3,14 +3,26 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Block;
-use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
+use Aparlay\Core\Api\V1\Resources\RegisterResource;
+use Aparlay\Core\Services\UserService;
 
 class UserController extends Controller
 {
     public $token = true;
+
+     /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // $this->authorizeResource(User::class, 'user');
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -48,11 +60,28 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Block  $media
-     * @return Response
+     * @param  Request  $request
+     * @return Object
      */
-    public function update(Block $media): Response
+    public function update(Request $request): object
     {
-        return $this->response([], Response::HTTP_OK);
+        $user = auth()->user();
+        
+        if ($user->status == User::STATUS_VERIFIED && !empty($request->username)) {
+            $user->username = $request->username;
+            $user->status = User::STATUS_ACTIVE;
+            $user->save();
+        } elseif ($request->hasFile('avatar')) {
+            UserService::uploadAvatar($request, $user);
+        }
+        else {
+            $requestData = $request->all();
+            $user->fill($requestData)->save();
+        }
+
+        return $this->response(
+            new RegisterResource($user),
+            Response::HTTP_OK
+        );
     }
 }

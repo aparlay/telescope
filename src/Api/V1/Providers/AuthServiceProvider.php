@@ -16,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'Aparlay\Core\Api\V1\Models\User' => 'Aparlay\Core\Api\V1\Policies\UserPolicy',
     ];
 
     /**

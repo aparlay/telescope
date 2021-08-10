@@ -8,6 +8,7 @@ use Aparlay\Core\Models\Login;
 use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Validation\ValidationException;
 
@@ -71,5 +72,28 @@ class UserService
     {
         /* User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
         return $user->getSetting()->otp && $user->status === User::STATUS_PENDING;
+    }
+
+    /**
+     * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
+     * @param User $user
+     * @param Request $request
+     * @return bool
+     */
+    public static function uploadAvatar(Request $request, User $user)
+    {
+        /** Upload Avtar Image */
+        $avtarNameWithExt = $request->file('avatar')->getClientOriginalName();
+        $avtarName = pathinfo($avtarNameWithExt, PATHINFO_FILENAME);
+        $extension = $request->file('avatar')->getClientOriginalExtension();
+        $avtarNameToStore = $avtarName . ' ' . time() . '.' . $extension;
+        $path = $request->file('avatar')->storeAs('public/uploads', $avtarNameToStore);
+        if ($path) {
+            $avatar = config('app.cdn.avatars') . uniqid($user->_id, false) . '.' . $extension;
+            $user->avatar = $avatar;
+            $user->save();
+        }
+
+        return true;
     }
 }
