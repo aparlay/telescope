@@ -13,6 +13,5 @@ return [
          */
         AuthServiceProvider::class,
         EventServiceProvider::class,
-        RepositoryServiceProvider::class,
     ],
 ];
