@@ -10,6 +10,7 @@ use Aparlay\Core\Models\Login;
 use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Models\Scopes\OtpScope;
 use Aparlay\Core\Services\EmailService;
+use App\Exceptions\BlockedException;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,16 +24,21 @@ class OtpService
      * @param User $user
      * @param string $loginEntity
      * @param string $deviceId
-     * @return string|void
+     * @throws \BlockedException
      */
     public static function sendOtp(User $user, string $loginEntity, string $deviceId)
     {
         if ($loginEntity === Login::IDENTITY_PHONE_NUMBER) {
-            return 'If you enter your phone number correctly you will receive an OTP sms soon.';
+            throw new BlockedException('OTP has been sent.', null, null, Response::HTTP_LOCKED, [
+                'message' => 'If you enter your phone number correctly you will receive an OTP sms soon.',
+                'sms_numbers' => $user['phone_number'],
+            ]);
         } elseif ($loginEntity === Login::IDENTITY_EMAIL) {
             if ($otp = self::generateOtp($user->email, $deviceId)) {
                 if (self::sendByEmail($user, $otp)) {
-                    return 'If you enter your email correctly you will receive an OTP email in your inbox soon.';
+                    throw new BlockedException('OTP has been sent.', null, null, Response::HTTP_LOCKED, [
+                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.'
+                    ]);
                 }
             }
         }
@@ -43,14 +49,19 @@ class OtpService
      * @param string $identity
      * @param string $device_id
      * @return array
-     * @throws \ValidationException
+     * @throws \BlockedException
      */
     public static function generateOtp(string $identity, string $device_id = null)
     {
         $previousOTP = Otp::FilterByIdentity($identity)->get();
 
         if (count($previousOTP) > 4) {
-            // throw new OTPException('You cannot create more OTP, please wait a while to receive an otp or try again later.', null, null, 422);
+            throw new BlockedException(
+                'You cannot create more OTP, please wait a while to receive an otp or try again later.',
+                null,
+                null,
+                Response::HTTP_LOCKED
+            );
         }
 
         // Expire all the Previous OTPs of the given user
@@ -117,14 +128,14 @@ class OtpService
 
         /** Prepare email content and dispatch the job to schedule the email */
         $content = [
-            'subject' => $otp->otp.' is your verification code',
-            'identity' => $otp->identity,
+            'subject'               => $otp->otp . ' is your verification code',
+            'identity'              => $otp->identity,
             'email_template_params' => [
-                'otp' => $otp->otp,
-                'otpLink' => '',
-                'tracking_url' => config('app.frontendUrl').'/t/'.$otp->_id,
+                'otp'               => $otp->otp,
+                'otpLink'           => '',
+                'tracking_url'      => config('app.frontendUrl') . '/t/' . $otp->_id,
             ],
-            'email_type' => 'email_verification',
+            'email_type'            => 'email_verification',
         ];
 
         if (new EmailJob($content)) {
@@ -143,8 +154,8 @@ class OtpService
         // Validate the otp for the given user
         $limit = config('app.otp.invalid_attempt_limit');
         $limit--;
-        $model = Otp::OtpIdentity($otp, $identity, $limit)->get();
-        if (!$model->isEmpty()) {
+        $model = Otp::OtpIdentity($otp, $identity, $checkValidated, $limit)->first();
+        if ($model) {
             if ($validateOnly) {
                 $model->validated = true;
                 $model->save();
@@ -153,7 +164,6 @@ class OtpService
             }
             return true;
         }
-
         // Increment the incorrect otp attempt by 1 then through the error
         Otp::OtpIncorrect($identity)->increment('incorrect', 1);
 

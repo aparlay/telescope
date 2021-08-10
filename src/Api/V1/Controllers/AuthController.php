@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
 use Aparlay\Core\Services\UserService;
+use App\Exceptions\BlockedException;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -90,14 +91,8 @@ class AuthController extends Controller
             if ($request->otp) {
                 OtpService::validateOtp($request->otp, $request->username);
                 $this->userRepo->verify($user);
-            } elseif ($response = OtpService::sendOtp($user, $identityField, $deviceId)) {
-                return $this->error(
-                    __('OTP has been sent.'),
-                    [$response],
-                    418
-                );
             } else {
-                throw ValidationException::withMessages(['message' => ['There are some errors in your provided data.']]);
+                return OtpService::sendOtp($user, $identityField, $deviceId);
             }
         }
 
@@ -150,7 +145,7 @@ class AuthController extends Controller
             if (UserService::isUnverified($user)) {
                 try {
                     OtpService::sendOtp($user, $identityField, $deviceId);
-                } catch (ValidationException $e) {
+                } catch (BlockedException $e) {
                 }
             }
         }

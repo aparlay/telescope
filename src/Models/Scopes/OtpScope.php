@@ -31,12 +31,17 @@ trait OtpScope
      * @param  Builder  $query
      * @param  string  $otp
      * @param  string  $identity
+     * @param  bool  $checkValidated
      * @param  int $limit
      * @return mixed
      */
-    public function scopeOtpIdentity(Builder $query, string $otp, string $identity, int $limit): Builder
+    public function scopeOtpIdentity(Builder $query, string $otp, string $identity, bool $checkValidated, int $limit): Builder
     {
-        return $query->where(['otp' => $otp, 'identity' => $identity, 'incorrect' => ['$in' => range(0, $limit)]]);
-
+        return $query->where([
+            'otp' => $otp,
+            'identity' => $identity,
+            'validated' => $checkValidated,
+            'incorrect' => ['$in' => range(0, $limit)]
+        ]);
     }
 }
