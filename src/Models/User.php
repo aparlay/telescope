@@ -344,7 +344,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get user settings
+     * Get user settings.
      *
      * @return object
      */

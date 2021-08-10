@@ -162,6 +162,7 @@ class OtpService
             } else {
                 $model->delete();
             }
+
             return true;
         }
         // Increment the incorrect otp attempt by 1 then through the error
