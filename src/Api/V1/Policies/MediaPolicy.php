@@ -2,22 +2,15 @@
 
 namespace Aparlay\Core\Api\V1\Policies;
 
+use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Repositories\MediaRepository;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
 class MediaPolicy
 {
     use HandlesAuthorization;
-
-    public $repository;
-
-    public function __construct(MediaRepository $repository)
-    {
-        $this->repository = $repository;
-    }
 
     /**
      * Determine whether the user can view the model.
@@ -30,9 +23,26 @@ class MediaPolicy
     {
         $userId = $user?->_id;
 
-        return $this->repository->getIsVisibleBy($userId, $media)
-            ? Response::allow()
-            : Response::deny(__('You can only view media that you\'ve created.'));
+        if ($media->visibility === Media::VISIBILITY_PUBLIC) {
+            return Response::allow();
+        }
+
+        $isFollowed = Follow::select(['created_by', '_id'])
+            ->creator($userId)
+            ->user($media->created_by)
+            ->accepted()
+            ->exists();
+        if ($isFollowed) {
+            return Response::allow();
+        }
+
+        /*
+        if ($media->visibility === Media::VISIBILITY_PRIVATE && $userId === null) {
+            return Response::deny(__('You can only view media that you\'ve created.'));;
+        }
+        */
+
+        return Response::deny(__('You can only view media that you\'ve created.'));
     }
 
     /**
