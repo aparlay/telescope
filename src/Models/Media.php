@@ -185,7 +185,18 @@ class Media extends Model
     protected static function booted()
     {
         static::creating(function (self $media) {
-            MediaService::parseDescription($media);
+            $media->hashtags = MediaService::extractHashtags($media->description);
+
+            $extractedPeople = MediaService::extractPeople($media->description);
+            if (! empty($extractedPeople)) {
+                $users = [];
+                $usersQuery = User::select(['username', 'avatar', '_id'])->usernames($extractedPeople)->limit(20)->get();
+                foreach ($usersQuery->toArray() as $user) {
+                    $users[] = $media->createSimpleUser($user);
+                }
+                $media->people = $users;
+            }
+
             $media->slug = MediaService::generateSlug(6);
 
             if ($media->wasChanged('file') && strpos($media->file, config('app.cdn.videos')) !== false) {
@@ -453,13 +464,5 @@ class Media extends Model
             [self::STATUS_COMPLETED, self::STATUS_CONFIRMED, self::STATUS_ADMIN_DELETED],
             true
         );
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function setSlugAttribute(): string
-    {
-        return $this->attributes['slug'] = MediaService::generateSlug(6);
     }
 }

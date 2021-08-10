@@ -2,12 +2,7 @@
 
 namespace Aparlay\Core\Services;
 
-use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Requests\MediaRequest;
-use Aparlay\Core\Models\Media as BaseMedia;
-use Aparlay\Core\Models\User;
-use MongoDB\BSON\ObjectId;
 
 class MediaService
 {
@@ -23,31 +18,39 @@ class MediaService
     }
 
     /**
-     * @param Media $media
-     * @return Media
+     * @param string $description
+     * @return array
      * @throws \Exception
      */
-    public static function parseDescription(BaseMedia $media): BaseMedia
+    public static function extractPeople(string $description): array
     {
-        $description = trim($media->description);
-        $tags = $people = [];
+        $description = trim($description);
+        $people = [];
         foreach (explode(' ', $description) as $item) {
-            if (isset($item[0]) && $item[0] === '#' && substr_count($item, '#') === 1) {
-                $tags[] = substr($item, 1);
-            }
             if (isset($item[0]) && $item[0] === '@' && substr_count($item, '@') === 1) {
                 $people[] = substr($item, 1);
             }
         }
-        $media->hashtags = array_slice($tags, 0, 20);
         $people = array_slice($people, 0, 20);
-        $users = [];
-        $usersQuery = User::select(['username', 'avatar', '_id'])->usernames($people)->limit(20)->get();
-        foreach ($usersQuery->toArray() as $user) {
-            $users[] = $media->createSimpleUser($user);
-        }
-        $media->people = $users;
 
-        return $media;
+        return $people;
+    }
+
+    /**
+     * @param string $description
+     * @return array
+     * @throws \Exception
+     */
+    public static function extractHashtags(string $description): array
+    {
+        $description = trim($description);
+        $tags = [];
+        foreach (explode(' ', $description) as $item) {
+            if (isset($item[0]) && $item[0] === '#' && substr_count($item, '#') === 1) {
+                $tags[] = substr($item, 1);
+            }
+        }
+
+        return array_slice($tags, 0, 20);
     }
 }

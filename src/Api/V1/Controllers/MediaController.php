@@ -26,7 +26,7 @@ class MediaController extends Controller
      */
     public function index(): Response
     {
-        return $this->response(Media::all());
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**

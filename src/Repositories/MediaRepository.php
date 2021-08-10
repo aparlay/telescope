@@ -4,10 +4,9 @@ namespace Aparlay\Core\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Repositories\Interfaces\MediaRepositoryInterface;
 use MongoDB\BSON\ObjectId;
 
-class MediaRepository implements MediaRepositoryInterface
+class MediaRepository
 {
     /**
      * @param ObjectId|null $userId
