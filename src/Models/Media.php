@@ -184,7 +184,7 @@ class Media extends Model
      */
     protected static function booted()
     {
-        static::creating(function (Media $media) {
+        static::creating(function (self $media) {
             MediaService::parseDescription($media);
             $media->slug = MediaService::generateSlug(6);
 
@@ -197,7 +197,7 @@ class Media extends Model
             }
         });
 
-        static::created(function (Media $media) {
+        static::created(function (self $media) {
             $creatorUser = $media->userObj;
 
             if ($media->wasChanged('status')) {

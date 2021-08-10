@@ -26,9 +26,10 @@ class MediaPolicy
      * @param  \Aparlay\Core\Api\V1\Models\Media  $media
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User|null $user, Media $media)
+    public function view(User | null $user, Media $media)
     {
         $userId = $user?->_id;
+
         return $this->repository->getIsVisibleBy($userId, $media)
             ? Response::allow()
             : Response::deny(__('You can only view media that you\'ve created.'));

@@ -12,5 +12,5 @@ interface MediaRepositoryInterface
      * @param Media $media
      * @return bool
      */
-    public function getIsVisibleBy(ObjectId|null $userId, Media $media): bool;
+    public function getIsVisibleBy(ObjectId | null $userId, Media $media): bool;
 }
