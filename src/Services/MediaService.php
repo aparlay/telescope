@@ -31,9 +31,8 @@ class MediaService
                 $people[] = substr($item, 1);
             }
         }
-        $people = array_slice($people, 0, 20);
 
-        return $people;
+        return array_slice($people, 0, 20);
     }
 
     /**
