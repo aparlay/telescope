@@ -2,6 +2,11 @@
 
 namespace Aparlay\Core\Services;
 
+use Aparlay\Core\Api\V1\Controllers;
+use Aparlay\Core\Api\V1\Requests\LoginRequest;
+use Aparlay\Core\Models\Login;
+use Aparlay\Core\Repositories\UserRepository;
+use Aparlay\Core\Services\OtpService;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Validation\ValidationException;
@@ -18,11 +23,11 @@ class UserService
         /* Find identity */
         switch ($identity) {
             case filter_var($identity, FILTER_VALIDATE_EMAIL):
-                return 'email';
+                return Login::IDENTITY_EMAIL;
             case is_numeric($identity):
-                return 'phone_number';
+                return Login::IDENTITY_PHONE_NUMBER;
             default:
-                return 'username';
+                return Login::IDENTITY_USERNAME;
         }
     }
 
@@ -39,15 +44,32 @@ class UserService
     {
         switch ($user->status) {
             case User::STATUS_SUSPENDED:
-                throw ValidationException::withMessages(['Account' => ['This account has been suspended.']]);
+                throw ValidationException::withMessages([
+                    'Account' => ['This account has been suspended.'],
+                ]);
             case User::STATUS_BLOCKED:
-                throw ValidationException::withMessages(['Account' => ['This account has been banned.']]);
+                throw ValidationException::withMessages([
+                    'Account' => ['This account has been banned.'],
+                ]);
             case User::STATUS_DEACTIVATED:
-                throw ValidationException::withMessages(['Account' => ['Your user account not found or does not match with password.']]);
+                throw ValidationException::withMessages([
+                    'Account' => ['Your user account not found or does not match with password.'],
+                ]);
             default:
                 return true;
 
                 break;
         }
+    }
+
+    /**
+     * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
+     * @param User $user
+     * @return bool
+     */
+    public static function isUnverified(User $user)
+    {
+        /* User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
+        return $user->getSetting()->otp && $user->status === User::STATUS_PENDING;
     }
 }
