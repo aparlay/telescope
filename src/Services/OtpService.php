@@ -37,7 +37,7 @@ class OtpService
             if ($otp = self::generateOtp($user->email, $deviceId)) {
                 if (self::sendByEmail($user, $otp)) {
                     throw new BlockedException('OTP has been sent.', null, null, Response::HTTP_LOCKED, [
-                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.'
+                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
                     ]);
                 }
             }
@@ -88,7 +88,7 @@ class OtpService
         if (count($otps) > 0) {
             foreach ($otps as $model) {
                 if (strpos($model->otp, 'expired_') === false) {
-                    $model->otp = 'expired_' . random_int(
+                    $model->otp = 'expired_'.random_int(
                         config('app.otp.length.min'),
                         config('app.otp.length.max')
                     );
@@ -128,12 +128,12 @@ class OtpService
 
         /** Prepare email content and dispatch the job to schedule the email */
         $content = [
-            'subject'               => $otp->otp . ' is your verification code',
+            'subject'               => $otp->otp.' is your verification code',
             'identity'              => $otp->identity,
             'email_template_params' => [
                 'otp'               => $otp->otp,
                 'otpLink'           => '',
-                'tracking_url'      => config('app.frontendUrl') . '/t/' . $otp->_id,
+                'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
             ],
             'email_type'            => 'email_verification',
         ];
