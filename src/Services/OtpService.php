@@ -6,9 +6,10 @@ use Aparlay\Core\Api\V1\Requests\EmailRequest;
 use Aparlay\Core\Api\V1\Requests\OtpRequest;
 use Aparlay\Core\Jobs\Email as EmailJob;
 use Aparlay\Core\Models\Email;
-use Aparlay\Core\Models\Login;
 use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Models\Scopes\OtpScope;
+use Aparlay\Core\Repositories\EmailRepository;
+use Aparlay\Core\Repositories\OtpRepository;
 use Aparlay\Core\Services\EmailService;
 use App\Exceptions\BlockedException;
 use App\Models\User;
@@ -22,26 +23,14 @@ class OtpService
     /**
      * send otp if status in pending and request otp is null.
      * @param User $user
-     * @param string $loginEntity
      * @param string $deviceId
-     * @throws \BlockedException
+     * @return bool
      */
-    public static function sendOtp(User $user, string $loginEntity, string $deviceId)
+    public static function sendOtp(User $user, string $deviceId)
     {
-        if ($loginEntity === Login::IDENTITY_PHONE_NUMBER) {
-            throw new BlockedException('OTP has been sent.', null, null, Response::HTTP_LOCKED, [
-                'message' => 'If you enter your phone number correctly you will receive an OTP sms soon.',
-                'sms_numbers' => $user['phone_number'],
-            ]);
-        } elseif ($loginEntity === Login::IDENTITY_EMAIL) {
-            if ($otp = self::generateOtp($user->email, $deviceId)) {
-                if (self::sendByEmail($user, $otp)) {
-                    throw new BlockedException('OTP has been sent.', null, null, Response::HTTP_LOCKED, [
-                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.'
-                    ]);
-                }
-            }
-        }
+        $otp = self::generateOtp($user->email, $deviceId);
+        self::sendByEmail($user, $otp);
+        return true;
     }
 
     /**
@@ -65,66 +54,31 @@ class OtpService
         }
 
         // Expire all the Previous OTPs of the given user
-        self::expireOtp($previousOTP);
+        OtpRepository::expire($previousOTP);
 
         /** Prepare request params for new OTP request */
         $request = [
             'identity'      => $identity,
             'device_id'     => $device_id,
         ];
-        $request = new OtpRequest((array) $request);
-        $otp = self::create($request);
-
-        return $otp;
-    }
-
-    /**
-     * Expire the previous OTPs.
-     * @param object $otps
-     * @return bool|void
-     */
-    public static function expireOtp(object $otps)
-    {
-        if (count($otps) > 0) {
-            foreach ($otps as $model) {
-                if (strpos($model->otp, 'expired_') === false) {
-                    $model->otp = 'expired_' . random_int(
-                        config('app.otp.length.min'),
-                        config('app.otp.length.max')
-                    );
-                    $model->save();
-
-                    return true;
-                }
-            }
-        }
-    }
-
-    /**
-     * Create OTP.
-     * @param OtpRequest $request
-     */
-    public static function create(OtpRequest $request)
-    {
-        $request->prepareForValidation();
-
-        return Otp::create($request->all());
+        return OtpRepository::create($request);
     }
 
     /**
      * Send OTP by email.
      * @param User $user
      * @param object $otp
+     * @return bool
      */
     public static function sendByEmail(User $user, object $otp)
     {
+        /** Prepare email request data and insert in Email table */
         $request = [
             'to' => $otp->identity,
             'user' => $user->toArray(),
         ];
 
-        $request = new EmailRequest($request);
-        EmailService::create($request);
+        EmailRepository::create($request);
 
         /** Prepare email content and dispatch the job to schedule the email */
         $content = [
@@ -137,10 +91,9 @@ class OtpService
             ],
             'email_type'            => 'email_verification',
         ];
+        new EmailJob($content);
 
-        if (new EmailJob($content)) {
-            return true;
-        }
+        return true;
     }
 
     /**

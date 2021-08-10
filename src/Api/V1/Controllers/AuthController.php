@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
+use Aparlay\Core\Models\Login;
 use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
 use Aparlay\Core\Services\UserService;
@@ -92,7 +93,18 @@ class AuthController extends Controller
                 OtpService::validateOtp($request->otp, $request->username);
                 $this->userRepo->verify($user);
             } else {
-                return OtpService::sendOtp($user, $identityField, $deviceId);
+                OtpService::sendOtp($user, $deviceId);
+                if ($identityField === Login::IDENTITY_PHONE_NUMBER) {
+                    $response = [
+                        'message' => 'If you enter your phone number correctly you will receive an OTP sms soon.',
+                        'sms_numbers' => $user['phone_number'],
+                    ];
+                } elseif ($identityField === Login::IDENTITY_EMAIL) {
+                    $response = [
+                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.'
+                    ];
+                }
+                throw new BlockedException('OTP has been sent.', null, null, Response::HTTP_LOCKED, $response);
             }
         }
 
@@ -136,18 +148,13 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): Response
     {
         $user = User::create($request->all());
-        if ($user) {
-            $deviceId = $request->headers->get('X-DEVICE-ID');
-            $identity = $user->phone_number ?? $user->email;
+        $deviceId = $request->headers->get('X-DEVICE-ID');
+        $identity = $user->phone_number ?? $user->email;
 
-            /** Find the identityField (Email/PhoneNumber/Username) based on username */
-            $identityField = UserService::getIdentityType($identity);
-            if (UserService::isUnverified($user)) {
-                try {
-                    OtpService::sendOtp($user, $identityField, $deviceId);
-                } catch (BlockedException $e) {
-                }
-            }
+        /** Find the identityField (Email/PhoneNumber/Username) based on username */
+        $identityField = UserService::getIdentityType($identity);
+        if (UserService::isUnverified($user)) {
+            OtpService::sendOtp($user, $deviceId);
         }
 
         return $this->response(
