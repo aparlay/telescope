@@ -6,9 +6,11 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
+use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Repositories\MediaRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 
 class MediaController extends Controller
@@ -53,6 +55,8 @@ class MediaController extends Controller
                 'username' => $user->username,
                 'avatar'   => $user->avatar,
             ],
+            'user_id' => $user->_id,
+            'created_by' => $user->_id,
             'description' => $request->input('description'),
         ]);
 
@@ -60,18 +64,21 @@ class MediaController extends Controller
             $file = $request->file;
 
             $media->file = uniqid('tmp_', true).'.'.$file->extension();
-            $fileName = time().'.'.$file->extension();
+            $path = Storage::path('upload').'/'.$media->file;
 
-            if (! $file->storeAs('upload', $fileName)) {
-                return $this->error(__('Cannot upload the file.'));
+            if (! $file->storeAs('upload', $path)) {
+                $this->error(__('Cannot upload the file.'));
             }
         } elseif (! empty($media->file)
-            && ! file_exists(public_path('upload').'/'.$media->file)) {
-            return $this->error(__('Uploaded file does not exists.'));
+            && ! file_exists(Storage::path('upload').'/'.$media->file)) {
+            $this->error(__('Uploaded file does not exists.'));
         }
 
         $media->save();
         $media->refresh();
+
+        dispatch((new UploadMedia((string) $media->userObj->_id, (string) $media->_id, $media->file))
+                     ->onQueue('high'));
 
         return $this->response(new MediaResource($media), '', Response::HTTP_CREATED);
     }

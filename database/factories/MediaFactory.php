@@ -25,6 +25,8 @@ class MediaFactory extends Factory
      */
     public function definition()
     {
+        $user = User::factory()->create();
+
         return [
             'description' => $this->faker->sentence(5),
             'notes' => $this->faker->sentence(5),
@@ -58,27 +60,17 @@ class MediaFactory extends Factory
             'people' => [],
             'processing_log' => [],
             'blocked_user_ids' => [],
-            'user_id' => function ($model) {
-                return new ObjectId($model['user_id']);
-            },
-            'creator' => function ($model) {
-                $user = User::user($model['user_id'])->first();
-
-                return [
-                    '_id' => new ObjectId($user->_id),
-                    'username' => $user->username,
-                    'avatar' => $user->avatar,
-                ];
-            },
+            'user_id' => new ObjectId($user->_id),
+            'creator' => [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ],
             'scores' => [],
             'sort_score' => $this->faker->randomNumber(4),
             'slug' => Str::random(6),
-            'created_by' => function ($model) {
-                return new ObjectId($model['user_id']);
-            },
-            'updated_by' => function ($model) {
-                return new ObjectId($model['user_id']);
-            },
+            'created_by' => new ObjectId($user->_id),
+            'updated_by' => new ObjectId($user->_id),
         ];
     }
 }

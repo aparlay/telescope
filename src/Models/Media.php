@@ -4,17 +4,18 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Database\Factories\MediaFactory;
+use Aparlay\Core\Events\MediaCreated;
+use Aparlay\Core\Events\MediaCreating;
+use Aparlay\Core\Events\MediaDeleted;
+use Aparlay\Core\Events\MediaSaved;
+use Aparlay\Core\Events\MediaSaving;
+use Aparlay\Core\Events\MediaUpdated;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Jobs\DeleteMediaLike;
-use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Scopes\MediaScope;
-use Aparlay\Core\Services\MediaService;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Cache;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
 use MathPHP\Statistics\Descriptive;
@@ -177,100 +178,14 @@ class Media extends Model
     protected $casts = [
     ];
 
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::creating(function (self $media) {
-            $media->hashtags = MediaService::extractHashtags($media->description);
-
-            $extractedPeople = MediaService::extractPeople($media->description);
-            if (! empty($extractedPeople)) {
-                $users = [];
-                $usersQuery = User::select(['username', 'avatar', '_id'])->usernames($extractedPeople)->limit(20)->get();
-                foreach ($usersQuery->toArray() as $user) {
-                    $users[] = $media->createSimpleUser($user);
-                }
-                $media->people = $users;
-            }
-
-            $media->slug = MediaService::generateSlug(6);
-
-            if ($media->wasChanged('file') && strpos($media->file, config('app.cdn.videos')) !== false) {
-                $media->file = str_replace(config('app.cdn.videos'), '', $media->file);
-            }
-
-            if ($media->status === self::STATUS_DENIED) {
-                $media->visibility = self::VISIBILITY_PRIVATE;
-            }
-        });
-
-        static::created(function (self $media) {
-            $creatorUser = $media->userObj;
-
-            if ($media->wasChanged('status')) {
-                $creatorUserMedias = $creatorUser->medias;
-                foreach ($creatorUserMedias as $creatorUserMedia) {
-                    if ((string) $creatorUserMedia['_id'] === (string) $media->_id) {
-                        $creatorUser->removeFromSet('medias', $creatorUserMedia);
-                    }
-                }
-
-                $creatorUser->media_count = self::creator($media->created_by)->count();
-                $medias = [];
-                $completedMedias = self::creator($media->created_by)->completed()->recentFirst()->limit(30)->asArray()->all();
-                foreach ($completedMedias as $completedMedia) {
-                    $basename = basename($completedMedia['file'], '.'.pathinfo($completedMedia['file'], PATHINFO_EXTENSION));
-                    $file = config('app.cdn.videos').$completedMedia['file'];
-                    $cover = config('app.cdn.covers').$basename.'.jpg';
-                    $medias[] = ['_id' => new ObjectId($completedMedia['_id']), 'file' => $file, 'cover' => $cover, 'status' => $completedMedia['status']];
-                }
-                $creatorUser->medias = $medias;
-                $creatorUser->count_fields_updated_at = array_merge(
-                    $creatorUser->count_fields_updated_at,
-                    ['medias' => DT::utcNow()]
-                );
-                $creatorUser->save();
-            }
-
-            if ($media->status === self::STATUS_COMPLETED || $media->status === self::STATUS_CONFIRMED) {
-                Cache::forget('Media.Index.TotalCount.Public');
-            }
-
-            if ($media->status === self::STATUS_USER_DELETED) {
-                Cache::forget('Media.Index.TotalCount.Public');
-                $creatorUser->refresh();
-
-                $creatorUser->media_count--;
-
-                $file = config('app.cdn.videos').$media->file;
-                $cover = config('app.cdn.covers').$media->filename.'.jpg';
-                $creatorUser->removeFromSet('medias', ['_id' => $media->_id, 'file' => $file, 'cover' => $cover, 'status' => $media->status]);
-                $creatorUser->count_fields_updated_at = array_merge(
-                    $creatorUser->count_fields_updated_at,
-                    ['medias' => DT::utcNow()]
-                );
-                $creatorUser->save();
-
-                dispatch((new DeleteMediaLike($media->id, $creatorUser->_id))->onQueue('low'));
-            }
-
-            dispatch((new UploadMedia($media->file, (string) $media->_id))->onQueue('high'));
-
-            if ($media->wasChanged('status') && $media->status === self::STATUS_CONFIRMED) {
-                /*
-                Handler::Push($media->created_by, 'media.confirmed', [
-                    'media' => $media->simple_array,
-                    'user' => $media->creator,
-                    'message' => $media->creator['username'] . 'likes your video.',
-                ]);
-                */
-            }
-        });
-    }
+    protected $dispatchesEvents = [
+        'creating' => MediaCreating::class,
+        'created' => MediaCreated::class,
+        'saving' => MediaSaving::class,
+        'updated' => MediaUpdated::class,
+        'saved' => MediaSaved::class,
+        'deleted' => MediaDeleted::class,
+    ];
 
     public static function getVisibilities()
     {
@@ -329,7 +244,7 @@ class Media extends Model
      */
     public function userObj()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'creator._id');
     }
 
     /**

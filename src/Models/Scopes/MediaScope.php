@@ -22,6 +22,16 @@ trait MediaScope
         return $query->where('creator._id', $creatorId);
     }
 
+    /**
+     * @param ObjectId|string $creatorId
+     */
+    public function scopeMedia(Builder $query, ObjectId | string $mediaId): Builder
+    {
+        $mediaId = $mediaId instanceof ObjectId ? $mediaId : new ObjectId($mediaId);
+
+        return $query->where('_id', $mediaId);
+    }
+
     public function scopeCompleted(Builder $query): Builder
     {
         return $query->where('status', Media::STATUS_COMPLETED);
