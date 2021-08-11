@@ -3,26 +3,17 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Block;
-use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Api\V1\Requests\MeRequest;
+use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Validator;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
     public $token = true;
-
-    /**
-     * Create the controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        // $this->authorizeResource(User::class, 'user');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -60,27 +51,40 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request  $request
+     * @param  MeRequest  $request
      * @return object
+     * @throws ValidationException
      */
-    public function update(Request $request): object
+    public function update(MeRequest $request): object
     {
+        /** Check the update permission */
         $user = auth()->user();
+        $this->authorize('update', $user);
 
-        if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
-            $user->username = $request->username;
-            $user->status = User::STATUS_ACTIVE;
-            $user->save();
-        } elseif ($request->hasFile('avatar')) {
+        /** Update User Avatar */
+        if ($request->hasFile('avatar')) {
             UserService::uploadAvatar($request, $user);
-        } else {
-            $requestData = $request->all();
-            $user->fill($requestData)->save();
-        }
 
-        return $this->response(
-            new RegisterResource($user),
-            Response::HTTP_OK
-        );
+            /** Return the updated user data */
+            return $this->response(
+                new MeResource($user),
+                Response::HTTP_OK
+            );
+        }
+        
+        /** Update User Profile Information */
+        if (count($request->all())) {
+            $user->fill($request->all());
+            if ($user->status == User::STATUS_VERIFIED && !empty($request->username)) {
+                $user->status = User::STATUS_ACTIVE;
+            }
+            $user->save();
+
+            /** Return the updated user data */
+            return $this->response(
+                new MeResource($user),
+                Response::HTTP_OK
+            );
+        }
     }
 }

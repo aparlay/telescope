@@ -2,11 +2,7 @@
 
 namespace Aparlay\Core\Services;
 
-use Aparlay\Core\Api\V1\Controllers;
-use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Models\Login;
-use Aparlay\Core\Repositories\UserRepository;
-use Aparlay\Core\Services\OtpService;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
@@ -76,24 +72,24 @@ class UserService
 
     /**
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
-     * @param User $user
      * @param Request $request
+     * @param User $user
      * @return bool
      */
     public static function uploadAvatar(Request $request, User $user)
     {
-        /** Upload Avtar Image */
-        $avtarNameWithExt = $request->file('avatar')->getClientOriginalName();
-        $avtarName = pathinfo($avtarNameWithExt, PATHINFO_FILENAME);
+        /** Upload Avatar Image on Server */
         $extension = $request->file('avatar')->getClientOriginalExtension();
-        $avtarNameToStore = $avtarName.' '.time().'.'.$extension;
-        $path = $request->file('avatar')->storeAs('public/uploads', $avtarNameToStore);
-        if ($path) {
-            $avatar = config('app.cdn.avatars').uniqid($user->_id, false).'.'.$extension;
-            $user->avatar = $avatar;
-            $user->save();
-        }
-
-        return true;
+        $avatar = uniqid($user->_id, false) . '.' . $extension;
+        $uploadDirectory = config('app.avatar.upload_directory');
+        $request->file('avatar')->storeAs($uploadDirectory, $avatar);
+       
+        /** Update Avatar Image on Cloude */
+        // Pending: https://trello.com/c/2wS0tk7I/27-setup-cloud-backblaze-bucket-and-google-clould
+        
+        /** Store avatar name in database */
+        $user->avatar = str_replace('//', '/', $uploadDirectory . '/' . $avatar);
+        $user->save();
+        return $user;
     }
 }
