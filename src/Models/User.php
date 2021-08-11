@@ -345,14 +345,4 @@ class User extends Authenticatable implements JWTSubject
 
         return Alert::user(auth()->user()->_id)->notVisited()->get();
     }
-
-    /**
-     * Get user settings.
-     *
-     * @return object
-     */
-    public function getSetting(): object
-    {
-        return json_decode(json_encode($this->setting, true));
-    }
 }
