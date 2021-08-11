@@ -28,6 +28,7 @@ class EmailRepository
 
         $modal->attributes = $attributes;
         $modal->save();
+
         return $modal;
     }
 }

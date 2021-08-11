@@ -30,6 +30,7 @@ class OtpService
     {
         $otp = self::generateOtp($user->email, $deviceId);
         self::sendByEmail($user, $otp);
+
         return true;
     }
 
@@ -83,12 +84,12 @@ class OtpService
 
         /** Prepare email content and dispatch the job to schedule the email */
         $content = [
-            'subject'               => $otp->otp . ' is your verification code',
+            'subject'               => $otp->otp.' is your verification code',
             'identity'              => $otp->identity,
             'email_template_params' => [
                 'otp'               => $otp->otp,
                 'otpLink'           => '',
-                'tracking_url'      => config('app.frontendUrl') . '/t/' . $otp->_id,
+                'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
             ],
             'email_type'            => 'email_verification',
         ];

@@ -105,7 +105,7 @@ class AuthController extends Controller
                     ];
                 } elseif ($identityField === Login::IDENTITY_EMAIL) {
                     $response = [
-                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.'
+                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
                     ];
                 }
                 throw new BlockedException('OTP has been sent.', null, null, Response::HTTP_LOCKED, $response);
