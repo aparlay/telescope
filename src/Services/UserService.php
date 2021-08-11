@@ -80,16 +80,17 @@ class UserService
     {
         /** Upload Avatar Image on Server */
         $extension = $request->file('avatar')->getClientOriginalExtension();
-        $avatar = uniqid($user->_id, false) . '.' . $extension;
+        $avatar = uniqid($user->_id, false).'.'.$extension;
         $uploadDirectory = config('app.avatar.upload_directory');
         $request->file('avatar')->storeAs($uploadDirectory, $avatar);
-       
-        /** Update Avatar Image on Cloude */
+
+        /* Update Avatar Image on Cloude */
         // Pending: https://trello.com/c/2wS0tk7I/27-setup-cloud-backblaze-bucket-and-google-clould
-        
-        /** Store avatar name in database */
-        $user->avatar = str_replace('//', '/', $uploadDirectory . '/' . $avatar);
+
+        /* Store avatar name in database */
+        $user->avatar = str_replace('//', '/', $uploadDirectory.'/'.$avatar);
         $user->save();
+
         return $user;
     }
 }

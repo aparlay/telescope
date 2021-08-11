@@ -12,7 +12,6 @@ class UserPolicy
 
     public function __construct(User $user)
     {
-        
     }
 
     /**
@@ -64,6 +63,5 @@ class UserPolicy
      */
     public function delete(User $user)
     {
-
     }
 }

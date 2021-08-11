@@ -39,7 +39,7 @@ class MeRequest extends FormRequest
     }
 
     /**
-     * This function is responsible to perform pre-validation tasks
+     * This function is responsible to perform pre-validation tasks.
      *
      * @throws Exception
      */
@@ -50,7 +50,7 @@ class MeRequest extends FormRequest
                 'avatar' => 'You can upload only one image file.',
             ]);
         }
-        
+
         /* Set the Default Values and required to be input parameters */
         $this->merge([
             'username' => trim($this->username),
