@@ -23,6 +23,7 @@ class MediaController extends Controller
      */
     public function listByUser(User $user): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
@@ -30,6 +31,7 @@ class MediaController extends Controller
      */
     public function store(Request $request): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
@@ -45,6 +47,7 @@ class MediaController extends Controller
      */
     public function update(Request $request, Media $media): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
@@ -52,6 +55,7 @@ class MediaController extends Controller
      */
     public function upload(Request $request): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
@@ -59,5 +63,6 @@ class MediaController extends Controller
      */
     public function destroy(Media $media): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 }

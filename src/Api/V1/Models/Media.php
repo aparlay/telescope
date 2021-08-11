@@ -39,6 +39,10 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $links
  * @property bool        $is_protected
  *
+ * @property-read string $slack_subject_admin_url
+ * @property-read string $slack_admin_url
+ * @property-read int $skin_score
+ *
  * @OA\Schema()
  */
 class Media extends MediaBase
@@ -55,9 +59,9 @@ class Media extends MediaBase
      */
     public function toSlack($notifiable)
     {
-        $message = $this->creator->slack_admin_url ?? 'A Guest user';
+        $message = $this->userObj->slack_admin_url ?? 'A Guest user';
         $message .= ' reported '.$this->slack_subject_admin_url;
-        $message .= PHP_EOL.'_*Reason:*_ '.$this->reason;
+        $message .= PHP_EOL.'_*Reason:*_ ';
 
         return (new SlackMessage())
             ->from('Reporter', ':radioactive_sign:')

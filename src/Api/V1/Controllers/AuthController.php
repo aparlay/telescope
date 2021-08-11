@@ -32,37 +32,41 @@ class AuthController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function token()
+    public function token(): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function changePassword()
+    public function changePassword(): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function validateOtp()
+    public function validateOtp(): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function requestOtp()
+    public function requestOtp(): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**

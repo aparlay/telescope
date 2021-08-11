@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Helpers;
 
+use Carbon\Carbon;
 use MongoDB\BSON\UTCDateTime;
 
 class DT
@@ -13,6 +14,7 @@ class DT
 
     /**
      * @param $config
+     * @return UTCDateTime
      */
     public static function utcDateTime($config): UTCDateTime
     {
@@ -36,23 +38,24 @@ class DT
      */
     public static function utcToTimestamp($utcDateTime)
     {
-        return (string) $utcDateTime / 1000;
+        return $utcDateTime / 1000;
     }
 
     /**
-     * @return int
+     * @param  UTCDateTime  $utcDateTime
+     * @return float
      */
-    public static function utcToMillisec(UTCDateTime $utcDateTime)
+    public static function utcToMillisec(UTCDateTime $utcDateTime): float
     {
-        return $utcDateTime->milliseconds;
+        return (new Carbon($utcDateTime->toDateTime()))->valueOf();
     }
 
-    public static function strToUtc(string $offset)
+    public static function strToUtc(string $offset): UTCDateTime
     {
         return new UTCDatetime($offset);
     }
 
-    public static function timestampToUtc($timestamp)
+    public static function timestampToUtc($timestamp): UTCDateTime
     {
         return new UTCDatetime($timestamp * 1000);
     }

@@ -28,6 +28,9 @@ use MongoDB\BSON\ObjectId;
  * @property string   $deleted_at
  * @property array    $links
  *
+ * @property User $userObj
+ * @property Media $mediaObj
+ *
  * @OA\Schema()
  */
 class Report extends Model

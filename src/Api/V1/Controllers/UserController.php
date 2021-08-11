@@ -15,36 +15,44 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param  Request  $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Block  $media
      * @return Response
      */
-    public function me(Block $media)
+    public function me(Block $media): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Block  $media
      * @return Response
      */
-    public function destroy(Block $media)
+    public function destroy(Block $media): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Block  $media
      * @return Response
      */
-    public function update(Block $media)
+    public function update(Block $media): Response
     {
+        return $this->response([], Response::HTTP_OK);
     }
 }

@@ -48,39 +48,39 @@ class Handler extends ExceptionHandler
 
     /**
      * @param Request             $request
-     * @param Exception|Throwable $exception
+     * @param Exception|Throwable $e
      *
      * @return JsonResponse|Response|\Symfony\Component\HttpFoundation\Response
      *
      * @throws Throwable
      */
-    public function render($request, Exception | Throwable $exception)
+    public function render($request, Exception | Throwable $e)
     {
         // detect instance
-        if ($exception instanceof UnauthorizedHttpException) {
+        if ($e instanceof UnauthorizedHttpException) {
             $response = [
                 'code' => 401,
                 'status' => 'ERROR',
                 'message' => __('UNAUTHORIZED_REQUEST'),
             ];
-            if ($exception->getPrevious() instanceof TokenExpiredException) {
-                $response['code'] = $exception->getStatusCode();
+            if ($e->getPrevious() instanceof TokenExpiredException) {
+                $response['code'] = $e->getStatusCode();
                 $response['message'] = __('TOKEN_EXPIRED');
             }
 
-            if ($exception->getPrevious() instanceof TokenInvalidException) {
-                $response['code'] = $exception->getStatusCode();
+            if ($e->getPrevious() instanceof TokenInvalidException) {
+                $response['code'] = $e->getStatusCode();
                 $response['message'] = __('TOKEN_INVALID');
             }
 
-            if ($exception->getPrevious() instanceof TokenBlacklistedException) {
-                $response['code'] = $exception->getStatusCode();
+            if ($e->getPrevious() instanceof TokenBlacklistedException) {
+                $response['code'] = $e->getStatusCode();
                 $response['message'] = __('TOKEN_BLACKLISTED');
             }
 
             return response()->json($response, $response['code']);
         }
 
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
     }
 }

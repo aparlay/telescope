@@ -89,7 +89,7 @@ class VersionController extends Controller
             ->get();
 
         if (empty($models)) {
-            return response()->json(['message' => 'Record not found.'], 404);
+            return $this->error('Record not found.', [], Response::HTTP_NOT_FOUND);
         }
 
         $requireForceUpdate = false;
@@ -102,9 +102,9 @@ class VersionController extends Controller
             }
         }
 
-        return response()->json([
-                                    'require_force_update' => $requireForceUpdate,
-                                    'version' => $models[0],
-                                ]);
+        return $this->response([
+            'require_force_update' => $requireForceUpdate,
+            'version' => $models[0],
+        ]);
     }
 }

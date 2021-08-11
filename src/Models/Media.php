@@ -47,6 +47,10 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $links
  * @property bool        $is_protected
  *
+ * @property-read string $slack_subject_admin_url
+ * @property-read string $slack_admin_url
+ * @property-read int $skin_score
+ *
  * @OA\Schema()
  *
  * @method static |self|Builder creator(ObjectId|string $userId) get creator user
