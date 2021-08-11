@@ -3,18 +3,18 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Block;
+use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
-use Aparlay\Core\Api\V1\Resources\RegisterResource;
-use Aparlay\Core\Services\UserService;
 
 class UserController extends Controller
 {
     public $token = true;
 
-     /**
+    /**
      * Create the controller instance.
      *
      * @return void
@@ -61,20 +61,19 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Request  $request
-     * @return Object
+     * @return object
      */
     public function update(Request $request): object
     {
         $user = auth()->user();
-        
-        if ($user->status == User::STATUS_VERIFIED && !empty($request->username)) {
+
+        if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
             $user->username = $request->username;
             $user->status = User::STATUS_ACTIVE;
             $user->save();
         } elseif ($request->hasFile('avatar')) {
             UserService::uploadAvatar($request, $user);
-        }
-        else {
+        } else {
             $requestData = $request->all();
             $user->fill($requestData)->save();
         }

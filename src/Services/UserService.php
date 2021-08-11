@@ -8,8 +8,8 @@ use Aparlay\Core\Models\Login;
 use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class UserService
@@ -86,10 +86,10 @@ class UserService
         $avtarNameWithExt = $request->file('avatar')->getClientOriginalName();
         $avtarName = pathinfo($avtarNameWithExt, PATHINFO_FILENAME);
         $extension = $request->file('avatar')->getClientOriginalExtension();
-        $avtarNameToStore = $avtarName . ' ' . time() . '.' . $extension;
+        $avtarNameToStore = $avtarName.' '.time().'.'.$extension;
         $path = $request->file('avatar')->storeAs('public/uploads', $avtarNameToStore);
         if ($path) {
-            $avatar = config('app.cdn.avatars') . uniqid($user->_id, false) . '.' . $extension;
+            $avatar = config('app.cdn.avatars').uniqid($user->_id, false).'.'.$extension;
             $user->avatar = $avatar;
             $user->save();
         }
