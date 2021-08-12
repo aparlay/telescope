@@ -22,9 +22,6 @@ class UserPolicy
      */
     public function view(User $user)
     {
-        if (in_array(auth()->user()->status, User::getStatuses())) {
-            return Response::deny(__('Account not found!'));
-        }
     }
 
     /**
@@ -35,11 +32,6 @@ class UserPolicy
      */
     public function create()
     {
-        $userId = $user->_id;
-
-        return ($userId === null || (string) auth()->user()->_id !== (string) $userId)
-        ? Response::allow()
-        : Response::deny(__('You can only update your account.'));
     }
 
     /**
