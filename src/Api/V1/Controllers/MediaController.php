@@ -7,8 +7,14 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Repositories\MediaRepository;
+use Aparlay\Core\Services\BackBlaze;
+use Aparlay\Core\Services\UploadService;
+use Flow\Config;
+use Flow\File;
+use Flow\Request as FlowRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
@@ -46,6 +52,22 @@ class MediaController extends Controller
         return $this->repository->store($request);
     }
 
+    public function upload(): Response
+    {
+        $result = UploadService::chunkUpload();
+
+        return $this->response($result['data'], '', $result['code']);
+    }
+
+    public function uploadToken()
+    {
+        $b2 = new BackBlaze();
+        $result = $b2->generateToken();
+        $result['filename'] = uniqid(auth()->user()->_id.'_', false);
+
+        return $result;
+    }
+
     /**
      * Display the specified resource.
      */
@@ -58,13 +80,6 @@ class MediaController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Media $media): Response
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function upload(Request $request): Response
     {
     }
 

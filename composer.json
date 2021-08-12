@@ -63,6 +63,7 @@
         "ext-openssl": "*",
         "ext-swoole": "*",
         "fideloper/proxy": "^4.4",
+        "flowjs/flow-php-server": "^1.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "jenssegers/mongodb": "^3.8",
