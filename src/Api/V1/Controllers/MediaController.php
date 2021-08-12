@@ -55,8 +55,6 @@ class MediaController extends Controller
                 'username' => $user->username,
                 'avatar'   => $user->avatar,
             ],
-            'user_id' => $user->_id,
-            'created_by' => $user->_id,
             'description' => $request->input('description'),
         ]);
 
@@ -76,9 +74,6 @@ class MediaController extends Controller
 
         $media->save();
         $media->refresh();
-
-        dispatch((new UploadMedia((string) $media->userObj->_id, (string) $media->_id, $media->file))
-                     ->onQueue('high'));
 
         return $this->response(new MediaResource($media), '', Response::HTTP_CREATED);
     }

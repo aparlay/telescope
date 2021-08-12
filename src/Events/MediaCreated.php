@@ -21,5 +21,6 @@ class MediaCreated
      */
     public function __construct(Media $media)
     {
+        //dispatch((new UploadMedia((string) $media->userObj->_id, (string) $media->_id, $media->file))->onQueue('high'));
     }
 }
