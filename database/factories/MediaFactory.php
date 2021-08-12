@@ -6,6 +6,7 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 use MongoDB\BSON\ObjectId;
 use Str;
 
@@ -30,7 +31,14 @@ class MediaFactory extends Factory
             'notes' => $this->faker->sentence(5),
             'location' => null,
             'hash' => $this->faker->sha1(),
-            'file' => Str::random(10).'.mp4',
+            'file' => function () {
+                $fileName = Str::random(10).'.mp4';
+//                UploadedFile::fake()
+//                    ->create($fileName, (string)(1024 * 1024 * rand(1, 1024)), 'video/mp4')
+//                    ->storeAs('upload', $fileName);
+
+                return $fileName;
+            },
             'files_history' => [],
             'mime_type' => 'video/mp4',
             'size' => $this->faker->randomDigitNotZero(),
@@ -58,11 +66,9 @@ class MediaFactory extends Factory
             'people' => [],
             'processing_log' => [],
             'blocked_user_ids' => [],
-            'user_id' => function ($model) {
-                return new ObjectId($model['user_id']);
-            },
-            'creator' => function ($model) {
-                $user = User::user($model['user_id'])->first();
+            'user_id' => User::factory(),
+            'creator' => function (array $attributes) {
+                $user = User::user($attributes['user_id'])->first();
 
                 return [
                     '_id' => new ObjectId($user->_id),
@@ -73,11 +79,11 @@ class MediaFactory extends Factory
             'scores' => [],
             'sort_score' => $this->faker->randomNumber(4),
             'slug' => Str::random(6),
-            'created_by' => function ($model) {
-                return new ObjectId($model['user_id']);
+            'created_by' => function (array $attributes) {
+                return new ObjectId($attributes['user_id']);
             },
-            'updated_by' => function ($model) {
-                return new ObjectId($model['user_id']);
+            'updated_by' => function (array $attributes) {
+                return new ObjectId($attributes['user_id']);
             },
         ];
     }
