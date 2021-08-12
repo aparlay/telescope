@@ -2,11 +2,11 @@
 
 namespace Aparlay\Core\Mail;
 
+use Aparlay\Core\Models\Email;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\View;
 
 class SendEmail extends Mailable
 {
@@ -43,17 +43,20 @@ class SendEmail extends Mailable
     public function getTemplate(string $type)
     {
         switch ($type) {
-            case 'email_verification':
-                if (config('app.email.template_urls.email_verification_template') && view()->exists(config('app.email.template_urls.email_verification_template'))) {
-                    return 'email_verification_template';
-                } else {
-                    return 'default_view::email_verification_template';
+            case Email::TEMPLATE_EMAIL_VERIFICATION:
+                $template = 'default_view::email_verification';
+                $verificationTemplate = config('app.email.templates.email_verification', 'default_view::email_verification');
+                if (view()->exists($verificationTemplate)) {
+                    $template = 'email_verification';
                 }
+
                 break;
 
             default:
-                return '';
+                $template = '';
                 break;
         }
+
+        return $template;
     }
 }

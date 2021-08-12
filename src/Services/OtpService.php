@@ -2,19 +2,13 @@
 
 namespace Aparlay\Core\Services;
 
-use Aparlay\Core\Api\V1\Requests\EmailRequest;
-use Aparlay\Core\Api\V1\Requests\OtpRequest;
 use Aparlay\Core\Jobs\Email as EmailJob;
 use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Otp;
-use Aparlay\Core\Models\Scopes\OtpScope;
 use Aparlay\Core\Repositories\EmailRepository;
 use Aparlay\Core\Repositories\OtpRepository;
-use Aparlay\Core\Services\EmailService;
 use App\Exceptions\BlockedException;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
@@ -43,7 +37,7 @@ class OtpService
      */
     public static function generateOtp(string $identity, string $device_id = null)
     {
-        $previousOTP = Otp::FilterByIdentity($identity)->get();
+        $previousOTP = Otp::identity($identity)->get();
 
         if (count($previousOTP) > 4) {
             throw new BlockedException(
@@ -91,9 +85,9 @@ class OtpService
                 'otpLink'           => '',
                 'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
             ],
-            'email_type'            => 'email_verification',
+            'email_type'            => Email::TEMPLATE_EMAIL_VERIFICATION,
         ];
-        new EmailJob($content);
+        EmailJob::dispatch($content);
 
         return true;
     }
@@ -109,7 +103,11 @@ class OtpService
         // Validate the otp for the given user
         $limit = config('app.otp.invalid_attempt_limit');
         $limit--;
-        $model = Otp::OtpIdentity($otp, $identity, $checkValidated, $limit)->first();
+        $model = Otp::identity($identity)
+            ->otp($otp)
+            ->validated($checkValidated)
+            ->remainingAttempt($limit)
+            ->first();
         if ($model) {
             if ($validateOnly) {
                 $model->validated = true;
@@ -121,7 +119,7 @@ class OtpService
             return true;
         }
         // Increment the incorrect otp attempt by 1 then through the error
-        Otp::OtpIncorrect($identity)->increment('incorrect', 1);
+        Otp::identity($identity)->first()->increment('incorrect', 1);
 
         throw ValidationException::withMessages([
             'otp' => ['Incorrect otp.'],

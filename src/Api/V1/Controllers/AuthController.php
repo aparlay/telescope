@@ -11,7 +11,6 @@ use Aparlay\Core\Services\OtpService;
 use Aparlay\Core\Services\UserService;
 use App\Exceptions\BlockedException;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
@@ -89,10 +88,10 @@ class AuthController extends Controller
 
         /** Through exception for suspended/banned/NotFound accounts */
         $user = auth()->user();
-        $elligible = UserService::isUserEligible($user);
+        $elligible = $this->userRepo->isUserEligible($user);
         $deviceId = $request->headers->get('X-DEVICE-ID');
 
-        if (UserService::isUnverified($user)) {
+        if ($this->userRepo->isUnverified($user)) {
             if ($request->otp) {
                 OtpService::validateOtp($request->otp, $request->username);
                 $this->userRepo->verify($user);
@@ -157,7 +156,7 @@ class AuthController extends Controller
 
         /** Find the identityField (Email/PhoneNumber/Username) based on username */
         $identityField = UserService::getIdentityType($identity);
-        if (UserService::isUnverified($user)) {
+        if ($this->userRepo->isUnverified($user)) {
             OtpService::sendOtp($user, $deviceId);
         }
 
