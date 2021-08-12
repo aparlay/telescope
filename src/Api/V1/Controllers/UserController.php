@@ -3,9 +3,9 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Block;
-use Aparlay\Core\Models\User;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -61,26 +61,26 @@ class UserController extends Controller
         $user = auth()->user();
         $this->authorize('update', $user);
 
-        /** Update User Avatar */
+        /* Update User Avatar */
         if ($request->hasFile('avatar')) {
             UserService::uploadAvatar($request, $user);
 
-            /** Return the updated user data */
+            /* Return the updated user data */
             return $this->response(
                 new MeResource($user),
                 Response::HTTP_OK
             );
         }
-        
-        /** Update User Profile Information */
+
+        /* Update User Profile Information */
         if (count($request->all())) {
             $user->fill($request->all());
-            if ($user->status == User::STATUS_VERIFIED && !empty($request->username)) {
+            if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
                 $user->status = User::STATUS_ACTIVE;
             }
             $user->save();
 
-            /** Return the updated user data */
+            /* Return the updated user data */
             return $this->response(
                 new MeResource($user),
                 Response::HTTP_OK
