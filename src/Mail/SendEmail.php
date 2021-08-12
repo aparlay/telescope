@@ -44,16 +44,19 @@ class SendEmail extends Mailable
     {
         switch ($type) {
             case Email::TEMPLATE_EMAIL_VERIFICATION:
-                if (config('app.email.template_urls.email_verification_template') && view()->exists(config('app.email.template_urls.email_verification_template'))) {
-                    return 'email_verification_template';
-                } else {
-                    return 'default_view::email_verification_template';
+                $template = 'default_view::email_verification';
+                $verificationTemplate = config('app.email.templates.email_verification', 'default_view::email_verification');
+                if (view()->exists($verificationTemplate)) {
+                    $template = 'email_verification';
                 }
+
                 break;
 
             default:
-                return '';
+                $template = '';
                 break;
         }
+
+        return $template;
     }
 }
