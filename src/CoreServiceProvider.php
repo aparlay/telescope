@@ -50,6 +50,9 @@ class CoreServiceProvider extends ServiceProvider
                                 CoreCommand::class,
                             ]);
         }
+
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'default_view');
+
         $this->configureRateLimiting();
 
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');

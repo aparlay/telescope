@@ -2,11 +2,14 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Mail\SendEmail;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Mail;
 
 class Email implements ShouldQueue
 {
@@ -14,6 +17,8 @@ class Email implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
+
+    protected $emailContent;
 
     /**
      * The number of times the job may be attempted.
@@ -37,8 +42,10 @@ class Email implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($emailContent)
     {
+        $this->emailContent = $emailContent;
+        $this->handle($emailContent['identity']);
     }
 
     /**
@@ -46,7 +53,9 @@ class Email implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle($send_mail)
     {
+        $email = new SendEmail($this->emailContent);
+        Mail::to($send_mail)->send($email);
     }
 }

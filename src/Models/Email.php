@@ -38,6 +38,8 @@ class Email extends Model
 
     public const TYPE_OTP = 0;
 
+    public const TEMPLATE_EMAIL_VERIFICATION = 'email_verification';
+
     /**
      * The collection associated with the model.
      *

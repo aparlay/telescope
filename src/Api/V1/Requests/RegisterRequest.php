@@ -75,45 +75,46 @@ class RegisterRequest extends FormRequest
             $filename = match ($this->gender) {
                 User::GENDER_FEMALE => $femaleFilename,
                 User::GENDER_MALE => $maleFilename,
-                default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
+            default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
             };
+
             $this->avatar = Cdn::avatar($filename);
         }
 
         /* Set the Default Values and required to be input parameters */
         $this->merge([
-                         'username' => trim($this->username),
-                         'email' => strtolower(trim($this->email)),
-                         'phone_number' => $this->phone_number,
-                         'avatar' => $this->avatar,
-                         'gender' => $this->gender,
-                         'password_hash' => Hash::make($this->password),
-                         'status' => User::STATUS_PENDING,
-                         'visibility' => User::VISIBILITY_PUBLIC,
-                         'interested_in' => User::INTERESTED_IN_FEMALE,
-                         'email_verified' => false,
-                         'phone_number_verified' => false,
-                         'type' => User::TYPE_USER,
-                         'full_name' => null,
-                         'promo_link' => null,
-                         'followers' => [],
-                         'followings' => [],
-                         'likes' => [],
-                         'blocks' => [],
-                         'followed_hashtags' => [],
-                         'medias' => [],
-                         'count_fields_updated_at' => [],
-                         'setting' => [
-                             'otp' => false,
-                             'notifications' => [
-                                 'unread_message_alerts' => false,
-                                 'new_followers' => false,
-                                 'news_and_updates' => false,
-                                 'tips' => false,
-                                 'new_subscribers' => false,
-                             ],
-                         ],
-                         'features' => array_fill_keys(array_keys(User::getFeatures()), false),
-                     ]);
+            'username' => trim($this->username),
+            'email' => strtolower(trim($this->email)),
+            'phone_number' => $this->phone_number,
+            'avatar' => $this->avatar,
+            'gender' => $this->gender,
+            'password_hash' => Hash::make($this->password),
+            'status' => User::STATUS_PENDING,
+            'visibility' => User::VISIBILITY_PUBLIC,
+            'interested_in' => User::INTERESTED_IN_FEMALE,
+            'email_verified' => false,
+            'phone_number_verified' => false,
+            'type' => User::TYPE_USER,
+            'full_name' => null,
+            'promo_link' => null,
+            'followers' => [],
+            'followings' => [],
+            'likes' => [],
+            'blocks' => [],
+            'followed_hashtags' => [],
+            'medias' => [],
+            'count_fields_updated_at' => [],
+            'setting' => [
+                'otp' => config('app.otp.enabled'),
+                'notifications' => [
+                    'unread_message_alerts' => false,
+                    'new_followers' => false,
+                    'news_and_updates' => false,
+                    'tips' => false,
+                    'new_subscribers' => false,
+                ],
+            ],
+            'features' => array_fill_keys(array_keys(User::getFeatures()), false),
+        ]);
     }
 }
