@@ -48,7 +48,7 @@ class MediaResource extends JsonResource
             'status' => Media::getStatuses()[$this->status],
             'hashtags' => $this->hashtags,
             'people' => $people,
-            'file' => $this->file, // TODO use Cdn
+            'file' => Cdn::video($this->is_completed ? $this->file : 'default.mp4'),
             'cover' => Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg'),
             'creator' => $this->createSimpleUser($this->creator),
             'is_liked' => (bool) $this->is_liked,
@@ -68,7 +68,7 @@ class MediaResource extends JsonResource
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [
                 'self' => ['href' => route('core.api.v1.media.show', ['media' => $this])],
-                'index' => ['href' => route('core.api.v1.user.media_list', ['user' => $this->userObj])],
+                'index' => ['href' => route('core.api.v1.user.media_list', ['user' => $this->creator['_id']])],
             ],
         ];
     }
