@@ -9,12 +9,8 @@ use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Repositories\MediaRepository;
 use Aparlay\Core\Services\BackBlaze;
 use Aparlay\Core\Services\UploadService;
-use Flow\Config;
-use Flow\File;
-use Flow\Request as FlowRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
