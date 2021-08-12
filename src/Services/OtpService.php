@@ -119,7 +119,10 @@ class OtpService
             return true;
         }
         // Increment the incorrect otp attempt by 1 then through the error
-        Otp::identity($identity)->first()->increment('incorrect', 1);
+        Otp::identity($identity)
+            ->RecentFirst()
+            ->first()
+            ->increment('incorrect', 1);
 
         throw ValidationException::withMessages([
             'otp' => ['Incorrect otp.'],
