@@ -10,7 +10,7 @@ class UserRepository implements RepositoryInterface
 {
     protected User $model;
 
-    public function __construct(User $model)
+    public function __construct($model)
     {
         if (!($model instanceof User)) {
             throw new \InvalidArgumentException('$model should be of User type');
