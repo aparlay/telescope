@@ -6,7 +6,11 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
+use Aparlay\Core\Models\Login;
+use Aparlay\Core\Repositories\UserRepository;
+use Aparlay\Core\Services\OtpService;
 use Aparlay\Core\Services\UserService;
+use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
@@ -21,6 +25,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->repository = new UserRepository(new User());
     }
 
     /**
@@ -64,7 +69,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Login a user.
      *
      * @return Response|void
      *
@@ -77,32 +82,54 @@ class AuthController extends Controller
 
         /** Prepare Credentials and attempt the login */
         $credentials = [$identityField => $request->username, 'password' => $request->password];
-        if ($token = auth()->attempt($credentials)) {
-            /* Check the account status and through exception for suspended/banned/NotFound account */
-            if (UserService::isUserEligible(auth()->user())) {
-                $result = $this->respondWithToken($token);
-                $cookie1 = Cookie::make(
-                    '__Secure_token',
-                    $result['access_token'],
-                    $result['token_expired_at'] / 60
-                );
-                $cookie2 = Cookie::make(
-                    '__Secure_refresh_token',
-                    $result['refresh_token'],
-                    $result['refresh_token_expired_at'] / 60
-                );
-                $cookie3 = Cookie::make(
-                    '__Secure_username',
-                    auth()->user()->username,
-                    $result['refresh_token_expired_at'] / 60
-                );
-
-                return $this->response($result)->cookie($cookie1)->cookie($cookie2)->cookie($cookie3);
-            }
-        } else {
-            /* Through exception in case of invalid username/password. */
+        if (! ($token = auth()->attempt($credentials))) {
             throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
         }
+
+        /** Through exception for suspended/banned/NotFound accounts */
+        $user = auth()->user();
+        $elligible = $this->repository->isUserEligible($user);
+        $deviceId = $request->headers->get('X-DEVICE-ID');
+
+        if ($this->repository->isUnverified($user)) {
+            if ($request->otp) {
+                OtpService::validateOtp($request->otp, $request->username);
+                $this->repository->verify($user);
+            } else {
+                OtpService::sendOtp($user, $deviceId);
+                if ($identityField === Login::IDENTITY_PHONE_NUMBER) {
+                    $response = [
+                        'message' => 'If you enter your phone number correctly you will receive an OTP sms soon.',
+                        'sms_numbers' => $user['phone_number'],
+                    ];
+                } elseif ($identityField === Login::IDENTITY_EMAIL) {
+                    $response = [
+                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
+                    ];
+                }
+                throw new BlockedException('OTP has been sent.', null, null, Response::HTTP_LOCKED, $response);
+            }
+        }
+
+        /** Prepare and return the json response */
+        $result = $this->respondWithToken($token);
+        $cookie1 = Cookie::make(
+            '__Secure_token',
+            $result['access_token'],
+            $result['token_expired_at'] / 60
+        );
+        $cookie2 = Cookie::make(
+            '__Secure_refresh_token',
+            $result['refresh_token'],
+            $result['refresh_token_expired_at'] / 60
+        );
+        $cookie3 = Cookie::make(
+            '__Secure_username',
+            auth()->user()->username,
+            $result['refresh_token_expired_at'] / 60
+        );
+
+        return $this->response($result)->cookie($cookie1)->cookie($cookie2)->cookie($cookie3);
     }
 
     /**
@@ -124,6 +151,14 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): Response
     {
         $user = User::create($request->all());
+        $deviceId = $request->headers->get('X-DEVICE-ID');
+        $identity = $user->phone_number ?? $user->email;
+
+        /** Find the identityField (Email/PhoneNumber/Username) based on username */
+        $identityField = UserService::getIdentityType($identity);
+        if ($this->repository->isUnverified($user)) {
+            OtpService::sendOtp($user, $deviceId);
+        }
 
         return $this->response(
             new RegisterResource($user),
