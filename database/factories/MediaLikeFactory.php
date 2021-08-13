@@ -24,14 +24,12 @@ class MediaLikeFactory extends Factory
     public function definition()
     {
         return [
-            'media_id' => function ($model) {
-                return new ObjectId($model['media_id']);
+            'media_id' => function (array $attributes) {
+                return new ObjectId($attributes['media_id']);
             },
-            'user_id' => function ($model) {
-                return new ObjectId($model['user_id']);
-            },
-            'creator' => function ($model) {
-                $user = User::user($model['user_id'])->first();
+            'user_id' => User::factory(),
+            'creator' => function (array $attributes) {
+                $user = User::user($attributes['user_id'])->first();
 
                 return [
                     '_id' => new ObjectId($user->_id),
@@ -39,11 +37,11 @@ class MediaLikeFactory extends Factory
                     'avatar' => $user->avatar,
                 ];
             },
-            'created_by' => function ($model) {
-                return new ObjectId($model['user_id']);
+            'created_by' => function (array $attributes) {
+                return new ObjectId($attributes['user_id']);
             },
-            'updated_by' => function ($model) {
-                return new ObjectId($model['user_id']);
+            'updated_by' => function (array $attributes) {
+                return new ObjectId($attributes['user_id']);
             },
         ];
     }
