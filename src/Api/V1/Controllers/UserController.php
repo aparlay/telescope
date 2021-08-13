@@ -55,35 +55,4 @@ class UserController extends Controller
     {
         return $this->response([], Response::HTTP_OK);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Request  $request
-     * @return Response
-     */
-    public function register(Request $request): Response
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->error('validation failed', ['error' => $validator->errors()], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $user = new User();
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->save();
-
-        if ($this->token) {
-            return $this->login($request);
-        }
-
-        return $this->response($user, '', Response::HTTP_OK);
-    }
 }

@@ -2,10 +2,16 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Database\Factories\MediaFactory;
+use Aparlay\Core\Events\MediaCreated;
+use Aparlay\Core\Events\MediaCreating;
+use Aparlay\Core\Events\MediaDeleted;
+use Aparlay\Core\Events\MediaSaved;
+use Aparlay\Core\Events\MediaSaving;
+use Aparlay\Core\Events\MediaUpdated;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -46,6 +52,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property mixed       $filename
  * @property array       $links
  * @property bool        $is_protected
+ * @property User        $userObj
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
@@ -61,6 +68,7 @@ class Media extends Model
     use HasFactory;
     use Notifiable;
     use MediaScope;
+    use SimpleUserTrait;
 
     public const VISIBILITY_PUBLIC = 1;
 
@@ -139,6 +147,13 @@ class Media extends Model
         'updated_at',
     ];
 
+    protected $attributes = [
+        'people' => [],
+        'likes' => [],
+        'visits' => [],
+        'status' => self::STATUS_QUEUED,
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -161,6 +176,15 @@ class Media extends Model
      * @var array
      */
     protected $casts = [
+    ];
+
+    protected $dispatchesEvents = [
+        'creating' => MediaCreating::class,
+        'created' => MediaCreated::class,
+        'saving' => MediaSaving::class,
+        'updated' => MediaUpdated::class,
+        'saved' => MediaSaved::class,
+        'deleted' => MediaDeleted::class,
     ];
 
     public static function getVisibilities()
@@ -220,7 +244,7 @@ class Media extends Model
      */
     public function userObj()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'creator._id');
     }
 
     /**
@@ -355,23 +379,5 @@ class Media extends Model
             [self::STATUS_COMPLETED, self::STATUS_CONFIRMED, self::STATUS_ADMIN_DELETED],
             true
         );
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function setSlugAttribute(): string
-    {
-        return $this->attributes['slug'] = $this->generateSlug(6);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function generateSlug(int $length): string
-    {
-        $slug = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
-
-        return (null === self::slug($slug)->first()) ? $slug : $this->generateSlug($length);
     }
 }

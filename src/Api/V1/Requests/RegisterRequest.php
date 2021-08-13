@@ -75,8 +75,9 @@ class RegisterRequest extends FormRequest
             $filename = match ($this->gender) {
                 User::GENDER_FEMALE => $femaleFilename,
                 User::GENDER_MALE => $maleFilename,
-                default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
+            default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
             };
+
             $this->avatar = Cdn::avatar($filename);
         }
 
@@ -104,7 +105,7 @@ class RegisterRequest extends FormRequest
             'medias' => [],
             'count_fields_updated_at' => [],
             'setting' => [
-                'otp' => false,
+                'otp' => config('app.otp.enabled'),
                 'notifications' => [
                     'unread_message_alerts' => false,
                     'new_followers' => false,
