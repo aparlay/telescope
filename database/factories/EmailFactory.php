@@ -24,6 +24,7 @@ class EmailFactory extends Factory
     public function definition()
     {
         $user = User::factory()->create();
+
         return [
             'attributes' => [
                 'user' => [
@@ -34,7 +35,7 @@ class EmailFactory extends Factory
                 'to' => $user->email,
                 'status' => $user->status,
                 'type' => $user->type,
-            ]
+            ],
         ];
     }
 }
