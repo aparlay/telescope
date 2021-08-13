@@ -3,7 +3,9 @@
 namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Models\Email;
+use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use MongoDB\BSON\ObjectId;
 
 class EmailFactory extends Factory
 {
@@ -21,8 +23,18 @@ class EmailFactory extends Factory
      */
     public function definition()
     {
+        $user = User::factory()->create();
         return [
-            //
+            'attributes' => [
+                'user' => [
+                    '_id' => new ObjectId($user->_id),
+                    'username' => $user->username,
+                    'avatar' => $user->avatar,
+                ],
+                'to' => $user->email,
+                'status' => $user->status,
+                'type' => $user->type,
+            ]
         ];
     }
 }

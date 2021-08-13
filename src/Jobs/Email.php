@@ -45,17 +45,17 @@ class Email implements ShouldQueue
     public function __construct($emailContent)
     {
         $this->emailContent = $emailContent;
-        $this->handle($emailContent['identity']);
+        $this->handle();
     }
 
     /**
      * Execute the job.
-     *
+     * @param string|null $send_mail
      * @return void
      */
-    public function handle($send_mail)
+    public function handle()
     {
         $email = new SendEmail($this->emailContent);
-        Mail::to($send_mail)->send($email);
+        Mail::to($this->emailContent['identity'])->send($email);
     }
 }
