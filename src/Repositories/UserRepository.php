@@ -3,8 +3,8 @@
 namespace Aparlay\Core\Repositories;
 
 use Aparlay\Core\Models\User;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Validation\ValidationException;
 
 class UserRepository implements RepositoryInterface
 {
@@ -12,7 +12,7 @@ class UserRepository implements RepositoryInterface
 
     public function __construct(User $model)
     {
-        if (!($model instanceof User)) {
+        if (! ($model instanceof User)) {
             throw new \InvalidArgumentException('$model should be of User type');
         }
 
@@ -35,7 +35,7 @@ class UserRepository implements RepositoryInterface
      *
      * @throws ValidationException
      */
-    public function isUserEligible(User|Authenticatable $user)
+    public function isUserEligible(User | Authenticatable $user)
     {
         switch ($user->status) {
             case User::STATUS_SUSPENDED:
