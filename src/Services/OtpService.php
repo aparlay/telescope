@@ -9,6 +9,7 @@ use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Repositories\EmailRepository;
 use Aparlay\Core\Repositories\OtpRepository;
 use App\Exceptions\BlockedException;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
@@ -16,12 +17,12 @@ class OtpService
 {
     /**
      * send otp if status in pending and request otp is null.
-     * @param  User  $user
+     * @param  User|Authenticatable  $user
      * @param  string  $deviceId
      * @return bool
      * @throws BlockedException
      */
-    public static function sendOtp(User $user, string $deviceId)
+    public static function sendOtp(User | Authenticatable $user, string $deviceId)
     {
         $otp = self::generateOtp($user->email, $deviceId);
         self::sendByEmail($user, $otp);
@@ -63,11 +64,11 @@ class OtpService
 
     /**
      * Send OTP by email.
-     * @param User $user
+     * @param User|Authenticatable $user
      * @param object $otp
      * @return bool
      */
-    public static function sendByEmail(User $user, object $otp)
+    public static function sendByEmail(User | Authenticatable $user, object $otp)
     {
         /** Prepare email request data and insert in Email table */
         $request = [

@@ -53,7 +53,7 @@ class AuthController extends Controller
         /** Change password Scenario */
         if ($request->old_password) {
             $user = auth()->user();
-            $this->userRepo->resetPassword($request->password, $user);
+            $this->repository->resetPassword($request->password, $user);
         } else {
             /** Forgot password scenario */
             if (!($user = UserService::findByIdentity($request->username))) {
@@ -63,7 +63,7 @@ class AuthController extends Controller
             /** Validate the OTP or Throw exception if OTP is incorrect */
             OtpService::validateOtp($request->otp, $request->username, false, true);
 
-            $this->userRepo->resetPassword($request->password, $user);
+            $this->repository->resetPassword($request->password, $user);
         }
 
         /** Prepare Credentials and attempt the login */
@@ -108,7 +108,7 @@ class AuthController extends Controller
         }
 
         /** Through exception for suspended/banned/NotFound accounts */
-        $this->userRepo->isUserEligible($user);
+        $this->repository->isUserEligible($user);
         
         /** Validate the OTP or Throw exception if OTP is incorrect */
         OtpService::validateOtp($request->otp, $request->username, true);
@@ -142,7 +142,7 @@ class AuthController extends Controller
         }
 
         /** Through exception for suspended/banned/NotFound accounts */
-        $this->userRepo->isUserEligible($user);
+        $this->repository->isUserEligible($user);
 
         // Send the OTP or Throw exception if send OTP limit is reached
         OtpService::sendOtp($user, $request->headers->get('X-DEVICE-ID', 'required'));
@@ -181,7 +181,7 @@ class AuthController extends Controller
 
         /** Through exception for suspended/banned/NotFound accounts */
         $user = auth()->user();
-        $elligible = $this->repository->isUserEligible($user);
+        $this->repository->isUserEligible($user);
         $deviceId = $request->headers->get('X-DEVICE-ID');
 
         if ($this->repository->isUnverified($user)) {

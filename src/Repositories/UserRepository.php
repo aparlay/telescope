@@ -20,7 +20,15 @@ class UserRepository implements RepositoryInterface
         $this->model = $model;
     }
 
-    public function verify(User $user)
+    /**
+     * Verifying the user
+     *
+     * @param  User|Authenticatable  $user
+     *
+     * @return bool
+     *
+     */
+    public function verify(User | Authenticatable $user)
     {
         $user->status = User::STATUS_VERIFIED;
         $user->email_verified = true;
@@ -60,10 +68,12 @@ class UserRepository implements RepositoryInterface
 
     /**
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
-     * @param  User  $user
+     *
+     * @param  User|Authenticatable  $user
+     *
      * @return bool
      */
-    public function isUnverified(User $user)
+    public function isUnverified(User | Authenticatable $user)
     {
         /* User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
         return $user->setting['otp'] && $user->status === User::STATUS_PENDING;
@@ -130,16 +140,12 @@ class UserRepository implements RepositoryInterface
      * Resposible for match old password
      *
      * @param string $password
-     *
-     * @param User $user
-     *
+     * @param User|Authenticatable  $user
      * @return bool
-     *
      */
-    public function resetPassword(string $password, User $user)
+    public function resetPassword(string $password, User | Authenticatable $user)
     {
         $user->password_hash = Hash::make($password);
-
         $user->save();
     }
 }

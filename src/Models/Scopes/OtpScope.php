@@ -32,7 +32,7 @@ trait OtpScope
      * @param  int $limit
      * @return mixed
      */
-    public function scopeValidated(Builder $query, bool $checkValidated, int $limit): Builder
+    public function scopeValidated(Builder $query, bool $checkValidated): Builder
     {
         return $query->where('validated', $checkValidated);
     }
