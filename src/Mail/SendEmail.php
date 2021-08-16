@@ -13,21 +13,21 @@ class SendEmail extends Mailable
     use Queueable;
     use SerializesModels;
 
-    protected string $subjct;
+    protected string $emailSubject;
     protected string $type;
     protected array $payload;
 
     /**
      * SendEmail Construct
      * 
-     * @param string $subject
+     * @param string $emailSubject
      * @param string $type
      * @param array $payload
      * @return void
      */
-    public function __construct(string $subject, string $type, array $payload)
+    public function __construct(string $emailSubject, string $type, array $payload)
     {
-        $this->subjct = $subject;
+        $this->emailSubject = $emailSubject;
         $this->type = $type;
         $this->payload = $payload;
         $this->build();
@@ -40,7 +40,7 @@ class SendEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->subjct)
+        return $this->subject($this->emailSubject)
             ->view($this->getTemplate())
             ->with($this->payload);
     }
