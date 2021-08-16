@@ -8,7 +8,6 @@ use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Repositories\MediaRepository;
 use Aparlay\Core\Services\BackBlaze;
-use Aparlay\Core\Services\UploadService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -46,13 +45,6 @@ class MediaController extends Controller
     public function store(MediaRequest $request): Response
     {
         return $this->repository->store($request);
-    }
-
-    public function upload(): Response
-    {
-        $result = UploadService::chunkUpload();
-
-        return $this->response($result['data'], '', $result['code']);
     }
 
     public function uploadToken()

@@ -33,7 +33,6 @@ Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1'
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
         Route::middleware('auth:api')->group(function () {
             Route::post('/', [MediaController::class, 'store'])->name('create');
-            Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
             Route::post('/upload-token', [MediaController::class, 'uploadToken'])->name('upload-token');
             Route::middleware('auth:api')->put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::middleware('auth:api')->delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
