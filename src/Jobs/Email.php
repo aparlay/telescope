@@ -18,7 +18,10 @@ class Email implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected $emailContent;
+    protected string $email;
+    protected string $subject;
+    protected string $type;
+    protected array $payload;
 
     /**
      * The number of times the job may be attempted.
@@ -40,22 +43,28 @@ class Email implements ShouldQueue
     /**
      * Create a new job instance.
      *
+     * @param string $email
+     * @param string $subject
+     * @param string $type
+     * @param array $payload
      * @return void
      */
-    public function __construct($emailContent)
+    public function __construct(string $email, string $subject, string $type, array $payload)
     {
-        $this->emailContent = $emailContent;
+        $this->email = $email;
+        $this->subject = $subject;
+        $this->type = $type;
+        $this->payload = $payload;
         $this->handle();
     }
 
     /**
      * Execute the job.
-     * @param string|null $send_mail
      * @return void
      */
     public function handle()
     {
-        $email = new SendEmail($this->emailContent);
-        Mail::to($this->emailContent['identity'])->send($email);
+        $send = new SendEmail($this->subject, $this->type, $this->payload);
+        Mail::to($this->email)->send($send);
     }
 }

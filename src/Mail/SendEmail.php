@@ -13,11 +13,23 @@ class SendEmail extends Mailable
     use Queueable;
     use SerializesModels;
 
-    protected $content;
+    protected string $subjct;
+    protected string $type;
+    protected array $payload;
 
-    public function __construct($content)
+    /**
+     * SendEmail Construct
+     * 
+     * @param string $subject
+     * @param string $type
+     * @param array $payload
+     * @return void
+     */
+    public function __construct(string $subject, string $type, array $payload)
     {
-        $this->content = $content;
+        $this->subjct = $subject;
+        $this->type = $type;
+        $this->payload = $payload;
         $this->build();
     }
 
@@ -28,35 +40,29 @@ class SendEmail extends Mailable
      */
     public function build()
     {
-        $template = $this->getTemplate($this->content['email_type']);
-
-        return $this->subject($this->content['subject'])
-            ->view($template)
-            ->with($this->content['email_template_params']);
+        return $this->subject($this->subjct)
+            ->view($this->getTemplate())
+            ->with($this->payload);
     }
 
     /**
      * Responsible to return the email template based on email type.
-     * @param string $type
      * @return string
      */
-    public function getTemplate(string $type)
+    public function getTemplate()
     {
-        switch ($type) {
+        switch ($this->type) {
             case Email::TEMPLATE_EMAIL_VERIFICATION:
                 $template = 'default_view::email_verification';
                 $verificationTemplate = config('app.email.templates.email_verification', 'default_view::email_verification');
                 if (view()->exists($verificationTemplate)) {
                     $template = 'email_verification';
                 }
-
                 break;
-
             default:
                 $template = '';
                 break;
         }
-
         return $template;
     }
 }
