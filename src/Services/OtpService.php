@@ -79,17 +79,15 @@ class OtpService
         EmailRepository::create($request);
 
         /** Prepare email content and dispatch the job to schedule the email */
-        $content = [
-            'subject'               => $otp->otp.' is your verification code',
-            'identity'              => $otp->identity,
-            'email_template_params' => [
-                'otp'               => $otp->otp,
-                'otpLink'           => '',
-                'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
-            ],
-            'email_type'            => Email::TEMPLATE_EMAIL_VERIFICATION,
+        $email = $otp->identity;
+        $subject = $otp->otp.' is your verification code';
+        $type = Email::TEMPLATE_EMAIL_VERIFICATION;
+        $payload = [
+            'otp'               => $otp->otp,
+            'otpLink'           => '',
+            'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
         ];
-        EmailJob::dispatch($content);
+        EmailJob::dispatch($email, $subject, $type, $payload);
 
         return true;
     }

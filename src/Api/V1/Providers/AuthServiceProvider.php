@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Providers;
 
 use Aparlay\Core\Api\V1\Models\Block;
+use Aparlay\Core\Api\V1\Policies\UserPolicy;
 use Aparlay\Core\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -16,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        User::class => UserPolicy::class,
         'Aparlay\Core\Api\V1\Models\Media' => 'Aparlay\Core\Api\V1\Policies\MediaPolicy',
     ];
 

@@ -138,6 +138,22 @@ class UserRepository implements RepositoryInterface
     }
 
     /**
+     * find user by username
+     *
+     * @param String $userName
+     *
+     * @return Array
+     */
+    public static function findByUsername(string $userName)
+    {
+        $user = User::Username($userName)->first();
+        if ($user) {
+            return $user;
+        }
+        return false;
+    }
+
+    /**
      * Resposible for match old password.
      *
      * @param string $password
