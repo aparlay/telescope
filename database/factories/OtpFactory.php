@@ -3,8 +3,8 @@
 namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\Otp;
+use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use MongoDB\BSON\ObjectId;
@@ -37,7 +37,7 @@ class OtpFactory extends Factory
             },
             'updated_by' => function () {
                 return new ObjectId(User::factory()->create()->_id);
-            }
+            },
         ];
     }
 }
