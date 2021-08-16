@@ -18,8 +18,8 @@ class SendEmail extends Mailable
     protected array $payload;
 
     /**
-     * SendEmail Construct
-     * 
+     * SendEmail Construct.
+     *
      * @param string $subject
      * @param string $type
      * @param array $payload
@@ -63,6 +63,7 @@ class SendEmail extends Mailable
                 $template = '';
                 break;
         }
+
         return $template;
     }
 }
