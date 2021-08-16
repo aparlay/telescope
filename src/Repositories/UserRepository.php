@@ -21,12 +21,11 @@ class UserRepository implements RepositoryInterface
     }
 
     /**
-     * Verifying the user
+     * Verifying the user.
      *
      * @param  User|Authenticatable  $user
      *
      * @return bool
-     *
      */
     public function verify(User | Authenticatable $user)
     {
@@ -105,11 +104,15 @@ class UserRepository implements RepositoryInterface
     }
 
     /**
-     * find user by email
+     * find user by email.
      *
-     * @param String $email
+     * @param string $email
      *
+<<<<<<< HEAD
      * @return Array | bool
+=======
+     * @return array
+>>>>>>> 4200184319142daaf3d583bcc80c817bec0411fb
      */
     public static function findByEmail(string $email)
     {
@@ -117,13 +120,14 @@ class UserRepository implements RepositoryInterface
         if ($user) {
             return $user;
         }
+
         return false;
     }
 
     /**
-     * find user by phone_number
+     * find user by phone_number.
      *
-     * @param String $phoneNumber
+     * @param string $phoneNumber
      *
      * @return Array | bool
      */
@@ -133,11 +137,12 @@ class UserRepository implements RepositoryInterface
         if ($user) {
             return $user;
         }
+
         return false;
     }
 
     /**
-     * Resposible for match old password
+     * Resposible for match old password.
      *
      * @param string $password
      * @param User|Authenticatable  $user

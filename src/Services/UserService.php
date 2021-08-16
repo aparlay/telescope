@@ -26,7 +26,7 @@ class UserService
     }
 
     /**
-     * Finds user by username
+     * Finds user by username.
      *
      * @param string $username
      *
