@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Requests\ChangePasswordRequest;
+use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Requests\RequestOtpRequest;
@@ -13,7 +14,6 @@ use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
 use Aparlay\Core\Services\UserService;
 use App\Exceptions\BlockedException;
-use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
@@ -28,7 +28,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'register', 'requestOtp', 'validateOtp', 'changePassword']]);
-        $this->userRepo = new UserRepository();
+        $this->repository = new UserRepository(new User());
     }
 
     /**
@@ -181,13 +181,13 @@ class AuthController extends Controller
 
         /** Through exception for suspended/banned/NotFound accounts */
         $user = auth()->user();
-        $elligible = $this->userRepo->isUserEligible($user);
+        $elligible = $this->repository->isUserEligible($user);
         $deviceId = $request->headers->get('X-DEVICE-ID');
 
-        if ($this->userRepo->isUnverified($user)) {
+        if ($this->repository->isUnverified($user)) {
             if ($request->otp) {
                 OtpService::validateOtp($request->otp, $request->username);
-                $this->userRepo->verify($user);
+                $this->repository->verify($user);
             } else {
                 OtpService::sendOtp($user, $deviceId);
                 if ($identityField === Login::IDENTITY_PHONE_NUMBER) {
@@ -249,7 +249,7 @@ class AuthController extends Controller
 
         /** Find the identityField (Email/PhoneNumber/Username) based on username */
         $identityField = UserService::getIdentityType($identity);
-        if ($this->userRepo->isUnverified($user)) {
+        if ($this->repository->isUnverified($user)) {
             OtpService::sendOtp($user, $deviceId);
         }
 

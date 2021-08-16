@@ -14,6 +14,8 @@ class Controller extends BaseController
     use DispatchesJobs;
     use ValidatesRequests;
 
+    public $repository;
+
     /**
      * success response method.
      *
