@@ -18,7 +18,7 @@ class SendEmail extends Mailable
     protected array $payload;
 
     /**
-     * SendEmail Construct
+     * SendEmail Construct.
      *
      * @param string $emailSubject
      * @param string $type
