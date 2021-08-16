@@ -108,11 +108,7 @@ class UserRepository implements RepositoryInterface
      *
      * @param string $email
      *
-<<<<<<< HEAD
      * @return Array | bool
-=======
-     * @return array
->>>>>>> 4200184319142daaf3d583bcc80c817bec0411fb
      */
     public static function findByEmail(string $email)
     {
