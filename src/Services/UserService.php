@@ -58,7 +58,7 @@ class UserService
     {
         /** Upload Avatar Image on Server */
         $extension = $request->file('avatar')->getClientOriginalExtension();
-        $avatar = uniqid($user->_id, false) . '.' . $extension;
+        $avatar = uniqid($user->_id, false).'.'.$extension;
         $uploadDirectory = config('app.avatar.upload_directory');
         $request->file('avatar')->storeAs($uploadDirectory, $avatar);
 

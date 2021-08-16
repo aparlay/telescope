@@ -138,11 +138,11 @@ class UserRepository implements RepositoryInterface
     }
 
     /**
-     * find user by username
+     * find user by username.
      *
-     * @param String $userName
+     * @param string $userName
      *
-     * @return Array
+     * @return array
      */
     public static function findByUsername(string $userName)
     {
@@ -150,6 +150,7 @@ class UserRepository implements RepositoryInterface
         if ($user) {
             return $user;
         }
+
         return false;
     }
 
