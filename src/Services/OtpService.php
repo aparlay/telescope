@@ -120,7 +120,7 @@ class OtpService
         }
         // Increment the incorrect otp attempt by 1 then through the error
         Otp::identity($identity)
-            ->RecentFirst()
+            ->recentFirst()
             ->first()
             ->increment('incorrect', 1);
 

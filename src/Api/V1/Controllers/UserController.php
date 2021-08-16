@@ -64,14 +64,14 @@ class UserController extends Controller
         /* Update User Avatar */
         if ($request->hasFile('avatar')) {
             UserService::uploadAvatar($request, $user);
-        } elseif (count($request->all())) {
-            /* Update User Profile Information */
-            $user->fill($request->all());
-            if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
-                $user->status = User::STATUS_ACTIVE;
-            }
-            $user->save();
         }
+
+        /* Update User Profile Information */
+        $user->fill($request->all());
+        if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
+            $user->status = User::STATUS_ACTIVE;
+        }
+        $user->save();
 
         /* Return the updated user data */
         return $this->response(
