@@ -9,6 +9,7 @@ use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Repositories\EmailRepository;
 use Aparlay\Core\Repositories\OtpRepository;
 use App\Exceptions\BlockedException;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
@@ -21,7 +22,7 @@ class OtpService
      * @return bool
      * @throws BlockedException
      */
-    public static function sendOtp(User $user, string $deviceId)
+    public static function sendOtp(User | Authenticatable $user, string $deviceId)
     {
         $otp = self::generateOtp($user->email, $deviceId);
         self::sendByEmail($user, $otp);
@@ -67,7 +68,7 @@ class OtpService
      * @param object $otp
      * @return bool
      */
-    public static function sendByEmail(User $user, object $otp)
+    public static function sendByEmail(User | Authenticatable $user, object $otp)
     {
         /** Prepare email request data and insert in Email table */
         $request = [
@@ -78,17 +79,15 @@ class OtpService
         EmailRepository::create($request);
 
         /** Prepare email content and dispatch the job to schedule the email */
-        $content = [
-            'subject'               => $otp->otp.' is your verification code',
-            'identity'              => $otp->identity,
-            'email_template_params' => [
-                'otp'               => $otp->otp,
-                'otpLink'           => '',
-                'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
-            ],
-            'email_type'            => Email::TEMPLATE_EMAIL_VERIFICATION,
+        $email = $otp->identity;
+        $subject = $otp->otp.' is your verification code';
+        $type = Email::TEMPLATE_EMAIL_VERIFICATION;
+        $payload = [
+            'otp'               => $otp->otp,
+            'otpLink'           => '',
+            'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
         ];
-        EmailJob::dispatch($content);
+        EmailJob::dispatch($email, $subject, $type, $payload);
 
         return true;
     }
@@ -120,7 +119,10 @@ class OtpService
             return true;
         }
         // Increment the incorrect otp attempt by 1 then through the error
-        Otp::identity($identity)->first()->increment('incorrect', 1);
+        Otp::identity($identity)
+            ->RecentFirst()
+            ->first()
+            ->increment('incorrect', 1);
 
         throw ValidationException::withMessages([
             'otp' => ['Incorrect otp.'],
