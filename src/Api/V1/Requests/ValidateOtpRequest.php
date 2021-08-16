@@ -35,7 +35,7 @@ class ValidateOtpRequest extends FormRequest
     }
 
     /**
-     * This function is responsible to perform pre-validation
+     * This function is responsible to perform pre-validation.
      */
     public function prepareForValidation()
     {

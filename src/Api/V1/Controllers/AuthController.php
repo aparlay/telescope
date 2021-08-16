@@ -2,13 +2,13 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
-use Aparlay\Core\Api\V1\Requests\ChangePasswordRequest;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Requests\ChangePasswordRequest;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Requests\RequestOtpRequest;
-use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Api\V1\Requests\ValidateOtpRequest;
+use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Models\Login;
 use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
@@ -42,7 +42,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Change password
+     * Change password.
      *
      * @param ChangePasswordRequest $request
      *
@@ -50,17 +50,17 @@ class AuthController extends Controller
      */
     public function changePassword(ChangePasswordRequest $request): Response
     {
-        /** Change password Scenario */
+        /* Change password Scenario */
         if ($request->old_password) {
             $user = auth()->user();
             $this->repository->resetPassword($request->password, $user);
         } else {
-            /** Forgot password scenario */
-            if (!($user = UserService::findByIdentity($request->username))) {
+            /* Forgot password scenario */
+            if (! ($user = UserService::findByIdentity($request->username))) {
                 throw ValidationException::withMessages(['user' => ['user not found']]);
             }
 
-            /** Validate the OTP or Throw exception if OTP is incorrect */
+            /* Validate the OTP or Throw exception if OTP is incorrect */
             OtpService::validateOtp($request->otp, $request->username, false, true);
 
             $this->repository->resetPassword($request->password, $user);
@@ -94,7 +94,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Validate request OTP
+     * Validate request OTP.
      *
      * @param ValidateOtpRequest $request
      *
@@ -102,18 +102,18 @@ class AuthController extends Controller
      */
     public function validateOtp(ValidateOtpRequest $request): Response
     {
-        /** Find the user based on username */
-        if (!($user = UserService::findByIdentity($request->username))) {
+        /* Find the user based on username */
+        if (! ($user = UserService::findByIdentity($request->username))) {
             throw ValidationException::withMessages(['user' => ['user not found']]);
         }
 
-        /** Through exception for suspended/banned/NotFound accounts */
+        /* Through exception for suspended/banned/NotFound accounts */
         $this->repository->isUserEligible($user);
-        
-        /** Validate the OTP or Throw exception if OTP is incorrect */
+
+        /* Validate the OTP or Throw exception if OTP is incorrect */
         OtpService::validateOtp($request->otp, $request->username, true);
 
-        /** Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
+        /* Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
         if (UserService::getIdentityType($request->username) === Login::IDENTITY_EMAIL) {
             $response = [
                 'message' => 'OTP is matched with your email.',
@@ -136,18 +136,18 @@ class AuthController extends Controller
      */
     public function requestOtp(RequestOtpRequest $request): Response
     {
-        /** Find the user based on username */
-        if (!($user = UserService::findByIdentity($request->username))) {
+        /* Find the user based on username */
+        if (! ($user = UserService::findByIdentity($request->username))) {
             throw ValidationException::withMessages(['user' => ['user not found']]);
         }
 
-        /** Through exception for suspended/banned/NotFound accounts */
+        /* Through exception for suspended/banned/NotFound accounts */
         $this->repository->isUserEligible($user);
 
         // Send the OTP or Throw exception if send OTP limit is reached
         OtpService::sendOtp($user, $request->headers->get('X-DEVICE-ID', 'required'));
 
-        /** Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
+        /* Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
         if (UserService::getIdentityType($request->username) === Login::IDENTITY_EMAIL) {
             $response = [
                 'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
@@ -158,6 +158,7 @@ class AuthController extends Controller
                 'sms_numbers' => $user['phone_number'],
             ];
         }
+
         return $this->response($response, '', Response::HTTP_OK);
     }
 

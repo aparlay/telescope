@@ -5,8 +5,8 @@ namespace Aparlay\Core\Api\V1\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 
 /**
  * @property string email
@@ -42,16 +42,16 @@ class ChangePasswordRequest extends FormRequest
     }
 
     /**
-     * This function is responsible to perform pre-validation
+     * This function is responsible to perform pre-validation.
      */
     public function prepareForValidation()
     {
         /* Convert uppercase email charecter into lowercase */
         $this->username = $this->email ? Str::lower($this->email) : $this->phone_number;
 
-        /** Resposible for match old password */
+        /* Resposible for match old password */
         if ($this->old_password && auth()->user()) {
-            if (!Hash::check($this->old_password, auth()->user()->password_hash)) {
+            if (! Hash::check($this->old_password, auth()->user()->password_hash)) {
                 throw ValidationException::withMessages([
                     'password' => ['Incorrect Old Password.'],
                 ]);
