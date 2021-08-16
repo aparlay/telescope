@@ -345,7 +345,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get status_list attribute for admin panel
+     * Get status_list attribute for admin panel.
      *
      * @return array
      */
@@ -353,12 +353,13 @@ class User extends Authenticatable implements JWTSubject
     {
         $statuses = self::getStatuses();
         $genders = self::getGenders();
+
         return array_values(array_filter([
-            strtolower(!empty($this->status) ? $statuses[$this->status] : ''),
+            strtolower(! empty($this->status) ? $statuses[$this->status] : ''),
             $this->email_verified ? 'email_verified' : 'email_not_verified',
-            strtolower(!empty($this->gender) ? $genders[$this->gender] : ''),
+            strtolower(! empty($this->gender) ? $genders[$this->gender] : ''),
         ], function ($value) {
-            return ($value !== '');
+            return $value !== '';
         }));
     }
 }
