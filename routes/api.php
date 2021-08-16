@@ -65,9 +65,11 @@ Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1'
     });
 
     Route::middleware('auth:api')->match(['put', 'patch'], '/{alert}', [AlertController::class, 'update'])->name('alert.update');
-    Route::match(['put', 'patch'], '/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
-    Route::patch('/validate-otp', [UserController::class, 'validateOtp'])->name('user.validateOtp');
-    Route::post('/request-otp', [UserController::class, 'requestOtp'])->name('user.requestOtp');
+
+    Route::match(['put', 'patch'], '/change-password', [AuthController::class, 'changePassword'])->name('user.change-password');
+    Route::patch('/validate-otp', [AuthController::class, 'validateOtp'])->name('user.validateOtp');
+    Route::post('/request-otp', [AuthController::class, 'requestOtp'])->name('user.requestOtp');
+
     Route::middleware('auth:api')->delete('/logout', [UserController::class, 'logout'])->name('user.logout');
 
     Route::post('/login', [AuthController::class, 'login'])->name('user.login');

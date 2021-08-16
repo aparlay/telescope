@@ -4,6 +4,7 @@ namespace Aparlay\Core\Repositories;
 
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserRepository
@@ -55,5 +56,70 @@ class UserRepository
     {
         /* User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
         return $user->setting['otp'] && $user->status === User::STATUS_PENDING;
+    }
+
+    /**
+     * find user by email
+     *
+     * @param String $email
+     *
+     * @return Array
+     */
+    public static function findByEmail(string $email)
+    {
+        $user = User::Email($email)->first();
+        if ($user) {
+            return $user;
+        }
+        return false;
+    }
+
+    /**
+     * find user by phone_number
+     *
+     * @param String $phoneNumber
+     *
+     * @return Array
+     */
+    public static function findByPhoneNumber(string $phoneNumber)
+    {
+        $user = User::PhoneNumber($phoneNumber)->first();
+        if ($user) {
+            return $user;
+        }
+        return false;
+    }
+
+    /**
+     * find user by username
+     *
+     * @param String $userName
+     *
+     * @return Array
+     */
+    public static function findByUsername(string $userName)
+    {
+        $user = User::Username($userName)->first();
+        if ($user) {
+            return $user;
+        }
+        return false;
+    }
+
+    /**
+     * Resposible for match old password
+     *
+     * @param string $password
+     *
+     * @param User $user
+     *
+     * @return bool
+     *
+     */
+    public function resetPassword(string $password, User $user)
+    {
+        $user->password_hash = Hash::make($password);
+
+        $user->save();
     }
 }

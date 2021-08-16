@@ -2,9 +2,12 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
+use Aparlay\Core\Api\V1\Requests\ChangePasswordRequest;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
+use Aparlay\Core\Api\V1\Requests\RequestOtpRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
+use Aparlay\Core\Api\V1\Requests\ValidateOtpRequest;
 use Aparlay\Core\Models\Login;
 use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\OtpService;
@@ -24,7 +27,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'requestOtp', 'validateOtp', 'changePassword']]);
         $this->userRepo = new UserRepository();
     }
 
@@ -39,33 +42,123 @@ class AuthController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Change password
+     *
+     * @param ChangePasswordRequest $request
      *
      * @return Response
      */
-    public function changePassword(): Response
+    public function changePassword(ChangePasswordRequest $request): Response
     {
-        return $this->response([], Response::HTTP_OK);
+        /** Change password Scenario */
+        if ($request->old_password) {
+            $user = auth()->user();
+            $this->userRepo->resetPassword($request->password, $user);
+        } else {
+            /** Forgot password scenario */
+            if (!($user = UserService::findByIdentity($request->username))) {
+                throw ValidationException::withMessages(['user' => ['user not found']]);
+            }
+
+            /** Validate the OTP or Throw exception if OTP is incorrect */
+            OtpService::validateOtp($request->otp, $request->username, false, true);
+
+            $this->userRepo->resetPassword($request->password, $user);
+        }
+
+        /** Prepare Credentials and attempt the login */
+        $credentials = ['email' => $user->email, 'password' => $request->password];
+        if (! ($token = auth()->attempt($credentials))) {
+            throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
+        }
+
+        /** Prepare and return the json response */
+        $result = $this->respondWithToken($token);
+        $cookie1 = Cookie::make(
+            '__Secure_token',
+            $result['access_token'],
+            $result['token_expired_at'] / 60
+        );
+        $cookie2 = Cookie::make(
+            '__Secure_refresh_token',
+            $result['refresh_token'],
+            $result['refresh_token_expired_at'] / 60
+        );
+        $cookie3 = Cookie::make(
+            '__Secure_username',
+            auth()->user()->username,
+            $result['refresh_token_expired_at'] / 60
+        );
+
+        return $this->response($result)->cookie($cookie1)->cookie($cookie2)->cookie($cookie3);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Validate request OTP
+     *
+     * @param ValidateOtpRequest $request
      *
      * @return Response
      */
-    public function validateOtp(): Response
+    public function validateOtp(ValidateOtpRequest $request): Response
     {
-        return $this->response([], Response::HTTP_OK);
+        /** Find the user based on username */
+        if (!($user = UserService::findByIdentity($request->username))) {
+            throw ValidationException::withMessages(['user' => ['user not found']]);
+        }
+
+        /** Through exception for suspended/banned/NotFound accounts */
+        $this->userRepo->isUserEligible($user);
+        
+        /** Validate the OTP or Throw exception if OTP is incorrect */
+        OtpService::validateOtp($request->otp, $request->username, true);
+
+        /** Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
+        if (UserService::getIdentityType($request->username) === Login::IDENTITY_EMAIL) {
+            $response = [
+                'message' => 'OTP is matched with your email.',
+            ];
+        } else {
+            $response = [
+                'message' => 'OTP is matched with your phone number.',
+            ];
+        }
+
+        return $this->response($response, '', Response::HTTP_OK);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Request for otp.
+     *
+     * @param RequestOtpRequest $request
      *
      * @return Response
      */
-    public function requestOtp(): Response
+    public function requestOtp(RequestOtpRequest $request): Response
     {
-        return $this->response([], Response::HTTP_OK);
+        /** Find the user based on username */
+        if (!($user = UserService::findByIdentity($request->username))) {
+            throw ValidationException::withMessages(['user' => ['user not found']]);
+        }
+
+        /** Through exception for suspended/banned/NotFound accounts */
+        $this->userRepo->isUserEligible($user);
+
+        // Send the OTP or Throw exception if send OTP limit is reached
+        OtpService::sendOtp($user, $request->headers->get('X-DEVICE-ID', 'required'));
+
+        /** Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
+        if (UserService::getIdentityType($request->username) === Login::IDENTITY_EMAIL) {
+            $response = [
+                'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
+            ];
+        } else {
+            $response = [
+                'message' => 'If you enter your phone number correctly you will receive an OTP sms soon.',
+                'sms_numbers' => $user['phone_number'],
+            ];
+        }
+        return $this->response($response, '', Response::HTTP_OK);
     }
 
     /**

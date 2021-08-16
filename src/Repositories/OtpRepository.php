@@ -42,7 +42,7 @@ class OtpRepository
         if (count($otps) > 0) {
             foreach ($otps as $model) {
                 if (strpos($model->otp, 'expired_') === false) {
-                    $model->otp = 'expired_'.random_int(
+                    $model->otp = 'expired_' . random_int(
                         config('app.otp.length.min'),
                         config('app.otp.length.max')
                     );

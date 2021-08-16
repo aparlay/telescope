@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Models\Login;
+use Aparlay\Core\Repositories\UserRepository;
 
 class UserService
 {
@@ -22,5 +23,25 @@ class UserService
             default:
                 return Login::IDENTITY_USERNAME;
         }
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     *
+     * @return static|null
+     */
+    public static function findByIdentity(string $username)
+    {
+        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            return UserRepository::findByEmail($username);
+        }
+
+        if (is_numeric($username)) {
+            return UserRepository::findByPhoneNumber($username);
+        }
+
+        return UserRepository::findByUsername($username);
     }
 }

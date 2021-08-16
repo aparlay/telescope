@@ -37,7 +37,7 @@ class OtpService
      */
     public static function generateOtp(string $identity, string $device_id = null)
     {
-        $previousOTP = Otp::FilterByIdentity($identity)->get();
+        $previousOTP = Otp::identity($identity)->get();
 
         if (count($previousOTP) > 4) {
             throw new BlockedException(
@@ -78,12 +78,12 @@ class OtpService
 
         /** Prepare email content and dispatch the job to schedule the email */
         $content = [
-            'subject'               => $otp->otp.' is your verification code',
+            'subject'               => $otp->otp . ' is your verification code',
             'identity'              => $otp->identity,
             'email_template_params' => [
                 'otp'               => $otp->otp,
                 'otpLink'           => '',
-                'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
+                'tracking_url'      => config('app.frontendUrl') . '/t/' . $otp->_id,
             ],
             'email_type'            => Email::TEMPLATE_EMAIL_VERIFICATION,
         ];
@@ -103,7 +103,11 @@ class OtpService
         // Validate the otp for the given user
         $limit = config('app.otp.invalid_attempt_limit');
         $limit--;
-        $model = Otp::FilterByRemainingAttempt($otp, $identity, $checkValidated, $limit)->first();
+        $model = Otp::identity($identity)
+            ->otp($otp)
+            ->validated($checkValidated)
+            ->remainingAttempt($limit)
+            ->first();
         if ($model) {
             if ($validateOnly) {
                 $model->validated = true;
@@ -115,7 +119,10 @@ class OtpService
             return true;
         }
         // Increment the incorrect otp attempt by 1 then through the error
-        Otp::FilterByIdentity($identity)->increment('incorrect', 1);
+        Otp::identity($identity)
+            ->recentFirst()
+            ->first()
+            ->increment('incorrect', 1);
 
         throw ValidationException::withMessages([
             'otp' => ['Incorrect otp.'],

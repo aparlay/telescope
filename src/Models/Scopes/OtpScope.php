@@ -11,26 +11,49 @@ trait OtpScope
      * @param  string  $identity
      * @return mixed
      */
-    public static function scopeFilterByIdentity(Builder $query, string $identity): Builder
+    public static function scopeIdentity(Builder $query, string $identity): Builder
     {
-        return $query->where(['identity' => $identity]);
+        return $query->where('identity', $identity);
     }
 
     /**
      * @param  Builder  $query
      * @param  string  $otp
-     * @param  string  $identity
+     * @return mixed
+     */
+    public function scopeOtp(Builder $query, string $otp): Builder
+    {
+        return $query->where('otp', $otp);
+    }
+
+    /**
+     * @param  Builder  $query
      * @param  bool  $checkValidated
      * @param  int $limit
      * @return mixed
      */
-    public function scopeFilterByRemainingAttempt(Builder $query, string $otp, string $identity, bool $checkValidated, int $limit): Builder
+    public function scopeValidated(Builder $query, bool $checkValidated): Builder
     {
-        return $query->where([
-            'otp' => $otp,
-            'identity' => $identity,
-            'validated' => $checkValidated,
-            'incorrect' => ['$in' => range(0, $limit)],
-        ]);
+        return $query->where('validated', $checkValidated);
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  int $limit
+     * @return mixed
+     */
+    public function scopeRemainingAttempt(Builder $query, int $limit): Builder
+    {
+        return $query->whereIn('incorrect', range(0, $limit));
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param $query
+     * @return mixed
+     */
+    public function scopeRecentFirst(Builder $query): mixed
+    {
+        return $query->orderBy('created_at', 'desc');
     }
 }
