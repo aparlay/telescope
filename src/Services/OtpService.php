@@ -80,14 +80,15 @@ class OtpService
 
         /** Prepare email content and dispatch the job to schedule the email */
         $email = $otp->identity;
-        $subject = $otp->otp . ' is your verification code';
+        $subject = $otp->otp.' is your verification code';
         $type = Email::TEMPLATE_EMAIL_VERIFICATION;
         $payload = [
             'otp'               => $otp->otp,
             'otpLink'           => '',
-            'tracking_url'      => config('app.frontendUrl') . '/t/' . $otp->_id,
+            'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
         ];
         EmailJob::dispatch($email, $subject, $type, $payload);
+
         return true;
     }
 
