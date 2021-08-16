@@ -145,7 +145,7 @@ class AuthController extends Controller
         $this->repository->isUserEligible($user);
 
         // Send the OTP or Throw exception if send OTP limit is reached
-        OtpService::sendOtp($user, $request->headers->get('X-DEVICE-ID', 'required'));
+        OtpService::sendOtp($user, $request->headers->get('X-DEVICE-ID'));
 
         /** Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
         if (UserService::getIdentityType($request->username) === Login::IDENTITY_EMAIL) {
