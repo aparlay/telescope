@@ -109,7 +109,7 @@ class UserRepository implements RepositoryInterface
      * @param string $email
      *
 <<<<<<< HEAD
-     * @return Array | bool
+     * @return array | bool
 =======
      * @return array
 >>>>>>> 4200184319142daaf3d583bcc80c817bec0411fb
@@ -129,7 +129,7 @@ class UserRepository implements RepositoryInterface
      *
      * @param string $phoneNumber
      *
-     * @return Array | bool
+     * @return array | bool
      */
     public static function findByPhoneNumber(string $phoneNumber)
     {
