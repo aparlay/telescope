@@ -27,7 +27,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property bool        $phone_number_verified
  * @property string      $auth_key
  * @property string      $avatar
- * @property int         $gender
  * @property int         $status
  * @property int         $visibility
  * @property int         $interested_in
@@ -345,24 +344,5 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return Alert::user(auth()->user()->_id)->notVisited()->get();
-    }
-
-    /**
-     * Get status_list attribute for admin panel.
-     *
-     * @return array
-     */
-    public function getStatusListAttribute(): array
-    {
-        $statuses = self::getStatuses();
-        $genders = self::getGenders();
-
-        return array_values(array_filter([
-            strtolower(! empty($this->status) ? $statuses[$this->status] : ''),
-            $this->email_verified ? 'email_verified' : 'email_not_verified',
-            strtolower(! empty($this->gender) ? $genders[$this->gender] : ''),
-        ], function ($value) {
-            return $value !== '';
-        }));
     }
 }
