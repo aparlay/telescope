@@ -62,7 +62,9 @@
         "ext-mongodb": "*",
         "ext-openssl": "*",
         "ext-swoole": "*",
+        "aparlay/telescope": "^4.6.1",
         "fideloper/proxy": "^4.4",
+        "flowjs/flow-php-server": "^1.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "jenssegers/mongodb": "^3.8",
@@ -74,8 +76,7 @@
         "laravel/tinker": "^2.5",
         "markrogoyski/math-php": "2.*",
         "spatie/laravel-fractal": "^5.8",
-        "tymon/jwt-auth": "dev-develop",
-        "aparlay/telescope": "^4.6.1"
+        "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9.1",
