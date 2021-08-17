@@ -16,6 +16,7 @@ use Aparlay\Core\Services\UserService;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -45,14 +46,21 @@ class AuthController extends Controller
      * Change password.
      *
      * @param ChangePasswordRequest $request
-     *
      * @return Response
      */
     public function changePassword(ChangePasswordRequest $request): Response
     {
-        /* Change password Scenario */
+        /* Change password scenario */
         if ($request->old_password) {
             $user = auth()->user();
+
+            /** Check the update permission */
+            $response = Gate::inspect('update', $user);
+            if (! $response->allowed()) {
+                throw ValidationException::withMessages(['user' => [$response->message()]]);
+            }
+
+            /* Change the password in database table */
             $this->repository->resetPassword($request->password, $user);
         } else {
             /* Forgot password scenario */
@@ -63,41 +71,17 @@ class AuthController extends Controller
             /* Validate the OTP or Throw exception if OTP is incorrect */
             OtpService::validateOtp($request->otp, $request->username, false, true);
 
+            /* Store the new password in database */
             $this->repository->resetPassword($request->password, $user);
         }
 
-        /** Prepare Credentials and attempt the login */
-        $credentials = ['email' => $user->email, 'password' => $request->password];
-        if (! ($token = auth()->attempt($credentials))) {
-            throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
-        }
-
-        /** Prepare and return the json response */
-        $result = $this->respondWithToken($token);
-        $cookie1 = Cookie::make(
-            '__Secure_token',
-            $result['access_token'],
-            $result['token_expired_at'] / 60
-        );
-        $cookie2 = Cookie::make(
-            '__Secure_refresh_token',
-            $result['refresh_token'],
-            $result['refresh_token_expired_at'] / 60
-        );
-        $cookie3 = Cookie::make(
-            '__Secure_username',
-            auth()->user()->username,
-            $result['refresh_token_expired_at'] / 60
-        );
-
-        return $this->response($result)->cookie($cookie1)->cookie($cookie2)->cookie($cookie3);
+        return $this->login(new LoginRequest(['password' => $request->password, 'username' => $user->username]));
     }
 
     /**
      * Validate request OTP.
      *
      * @param ValidateOtpRequest $request
-     *
      * @return Response
      */
     public function validateOtp(ValidateOtpRequest $request): Response
@@ -113,25 +97,16 @@ class AuthController extends Controller
         /* Validate the OTP or Throw exception if OTP is incorrect */
         OtpService::validateOtp($request->otp, $request->username, true);
 
-        /* Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
-        if (UserService::getIdentityType($request->username) === Login::IDENTITY_EMAIL) {
-            $response = [
-                'message' => 'OTP is matched with your email.',
-            ];
-        } else {
-            $response = [
-                'message' => 'OTP is matched with your phone number.',
-            ];
-        }
-
-        return $this->response($response, '', Response::HTTP_OK);
+        /* Find the identityField (Email/Phone Number/Username) based on username and return the response*/
+        return $this->response([
+            'message' => 'OTP is matched with your '.ucfirst(str_replace('_', ' ', UserService::getIdentityType($request->username))),
+        ], '', Response::HTTP_OK);
     }
 
     /**
      * Request for otp.
      *
      * @param RequestOtpRequest $request
-     *
      * @return Response
      */
     public function requestOtp(RequestOtpRequest $request): Response

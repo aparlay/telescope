@@ -37,7 +37,7 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  User | null  $user
+     * @param  User|null  $user
      * @return Response|bool
      */
     public function update(User | null $user)

@@ -24,8 +24,7 @@ class UserRepository implements RepositoryInterface
      * Verifying the user.
      *
      * @param  User|Authenticatable  $user
-     *
-     * @return bool
+     * @return void
      */
     public function verify(User | Authenticatable $user)
     {
@@ -38,9 +37,7 @@ class UserRepository implements RepositoryInterface
      * Through exception if user is suspended/banned/not found.
      *
      * @param  User|Authenticatable  $user
-     *
      * @return bool
-     *
      * @throws ValidationException
      */
     public function isUserEligible(User | Authenticatable $user)
@@ -69,7 +66,6 @@ class UserRepository implements RepositoryInterface
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
      *
      * @param  User|Authenticatable  $user
-     *
      * @return bool
      */
     public function isUnverified(User | Authenticatable $user)
@@ -107,51 +103,33 @@ class UserRepository implements RepositoryInterface
      * find user by email.
      *
      * @param string $email
-     *
-     * @return array | bool
+     * @return User|void
      */
     public static function findByEmail(string $email)
     {
-        $user = User::Email($email)->first();
-        if ($user) {
-            return $user;
-        }
-
-        return false;
+        return User::email($email)->first();
     }
 
     /**
      * find user by phone_number.
      *
      * @param string $phoneNumber
-     *
-     * @return array | bool
+     * @return User|void
      */
     public static function findByPhoneNumber(string $phoneNumber)
     {
-        $user = User::PhoneNumber($phoneNumber)->first();
-        if ($user) {
-            return $user;
-        }
-
-        return false;
+        return User::phoneNumber($phoneNumber)->first();
     }
 
     /**
      * find user by username.
      *
      * @param string $userName
-     *
-     * @return array
+     * @return User|void
      */
     public static function findByUsername(string $userName)
     {
-        $user = User::Username($userName)->first();
-        if ($user) {
-            return $user;
-        }
-
-        return false;
+        return User::username($userName)->first();
     }
 
     /**
