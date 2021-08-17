@@ -13,6 +13,7 @@ class UserService
     /**
      * Responsible for returning Login Entity (email or phone_number or username) based on the input username.
      *
+     * @param string $identity
      * @return string
      */
     public static function getIdentityType(string $identity)
@@ -29,11 +30,10 @@ class UserService
     }
 
     /**
-     * Finds user by username.
+     * Find user by identity (email/phone_number/username).
      *
      * @param string $username
-     *
-     * @return static|null
+     * @return User
      */
     public static function findByIdentity(string $username)
     {

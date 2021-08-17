@@ -36,7 +36,7 @@ class ChangePasswordRequest extends FormRequest
         return [
             'email' => ['email:rfc,dns', 'max:255', 'required_without:old_password'],
             'otp' => ['required_without:old_password'],
-            'password' => ['required', Password::min(8)->letters()->numbers()],
+            'password' => ['required', Password::min(8)->letters()->numbers(), 'different:old_password'],
             'old_password' => ['required_without:email', Password::min(8)->letters()->numbers()],
         ];
     }
@@ -49,7 +49,7 @@ class ChangePasswordRequest extends FormRequest
         /* Convert uppercase email charecter into lowercase */
         $this->username = $this->email ? Str::lower($this->email) : $this->phone_number;
 
-        /* Resposible for match old password */
+        /* Resposible to match old password */
         if ($this->old_password && auth()->user()) {
             if (! Hash::check($this->old_password, auth()->user()->password_hash)) {
                 throw ValidationException::withMessages([

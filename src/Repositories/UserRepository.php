@@ -24,8 +24,7 @@ class UserRepository implements RepositoryInterface
      * Verifying the user.
      *
      * @param  User|Authenticatable  $user
-     *
-     * @return bool
+     * @return Void
      */
     public function verify(User | Authenticatable $user)
     {
@@ -38,9 +37,7 @@ class UserRepository implements RepositoryInterface
      * Through exception if user is suspended/banned/not found.
      *
      * @param  User|Authenticatable  $user
-     *
-     * @return bool
-     *
+     * @return Bool
      * @throws ValidationException
      */
     public function isUserEligible(User | Authenticatable $user)
@@ -69,8 +66,7 @@ class UserRepository implements RepositoryInterface
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
      *
      * @param  User|Authenticatable  $user
-     *
-     * @return bool
+     * @return Bool
      */
     public function isUnverified(User | Authenticatable $user)
     {
@@ -106,60 +102,42 @@ class UserRepository implements RepositoryInterface
     /**
      * find user by email.
      *
-     * @param string $email
-     *
-     * @return array | bool
+     * @param String $email
+     * @return User|Void
      */
     public static function findByEmail(string $email)
     {
-        $user = User::Email($email)->first();
-        if ($user) {
-            return $user;
-        }
-
-        return false;
+        return User::Email($email)->first();
     }
 
     /**
      * find user by phone_number.
      *
-     * @param string $phoneNumber
-     *
-     * @return array | bool
+     * @param String $phoneNumber
+     * @return User|Void
      */
     public static function findByPhoneNumber(string $phoneNumber)
     {
-        $user = User::PhoneNumber($phoneNumber)->first();
-        if ($user) {
-            return $user;
-        }
-
-        return false;
+        return User::PhoneNumber($phoneNumber)->first();
     }
 
     /**
      * find user by username.
      *
-     * @param string $userName
-     *
-     * @return array
+     * @param String $userName
+     * @return User|Void
      */
     public static function findByUsername(string $userName)
     {
-        $user = User::Username($userName)->first();
-        if ($user) {
-            return $user;
-        }
-
-        return false;
+        return User::Username($userName)->first();
     }
 
     /**
      * Resposible for match old password.
      *
-     * @param string $password
+     * @param String $password
      * @param User|Authenticatable  $user
-     * @return bool
+     * @return Bool
      */
     public function resetPassword(string $password, User | Authenticatable $user)
     {
