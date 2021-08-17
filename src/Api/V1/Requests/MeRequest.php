@@ -4,8 +4,8 @@ namespace Aparlay\Core\Api\V1\Requests;
 
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\RequiredIf;
+use Illuminate\Validation\ValidationException;
 
 /**
  * @property string email
