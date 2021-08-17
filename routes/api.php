@@ -25,10 +25,10 @@ use Illuminate\Support\Facades\Route;
 */
 Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1')->group(function () {
     Route::prefix('media')->name('media.')->group(function () {
-        Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
+        Route::get('/', [MediaController::class, 'index'])->name('list');
         Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
-        Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])
+        Route::get('/{media}', [MediaController::class, 'show'])
             ->middleware('cache.headers:public;max_age=2628000;etag')->name('show');
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
         Route::middleware('auth:api')->group(function () {

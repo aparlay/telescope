@@ -26,7 +26,9 @@ class MediaController extends Controller
      */
     public function index(): Response
     {
-        return $this->response([], Response::HTTP_OK);
+        $type = request()->input('type') ?? '';
+
+        return $this->response($this->repository->getByType($type), Response::HTTP_OK);
     }
 
     /**

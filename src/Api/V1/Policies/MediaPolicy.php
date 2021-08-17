@@ -4,13 +4,18 @@ namespace Aparlay\Core\Api\V1\Policies;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
 class MediaPolicy
 {
     use HandlesAuthorization;
+
+    public function viewAny()
+    {
+        return Response::allow();
+    }
 
     /**
      * Determine whether the user can view the model.
@@ -23,7 +28,7 @@ class MediaPolicy
     {
         $userId = $user?->_id;
 
-        if ($media->visibility === Media::VISIBILITY_PUBLIC) {
+        if ((int) $media->visibility === Media::VISIBILITY_PUBLIC) {
             return Response::allow();
         }
 
@@ -48,12 +53,11 @@ class MediaPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \Aparlay\Core\Api\V1\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create()
     {
-        return auth()->user()->status !== User::STATUS_PENDING
+        return auth()->user()->status != User::STATUS_PENDING
             ? Response::allow()
             : Response::deny(__('You need to complete registration first!'));
     }
