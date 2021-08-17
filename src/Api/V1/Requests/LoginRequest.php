@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\RequiredIf;
 
 class LoginRequest extends FormRequest
 {
@@ -27,6 +28,19 @@ class LoginRequest extends FormRequest
             'username' => 'required',
             'password' => 'required',
             'otp' => 'nullable',
+            'device_id' => new RequiredIf($this->header('X-DEVICE-ID') == ''),
+        ];
+    }
+
+    /**
+     * Get the validation message that apply to the request.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'device_id.required' => 'Device Id cannot be blank.',
         ];
     }
 }

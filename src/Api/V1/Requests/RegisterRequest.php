@@ -9,6 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rules\RequiredIf;
 
 /**
  * @property string email
@@ -42,6 +43,19 @@ class RegisterRequest extends FormRequest
             'password' => ['required', Password::min(8)->letters()->numbers()],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
             'username' => ['nullable', 'max:255'],
+            'device_id' => new RequiredIf($this->header('X-DEVICE-ID') == ''),
+        ];
+    }
+
+    /**
+     * Get the validation message that apply to the request.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'device_id.required' => 'Device Id cannot be blank.',
         ];
     }
 
