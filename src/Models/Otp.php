@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Database\Factories\OrderFactory;
+use Aparlay\Core\Database\Factories\OtpFactory;
 use Aparlay\Core\Models\Scopes\OtpScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -68,6 +68,6 @@ class Otp extends Model
      */
     protected static function newFactory(): Factory
     {
-        return OrderFactory::new();
+        return OtpFactory::new();
     }
 }

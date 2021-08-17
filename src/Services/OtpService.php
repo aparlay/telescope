@@ -2,13 +2,14 @@
 
 namespace Aparlay\Core\Services;
 
+use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Jobs\Email as EmailJob;
 use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Repositories\EmailRepository;
 use Aparlay\Core\Repositories\OtpRepository;
 use App\Exceptions\BlockedException;
-use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
@@ -16,11 +17,12 @@ class OtpService
 {
     /**
      * send otp if status in pending and request otp is null.
-     * @param User $user
-     * @param string $deviceId
+     * @param  User  $user
+     * @param  string  $deviceId
      * @return bool
+     * @throws BlockedException
      */
-    public static function sendOtp(User $user, string $deviceId)
+    public static function sendOtp(User | Authenticatable $user, string $deviceId)
     {
         $otp = self::generateOtp($user->email, $deviceId);
         self::sendByEmail($user, $otp);
@@ -31,9 +33,9 @@ class OtpService
     /**
      * Generate OTP.
      * @param string $identity
-     * @param string $device_id
-     * @return array
-     * @throws \BlockedException
+     * @param string|null $device_id
+     * @return \Aparlay\Core\Api\V1\Models\Otp
+     * @throws BlockedException
      */
     public static function generateOtp(string $identity, string $device_id = null)
     {
@@ -66,7 +68,7 @@ class OtpService
      * @param object $otp
      * @return bool
      */
-    public static function sendByEmail(User $user, object $otp)
+    public static function sendByEmail(User | Authenticatable $user, object $otp)
     {
         /** Prepare email request data and insert in Email table */
         $request = [
@@ -77,17 +79,15 @@ class OtpService
         EmailRepository::create($request);
 
         /** Prepare email content and dispatch the job to schedule the email */
-        $content = [
-            'subject'               => $otp->otp.' is your verification code',
-            'identity'              => $otp->identity,
-            'email_template_params' => [
-                'otp'               => $otp->otp,
-                'otpLink'           => '',
-                'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
-            ],
-            'email_type'            => Email::TEMPLATE_EMAIL_VERIFICATION,
+        $email = $otp->identity;
+        $subject = $otp->otp.' is your verification code';
+        $type = Email::TEMPLATE_EMAIL_VERIFICATION;
+        $payload = [
+            'otp'               => $otp->otp,
+            'otpLink'           => '',
+            'tracking_url'      => config('app.frontendUrl').'/t/'.$otp->_id,
         ];
-        EmailJob::dispatch($content);
+        EmailJob::dispatch($email, $subject, $type, $payload);
 
         return true;
     }

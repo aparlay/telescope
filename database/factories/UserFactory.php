@@ -58,6 +58,16 @@ class UserFactory extends Factory
                 'hashtags' => DT::utcNow(),
                 'medias' => DT::utcNow(),
             ],
+            'setting' => [
+                'otp' => $this->faker->boolean(),
+                'notifications' => [
+                    'unread_message_alerts' => $this->faker->boolean(),
+                    'new_followers' => $this->faker->boolean(),
+                    'news_and_updates' => $this->faker->boolean(),
+                    'tips' => $this->faker->boolean(),
+                    'new_subscribers' => $this->faker->boolean(),
+                ],
+            ],
             'blocks' => [],
             'likes' => [],
             'followers' => [],

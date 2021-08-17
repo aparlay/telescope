@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
-use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
