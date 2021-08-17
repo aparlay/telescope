@@ -56,11 +56,11 @@ class AuthController extends Controller
 
             /** Check the update permission */
             $response = Gate::inspect('update', $user);
-            if (!$response->allowed()) {
+            if (! $response->allowed()) {
                 throw ValidationException::withMessages(['user' => [$response->message()]]);
             }
 
-            /** Change the password in database table */
+            /* Change the password in database table */
             $this->repository->resetPassword($request->password, $user);
         } else {
             /* Forgot password scenario */
@@ -99,7 +99,7 @@ class AuthController extends Controller
 
         /* Find the identityField (Email/Phone Number/Username) based on username and return the response*/
         return $this->response([
-            'message' => 'OTP is matched with your ' . ucfirst(str_replace('_', ' ', UserService::getIdentityType($request->username)))
+            'message' => 'OTP is matched with your '.ucfirst(str_replace('_', ' ', UserService::getIdentityType($request->username))),
         ], '', Response::HTTP_OK);
     }
 
@@ -112,7 +112,7 @@ class AuthController extends Controller
     public function requestOtp(RequestOtpRequest $request): Response
     {
         /* Find the user based on username */
-        if (!($user = UserService::findByIdentity($request->username))) {
+        if (! ($user = UserService::findByIdentity($request->username))) {
             throw ValidationException::withMessages(['user' => ['user not found']]);
         }
 

@@ -24,7 +24,7 @@ class UserRepository implements RepositoryInterface
      * Verifying the user.
      *
      * @param  User|Authenticatable  $user
-     * @return Void
+     * @return void
      */
     public function verify(User | Authenticatable $user)
     {
@@ -37,7 +37,7 @@ class UserRepository implements RepositoryInterface
      * Through exception if user is suspended/banned/not found.
      *
      * @param  User|Authenticatable  $user
-     * @return Bool
+     * @return bool
      * @throws ValidationException
      */
     public function isUserEligible(User | Authenticatable $user)
@@ -66,7 +66,7 @@ class UserRepository implements RepositoryInterface
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
      *
      * @param  User|Authenticatable  $user
-     * @return Bool
+     * @return bool
      */
     public function isUnverified(User | Authenticatable $user)
     {
@@ -102,8 +102,8 @@ class UserRepository implements RepositoryInterface
     /**
      * find user by email.
      *
-     * @param String $email
-     * @return User|Void
+     * @param string $email
+     * @return User|void
      */
     public static function findByEmail(string $email)
     {
@@ -113,8 +113,8 @@ class UserRepository implements RepositoryInterface
     /**
      * find user by phone_number.
      *
-     * @param String $phoneNumber
-     * @return User|Void
+     * @param string $phoneNumber
+     * @return User|void
      */
     public static function findByPhoneNumber(string $phoneNumber)
     {
@@ -124,8 +124,8 @@ class UserRepository implements RepositoryInterface
     /**
      * find user by username.
      *
-     * @param String $userName
-     * @return User|Void
+     * @param string $userName
+     * @return User|void
      */
     public static function findByUsername(string $userName)
     {
@@ -135,9 +135,9 @@ class UserRepository implements RepositoryInterface
     /**
      * Resposible for match old password.
      *
-     * @param String $password
+     * @param string $password
      * @param User|Authenticatable  $user
-     * @return Bool
+     * @return bool
      */
     public function resetPassword(string $password, User | Authenticatable $user)
     {
