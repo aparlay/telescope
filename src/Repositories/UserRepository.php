@@ -107,7 +107,7 @@ class UserRepository implements RepositoryInterface
      */
     public static function findByEmail(string $email)
     {
-        return User::Email($email)->first();
+        return User::email($email)->first();
     }
 
     /**
@@ -118,7 +118,7 @@ class UserRepository implements RepositoryInterface
      */
     public static function findByPhoneNumber(string $phoneNumber)
     {
-        return User::PhoneNumber($phoneNumber)->first();
+        return User::phoneNumber($phoneNumber)->first();
     }
 
     /**
@@ -129,7 +129,7 @@ class UserRepository implements RepositoryInterface
      */
     public static function findByUsername(string $userName)
     {
-        return User::Username($userName)->first();
+        return User::username($userName)->first();
     }
 
     /**
