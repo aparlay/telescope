@@ -17,7 +17,7 @@ class OtpService
 {
     /**
      * send otp if status in pending and request otp is null.
-     * @param  User  $user
+     * @param  User|Authenticatable  $user
      * @param  string  $deviceId
      * @return bool
      * @throws BlockedException
@@ -64,7 +64,7 @@ class OtpService
 
     /**
      * Send OTP by email.
-     * @param User $user
+     * @param User|Authenticatable $user
      * @param object $otp
      * @return bool
      */

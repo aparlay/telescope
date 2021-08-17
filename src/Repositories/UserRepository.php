@@ -4,6 +4,7 @@ namespace Aparlay\Core\Repositories;
 
 use Aparlay\Core\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserRepository implements RepositoryInterface
@@ -19,7 +20,14 @@ class UserRepository implements RepositoryInterface
         $this->model = $model;
     }
 
-    public function verify(User $user)
+    /**
+     * Verifying the user.
+     *
+     * @param  User|Authenticatable  $user
+     *
+     * @return bool
+     */
+    public function verify(User | Authenticatable $user)
     {
         $user->status = User::STATUS_VERIFIED;
         $user->email_verified = true;
@@ -59,10 +67,12 @@ class UserRepository implements RepositoryInterface
 
     /**
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
-     * @param  User  $user
+     *
+     * @param  User|Authenticatable  $user
+     *
      * @return bool
      */
-    public function isUnverified(User $user)
+    public function isUnverified(User | Authenticatable $user)
     {
         /* User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
         return $user->setting['otp'] && $user->status === User::STATUS_PENDING;
@@ -91,5 +101,69 @@ class UserRepository implements RepositoryInterface
     public function find($id)
     {
         // TODO: Implement find() method.
+    }
+
+    /**
+     * find user by email.
+     *
+     * @param string $email
+     *
+     * @return array | bool
+     */
+    public static function findByEmail(string $email)
+    {
+        $user = User::Email($email)->first();
+        if ($user) {
+            return $user;
+        }
+
+        return false;
+    }
+
+    /**
+     * find user by phone_number.
+     *
+     * @param string $phoneNumber
+     *
+     * @return array | bool
+     */
+    public static function findByPhoneNumber(string $phoneNumber)
+    {
+        $user = User::PhoneNumber($phoneNumber)->first();
+        if ($user) {
+            return $user;
+        }
+
+        return false;
+    }
+
+    /**
+     * find user by username.
+     *
+     * @param string $userName
+     *
+     * @return array
+     */
+    public static function findByUsername(string $userName)
+    {
+        $user = User::Username($userName)->first();
+        if ($user) {
+            return $user;
+        }
+
+        return false;
+    }
+
+    /**
+     * Resposible for match old password.
+     *
+     * @param string $password
+     * @param User|Authenticatable  $user
+     * @return bool
+     */
+    public function resetPassword(string $password, User | Authenticatable $user)
+    {
+        $user->password_hash = Hash::make($password);
+        $user->save();
     }
 }

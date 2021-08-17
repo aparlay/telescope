@@ -50,6 +50,7 @@ trait OtpScope
     /**
      * @param  Builder  $query
      * @param $query
+     * @return mixed
      */
     public function scopeRecentFirst(Builder $query): mixed
     {
