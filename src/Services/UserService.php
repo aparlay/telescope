@@ -4,8 +4,8 @@ namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Models\Login;
 use Aparlay\Core\Models\User;
-use Exception;
 use Aparlay\Core\Repositories\UserRepository;
+use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class UserService
      * Responsible for returning Login Entity (email or phone_number or username) based on the input username.
      *
      * @param string $identity
-     * @return String
+     * @return string
      */
     public static function getIdentityType(string $identity)
     {
@@ -60,7 +60,7 @@ class UserService
         /* Upload Avatar Image on Server */
         if ($request->hasFile('avatar')) {
             $extension = $request->file('avatar')->getClientOriginalExtension();
-            $avatar = uniqid($user->_id, false) . '.' . $extension;
+            $avatar = uniqid($user->_id, false).'.'.$extension;
             if (! $request->file('avatar')->storeAs(config('app.avatar.upload_directory'), $avatar)) {
                 throw new Exception('Cannot upload the file.');
             }
