@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\UserFactory;
+use Aparlay\Core\Events\UserUpdated;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -174,6 +175,10 @@ class User extends Authenticatable implements JWTSubject
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
+    ];
+
+    protected $dispatchesEvents = [
+        'updated' => UserUpdated::class,
     ];
 
     public static function getFeatures(): array

@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
@@ -64,15 +65,15 @@ class UserController extends Controller
         /* Update User Avatar */
         if ($request->hasFile('avatar')) {
             UserService::uploadAvatar($request, $user);
+        } else {
+            /* Update User Profile Information */
+            $user->fill($request->all());
+            if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
+                $user->status = User::STATUS_ACTIVE;
+            }
+            $user->save();
+            $user->refresh();
         }
-
-        /* Update User Profile Information */
-        $user->fill($request->all());
-        if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
-            $user->status = User::STATUS_ACTIVE;
-        }
-        $user->save();
-
         /* Return the updated user data */
         return $this->response(
             new MeResource($user),

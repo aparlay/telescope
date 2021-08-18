@@ -30,19 +30,19 @@ class UploadAvatar implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries = 1;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
      */
-    public int $maxExceptions = 3;
+    public int $maxExceptions = 1;
 
     /**
      * The number of seconds to wait before retrying the job.
      *
      * @var int|array
      */
-    public $backoff = 30;
+    public $backoff = 1;
 
     /**
      * Create a new job instance.
@@ -55,8 +55,9 @@ class UploadAvatar implements ShouldQueue
     {
         $this->file = $file;
         if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'User not found!');
+            throw new Exception(__CLASS__ . PHP_EOL . 'User not found!');
         }
+        $this->handle();
     }
 
     /**
@@ -69,16 +70,28 @@ class UploadAvatar implements ShouldQueue
      */
     public function handle()
     {
-        $resource = Storage::disk('upload')->readStream($this->file);
-        Storage::disk('b2-avatars')->writeStream($this->file, $resource);
-        Storage::disk('gc-avatars')->writeStream($this->file, $resource);
-
-        $this->user->avatar = Cdn::avatar($this->file);
-        $this->user->save();
+        $storage = Storage::disk('upload');
+        if ($storage->exists($this->file)) {
+            Storage::disk('b2-avatars')->writeStream($this->file, $storage->readStream($this->file));
+            Storage::disk('gc-avatars')->writeStream($this->file, $storage->readStream($this->file));
+            $this->user->avatar = Cdn::avatar($this->file);
+            $this->user->save();
+            $this->user->refresh();
+        }
     }
 
     public function failed(Throwable $exception)
     {
         $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+    }
+
+    /**
+     * Calculate the number of seconds to wait before retrying the job.
+     *
+     * @return int
+     */
+    public function backoff()
+    {
+        return $this->attempts() * 60;
     }
 }

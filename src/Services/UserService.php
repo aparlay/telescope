@@ -3,16 +3,18 @@
 namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Models\Login;
-use App\Models\User;
+use Aparlay\Core\Models\User;
+use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserService
 {
     /**
      * Responsible for returning Login Entity (email or phone_number or username) based on the input username.
      *
-     * @return string
+     * @return String
      */
     public static function getIdentityType(string $identity)
     {
@@ -30,23 +32,24 @@ class UserService
     /**
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
      * @param Request $request
-     * @param User $user
-     * @return bool
+     * @param User|Authenticatable $user
+     * @return User|Bool
      */
     public static function uploadAvatar(Request $request, User | Authenticatable $user)
     {
         /** Upload Avatar Image on Server */
-        $extension = $request->file('avatar')->getClientOriginalExtension();
-        $avatar = uniqid($user->_id, false).'.'.$extension;
-        $uploadDirectory = config('app.avatar.upload_directory');
-        $request->file('avatar')->storeAs($uploadDirectory, $avatar);
+        if ($request->hasFile('avatar')) {
+            $extension = $request->file('avatar')->getClientOriginalExtension();
+            $avatar = uniqid($user->_id, false) . '.' . $extension;
+            if (! $request->file('avatar')->storeAs(config('app.avatar.upload_directory'), $avatar)) {
+                throw new Exception('Cannot upload the file.');
+            }
 
-        /* Update Avatar Image on Cloude */
-        // Pending: https://trello.com/c/2wS0tk7I/27-setup-cloud-backblaze-bucket-and-google-clould
-
-        /* Store avatar name in database */
-        $user->avatar = str_replace('//', '/', $uploadDirectory.'/'.$avatar);
-        $user->save();
+            /* Store temporary avatar name in database */
+            $user->avatar = $avatar;
+            $user->save();
+            $user->refresh();
+        }
 
         return $user;
     }
