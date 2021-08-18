@@ -176,6 +176,7 @@ class Media extends Model
      * @var array
      */
     protected $casts = [
+        'visibility' => 'integer',
     ];
 
     protected $dispatchesEvents = [

@@ -28,7 +28,7 @@ class MediaPolicy
     {
         $userId = $user?->_id;
 
-        if ((int) $media->visibility === Media::VISIBILITY_PUBLIC) {
+        if ($media->visibility === Media::VISIBILITY_PUBLIC) {
             return Response::allow();
         }
 
@@ -57,7 +57,7 @@ class MediaPolicy
      */
     public function create()
     {
-        return auth()->user()->status != User::STATUS_PENDING
+        return auth()->user()->status !== User::STATUS_PENDING
             ? Response::allow()
             : Response::deny(__('You need to complete registration first!'));
     }

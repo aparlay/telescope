@@ -174,6 +174,7 @@ class User extends Authenticatable implements JWTSubject
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
+        'status' => 'integer',
     ];
 
     public static function getFeatures(): array
