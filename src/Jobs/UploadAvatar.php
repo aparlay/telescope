@@ -84,14 +84,4 @@ class UploadAvatar implements ShouldQueue
     {
         $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
     }
-
-    /**
-     * Calculate the number of seconds to wait before retrying the job.
-     *
-     * @return int
-     */
-    public function backoff()
-    {
-        return $this->attempts() * 60;
-    }
 }
