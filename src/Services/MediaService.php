@@ -8,6 +8,7 @@ use Aparlay\Core\Models\MediaVisit;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use MongoDB\BSON\ObjectId;
 
 class MediaService
 {
@@ -67,17 +68,20 @@ class MediaService
     {
         $query = Media::query();
         if (! auth()->guest() && $type === 'following') {
-            $query->availableForFollower()->following(auth()->user()->_id)->latest();
+            $query->availableForFollower()->following(auth()->user()->_id)->recentFirst();
         } else {
             $query->public()->confirmed()->sort();
         }
         if (! auth()->guest()) {
-            $query->notBlockedFor(auth()->user()->_id);
+            //$query->notBlockedFor(auth()->user()->_id);
+            //@todo determine why notBlockedFor doesn't work
         }
-        $deviceId = request()->headers->get('X-DEVICE-ID', '');
-        $cacheKey = 'media_visits'.'_'.$deviceId;
+        //$deviceId = request()->headers->get('X-DEVICE-ID', '');
+        //$cacheKey = 'media_visits'.'_'.$deviceId;
         if ($type !== 'following') {
-            if (! auth()->guest()) {
+            /*
+             * @todo MediaVisit
+             * if (! auth()->guest()) {
                 $userId = auth()->user()->_id;
                 $query->notVisitedByUserAndDevice($userId, $deviceId);
             } else {
@@ -90,16 +94,17 @@ class MediaService
                 }
                 cache()->delete($cacheKey);
                 redirect('index');
-            }
+            }*/
             $provider = $query->paginate(15);
         } else {
             $provider = $query->get();
         }
-        $visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
+        /*$visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
         foreach ($provider as $model) {
             $visited[] = $model->_id;
         }
         cache()->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
+        */
         if ($type === 'following') {
             $provider = MediaResource::collection($provider);
         }

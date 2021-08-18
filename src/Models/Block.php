@@ -92,6 +92,30 @@ class Block extends Model
                 ['blocks' => DT::utcNow()]
             );
             $block->creatorObj->save();
+
+            if (($follow = Follow::creator($block->creator['_id'])->user($block->user['_id'])->first()) !== null) {
+                $follow->delete();
+            }
+
+            if (($follow = Follow::creator($block->user['_id'])->user($block->creator['_id'])->first()) !== null) {
+                $follow->delete();
+            }
+
+            foreach (Media::creator($block->user['_id'])->get() as $media) {
+                $media->addToSet('blocked_user_ids', new ObjectId($block->creator['_id']));
+            }
+
+            foreach (Media::creator($block->creator['_id'])->get() as $media) {
+                $media->addToSet('blocked_user_ids', new ObjectId($block->user['_id']));
+            }
+
+            foreach (MediaLike::creator($block->user['_id'])->user($block->creator['_id'])->get() as $mediaLike) {
+                $mediaLike->delete();
+            }
+
+            foreach (MediaLike::creator($block->creator['_id'])->user($block->user['_id'])->get() as $mediaLike) {
+                $mediaLike->delete();
+            }
         });
 
         static::deleted(function ($block) {
@@ -106,6 +130,14 @@ class Block extends Model
                 ['blocks' => DT::utcNow()]
             );
             $block->creatorObj->save();
+
+            foreach (Media::creator($block->user['_id'])->get() as $media) {
+                $media->removeFromSet('blocked_user_ids', $this->creator_id);
+            }
+
+            foreach (Media::creator($block->creator['_id'])->get() as $media) {
+                $media->removeFromSet('blocked_user_ids', $this->user_id);
+            }
         });
     }
 
