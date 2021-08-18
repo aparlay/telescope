@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1')->group(function () {
     Route::prefix('media')->name('media.')->group(function () {
         Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
-        Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
         Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
         Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])
@@ -34,6 +33,7 @@ Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1'
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
         Route::middleware('auth:api')->group(function () {
             Route::post('/', [MediaController::class, 'store'])->name('create');
+            Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
             Route::middleware('auth:api')->put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::middleware('auth:api')->delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
         });
@@ -65,9 +65,11 @@ Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1'
     });
 
     Route::middleware('auth:api')->match(['put', 'patch'], '/{alert}', [AlertController::class, 'update'])->name('alert.update');
-    Route::match(['put', 'patch'], '/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
-    Route::patch('/validate-otp', [UserController::class, 'validateOtp'])->name('user.validateOtp');
-    Route::post('/request-otp', [UserController::class, 'requestOtp'])->name('user.requestOtp');
+
+    Route::match(['put', 'patch'], '/change-password', [AuthController::class, 'changePassword'])->name('user.change-password');
+    Route::patch('/validate-otp', [AuthController::class, 'validateOtp'])->name('user.validateOtp');
+    Route::post('/request-otp', [AuthController::class, 'requestOtp'])->name('user.requestOtp');
+
     Route::middleware('auth:api')->delete('/logout', [UserController::class, 'logout'])->name('user.logout');
 
     Route::post('/login', [AuthController::class, 'login'])->name('user.login');

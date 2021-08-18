@@ -5,15 +5,16 @@ namespace Aparlay\Core\Services;
 use Aparlay\Core\Models\Login;
 use Aparlay\Core\Models\User;
 use Exception;
+use Aparlay\Core\Repositories\UserRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class UserService
 {
     /**
      * Responsible for returning Login Entity (email or phone_number or username) based on the input username.
      *
+     * @param string $identity
      * @return String
      */
     public static function getIdentityType(string $identity)
@@ -27,6 +28,25 @@ class UserService
             default:
                 return Login::IDENTITY_USERNAME;
         }
+    }
+
+    /**
+     * Find user by identity (email/phone_number/username).
+     *
+     * @param string $username
+     * @return User
+     */
+    public static function findByIdentity(string $username)
+    {
+        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            return UserRepository::findByEmail($username);
+        }
+
+        if (is_numeric($username)) {
+            return UserRepository::findByPhoneNumber($username);
+        }
+
+        return UserRepository::findByUsername($username);
     }
 
     /**
