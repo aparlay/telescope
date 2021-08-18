@@ -2,10 +2,10 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
-use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\Request;
