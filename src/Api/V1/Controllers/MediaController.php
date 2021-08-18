@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Repositories\MediaRepository;
+use Aparlay\Core\Services\UploadService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -46,6 +47,13 @@ class MediaController extends Controller
         return $this->repository->store($request);
     }
 
+    public function upload(): Response
+    {
+        $result = UploadService::chunkUpload();
+
+        return $this->response($result['data'], '', $result['code']);
+    }
+
     /**
      * Display the specified resource.
      */
@@ -58,13 +66,6 @@ class MediaController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Media $media): Response
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function upload(Request $request): Response
     {
     }
 
