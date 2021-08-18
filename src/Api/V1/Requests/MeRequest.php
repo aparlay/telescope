@@ -5,7 +5,6 @@ namespace Aparlay\Core\Api\V1\Requests;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Rules\RequiredIf;
 
 /**
  * @property string email
@@ -36,19 +35,6 @@ class MeRequest extends FormRequest
         return [
             'avatar' => ['image', 'mimes:png,jpg,jpeg,gif', 'max:10485760'],
             'username' => ['unique:users', 'min:2', 'max:255'],
-            'device_id' => new RequiredIf($this->header('X-DEVICE-ID') == ''),
-        ];
-    }
-
-    /**
-     * Get the validation message that apply to the request.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'device_id.required' => 'Device Id cannot be blank.',
         ];
     }
 

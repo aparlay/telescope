@@ -5,7 +5,6 @@ namespace Aparlay\Core\Api\V1\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\RequiredIf;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -39,19 +38,6 @@ class ChangePasswordRequest extends FormRequest
             'otp' => ['required_without:old_password'],
             'password' => ['required', Password::min(8)->letters()->numbers(), 'different:old_password'],
             'old_password' => ['required_without:email', Password::min(8)->letters()->numbers()],
-            'device_id' => new RequiredIf($this->header('X-DEVICE-ID') == ''),
-        ];
-    }
-
-    /**
-     * Get the validation message that apply to the request.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'device_id.required' => 'Device Id cannot be blank.',
         ];
     }
 
