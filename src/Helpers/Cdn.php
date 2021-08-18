@@ -18,12 +18,12 @@ class Cdn
         }
 
         /* Return the input file url if cdn is not enabled */
-        if (!config('app.cdn.enabled')) {
+        if (! config('app.cdn.enabled')) {
             return $url;
         }
 
         /* Prepend the CDN Server Url and return the file url */
-        return config('app.cdn.avatars') . $url;
+        return config('app.cdn.avatars').$url;
     }
 
     /**
@@ -41,7 +41,7 @@ class Cdn
             return $url;
         }
 
-        return config('app.cdn.covers') . $url;
+        return config('app.cdn.covers').$url;
     }
 
     /**
@@ -59,6 +59,6 @@ class Cdn
             return $url;
         }
 
-        return config('app.cdn.videos') . $url;
+        return config('app.cdn.videos').$url;
     }
 }

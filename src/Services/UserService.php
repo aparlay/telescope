@@ -53,11 +53,11 @@ class UserService
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
      * @param Request $request
      * @param User|Authenticatable $user
-     * @return User|Bool
+     * @return User|bool
      */
     public static function uploadAvatar(Request $request, User | Authenticatable $user)
     {
-        /** Upload Avatar Image on Server */
+        /* Upload Avatar Image on Server */
         if ($request->hasFile('avatar')) {
             $extension = $request->file('avatar')->getClientOriginalExtension();
             $avatar = uniqid($user->_id, false) . '.' . $extension;
