@@ -29,12 +29,12 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Block  $media
      * @return Response
      */
-    public function me(Block $media): Response
+    public function me(): Response
     {
-        return $this->response([], Response::HTTP_OK);
+        $user = auth()->user();
+        return $this->response(new MeResource($user), Response::HTTP_OK);
     }
 
     /**
