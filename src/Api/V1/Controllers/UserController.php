@@ -34,6 +34,7 @@ class UserController extends Controller
     public function me(): Response
     {
         $user = auth()->user();
+
         return $this->response(new MeResource($user), Response::HTTP_OK);
     }
 
