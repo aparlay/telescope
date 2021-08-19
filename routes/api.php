@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1')->group(function () {
+Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')->prefix('v1')->group(function () {
     Route::prefix('media')->name('media.')->group(function () {
         Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
         Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
@@ -76,7 +76,7 @@ Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1'
     Route::post('/register', [AuthController::class, 'register'])->name('user.register');
     Route::match(['put', 'patch'], '/refresh', [AuthController::class, 'refresh'])->name('user.refreshToken');
 
-    Route::get('/version/{os}/{version}', [VersionController::class, 'show'])->name('version.show');
-    Route::get('/cache', [SiteController::class, 'cache'])->name('site.cache');
-    Route::get('/health', [SiteController::class, 'health'])->name('site.health');
+    Route::get('/version/{os}/{version}', [VersionController::class, 'show'])->name('version.show')->withoutMiddleware(['device-id']);
+    Route::get('/cache', [SiteController::class, 'cache'])->name('site.cache')->withoutMiddleware(['device-id']);
+    Route::get('/health', [SiteController::class, 'health'])->name('site.health')->withoutMiddleware(['device-id']);
 });
