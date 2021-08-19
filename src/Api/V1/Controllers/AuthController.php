@@ -71,6 +71,11 @@ class AuthController extends Controller
             /* Validate the OTP or Throw exception if OTP is incorrect */
             OtpService::validateOtp($request->otp, $request->username, false, true);
 
+            /* verifying user if status is pending */
+            if ($this->repository->isUnverified($user)) {
+                $this->repository->verify($user);
+            }
+
             /* Store the new password in database */
             $this->repository->resetPassword($request->password, $user);
         }
