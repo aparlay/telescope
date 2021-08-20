@@ -2,14 +2,19 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
-use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Resources\BlockResource;
+use Aparlay\Core\Services\BlockService;
 use Illuminate\Http\Response;
-use MongoDB\BSON\ObjectId;
 
 class BlockController extends Controller
 {
+    protected $blockService;
+
+    public function __construct(BlockService $blockService)
+    {
+        $this->blockService = $blockService;
+    }
     /**
      * @OA\Put(
      *     path="/v1/user/{id}/block",
@@ -84,18 +89,8 @@ class BlockController extends Controller
      */
     public function store(User $user): Response
     {
-        $block = Block::user($user->_id)->creator(auth()->user()->_id)->first();
-        if (null === $block) {
-            $block = new Block([
-                                   'user' => ['_id' => new ObjectId($user->_id)],
-                                   'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
-                               ]);
-            $block->save();
-
-            return $this->response(new BlockResource($block), '', Response::HTTP_CREATED);
-        }
-
-        return $this->response(new BlockResource($block), '', Response::HTTP_OK);
+        $response = $this->blockService->create($user);
+        return $this->response(new BlockResource($response['data']), '', $response['statusCode']);
     }
 
     /**
@@ -171,10 +166,8 @@ class BlockController extends Controller
      */
     public function destroy(User $user): Response
     {
-        $block = Block::user($user->_id)->creator(auth()->user()->_id)->firstOrFail();
-        if (null !== $block) {
-            $block->delete();
-        }
+        // Unblock the user or throw exception if not Blocked
+        $this->blockService->unBlock($user);
 
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
