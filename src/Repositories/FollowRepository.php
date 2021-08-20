@@ -4,7 +4,6 @@ namespace Aparlay\Core\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
 use MongoDB\BSON\ObjectId;
 
 class FollowRepository implements RepositoryInterface
