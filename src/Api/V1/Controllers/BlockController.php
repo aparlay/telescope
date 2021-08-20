@@ -15,6 +15,7 @@ class BlockController extends Controller
     {
         $this->blockService = $blockService;
     }
+
     /**
      * @OA\Put(
      *     path="/v1/user/{id}/block",
@@ -90,6 +91,7 @@ class BlockController extends Controller
     public function store(User $user): Response
     {
         $response = $this->blockService->create($user);
+
         return $this->response(new BlockResource($response['data']), '', $response['statusCode']);
     }
 

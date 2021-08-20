@@ -18,7 +18,7 @@ class BlockService
         $this->blockRepository = new BlockRepository(new Block());
     }
 
-      /**
+    /**
      * Responsible to create block for given user.
      *
      * @param User
@@ -39,7 +39,7 @@ class BlockService
      * Responsible to unblock the given user.
      *
      * @param User
-     * @return Bool
+     * @return bool
      */
     public function unblock(User $user)
     {
