@@ -6,9 +6,9 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Resources\FollowResource;
 use Aparlay\Core\Repositories\FollowRepository;
 use Aparlay\Core\Services\FollowService;
+use Aparlay\Core\Services\FollowService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
-use Aparlay\Core\Services\FollowService;
 
 class FollowController extends Controller
 {
@@ -98,6 +98,7 @@ class FollowController extends Controller
         }
 
         $response = $this->followService->create($user);
+
         return $this->response(new FollowResource($response['data']), '', $response['statusCode']);
     }
 
