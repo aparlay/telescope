@@ -4,9 +4,9 @@ namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Repositories\FollowRepository;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 use MongoDB\BSON\ObjectId;
 
 class FollowService
