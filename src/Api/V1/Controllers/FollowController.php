@@ -8,9 +8,15 @@ use Aparlay\Core\Api\V1\Resources\FollowResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use MongoDB\BSON\ObjectId;
+use Aparlay\Core\Services\FollowService;
+use Aparlay\Core\Repositories\FollowRepository;
 
 class FollowController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->repository = new FollowRepository(new Follow());
+    // }
     /**
      * @OA\Put(
      *     path="/v1/user/{id}/follow",
@@ -89,18 +95,19 @@ class FollowController extends Controller
             return $this->error('You cannot follow this user at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
-        $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->first();
-        if (null === $follow) {
-            $follow = new Follow([
-                'user' => ['_id' => new ObjectId($user->_id)],
-                'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
-            ]);
-            $follow->save();
-
-            return $this->response(new FollowResource($follow), '', Response::HTTP_CREATED);
+        // $followed = FollowService::isfollowed($user);
+        // if (!$followed) {
+        //     $follow = $this->repository->followerUser($user);
+        //     return $this->response(new FollowResource($follow), '', Response::HTTP_CREATED);
+        // }
+        // return $this->response(new FollowResource($followed), '', Response::HTTP_OK);
+        
+        $follow = FollowService::followUser($user);
+        if (! $follow['status']) {
+            return $this->response(new FollowResource($follow['data']), '', Response::HTTP_CREATED);
         }
 
-        return $this->response(new FollowResource($follow), '', Response::HTTP_OK);
+        return $this->response(new FollowResource($follow['data']), '', Response::HTTP_OK);
     }
 
     /**
