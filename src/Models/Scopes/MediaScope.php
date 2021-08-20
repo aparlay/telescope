@@ -106,7 +106,7 @@ trait MediaScope
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
-        return $query->where('blocked_user_ids', '$ne', $userId);
+        return $query->where('blocked_user_ids', '!=', $userId);
     }
 
     public function scopeSlug(Builder $query, string $slug): Builder

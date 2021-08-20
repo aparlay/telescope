@@ -73,8 +73,7 @@ class MediaService
             $query->public()->confirmed()->sort();
         }
         if (! auth()->guest()) {
-            //$query->notBlockedFor(auth()->user()->_id);
-            //@todo determine why notBlockedFor doesn't work
+            $query->notBlockedFor(auth()->user()->_id);
         }
         //$deviceId = request()->headers->get('X-DEVICE-ID', '');
         //$cacheKey = 'media_visits'.'_'.$deviceId;
