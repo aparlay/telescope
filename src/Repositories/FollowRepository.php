@@ -4,6 +4,7 @@ namespace Aparlay\Core\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use MongoDB\BSON\ObjectId;
 
 class FollowRepository implements RepositoryInterface
@@ -24,9 +25,21 @@ class FollowRepository implements RepositoryInterface
         // TODO: Implement all() method.
     }
 
+    /**
+     * Create Follow
+     *
+     * @param Array $data
+     * @return Follow
+     */
     public function create(array $data)
     {
-        // TODO: Implement create() method.
+        $creator = auth()->user();
+
+        $modal = new Follow(
+            array_merge($data, ['creator' => ['_id' => new ObjectId($creator->_id)]])
+        );
+        $modal->save();
+        return $modal;
     }
 
     public function update(array $data, $id)
@@ -45,45 +58,15 @@ class FollowRepository implements RepositoryInterface
     }
 
     /**
-     * find user by email.
+     * Check if already followed by the given user.
      *
-     * @param string $email
+     * @param User $user
      * @return Follow|Void
      */
-    public static function findFollower(User $user)
+    public function isFollowed(User $user)
     {
-        return Follow::user($user->_id)->creator(auth()->user()->_id)->first();
-    }
+        $creator = auth()->user();
 
-    /**
-     * find user by email.
-     *
-     * @param User $user
-     * @return Follow
-     */
-    public function followerUser(User $user)
-    {
-        $modal = new Follow([
-            'user' => ['_id' => new ObjectId($user->_id)],
-            'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
-        ]);
-        $modal->save();
-        return $modal;
-    }
-
-    /**
-     * find user by email.
-     *
-     * @param User $user
-     * @return Follow
-     */
-    public static function createFollower(User $user)
-    {
-        $modal = new Follow([
-            'user' => ['_id' => new ObjectId($user->_id)],
-            'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
-        ]);
-        $modal->save();
-        return $modal;
+        return Follow::user($user->_id)->creator($creator->_id)->first();
     }
 }

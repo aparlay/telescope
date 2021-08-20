@@ -5,39 +5,47 @@ namespace Aparlay\Core\Services;
 use Aparlay\Core\Repositories\FollowRepository;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
+use App\Exceptions\BlockedException;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
+use MongoDB\BSON\ObjectId;
 
 class FollowService
 {
-    /**
-     * Responsible for check follower exist or not
-     *
-     * @param User
-     * @return Follow|Void
-    */
-    public static function isfollowed(User $user)
+    protected $followRepository;
+
+    public function __construct()
     {
-        return Follow::user($user->_id)->Creator(auth()->user()->_id)->first();
+        $this->followRepository = new FollowRepository(new Follow());
     }
 
     /**
-     * Responsible for check follower exist or not
+     * Responsible to create follow for given user
      *
      * @param User
      * @return Array
     */
-    public static function followUser(User $user)
+    public function create(User $user)
     {
-        $follow = FollowRepository::findFollower($user);
-        if (null === $follow) {
-            $follow = FollowRepository::createFollower($user);
-            return [
-                'status' => false,
-                'data' => $follow
-            ];
+        $statusCode = Response::HTTP_OK;
+        if (($follow = $this->followRepository->isFollowed($user)) === null) {
+            $follow = $this->followRepository->create(['user' => ['_id' => new ObjectId($user->_id)]]);
+            $statusCode = Response::HTTP_CREATED;
         }
-        return [
-            'status' => true,
-            'data' => $follow
-        ];
+        return ['data' => $follow, 'statusCode' => $statusCode];
+    }
+
+    /**
+     * Responsible to unfollow the given user
+     *
+     * @param User
+     * @return Array
+    */
+    public function unfollow(User $user)
+    {
+        if (($follow = $this->followRepository->isFollowed($user)) === null) {
+            throw new BlockedException('No Record Found', null, null, Response::HTTP_NOT_FOUND);
+        }
+        $follow->delete();
     }
 }

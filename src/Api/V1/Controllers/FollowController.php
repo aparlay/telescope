@@ -2,21 +2,21 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
-use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Resources\FollowResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
-use MongoDB\BSON\ObjectId;
 use Aparlay\Core\Services\FollowService;
-use Aparlay\Core\Repositories\FollowRepository;
 
 class FollowController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->repository = new FollowRepository(new Follow());
-    // }
+    protected $followService;
+
+    public function __construct(FollowService $followService)
+    {
+        $this->followService = $followService;
+    }
+
     /**
      * @OA\Put(
      *     path="/v1/user/{id}/follow",
@@ -95,19 +95,8 @@ class FollowController extends Controller
             return $this->error('You cannot follow this user at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
-        // $followed = FollowService::isfollowed($user);
-        // if (!$followed) {
-        //     $follow = $this->repository->followerUser($user);
-        //     return $this->response(new FollowResource($follow), '', Response::HTTP_CREATED);
-        // }
-        // return $this->response(new FollowResource($followed), '', Response::HTTP_OK);
-        
-        $follow = FollowService::followUser($user);
-        if (! $follow['status']) {
-            return $this->response(new FollowResource($follow['data']), '', Response::HTTP_CREATED);
-        }
-
-        return $this->response(new FollowResource($follow['data']), '', Response::HTTP_OK);
+        $response = $this->followService->create($user);
+        return $this->response(new FollowResource($response['data']), '', $response['statusCode']);
     }
 
     /**
@@ -183,8 +172,8 @@ class FollowController extends Controller
      */
     public function destroy(User $user): Response
     {
-        $follow = Follow::user($user->_id)->creator(auth()->user()->_id)->firstOrFail();
-        $follow?->delete();
+        // Unfollow the user or throw exception if not followed
+        $this->followService->unfollow($user);
 
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
