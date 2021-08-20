@@ -25,9 +25,9 @@ class FollowRepository implements RepositoryInterface
     }
 
     /**
-     * Create Follow
+     * Create Follow.
      *
-     * @param Array $data
+     * @param array $data
      * @return Follow
      */
     public function create(array $data)
@@ -38,6 +38,7 @@ class FollowRepository implements RepositoryInterface
             array_merge($data, ['creator' => ['_id' => new ObjectId($creator->_id)]])
         );
         $modal->save();
+
         return $modal;
     }
 
@@ -60,7 +61,7 @@ class FollowRepository implements RepositoryInterface
      * Check if already followed by the given user.
      *
      * @param User $user
-     * @return Follow|Void
+     * @return Follow|void
      */
     public function isFollowed(User $user)
     {

@@ -19,11 +19,11 @@ class FollowService
     }
 
     /**
-     * Responsible to create follow for given user
+     * Responsible to create follow for given user.
      *
      * @param User
-     * @return Array
-    */
+     * @return array
+     */
     public function create(User $user)
     {
         $statusCode = Response::HTTP_OK;
@@ -31,15 +31,16 @@ class FollowService
             $follow = $this->followRepository->create(['user' => ['_id' => new ObjectId($user->_id)]]);
             $statusCode = Response::HTTP_CREATED;
         }
+
         return ['data' => $follow, 'statusCode' => $statusCode];
     }
 
     /**
-     * Responsible to unfollow the given user
+     * Responsible to unfollow the given user.
      *
      * @param User
-     * @return Array
-    */
+     * @return array
+     */
     public function unfollow(User $user)
     {
         if (($follow = $this->followRepository->isFollowed($user)) === null) {
