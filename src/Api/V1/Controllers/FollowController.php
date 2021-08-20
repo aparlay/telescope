@@ -5,11 +5,11 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Resources\FollowResource;
+use Aparlay\Core\Repositories\FollowRepository;
+use Aparlay\Core\Services\FollowService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use MongoDB\BSON\ObjectId;
-use Aparlay\Core\Services\FollowService;
-use Aparlay\Core\Repositories\FollowRepository;
 
 class FollowController extends Controller
 {
@@ -17,6 +17,7 @@ class FollowController extends Controller
     // {
     //     $this->repository = new FollowRepository(new Follow());
     // }
+
     /**
      * @OA\Put(
      *     path="/v1/user/{id}/follow",
@@ -101,7 +102,7 @@ class FollowController extends Controller
         //     return $this->response(new FollowResource($follow), '', Response::HTTP_CREATED);
         // }
         // return $this->response(new FollowResource($followed), '', Response::HTTP_OK);
-        
+
         $follow = FollowService::followUser($user);
         if (! $follow['status']) {
             return $this->response(new FollowResource($follow['data']), '', Response::HTTP_CREATED);

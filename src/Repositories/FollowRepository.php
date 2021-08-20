@@ -48,7 +48,7 @@ class FollowRepository implements RepositoryInterface
      * find user by email.
      *
      * @param string $email
-     * @return Follow|Void
+     * @return Follow|void
      */
     public static function findFollower(User $user)
     {
@@ -68,6 +68,7 @@ class FollowRepository implements RepositoryInterface
             'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
         ]);
         $modal->save();
+
         return $modal;
     }
 
@@ -84,6 +85,7 @@ class FollowRepository implements RepositoryInterface
             'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
         ]);
         $modal->save();
+
         return $modal;
     }
 }
