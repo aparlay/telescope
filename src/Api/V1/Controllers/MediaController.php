@@ -74,5 +74,12 @@ class MediaController extends Controller
      */
     public function destroy(Media $media): Response
     {
+        $model = Media::media($media->_id)->firstOrFail();
+
+        if ($model !== null && $media->status !== Media::STATUS_USER_DELETED) {
+            $model->update(['status' => Media::STATUS_USER_DELETED]);
+        }
+
+        return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
 }
