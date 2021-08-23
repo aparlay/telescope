@@ -16,6 +16,7 @@ class MediaLikeController extends Controller
     {
         $this->mediaLikeService = $mediaLikeService;
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -97,6 +98,7 @@ class MediaLikeController extends Controller
         }
 
         $response = $this->mediaLikeService->create($media);
+
         return $this->response(new MediaLikeResource($response['data']), '', $response['statusCode']);
     }
 
