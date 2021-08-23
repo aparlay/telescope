@@ -31,7 +31,8 @@ class MediaRepository extends Controller
            ],
            'user_id' => new ObjectId($user->_id),
            'description' => $request->input('description'),
-       ]);
+           'count_fields_updated_at' => [],
+        ]);
 
         if ($request->hasFile('file')) {
             $file = $request->file;
