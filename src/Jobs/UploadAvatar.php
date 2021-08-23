@@ -76,7 +76,6 @@ class UploadAvatar implements ShouldQueue
             Storage::disk('gc-avatars')->writeStream($this->file, $storage->readStream($this->file));
             $this->user->avatar = Cdn::avatar($this->file);
             $this->user->save();
-            $this->user->refresh();
         }
     }
 

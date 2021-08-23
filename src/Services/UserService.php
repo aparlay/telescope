@@ -5,9 +5,9 @@ namespace Aparlay\Core\Services;
 use Aparlay\Core\Models\Login;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Repositories\UserRepository;
-use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class UserService
 {
@@ -54,6 +54,7 @@ class UserService
      * @param Request $request
      * @param User|Authenticatable $user
      * @return User|bool
+     * @throws ValidationException
      */
     public static function uploadAvatar(Request $request, User | Authenticatable $user)
     {
@@ -62,7 +63,7 @@ class UserService
             $extension = $request->file('avatar')->getClientOriginalExtension();
             $avatar = uniqid($user->_id, false).'.'.$extension;
             if (! $request->file('avatar')->storeAs(config('app.avatar.upload_directory'), $avatar)) {
-                throw new Exception('Cannot upload the file.');
+                throw ValidationException::withMessages(['avatar' => ['Unable to upload avatar']]);
             }
 
             /* Store temporary avatar name in database */
