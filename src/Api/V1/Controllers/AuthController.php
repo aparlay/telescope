@@ -28,7 +28,15 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'requestOtp', 'validateOtp', 'changePassword']]);
+        $this->middleware('auth:api', [
+            'except' => [
+                'login',
+                'register',
+                'requestOtp',
+                'validateOtp',
+                'changePassword'
+            ]
+        ]);
         $this->repository = new UserRepository(new User());
     }
 
@@ -57,7 +65,7 @@ class AuthController extends Controller
             /** Check the update permission */
             $response = Gate::inspect('update', $user);
             if (! $response->allowed()) {
-                throw ValidationException::withMessages(['user' => [$response->message()]]);
+                throw new BlockedException($response->message(), null, null, Response::HTTP_FORBIDDEN);
             }
 
             /* Change the password in database table */
@@ -65,7 +73,7 @@ class AuthController extends Controller
         } else {
             /* Forgot password scenario */
             if (! ($user = UserService::findByIdentity($request->username))) {
-                throw ValidationException::withMessages(['user' => ['user not found']]);
+                throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
             }
 
             /* Validate the OTP or Throw exception if OTP is incorrect */
@@ -93,7 +101,7 @@ class AuthController extends Controller
     {
         /* Find the user based on username */
         if (! ($user = UserService::findByIdentity($request->username))) {
-            throw ValidationException::withMessages(['user' => ['user not found']]);
+            throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
         }
 
         /* Through exception for suspended/banned/NotFound accounts */
@@ -118,7 +126,7 @@ class AuthController extends Controller
     {
         /* Find the user based on username */
         if (! ($user = UserService::findByIdentity($request->username))) {
-            throw ValidationException::withMessages(['user' => ['user not found']]);
+            throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
         }
 
         /* Through exception for suspended/banned/NotFound accounts */

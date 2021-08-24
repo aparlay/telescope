@@ -7,8 +7,10 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Services\UserService;
+use App\Exceptions\BlockedException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -34,6 +36,9 @@ class UserController extends Controller
     public function me(): Response
     {
         $user = auth()->user();
+        if ($user === null) {
+            throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
+        }
 
         return $this->response(new MeResource($user), Response::HTTP_OK);
     }
@@ -60,7 +65,12 @@ class UserController extends Controller
     {
         /** Check the update permission */
         $user = auth()->user();
-        $this->authorizeResource(User::class, 'user');
+        
+        /** Check the update permission */
+        $response = Gate::inspect('update', $user);
+        if (! $response->allowed()) {
+            throw new BlockedException($response->message(), null, null, Response::HTTP_FORBIDDEN);
+        }
 
         /* Update User Avatar */
         if ($request->hasFile('avatar')) {
