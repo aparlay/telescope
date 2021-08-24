@@ -65,7 +65,7 @@ class UserController extends Controller
     {
         /** Check the update permission */
         $user = auth()->user();
-        
+
         /** Check the update permission */
         $response = Gate::inspect('update', $user);
         if (! $response->allowed()) {

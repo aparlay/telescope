@@ -34,8 +34,8 @@ class AuthController extends Controller
                 'register',
                 'requestOtp',
                 'validateOtp',
-                'changePassword'
-            ]
+                'changePassword',
+            ],
         ]);
         $this->repository = new UserRepository(new User());
     }
