@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Repositories;
 
 use Aparlay\Core\Api\V1\Controllers\Controller;
+use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
@@ -51,5 +52,33 @@ class MediaRepository extends Controller
         $media->refresh();
 
         return $this->response(new MediaResource($media), '', Response::HTTP_CREATED);
+    }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function findByUser($userId)
+    {
+        $query = Media::creator($userId)->recentFirst();
+
+        if (auth()->guest()) {
+            $query->confirmed()->public();
+        } elseif ((string) $userId === (string) auth()->user()->_id) {
+            $query->availableForOwner();
+        } else {
+            $isFollowed = Follow::select(['user._id', '_id'])
+                ->creator(auth()->user()->_id)
+                ->user($userId)
+                ->accepted()
+                ->exists();
+            if (empty($isFollowed)) {
+                $query->confirmed()->public();
+            } else {
+                $query->availableForFollower();
+            }
+        }
+
+        return $query->get();
     }
 }

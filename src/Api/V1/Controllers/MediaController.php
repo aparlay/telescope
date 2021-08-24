@@ -34,6 +34,9 @@ class MediaController extends Controller
      */
     public function listByUser(User $user): Response
     {
+        $medias = $this->repository->findByUser($user->_id);
+
+        return $this->response(MediaResource::collection($medias), '', Response::HTTP_OK);
     }
 
     /**
