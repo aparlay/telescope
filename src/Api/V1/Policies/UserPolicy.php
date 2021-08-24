@@ -22,12 +22,6 @@ class UserPolicy
      */
     public function view(User $user)
     {
-        return (
-            ($user !== null && (string) auth()->user()->_id === (string) $user->_id) ||
-            auth()->user()->type === User::TYPE_ADMIN
-        )
-        ? Response::allow()
-        : Response::deny(__('You can only update your account.'));
     }
 
     /**
