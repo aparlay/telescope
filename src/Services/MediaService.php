@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Models\MediaVisit;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -64,7 +65,7 @@ class MediaService
      * @return Collection|LengthAwarePaginator|AnonymousResourceCollection|array
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public static function getByType(string $type): Collection | LengthAwarePaginator | AnonymousResourceCollection | array
+    public static function getByType(string $type): MediaCollection | LengthAwarePaginator | AnonymousResourceCollection | array
     {
         $query = Media::query();
         if (! auth()->guest() && $type === 'following') {
@@ -105,7 +106,7 @@ class MediaService
         cache()->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
         */
         if ($type === 'following') {
-            $provider = MediaResource::collection($provider);
+            $provider = new MediaCollection($provider);
         }
 
         return $provider;
