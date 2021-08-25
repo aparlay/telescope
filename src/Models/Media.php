@@ -152,6 +152,7 @@ class Media extends Model
         'likes' => [],
         'visits' => [],
         'status' => self::STATUS_QUEUED,
+        'is_protected' => false,
     ];
 
     /**
@@ -176,13 +177,13 @@ class Media extends Model
      * @var array
      */
     protected $casts = [
+        'status' => 'integer',
     ];
 
     protected $dispatchesEvents = [
         'creating' => MediaCreating::class,
         'created' => MediaCreated::class,
         'saving' => MediaSaving::class,
-        'updated' => MediaUpdated::class,
         'saved' => MediaSaved::class,
         'deleted' => MediaDeleted::class,
     ];

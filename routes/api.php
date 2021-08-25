@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')->prefix('v1')->group(function () {
     Route::prefix('media')->name('media.')->group(function () {
         Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
-        Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
         Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])
             ->middleware('cache.headers:public;max_age=2628000;etag')->name('show');
@@ -34,6 +33,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
         Route::middleware('auth:api')->group(function () {
             Route::post('/', [MediaController::class, 'store'])->name('create');
             Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
+            Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
             Route::middleware('auth:api')->put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::middleware('auth:api')->delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
         });
