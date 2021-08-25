@@ -94,6 +94,7 @@ class UploadMedia implements ShouldQueue
         $this->media->status = Media::STATUS_UPLOADED;
         $this->media->save();
     }
+
     /**
      * Calculate the number of seconds to wait before retrying the job.
      *
