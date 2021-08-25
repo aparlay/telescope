@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package media;
+
+option go_package = "bitbucket.org/aparlay/media/proto";
+option php_namespace = "Aparlay\\Core\\Microservices\\ffmpeg";
+
+message DownloadRequest {
+  string bucket_name = 1;
+  string bucket_id = 2;
+  string file = 3;
+}
+
+message DownloadResponse {
+  string file = 1;
+}
+
+message UploadRequest {
+  string bucket_name = 1;
+  string bucket_id = 2;
+  string src = 3;
+  string des = 4;
+}
+
+message UploadResponse {
+  string file = 1;
+}
+
+message DurationResponse {
+  string sec = 1;
+}
+
+message OptimizeResponse {
+  string result = 1;
+  string error = 2;
+}
+
+message OptimizeRequest {
+  string src = 1;
+  string des = 2;
+  string username = 3;
+}
+
+message RemoveRequest {
+  string file = 1;
+}
+
+message RemoveResponse {
+  string result = 1;
+  string error = 2;
+}
+
+service Media {
+  rpc DownloadVideo (DownloadRequest) returns (DownloadResponse) {}
+  rpc Quality (OptimizeRequest) returns (OptimizeResponse) {}
+  rpc BlackBars (OptimizeRequest) returns (OptimizeResponse) {}
+  rpc LowVolume (OptimizeRequest) returns (OptimizeResponse) {}
+  rpc Duration (OptimizeRequest) returns (DurationResponse) {}
+  rpc Trim (OptimizeRequest) returns (OptimizeResponse) {}
+  rpc NormalizeAudio (OptimizeRequest) returns (OptimizeResponse) {}
+  rpc Watermark (OptimizeRequest) returns (OptimizeResponse) {}
+  rpc CreateCover (OptimizeRequest) returns (OptimizeResponse) {}
+  rpc Optimize (OptimizeRequest) returns (OptimizeResponse) {}
+  rpc UploadVideo (UploadRequest) returns (UploadResponse) {}
+  rpc UploadCover (UploadRequest) returns (UploadResponse) {}
+  rpc Remove (RemoveRequest) returns (RemoveResponse) {}
+}

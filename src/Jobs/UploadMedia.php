@@ -94,12 +94,6 @@ class UploadMedia implements ShouldQueue
         $this->media->status = Media::STATUS_UPLOADED;
         $this->media->save();
     }
-
-    public function failed(Throwable $exception): void
-    {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
-    }
-
     /**
      * Calculate the number of seconds to wait before retrying the job.
      *
@@ -108,5 +102,10 @@ class UploadMedia implements ShouldQueue
     public function backoff()
     {
         return $this->attempts() * 60;
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
     }
 }
