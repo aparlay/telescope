@@ -176,6 +176,10 @@ class User extends Authenticatable implements JWTSubject
         'deleted_at' => 'datetime',
     ];
 
+    protected $attributes = [
+        'count_fields_updated_at' => [],
+    ];
+
     public static function getFeatures(): array
     {
         return [
