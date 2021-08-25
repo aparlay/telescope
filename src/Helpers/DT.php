@@ -64,4 +64,13 @@ class DT
     {
         return $dateTime->toDateTime();
     }
+
+    /**
+     * @param int $millisec
+     * @return UTCDateTime
+     */
+    public static function millisecToUtc(int $millisec): UTCDateTime
+    {
+        return new UTCDatetime($millisec);
+    }
 }
