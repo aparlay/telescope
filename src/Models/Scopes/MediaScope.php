@@ -64,7 +64,7 @@ trait MediaScope
 
     public function scopeAvailableForOwner(Builder $query): Builder
     {
-        return $query->where('status', '$in', [
+        return $query->whereIn('status', [
             Media::STATUS_QUEUED,
             Media::STATUS_UPLOADED,
             Media::STATUS_IN_PROGRESS,
@@ -77,7 +77,7 @@ trait MediaScope
 
     public function scopeAvailableForFollower(Builder $query): Builder
     {
-        return $query->where('status', '$in', [
+        return $query->whereIn('status', [
             Media::STATUS_CONFIRMED,
             Media::STATUS_DENIED,
         ]);
@@ -96,7 +96,7 @@ trait MediaScope
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
         $user = User::where('_id', $userId)->first();
 
-        return $query->where('creator._id', '$in', array_column($user['followings'], '_id'));
+        return $query->whereIn('creator._id', array_column($user['followings'], '_id'));
     }
 
     /**
