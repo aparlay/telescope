@@ -69,12 +69,12 @@ class SiteController extends Controller
         $ttl = ini_get('realpath_cache_ttl');
         $percentUsed = $current * 100 / $value;
 
-        return response()->json([
-                                    'current' => $current,
-                                    'max' => $value,
-                                    'percent' => $percentUsed,
-                                    'ttl' => $ttl,
-                                ]);
+        return $this->response([
+                    'current' => $current,
+                    'max' => $value,
+                    'percent' => $percentUsed,
+                    'ttl' => $ttl,
+                ]);
     }
 
     /**
@@ -122,7 +122,6 @@ class SiteController extends Controller
      */
     public function health(Request $request)
     {
-        return response()->json([
-                                ]);
+        return $this->response([]);
     }
 }

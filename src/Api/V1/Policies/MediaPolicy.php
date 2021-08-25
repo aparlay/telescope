@@ -20,7 +20,7 @@ class MediaPolicy
      * @param  \Aparlay\Core\Api\V1\Models\Media  $media
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User | null $user, Media $media)
+    public function view(User | null | Authenticatable $user, Media $media)
     {
         $userId = $user?->_id;
 
@@ -66,11 +66,11 @@ class MediaPolicy
      * @param  \Aparlay\Core\Api\V1\Models\Media  $media
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Media $media)
+    public function update(User | Authenticatable $user, Media $media)
     {
         $userId = $user->_id ?? null;
 
-        return ($userId === null || (string) $media->created_by !== (string) $userId)
+        return ($userId !== null && (string) $media->created_by === (string) $userId)
             ? Response::allow()
             : Response::deny(__('You can only update media that you\'ve created.'));
     }
@@ -82,7 +82,7 @@ class MediaPolicy
      * @param  \Aparlay\Core\Api\V1\Models\Media  $media
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Media $media)
+    public function delete(User | Authenticatable $user, Media $media)
     {
         $userId = $user->_id ?? null;
 
