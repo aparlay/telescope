@@ -63,7 +63,7 @@ class UserController extends Controller
         /** Check the update permission */
         $user = auth()->user();
 
-        /** Check the update permission */
+        /* Check the update permission */
         $this->authorizeResource(User::class, 'user');
 
         /* Update User Avatar */
