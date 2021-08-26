@@ -68,7 +68,7 @@ class AuthController extends Controller
             /** Check user varification */
             $this->repository->isVerified($user);
 
-            /** Check the update permission */
+            /* Check the update permission */
             $this->authorizeResource(User::class, 'user');
 
             /* Change the password in database table */
