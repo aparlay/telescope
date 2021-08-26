@@ -64,8 +64,6 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
         Route::get('/token', [UserController::class, 'token']);
     });
 
-    Route::middleware('auth:api')->match(['put', 'patch'], '/{alert}', [AlertController::class, 'update'])->name('alert.update');
-
     Route::match(['put', 'patch'], '/change-password', [AuthController::class, 'changePassword'])->name('user.change-password');
     Route::patch('/validate-otp', [AuthController::class, 'validateOtp'])->name('user.validateOtp');
     Route::post('/request-otp', [AuthController::class, 'requestOtp'])->name('user.requestOtp');
@@ -80,4 +78,6 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
     Route::get('/version/{os}/{version}', [VersionController::class, 'show'])->name('version.show')->withoutMiddleware(['device-id']);
     Route::get('/cache', [SiteController::class, 'cache'])->name('site.cache')->withoutMiddleware(['device-id']);
     Route::get('/health', [SiteController::class, 'health'])->name('site.health')->withoutMiddleware(['device-id']);
+
+    Route::middleware('auth:api')->match(['put', 'patch'], '/{alert}', [AlertController::class, 'update'])->name('alert.update');
 });
