@@ -26,8 +26,7 @@ class MediaClient extends \Grpc\BaseStub
         DownloadRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/DownloadVideo',
             $argument,
@@ -47,8 +46,7 @@ class MediaClient extends \Grpc\BaseStub
         OptimizeRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/Quality',
             $argument,
@@ -68,8 +66,7 @@ class MediaClient extends \Grpc\BaseStub
         OptimizeRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/BlackBars',
             $argument,
@@ -89,8 +86,7 @@ class MediaClient extends \Grpc\BaseStub
         OptimizeRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/LowVolume',
             $argument,
@@ -110,8 +106,7 @@ class MediaClient extends \Grpc\BaseStub
         OptimizeRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/Duration',
             $argument,
@@ -131,8 +126,7 @@ class MediaClient extends \Grpc\BaseStub
         OptimizeRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/Trim',
             $argument,
@@ -152,8 +146,7 @@ class MediaClient extends \Grpc\BaseStub
         OptimizeRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/NormalizeAudio',
             $argument,
@@ -173,8 +166,7 @@ class MediaClient extends \Grpc\BaseStub
         OptimizeRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/Watermark',
             $argument,
@@ -194,8 +186,7 @@ class MediaClient extends \Grpc\BaseStub
         OptimizeRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/CreateCover',
             $argument,
@@ -215,8 +206,7 @@ class MediaClient extends \Grpc\BaseStub
         OptimizeRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/Optimize',
             $argument,
@@ -236,8 +226,7 @@ class MediaClient extends \Grpc\BaseStub
         UploadRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/UploadVideo',
             $argument,
@@ -257,8 +246,7 @@ class MediaClient extends \Grpc\BaseStub
         UploadRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/UploadCover',
             $argument,
@@ -278,8 +266,7 @@ class MediaClient extends \Grpc\BaseStub
         RemoveRequest $argument,
         $metadata = [],
         $options = []
-    )
-    {
+    ) {
         return $this->_simpleRequest(
             '/media.Media/Remove',
             $argument,
