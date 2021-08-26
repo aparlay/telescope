@@ -4,7 +4,7 @@ namespace Aparlay\Core\Api\V1\Policies;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Models\User;
+use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
