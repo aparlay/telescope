@@ -60,12 +60,12 @@ class AuthController extends Controller
         /* Change password scenario */
         if ($request->old_password) {
             $user = auth()->user();
-            
+
             if ($user === null) {
                 throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
             }
 
-            /** Check user varification */
+            /* Check user varification */
             $this->repository->isVerified($user);
 
             /* Check the update permission */
