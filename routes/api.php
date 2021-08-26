@@ -24,20 +24,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')->prefix('v1')->group(function () {
-    
-    /** Media Prefix Group */
-    Route::prefix('media')->name('media.')->group(function () {
 
+    /* Media Prefix Group */
+    Route::prefix('media')->name('media.')->group(function () {
         Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
 
-        /** Cache Group */
+        /* Cache Group */
         Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function () {
             Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
         });
 
-        /** Authentication Group */
+        /* Authentication Group */
         Route::middleware('auth:api')->group(function () {
             Route::post('/', [MediaController::class, 'store'])->name('create');
             Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
@@ -48,7 +47,6 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
     });
 
     Route::prefix('user')->name('user.')->group(function () {
-
         Route::get('/{type}', [UserController::class, 'index'])
             ->where(['type' => '(likes|blocks|followers|followings|hashtags)'])->name('list');
 
@@ -56,7 +54,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
         Route::get('/{user}/media', [MediaController::class, 'listByUser'])->name('media_list');
         Route::get('/{user}', [UserController::class, 'show'])->name('show');
 
-        /** Authentication Group with user prifix */
+        /* Authentication Group with user prifix */
         Route::middleware('auth:api')->group(function () {
             Route::put('/{user}/block', [BlockController::class, 'store'])->name('block');
             Route::delete('/{user}/block', [BlockController::class, 'destroy'])->name('unblock');
@@ -65,7 +63,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
         });
     });
 
-    /** Authentication Group with me prifix */
+    /* Authentication Group with me prifix */
     Route::middleware('auth:api')->prefix('me')->name('profie.')->group(function () {
         Route::get('/', [UserController::class, 'me']);
         Route::match(['put', 'patch'], '/', [UserController::class, 'update']);
@@ -75,12 +73,12 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
         Route::delete('/logout', [UserController::class, 'logout'])->name('user.logout');
     });
 
-    /** Authentication Group */
+    /* Authentication Group */
     Route::middleware('auth:api')->group(function () {
         Route::match(['put', 'patch'], '/alert/{alert}', [AlertController::class, 'update'])->name('alert.update');
     });
 
-    /** OTP Endpoints */
+    /* OTP Endpoints */
     Route::match(['put', 'patch'], '/change-password', [AuthController::class, 'changePassword'])->name('user.change-password');
     Route::patch('/validate-otp', [AuthController::class, 'validateOtp'])->name('user.validateOtp');
     Route::post('/request-otp', [AuthController::class, 'requestOtp'])->name('user.requestOtp');
@@ -89,12 +87,11 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
     Route::post('/register', [AuthController::class, 'register'])->name('user.register');
     Route::match(['put', 'patch'], '/refresh', [AuthController::class, 'refresh'])->name('user.refreshToken');
 
-    /** Without Middleware Endpoints */
+    /* Without Middleware Endpoints */
     Route::get('/version/{os}/{version}', [VersionController::class, 'show'])->name('version.show')
         ->withoutMiddleware(['device-id']);
     Route::get('/cache', [SiteController::class, 'cache'])->name('site.cache')
         ->withoutMiddleware(['device-id']);
     Route::get('/health', [SiteController::class, 'health'])->name('site.health')
         ->withoutMiddleware(['device-id']);
-
 });
