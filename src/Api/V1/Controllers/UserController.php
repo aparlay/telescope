@@ -36,9 +36,6 @@ class UserController extends Controller
     public function me(): Response
     {
         $user = auth()->user();
-        if ($user === null) {
-            throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
-        }
 
         return $this->response(new MeResource($user), Response::HTTP_OK);
     }
