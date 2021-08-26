@@ -63,10 +63,7 @@ class AuthController extends Controller
             $user = auth()->user();
 
             /** Check the update permission */
-            $response = Gate::inspect('update', $user);
-            if (! $response->allowed()) {
-                throw new BlockedException($response->message(), null, null, Response::HTTP_FORBIDDEN);
-            }
+            $this->authorizeResource(User::class, 'user');
 
             /* Change the password in database table */
             $this->repository->resetPassword($request->password, $user);
