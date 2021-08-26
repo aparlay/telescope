@@ -5,6 +5,7 @@ namespace Aparlay\Core\Repositories;
 use Aparlay\Core\Api\V1\Controllers\Controller;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
@@ -52,11 +53,12 @@ class MediaRepository extends Controller
     }
 
     /**
-     * @param $userId
+     * @param User $user
      * @return mixed
      */
-    public function findByUser($userId)
+    public function findByUser(User $user)
     {
+        $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();
 
         if (auth()->guest()) {
