@@ -64,10 +64,7 @@ class UserController extends Controller
         $user = auth()->user();
 
         /** Check the update permission */
-        $response = Gate::inspect('update', $user);
-        if (! $response->allowed()) {
-            throw new BlockedException($response->message(), null, null, Response::HTTP_FORBIDDEN);
-        }
+        $this->authorizeResource(User::class, 'user');
 
         /* Update User Avatar */
         if ($request->hasFile('avatar')) {
