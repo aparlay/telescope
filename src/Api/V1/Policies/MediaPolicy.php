@@ -75,18 +75,11 @@ class MediaPolicy
             : Response::deny(__('You can only update media that you\'ve created.'));
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \Aparlay\Core\Api\V1\Models\User  $user
-     * @param  \Aparlay\Core\Api\V1\Models\Media  $media
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function delete(User | Authenticatable $user, Media $media)
+    public function delete($user, $media)
     {
         $userId = $user->_id ?? null;
 
-        if ($userId === null || (string) $media->created_by !== (string) $userId) {
+        if ($userId === null || (string) $media->creator['_id'] !== (string) $userId) {
             return Response::deny(__('You can only delete media that you\'ve created.'));
         }
 

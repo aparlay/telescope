@@ -85,6 +85,7 @@ class MediaFactory extends Factory
             'updated_by' => function (array $attributes) {
                 return new ObjectId($attributes['user_id']);
             },
+            'is_protected' => false,
         ];
     }
 }
