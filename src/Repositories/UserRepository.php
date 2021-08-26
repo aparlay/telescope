@@ -67,7 +67,6 @@ class UserRepository implements RepositoryInterface
      *
      * @param  User|Authenticatable  $user
      * @return bool
-     * @throws ValidationException
      */
     public function isUnverified(User | Authenticatable $user)
     {
@@ -80,6 +79,7 @@ class UserRepository implements RepositoryInterface
      *
      * @param  User|Authenticatable  $user
      * @return bool
+     * @throws ValidationException
      */
     public function isVerified(User | Authenticatable $user)
     {
