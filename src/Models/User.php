@@ -177,6 +177,10 @@ class User extends Authenticatable implements JWTSubject
         'status' => 'integer',
     ];
 
+    protected $attributes = [
+        'count_fields_updated_at' => [],
+    ];
+
     public static function getFeatures(): array
     {
         return [

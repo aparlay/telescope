@@ -79,5 +79,8 @@ class MediaController extends Controller
      */
     public function destroy(Media $media): Response
     {
+        MediaService::delete($media);
+
+        return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
 }

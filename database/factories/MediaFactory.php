@@ -87,6 +87,7 @@ class MediaFactory extends Factory
             'updated_by' => function (array $attributes) {
                 return $attributes['creator']['_id'];
             },
+            'is_protected' => false,
         ];
     }
 }

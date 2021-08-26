@@ -64,7 +64,7 @@ trait MediaScope
 
     public function scopeAvailableForOwner(Builder $query): Builder
     {
-        return $query->where('status', '$in', [
+        return $query->whereIn('status', [
             Media::STATUS_QUEUED,
             Media::STATUS_UPLOADED,
             Media::STATUS_IN_PROGRESS,

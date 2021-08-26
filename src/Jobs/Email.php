@@ -2,7 +2,8 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Mail\SendEmail;
+use Aparlay\Core\Mail\EmailEnvelope;
+use Aparlay\Core\Notifications\JobFailed;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,7 +19,10 @@ class Email implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected $emailContent;
+    protected string $email;
+    protected string $subject;
+    protected string $type;
+    protected array $payload;
 
     /**
      * The number of times the job may be attempted.
@@ -40,22 +44,33 @@ class Email implements ShouldQueue
     /**
      * Create a new job instance.
      *
+     * @param string $email
+     * @param string $subject
+     * @param string $type
+     * @param array $payload
      * @return void
      */
-    public function __construct($emailContent)
+    public function __construct(string $email, string $subject, string $type, array $payload)
     {
-        $this->emailContent = $emailContent;
-        $this->handle($emailContent['identity']);
+        $this->email = $email;
+        $this->subject = $subject;
+        $this->type = $type;
+        $this->payload = $payload;
+        $this->handle();
     }
 
     /**
      * Execute the job.
-     *
      * @return void
      */
-    public function handle($send_mail)
+    public function handle()
     {
-        $email = new SendEmail($this->emailContent);
-        Mail::to($send_mail)->send($email);
+        $send = new EmailEnvelope($this->subject, $this->type, $this->payload);
+        Mail::to($this->email)->send($send);
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
     }
 }

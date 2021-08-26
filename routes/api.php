@@ -23,10 +23,9 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1')->group(function () {
+Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')->prefix('v1')->group(function () {
     Route::prefix('media')->name('media.')->group(function () {
-        Route::get('/', [MediaController::class, 'index'])->name('list');
-        Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
+        Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
         Route::get('/{media}', [MediaController::class, 'show'])
             ->middleware('cache.headers:public;max_age=2628000;etag')->name('show');
@@ -34,6 +33,7 @@ Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1'
         Route::middleware('auth:api')->group(function () {
             Route::post('/', [MediaController::class, 'store'])->name('create');
             Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
+            Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
             Route::middleware('auth:api')->put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::middleware('auth:api')->delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
         });
@@ -64,17 +64,20 @@ Route::middleware(['api', 'format-response'])->name('core.api.v1.')->prefix('v1'
         Route::get('/token', [UserController::class, 'token']);
     });
 
-    Route::middleware('auth:api')->match(['put', 'patch'], '/{alert}', [AlertController::class, 'update'])->name('alert.update');
-    Route::match(['put', 'patch'], '/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
-    Route::patch('/validate-otp', [UserController::class, 'validateOtp'])->name('user.validateOtp');
-    Route::post('/request-otp', [UserController::class, 'requestOtp'])->name('user.requestOtp');
+    Route::middleware('auth:api')->match(['put', 'patch'], '/alert/{alert}', [AlertController::class, 'update'])->name('alert.update');
+
+    Route::match(['put', 'patch'], '/change-password', [AuthController::class, 'changePassword'])->name('user.change-password');
+    Route::patch('/validate-otp', [AuthController::class, 'validateOtp'])->name('user.validateOtp');
+    Route::post('/request-otp', [AuthController::class, 'requestOtp'])->name('user.requestOtp');
+
+    Route::middleware('auth:api')->get('/me', [UserController::class, 'me'])->name('user.me');
     Route::middleware('auth:api')->delete('/logout', [UserController::class, 'logout'])->name('user.logout');
 
     Route::post('/login', [AuthController::class, 'login'])->name('user.login');
     Route::post('/register', [AuthController::class, 'register'])->name('user.register');
     Route::match(['put', 'patch'], '/refresh', [AuthController::class, 'refresh'])->name('user.refreshToken');
 
-    Route::get('/version/{os}/{version}', [VersionController::class, 'show'])->name('version.show');
-    Route::get('/cache', [SiteController::class, 'cache'])->name('site.cache');
-    Route::get('/health', [SiteController::class, 'health'])->name('site.health');
+    Route::get('/version/{os}/{version}', [VersionController::class, 'show'])->name('version.show')->withoutMiddleware(['device-id']);
+    Route::get('/cache', [SiteController::class, 'cache'])->name('site.cache')->withoutMiddleware(['device-id']);
+    Route::get('/health', [SiteController::class, 'health'])->name('site.health')->withoutMiddleware(['device-id']);
 });

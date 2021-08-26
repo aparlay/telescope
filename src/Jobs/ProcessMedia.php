@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Notifications\JobFailed;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -31,5 +32,10 @@ class ProcessMedia implements ShouldQueue
      */
     public function handle()
     {
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
     }
 }

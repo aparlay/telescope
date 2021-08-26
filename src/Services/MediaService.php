@@ -61,6 +61,20 @@ class MediaService
     }
 
     /**
+     * @param Media $media
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public static function delete(Media $media): void
+    {
+        $model = Media::media($media->_id)->firstOrFail();
+
+        if ($model !== null && $media->status !== Media::STATUS_USER_DELETED) {
+            $model->update(['status' => Media::STATUS_USER_DELETED]);
+        }
+    }
+
+    /**
      * @param string $type
      * @return Collection|LengthAwarePaginator|AnonymousResourceCollection|array
      * @throws \Psr\SimpleCache\InvalidArgumentException

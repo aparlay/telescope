@@ -15,7 +15,7 @@ trait AnalyticScope
             $in[date('Y-m-d', $timestamp + 20000)] = true;
         }
 
-        return $query->where('date', '$in', array_keys($in));
+        return $query->whereIn('date', array_keys($in));
     }
 
     public function scopeDate(Builder $query, UTCDateTime $start, UTCDateTime $end): Builder
