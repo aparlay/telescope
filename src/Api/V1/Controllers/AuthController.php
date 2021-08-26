@@ -62,7 +62,7 @@ class AuthController extends Controller
         if ($request->old_password) {
             $user = auth()->user();
 
-            /** Check the update permission */
+            /* Check the update permission */
             $this->authorizeResource(User::class, 'user');
 
             /* Change the password in database table */
