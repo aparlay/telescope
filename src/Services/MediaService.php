@@ -3,6 +3,13 @@
 namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Resources\MediaCollection;
+use Aparlay\Core\Api\V1\Resources\MediaResource;
+use Aparlay\Core\Models\MediaVisit;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use MongoDB\BSON\ObjectId;
 
 class MediaService
 {
@@ -65,5 +72,57 @@ class MediaService
         if ($model !== null && $media->status !== Media::STATUS_USER_DELETED) {
             $model->update(['status' => Media::STATUS_USER_DELETED]);
         }
+    }
+
+    /**
+     * @param string $type
+     * @return Collection|LengthAwarePaginator|AnonymousResourceCollection|array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public static function getByType(string $type): MediaCollection | LengthAwarePaginator | AnonymousResourceCollection | array
+    {
+        $query = Media::query();
+        if (! auth()->guest() && $type === 'following') {
+            $query->availableForFollower()->following(auth()->user()->_id)->recentFirst();
+        } else {
+            $query->public()->confirmed()->sort();
+        }
+        if (! auth()->guest()) {
+            $query->notBlockedFor(auth()->user()->_id);
+        }
+        //$deviceId = request()->headers->get('X-DEVICE-ID', '');
+        //$cacheKey = 'media_visits'.'_'.$deviceId;
+        if ($type !== 'following') {
+            /*
+             * @todo MediaVisit
+             * if (! auth()->guest()) {
+                $userId = auth()->user()->_id;
+                $query->notVisitedByUserAndDevice($userId, $deviceId);
+            } else {
+                $query->notVisitedByDevice($deviceId);
+            }
+            $count = $query->count();
+            if ($count === 0) {
+                if (! auth()->guest()) {
+                    MediaVisit::user(auth()->user()->_id)->delete();
+                }
+                cache()->delete($cacheKey);
+                redirect('index');
+            }*/
+            $provider = $query->paginate(15);
+        } else {
+            $provider = $query->get();
+        }
+        /*$visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
+        foreach ($provider as $model) {
+            $visited[] = $model->_id;
+        }
+        cache()->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
+        */
+        if ($type === 'following') {
+            $provider = new MediaCollection($provider);
+        }
+
+        return $provider;
     }
 }

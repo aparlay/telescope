@@ -6,8 +6,6 @@ use Aparlay\Core\Api\V1\Controllers\Controller;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
-use Aparlay\Core\Api\V1\Resources\MediaResource;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 
@@ -17,9 +15,9 @@ class MediaRepository extends Controller
      * Store a newly created resource in storage.
      *
      * @param MediaRequest $request
-     * @return Response
+     * @return Media
      */
-    public function store(MediaRequest $request): Response
+    public function store(MediaRequest $request): Media
     {
         $user = auth()->user();
 
@@ -32,7 +30,7 @@ class MediaRepository extends Controller
            ],
            'user_id' => new ObjectId($user->_id),
            'description' => $request->input('description'),
-       ]);
+        ]);
 
         if ($request->hasFile('file')) {
             $file = $request->file;
@@ -47,11 +45,10 @@ class MediaRepository extends Controller
             && ! file_exists(Storage::path('upload').'/'.$media->file)) {
             $this->error(__('Uploaded file does not exists.'));
         }
-
         $media->save();
         $media->refresh();
 
-        return $this->response(new MediaResource($media), '', Response::HTTP_CREATED);
+        return $media;
     }
 
     /**

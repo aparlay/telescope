@@ -32,7 +32,7 @@ trait OtpScope
      * @param  int $limit
      * @return mixed
      */
-    public function scopeValidated(Builder $query, bool $checkValidated, int $limit): Builder
+    public function scopeValidated(Builder $query, bool $checkValidated): Builder
     {
         return $query->where('validated', $checkValidated);
     }
@@ -45,5 +45,15 @@ trait OtpScope
     public function scopeRemainingAttempt(Builder $query, int $limit): Builder
     {
         return $query->whereIn('incorrect', range(0, $limit));
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param $query
+     * @return mixed
+     */
+    public function scopeRecentFirst(Builder $query): mixed
+    {
+        return $query->orderBy('created_at', 'desc');
     }
 }
