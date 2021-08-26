@@ -67,11 +67,30 @@ class UserRepository implements RepositoryInterface
      *
      * @param  User|Authenticatable  $user
      * @return bool
+     * @throws ValidationException
      */
     public function isUnverified(User | Authenticatable $user)
     {
         /* User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
         return $user->setting['otp'] && $user->status === User::STATUS_PENDING;
+    }
+
+    /**
+     * Responsible to check the user is Verified.
+     *
+     * @param  User|Authenticatable  $user
+     * @return bool
+     */
+    public function isVerified(User | Authenticatable $user)
+    {
+        /* User is considered as verified when user status is active or verified */
+        if ($user->status !== User::STATUS_VERIFIED && $user->status !== User::STATUS_ACTIVE) {
+            throw ValidationException::withMessages([
+                'Account' => ['Your account is not authenticated.'],
+            ]);
+        }
+
+        return true;
     }
 
     public function all()

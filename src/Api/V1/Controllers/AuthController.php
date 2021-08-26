@@ -16,7 +16,6 @@ use Aparlay\Core\Services\UserService;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -61,6 +60,13 @@ class AuthController extends Controller
         /* Change password scenario */
         if ($request->old_password) {
             $user = auth()->user();
+            
+            if ($user === null) {
+                throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
+            }
+
+            /** Check user varification */
+            $this->repository->isVerified($user);
 
             /** Check the update permission */
             $this->authorizeResource(User::class, 'user');
