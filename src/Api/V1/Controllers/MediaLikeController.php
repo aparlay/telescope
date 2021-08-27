@@ -93,7 +93,7 @@ class MediaLikeController extends Controller
      */
     public function store(Media $media): Response
     {
-        $this->authorize([MediaLike::class, $media], 'media');
+        $this->authorize('create', [MediaLike::class, $media]);
 
         $response = $this->mediaLikeService->create($media);
 
@@ -175,7 +175,7 @@ class MediaLikeController extends Controller
      */
     public function destroy(Media $media): Response
     {
-        $this->authorize([MediaLike::class, $media], 'media');
+        $this->authorize('delete', [MediaLike::class, $media]);
 
         // Unlike the media or throw exception if not liked
         $this->mediaLikeService->unLike($media);
