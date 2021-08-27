@@ -237,6 +237,15 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    public static function disabledStatues(): array
+    {
+        return [
+            self::STATUS_SUSPENDED,
+            self::STATUS_BLOCKED,
+            self::STATUS_DEACTIVATED,
+        ];
+    }
+
     /**
      * Create a new factory instance for the model.
      */
