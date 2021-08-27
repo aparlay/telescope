@@ -79,7 +79,7 @@ class Media extends MediaBase
         }
 
         $mediaLikeCacheKey = 'MediaLike.creator.'.auth()->user()->id;
-        $mediaLike = Cache::remember($mediaLikeCacheKey, 'cache.longDuration', function () {
+        $mediaLike = Cache::remember($mediaLikeCacheKey, config('app.cache.longDuration'), function () {
             return MediaLike::select(['media_id' => 1, '_id' => 0])->creator(auth()->user()->id)->pluck('media_id');
         });
 
@@ -96,7 +96,7 @@ class Media extends MediaBase
         }
 
         $mediaLikeCacheKey = 'MediaVisit.creator.'.auth()->user()->id;
-        $mediaLike = Cache::remember($mediaLikeCacheKey, 'cache.longDuration', function () {
+        $mediaLike = Cache::remember($mediaLikeCacheKey, config('app.cache.longDuration'), function () {
             return MediaVisit::select(['media_id' => 1, '_id' => 0])->user(auth()->user()->id)->pluck('media_id');
         });
 
