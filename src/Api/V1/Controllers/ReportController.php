@@ -121,11 +121,11 @@ class ReportController extends Controller
         }
 
         $model = new Report([
-                                'reason' => $request->post('reason'),
-                                'type' => Report::TYPE_MEDIA,
-                                'status' => Report::STATUS_REPORTED,
-                                'user_id' => new ObjectId($user->_id),
-                            ]);
+            'reason' => $request->post('reason'),
+            'type' => Report::TYPE_USER,
+            'status' => Report::STATUS_REPORTED,
+            'user_id' => new ObjectId($user->_id),
+        ]);
         $model->save();
         $model->notify(new ReportSent());
 
