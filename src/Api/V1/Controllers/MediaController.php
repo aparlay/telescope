@@ -27,7 +27,9 @@ class MediaController extends Controller
      */
     public function index(): Response
     {
-        return $this->response([], Response::HTTP_OK);
+        $type = request()->input('type') ?? '';
+
+        return $this->response(MediaService::getByType($type), Response::HTTP_OK);
     }
 
     /**
@@ -45,7 +47,9 @@ class MediaController extends Controller
      */
     public function store(MediaRequest $request): Response
     {
-        return $this->repository->store($request);
+        $media = $this->repository->store($request);
+
+        return $this->response(new MediaResource($media), '', Response::HTTP_CREATED);
     }
 
     public function upload(): Response

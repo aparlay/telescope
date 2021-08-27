@@ -13,6 +13,11 @@ class MediaPolicy
 {
     use HandlesAuthorization;
 
+    public function viewAny()
+    {
+        return Response::allow();
+    }
+
     /**
      * Determine whether the user can view the model.
      *
@@ -49,7 +54,6 @@ class MediaPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \Aparlay\Core\Api\V1\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create()

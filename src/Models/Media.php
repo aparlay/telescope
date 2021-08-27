@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
+use Aparlay\Core\Builders\BaseBuilder;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Events\MediaCreated;
 use Aparlay\Core\Events\MediaCreating;
@@ -178,6 +180,7 @@ class Media extends Model
      */
     protected $casts = [
         'status' => 'integer',
+        'visibility' => 'integer',
     ];
 
     protected $dispatchesEvents = [
@@ -218,6 +221,11 @@ class Media extends Model
     protected static function newFactory(): Factory
     {
         return MediaFactory::new();
+    }
+
+    public function newEloquentBuilder($query): BaseBuilder
+    {
+        return new BaseBuilder($query);
     }
 
     public function getCountFieldsUpdatedAtAttribute($attributeValue)
