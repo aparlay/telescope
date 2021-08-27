@@ -27,7 +27,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
 
     /* Media Prefix Group */
     Route::prefix('media')->name('media.')->group(function () {
-        Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
+        Route::get('/', [MediaController::class, 'index'])->name('list');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
 

@@ -2,11 +2,11 @@
 
 namespace Aparlay\Core\Builders;
 
-use Aparlay\Core\Pagination\CorePaginator;
+use Aparlay\Core\Pagination\MediaPaginator;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Builder;
 
-class BaseBuilder extends Builder
+class MediaBuilder extends Builder
 {
     /**
      * Paginate the given query.
@@ -15,20 +15,20 @@ class BaseBuilder extends Builder
      * @param array $columns
      * @param string $pageName
      * @param int|null $page
-     * @return CorePaginator
+     * @return MediaPaginator
      *
      * @throws \InvalidArgumentException
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        $page = $page ?: CorePaginator::resolveCurrentPage($pageName);
+        $page = $page ?: MediaPaginator::resolveCurrentPage($pageName);
         $perPage = $perPage ?: $this->model->getPerPage();
         $results = ($total = $this->toBase()->getCountForPagination())
             ? $this->forPage($page, $perPage)->get($columns)
             : $this->model->newCollection();
 
-        return new CorePaginator($results, $total, $perPage, $page, [
-            'path'     => CorePaginator::resolveCurrentPath(),
+        return new MediaPaginator($results, $total, $perPage, $page, [
+            'path'     => MediaPaginator::resolveCurrentPath(),
             'pageName' => $pageName,
         ]);
     }

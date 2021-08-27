@@ -109,19 +109,19 @@ class MediaService
                 cache()->delete($cacheKey);
                 redirect('index');
             }*/
-            $provider = $query->paginate(15);
-        } else {
-            $provider = $query->get();
         }
+        $provider = $query->paginate(10);
+
         /*$visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
         foreach ($provider as $model) {
             $visited[] = $model->_id;
         }
         cache()->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
-        */
+
         if ($type === 'following') {
             $provider = new MediaCollection($provider);
         }
+        */
 
         return $provider;
     }
