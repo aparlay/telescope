@@ -36,7 +36,6 @@ class AuthController extends Controller
                 'changePassword',
             ],
         ]);
-        $this->repository = new UserRepository(new User());
     }
 
     /**
@@ -52,8 +51,10 @@ class AuthController extends Controller
     /**
      * Change password.
      *
-     * @param ChangePasswordRequest $request
+     * @param  ChangePasswordRequest  $request
      * @return Response
+     * @throws BlockedException
+     * @throws ValidationException
      */
     public function changePassword(ChangePasswordRequest $request): Response
     {
@@ -65,30 +66,32 @@ class AuthController extends Controller
                 throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
             }
 
-            /* Check user varification */
-            $this->repository->isVerified($user);
+            /* Check user verification */
+            $this->repository = new UserRepository($user);
+            $this->repository->isVerified();
 
             /* Check the update permission */
             $this->authorizeResource(User::class, 'user');
 
             /* Change the password in database table */
-            $this->repository->resetPassword($request->password, $user);
+            $this->repository->resetPassword($request->password);
         } else {
             /* Forgot password scenario */
             if (! ($user = UserService::findByIdentity($request->username))) {
                 throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
             }
+            $this->repository = new UserRepository($user);
 
             /* Validate the OTP or Throw exception if OTP is incorrect */
             OtpService::validateOtp($request->otp, $request->username, false, true);
 
             /* verifying user if status is pending */
-            if ($this->repository->isUnverified($user)) {
-                $this->repository->verify($user);
+            if ($this->repository->isUnverified()) {
+                $this->repository->verify();
             }
 
             /* Store the new password in database */
-            $this->repository->resetPassword($request->password, $user);
+            $this->repository->resetPassword($request->password);
         }
 
         return $this->login(new LoginRequest(['password' => $request->password, 'username' => $user->username]));
@@ -97,8 +100,10 @@ class AuthController extends Controller
     /**
      * Validate request OTP.
      *
-     * @param ValidateOtpRequest $request
+     * @param  ValidateOtpRequest  $request
      * @return Response
+     * @throws BlockedException
+     * @throws ValidationException
      */
     public function validateOtp(ValidateOtpRequest $request): Response
     {
@@ -106,9 +111,10 @@ class AuthController extends Controller
         if (! ($user = UserService::findByIdentity($request->username))) {
             throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
         }
+        $this->repository = new UserRepository($user);
 
         /* Through exception for suspended/banned/NotFound accounts */
-        $this->repository->isUserEligible($user);
+        $this->repository->isUserEligible();
 
         /* Validate the OTP or Throw exception if OTP is incorrect */
         OtpService::validateOtp($request->otp, $request->username, true);
@@ -122,8 +128,10 @@ class AuthController extends Controller
     /**
      * Request for otp.
      *
-     * @param RequestOtpRequest $request
+     * @param  RequestOtpRequest  $request
      * @return Response
+     * @throws BlockedException
+     * @throws ValidationException
      */
     public function requestOtp(RequestOtpRequest $request): Response
     {
@@ -131,9 +139,10 @@ class AuthController extends Controller
         if (! ($user = UserService::findByIdentity($request->username))) {
             throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
         }
+        $this->repository = new UserRepository($user);
 
         /* Through exception for suspended/banned/NotFound accounts */
-        $this->repository->isUserEligible($user);
+        $this->repository->isUserEligible();
 
         // Send the OTP or Throw exception if send OTP limit is reached
         OtpService::sendOtp($user, $request->headers->get('X-DEVICE-ID'));
@@ -156,8 +165,10 @@ class AuthController extends Controller
     /**
      * Login a user.
      *
+     * @param  LoginRequest  $request
      * @return Response|void
      *
+     * @throws BlockedException
      * @throws ValidationException
      */
     public function login(LoginRequest $request)
@@ -173,13 +184,14 @@ class AuthController extends Controller
 
         /** Through exception for suspended/banned/NotFound accounts */
         $user = auth()->user();
-        $this->repository->isUserEligible($user);
+        $this->repository = new UserRepository($user);
+        $this->repository->isUserEligible();
         $deviceId = $request->headers->get('X-DEVICE-ID');
 
-        if ($this->repository->isUnverified($user)) {
+        if ($this->repository->isUnverified()) {
             if ($request->otp) {
                 OtpService::validateOtp($request->otp, $request->username);
-                $this->repository->verify($user);
+                $this->repository->verify();
             } else {
                 OtpService::sendOtp($user, $deviceId);
                 if ($identityField === Login::IDENTITY_PHONE_NUMBER) {
@@ -240,8 +252,8 @@ class AuthController extends Controller
         $identity = $user->phone_number ?? $user->email;
 
         /** Find the identityField (Email/PhoneNumber/Username) based on username */
-        $identityField = UserService::getIdentityType($identity);
-        if ($this->repository->isUnverified($user)) {
+        $this->repository = new UserRepository($user);
+        if ($this->repository->isUnverified()) {
             OtpService::sendOtp($user, $deviceId);
         }
 

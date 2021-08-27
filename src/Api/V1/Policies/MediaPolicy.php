@@ -20,7 +20,7 @@ class MediaPolicy
      * @param  \Aparlay\Core\Api\V1\Models\Media  $media
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User | null | Authenticatable $user, Media $media)
+    public function view(User | Authenticatable | null $user, Media $media)
     {
         $userId = $user?->_id;
 

@@ -33,7 +33,7 @@ class UserService
      * Find user by identity (email/phone_number/username).
      *
      * @param string $username
-     * @return User
+     * @return User|null
      */
     public static function findByIdentity(string $username)
     {
