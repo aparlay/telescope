@@ -13,7 +13,7 @@ class MediaPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User | Authenticatable | null $user)
+    public function viewAny()
     {
         return Response::allow();
     }

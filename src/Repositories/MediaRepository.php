@@ -78,6 +78,6 @@ class MediaRepository extends Controller
             }
         }
 
-        return $query->paginate(10);
+        return $query->get();
     }
 }

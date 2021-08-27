@@ -4,7 +4,7 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
-use Aparlay\Core\Builders\MediaBuilder;
+use Aparlay\Core\Builders\BaseBuilder;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Events\MediaCreated;
 use Aparlay\Core\Events\MediaCreating;
@@ -223,9 +223,9 @@ class Media extends Model
         return MediaFactory::new();
     }
 
-    public function newEloquentBuilder($query): MediaBuilder
+    public function newEloquentBuilder($query): BaseBuilder
     {
-        return new MediaBuilder($query);
+        return new BaseBuilder($query);
     }
 
     public function getCountFieldsUpdatedAtAttribute($attributeValue)

@@ -5,7 +5,7 @@ namespace Aparlay\Core\Pagination;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class MediaPaginator extends LengthAwarePaginator
+class CorePaginator extends LengthAwarePaginator
 {
     /**
      * Get the instance as an array.
@@ -32,6 +32,7 @@ class MediaPaginator extends LengthAwarePaginator
                 'prev' => [
                     'href' => $this->previousPageUrl(),
                 ],
+
             ],
             '_meta' => [
                 'total_count' => $this->total(),
