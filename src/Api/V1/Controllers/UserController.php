@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
+use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -86,10 +87,12 @@ class UserController extends Controller
 
     public function show(User $user): Response
     {
-        if (in_array($user->status, User::disabledStatues())) {
-            return $this->error('Account not found!', [], Response::HTTP_NOT_FOUND);
+        $userRepository = new UserRepository($user);
+
+        if ($userRepository->isUserEligible()) {
+            return $this->response(new UserResource($user));
         }
 
-        return $this->response(new UserResource($user));
+        return $this->error('Account not found!', [], Response::HTTP_NOT_FOUND);
     }
 }
