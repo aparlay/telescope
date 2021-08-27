@@ -3,10 +3,10 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Resources\MediaLikeResource;
 use Aparlay\Core\Services\MediaLikeService;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
 
 class MediaLikeController extends Controller
 {
@@ -93,9 +93,7 @@ class MediaLikeController extends Controller
      */
     public function store(Media $media): Response
     {
-        if (Gate::forUser(auth()->user())->denies('interact', $media->created_by)) {
-            return $this->error('You cannot like this video at the moment.', [], Response::HTTP_FORBIDDEN);
-        }
+        $this->authorize([MediaLike::class, $media], 'media');
 
         $response = $this->mediaLikeService->create($media);
 
@@ -177,6 +175,8 @@ class MediaLikeController extends Controller
      */
     public function destroy(Media $media): Response
     {
+        $this->authorize([MediaLike::class, $media], 'media');
+
         // Unlike the media or throw exception if not liked
         $this->mediaLikeService->unLike($media);
 
