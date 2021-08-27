@@ -29,11 +29,11 @@ class MediaLikePolicy
         $user = auth()->user();
         $userId = $user?->_id;
 
-        $isFollowed = Block::select(['created_by', '_id'])
+        $isBlocked = Block::select(['created_by', '_id'])
             ->creator($media->created_by)
             ->user($userId)
             ->exists();
-        if ($isFollowed) {
+        if ($isBlocked) {
             return Response::deny(__('You cannot like this video at the moment.'));
         }
 
@@ -56,11 +56,11 @@ class MediaLikePolicy
         $user = auth()->user();
         $userId = $user?->_id;
 
-        $isFollowed = Block::select(['created_by', '_id'])
+        $isBlocked = Block::select(['created_by', '_id'])
             ->creator($media->created_by)
             ->user($userId)
             ->exists();
-        if ($isFollowed) {
+        if ($isBlocked) {
             return Response::deny(__('You cannot unlike this video at the moment.'));
         }
 
