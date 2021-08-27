@@ -20,7 +20,7 @@ trait SimpleUserTrait
     ): array {
         $user = auth()->user();
         $userArray['_id'] = (string) $userArray['_id'];
-        $userArray['avatar'] = Cdn::avatar((string) ($userArray['avatar'] ?? 'default.jpg'));
+        $userArray['avatar'] = $userArray['avatar'] ?? Cdn::avatar('default.jpg');
         $userArray['is_followed'] = false;
         $userArray['is_liked'] = false;
         if ($user) {
