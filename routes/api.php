@@ -29,13 +29,11 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
     Route::prefix('media')->name('media.')->group(function () {
         Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
-        Route::get('/{media}', [MediaController::class, 'show'])
-            ->middleware('cache.headers:public;max_age=2628000;etag')->name('show');
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
 
         /* Cache Group */
         Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function () {
-            Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
+            Route::get('/{media}', [MediaController::class, 'show'])->name('show');
         });
 
         /* Authentication Group */
