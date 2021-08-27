@@ -44,8 +44,8 @@ class OtpService
         if (count($previousOTP) > 4) {
             throw new BlockedException(
                 'You cannot create more OTP, please wait a while to receive an otp or try again later.',
-                null,
-                null,
+                'ERROR',
+                'LOCKED',
                 Response::HTTP_LOCKED
             );
         }

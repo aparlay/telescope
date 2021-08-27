@@ -22,6 +22,7 @@ class UserPolicy
      */
     public function view(User $user)
     {
+        return Response::allow();
     }
 
     /**
@@ -32,6 +33,7 @@ class UserPolicy
      */
     public function create()
     {
+        return Response::allow();
     }
 
     /**
@@ -42,7 +44,10 @@ class UserPolicy
      */
     public function update(User | null $user)
     {
-        return ($user !== null && (string) auth()->user()->_id === (string) $user->_id)
+        return (
+            ($user !== null && (string) auth()->user()->_id === (string) $user->_id) ||
+            auth()->user()->type === User::TYPE_ADMIN
+        )
         ? Response::allow()
         : Response::deny(__('You can only update your account.'));
     }
@@ -55,5 +60,11 @@ class UserPolicy
      */
     public function delete(User $user)
     {
+        return (
+            ($user !== null && (string) auth()->user()->_id === (string) $user->_id) ||
+            auth()->user()->type === User::TYPE_ADMIN
+        )
+            ? Response::allow()
+            : Response::deny(__('You can only delete your account.'));
     }
 }

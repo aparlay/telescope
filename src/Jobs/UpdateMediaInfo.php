@@ -85,4 +85,9 @@ class UpdateMediaInfo implements ShouldQueue
             $this->user->notify(new JobFailed(self::class, $this->attempts(), 'File not exists'));
         }
     }
+
+    public function failed(Throwable $exception): void
+    {
+        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+    }
 }

@@ -62,7 +62,7 @@ trait UserScope
 
     public function scopeEnable(Builder $query): Builder
     {
-        return $query->where('status', '$in', [
+        return $query->whereIn('status', [
             User::STATUS_PENDING,
             User::STATUS_VERIFIED,
             User::STATUS_ACTIVE,
@@ -71,7 +71,7 @@ trait UserScope
 
     public function scopeDisable(Builder $query): Builder
     {
-        return $query->where('status', '$in', [
+        return $query->whereIn('status', [
             User::STATUS_SUSPENDED,
             User::STATUS_BLOCKED,
             User::STATUS_DEACTIVATED,

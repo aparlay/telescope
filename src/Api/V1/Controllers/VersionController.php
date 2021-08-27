@@ -85,7 +85,7 @@ class VersionController extends Controller
     {
         $models = Version::os($os)
             ->app('waptap')
-            ->latestFirst()
+            ->latest()
             ->get();
 
         if (empty($models)) {

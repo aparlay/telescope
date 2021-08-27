@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
+use Aparlay\Core\Builders\BaseBuilder;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Events\MediaCreated;
 use Aparlay\Core\Events\MediaCreating;
@@ -152,6 +154,7 @@ class Media extends Model
         'likes' => [],
         'visits' => [],
         'status' => self::STATUS_QUEUED,
+        'is_protected' => false,
     ];
 
     /**
@@ -176,13 +179,14 @@ class Media extends Model
      * @var array
      */
     protected $casts = [
+        'status' => 'integer',
+        'visibility' => 'integer',
     ];
 
     protected $dispatchesEvents = [
         'creating' => MediaCreating::class,
         'created' => MediaCreated::class,
         'saving' => MediaSaving::class,
-        'updated' => MediaUpdated::class,
         'saved' => MediaSaved::class,
         'deleted' => MediaDeleted::class,
     ];
@@ -217,6 +221,11 @@ class Media extends Model
     protected static function newFactory(): Factory
     {
         return MediaFactory::new();
+    }
+
+    public function newEloquentBuilder($query): BaseBuilder
+    {
+        return new BaseBuilder($query);
     }
 
     public function getCountFieldsUpdatedAtAttribute($attributeValue)
