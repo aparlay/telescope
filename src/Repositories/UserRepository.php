@@ -29,6 +29,7 @@ class UserRepository implements RepositoryInterface
     {
         $this->model->status = User::STATUS_VERIFIED;
         $this->model->email_verified = true;
+
         return $this->model->save(['status', 'email_verified']);
     }
 
@@ -156,6 +157,7 @@ class UserRepository implements RepositoryInterface
     public function resetPassword(string $password): bool
     {
         $this->model->password_hash = Hash::make($password);
+
         return $this->model->save();
     }
 }
