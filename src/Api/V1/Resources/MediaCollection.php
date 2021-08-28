@@ -16,7 +16,7 @@ class MediaCollection extends ResourceCollection
      *
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request): array|Arrayable|JsonSerializable
+    public function toArray($request): array | Arrayable | JsonSerializable
     {
         return [
             'items' => $this->resource->items(),

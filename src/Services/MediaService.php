@@ -80,20 +80,20 @@ class MediaService
     public static function getByType(string $type)
     {
         $query = Media::query();
-        if (!auth()->guest() && $type === 'following') {
+        if (! auth()->guest() && $type === 'following') {
             $query->availableForFollower()->following(auth()->user()->_id)->recentFirst();
         } else {
             $query->public()->confirmed()->sort();
         }
 
-        if (!auth()->guest()) {
+        if (! auth()->guest()) {
             $query->notBlockedFor(auth()->user()->_id);
         }
 
         $deviceId = request()->headers->get('X-DEVICE-ID', '');
         $cacheKey = 'media_visits'.'_'.$deviceId;
         if ($type !== 'following') {
-            if (!auth()->guest()) {
+            if (! auth()->guest()) {
                 $userId = auth()->user()->_id;
                 $query->notVisitedByUserAndDevice($userId, $deviceId);
             } else {
@@ -101,7 +101,7 @@ class MediaService
             }
             $count = $query->count();
             if ($count === 0) {
-                if (!auth()->guest()) {
+                if (! auth()->guest()) {
                     MediaVisit::user(auth()->user()->_id)->get()->delete();
                 }
                 cache()->delete($cacheKey);
