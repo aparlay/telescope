@@ -4,6 +4,9 @@ namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
+use Exception;
+use Illuminate\Contracts\Pagination\Paginator;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaService
 {
@@ -21,7 +24,7 @@ class MediaService
     /**
      * @param  string  $description
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public static function extractPeople(string $description): array
     {
@@ -39,7 +42,7 @@ class MediaService
     /**
      * @param  string  $description
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public static function extractHashtags(string $description): array
     {
@@ -70,8 +73,9 @@ class MediaService
 
     /**
      * @param  string  $type
-     * @return \Illuminate\Contracts\Pagination\CursorPaginator
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @return Paginator
+     * @throws InvalidArgumentException
+     * @throws Exception
      */
     public static function getByType(string $type)
     {
