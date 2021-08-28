@@ -5,12 +5,18 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Resources\MediaLikeResource;
+use Aparlay\Core\Services\MediaLikeService;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
-use MongoDB\BSON\ObjectId;
 
 class MediaLikeController extends Controller
 {
+    protected $mediaLikeService;
+
+    public function __construct(MediaLikeService $mediaLikeService)
+    {
+        $this->mediaLikeService = $mediaLikeService;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -87,24 +93,11 @@ class MediaLikeController extends Controller
      */
     public function store(Media $media): Response
     {
-        if (Gate::forUser(auth()->user())->denies('interact', $media->created_by)) {
-            return $this->error('You cannot like this video at the moment.', [], Response::HTTP_FORBIDDEN);
-        }
+        $this->authorize('create', [MediaLike::class, $media]);
 
-        $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
-        if (null === $mediaLike) {
-            $mediaLike = new MediaLike([
-                                           'creator' => ['_id' => new ObjectId(auth()->user()->_id)],
-                                           'media_id' => new ObjectId($media->_id),
-                                           'user_id' => new ObjectId(auth()->user()->_id),
-                                       ]);
-            $mediaLike->save();
-            $mediaLike->refresh();
+        $response = $this->mediaLikeService->create($media);
 
-            return $this->response(new MediaLikeResource($mediaLike), '', Response::HTTP_CREATED);
-        }
-
-        return $this->response(new MediaLikeResource($mediaLike), '', Response::HTTP_OK);
+        return $this->response(new MediaLikeResource($response['data']), '', $response['statusCode']);
     }
 
     /**
@@ -182,10 +175,10 @@ class MediaLikeController extends Controller
      */
     public function destroy(Media $media): Response
     {
-        $mediaLike = MediaLike::media($media->_id)->creator(auth()->user()->_id)->first();
-        if (null !== $mediaLike) {
-            $mediaLike->delete();
-        }
+        $this->authorize('delete', [MediaLike::class, $media]);
+
+        // Unlike the media or throw exception if not liked
+        $this->mediaLikeService->unLike($media);
 
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
