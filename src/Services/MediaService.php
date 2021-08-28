@@ -3,18 +3,12 @@
 namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Resources\MediaCollection;
-use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Models\MediaVisit;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use MongoDB\BSON\ObjectId;
 
 class MediaService
 {
     /**
-     * @param int $length
+     * @param  int  $length
      * @return string
      */
     public static function generateSlug(int $length): string
@@ -25,7 +19,7 @@ class MediaService
     }
 
     /**
-     * @param string $description
+     * @param  string  $description
      * @return array
      * @throws \Exception
      */
@@ -43,7 +37,7 @@ class MediaService
     }
 
     /**
-     * @param string $description
+     * @param  string  $description
      * @return array
      * @throws \Exception
      */
@@ -61,7 +55,7 @@ class MediaService
     }
 
     /**
-     * @param Media $media
+     * @param  Media  $media
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
@@ -75,27 +69,27 @@ class MediaService
     }
 
     /**
-     * @param string $type
-     * @return Collection|LengthAwarePaginator|AnonymousResourceCollection|array
+     * @param  string  $type
+     * @return \Illuminate\Contracts\Pagination\CursorPaginator
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public static function getByType(string $type): MediaCollection | LengthAwarePaginator | AnonymousResourceCollection | array
+    public static function getByType(string $type)
     {
         $query = Media::query();
-        if (! auth()->guest() && $type === 'following') {
+        if (!auth()->guest() && $type === 'following') {
             $query->availableForFollower()->following(auth()->user()->_id)->recentFirst();
         } else {
             $query->public()->confirmed()->sort();
         }
-        if (! auth()->guest()) {
+
+        if (!auth()->guest()) {
             $query->notBlockedFor(auth()->user()->_id);
         }
-        //$deviceId = request()->headers->get('X-DEVICE-ID', '');
-        //$cacheKey = 'media_visits'.'_'.$deviceId;
+
+        $deviceId = request()->headers->get('X-DEVICE-ID', '');
+        $cacheKey = 'media_visits'.'_'.$deviceId;
         if ($type !== 'following') {
-            /*
-             * @todo MediaVisit
-             * if (! auth()->guest()) {
+            if (!auth()->guest()) {
                 $userId = auth()->user()->_id;
                 $query->notVisitedByUserAndDevice($userId, $deviceId);
             } else {
@@ -103,26 +97,21 @@ class MediaService
             }
             $count = $query->count();
             if ($count === 0) {
-                if (! auth()->guest()) {
-                    MediaVisit::user(auth()->user()->_id)->delete();
+                if (!auth()->guest()) {
+                    MediaVisit::user(auth()->user()->_id)->get()->delete();
                 }
                 cache()->delete($cacheKey);
                 redirect('index');
-            }*/
-            $provider = $query->paginate(15);
-        } else {
-            $provider = $query->get();
+            }
         }
-        /*$visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
-        foreach ($provider as $model) {
+
+        $data = $query->paginate(10);
+        $visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
+        foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
         cache()->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
-        */
-        if ($type === 'following') {
-            $provider = new MediaCollection($provider);
-        }
 
-        return $provider;
+        return $data;
     }
 }
