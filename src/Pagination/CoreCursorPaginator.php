@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Pagination;
 
-
 class CoreCursorPaginator
 {
     protected $items;

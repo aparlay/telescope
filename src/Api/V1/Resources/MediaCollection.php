@@ -16,7 +16,7 @@ class MediaCollection extends ResourceCollection
      *
      * @return array|Arrayable|JsonSerializable
      */
-    public function toArray($request): array|Arrayable|JsonSerializable
+    public function toArray($request): array | Arrayable | JsonSerializable
     {
         return [
             'items' => $this->collection,
@@ -30,9 +30,9 @@ class MediaCollection extends ResourceCollection
             ],
             '_meta' => [
                 'per_page' => $this->resource->perPage(),
-                "current_page" => $this->resource->currentPage(),
-                "page_count" => $this->resource->count(),
-                "total_count" => $this->resource->total(),
+                'current_page' => $this->resource->currentPage(),
+                'page_count' => $this->resource->count(),
+                'total_count' => $this->resource->total(),
             ],
         ];
     }
