@@ -109,7 +109,7 @@ class MediaService
             }
         }
 
-        $data = $query->paginate(10);
+        $data = $query->paginate(5);
         $visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
