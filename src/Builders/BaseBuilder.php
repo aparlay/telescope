@@ -2,13 +2,11 @@
 
 namespace Aparlay\Core\Builders;
 
-
 use Aparlay\Core\Pagination\CoreCursorPaginator;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
 class BaseBuilder extends Builder
 {
-
     /**
      * Paginate the given query into a cursor paginator.
      *
