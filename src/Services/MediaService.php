@@ -102,7 +102,7 @@ class MediaService
             $count = $query->count();
             if ($count === 0) {
                 if (! auth()->guest()) {
-                    MediaVisit::user(auth()->user()->_id)->get()->delete();
+                    MediaVisit::user(auth()->user()->_id)->delete();
                 }
                 cache()->delete($cacheKey);
                 redirect('index');
