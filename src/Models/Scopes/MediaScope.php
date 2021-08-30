@@ -140,7 +140,7 @@ trait MediaScope
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
         }
 
-        return $query->where('_id', '$nin', $visitedIds);
+        return $query->whereNotIn('_id', $visitedIds);
     }
 
     public function scopeNotVisitedByDevice(Builder $query, string $deviceId): Builder
@@ -152,7 +152,7 @@ trait MediaScope
         $cacheKey = 'media_visits.'.$deviceId;
         if (($visitedIds = Cache::get($cacheKey, false)) !== false && is_array($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));
-            $query->where('_id', '$nin', $visitedIds);
+            $query->whereNotIn('_id', $visitedIds);
         }
 
         return $query;
