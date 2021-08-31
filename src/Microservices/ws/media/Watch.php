@@ -22,6 +22,12 @@ class Watch implements WsEventDispatcher
 
     public function __construct($config = [])
     {
+        foreach ($config as $property => $value) {
+            if (property_exists($this, $property)) {
+                $this->$property = $value;
+            }
+        }
+
         if (empty($this->mediaId)) {
             throw new InvalidArgumentException('mediaId is mandatory field for the "media.like" event.');
         }
