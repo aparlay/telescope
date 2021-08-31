@@ -6,6 +6,8 @@ use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
+use Aparlay\Core\Api\V1\Resources\UserResource;
+use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -81,5 +83,16 @@ class UserController extends Controller
             new MeResource($user),
             Response::HTTP_OK
         );
+    }
+
+    public function show(User $user): Response
+    {
+        $userRepository = new UserRepository($user);
+
+        if ($userRepository->isUserEligible()) {
+            return $this->response(new UserResource($user));
+        }
+
+        return $this->error('Account not found!', [], Response::HTTP_NOT_FOUND);
     }
 }
