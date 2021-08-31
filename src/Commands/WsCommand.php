@@ -2,15 +2,29 @@
 
 namespace Aparlay\Core\Commands;
 
+use Aparlay\Core\Microservices\ws\WsChannel;
 use Aparlay\Core\Microservices\ws\WsDispatcherFactory;
+use Carbon\Carbon;
 use co;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
+use JWTAuth;
+use JWTFactory;
 use Swoole\Coroutine\Http\Client;
 use Swoole\Runtime;
 use Swoole\WebSocket\Frame;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Facades\JWTFactory;
+use Tymon\JWTAuth\Claims\Audience;
+use Tymon\JWTAuth\Claims\Collection;
+use Tymon\JWTAuth\Claims\Custom;
+use Tymon\JWTAuth\Claims\Expiration;
+use Tymon\JWTAuth\Claims\IssuedAt;
+use Tymon\JWTAuth\Claims\Issuer;
+use Tymon\JWTAuth\Claims\JwtId;
+use Tymon\JWTAuth\Claims\NotBefore;
+use Tymon\JWTAuth\Claims\Subject;
+use Tymon\JWTAuth\Payload;
+use Tymon\JWTAuth\Validators\PayloadValidator;
 
 class WsCommand extends Command
 {
@@ -20,11 +34,22 @@ class WsCommand extends Command
 
     public function handle()
     {
-        $payload['sub'] = '0';
-        $payload['role'] = 'system';
-        $payload['device_id'] = '0';
-        $payLoad = JWTFactory::make($payload);
-        $token = JWTAuth::encode($payLoad)->get();
+        $requiredClaims = [
+            new Audience(config('app.jwt.sig.audience')),
+            new Issuer(config('app.jwt.sig.issuer')),
+            new IssuedAt(Carbon::now('UTC')),
+            new Expiration(Carbon::now('UTC')->addYear(1)),
+            new NotBefore(Carbon::now('UTC')),
+            new JwtId(Str::random()),
+            new Subject('0'),
+            new Custom('role', 'system'),
+            new Custom('device_id', '0'),
+        ];
+
+        $claims = new Collection($requiredClaims);
+        $payload = new Payload($claims, new PayloadValidator());
+        $tokenInstance = JWTAuth::encode($payload);
+        $token = $tokenInstance->get();
         Runtime::enableCoroutine(SWOOLE_HOOK_ALL);
         \Co\run(function () use ($token) {
             $client = new Client(config('app.websocket.host'), config('app.websocket.port'));
@@ -37,7 +62,7 @@ class WsCommand extends Command
             if ($ret) {
                 $this->info('Connection established successfully!');
                 go(function () use ($client) {
-                    Redis::subscribe(['test-channel'], function ($message) use ($client) {
+                    Redis::subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
                         $this->info('New broadcasting message arrived!');
                         $this->info($message);
                         $client->push($message);

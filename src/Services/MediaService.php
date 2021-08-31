@@ -5,6 +5,7 @@ namespace Aparlay\Core\Services;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Alert;
 use Aparlay\Core\Models\MediaVisit;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -135,7 +136,9 @@ class MediaService
         if (auth()->guest()) {
             $query->confirmed()->public();
         } elseif ((string) $userId === (string) auth()->user()->_id) {
-            $query->availableForOwner();
+            $query->with(['alertObjs' => function ($query) {
+                $query->where('status', Alert::STATUS_NOT_VISITED);
+            }])->availableForOwner();
         } else {
             $isFollowed = Follow::select(['user._id', '_id'])
                 ->creator(auth()->user()->_id)

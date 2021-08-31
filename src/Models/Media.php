@@ -2,16 +2,13 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
-use Aparlay\Core\Builders\BaseBuilder;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Events\MediaCreated;
 use Aparlay\Core\Events\MediaCreating;
 use Aparlay\Core\Events\MediaDeleted;
 use Aparlay\Core\Events\MediaSaved;
 use Aparlay\Core\Events\MediaSaving;
-use Aparlay\Core\Events\MediaUpdated;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -55,6 +52,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $links
  * @property bool        $is_protected
  * @property User        $userObj
+ * @property Alert[]     $alertObjs
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
@@ -253,6 +251,14 @@ class Media extends Model
     }
 
     /**
+     * Get the phone associated with the user.
+     */
+    public function alertObjs()
+    {
+        return $this->hasMany(Alert::class, 'media_id');
+    }
+
+    /**
      * Get the user's full name.
      */
     public function getIsAdultAttribute(): bool
@@ -299,11 +305,11 @@ class Media extends Model
      */
     public function getAlertsAttribute()
     {
-        if (auth()->guest() || (string) $this->created_by !== (string) auth()->user()->_id) {
-            return [];
+        if (!auth()->guest() && (string) $this->created_by === (string) auth()->user()->_id) {
+            return $this->alertObjs;
         }
 
-        return Alert::media($this->_id)->user(auth()->user()->_id)->notVisited()->get();
+        return [];
     }
 
     /**
