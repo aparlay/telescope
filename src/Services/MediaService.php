@@ -93,7 +93,7 @@ class MediaService
         }
 
         $deviceId = request()->headers->get('X-DEVICE-ID', '');
-        $cacheKey = (new MediaVisit())->getCollection().'_'.$deviceId;
+        $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
         if ($type !== 'following') {
             if (! auth()->guest()) {
                 $userId = auth()->user()->_id;
@@ -101,17 +101,18 @@ class MediaService
             } else {
                 $query->notVisitedByDevice($deviceId);
             }
-            $count = $query->count();
-            if ($count === 0) {
+            $data = $query->paginate(5);
+            if ($data->total() === 0) {
                 if (! auth()->guest()) {
                     MediaVisit::user(auth()->user()->_id)->delete();
                 }
                 Cache::store('redis')->delete($cacheKey);
                 redirect('index');
             }
+        } else {
+            $data = $query->paginate(5);
         }
 
-        $data = $query->paginate(5);
         $visited = Cache::store('redis')->get($cacheKey, []);
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
