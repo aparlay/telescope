@@ -63,8 +63,8 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
         });
     });
 
-    /* Authentication Group with me prifix */
-    Route::middleware('auth:api')->prefix('me')->name('profie.')->group(function () {
+    /* Authentication Group with me prefix */
+    Route::middleware('auth:api')->name('profie.')->group(function () {
         Route::get('/', [UserController::class, 'me']);
         Route::match(['put', 'patch'], '/', [UserController::class, 'update']);
         Route::delete('/', [UserController::class, 'destroy']);
