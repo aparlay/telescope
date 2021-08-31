@@ -29,11 +29,11 @@ class Watch implements WsEventDispatcher
         }
 
         if (empty($this->mediaId)) {
-            throw new InvalidArgumentException('mediaId is mandatory field for the "media.like" event.');
+            throw new InvalidArgumentException('mediaId is mandatory field for the "media.watch" event.');
         }
 
         if (empty($this->userId) && empty($this->anonymousId)) {
-            throw new InvalidArgumentException('one of the userId or anonymousId is mandatory field for the "media.like" event.');
+            throw new InvalidArgumentException('one of the userId or anonymousId is mandatory field for the "media.watch" event.');
         }
 
         $this->mediaId = new ObjectId($this->mediaId);
