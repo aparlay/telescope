@@ -87,7 +87,6 @@ class MediaService
             $query->public()->confirmed()->sort();
         }
 
-
         if (! auth()->guest()) {
             $query->notBlockedFor(auth()->user()->_id);
         }
