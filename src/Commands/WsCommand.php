@@ -51,7 +51,7 @@ class WsCommand extends Command
         $token = $tokenInstance->get();
         Runtime::enableCoroutine(SWOOLE_HOOK_ALL);
         \Co\run(function () use ($token) {
-            $client = new Client(config('app.websocket.host'),config('app.websocket.port'));
+            $client = new Client(config('app.websocket.host'), config('app.websocket.port'));
             $client->setHeaders([
                 'Authorization' => 'Bearer '.$token,
                 'Device_id' => '0',
