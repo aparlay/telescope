@@ -52,7 +52,6 @@ class WsCommand extends Command
         $token = $tokenInstance->get();
         Co::set(['hook_flags'=> SWOOLE_HOOK_ALL]);
         \Co\run(function () use ($token) {
-
             $client = new Client(config('app.websocket.host'), config('app.websocket.port'));
             $client->setHeaders([
                 'Authorization' => 'Bearer '.$token,
