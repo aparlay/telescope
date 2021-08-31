@@ -181,6 +181,14 @@ class User extends Authenticatable implements JWTSubject
         'count_fields_updated_at' => [],
     ];
 
+    protected $dates = [
+        'email_verified_at',
+        'phone_number_verified_at',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     public static function getFeatures(): array
     {
         return [

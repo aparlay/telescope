@@ -66,4 +66,12 @@ class Model extends \Jenssegers\Mongodb\Eloquent\Model
 
         $this->$attribute = $values;
     }
+
+    /**
+     * @return string
+     */
+    public function getCollection(): string
+    {
+        return $this->collection;
+    }
 }

@@ -2,34 +2,57 @@
 
 namespace Aparlay\Core\Builders;
 
-use Aparlay\Core\Pagination\CorePaginator;
-use Illuminate\Container\Container;
-use Illuminate\Database\Eloquent\Builder;
+use Aparlay\Core\Pagination\CoreCursorPaginator;
+use Jenssegers\Mongodb\Eloquent\Builder;
 
 class BaseBuilder extends Builder
 {
     /**
-     * Paginate the given query.
+     * Paginate the given query into a cursor paginator.
      *
-     * @param int|null $perPage
-     * @param array $columns
-     * @param string $pageName
-     * @param int|null $page
-     * @return CorePaginator
-     *
-     * @throws \InvalidArgumentException
+     * @param  int|null  $perPage
+     * @param  array  $columns
+     * @param  string  $cursorName
+     * @param  \Illuminate\Pagination\Cursor|string|null  $cursor
+     * @return \Illuminate\Contracts\Pagination\CursorPaginator
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    public function cursorPaginate($perPage = null, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
     {
-        $page = $page ?: CorePaginator::resolveCurrentPage($pageName);
-        $perPage = $perPage ?: $this->model->getPerPage();
-        $results = ($total = $this->toBase()->getCountForPagination())
-            ? $this->forPage($page, $perPage)->get($columns)
-            : $this->model->newCollection();
+        $cursor = CoreCursorPaginator::currentCursor();
 
-        return new CorePaginator($results, $total, $perPage, $page, [
-            'path'     => CorePaginator::resolveCurrentPath(),
-            'pageName' => $pageName,
-        ]);
+        if ($cursor) {
+            $apply = function ($query, $columns, $cursor) use (&$apply) {
+                $query->where(function ($query) use ($columns, $cursor, $apply) {
+                    $column = key($columns);
+                    $direction = array_shift($columns);
+                    $value = array_shift($cursor);
+
+                    $query->where($column, $direction === 'asc' ? '>' : '<', $value);
+
+                    if (! empty($columns)) {
+                        $query->orWhere($column, $value);
+                        $apply($query, $columns, $cursor);
+                    }
+                });
+            };
+
+            $apply($this, $columns, $cursor);
+        }
+
+        foreach ($columns as $column => $direction) {
+            $this->orderBy($column, $direction);
+        }
+
+        $items = $this->limit($perPage + 1)->get();
+
+        if ($items->count() <= $perPage) {
+            return new CoreCursorPaginator($perPage);
+        }
+
+        $items->pop();
+
+        return new CoreCursorPaginator($items, array_map(function ($column) use ($items) {
+            return $items->last()->{$column};
+        }, array_keys($columns)));
     }
 }

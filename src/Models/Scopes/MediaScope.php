@@ -13,7 +13,9 @@ use MongoDB\BSON\UTCDateTime;
 trait MediaScope
 {
     /**
-     * @param ObjectId|string $creatorId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $creatorId
+     * @return Builder
      */
     public function scopeCreator(Builder $query, ObjectId | string $creatorId): Builder
     {
@@ -23,7 +25,9 @@ trait MediaScope
     }
 
     /**
-     * @param ObjectId|string $creatorId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $mediaId
+     * @return Builder
      */
     public function scopeMedia(Builder $query, ObjectId | string $mediaId): Builder
     {
@@ -89,7 +93,9 @@ trait MediaScope
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @return Builder
      */
     public function scopeFollowing(Builder $query, ObjectId | string $userId): Builder
     {
@@ -100,7 +106,9 @@ trait MediaScope
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @return Builder
      */
     public function scopeNotBlockedFor(Builder $query, ObjectId | string $userId): Builder
     {
@@ -115,7 +123,10 @@ trait MediaScope
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @param  string  $deviceId
+     * @return Builder
      */
     public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId | string $userId, string $deviceId): Builder
     {
@@ -129,7 +140,7 @@ trait MediaScope
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
         }
 
-        return $query->where('_id', '$nin', $visitedIds);
+        return $query->whereNotIn('_id', $visitedIds);
     }
 
     public function scopeNotVisitedByDevice(Builder $query, string $deviceId): Builder
@@ -141,7 +152,7 @@ trait MediaScope
         $cacheKey = 'media_visits.'.$deviceId;
         if (($visitedIds = Cache::get($cacheKey, false)) !== false && is_array($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));
-            $query->where('_id', '$nin', $visitedIds);
+            $query->whereNotIn('_id', $visitedIds);
         }
 
         return $query;
@@ -163,7 +174,8 @@ trait MediaScope
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
      *
      * @return mixed
      */
@@ -193,6 +205,7 @@ trait MediaScope
 
     /**
      * @param $query
+     * @return mixed
      */
     public function scopeRecentFirst($query): mixed
     {
@@ -201,6 +214,7 @@ trait MediaScope
 
     /**
      * @param $query
+     * @return mixed
      */
     public function scopeSort($query): mixed
     {

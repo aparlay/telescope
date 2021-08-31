@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Repositories\MediaRepository;
 use Aparlay\Core\Services\MediaService;
@@ -27,9 +28,9 @@ class MediaController extends Controller
      */
     public function index(): Response
     {
-        $type = request()->input('type') ?? '';
+        $type = request()?->input('type') ?? '';
 
-        return $this->response(MediaService::getByType($type), Response::HTTP_OK);
+        return $this->response(new MediaCollection(MediaService::getByType($type)), '', Response::HTTP_OK);
     }
 
     /**
@@ -37,7 +38,7 @@ class MediaController extends Controller
      */
     public function listByUser(User $user): Response
     {
-        return $this->response($this->repository->findByUser($user), '', Response::HTTP_OK);
+        return $this->response(new MediaCollection(MediaService::getByUser($user)), '', Response::HTTP_OK);
     }
 
     /**

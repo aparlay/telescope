@@ -10,6 +10,7 @@ trait MediaVisitScope
     /**
      * @param $query
      * @param $mediaId
+     * @return mixed
      */
     public function scopeMedia($query, $mediaId): mixed
     {
@@ -21,6 +22,7 @@ trait MediaVisitScope
     /**
      * @param $query
      * @param $userId
+     * @return mixed
      */
     public function scopeUser($query, $userId): mixed
     {

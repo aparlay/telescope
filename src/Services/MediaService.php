@@ -2,19 +2,19 @@
 
 namespace Aparlay\Core\Services;
 
+use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Resources\MediaCollection;
-use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Models\MediaVisit;
+use App\Models\User;
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use MongoDB\BSON\ObjectId;
+use Illuminate\Contracts\Pagination\Paginator;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaService
 {
     /**
-     * @param int $length
+     * @param  int  $length
      * @return string
      */
     public static function generateSlug(int $length): string
@@ -25,9 +25,9 @@ class MediaService
     }
 
     /**
-     * @param string $description
+     * @param  string  $description
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public static function extractPeople(string $description): array
     {
@@ -43,9 +43,9 @@ class MediaService
     }
 
     /**
-     * @param string $description
+     * @param  string  $description
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public static function extractHashtags(string $description): array
     {
@@ -61,7 +61,7 @@ class MediaService
     }
 
     /**
-     * @param Media $media
+     * @param  Media  $media
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
@@ -75,11 +75,11 @@ class MediaService
     }
 
     /**
-     * @param string $type
-     * @return Collection|LengthAwarePaginator|AnonymousResourceCollection|array
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @param  string  $type
+     * @return LengthAwarePaginator
+     * @throws InvalidArgumentException|Exception
      */
-    public static function getByType(string $type): MediaCollection | LengthAwarePaginator | AnonymousResourceCollection | array
+    public static function getByType(string $type)
     {
         $query = Media::query();
         if (! auth()->guest() && $type === 'following') {
@@ -87,15 +87,15 @@ class MediaService
         } else {
             $query->public()->confirmed()->sort();
         }
+
         if (! auth()->guest()) {
             $query->notBlockedFor(auth()->user()->_id);
         }
-        //$deviceId = request()->headers->get('X-DEVICE-ID', '');
-        //$cacheKey = 'media_visits'.'_'.$deviceId;
+
+        $deviceId = request()->headers->get('X-DEVICE-ID', '');
+        $cacheKey = (new MediaVisit())->getCollection().'_'.$deviceId;
         if ($type !== 'following') {
-            /*
-             * @todo MediaVisit
-             * if (! auth()->guest()) {
+            if (! auth()->guest()) {
                 $userId = auth()->user()->_id;
                 $query->notVisitedByUserAndDevice($userId, $deviceId);
             } else {
@@ -108,21 +108,46 @@ class MediaService
                 }
                 cache()->delete($cacheKey);
                 redirect('index');
-            }*/
+            }
         }
 
-        $provider = $query->paginate(10);
-
-        /*$visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
-        foreach ($provider as $model) {
+        $data = $query->paginate(5);
+        $visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
+        foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
         cache()->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
-        if ($type === 'following') {
-            $provider = new MediaCollection($provider);
-        }*/
+        return $data;
+    }
 
-        return $provider;
+    /**
+     * @param  User  $user
+     * @return LengthAwarePaginator
+     * @throws InvalidArgumentException
+     */
+    public static function getByUser(User $user)
+    {
+        $userId = $user->_id;
+        $query = Media::creator($userId)->recentFirst();
+
+        if (auth()->guest()) {
+            $query->confirmed()->public();
+        } elseif ((string) $userId === (string) auth()->user()->_id) {
+            $query->availableForOwner();
+        } else {
+            $isFollowed = Follow::select(['user._id', '_id'])
+                ->creator(auth()->user()->_id)
+                ->user($userId)
+                ->accepted()
+                ->exists();
+            if (empty($isFollowed)) {
+                $query->confirmed()->public();
+            } else {
+                $query->availableForFollower();
+            }
+        }
+
+        return $query->paginate(15);
     }
 }

@@ -95,7 +95,7 @@ class FollowController extends Controller
             return $this->error('You cannot follow this user at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
-        $response = $this->followService->create($user);
+        $response = $this->followService->follow($user);
 
         return $this->response(new FollowResource($response['data']), '', $response['statusCode']);
     }

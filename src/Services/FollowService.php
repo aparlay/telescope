@@ -11,7 +11,7 @@ use MongoDB\BSON\ObjectId;
 
 class FollowService
 {
-    protected $followRepository;
+    protected FollowRepository $followRepository;
 
     public function __construct()
     {
@@ -21,10 +21,10 @@ class FollowService
     /**
      * Responsible to create follow for given user.
      *
-     * @param User
+     * @param  User  $user
      * @return array
      */
-    public function create(User $user)
+    public function follow(User $user): array
     {
         $statusCode = Response::HTTP_OK;
         if (($follow = $this->followRepository->isFollowed($user)) === null) {
@@ -38,14 +38,17 @@ class FollowService
     /**
      * Responsible to unfollow the given user.
      *
-     * @param User
+     * @param  User  $user
      * @return array
+     * @throws BlockedException
      */
-    public function unfollow(User $user)
+    public function unfollow(User $user): array
     {
         if (($follow = $this->followRepository->isFollowed($user)) === null) {
             throw new BlockedException('No Record Found', null, null, Response::HTTP_NOT_FOUND);
         }
         $follow->delete();
+
+        return [];
     }
 }
