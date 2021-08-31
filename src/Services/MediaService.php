@@ -4,11 +4,10 @@ namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Models\MediaVisit;
-use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\Pagination\Paginator;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaService
@@ -111,7 +110,7 @@ class MediaService
             }
         }
 
-        $data = $query->paginate(5);
+        $data = $query->paginate(10);
         $visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
@@ -148,6 +147,6 @@ class MediaService
             }
         }
 
-        return $query->paginate(15);
+        return $query->paginate(10);
     }
 }
