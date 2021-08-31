@@ -3,9 +3,7 @@
 namespace Aparlay\Core\Repositories;
 
 use Aparlay\Core\Api\V1\Controllers\Controller;
-use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
@@ -51,34 +49,5 @@ class MediaRepository extends Controller
         $media->refresh();
 
         return $media;
-    }
-
-    /**
-     * @param User $user
-     * @return mixed
-     */
-    public function findByUser(User $user)
-    {
-        $userId = $user->_id;
-        $query = Media::creator($userId)->recentFirst();
-
-        if (auth()->guest()) {
-            $query->confirmed()->public();
-        } elseif ((string) $userId === (string) auth()->user()->_id) {
-            $query->availableForOwner();
-        } else {
-            $isFollowed = Follow::select(['user._id', '_id'])
-                ->creator(auth()->user()->_id)
-                ->user($userId)
-                ->accepted()
-                ->exists();
-            if (empty($isFollowed)) {
-                $query->confirmed()->public();
-            } else {
-                $query->availableForFollower();
-            }
-        }
-
-        return $query->paginate(10);
     }
 }
