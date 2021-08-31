@@ -3,16 +3,46 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\MediaVisitFactory;
+use Aparlay\Core\Events\MediaCreated;
+use Aparlay\Core\Events\MediaCreating;
+use Aparlay\Core\Events\MediaDeleted;
+use Aparlay\Core\Events\MediaSaved;
+use Aparlay\Core\Events\MediaSaving;
+use Aparlay\Core\Events\MediaVisitSaved;
+use Aparlay\Core\Events\MediaVisitSaving;
 use Aparlay\Core\Models\Scopes\MediaVisitScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Relations\BelongsTo;
+use MongoDB\BSON\ObjectId;
 
+/**
+ * Class MediaVisit
+ *
+ * @property ObjectId $_id
+ * @property string $date
+ * @property ObjectId $user_id
+ * @property array $media_ids
+ * @property string $created_at
+ *
+ * @property-read User $userObj
+ * @property-read Media $mediaObj
+ * @property string $aliasModel
+ *
+ * @method static |self|Builder media(ObjectId $mediaId)    get media visits for thew given media
+ * @method static |self|Builder user(ObjectId $userId)      get media visits for thew given user
+ * @method static |self|Builder date(string $date)          get media visits for thew given date
+ */
 class MediaVisit extends Model
 {
     use HasFactory;
     use Notifiable;
     use MediaVisitScope;
+
+    public $media_id;
+    public $duration;
 
     /**
      * The collection associated with the model.
@@ -20,6 +50,11 @@ class MediaVisit extends Model
      * @var string
      */
     protected $collection = 'media_visits';
+
+    protected $dispatchesEvents = [
+        'saving' => MediaVisitSaving::class,
+        'saved' => MediaVisitSaved::class,
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -63,10 +98,18 @@ class MediaVisit extends Model
     }
 
     /**
-     * Get the phone associated with the user.
+     * @return BelongsTo
      */
-    public function userObj()
+    public function userObj(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function mediaObj(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'media_id');
     }
 }

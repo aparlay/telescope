@@ -3,6 +3,7 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Commands\CoreCommand;
+use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Pagination\CoreCursorPaginator;
 use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
@@ -50,6 +51,7 @@ class CoreServiceProvider extends ServiceProvider
 
             $this->commands([
                 CoreCommand::class,
+                WsCommand::class,
             ]);
         }
 

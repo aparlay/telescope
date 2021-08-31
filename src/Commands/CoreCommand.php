@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class CoreCommand extends Command
 {
-    public $signature = 'core';
+    public $signature = 'core:index';
 
     public $description = 'Aparlay Core Command';
 
