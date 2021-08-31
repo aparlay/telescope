@@ -65,12 +65,13 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
 
     /* Authentication Group with me prefix */
     Route::middleware('auth:api')->name('profie.')->group(function () {
-        Route::get('/', [UserController::class, 'me']);
-        Route::match(['put', 'patch'], '/', [UserController::class, 'update']);
-        Route::delete('/', [UserController::class, 'destroy']);
-        Route::get('/token', [UserController::class, 'token']);
-        Route::get('/me', [UserController::class, 'me'])->name('user.me');
         Route::delete('/logout', [AuthController::class, 'logout'])->name('user.logout');
+        Route::prefix('me')->group(function () {
+            Route::get('/', [UserController::class, 'me'])->name('user.me');
+            Route::delete('/', [UserController::class, 'destroy']);
+            Route::match(['put', 'patch'], '/', [UserController::class, 'update']);
+            Route::get('/token', [UserController::class, 'token']);
+        });
     });
 
     /* Authentication Group */
