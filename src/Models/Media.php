@@ -305,7 +305,7 @@ class Media extends Model
      */
     public function getAlertsAttribute()
     {
-        if (!auth()->guest() && (string) $this->created_by === (string) auth()->user()->_id) {
+        if (! auth()->guest() && (string) $this->created_by === (string) auth()->user()->_id) {
             return $this->alertObjs;
         }
 
