@@ -2,9 +2,12 @@
 
 namespace Aparlay\Core\Services;
 
+use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
+use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Pagination\Paginator;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -73,9 +76,8 @@ class MediaService
 
     /**
      * @param  string  $type
-     * @return Paginator
-     * @throws InvalidArgumentException
-     * @throws Exception
+     * @return LengthAwarePaginator
+     * @throws InvalidArgumentException|Exception
      */
     public static function getByType(string $type)
     {
@@ -91,7 +93,7 @@ class MediaService
         }
 
         $deviceId = request()->headers->get('X-DEVICE-ID', '');
-        $cacheKey = 'media_visits'.'_'.$deviceId;
+        $cacheKey = (new MediaVisit())->getCollection().'_'.$deviceId;
         if ($type !== 'following') {
             if (! auth()->guest()) {
                 $userId = auth()->user()->_id;
@@ -117,5 +119,34 @@ class MediaService
         cache()->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
         return $data;
+    }
+
+    /**
+     * @param  User  $user
+     * @return LengthAwarePaginator
+     * @throws InvalidArgumentException
+     */
+    public static function getByUser(User $user)
+    {
+        $userId = $user->_id;
+        $query = Media::creator($userId)->recentFirst();
+
+        if (auth()->guest()) {
+            $query->confirmed()->public();
+        } elseif ((string) $userId === (string) auth()->user()->_id) {
+            $query->availableForOwner();
+        } else {
+            $isFollowed = Follow::select(['user._id', '_id'])
+                ->creator(auth()->user()->_id)
+                ->user($userId)
+                ->accepted()
+                ->exists();
+            if (empty($isFollowed)) {
+                $query->confirmed()->public();
+            } else {
+                $query->availableForFollower();
+            }
+        }
+        return $query->paginate(15);
     }
 }

@@ -52,33 +52,4 @@ class MediaRepository extends Controller
 
         return $media;
     }
-
-    /**
-     * @param User $user
-     * @return mixed
-     */
-    public function findByUser(User $user)
-    {
-        $userId = $user->_id;
-        $query = Media::creator($userId)->recentFirst();
-
-        if (auth()->guest()) {
-            $query->confirmed()->public();
-        } elseif ((string) $userId === (string) auth()->user()->_id) {
-            $query->availableForOwner();
-        } else {
-            $isFollowed = Follow::select(['user._id', '_id'])
-                ->creator(auth()->user()->_id)
-                ->user($userId)
-                ->accepted()
-                ->exists();
-            if (empty($isFollowed)) {
-                $query->confirmed()->public();
-            } else {
-                $query->availableForFollower();
-            }
-        }
-
-        return $query->get();
-    }
 }
