@@ -111,7 +111,7 @@ class MediaService
             }
         }
 
-        $data = $query->paginate(5);
+        $data = $query->paginate(5)->setPath(config('app.url'));
         $visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
@@ -148,6 +148,6 @@ class MediaService
             }
         }
 
-        return $query->paginate(15);
+        return $query->paginate(15)->setPath(config('app.url'));
     }
 }
