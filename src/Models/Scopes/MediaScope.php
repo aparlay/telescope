@@ -138,7 +138,7 @@ trait MediaScope
 
         $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
         $visitedIdsFromCache = Cache::store('redis')->get($cacheKey, []);
-        if (!empty($visitedIdsFromCache)) {
+        if (! empty($visitedIdsFromCache)) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
         }
 
@@ -159,7 +159,7 @@ trait MediaScope
 
         $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
         $visitedIds = Cache::store('redis')->get($cacheKey, []);
-        if (!empty($visitedIds)) {
+        if (! empty($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));
             $query->whereNotIn('_id', $visitedIds);
         }
