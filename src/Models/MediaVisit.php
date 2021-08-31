@@ -19,7 +19,7 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
 /**
- * Class MediaVisit
+ * Class MediaVisit.
  *
  * @property ObjectId $_id
  * @property string $date

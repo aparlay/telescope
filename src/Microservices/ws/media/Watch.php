@@ -30,8 +30,8 @@ class Watch implements WsEventDispatcher
         }
 
         $this->mediaId = new ObjectId($this->mediaId);
-        $this->userId = !empty($this->userId) ? new ObjectId($this->userId) : null;
-        $this->deviceId = !empty($this->deviceId) ? (string)$this->deviceId : null;
+        $this->userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
+        $this->deviceId = ! empty($this->deviceId) ? (string) $this->deviceId : null;
     }
 
     /**
@@ -62,13 +62,13 @@ class Watch implements WsEventDispatcher
                 $media->length_watched += $this->durationWatched;
             }
             $media->visit_count++;
-            $media->count_fields_updated_at =  array_merge(
+            $media->count_fields_updated_at = array_merge(
                 $media->count_fields_updated_at,
                 ['visits' => DT::utcNow()]
             );
             $media->save();
 
-            $cacheKey = (new MediaVisit())->getCollection() . $this->deviceId;
+            $cacheKey = (new MediaVisit())->getCollection().$this->deviceId;
             $visited = [];
             if (cache()->has($cacheKey)) {
                 $visited = cache()->get($cacheKey);
@@ -93,7 +93,7 @@ class Watch implements WsEventDispatcher
         $model->media_id = $this->mediaId;
         $model->duration = $this->durationWatched;
 
-        if (!$model->save()) {
+        if (! $model->save()) {
             throw new Exception('Cannot save data.');
         }
     }

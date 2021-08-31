@@ -6,7 +6,6 @@ use Exception;
 
 interface WsEventDispatcher
 {
-
     /**
      * @throws Exception
      */

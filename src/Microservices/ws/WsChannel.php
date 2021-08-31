@@ -19,7 +19,7 @@ class WsChannel
      * @return void
      */
     public static function Push(
-        ObjectId|string $recipientId,
+        ObjectId | string $recipientId,
         string $event = '',
         array $properties = [],
         array $context = null,
@@ -38,5 +38,4 @@ class WsChannel
 
         Redis::publish(self::REDIS_CHANNEL, json_encode($message));
     }
-
 }

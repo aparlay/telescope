@@ -29,14 +29,14 @@ class WsCommand extends Command
         \Co\run(function () use ($token) {
             $client = new Client(config('app.websocket.host'), config('app.websocket.port'));
             $client->setHeaders([
-                'Authorization' => 'Bearer ' . $token,
+                'Authorization' => 'Bearer '.$token,
                 'Device_id' => '0',
                 'User_id' => '0',
             ]);
             $ret = $client->upgrade('/');
             if ($ret) {
                 $this->info('Connection established successfully!');
-                go(function() use ($client) {
+                go(function () use ($client) {
                     Redis::subscribe(['test-channel'], function ($message) use ($client) {
                         $this->info('New broadcasting message arrived!');
                         $this->info($message);

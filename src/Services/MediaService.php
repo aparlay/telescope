@@ -147,6 +147,7 @@ class MediaService
                 $query->availableForFollower();
             }
         }
+
         return $query->paginate(15);
     }
 }
