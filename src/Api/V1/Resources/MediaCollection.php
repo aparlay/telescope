@@ -22,10 +22,10 @@ class MediaCollection extends ResourceCollection
             'items' => $this->resource->items(),
             '_links' => [
                 'next' => [
-                    'href' => $this->resource->nextPageUrl(),
+                    'href' => str_replace('http://', 'https://', $this->resource->nextPageUrl()),
                 ],
                 'prev' => [
-                    'href' => $this->resource->previousPageUrl(),
+                    'href' => str_replace('http://', 'https://', $this->resource->previousPageUrl()),
                 ],
             ],
             '_meta' => [
