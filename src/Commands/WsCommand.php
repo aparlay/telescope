@@ -5,12 +5,11 @@ namespace Aparlay\Core\Commands;
 use Aparlay\Core\Microservices\ws\WsChannel;
 use Aparlay\Core\Microservices\ws\WsDispatcherFactory;
 use Carbon\Carbon;
-use co;
+use Co;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use JWTAuth;
-use JWTFactory;
 use Swoole\Coroutine\Http\Client;
 use Swoole\Runtime;
 use Swoole\WebSocket\Frame;
@@ -52,7 +51,7 @@ class WsCommand extends Command
         $token = $tokenInstance->get();
         Runtime::enableCoroutine(SWOOLE_HOOK_ALL);
         \Co\run(function () use ($token) {
-            $client = new Client(config('app.websocket.host'), config('app.websocket.port'));
+            $client = new Client(config('app.websocket.host'),config('app.websocket.port'));
             $client->setHeaders([
                 'Authorization' => 'Bearer '.$token,
                 'Device_id' => '0',
@@ -83,13 +82,13 @@ class WsCommand extends Command
                             $dispatcher->execute();
                         }
                     }
-                    co::sleep(0.1);
+                    Co::sleep(0.1);
                 }
             }
 
             $client->close();
         });
 
-        $this->comment('All done');
+        $this->error('Cannot connect to the server!');
     }
 }
