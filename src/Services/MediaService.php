@@ -87,6 +87,7 @@ class MediaService
             $query->public()->confirmed()->sort();
         }
 
+
         if (! auth()->guest()) {
             $query->notBlockedFor(auth()->user()->_id);
         }
@@ -110,7 +111,7 @@ class MediaService
             }
         }
 
-        $data = $query->paginate(10);
+        $data = $query->paginate(5);
         $visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
@@ -147,6 +148,6 @@ class MediaService
             }
         }
 
-        return $query->paginate(10);
+        return $query->paginate(15);
     }
 }
