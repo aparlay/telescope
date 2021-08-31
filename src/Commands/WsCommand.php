@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use JWTAuth;
 use Swoole\Coroutine\Http\Client;
 use Swoole\Runtime;
+use Swoole\Timer;
 use Swoole\WebSocket\Frame;
 use Tymon\JWTAuth\Claims\Audience;
 use Tymon\JWTAuth\Claims\Collection;
@@ -51,6 +52,9 @@ class WsCommand extends Command
         $token = $tokenInstance->get();
         Runtime::enableCoroutine(SWOOLE_HOOK_ALL);
         \Co\run(function () use ($token) {
+            Timer::tick(30000, function () {
+                Redis::publish(WsChannel::REDIS_CHANNEL, 'ping');
+            });
             $client = new Client(config('app.websocket.host'), config('app.websocket.port'));
             $client->setHeaders([
                 'Authorization' => 'Bearer '.$token,
@@ -62,6 +66,9 @@ class WsCommand extends Command
                 $this->info('Connection established successfully!');
                 go(function () use ($client) {
                     Redis::subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
+                        if ($message === 'ping') {
+                            return ;
+                        }
                         $this->info('New broadcasting message arrived!');
                         $this->info($message);
                         $client->push($message);
