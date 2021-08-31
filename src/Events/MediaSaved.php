@@ -55,11 +55,11 @@ class MediaSaved
         }
 
         if ($media->status === Media::STATUS_COMPLETED || $media->status === Media::STATUS_CONFIRMED) {
-            Cache::forget('Media.Index.TotalCount.Public');
+            Cache::store('redis')->forget('Media.Index.TotalCount.Public');
         }
 
         if ($media->isDirty('status') && $media->status === Media::STATUS_USER_DELETED) {
-            Cache::forget('Media.Index.TotalCount.Public');
+            Cache::store('redis')->forget('Media.Index.TotalCount.Public');
 
             $creatorUser->media_count--;
 
