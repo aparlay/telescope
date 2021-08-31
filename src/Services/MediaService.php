@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Models\MediaVisit;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaService
@@ -105,17 +106,17 @@ class MediaService
                 if (! auth()->guest()) {
                     MediaVisit::user(auth()->user()->_id)->delete();
                 }
-                cache()->delete($cacheKey);
+                Cache::store('redis')->delete($cacheKey);
                 redirect('index');
             }
         }
 
         $data = $query->paginate(5);
-        $visited = cache()->has($cacheKey) ? cache()->get($cacheKey) : [];
+        $visited = Cache::store('redis')->get($cacheKey, []);
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        cache()->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
+        Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
         return $data;
     }

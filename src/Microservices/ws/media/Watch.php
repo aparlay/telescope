@@ -7,6 +7,7 @@ use Aparlay\Core\Microservices\ws\WsEventDispatcher;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
 use MongoDB\BSON\ObjectId;
 
@@ -70,13 +71,13 @@ class Watch implements WsEventDispatcher
 
             $cacheKey = (new MediaVisit())->getCollection().$this->deviceId;
             $visited = [];
-            if (cache()->has($cacheKey)) {
-                $visited = cache()->get($cacheKey);
+            if (Cache::store('redis')->has($cacheKey)) {
+                $visited = Cache::store('redis')->get($cacheKey);
             }
 
             $visited[] = $this->mediaId;
 
-            cache()->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
+            Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
         }
     }
 
