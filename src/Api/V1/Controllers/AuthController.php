@@ -271,11 +271,11 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        Cookie::forget('__Secure_token');
-        Cookie::forget('__Secure_refresh_token');
-        Cookie::forget('__Secure_username');
+        $cookie1 = Cookie::forget('__Secure_token');
+        $cookie2 = Cookie::forget('__Secure_refresh_token');
+        $cookie3 = Cookie::forget('__Secure_username');
 
-        return $this->response([], '', Response::HTTP_NO_CONTENT);
+        return $this->response([], '', Response::HTTP_NO_CONTENT)->cookie($cookie1)->cookie($cookie2)->cookie($cookie3);
     }
 
     /**
