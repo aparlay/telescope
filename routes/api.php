@@ -70,7 +70,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
         Route::delete('/', [UserController::class, 'destroy']);
         Route::get('/token', [UserController::class, 'token']);
         Route::get('/me', [UserController::class, 'me'])->name('user.me');
-        Route::delete('/logout', [UserController::class, 'logout'])->name('user.logout');
+        Route::delete('/logout', [AuthController::class, 'logout'])->name('user.logout');
     });
 
     /* Authentication Group */
