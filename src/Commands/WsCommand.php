@@ -50,11 +50,9 @@ class WsCommand extends Command
         $payload = new Payload($claims, new PayloadValidator());
         $tokenInstance = JWTAuth::encode($payload);
         $token = $tokenInstance->get();
-        Runtime::enableCoroutine(SWOOLE_HOOK_ALL);
+        Co::set(['hook_flags'=> SWOOLE_HOOK_ALL]);
         \Co\run(function () use ($token) {
-            Timer::tick(30000, function () {
-                Redis::publish(WsChannel::REDIS_CHANNEL, 'ping');
-            });
+
             $client = new Client(config('app.websocket.host'), config('app.websocket.port'));
             $client->setHeaders([
                 'Authorization' => 'Bearer '.$token,
@@ -65,10 +63,9 @@ class WsCommand extends Command
             if ($ret) {
                 $this->info('Connection established successfully!');
                 go(function () use ($client) {
+                    $redis = Redis::connection();
+                    $redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
                     Redis::subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
-                        if ($message === 'ping') {
-                            return;
-                        }
                         $this->info('New broadcasting message arrived!');
                         $this->info($message);
                         $client->push($message);
