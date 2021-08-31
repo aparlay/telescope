@@ -95,12 +95,12 @@ class Media extends MediaBase
             return false;
         }
 
-        $mediaLikeCacheKey = (new MediaVisit())->getCollection().':creator:'.auth()->user()->id;
-        $mediaLike = Cache::store('redis')->remember($mediaLikeCacheKey, config('app.cache.longDuration'), function () {
+        $mediaVisitCacheKey = (new MediaVisit())->getCollection().':creator:'.auth()->user()->id;
+        $mediaVisit = Cache::store('redis')->remember($mediaVisitCacheKey, config('app.cache.longDuration'), function () {
             return MediaVisit::select(['media_id' => 1, '_id' => 0])->user(auth()->user()->id)->pluck('media_id');
         });
 
-        return isset($mediaLike[(string) $this->_id]);
+        return isset($mediaVisit[(string) $this->_id]);
     }
 
     public function getFilenameAttribute(): string
