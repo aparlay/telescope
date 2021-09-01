@@ -160,4 +160,14 @@ class UserRepository implements RepositoryInterface
 
         return $this->model->save();
     }
+
+    public function deleteAccount()
+    {
+        $randString = random_int(1, 100);
+        $this->model->email = 'del_'.$randString.'_'.$this->model->email;
+        $this->model->phone_number = ! empty($this->model->phone_number) ? 'del_'.$randString.'_'.$this->model->phone_number : null;
+        $this->model->status = User::STATUS_DEACTIVATED;
+
+        return $this->model->save();
+    }
 }
