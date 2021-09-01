@@ -37,7 +37,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
         });
 
         /* Authentication Group */
-        Route::middleware('auth:api')->group(function () {
+        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::post('/', [MediaController::class, 'store'])->name('create');
             Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
             Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
@@ -55,7 +55,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
         Route::get('/{user}', [UserController::class, 'show'])->name('show');
 
         /* Authentication Group with user prifix */
-        Route::middleware('auth:api')->group(function () {
+        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::put('/{user}/block', [BlockController::class, 'store'])->name('block');
             Route::delete('/{user}/block', [BlockController::class, 'destroy'])->name('unblock');
             Route::put('/{user}/follow', [FollowController::class, 'store'])->name('follow');
@@ -64,7 +64,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
     });
 
     /* Authentication Group with me prefix */
-    Route::middleware('auth:api')->name('profie.')->group(function () {
+    Route::middleware(['auth:api', 'cookies-auth'])->name('profie.')->group(function () {
         Route::delete('/logout', [AuthController::class, 'logout'])->name('user.logout');
         Route::prefix('me')->group(function () {
             Route::get('/', [UserController::class, 'me'])->name('user.me');
@@ -75,7 +75,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
     });
 
     /* Authentication Group */
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
         Route::match(['put', 'patch'], '/alert/{alert}', [AlertController::class, 'update'])->name('alert.update');
     });
 
