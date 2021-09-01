@@ -55,7 +55,6 @@ class UserController extends Controller
 
         $userRepository = new UserRepository($user);
         if ($userRepository->deleteAccount()) {
-        
             $cookie1 = Cookie::forget('__Secure_token');
             $cookie2 = Cookie::forget('__Secure_refresh_token');
             $cookie3 = Cookie::forget('__Secure_username');
