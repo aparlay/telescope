@@ -65,9 +65,7 @@ class MediaLikeCreated
         WsChannel::Push($media->created_by, 'media.like', [
             'media' => $media->simple_array,
             'user' => $mediaLike->creatorObj,
-            'message' => __('app', ':username likes your video.',
-                ['username' => $mediaLike->creatorObj->username]
-            ),
+            'message' => __(':username likes your video.', ['username' => $mediaLike->creatorObj->username]),
         ]);
     }
 }
