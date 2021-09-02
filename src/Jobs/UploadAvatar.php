@@ -78,7 +78,8 @@ class UploadAvatar implements ShouldQueue
 
         $this->user->avatar = Cdn::avatar($filename);
         if ($this->user->save()) {
-            Storage::disk('public')->delete($this->file);
+            $deleteUploaded = new DeleteAvatar((string) $this->user->_id, $this->file, ['public']);
+            dispatch($deleteUploaded->delay(100)->onQueue('low'));
         }
     }
 

@@ -22,6 +22,7 @@ class DeleteAvatar implements ShouldQueue
     use SerializesModels;
 
     public User $user;
+    public array $disks = [];
 
     public string $file;
 
@@ -47,9 +48,10 @@ class DeleteAvatar implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(string $userId, string $file)
+    public function __construct(string $userId, string $file, array $disks = [])
     {
         $this->file = $file;
+        $this->disks = !empty($disks) ? $disks : ['public', 'b2-avatars', 'gc-avatars'];
         if (($this->user = User::user($userId)->first()) === null) {
             throw new InvalidArgumentException(__CLASS__.PHP_EOL.'User not found!');
         }
@@ -60,16 +62,10 @@ class DeleteAvatar implements ShouldQueue
      */
     public function handle(): void
     {
-        if (Storage::disk('public')->exists($this->file)) {
-            Storage::disk('public')->delete($this->file);
-        }
-
-        if (Storage::disk('b2-avatars')->exists($this->file)) {
-            Storage::disk('b2-avatars')->delete($this->file);
-        }
-
-        if (Storage::disk('gc-avatars')->exists($this->file)) {
-            Storage::disk('gc-avatars')->delete($this->file);
+        foreach ($this->disks as $disk) {
+            if (Storage::disk($disk)->exists($this->file)) {
+                Storage::disk($disk)->delete($this->file);
+            }
         }
     }
 
