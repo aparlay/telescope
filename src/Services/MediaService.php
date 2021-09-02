@@ -108,7 +108,7 @@ class MediaService
                     MediaVisit::user(auth()->user()->_id)->delete();
                 }
                 Cache::store('redis')->delete($cacheKey);
-                redirect('index');
+                redirect()->route('core.api.v1.media.list');
             }
         } else {
             $data = $query->paginate(5);

@@ -51,7 +51,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
             ->where(['type' => '(likes|blocks|followers|followings|hashtags)'])->name('list');
 
         Route::post('/{user}/report', [ReportController::class, 'user'])->name('report');
-        Route::get('/{user}/media', [MediaController::class, 'listByUser'])->name('media_list');
+        Route::get('/{user}/media', [MediaController::class, 'listByUser'])->name('media.list');
         Route::get('/{user}', [UserController::class, 'show'])->name('show');
 
         /* Authentication Group with user prifix */
