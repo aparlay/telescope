@@ -40,7 +40,7 @@ class CleanupCommand extends Command
         try {
             Uploader::pruneChunks(config('app.avatar.upload_directory'));
         } catch (FileOpenException $e) {
-            return ExitCod::TEMPFAIL;
+            return ExitCode::TEMPFAIL;
         }
     }
 }
