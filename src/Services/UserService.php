@@ -2,10 +2,13 @@
 
 namespace Aparlay\Core\Services;
 
+use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Login;
 use Aparlay\Core\Repositories\UserRepository;
 use App\Models\User;
+use console\jobs\DeleteAvatarJob;
+use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -55,21 +58,29 @@ class UserService
      * @param  Request  $request
      * @param  User|Authenticatable  $user
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public static function uploadAvatar(Request $request, User | Authenticatable $user)
     {
-        /** Upload Avatar Image on Server */
+        if ($request->hasFile('avatar') === false || $request->file('avatar') === null) {
+            return false;
+        }
+
         $extension = $request->file('avatar')->getClientOriginalExtension();
-        $avatar = uniqid($user->_id, false).'.'.$extension;
+        $avatar = uniqid((string)$user->_id, false).'.'.$extension;
         if (($filePath = $request->file('avatar')->storeAs('avatars', $avatar, 'public')) !== false) {
-            dispatch((new UploadAvatar($user->_id, $filePath))->onQueue('low'));
+            dispatch((new UploadAvatar((string)$user->_id, $filePath))->onQueue('low'));
+
+            if (!str_contains($user->avatar, 'default_')) {
+                /* delete old avatar file */
+                dispatch((new DeleteAvatar((string)$user->_id, basename($user->avatar)))->onQueue('low'));
+            }
 
             /* Store avatar name in database */
             $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
-            $user->save();
+            return $user->save();
         }
 
-        return $user;
+        return false;
     }
 }

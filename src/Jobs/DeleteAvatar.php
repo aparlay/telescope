@@ -4,12 +4,14 @@ namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use InvalidArgumentException;
 use Throwable;
 
 class DeleteAvatar implements ShouldQueue
@@ -45,10 +47,12 @@ class DeleteAvatar implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($user_id, string $file)
+    public function __construct(string $userId, string $file)
     {
-        $this->user = User::user($user_id)->first();
         $this->file = $file;
+        if (($this->user = User::user($userId)->first()) === null) {
+            throw new InvalidArgumentException(__CLASS__.PHP_EOL.'User not found!');
+        }
     }
 
     /**
@@ -56,8 +60,17 @@ class DeleteAvatar implements ShouldQueue
      */
     public function handle(): void
     {
-        Storage::disk('b2-avatars')->delete($this->file);
-        Storage::disk('gc-avatars')->delete($this->file);
+        if (Storage::disk('public')->exists($this->file)) {
+            Storage::disk('public')->delete($this->file);
+        }
+
+        if (Storage::disk('b2-avatars')->exists($this->file)) {
+            Storage::disk('b2-avatars')->delete($this->file);
+        }
+
+        if (Storage::disk('gc-avatars')->exists($this->file)) {
+            Storage::disk('gc-avatars')->delete($this->file);
+        }
     }
 
     public function failed(Throwable $exception): void
