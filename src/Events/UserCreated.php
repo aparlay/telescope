@@ -2,8 +2,7 @@
 
 namespace Aparlay\Core\Events;
 
-use Aparlay\Core\Jobs\UploadMedia;
-use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -17,10 +16,9 @@ class UserCreated
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param  User  $user
      */
-    public function __construct(Media $media)
+    public function __construct(User $user)
     {
-        //dispatch((new UploadMedia((string) $media->userObj->_id, (string) $media->_id, $media->file))->onQueue('high'));
     }
 }

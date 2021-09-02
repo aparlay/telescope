@@ -23,7 +23,7 @@ class UserCreating
      */
     public function __construct(User $user)
     {
-        $user->setting = config('app.user.defaultSetting');
+        /*$user->setting = config('app.user.defaultSetting');
         $now = DT::utcNow();
         $user->count_fields_updated_at = [
             'followers' => $now,
@@ -33,7 +33,8 @@ class UserCreating
             'visits' => $now,
             'medias' => $now,
             'followed_hashtags' => $now,
-        ];
+        ];*/
+
         if (empty($user->avatar)) {
             $filename = match ($user->gender) {
                 User::GENDER_FEMALE => 'default_fm_'.random_int(1, 60).'.png',

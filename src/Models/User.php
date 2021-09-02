@@ -201,10 +201,6 @@ class User extends Authenticatable implements JWTSubject
         'deleted_at',
     ];
 
-    protected $dispatchesEvents = [
-        'updated' => UserUpdated::class,
-    ];
-
     public static function getFeatures(): array
     {
         return [

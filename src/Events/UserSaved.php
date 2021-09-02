@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Events;
 
-use Aparlay\Core\Jobs\DeleteMediaLike;
 use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
