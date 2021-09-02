@@ -75,7 +75,8 @@ class UserService
             $user->save();
             dispatch((new UploadAvatar((string) $user->_id, $fileName))->delay(10)->onQueue('high'));
             if (! str_contains($oldFileName, 'default_')) {
-                dispatch((new DeleteAvatar((string) $user->_id, basename($oldFileName)))->delay(100)->onQueue('low'));
+                $deleteOldFiles = new DeleteAvatar((string) $user->_id, basename($oldFileName));
+                dispatch($deleteOldFiles->delay(100)->onQueue('low'));
             }
         }
 
