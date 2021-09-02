@@ -73,9 +73,9 @@ class UserService
             $oldFileName = $user->avatar;
             $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
             $user->save();
-            dispatch((new UploadAvatar((string) $user->_id, $fileName))->onQueue('high'));
+            dispatch((new UploadAvatar((string) $user->_id, $fileName))->delay(10)->onQueue('high'));
             if (!str_contains($oldFileName, 'default_')) {
-                dispatch((new DeleteAvatar((string) $user->_id, basename($oldFileName)))->onQueue('low'));
+                dispatch((new DeleteAvatar((string) $user->_id, basename($oldFileName)))->delay(100)->onQueue('low'));
             }
         }
 
