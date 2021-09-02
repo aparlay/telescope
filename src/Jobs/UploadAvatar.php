@@ -76,15 +76,8 @@ class UploadAvatar implements ShouldQueue
         Storage::disk('b2-avatars')->writeStream($filename, $resource);
         Storage::disk('gc-avatars')->writeStream($filename, $resource);
 
-        $oldFilename = basename($this->user->avatar);
         $this->user->avatar = Cdn::avatar($filename);
         if ($this->user->save()) {
-            if (! str_contains($oldFilename, 'default_')) {
-                /* delete old avatar file */
-                dispatch((new DeleteAvatar((string) $this->user->_id, $oldFilename))->onQueue('low'));
-            }
-
-            dispatch((new UpdateAvatar((string) $this->user->_id))->onQueue('low'));
             Storage::disk('public')->delete($this->file);
         }
     }

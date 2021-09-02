@@ -2,10 +2,12 @@
 
 namespace Aparlay\Core\Events;
 
+use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UpdateMedia;
+use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\User;
 use Exception;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -26,6 +28,10 @@ class UserSaved
      */
     public function __construct(User $user)
     {
+        if (! $user->wasRecentlyCreated && $user->wasChanged('avatar')) {
+            dispatch((new UpdateAvatar((string) $user->_id))->onQueue('low'));
+        }
+
         if (! $user->wasRecentlyCreated && $user->wasChanged('status')) {
             switch ($user->status) {
                 case User::STATUS_DEACTIVATED:

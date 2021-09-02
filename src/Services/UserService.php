@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Services;
 
 use Aparlay\Core\Jobs\DeleteAvatar;
+use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Login;
 use Aparlay\Core\Models\User;
@@ -67,13 +68,15 @@ class UserService
 
         $extension = $request->avatar->getClientOriginalExtension();
         $avatar = uniqid((string) $user->_id, false).'.'.$extension;
-        if (($filePath = $request->avatar->storeAs('avatars', $avatar, 'public')) !== false) {
-            dispatch((new UploadAvatar((string) $user->_id, $filePath))->delay(30)->onQueue('low'));
-
+        if ($request->avatar->storeAs('avatars', $avatar, 'public') !== false) {
             /* Store avatar name in database */
             $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
-
-            return $user->save();
+            $user->save();
+            dispatch((new UploadAvatar((string) $user->_id, $avatar))->onQueue('high'));
+            $filename = 'avatars/' . basename($user->avatar);
+            if (!str_contains($filename, 'default_')) {
+                dispatch((new DeleteAvatar((string) $user->_id, basename($user->getOriginal('avatar'))))->onQueue('low'));
+            }
         }
 
         return false;
