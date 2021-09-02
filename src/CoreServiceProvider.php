@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core;
 
+use Aparlay\Core\Api\V1\Http\Kernel;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Pagination\CoreCursorPaginator;
@@ -54,6 +55,8 @@ class CoreServiceProvider extends ServiceProvider
                 WsCommand::class,
             ]);
         }
+
+        app()->make(Kernel::class);
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'default_view');
 

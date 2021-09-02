@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -169,5 +170,25 @@ class MediaLike extends Model
     public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
+    }
+
+    /**
+     * @param ObjectId|string $userId
+     */
+    public static function cacheByUserId(ObjectId | string $userId): void
+    {
+        $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
+        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+
+        if (! Redis::exists($cacheKey)) {
+            $likedMediaIds = self::project(['media_id' => true, '_id' => false])
+                ->creator(new ObjectId($userId))
+                ->pluck('media_id')
+                ->toArray();
+            $likedMediaIds = array_map('strval', $likedMediaIds);
+
+            Redis::sAdd($cacheKey, ...$likedMediaIds);
+            Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
+        }
     }
 }
