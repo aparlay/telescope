@@ -170,6 +170,14 @@ class MediaLike extends Model
     }
 
     /**
+     * Get the user associated with the alert.
+     */
+    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
      * Get the media associated with the alert.
      */
     public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
