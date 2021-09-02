@@ -77,9 +77,9 @@ class UploadAvatar implements ShouldQueue
         $oldFilename = basename($this->user->avatar);
         $this->user->avatar = Cdn::avatar($filename);
         if ($this->user->save()) {
-            if (!str_contains($oldFilename, 'default_')) {
+            if (! str_contains($oldFilename, 'default_')) {
                 /* delete old avatar file */
-                dispatch((new DeleteAvatar((string)$this->user->_id, $oldFilename))->onQueue('low'));
+                dispatch((new DeleteAvatar((string) $this->user->_id, $oldFilename))->onQueue('low'));
             }
             Storage::disk('public')->delete($this->file);
         }

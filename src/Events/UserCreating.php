@@ -40,7 +40,7 @@ class UserCreating
                 User::GENDER_MALE => 'default_m_'.random_int(1, 120).'.png',
                 default => (
                     (random_int(0, 1)) ? 'default_m_'.random_int(1, 120) : 'default_fm_'.random_int(1, 60)
-                    ).'.png',
+                ).'.png',
             };
 
             $user->avatar = Cdn::avatar($filename);

@@ -36,6 +36,6 @@ class MediaDeleted
         );
         $creatorUser->save();
 
-        dispatch((new DeleteMediaLike((string)$media->_id, (string)$creatorUser->_id))->onQueue('low'));
+        dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
     }
 }

@@ -68,11 +68,11 @@ class MediaSaved
             );
             $creatorUser->save();
 
-            dispatch((new DeleteMediaLike((string)$media->_id, (string)$creatorUser->_id))->onQueue('low'));
+            dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
         }
 
         if ($media->isDirty('status') && $media->status === Media::STATUS_ADMIN_DELETED) {
-            dispatch((new DeleteMediaLike((string)$media->_id, (string)$creatorUser->_id))->onQueue('low'));
+            dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
         }
     }
 }
