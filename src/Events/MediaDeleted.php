@@ -5,6 +5,7 @@ namespace Aparlay\Core\Events;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaLike;
 use Aparlay\Core\Models\Media;
+use Exception;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -19,6 +20,7 @@ class MediaDeleted
      * Create a new event instance.
      *
      * @return void
+     * @throws Exception
      */
     public function __construct(Media $media)
     {
@@ -34,6 +36,6 @@ class MediaDeleted
         );
         $creatorUser->save();
 
-        dispatch((new DeleteMediaLike($media->id, $creatorUser->_id))->onQueue('low'));
+        dispatch((new DeleteMediaLike((string)$media->_id, (string)$creatorUser->_id))->onQueue('low'));
     }
 }
