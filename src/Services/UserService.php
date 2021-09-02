@@ -61,13 +61,13 @@ class UserService
      */
     public static function uploadAvatar(Request $request, User | Authenticatable $user)
     {
+        \Log::error($request->avatar->getError());
         if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
             return false;
         }
 
         $extension = $request->avatar->getClientOriginalExtension();
         $avatar = uniqid((string) $user->_id, false).'.'.$extension;
-        \Log::error($request->avatar->getError());
         if (($filePath = $request->avatar->storeAs('avatars', $avatar, 'public')) !== false) {
             dispatch((new UploadAvatar((string) $user->_id, $filePath))->onQueue('low'));
 
