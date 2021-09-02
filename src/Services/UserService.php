@@ -73,8 +73,8 @@ class UserService
             $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
             $user->save();
             dispatch((new UploadAvatar((string) $user->_id, $avatar))->onQueue('high'));
-            $filename = 'avatars/' . basename($user->avatar);
-            if (!str_contains($filename, 'default_')) {
+            $filename = 'avatars/'.basename($user->avatar);
+            if (! str_contains($filename, 'default_')) {
                 dispatch((new DeleteAvatar((string) $user->_id, basename($user->getOriginal('avatar'))))->onQueue('low'));
             }
         }
