@@ -67,8 +67,8 @@ class UserService
 
         $extension = $request->avatar->getClientOriginalExtension();
         $avatar = uniqid((string) $user->_id, false).'.'.$extension;
+        \Log::error($request->avatar->getError());
         if (($filePath = $request->avatar->storeAs('avatars', $avatar, 'public')) !== false) {
-            \Log::error($request->avatar->getError());
             dispatch((new UploadAvatar((string) $user->_id, $filePath))->onQueue('low'));
 
             /* Store avatar name in database */
