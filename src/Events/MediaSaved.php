@@ -7,6 +7,7 @@ use Aparlay\Core\Models\Media;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
 
 class MediaSaved
@@ -51,6 +52,27 @@ class MediaSaved
                 ['medias' => DT::utcNow()]
             );
             $creatorUser->save();
+        }
+
+        if ($media->status === Media::STATUS_COMPLETED || $media->status === Media::STATUS_CONFIRMED) {
+            Cache::store('redis')->forget('Media.Index.TotalCount.Public');
+        }
+
+        if ($media->isDirty('status') && $media->status === Media::STATUS_USER_DELETED) {
+            Cache::store('redis')->forget('Media.Index.TotalCount.Public');
+
+            $creatorUser->media_count--;
+
+            $file = config('app.cdn.videos').$media->file;
+            $cover = config('app.cdn.covers').$media->filename.'.jpg';
+            $creatorUser->removeFromSet('medias', ['_id' => $media->_id, 'file' => $file, 'cover' => $cover, 'status' => $media->status]);
+            $creatorUser->count_fields_updated_at = array_merge(
+                $creatorUser->count_fields_updated_at,
+                ['medias' => DT::utcNow()]
+            );
+            $creatorUser->save();
+
+            //dispatch((new DeleteMediaLike($media->id, $creatorUser->_id))->onQueue('low'));
         }
     }
 }

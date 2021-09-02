@@ -9,7 +9,6 @@ use Aparlay\Core\Events\MediaCreating;
 use Aparlay\Core\Events\MediaDeleted;
 use Aparlay\Core\Events\MediaSaved;
 use Aparlay\Core\Events\MediaSaving;
-use Aparlay\Core\Events\MediaUpdated;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -53,6 +52,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $links
  * @property bool        $is_protected
  * @property User        $userObj
+ * @property Alert[]     $alertObjs
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
@@ -62,6 +62,7 @@ use MongoDB\BSON\UTCDateTime;
  *
  * @method static |self|Builder creator(ObjectId|string $userId) get creator user
  * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
+ * @method static |self|Builder availableForFollower()    get available content for followers
  */
 class Media extends Model
 {
@@ -152,6 +153,7 @@ class Media extends Model
         'likes' => [],
         'visits' => [],
         'status' => self::STATUS_QUEUED,
+        'is_protected' => false,
     ];
 
     /**
@@ -176,13 +178,14 @@ class Media extends Model
      * @var array
      */
     protected $casts = [
+        'status' => 'integer',
+        'visibility' => 'integer',
     ];
 
     protected $dispatchesEvents = [
         'creating' => MediaCreating::class,
         'created' => MediaCreated::class,
         'saving' => MediaSaving::class,
-        'updated' => MediaUpdated::class,
         'saved' => MediaSaved::class,
         'deleted' => MediaDeleted::class,
     ];
@@ -248,6 +251,14 @@ class Media extends Model
     }
 
     /**
+     * Get the phone associated with the user.
+     */
+    public function alertObjs()
+    {
+        return $this->hasMany(Alert::class, 'media_id');
+    }
+
+    /**
      * Get the user's full name.
      */
     public function getIsAdultAttribute(): bool
@@ -294,11 +305,11 @@ class Media extends Model
      */
     public function getAlertsAttribute()
     {
-        if (auth()->guest()) {
-            return [];
+        if (! auth()->guest() && (string) $this->created_by === (string) auth()->user()->_id) {
+            return $this->alertObjs;
         }
 
-        return Alert::media($this->_id)->user(auth()->user()->_id)->notVisited()->get();
+        return [];
     }
 
     /**

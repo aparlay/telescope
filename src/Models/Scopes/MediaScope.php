@@ -5,15 +5,17 @@ namespace Aparlay\Core\Models\Scopes;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
-use Cache;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 trait MediaScope
 {
     /**
-     * @param ObjectId|string $creatorId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $creatorId
+     * @return Builder
      */
     public function scopeCreator(Builder $query, ObjectId | string $creatorId): Builder
     {
@@ -23,7 +25,9 @@ trait MediaScope
     }
 
     /**
-     * @param ObjectId|string $creatorId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $mediaId
+     * @return Builder
      */
     public function scopeMedia(Builder $query, ObjectId | string $mediaId): Builder
     {
@@ -64,7 +68,7 @@ trait MediaScope
 
     public function scopeAvailableForOwner(Builder $query): Builder
     {
-        return $query->where('status', '$in', [
+        return $query->whereIn('status', [
             Media::STATUS_QUEUED,
             Media::STATUS_UPLOADED,
             Media::STATUS_IN_PROGRESS,
@@ -77,7 +81,7 @@ trait MediaScope
 
     public function scopeAvailableForFollower(Builder $query): Builder
     {
-        return $query->where('status', '$in', [
+        return $query->whereIn('status', [
             Media::STATUS_CONFIRMED,
             Media::STATUS_DENIED,
         ]);
@@ -89,24 +93,28 @@ trait MediaScope
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @return Builder
      */
     public function scopeFollowing(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
-        $user = User::where('_id', $userId)->first();
+        $user = User::user($userId)->first();
 
-        return $query->where('creator._id', '$in', array_column($user['followings'], '_id'));
+        return $query->whereIn('creator._id', array_column($user['followings'], '_id'));
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @return Builder
      */
     public function scopeNotBlockedFor(Builder $query, ObjectId | string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
-        return $query->where('blocked_user_ids', '$ne', $userId);
+        return $query->where('blocked_user_ids', '!=', $userId);
     }
 
     public function scopeSlug(Builder $query, string $slug): Builder
@@ -115,33 +123,45 @@ trait MediaScope
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @param  string  $deviceId
+     * @return Builder
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId | string $userId, string $deviceId): Builder
     {
         $visitedIds = [];
-        foreach (MediaVisit::select(['media_ids'])->user($userId)->column() as $mediaVisit) {
+        foreach (MediaVisit::select(['media_ids'])->user($userId)->get()->toArray() as $mediaVisit) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $mediaVisit), SORT_REGULAR));
         }
 
-        $cacheKey = 'media_visits.'.$deviceId;
-        if (($visitedIdsFromCache = Cache::get($cacheKey, false)) !== false && is_array($visitedIdsFromCache)) {
+        $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
+        $visitedIdsFromCache = Cache::store('redis')->get($cacheKey, []);
+        if (! empty($visitedIdsFromCache)) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
         }
 
-        return $query->where('_id', '$nin', $visitedIds);
+        return $query->whereNotIn('_id', $visitedIds);
     }
 
+    /**
+     * @param  Builder  $query
+     * @param  string  $deviceId
+     * @return Builder
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function scopeNotVisitedByDevice(Builder $query, string $deviceId): Builder
     {
         if (empty($deviceId)) {
             return $query;
         }
 
-        $cacheKey = 'media_visits.'.$deviceId;
-        if (($visitedIds = Cache::get($cacheKey, false)) !== false && is_array($visitedIds)) {
+        $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
+        $visitedIds = Cache::store('redis')->get($cacheKey, []);
+        if (! empty($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));
-            $query->where('_id', '$nin', $visitedIds);
+            $query->whereNotIn('_id', $visitedIds);
         }
 
         return $query;
@@ -163,7 +183,8 @@ trait MediaScope
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
      *
      * @return mixed
      */
@@ -193,6 +214,7 @@ trait MediaScope
 
     /**
      * @param $query
+     * @return mixed
      */
     public function scopeRecentFirst($query): mixed
     {
@@ -201,6 +223,7 @@ trait MediaScope
 
     /**
      * @param $query
+     * @return mixed
      */
     public function scopeSort($query): mixed
     {

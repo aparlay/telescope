@@ -6,9 +6,12 @@ use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
+use Aparlay\Core\Api\V1\Resources\UserResource;
+use Aparlay\Core\Repositories\UserRepository;
 use Aparlay\Core\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -29,23 +32,40 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Block  $media
      * @return Response
      */
-    public function me(Block $media): Response
+    public function me(): Response
     {
-        return $this->response([], Response::HTTP_OK);
+        $user = auth()->user();
+
+        return $this->response(new MeResource($user), Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Block  $media
      * @return Response
      */
-    public function destroy(Block $media): Response
+    public function destroy(): Response
     {
-        return $this->response([], Response::HTTP_OK);
+        /* Check the update permission */
+        $this->authorize('delete', User::class);
+
+        $user = auth()->user();
+
+        $userRepository = new UserRepository($user);
+        if ($userRepository->deleteAccount()) {
+            $cookie1 = Cookie::forget('__Secure_token');
+            $cookie2 = Cookie::forget('__Secure_refresh_token');
+            $cookie3 = Cookie::forget('__Secure_username');
+
+            return $this->response([], '', Response::HTTP_NO_CONTENT)
+                ->cookie($cookie1)
+                ->cookie($cookie2)
+                ->cookie($cookie3);
+        } else {
+            return $user;
+        }
     }
 
     /**
@@ -57,9 +77,10 @@ class UserController extends Controller
      */
     public function update(MeRequest $request): object
     {
-        /** Check the update permission */
         $user = auth()->user();
-        $this->authorizeResource(User::class, 'user');
+
+        /* Check the update permission */
+        $this->authorize('update', User::class);
 
         /* Update User Avatar */
         if ($request->hasFile('avatar')) {
@@ -78,5 +99,16 @@ class UserController extends Controller
             new MeResource($user),
             Response::HTTP_OK
         );
+    }
+
+    public function show(User $user): Response
+    {
+        $userRepository = new UserRepository($user);
+
+        if ($userRepository->isUserEligible()) {
+            return $this->response(new UserResource($user));
+        }
+
+        return $this->error('Account not found!', [], Response::HTTP_NOT_FOUND);
     }
 }

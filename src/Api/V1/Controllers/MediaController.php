@@ -5,8 +5,10 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Repositories\MediaRepository;
+use Aparlay\Core\Services\MediaService;
 use Aparlay\Core\Services\UploadService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -26,7 +28,9 @@ class MediaController extends Controller
      */
     public function index(): Response
     {
-        return $this->response([], Response::HTTP_OK);
+        $type = request()?->input('type') ?? '';
+
+        return $this->response(new MediaCollection(MediaService::getByType($type)), '', Response::HTTP_OK);
     }
 
     /**
@@ -34,6 +38,7 @@ class MediaController extends Controller
      */
     public function listByUser(User $user): Response
     {
+        return $this->response(new MediaCollection(MediaService::getByUser($user)), '', Response::HTTP_OK);
     }
 
     /**
@@ -44,7 +49,9 @@ class MediaController extends Controller
      */
     public function store(MediaRequest $request): Response
     {
-        return $this->repository->store($request);
+        $media = $this->repository->store($request);
+
+        return $this->response(new MediaResource($media), '', Response::HTTP_CREATED);
     }
 
     public function upload(): Response
@@ -74,5 +81,8 @@ class MediaController extends Controller
      */
     public function destroy(Media $media): Response
     {
+        MediaService::delete($media);
+
+        return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
 }

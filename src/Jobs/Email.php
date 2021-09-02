@@ -2,7 +2,8 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Mail\SendEmail;
+use Aparlay\Core\Mail\EmailEnvelope;
+use Aparlay\Core\Notifications\JobFailed;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -64,7 +65,12 @@ class Email implements ShouldQueue
      */
     public function handle()
     {
-        $send = new SendEmail($this->subject, $this->type, $this->payload);
+        $send = new EmailEnvelope($this->subject, $this->type, $this->payload);
         Mail::to($this->email)->send($send);
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
     }
 }

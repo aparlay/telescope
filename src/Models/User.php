@@ -175,6 +175,19 @@ class User extends Authenticatable implements JWTSubject
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
+        'status' => 'integer',
+    ];
+
+    protected $attributes = [
+        'count_fields_updated_at' => [],
+    ];
+
+    protected $dates = [
+        'email_verified_at',
+        'phone_number_verified_at',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     protected $dispatchesEvents = [

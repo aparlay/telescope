@@ -23,26 +23,25 @@ class UserRepository implements RepositoryInterface
     /**
      * Verifying the user.
      *
-     * @param  User|Authenticatable  $user
-     * @return void
+     * @return bool
      */
-    public function verify(User | Authenticatable $user)
+    public function verify(): bool
     {
-        $user->status = User::STATUS_VERIFIED;
-        $user->email_verified = true;
-        $user->save(['status', 'email_verified']);
+        $this->model->status = User::STATUS_VERIFIED;
+        $this->model->email_verified = true;
+
+        return $this->model->save(['status', 'email_verified']);
     }
 
     /**
      * Through exception if user is suspended/banned/not found.
      *
-     * @param  User|Authenticatable  $user
      * @return bool
      * @throws ValidationException
      */
-    public function isUserEligible(User | Authenticatable $user)
+    public function isUserEligible(): bool
     {
-        switch ($user->status) {
+        switch ($this->model->status) {
             case User::STATUS_SUSPENDED:
                 throw ValidationException::withMessages([
                     'Account' => ['This account has been suspended.'],
@@ -65,13 +64,30 @@ class UserRepository implements RepositoryInterface
     /**
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
      *
-     * @param  User|Authenticatable  $user
      * @return bool
      */
-    public function isUnverified(User | Authenticatable $user)
+    public function isUnverified(): bool
     {
         /* User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
-        return $user->setting['otp'] && $user->status === User::STATUS_PENDING;
+        return $this->model->setting['otp'] && $this->model->status === User::STATUS_PENDING;
+    }
+
+    /**
+     * Responsible to check the user is Verified.
+     *
+     * @return bool
+     * @throws ValidationException
+     */
+    public function isVerified(): bool
+    {
+        /* User is considered as verified when user status is active or verified */
+        if ($this->model->status !== User::STATUS_VERIFIED && $this->model->status !== User::STATUS_ACTIVE) {
+            throw ValidationException::withMessages([
+                'Account' => ['Your account is not authenticated.'],
+            ]);
+        }
+
+        return true;
     }
 
     public function all()
@@ -103,9 +119,9 @@ class UserRepository implements RepositoryInterface
      * find user by email.
      *
      * @param string $email
-     * @return User|void
+     * @return User|null
      */
-    public static function findByEmail(string $email)
+    public static function findByEmail(string $email): ?User
     {
         return User::email($email)->first();
     }
@@ -114,9 +130,9 @@ class UserRepository implements RepositoryInterface
      * find user by phone_number.
      *
      * @param string $phoneNumber
-     * @return User|void
+     * @return User|null
      */
-    public static function findByPhoneNumber(string $phoneNumber)
+    public static function findByPhoneNumber(string $phoneNumber): ?User
     {
         return User::phoneNumber($phoneNumber)->first();
     }
@@ -125,23 +141,33 @@ class UserRepository implements RepositoryInterface
      * find user by username.
      *
      * @param string $userName
-     * @return User|void
+     * @return User|null
      */
-    public static function findByUsername(string $userName)
+    public static function findByUsername(string $userName): ?User
     {
         return User::username($userName)->first();
     }
 
     /**
-     * Resposible for match old password.
+     * Responsible for match old password.
      *
      * @param string $password
-     * @param User|Authenticatable  $user
      * @return bool
      */
-    public function resetPassword(string $password, User | Authenticatable $user)
+    public function resetPassword(string $password): bool
     {
-        $user->password_hash = Hash::make($password);
-        $user->save();
+        $this->model->password_hash = Hash::make($password);
+
+        return $this->model->save();
+    }
+
+    public function deleteAccount()
+    {
+        $randString = random_int(1, 100);
+        $this->model->email = 'del_'.$randString.'_'.$this->model->email;
+        $this->model->phone_number = ! empty($this->model->phone_number) ? 'del_'.$randString.'_'.$this->model->phone_number : null;
+        $this->model->status = User::STATUS_DEACTIVATED;
+
+        return $this->model->save();
     }
 }

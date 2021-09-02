@@ -7,10 +7,16 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class MediaPolicy
 {
     use HandlesAuthorization;
+
+    public function viewAny(User | Authenticatable | null $user)
+    {
+        return Response::allow();
+    }
 
     /**
      * Determine whether the user can view the model.
@@ -19,7 +25,7 @@ class MediaPolicy
      * @param  \Aparlay\Core\Api\V1\Models\Media  $media
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User | null $user, Media $media)
+    public function view(User | Authenticatable | null $user, Media $media)
     {
         $userId = $user?->_id;
 
@@ -48,7 +54,6 @@ class MediaPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \Aparlay\Core\Api\V1\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create()
@@ -65,27 +70,20 @@ class MediaPolicy
      * @param  \Aparlay\Core\Api\V1\Models\Media  $media
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Media $media)
+    public function update(User | Authenticatable $user, Media $media)
     {
         $userId = $user->_id ?? null;
 
-        return ($userId === null || (string) $media->created_by !== (string) $userId)
+        return ($userId !== null && (string) $media->created_by === (string) $userId)
             ? Response::allow()
             : Response::deny(__('You can only update media that you\'ve created.'));
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     *
-     * @param  \Aparlay\Core\Api\V1\Models\User  $user
-     * @param  \Aparlay\Core\Api\V1\Models\Media  $media
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function delete(User $user, Media $media)
+    public function delete($user, $media)
     {
         $userId = $user->_id ?? null;
 
-        if ($userId === null || (string) $media->created_by !== (string) $userId) {
+        if ($userId === null || (string) $media->creator['_id'] !== (string) $userId) {
             return Response::deny(__('You can only delete media that you\'ve created.'));
         }
 
