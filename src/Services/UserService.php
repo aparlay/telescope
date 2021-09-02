@@ -72,6 +72,7 @@ class UserService
 
             /* Store avatar name in database */
             $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
+
             return $user->save();
         }
 
