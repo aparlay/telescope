@@ -3,11 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\UserFactory;
-use Aparlay\Core\Events\MediaCreated;
-use Aparlay\Core\Events\MediaCreating;
-use Aparlay\Core\Events\MediaDeleted;
-use Aparlay\Core\Events\MediaSaved;
-use Aparlay\Core\Events\MediaSaving;
+use Aparlay\Core\Events\UserUpdated;
 use Aparlay\Core\Events\UserCreated;
 use Aparlay\Core\Events\UserCreating;
 use Aparlay\Core\Events\UserSaved;
@@ -203,6 +199,10 @@ class User extends Authenticatable implements JWTSubject
         'created_at',
         'updated_at',
         'deleted_at',
+    ];
+
+    protected $dispatchesEvents = [
+        'updated' => UserUpdated::class,
     ];
 
     public static function getFeatures(): array

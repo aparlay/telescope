@@ -30,19 +30,19 @@ class UploadAvatar implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries = 1;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
      */
-    public int $maxExceptions = 3;
+    public int $maxExceptions = 1;
 
     /**
      * The number of seconds to wait before retrying the job.
      *
      * @var int|array
      */
-    public $backoff = 30;
+    public $backoff = 1;
 
     /**
      * Create a new job instance.
@@ -57,6 +57,7 @@ class UploadAvatar implements ShouldQueue
         if (($this->user = User::user($userId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'User not found!');
         }
+        $this->handle();
     }
 
     /**
