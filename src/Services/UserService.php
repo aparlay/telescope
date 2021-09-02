@@ -61,7 +61,7 @@ class UserService
      */
     public static function uploadAvatar(Request $request, User | Authenticatable $user)
     {
-        if (!$request->hasFile('avatar') && !$request->file('avatar')->isValid()) {
+        if (! $request->hasFile('avatar') && ! $request->file('avatar')->isValid()) {
             return false;
         }
 
