@@ -57,7 +57,7 @@ class UserService
      * @return bool
      * @throws \Exception
      */
-    public static function uploadAvatar(Request $request, User|Authenticatable $user)
+    public static function uploadAvatar(Request $request, User | Authenticatable $user)
     {
         /** Upload Avatar Image on Server */
         $extension = $request->file('avatar')->getClientOriginalExtension();
