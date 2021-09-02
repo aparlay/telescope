@@ -185,6 +185,11 @@ class MediaLike extends Model
                 ->creator(new ObjectId($userId))
                 ->pluck('media_id')
                 ->toArray();
+
+            if (empty($likedMediaIds)) {
+                $likedMediaIds = [''];
+            }
+
             $likedMediaIds = array_map('strval', $likedMediaIds);
 
             Redis::sAdd($cacheKey, ...$likedMediaIds);

@@ -43,8 +43,8 @@ class MediaLikeCreated
         $media->save();
 
         $cacheKey = $mediaLike->getCollection().':creator:'.$mediaLike->creator['_id'];
-        MediaLike::cacheByUserId((string) $mediaLike->creator['_id']);
-        Redis::sAdd($cacheKey, (string) $media->_id);
+        MediaLike::cacheByUserId((string) $mediaLike->created_by);
+        Redis::sAdd($cacheKey, (string) $mediaLike->media_id);
 
         $user->like_count++;
         $user->addToSet(

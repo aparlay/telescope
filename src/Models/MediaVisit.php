@@ -123,13 +123,18 @@ class MediaVisit extends Model
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
 
         if (! Redis::exists($cacheKey)) {
-            $likedMediaIds = self::project(['media_id' => true, '_id' => false])
+            $visitedMediaIds = self::project(['media_id' => true, '_id' => false])
                 ->creator($userId)
                 ->pluck('media_id')
                 ->toArray();
-            $likedMediaIds = array_map('strval', $likedMediaIds);
 
-            Redis::sAdd($cacheKey, ...$likedMediaIds);
+            if (empty($visitedMediaIds)) {
+                $visitedMediaIds = [''];
+            }
+
+            $visitedMediaIds = array_map('strval', $visitedMediaIds);
+
+            Redis::sAdd($cacheKey, ...$visitedMediaIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
         }
     }
