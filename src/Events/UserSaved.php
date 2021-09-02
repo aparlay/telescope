@@ -26,10 +26,6 @@ class UserSaved
      */
     public function __construct(User $user)
     {
-        if (! $user->wasRecentlyCreated && $user->wasChanged('avatar')) {
-            dispatch((new UpdateAvatar((string) $user->_id))->onQueue('low'));
-        }
-
         if (! $user->wasRecentlyCreated && $user->wasChanged('status')) {
             switch ($user->status) {
                 case User::STATUS_DEACTIVATED:

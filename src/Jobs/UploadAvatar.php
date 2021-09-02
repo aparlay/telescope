@@ -67,6 +67,7 @@ class UploadAvatar implements ShouldQueue
      *
      * @throws FileExistsException
      * @throws FileNotFoundException
+     * @throws Exception
      */
     public function handle()
     {
@@ -82,6 +83,8 @@ class UploadAvatar implements ShouldQueue
                 /* delete old avatar file */
                 dispatch((new DeleteAvatar((string) $this->user->_id, $oldFilename))->onQueue('low'));
             }
+
+            dispatch((new UpdateAvatar((string) $this->user->_id))->onQueue('low'));
             Storage::disk('public')->delete($this->file);
         }
     }
