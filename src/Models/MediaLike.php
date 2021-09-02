@@ -175,7 +175,7 @@ class MediaLike extends Model
     /**
      * @param ObjectId|string $userId
      */
-    public static function cacheByUserId(ObjectId|string $userId): void
+    public static function cacheByUserId(ObjectId | string $userId): void
     {
         $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
