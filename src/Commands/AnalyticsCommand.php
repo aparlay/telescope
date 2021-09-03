@@ -23,15 +23,14 @@ use Swoole\WebSocket\Frame;
 // use yii\console\ExitCode;
 
 
-class AnalyticsController extends Command
+class AnalyticsCommand extends Command
 {
-    public $signature = 'core:ws';
+    public $signature = 'report:alalytics';
 
     public $description = 'Aparlay Ws Client';
 
     public function handle()
     {
-        
     }
 
     public function actionTwoMonth()
@@ -90,7 +89,7 @@ class AnalyticsController extends Command
         }
 
         // return ExitCode::OK;
-        return Response::HTTP_OK
+        return Response::HTTP_OK;
     }
 
     public function actionDaily()
@@ -144,6 +143,6 @@ class AnalyticsController extends Command
         $model->save();
 
         // return ExitCode::OK;
-        return Response::HTTP_OK
+        return Response::HTTP_OK;
     }
 }
