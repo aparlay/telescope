@@ -42,11 +42,11 @@ class UserObserver
      */
     public function saved(User $user)
     {
-        if (!$user->wasRecentlyCreated && $user->wasChanged('avatar')) {
+        if (! $user->wasRecentlyCreated && $user->wasChanged('avatar')) {
             dispatch((new UpdateAvatar((string) $user->_id))->onQueue('low'));
         }
 
-        if (!$user->wasRecentlyCreated && $user->wasChanged('status')) {
+        if (! $user->wasRecentlyCreated && $user->wasChanged('status')) {
             switch ($user->status) {
                 case User::STATUS_DEACTIVATED:
                 case User::STATUS_BLOCKED:
@@ -56,7 +56,7 @@ class UserObserver
             }
         }
 
-        if (!$user->wasRecentlyCreated && $user->wasChanged('visibility')) {
+        if (! $user->wasRecentlyCreated && $user->wasChanged('visibility')) {
             dispatch((new UpdateMedia((string) $user->_id, ['visibility' => $user->visibility]))->onQueue('low'));
         }
     }

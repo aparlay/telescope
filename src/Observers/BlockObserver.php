@@ -2,12 +2,12 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
-use Aparlay\Core\Helpers\DT;
 use MongoDB\BSON\ObjectId;
 
 class BlockObserver

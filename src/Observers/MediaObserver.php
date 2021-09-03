@@ -31,19 +31,19 @@ class MediaObserver
      * @return void
      * @throws Exception
      */
-    public function saving(\Aparlay\Core\Models\Media $media)
+    public function saving(Media $media)
     {
         ModelSaving::dispatch($media);
 
         $media->hashtags = MediaService::extractHashtags($media->description);
 
         $extractedPeople = MediaService::extractPeople($media->description);
-        if (!empty($extractedPeople)) {
+        if (! empty($extractedPeople)) {
             $users = [];
             $usersQuery = \Aparlay\Core\Models\User::select([
                 'username', 'avatar', '_id',
             ])->usernames($extractedPeople)->limit(20)->get();
-            if (!$usersQuery->isEmpty()) {
+            if (! $usersQuery->isEmpty()) {
                 foreach ($usersQuery->toArray() as $user) {
                     $users[] = $media->createSimpleUser($user);
                 }
@@ -76,7 +76,7 @@ class MediaObserver
 
         if ($media->wasRecentlyCreated || $media->wasChanged('status')) {
             $creatorUserMedias = $creatorUser->medias;
-            if (!empty($creatorUserMedias)) {
+            if (! empty($creatorUserMedias)) {
                 foreach ($creatorUserMedias as $creatorUserMedia) {
                     if ((string) $creatorUserMedia['_id'] === (string) $media->_id) {
                         $creatorUser->removeFromSet('medias', $creatorUserMedia);
@@ -87,7 +87,7 @@ class MediaObserver
             $creatorUser->media_count = Media::creator($media->created_by)->count();
             $medias = [];
             $completedMedias = Media::creator($media->created_by)->completed()->recentFirst()->limit(30)->get();
-            if (!$completedMedias->isEmpty()) {
+            if (! $completedMedias->isEmpty()) {
                 foreach ($completedMedias as $completedMedia) {
                     $basename = basename(
                         $completedMedia['file'],

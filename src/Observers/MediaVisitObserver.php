@@ -21,7 +21,6 @@ class MediaVisitObserver
         $mediaVisit->push('media_ids', $mediaVisit->media_id, true);
     }
 
-
     /**
      * Create a new event instance.
      *
