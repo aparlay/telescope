@@ -89,7 +89,6 @@ class MediaLike extends Model
     protected $casts = [
     ];
 
-
     /**
      * Create a new factory instance for the model.
      */

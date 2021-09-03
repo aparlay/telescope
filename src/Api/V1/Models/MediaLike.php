@@ -9,5 +9,4 @@ use Aparlay\Core\Models\MediaLike as MediaLikeBase;
  */
 class MediaLike extends MediaLikeBase
 {
-    
 }

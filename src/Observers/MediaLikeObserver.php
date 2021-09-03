@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
-use Aparlay\Core\Helpers\DT;
 use MongoDB\BSON\ObjectId;
 
 class MediaLikeObserver
@@ -46,7 +46,7 @@ class MediaLikeObserver
             ['likes' => DT::utcNow()]
         );
         $media->save();
-        
+
         $user = $media->userObj;
         $user->addToSet('likes', [
             '_id' => new ObjectId($mediaLike->creator['_id']),
@@ -57,7 +57,7 @@ class MediaLikeObserver
             $user->count_fields_updated_at,
             ['likes' => DT::utcNow()]
         );
-        
+
         $user->save();
     }
 
