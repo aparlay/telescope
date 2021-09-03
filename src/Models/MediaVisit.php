@@ -52,11 +52,6 @@ class MediaVisit extends Model
      */
     protected $collection = 'media_visits';
 
-    protected $dispatchesEvents = [
-        'saving' => MediaVisitSaving::class,
-        'saved' => MediaVisitSaved::class,
-    ];
-
     /**
      * The attributes that are mass assignable.
      *

@@ -3,8 +3,8 @@
 namespace Aparlay\Core\Repositories;
 
 use Aparlay\Core\Api\V1\Controllers\Controller;
-use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Models\Media;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 

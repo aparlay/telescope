@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Repositories;
 
-use Aparlay\Core\Api\V1\Models\Otp;
+use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Helpers\DT;
 use Illuminate\Support\Str;
 

@@ -183,12 +183,6 @@ class User extends Authenticatable implements JWTSubject
         'status' => 'integer',
     ];
 
-    protected $dispatchesEvents = [
-        'creating' => UserCreating::class,
-        'created' => UserCreated::class,
-        'saved' => UserSaved::class,
-    ];
-
     protected $attributes = [
         'count_fields_updated_at' => [],
     ];

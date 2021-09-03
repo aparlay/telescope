@@ -1,24 +1,38 @@
 <?php
 
-namespace Aparlay\Core\Events;
+namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Jobs\DeleteAvatar;
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UpdateMedia;
-use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\User;
 use Exception;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
-class UserSaved
+class UserObserver
 {
-    use Dispatchable;
-    use InteractsWithSockets;
-    use SerializesModels;
+    /**
+     * Handle the User "creating" event.
+     *
+     * @param  User  $user
+     * @return void
+     * @throws Exception
+     */
+    public function creating(User $user)
+    {
+        if (empty($user->avatar)) {
+            $maleAvatar = 'default_m_'.random_int(1, 120).'.png';
+            $femaleAvatar = 'default_fm_'.random_int(1, 60).'.png';
+            $filename = match ($user->gender) {
+                User::GENDER_FEMALE => $femaleAvatar,
+                User::GENDER_MALE => $maleAvatar,
+                default => (random_int(0, 1)) ? $maleAvatar : $femaleAvatar,
+            };
+
+            $user->avatar = Cdn::avatar($filename);
+        }
+    }
 
     /**
      * Create a new event instance.
@@ -26,7 +40,7 @@ class UserSaved
      * @return void
      * @throws Exception
      */
-    public function __construct(User $user)
+    public function saved(User $user)
     {
         if (! $user->wasRecentlyCreated && $user->wasChanged('avatar')) {
             dispatch((new UpdateAvatar((string) $user->_id))->onQueue('low'));
