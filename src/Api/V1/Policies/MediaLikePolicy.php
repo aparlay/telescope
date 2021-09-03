@@ -26,7 +26,6 @@ class MediaLikePolicy
      */
     public function create(User | Authenticatable $user, Media $media)
     {
-        $user = auth()->user();
         $userId = $user?->_id;
 
         $isBlocked = Block::select(['created_by', '_id'])
@@ -53,7 +52,6 @@ class MediaLikePolicy
      */
     public function delete(User | Authenticatable $user, Media $media)
     {
-        $user = auth()->user();
         $userId = $user?->_id;
 
         $isBlocked = Block::select(['created_by', '_id'])

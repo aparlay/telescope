@@ -6,6 +6,4 @@ use Aparlay\Core\Models\Block as BlockBase;
 
 class Block extends BlockBase
 {
-    use UserFieldTrait;
-    use CreatorFieldTrait;
 }

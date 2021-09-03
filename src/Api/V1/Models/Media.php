@@ -6,6 +6,7 @@ use Aparlay\Core\Models\Media as MediaBase;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
@@ -79,11 +80,9 @@ class Media extends MediaBase
         }
 
         $mediaLikeCacheKey = (new MediaLike())->getCollection().':creator:'.auth()->user()->id;
-        $mediaLike = Cache::store('redis')->remember($mediaLikeCacheKey, config('app.cache.longDuration'), function () {
-            return MediaLike::select(['media_id' => 1, '_id' => 0])->creator(auth()->user()->id)->pluck('media_id');
-        });
+        MediaLike::cacheByUserId(auth()->user()->id);
 
-        return isset($mediaLike[(string) $this->_id]);
+        return Redis::sismember($mediaLikeCacheKey, (string) $this->_id);
     }
 
     /**
@@ -96,11 +95,9 @@ class Media extends MediaBase
         }
 
         $mediaVisitCacheKey = (new MediaVisit())->getCollection().':creator:'.auth()->user()->id;
-        $mediaVisit = Cache::store('redis')->remember($mediaVisitCacheKey, config('app.cache.longDuration'), function () {
-            return MediaVisit::select(['media_id' => 1, '_id' => 0])->user(auth()->user()->id)->pluck('media_id');
-        });
+        MediaLike::cacheByUserId(auth()->user()->id);
 
-        return isset($mediaVisit[(string) $this->_id]);
+        return Redis::sismember($mediaVisitCacheKey, (string) $this->_id);
     }
 
     public function getFilenameAttribute(): string

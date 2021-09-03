@@ -2,10 +2,13 @@
 
 namespace Aparlay\Core\Services;
 
+use Aparlay\Core\Jobs\DeleteAvatar;
+use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Login;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Repositories\UserRepository;
-use App\Models\User;
+use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -55,21 +58,28 @@ class UserService
      * @param  Request  $request
      * @param  User|Authenticatable  $user
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public static function uploadAvatar(Request $request, User | Authenticatable $user)
     {
-        /** Upload Avatar Image on Server */
-        $extension = $request->file('avatar')->getClientOriginalExtension();
-        $avatar = uniqid($user->_id, false).'.'.$extension;
-        if (($filePath = $request->file('avatar')->storeAs('avatars', $avatar, 'public')) !== false) {
-            dispatch((new UploadAvatar($user->_id, $filePath))->onQueue('low'));
-
-            /* Store avatar name in database */
-            $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
-            $user->save();
+        if (! $request->hasFile('avatar') && ! $request->file('avatar')->isValid()) {
+            return false;
         }
 
-        return $user;
+        $extension = $request->avatar->getClientOriginalExtension();
+        $avatar = uniqid((string) $user->_id, false).'.'.$extension;
+        if (($fileName = $request->avatar->storeAs('avatars', $avatar, 'public')) !== false) {
+            /* Store avatar name in database */
+            $oldFileName = $user->avatar;
+            $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
+            $user->save();
+            dispatch((new UploadAvatar((string) $user->_id, $fileName))->delay(10)->onQueue('high'));
+            if (! str_contains($oldFileName, 'default_')) {
+                $deleteOldFiles = new DeleteAvatar((string) $user->_id, basename($oldFileName));
+                dispatch($deleteOldFiles->delay(100)->onQueue('low'));
+            }
+        }
+
+        return false;
     }
 }

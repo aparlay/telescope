@@ -3,6 +3,10 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\UserFactory;
+use Aparlay\Core\Events\UserCreated;
+use Aparlay\Core\Events\UserCreating;
+use Aparlay\Core\Events\UserSaved;
+use Aparlay\Core\Events\UserUpdated;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -28,6 +32,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string      $auth_key
  * @property string      $avatar
  * @property int         $status
+ * @property int         $gender
  * @property int         $visibility
  * @property int         $interested_in
  * @property int         $block_count
@@ -48,6 +53,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property bool        $require_otp
  * @property bool        $is_protected
  * @property array       $defaultSetting
+ * @property array       $count_fields_updated_at
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
@@ -175,6 +181,12 @@ class User extends Authenticatable implements JWTSubject
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
         'status' => 'integer',
+    ];
+
+    protected $dispatchesEvents = [
+        'creating' => UserCreating::class,
+        'created' => UserCreated::class,
+        'saved' => UserSaved::class,
     ];
 
     protected $attributes = [

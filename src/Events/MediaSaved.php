@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Events;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Jobs\DeleteMediaLike;
 use Aparlay\Core\Models\Media;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -20,6 +21,7 @@ class MediaSaved
      * Create a new event instance.
      *
      * @return void
+     * @throws \Exception
      */
     public function __construct(Media $media)
     {
@@ -54,13 +56,7 @@ class MediaSaved
             $creatorUser->save();
         }
 
-        if ($media->status === Media::STATUS_COMPLETED || $media->status === Media::STATUS_CONFIRMED) {
-            Cache::store('redis')->forget('Media.Index.TotalCount.Public');
-        }
-
         if ($media->isDirty('status') && $media->status === Media::STATUS_USER_DELETED) {
-            Cache::store('redis')->forget('Media.Index.TotalCount.Public');
-
             $creatorUser->media_count--;
 
             $file = config('app.cdn.videos').$media->file;
@@ -72,7 +68,11 @@ class MediaSaved
             );
             $creatorUser->save();
 
-            //dispatch((new DeleteMediaLike($media->id, $creatorUser->_id))->onQueue('low'));
+            dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
+        }
+
+        if ($media->isDirty('status') && $media->status === Media::STATUS_ADMIN_DELETED) {
+            dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
         }
     }
 }
