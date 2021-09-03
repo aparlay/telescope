@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Http\Kernel;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Pagination\CoreCursorPaginator;
+use Aparlay\Core\Providers\EventServiceProvider;
 use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -29,6 +30,7 @@ class CoreServiceProvider extends ServiceProvider
             $this->app->register(IdeHelperServiceProvider::class);
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
+            $this->app->register(EventServiceProvider::class);
         }
 
         $this->mergeConfigFrom(__DIR__.'/../config/core.php', 'core');
