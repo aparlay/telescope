@@ -89,69 +89,6 @@ class MediaLike extends Model
     protected $casts = [
     ];
 
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::created(function ($like) {
-            $media = $like->mediaObj;
-            $media->like_count++;
-            $media->addToSet('likes', [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ], 10);
-            $media->count_fields_updated_at = array_merge(
-                $media->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
-            );
-            $media->save();
-
-            $user = $media->userObj;
-            $user->like_count++;
-            $user->addToSet('likes', [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ], 10);
-            $user->count_fields_updated_at = array_merge(
-                $user->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
-            );
-            $user->save();
-        });
-
-        static::deleted(function ($like) {
-            $media = $like->mediaObj;
-            $media->like_count--;
-            $media->removeFromSet('likes', [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ]);
-            $media->count_fields_updated_at = array_merge(
-                $media->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
-            );
-            $media->save();
-
-            $user = $media->userObj;
-            $user->like_count--;
-            $user->removeFromSet('likes', [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ]);
-            $user->count_fields_updated_at = array_merge(
-                $user->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
-            );
-            $user->save();
-        });
-    }
 
     /**
      * Create a new factory instance for the model.
