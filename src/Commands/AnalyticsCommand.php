@@ -22,7 +22,6 @@ use Swoole\WebSocket\Frame;
 
 // use yii\console\ExitCode;
 
-
 class AnalyticsCommand extends Command
 {
     public $signature = 'report:alalytics';
@@ -36,13 +35,12 @@ class AnalyticsCommand extends Command
     public function actionTwoMonth()
     {
         for ($i = -90; $i <= 0; $i++) {
-            
-            $timestamp          = strtotime($i . ' days midnight');
-            $startUtc           = DT::timestampToUtc($timestamp);
-            $endUtc             = DT::timestampToUtc($timestamp + 86400);
-            $availableMedia     = Media::find()->date(null, $endUtc)->count();
-            $date               = date('Y-m-d', $timestamp + 20000);
-            $mediaVisitCounts   = 0;
+            $timestamp = strtotime($i.' days midnight');
+            $startUtc = DT::timestampToUtc($timestamp);
+            $endUtc = DT::timestampToUtc($timestamp + 86400);
+            $availableMedia = Media::find()->date(null, $endUtc)->count();
+            $date = date('Y-m-d', $timestamp + 20000);
+            $mediaVisitCounts = 0;
 
             foreach (MediaVisit::find()->date($date)->each() as $mediaVisits) {
                 $mediaVisitCounts += count($mediaVisits->media_ids);
@@ -84,8 +82,7 @@ class AnalyticsCommand extends Command
             $model->attributes = $analytics;
             $model->save();
 
-
-            $this->stdout($date . ' analytics stored.' . PHP_EOL, Console::BOLD, Console::FG_YELLOW);
+            $this->stdout($date.' analytics stored.'.PHP_EOL, Console::BOLD, Console::FG_YELLOW);
         }
 
         // return ExitCode::OK;
@@ -94,12 +91,12 @@ class AnalyticsCommand extends Command
 
     public function actionDaily()
     {
-        $timestamp          = strtotime('midnight');
-        $startUtc           = DT::timestampToUtc($timestamp);
-        $endUtc             = DT::timestampToUtc($timestamp + 86400);
-        $availableMedia     = Media::find()->date(null, $endUtc)->count();
-        $date               = date('Y-m-d', $timestamp + 20000);
-        $mediaVisitCounts   = 0;
+        $timestamp = strtotime('midnight');
+        $startUtc = DT::timestampToUtc($timestamp);
+        $endUtc = DT::timestampToUtc($timestamp + 86400);
+        $availableMedia = Media::find()->date(null, $endUtc)->count();
+        $date = date('Y-m-d', $timestamp + 20000);
+        $mediaVisitCounts = 0;
 
         foreach (MediaVisit::find()->date($date)->each() as $mediaVisits) {
             $mediaVisitCounts += count($mediaVisits->media_ids);

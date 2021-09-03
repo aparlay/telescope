@@ -3,9 +3,9 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Api\V1\Http\Kernel;
+use Aparlay\Core\Commands\AnalyticsCommand;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\WsCommand;
-use Aparlay\Core\Commands\AnalyticsCommand;
 use Aparlay\Core\Pagination\CoreCursorPaginator;
 use Aparlay\Core\Providers\EventServiceProvider;
 use App\Providers\TelescopeServiceProvider;
