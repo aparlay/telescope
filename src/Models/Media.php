@@ -182,14 +182,6 @@ class Media extends Model
         'visibility' => 'integer',
     ];
 
-    protected $dispatchesEvents = [
-        'creating' => MediaCreating::class,
-        'created' => MediaCreated::class,
-        'saving' => MediaSaving::class,
-        'saved' => MediaSaved::class,
-        'deleted' => MediaDeleted::class,
-    ];
-
     public static function getVisibilities()
     {
         return [

@@ -2,11 +2,11 @@
 
 namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Api\V1\Models\Block;
-use Aparlay\Core\Api\V1\Models\Follow;
-use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Models\MediaLike;
-use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Block;
+use Aparlay\Core\Models\Follow;
+use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaLike;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Helpers\DT;
 use MongoDB\BSON\ObjectId;
 
@@ -84,17 +84,6 @@ class BlockObserver
     }
 
     /**
-     * Handle the Block "updated" event.
-     *
-     * @param  Block  $block
-     * @return void
-     */
-    public function updated(Block $block)
-    {
-        //
-    }
-
-    /**
      * Handle the Block "deleted" event.
      *
      * @param  Block  $block
@@ -123,27 +112,5 @@ class BlockObserver
             $media->removeFromSet('blocked_user_ids', new ObjectId($block->user['_id']));
             $media->save();
         }
-    }
-
-    /**
-     * Handle the Block "restored" event.
-     *
-     * @param  Block  $block
-     * @return void
-     */
-    public function restored(Block $block)
-    {
-        //
-    }
-
-    /**
-     * Handle the Block "force deleted" event.
-     *
-     * @param  Block  $block
-     * @return void
-     */
-    public function forceDeleted(Block $block)
-    {
-        //
     }
 }
