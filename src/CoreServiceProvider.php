@@ -3,6 +3,7 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Api\V1\Http\Kernel;
+use Aparlay\Core\Commands\AnalyticsCommand;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Pagination\CoreCursorPaginator;
@@ -55,6 +56,7 @@ class CoreServiceProvider extends ServiceProvider
             $this->commands([
                 CoreCommand::class,
                 WsCommand::class,
+                AnalyticsCommand::class,
             ]);
         }
 
