@@ -365,7 +365,6 @@ class User extends Authenticatable implements JWTSubject
         return Alert::user(auth()->user()->_id)->notVisited()->get();
     }
 
-
     /**
      * @return string
      */
