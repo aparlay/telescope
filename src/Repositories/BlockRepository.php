@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Repositories;
 
-use Aparlay\Core\Api\V1\Models\Block;
-use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Block;
+use Aparlay\Core\Models\User;
 use MongoDB\BSON\ObjectId;
 
 class BlockRepository

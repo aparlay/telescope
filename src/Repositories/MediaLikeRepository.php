@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Repositories;
 
-use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Models\MediaLike;
+use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaLike;
 use MongoDB\BSON\ObjectId;
 
 class MediaLikeRepository

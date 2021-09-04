@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Repositories;
 
-use Aparlay\Core\Api\V1\Models\Otp;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Otp;
 use Illuminate\Support\Str;
 
 class OtpRepository
