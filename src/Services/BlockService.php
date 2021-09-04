@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Services;
 
-use Aparlay\Core\Api\V1\Models\Block;
-use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Block;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Repositories\BlockRepository;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
@@ -11,7 +11,7 @@ use MongoDB\BSON\ObjectId;
 
 class BlockService
 {
-    protected $blockRepository;
+    protected BlockRepository $blockRepository;
 
     public function __construct()
     {
@@ -21,7 +21,7 @@ class BlockService
     /**
      * Responsible to create block for given user.
      *
-     * @param User
+     * @param  User  $user
      * @return array
      */
     public function create(User $user)
@@ -38,8 +38,9 @@ class BlockService
     /**
      * Responsible to unblock the given user.
      *
-     * @param User
-     * @return bool
+     * @param  User  $user
+     * @return void
+     * @throws BlockedException
      */
     public function unblock(User $user)
     {

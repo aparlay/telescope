@@ -37,7 +37,6 @@ class UserFactory extends Factory
             'auth_key' => $this->faker->randomKey(),
             'password_hash' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             'password_reset_token' => $this->faker->randomKey(),
-            'setting',
             'features' => array_fill_keys(array_keys(User::getFeatures()), false),
             'gender' => $this->faker->randomElement(array_keys(User::getGenders())),
             'interested_in' => $this->faker->randomElement(array_keys(User::getInterestedIns())),

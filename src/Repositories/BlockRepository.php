@@ -6,7 +6,7 @@ use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\User;
 use MongoDB\BSON\ObjectId;
 
-class BlockRepository
+class BlockRepository implements RepositoryInterface
 {
     protected Block $model;
 

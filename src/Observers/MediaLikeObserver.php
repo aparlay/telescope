@@ -48,6 +48,7 @@ class MediaLikeObserver
         $media->save();
 
         $user = $media->userObj;
+        $user->like_count++;
         $user->addToSet('likes', [
             '_id' => new ObjectId($mediaLike->creator['_id']),
             'username' => $mediaLike->creator['username'],

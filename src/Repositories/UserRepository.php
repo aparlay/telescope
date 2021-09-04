@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Repositories;
 
 use Aparlay\Core\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 

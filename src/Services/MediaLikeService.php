@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Services;
 
-use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Models\MediaLike;
+use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Repositories\MediaLikeRepository;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
@@ -11,7 +11,7 @@ use MongoDB\BSON\ObjectId;
 
 class MediaLikeService
 {
-    protected $mediaLikeRepository;
+    protected MediaLikeRepository $mediaLikeRepository;
 
     public function __construct()
     {
@@ -30,7 +30,7 @@ class MediaLikeService
         if (($like = $this->mediaLikeRepository->isLiked($media)) === null) {
             $like = $this->mediaLikeRepository->create([
                 'media_id' => new ObjectId($media->_id),
-                'user_id' => new ObjectId(auth()->user()->_id),
+                'user_id' => new ObjectId($media->userObj->_id),
             ]);
             $statusCode = Response::HTTP_CREATED;
         }
@@ -41,8 +41,9 @@ class MediaLikeService
     /**
      * Responsible to unlike the given media.
      *
-     * @param Media
-     * @return bool
+     * @param  Media  $media
+     * @return void
+     * @throws BlockedException
      */
     public function unlike(Media $media)
     {

@@ -3,8 +3,6 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\MediaLikeFactory;
-use Aparlay\Core\Events\MediaLikeCreated;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -60,10 +58,6 @@ class MediaLike extends Model
         'created_at',
         'created_by',
         'updated_by',
-    ];
-
-    protected $dispatchesEvents = [
-        'created' => MediaLikeCreated::class,
     ];
 
     /**

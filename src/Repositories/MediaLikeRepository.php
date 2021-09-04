@@ -6,7 +6,7 @@ use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use MongoDB\BSON\ObjectId;
 
-class MediaLikeRepository
+class MediaLikeRepository implements RepositoryInterface
 {
     protected MediaLike $model;
 

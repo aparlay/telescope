@@ -7,6 +7,7 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaLike;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Services\MediaService;
 use Exception;
 use MongoDB\BSON\ObjectId;
@@ -21,60 +22,9 @@ class MediaObserver
      */
     public function created(Media $media)
     {
-        dispatch((new UploadMedia((string) $media->userObj->_id, (string) $media->_id, $media->file))
-            ->onQueue('loq'));
-    }
-
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function saving(Media $media)
-    {
-        ModelSaving::dispatch($media);
-
-        $media->hashtags = MediaService::extractHashtags($media->description);
-
-        $extractedPeople = MediaService::extractPeople($media->description);
-        if (! empty($extractedPeople)) {
-            $users = [];
-            $usersQuery = \Aparlay\Core\Models\User::select([
-                'username', 'avatar', '_id',
-            ])->usernames($extractedPeople)->limit(20)->get();
-            if (! $usersQuery->isEmpty()) {
-                foreach ($usersQuery->toArray() as $user) {
-                    $users[] = $media->createSimpleUser($user);
-                }
-            }
-            $media->people = $users;
-        }
-
-        if ($media->wasChanged('file') && str_contains($media->file, config('app.cdn.videos'))) {
-            $media->file = str_replace(config('app.cdn.videos'), '', $media->file);
-        }
-
-        if ($media->status === Media::STATUS_DENIED) {
-            $media->visibility = Media::VISIBILITY_PRIVATE;
-        }
-
-        if ($media->wasRecentlyCreated) {
-            $media->slug = MediaService::generateSlug(6);
-        }
-    }
-
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function saved(Media $media)
-    {
         $creatorUser = $media->userObj;
 
-        if ($media->wasRecentlyCreated || $media->wasChanged('status')) {
+        if ($media->isDirty('status')) {
             $creatorUserMedias = $creatorUser->medias;
             if (! empty($creatorUserMedias)) {
                 foreach ($creatorUserMedias as $creatorUserMedia) {
@@ -108,6 +58,56 @@ class MediaObserver
             );
             $creatorUser->save();
         }
+        //dispatch((new UploadMedia((string) $media->userObj->_id, (string) $media->_id, $media->file))->onQueue('low'));
+    }
+
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function saving(Media $media)
+    {
+        ModelSaving::dispatch($media);
+
+        $media->hashtags = MediaService::extractHashtags($media->description);
+
+        $extractedPeople = MediaService::extractPeople($media->description);
+        if (! empty($extractedPeople)) {
+            $users = [];
+            $usersQuery = User::select([
+                'username', 'avatar', '_id',
+            ])->usernames($extractedPeople)->limit(20)->get();
+            if (! $usersQuery->isEmpty()) {
+                foreach ($usersQuery->toArray() as $user) {
+                    $users[] = $media->createSimpleUser($user);
+                }
+            }
+            $media->people = $users;
+        }
+
+        if ($media->wasChanged('file') && str_contains($media->file, config('app.cdn.videos'))) {
+            $media->file = str_replace(config('app.cdn.videos'), '', $media->file);
+        }
+
+        if ($media->status === Media::STATUS_DENIED) {
+            $media->visibility = Media::VISIBILITY_PRIVATE;
+        }
+
+        if ($media->wasRecentlyCreated) {
+            $media->slug = MediaService::generateSlug(6);
+        }
+    }
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function updated(Media $media)
+    {
+        $creatorUser = $media->userObj;
 
         if ($media->status === Media::STATUS_USER_DELETED && $media->isDirty('status')) {
             $creatorUser->media_count--;
@@ -124,10 +124,6 @@ class MediaObserver
             );
             $creatorUser->save();
 
-            dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
-        }
-
-        if ($media->status === Media::STATUS_ADMIN_DELETED & $media->isDirty('status')) {
             dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
         }
     }

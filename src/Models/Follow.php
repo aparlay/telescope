@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\CreatorFieldTrait;
+use Aparlay\Core\Api\V1\Models\UserFieldTrait;
 use Aparlay\Core\Database\Factories\FollowFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\FollowScope;
@@ -35,6 +37,8 @@ class Follow extends Model
     use HasFactory;
     use Notifiable;
     use FollowScope;
+    use UserFieldTrait;
+    use CreatorFieldTrait;
 
     public const STATUS_PENDING = 0;
 

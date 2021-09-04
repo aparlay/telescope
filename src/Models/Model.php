@@ -8,14 +8,6 @@ use MongoDB\BSON\ObjectId;
 
 class Model extends \Jenssegers\Mongodb\Eloquent\Model
 {
-    /**
-     * The event map for the model.
-     *
-     * @var array
-     */
-    protected $dispatchesEvents = [
-        'saving' => ModelSaving::class,
-    ];
 
     protected static function boot(): void
     {

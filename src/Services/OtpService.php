@@ -2,10 +2,10 @@
 
 namespace Aparlay\Core\Services;
 
-use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Jobs\Email as EmailJob;
 use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Otp;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Repositories\EmailRepository;
 use Aparlay\Core\Repositories\OtpRepository;
 use App\Exceptions\BlockedException;
@@ -15,6 +15,13 @@ use Illuminate\Validation\ValidationException;
 
 class OtpService
 {
+    protected OtpRepository $otpRepository;
+
+    public function __construct()
+    {
+        $this->otpRepository = new OtpRepository(new Otp());
+    }
+
     /**
      * send otp if status in pending and request otp is null.
      * @param  User|Authenticatable  $user
@@ -34,7 +41,7 @@ class OtpService
      * Generate OTP.
      * @param string $identity
      * @param string|null $device_id
-     * @return \Aparlay\Core\Api\V1\Models\Otp
+     * @return \Aparlay\Core\Models\Otp
      * @throws BlockedException
      */
     public static function generateOtp(string $identity, string $device_id = null)

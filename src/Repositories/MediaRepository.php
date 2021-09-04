@@ -2,13 +2,12 @@
 
 namespace Aparlay\Core\Repositories;
 
-use Aparlay\Core\Api\V1\Controllers\Controller;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Models\Media;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 
-class MediaRepository extends Controller
+class MediaRepository implements RepositoryInterface
 {
     /**
      * Store a newly created resource in storage.
@@ -49,5 +48,34 @@ class MediaRepository extends Controller
         $media->refresh();
 
         return $media;
+    }
+
+    public function __construct($model)
+    {
+    }
+
+    public function all()
+    {
+        // TODO: Implement all() method.
+    }
+
+    public function create(array $data)
+    {
+        // TODO: Implement create() method.
+    }
+
+    public function update(array $data, $id)
+    {
+        // TODO: Implement update() method.
+    }
+
+    public function delete($id)
+    {
+        // TODO: Implement delete() method.
+    }
+
+    public function find($id)
+    {
+        // TODO: Implement find() method.
     }
 }

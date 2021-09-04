@@ -30,7 +30,6 @@ class CoreServiceProvider extends ServiceProvider
             $this->app->register(IdeHelperServiceProvider::class);
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
-            $this->app->register(EventServiceProvider::class);
         }
 
         $this->mergeConfigFrom(__DIR__.'/../config/core.php', 'core');
@@ -40,6 +39,7 @@ class CoreServiceProvider extends ServiceProvider
      * Bootstrap services.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function boot()
     {
@@ -73,45 +73,6 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'core');
-
-        Builder::macro('cursorPaginate', function ($limit, $columns) {
-            $cursor = CoreCursorPaginator::currentCursor();
-
-            if ($cursor) {
-                $apply = function ($query, $columns, $cursor) use (&$apply) {
-                    $query->where(function ($query) use ($columns, $cursor, $apply) {
-                        $column = key($columns);
-                        $direction = array_shift($columns);
-                        $value = array_shift($cursor);
-
-                        $query->where($column, $direction === 'asc' ? '>' : '<', $value);
-
-                        if (! empty($columns)) {
-                            $query->orWhere($column, $value);
-                            $apply($query, $columns, $cursor);
-                        }
-                    });
-                };
-
-                $apply($this, $columns, $cursor);
-            }
-
-            foreach ($columns as $column => $direction) {
-                $this->orderBy($column, $direction);
-            }
-
-            $items = $this->limit($limit + 1)->get();
-
-            if ($items->count() <= $limit) {
-                return new CoreCursorPaginator($items);
-            }
-
-            $items->pop();
-
-            return new CoreCursorPaginator($items, array_map(function ($column) use ($items) {
-                return $items->last()->{$column};
-            }, array_keys($columns)));
-        });
     }
 
     /**

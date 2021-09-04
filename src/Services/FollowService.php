@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Services;
 
-use Aparlay\Core\Api\V1\Models\Follow;
-use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Follow;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Repositories\FollowRepository;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
