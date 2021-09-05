@@ -3,6 +3,7 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Api\V1\Http\Kernel;
+use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\WsCommand;
@@ -29,6 +30,7 @@ class CoreServiceProvider extends ServiceProvider
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
+        $this->app->register(AuthServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
 
         $this->mergeConfig();
