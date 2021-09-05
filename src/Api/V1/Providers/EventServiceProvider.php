@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Model;
 use Aparlay\Core\Observers\BlockObserver;
 use Aparlay\Core\Observers\MediaLikeObserver;
 use Aparlay\Core\Observers\MediaObserver;

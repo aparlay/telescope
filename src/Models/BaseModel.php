@@ -8,7 +8,6 @@ use MongoDB\BSON\ObjectId;
 
 class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
 {
-
     protected static function boot(): void
     {
         parent::boot();

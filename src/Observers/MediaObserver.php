@@ -94,6 +94,7 @@ class MediaObserver
             $media->slug = MediaService::generateSlug(6);
         }
     }
+
     /**
      * Create a new event instance.
      *
