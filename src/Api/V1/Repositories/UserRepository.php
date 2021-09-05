@@ -9,11 +9,11 @@ use Illuminate\Validation\ValidationException;
 
 class UserRepository implements RepositoryInterface
 {
-    protected User|BaseUser $model;
+    protected User | BaseUser $model;
 
     public function __construct($model)
     {
-        if (!($model instanceof BaseUser)) {
+        if (! ($model instanceof BaseUser)) {
             throw new \InvalidArgumentException('$model should be of User type');
         }
 
