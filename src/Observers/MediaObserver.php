@@ -2,10 +2,10 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaLike;
 use Aparlay\Core\Models\Media;
-use Aparlay\Core\Api\V1\Services\MediaService;
 use Exception;
 use MongoDB\BSON\ObjectId;
 

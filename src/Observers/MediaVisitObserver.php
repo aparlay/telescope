@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Observers\BaseModelObserver;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaVisit;
+use Aparlay\Core\Observers\BaseModelObserver;
 use Exception;
 
 class MediaVisitObserver

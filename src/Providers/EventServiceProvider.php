@@ -2,13 +2,13 @@
 
 namespace Aparlay\Core\Providers;
 
-use Aparlay\Core\Observers\BaseModelObserver;
 use Aparlay\Core\Models\BaseModel;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Observers\BaseModelObserver;
 use Aparlay\Core\Observers\BlockObserver;
 use Aparlay\Core\Observers\MediaLikeObserver;
 use Aparlay\Core\Observers\MediaObserver;

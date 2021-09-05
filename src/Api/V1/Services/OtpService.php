@@ -2,12 +2,12 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
-use Aparlay\Core\Jobs\Email as EmailJob;
 use Aparlay\Core\Api\V1\Models\Email;
 use Aparlay\Core\Api\V1\Models\Otp;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\EmailRepository;
 use Aparlay\Core\Api\V1\Repositories\OtpRepository;
+use Aparlay\Core\Jobs\Email as EmailJob;
 use App\Exceptions\BlockedException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
