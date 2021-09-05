@@ -1,18 +1,19 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
-use Aparlay\Core\Models\User;
+use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\User as BaseUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserRepository implements RepositoryInterface
 {
-    protected User $model;
+    protected User|BaseUser $model;
 
     public function __construct($model)
     {
-        if (! ($model instanceof User)) {
+        if (!($model instanceof BaseUser)) {
             throw new \InvalidArgumentException('$model should be of User type');
         }
 

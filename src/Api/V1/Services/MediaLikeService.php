@@ -1,10 +1,10 @@
 <?php
 
-namespace Aparlay\Core\Services;
+namespace Aparlay\Core\Api\V1\Services;
 
-use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaLike;
-use Aparlay\Core\Repositories\MediaLikeRepository;
+use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaLike;
+use Aparlay\Core\Api\V1\Repositories\MediaLikeRepository;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
 use MongoDB\BSON\ObjectId;

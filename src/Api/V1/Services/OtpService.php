@@ -1,13 +1,13 @@
 <?php
 
-namespace Aparlay\Core\Services;
+namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Jobs\Email as EmailJob;
-use Aparlay\Core\Models\Email;
-use Aparlay\Core\Models\Otp;
-use Aparlay\Core\Models\User;
-use Aparlay\Core\Repositories\EmailRepository;
-use Aparlay\Core\Repositories\OtpRepository;
+use Aparlay\Core\Api\V1\Models\Email;
+use Aparlay\Core\Api\V1\Models\Otp;
+use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Repositories\EmailRepository;
+use Aparlay\Core\Api\V1\Repositories\OtpRepository;
 use App\Exceptions\BlockedException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;

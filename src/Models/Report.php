@@ -33,7 +33,7 @@ use MongoDB\BSON\ObjectId;
  *
  * @OA\Schema()
  */
-class Report extends Model
+class Report extends BaseModel
 {
     use HasFactory;
     use Notifiable;

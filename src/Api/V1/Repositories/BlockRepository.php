@@ -1,9 +1,9 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
-use Aparlay\Core\Models\Block;
-use Aparlay\Core\Models\User;
+use Aparlay\Core\Api\V1\Models\Block;
+use Aparlay\Core\Api\V1\Models\User;
 use MongoDB\BSON\ObjectId;
 
 class BlockRepository implements RepositoryInterface

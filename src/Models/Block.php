@@ -31,7 +31,7 @@ use MongoDB\BSON\ObjectId;
  * @method static |self|Builder creator(ObjectId|string $userId) get creator user
  * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
  */
-class Block extends Model
+class Block extends BaseModel
 {
     use HasFactory;
     use Notifiable;

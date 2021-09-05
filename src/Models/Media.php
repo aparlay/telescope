@@ -59,7 +59,7 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
  * @method static |self|Builder availableForFollower()    get available content for followers
  */
-class Media extends Model
+class Media extends BaseModel
 {
     use HasFactory;
     use Notifiable;

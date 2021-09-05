@@ -2,11 +2,11 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Events\ModelSaving;
+use Aparlay\Core\Observers\BaseModelObserver;
 use Illuminate\Support\Facades\Auth;
 use MongoDB\BSON\ObjectId;
 
-class Model extends \Jenssegers\Mongodb\Eloquent\Model
+class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
 {
 
     protected static function boot(): void

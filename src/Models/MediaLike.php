@@ -32,7 +32,7 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
  * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
  */
-class MediaLike extends Model
+class MediaLike extends BaseModel
 {
     use HasFactory;
     use Notifiable;

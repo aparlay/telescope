@@ -22,7 +22,7 @@ use MongoDB\BSON\ObjectId;
  * @method static |self|Builder media(ObjectId|string $mediaId) get media alerts
  * @method static |self|Builder user(ObjectId|string $userId)   get user alerts
  */
-class Email extends Model
+class Email extends BaseModel
 {
     use HasFactory;
     use Notifiable;

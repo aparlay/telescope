@@ -1,13 +1,13 @@
 <?php
 
-namespace Aparlay\Core\Services;
+namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
-use Aparlay\Core\Models\Login;
-use Aparlay\Core\Models\User;
-use Aparlay\Core\Repositories\UserRepository;
+use Aparlay\Core\Api\V1\Models\Login;
+use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Repositories\UserRepository;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;

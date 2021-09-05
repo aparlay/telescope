@@ -1,6 +1,6 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
 interface RepositoryInterface
 {

@@ -7,8 +7,8 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
-use Aparlay\Core\Services\MediaService;
-use Aparlay\Core\Services\UploadService;
+use Aparlay\Core\Api\V1\Services\MediaService;
+use Aparlay\Core\Api\V1\Services\UploadService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

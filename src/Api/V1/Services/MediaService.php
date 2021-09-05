@@ -1,14 +1,14 @@
 <?php
 
-namespace Aparlay\Core\Services;
+namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
-use Aparlay\Core\Models\Alert;
-use Aparlay\Core\Models\Follow;
-use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaVisit;
-use Aparlay\Core\Models\User;
-use Aparlay\Core\Repositories\MediaRepository;
+use Aparlay\Core\Api\V1\Models\Alert;
+use Aparlay\Core\Api\V1\Models\Follow;
+use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaVisit;
+use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Repositories\MediaRepository;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;

@@ -1,13 +1,13 @@
 <?php
 
-namespace Aparlay\Core\Events;
+namespace Aparlay\Core\Observers;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use MongoDB\BSON\ObjectId;
 
-class ModelSaving
+class BaseModelObserver
 {
     use Dispatchable;
     use InteractsWithSockets;
@@ -18,7 +18,7 @@ class ModelSaving
      *
      * @return void
      */
-    public function __construct($model)
+    public function saving($model)
     {
         if (! empty($model->created_by) && is_string($model->created_by)) {
             $model->created_by = new ObjectId($model->created_by);

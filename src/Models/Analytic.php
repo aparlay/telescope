@@ -19,7 +19,7 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder days(int $days)                            get days of analytics
  * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get analytics by date
  */
-class Analytic extends Model
+class Analytic extends BaseModel
 {
     use HasFactory;
     use Notifiable;

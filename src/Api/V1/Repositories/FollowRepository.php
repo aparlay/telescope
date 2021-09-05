@@ -1,9 +1,9 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
-use Aparlay\Core\Models\Follow;
-use Aparlay\Core\Models\User;
+use Aparlay\Core\Api\V1\Models\Follow;
+use Aparlay\Core\Api\V1\Models\User;
 use MongoDB\BSON\ObjectId;
 
 class FollowRepository implements RepositoryInterface

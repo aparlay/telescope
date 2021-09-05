@@ -1,9 +1,9 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
-use Aparlay\Core\Models\Media;
+use Aparlay\Core\Api\V1\Models\Media;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 

@@ -3,17 +3,15 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Api\V1\Http\Kernel;
+use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\WsCommand;
-use Aparlay\Core\Pagination\CoreCursorPaginator;
-use Aparlay\Core\Providers\EventServiceProvider;
 use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use Jenssegers\Mongodb\Eloquent\Builder;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -31,8 +29,9 @@ class CoreServiceProvider extends ServiceProvider
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
+        $this->app->register(EventServiceProvider::class);
 
-        $this->mergeConfigFrom(__DIR__.'/../config/core.php', 'core');
+        $this->mergeConfig();
     }
 
     /**
@@ -73,6 +72,8 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'core');
+        $this->publishConfig();
+        $this->publishMigrations();
     }
 
     /**
@@ -85,5 +86,33 @@ class CoreServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
+    }
+
+    private function mergeConfig()
+    {
+        $path = $this->getConfigPath();
+        $this->mergeConfigFrom($path, 'core');
+    }
+
+    private function publishConfig()
+    {
+        $path = $this->getConfigPath();
+        $this->publishes([$path => config_path('core.php')], 'config');
+    }
+
+    private function publishMigrations()
+    {
+        $path = $this->getMigrationsPath();
+        $this->publishes([$path => database_path('migrations')], 'migrations');
+    }
+
+    private function getConfigPath()
+    {
+        return __DIR__.'/../config/core.php';
+    }
+
+    private function getMigrationsPath()
+    {
+        return __DIR__.'/../database/migrations';
     }
 }

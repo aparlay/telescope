@@ -2,13 +2,10 @@
 
 namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Events\ModelSaving;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaLike;
-use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\User;
-use Aparlay\Core\Services\MediaService;
+use Aparlay\Core\Api\V1\Services\MediaService;
 use Exception;
 use MongoDB\BSON\ObjectId;
 
@@ -69,14 +66,12 @@ class MediaObserver
      */
     public function saving(Media $media)
     {
-        ModelSaving::dispatch($media);
-
         $media->hashtags = MediaService::extractHashtags($media->description);
 
         $extractedPeople = MediaService::extractPeople($media->description);
         if (! empty($extractedPeople)) {
             $users = [];
-            $usersQuery = User::select([
+            $usersQuery = \Aparlay\Core\Models\User::select([
                 'username', 'avatar', '_id',
             ])->usernames($extractedPeople)->limit(20)->get();
             if (! $usersQuery->isEmpty()) {
@@ -105,26 +100,28 @@ class MediaObserver
      * @return void
      * @throws Exception
      */
-    public function updated(Media $media)
+    public function saved(Media $media)
     {
-        $creatorUser = $media->userObj;
+        if ($media->wasRecentlyCreated === false) {
+            $creatorUser = $media->userObj;
 
-        if ($media->status === Media::STATUS_USER_DELETED && $media->isDirty('status')) {
-            $creatorUser->media_count--;
+            if ($media->status === Media::STATUS_USER_DELETED && $media->isDirty('status')) {
+                $creatorUser->media_count--;
 
-            $file = config('app.cdn.videos').$media->file;
-            $cover = config('app.cdn.covers').$media->filename.'.jpg';
-            $creatorUser->removeFromSet(
-                'medias',
-                ['_id' => $media->_id, 'file' => $file, 'cover' => $cover, 'status' => $media->status]
-            );
-            $creatorUser->count_fields_updated_at = array_merge(
-                $creatorUser->count_fields_updated_at,
-                ['medias' => DT::utcNow()]
-            );
-            $creatorUser->save();
+                $file = config('app.cdn.videos').$media->file;
+                $cover = config('app.cdn.covers').$media->filename.'.jpg';
+                $creatorUser->removeFromSet(
+                    'medias',
+                    ['_id' => $media->_id, 'file' => $file, 'cover' => $cover, 'status' => $media->status]
+                );
+                $creatorUser->count_fields_updated_at = array_merge(
+                    $creatorUser->count_fields_updated_at,
+                    ['medias' => DT::utcNow()]
+                );
+                $creatorUser->save();
 
-            dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
+                dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
+            }
         }
     }
 

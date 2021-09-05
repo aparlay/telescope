@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
-class Otp extends Model
+class Otp extends BaseModel
 {
     use HasFactory;
     use Notifiable;
