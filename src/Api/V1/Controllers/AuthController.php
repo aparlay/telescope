@@ -249,7 +249,7 @@ class AuthController extends Controller
     {
         $user = User::create($request->all());
         $deviceId = $request->headers->get('X-DEVICE-ID');
-        
+
         /* Find the identityField (Email/PhoneNumber/Username) based on username */
         if ($this->userService->isUnverified($user)) {
             $this->otpService->sendOtp($user, $deviceId);

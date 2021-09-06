@@ -67,10 +67,11 @@ class ReportRepository implements RepositoryInterface
         $this->model->user_id = new ObjectId($user->_id);
         $this->model->save();
         $this->model->notify(new ReportSent());
+
         return $this->model;
     }
 
-     /**
+    /**
      * Responsible to create report for given media.
      *
      * @param Media $media
@@ -85,6 +86,7 @@ class ReportRepository implements RepositoryInterface
         $this->model->media_id = new ObjectId($media->_id);
         $this->model->save();
         $this->model->notify(new ReportSent());
+
         return $this->model;
     }
 }

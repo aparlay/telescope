@@ -98,6 +98,7 @@ class UserService
     public function isVerified(User | Authenticatable $user): bool
     {
         $this->userRepository = new UserRepository($user);
+
         return $this->userRepository->isVerified();
     }
 
@@ -121,6 +122,7 @@ class UserService
     public function isUnverified(User | Authenticatable $user): bool
     {
         $this->userRepository = new UserRepository($user);
+
         return $this->userRepository->isUnverified();
     }
 
@@ -143,6 +145,7 @@ class UserService
     public function isUserEligible(User | Authenticatable $user): bool
     {
         $this->userRepository = new UserRepository($user);
+
         return $this->userRepository->isUserEligible();
     }
 
@@ -155,6 +158,7 @@ class UserService
     public function deleteAccount(User | Authenticatable $user)
     {
         $this->userRepository = new UserRepository($user);
+
         return $this->userRepository->deleteAccount();
     }
 }
