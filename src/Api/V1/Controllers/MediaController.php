@@ -28,8 +28,8 @@ class MediaController extends Controller
     public function index(): Response
     {
         $type = request()?->input('type') ?? '';
-
-        return $this->response(new MediaCollection(MediaService::getByType($type)), '', Response::HTTP_OK);
+        
+        return $this->response(new MediaCollection($this->mediaService->getByType($type)), '', Response::HTTP_OK);
     }
 
     /**
@@ -37,7 +37,7 @@ class MediaController extends Controller
      */
     public function listByUser(User $user): Response
     {
-        return $this->response(new MediaCollection(MediaService::getByUser($user)), '', Response::HTTP_OK);
+        return $this->response(new MediaCollection($this->mediaService->getByUser($user)), '', Response::HTTP_OK);
     }
 
     /**
@@ -82,7 +82,7 @@ class MediaController extends Controller
      */
     public function destroy(Media $media): Response
     {
-        MediaService::delete($media);
+        $this->mediaService->delete($media);
 
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }

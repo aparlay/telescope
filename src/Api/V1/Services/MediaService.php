@@ -84,7 +84,7 @@ class MediaService
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public static function delete(Media $media): void
+    public function delete(Media $media): void
     {
         $model = Media::media($media->_id)->firstOrFail();
 
@@ -98,7 +98,7 @@ class MediaService
      * @return LengthAwarePaginator
      * @throws InvalidArgumentException|Exception
      */
-    public static function getByType(string $type)
+    public function getByType(string $type)
     {
         $query = Media::query();
         if (! auth()->guest() && $type === 'following') {
@@ -146,7 +146,7 @@ class MediaService
      * @return LengthAwarePaginator
      * @throws InvalidArgumentException
      */
-    public static function getByUser(User $user)
+    public function getByUser(User $user)
     {
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();

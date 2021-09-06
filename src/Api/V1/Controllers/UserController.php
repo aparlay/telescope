@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
-use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Api\V1\Repositories\UserRepository;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
@@ -17,6 +15,12 @@ use Illuminate\Validation\ValidationException;
 class UserController extends Controller
 {
     public $token = true;
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -53,8 +57,7 @@ class UserController extends Controller
 
         $user = auth()->user();
 
-        $userRepository = new UserRepository($user);
-        if ($userRepository->deleteAccount()) {
+        if ($this->userService->deleteAccount($user)) {
             $cookie1 = Cookie::forget('__Secure_token');
             $cookie2 = Cookie::forget('__Secure_refresh_token');
             $cookie3 = Cookie::forget('__Secure_username');
@@ -84,7 +87,7 @@ class UserController extends Controller
 
         /* Update User Avatar */
         if ($request->hasFile('avatar')) {
-            UserService::uploadAvatar($request, $user);
+            $this->userService->uploadAvatar($request, $user);
         } else {
             /* Update User Profile Information */
             $user->fill($request->all());
@@ -103,9 +106,7 @@ class UserController extends Controller
 
     public function show(User $user): Response
     {
-        $userRepository = new UserRepository($user);
-
-        if ($userRepository->isUserEligible()) {
+        if ($this->userService->isUserEligible($user)) {
             return $this->response(new UserResource($user));
         }
 
