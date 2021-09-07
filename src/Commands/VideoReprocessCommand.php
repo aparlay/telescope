@@ -21,13 +21,13 @@ class VideoReprocessCommand extends Command
         foreach ($mediaQuery->get() as $media) {
             ReprocessMedia::dispatch([
                 'file' => $media->file,
-                'media_id' => $media->_id
+                'media_id' => $media->_id,
             ])->onQueue('lowpriority');
 
             $media->status = Media::STATUS_QUEUED;
             $media->save(false, ['status']);
 
-            $this->line('<fg=yellow;options=bold>' . 'Video ' . $media->_id . ' need to send for reprocessing.' . PHP_EOL . '</>');
+            $this->line('<fg=yellow;options=bold>'.'Video '.$media->_id.' need to send for reprocessing.'.PHP_EOL.'</>');
         }
     }
 }

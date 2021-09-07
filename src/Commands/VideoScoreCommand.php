@@ -15,18 +15,17 @@ class VideoScoreCommand extends Command
     public function handle()
     {
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower();
-        
-        foreach ($mediaQuery->get() as $media) {
 
+        foreach ($mediaQuery->get() as $media) {
             $mediaModal = new Media();
-            $this->line('<fg=blue;options=bold>' . '--------------------------------' . PHP_EOL . '</>');
+            $this->line('<fg=blue;options=bold>'.'--------------------------------'.PHP_EOL.'</>');
             $media->sort_score = $mediaModal->getAwesomenessScoreAttribute() + ($mediaModal->getTimeScoreAttribute() / 2) + ($mediaModal->getLikeScoreAttribute() / 3) + ($mediaModal->visit_score / 3);
-            $this->line('<fg=yellow;options=bold>' . '  - awesomeness_score set to ' . $media->awesomeness_score . PHP_EOL . '</>');
-            $this->line('<fg=yellow;options=bold>' . '  - time_score set to ' . $media->time_score . PHP_EOL . '</>');
-            $this->line('<fg=yellow;options=bold>' . '  - like_score set to ' . $media->like_score . PHP_EOL . '</>');
-            $this->line('<fg=yellow;options=bold>' . '  - visit_score set to ' . $media->visit_score . PHP_EOL . '</>');
-            $this->line('<fg=yellow;options=bold>' . '  - total set to ' . $media->sort_score . PHP_EOL . '</>');
-            $this->line('<fg=yellow;options=bold>' . '  - link https://app.waptap.dev/share/' . $media->_id . PHP_EOL . '</>');
+            $this->line('<fg=yellow;options=bold>'.'  - awesomeness_score set to '.$media->awesomeness_score.PHP_EOL.'</>');
+            $this->line('<fg=yellow;options=bold>'.'  - time_score set to '.$media->time_score.PHP_EOL.'</>');
+            $this->line('<fg=yellow;options=bold>'.'  - like_score set to '.$media->like_score.PHP_EOL.'</>');
+            $this->line('<fg=yellow;options=bold>'.'  - visit_score set to '.$media->visit_score.PHP_EOL.'</>');
+            $this->line('<fg=yellow;options=bold>'.'  - total set to '.$media->sort_score.PHP_EOL.'</>');
+            $this->line('<fg=yellow;options=bold>'.'  - link https://app.waptap.dev/share/'.$media->_id.PHP_EOL.'</>');
             $media->save();
         }
 
@@ -39,7 +38,7 @@ class VideoScoreCommand extends Command
                 $media->time_score,
                 $media->like_score,
                 $media->visit_score,
-                'https://app.waptap.dev/share/' . $media->_id
+                'https://app.waptap.dev/share/'.$media->_id,
             ];
             $media->save();
         }
