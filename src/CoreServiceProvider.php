@@ -3,18 +3,18 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Api\V1\Http\Kernel;
-use Aparlay\Core\Commands\AnalyticsCommand;
+use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
+use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
+use Aparlay\Core\Commands\AnalyticsDailyCommand;
+use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\WsCommand;
-use Aparlay\Core\Pagination\CoreCursorPaginator;
-use Aparlay\Core\Providers\EventServiceProvider;
 use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use Jenssegers\Mongodb\Eloquent\Builder;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -31,16 +31,18 @@ class CoreServiceProvider extends ServiceProvider
             $this->app->register(IdeHelperServiceProvider::class);
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
-            $this->app->register(EventServiceProvider::class);
         }
+        $this->app->register(AuthServiceProvider::class);
+        $this->app->register(EventServiceProvider::class);
 
-        $this->mergeConfigFrom(__DIR__.'/../config/core.php', 'core');
+        $this->mergeConfig();
     }
 
     /**
      * Bootstrap services.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function boot()
     {
@@ -56,7 +58,8 @@ class CoreServiceProvider extends ServiceProvider
             $this->commands([
                 CoreCommand::class,
                 WsCommand::class,
-                AnalyticsCommand::class,
+                AnalyticsTwoMonthCommand::class,
+                AnalyticsDailyCommand::class,
             ]);
         }
 
@@ -75,45 +78,8 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'core');
-
-        Builder::macro('cursorPaginate', function ($limit, $columns) {
-            $cursor = CoreCursorPaginator::currentCursor();
-
-            if ($cursor) {
-                $apply = function ($query, $columns, $cursor) use (&$apply) {
-                    $query->where(function ($query) use ($columns, $cursor, $apply) {
-                        $column = key($columns);
-                        $direction = array_shift($columns);
-                        $value = array_shift($cursor);
-
-                        $query->where($column, $direction === 'asc' ? '>' : '<', $value);
-
-                        if (! empty($columns)) {
-                            $query->orWhere($column, $value);
-                            $apply($query, $columns, $cursor);
-                        }
-                    });
-                };
-
-                $apply($this, $columns, $cursor);
-            }
-
-            foreach ($columns as $column => $direction) {
-                $this->orderBy($column, $direction);
-            }
-
-            $items = $this->limit($limit + 1)->get();
-
-            if ($items->count() <= $limit) {
-                return new CoreCursorPaginator($items);
-            }
-
-            $items->pop();
-
-            return new CoreCursorPaginator($items, array_map(function ($column) use ($items) {
-                return $items->last()->{$column};
-            }, array_keys($columns)));
-        });
+        $this->publishConfig();
+        $this->publishMigrations();
     }
 
     /**
@@ -126,5 +92,33 @@ class CoreServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
+    }
+
+    private function mergeConfig()
+    {
+        $path = $this->getConfigPath();
+        $this->mergeConfigFrom($path, 'core');
+    }
+
+    private function publishConfig()
+    {
+        $path = $this->getConfigPath();
+        $this->publishes([$path => config_path('core.php')], 'config');
+    }
+
+    private function publishMigrations()
+    {
+        $path = $this->getMigrationsPath();
+        $this->publishes([$path => database_path('migrations')], 'migrations');
+    }
+
+    private function getConfigPath()
+    {
+        return __DIR__.'/../config/core.php';
+    }
+
+    private function getMigrationsPath()
+    {
+        return __DIR__.'/../database/migrations';
     }
 }

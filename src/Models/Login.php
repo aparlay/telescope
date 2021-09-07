@@ -7,7 +7,7 @@ namespace Aparlay\Core\Models;
  *
  * @OA\Schema()
  */
-class Login extends Model
+class Login extends BaseModel
 {
     public const IDENTITY_EMAIL = 'email';
     public const IDENTITY_PHONE_NUMBER = 'phone_number';

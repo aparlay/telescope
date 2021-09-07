@@ -4,7 +4,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Resources\FollowResource;
-use Aparlay\Core\Services\FollowService;
+use Aparlay\Core\Api\V1\Services\FollowService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 

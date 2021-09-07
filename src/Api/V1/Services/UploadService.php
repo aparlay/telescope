@@ -1,6 +1,6 @@
 <?php
 
-namespace Aparlay\Core\Services;
+namespace Aparlay\Core\Api\V1\Services;
 
 use Flow\Config;
 use Flow\File;

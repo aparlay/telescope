@@ -1,12 +1,12 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use MongoDB\BSON\ObjectId;
 
-class MediaLikeRepository
+class MediaLikeRepository implements RepositoryInterface
 {
     protected MediaLike $model;
 

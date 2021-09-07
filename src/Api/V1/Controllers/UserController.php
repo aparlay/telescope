@@ -4,11 +4,11 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Repositories\UserRepository;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
-use Aparlay\Core\Repositories\UserRepository;
-use Aparlay\Core\Services\UserService;
+use Aparlay\Core\Api\V1\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;

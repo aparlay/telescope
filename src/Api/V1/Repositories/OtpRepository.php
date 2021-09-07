@@ -1,6 +1,6 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Otp;
 use Aparlay\Core\Helpers\DT;
@@ -10,8 +10,9 @@ class OtpRepository
 {
     /**
      * Responsible to create OTP.
-     * @param array $otp
+     * @param  array  $otp
      * @return Otp
+     * @throws \Exception
      */
     public static function create(array $otp)
     {
@@ -34,8 +35,9 @@ class OtpRepository
 
     /**
      * Expire the previous OTPs.
-     * @param object $otps
+     * @param  object  $otps
      * @return bool|void
+     * @throws \Exception
      */
     public static function expire(object $otps)
     {
@@ -50,5 +52,29 @@ class OtpRepository
                 }
             }
         }
+    }
+
+    public function __construct($model)
+    {
+    }
+
+    public function all()
+    {
+        // TODO: Implement all() method.
+    }
+
+    public function update(array $data, $id)
+    {
+        // TODO: Implement update() method.
+    }
+
+    public function delete($id)
+    {
+        // TODO: Implement delete() method.
+    }
+
+    public function find($id)
+    {
+        // TODO: Implement find() method.
     }
 }

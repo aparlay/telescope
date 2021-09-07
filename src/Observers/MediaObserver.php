@@ -2,12 +2,10 @@
 
 namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Events\ModelSaving;
+use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaLike;
-use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Media;
-use Aparlay\Core\Services\MediaService;
 use Exception;
 use MongoDB\BSON\ObjectId;
 
@@ -21,8 +19,43 @@ class MediaObserver
      */
     public function created(Media $media)
     {
-        dispatch((new UploadMedia((string) $media->userObj->_id, (string) $media->_id, $media->file))
-            ->onQueue('loq'));
+        $creatorUser = $media->userObj;
+
+        if ($media->isDirty('status')) {
+            $creatorUserMedias = $creatorUser->medias;
+            if (! empty($creatorUserMedias)) {
+                foreach ($creatorUserMedias as $creatorUserMedia) {
+                    if ((string) $creatorUserMedia['_id'] === (string) $media->_id) {
+                        $creatorUser->removeFromSet('medias', $creatorUserMedia);
+                    }
+                }
+            }
+
+            $creatorUser->media_count = Media::creator($media->created_by)->count();
+            $medias = [];
+            $completedMedias = Media::creator($media->created_by)->completed()->recentFirst()->limit(30)->get();
+            if (! $completedMedias->isEmpty()) {
+                foreach ($completedMedias as $completedMedia) {
+                    $basename = basename(
+                        $completedMedia['file'],
+                        '.'.pathinfo($completedMedia['file'], PATHINFO_EXTENSION)
+                    );
+                    $file = config('app.cdn.videos').$completedMedia['file'];
+                    $cover = config('app.cdn.covers').$basename.'.jpg';
+                    $medias[] = [
+                        '_id' => new ObjectId($completedMedia['_id']), 'file' => $file, 'cover' => $cover,
+                        'status' => $completedMedia['status'],
+                    ];
+                }
+            }
+            $creatorUser->medias = $medias;
+            $creatorUser->count_fields_updated_at = array_merge(
+                $creatorUser->count_fields_updated_at,
+                ['medias' => DT::utcNow()]
+            );
+            $creatorUser->save();
+        }
+        //dispatch((new UploadMedia((string) $media->userObj->_id, (string) $media->_id, $media->file))->onQueue('low'));
     }
 
     /**
@@ -33,8 +66,6 @@ class MediaObserver
      */
     public function saving(Media $media)
     {
-        ModelSaving::dispatch($media);
-
         $media->hashtags = MediaService::extractHashtags($media->description);
 
         $extractedPeople = MediaService::extractPeople($media->description);
@@ -72,63 +103,26 @@ class MediaObserver
      */
     public function saved(Media $media)
     {
-        $creatorUser = $media->userObj;
+        if ($media->wasRecentlyCreated === false) {
+            $creatorUser = $media->userObj;
 
-        if ($media->wasRecentlyCreated || $media->wasChanged('status')) {
-            $creatorUserMedias = $creatorUser->medias;
-            if (! empty($creatorUserMedias)) {
-                foreach ($creatorUserMedias as $creatorUserMedia) {
-                    if ((string) $creatorUserMedia['_id'] === (string) $media->_id) {
-                        $creatorUser->removeFromSet('medias', $creatorUserMedia);
-                    }
-                }
+            if ($media->status === Media::STATUS_USER_DELETED && $media->isDirty('status')) {
+                $creatorUser->media_count--;
+
+                $file = config('app.cdn.videos').$media->file;
+                $cover = config('app.cdn.covers').$media->filename.'.jpg';
+                $creatorUser->removeFromSet(
+                    'medias',
+                    ['_id' => $media->_id, 'file' => $file, 'cover' => $cover, 'status' => $media->status]
+                );
+                $creatorUser->count_fields_updated_at = array_merge(
+                    $creatorUser->count_fields_updated_at,
+                    ['medias' => DT::utcNow()]
+                );
+                $creatorUser->save();
+
+                dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
             }
-
-            $creatorUser->media_count = Media::creator($media->created_by)->count();
-            $medias = [];
-            $completedMedias = Media::creator($media->created_by)->completed()->recentFirst()->limit(30)->get();
-            if (! $completedMedias->isEmpty()) {
-                foreach ($completedMedias as $completedMedia) {
-                    $basename = basename(
-                        $completedMedia['file'],
-                        '.'.pathinfo($completedMedia['file'], PATHINFO_EXTENSION)
-                    );
-                    $file = config('app.cdn.videos').$completedMedia['file'];
-                    $cover = config('app.cdn.covers').$basename.'.jpg';
-                    $medias[] = [
-                        '_id' => new ObjectId($completedMedia['_id']), 'file' => $file, 'cover' => $cover,
-                        'status' => $completedMedia['status'],
-                    ];
-                }
-            }
-            $creatorUser->medias = $medias;
-            $creatorUser->count_fields_updated_at = array_merge(
-                $creatorUser->count_fields_updated_at,
-                ['medias' => DT::utcNow()]
-            );
-            $creatorUser->save();
-        }
-
-        if ($media->status === Media::STATUS_USER_DELETED && $media->isDirty('status')) {
-            $creatorUser->media_count--;
-
-            $file = config('app.cdn.videos').$media->file;
-            $cover = config('app.cdn.covers').$media->filename.'.jpg';
-            $creatorUser->removeFromSet(
-                'medias',
-                ['_id' => $media->_id, 'file' => $file, 'cover' => $cover, 'status' => $media->status]
-            );
-            $creatorUser->count_fields_updated_at = array_merge(
-                $creatorUser->count_fields_updated_at,
-                ['medias' => DT::utcNow()]
-            );
-            $creatorUser->save();
-
-            dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
-        }
-
-        if ($media->status === Media::STATUS_ADMIN_DELETED & $media->isDirty('status')) {
-            dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
         }
     }
 

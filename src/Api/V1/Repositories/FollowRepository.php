@@ -1,19 +1,19 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
-use Aparlay\Core\Api\V1\Models\Block;
+use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
 use MongoDB\BSON\ObjectId;
 
-class BlockRepository
+class FollowRepository implements RepositoryInterface
 {
-    protected Block $model;
+    protected Follow $model;
 
     public function __construct($model)
     {
-        if (! ($model instanceof Block)) {
-            throw new \InvalidArgumentException('$model should be of User type');
+        if (! ($model instanceof Follow)) {
+            throw new \InvalidArgumentException('$model should be of Follow type');
         }
 
         $this->model = $model;
@@ -25,16 +25,16 @@ class BlockRepository
     }
 
     /**
-     * Create block.
+     * Create Follow.
      *
      * @param array $data
-     * @return Block
+     * @return Follow
      */
     public function create(array $data)
     {
         $creator = auth()->user();
 
-        $modal = new Block(
+        $modal = new Follow(
             array_merge($data, ['creator' => ['_id' => new ObjectId($creator->_id)]])
         );
         $modal->save();
@@ -58,15 +58,15 @@ class BlockRepository
     }
 
     /**
-     * Check if already blocked by the given user.
+     * Check if already followed by the given user.
      *
      * @param User $user
-     * @return Block|void
+     * @return Follow|void
      */
-    public function isBlocked(User $user)
+    public function isFollowed(User $user)
     {
         $creator = auth()->user();
 
-        return Block::user($user->_id)->creator($creator->_id)->first();
+        return Follow::user($user->_id)->creator($creator->_id)->first();
     }
 }

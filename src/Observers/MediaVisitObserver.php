@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Events\ModelSaving;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaVisit;
+use Aparlay\Core\Observers\BaseModelObserver;
 use Exception;
 
 class MediaVisitObserver
@@ -17,7 +17,7 @@ class MediaVisitObserver
      */
     public function saving(MediaVisit $mediaVisit)
     {
-        ModelSaving::dispatch($mediaVisit);
+        BaseModelObserver::dispatch($mediaVisit);
         $mediaVisit->push('media_ids', $mediaVisit->media_id, true);
     }
 

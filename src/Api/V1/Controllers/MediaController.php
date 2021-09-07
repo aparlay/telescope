@@ -7,19 +7,18 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
-use Aparlay\Core\Repositories\MediaRepository;
-use Aparlay\Core\Services\MediaService;
-use Aparlay\Core\Services\UploadService;
+use Aparlay\Core\Api\V1\Services\MediaService;
+use Aparlay\Core\Api\V1\Services\UploadService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class MediaController extends Controller
 {
-    public $repository;
+    protected $mediaService;
 
-    public function __construct(MediaRepository $repository)
+    public function __construct(MediaService $mediaService)
     {
-        $this->repository = $repository;
+        $this->mediaService = $mediaService;
         $this->authorizeResource(Media::class, 'media');
     }
 
@@ -49,9 +48,11 @@ class MediaController extends Controller
      */
     public function store(MediaRequest $request): Response
     {
-        $media = $this->repository->store($request);
-
-        return $this->response(new MediaResource($media), '', Response::HTTP_CREATED);
+        return $this->response(
+            new MediaResource($this->mediaService->create($request)),
+            '',
+            Response::HTTP_CREATED
+        );
     }
 
     public function upload(): Response

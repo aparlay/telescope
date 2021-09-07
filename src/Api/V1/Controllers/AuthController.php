@@ -3,16 +3,16 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Repositories\UserRepository;
 use Aparlay\Core\Api\V1\Requests\ChangePasswordRequest;
 use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Requests\RequestOtpRequest;
 use Aparlay\Core\Api\V1\Requests\ValidateOtpRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
+use Aparlay\Core\Api\V1\Services\OtpService;
+use Aparlay\Core\Api\V1\Services\UserService;
 use Aparlay\Core\Models\Login;
-use Aparlay\Core\Repositories\UserRepository;
-use Aparlay\Core\Services\OtpService;
-use Aparlay\Core\Services\UserService;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;

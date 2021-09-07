@@ -2,12 +2,15 @@
 
 namespace Aparlay\Core\Providers;
 
+use Aparlay\Core\Models\BaseModel;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\MediaVisit;
-use Aparlay\Core\Models\Model;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Observers\BaseModelObserver;
 use Aparlay\Core\Observers\BlockObserver;
+use Aparlay\Core\Observers\MediaLikeObserver;
 use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\MediaVisitObserver;
 use Aparlay\Core\Observers\UserObserver;
@@ -22,7 +25,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Model::class => [
+        BaseModel::class => [
             SendEmailVerificationNotification::class,
         ],
     ];
@@ -34,9 +37,12 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        BaseModel::observe(BaseModelObserver::class);
         Block::observe(BlockObserver::class);
+        MediaLike::observe(MediaLikeObserver::class);
         Media::observe(MediaObserver::class);
         MediaVisit::observe(MediaVisitObserver::class);
         User::observe(UserObserver::class);
+        parent::boot();
     }
 }
