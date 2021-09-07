@@ -305,7 +305,7 @@ class Media extends BaseModel
     public function getTimeScoreAttribute(): int
     {
         $oldness = time() - DT::utcToTimestamp(strtotime($this->created_at));
-        
+
         return match (true) {
             $oldness <= 21600 => 10,
             $oldness <= 43200 => 9,
@@ -367,7 +367,6 @@ class Media extends BaseModel
         };
     }
 
-
     /**
      * Get the media visit score.
      */
@@ -380,8 +379,10 @@ class Media extends BaseModel
 
         if ($ratio && $totalLengthWatched && $totalLength) {
             $avgRatio = $totalLengthWatched / $totalLength;
+
             return $ratio > 0 ? (10 * ($ratio / ($ratio + $avgRatio))) : 0;
         }
+
         return 0;
     }
 
