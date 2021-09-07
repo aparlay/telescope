@@ -2,13 +2,13 @@
 
 namespace Aparlay\Core\Commands;
 
-use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaLike;
-use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Analytic;
 use Aparlay\Core\Models\Email;
+use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaLike;
+use Aparlay\Core\Models\MediaVisit;
 use Illuminate\Console\Command;
 use Illuminate\Http\Response;
 
@@ -21,7 +21,7 @@ class AnalyticsTwoMonthCommand extends Command
     public function handle()
     {
         for ($i = -90; $i <= 0; $i++) {
-            $timestamp = strtotime($i . ' days midnight');
+            $timestamp = strtotime($i.' days midnight');
             $startUtc = DT::timestampToUtc($timestamp);
             $endUtc = DT::timestampToUtc($timestamp + 86400);
             $availableMedia = Media::date(null, $endUtc)->count();
@@ -62,14 +62,14 @@ class AnalyticsTwoMonthCommand extends Command
                     'opened'        => Email::date($startUtc, $endUtc)->opened()->count(),
                 ],
             ];
-            
+
             if (($model = Analytic::Where(['date' => $analytics['date']])->first()) === null) {
                 $model = new Analytic();
             }
             $model->attributes = $analytics;
             $model->save();
 
-            $this->line('<fg=yellow;options=bold>' . $date . ' analytics stored.' . PHP_EOL . '</>');
+            $this->line('<fg=yellow;options=bold>'.$date.' analytics stored.'.PHP_EOL.'</>');
         }
         $this->info(Response::HTTP_OK);
     }
