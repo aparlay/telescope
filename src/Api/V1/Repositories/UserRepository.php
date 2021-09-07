@@ -121,7 +121,7 @@ class UserRepository implements RepositoryInterface
      * @param string $email
      * @return User|null
      */
-    public static function findByEmail(string $email): ?User
+    public function findByEmail(string $email): ?User
     {
         return User::email($email)->first();
     }
@@ -132,7 +132,7 @@ class UserRepository implements RepositoryInterface
      * @param string $phoneNumber
      * @return User|null
      */
-    public static function findByPhoneNumber(string $phoneNumber): ?User
+    public function findByPhoneNumber(string $phoneNumber): ?User
     {
         return User::phoneNumber($phoneNumber)->first();
     }
@@ -143,13 +143,13 @@ class UserRepository implements RepositoryInterface
      * @param string $userName
      * @return User|null
      */
-    public static function findByUsername(string $userName): ?User
+    public function findByUsername(string $userName): ?User
     {
         return User::username($userName)->first();
     }
 
     /**
-     * Responsible for match old password.
+     * Responsible for change old password.
      *
      * @param string $password
      * @return bool
@@ -161,6 +161,11 @@ class UserRepository implements RepositoryInterface
         return $this->model->save();
     }
 
+    /**
+     * Responsible for delete user account.
+     *
+     * @return bool
+     */
     public function deleteAccount()
     {
         $randString = random_int(1, 100);
