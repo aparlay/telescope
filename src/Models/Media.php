@@ -304,8 +304,8 @@ class Media extends BaseModel
      */
     public function getTimeScoreAttribute(): int
     {
-        $oldness = time() - DT::utcToTimestamp($this->created_at);
-
+        $oldness = time() - DT::utcToTimestamp(strtotime($this->created_at));
+        
         return match (true) {
             $oldness <= 21600 => 10,
             $oldness <= 43200 => 9,
@@ -328,7 +328,7 @@ class Media extends BaseModel
      */
     public function getLikeScoreAttribute(): int
     {
-        $timestamp = DT::utcToTimestamp($this->created_at);
+        $timestamp = DT::utcToTimestamp(strtotime($this->created_at));
         $windowDuration = 86400 * 10;
         $startUtc = DT::timestampToUtc($timestamp - $windowDuration);
         $endUtc = DT::timestampToUtc($timestamp + $windowDuration);
@@ -365,6 +365,24 @@ class Media extends BaseModel
             $z >= -2.5 && $z <= -2 => 1,
             default => 0,
         };
+    }
+
+
+    /**
+     * Get the media visit score.
+     */
+    public function getVisitScoreAttribute(): int
+    {
+        $totalLengthWatched = self::availableForFollower()->sum('length_watched');
+        $totalLength = self::availableForFollower()->sum('length');
+
+        $ratio = $this->length > 0 ? $this->length_watched / $this->length : 0;
+
+        if ($ratio && $totalLengthWatched && $totalLength) {
+            $avgRatio = $totalLengthWatched / $totalLength;
+            return $ratio > 0 ? (10 * ($ratio / ($ratio + $avgRatio))) : 0;
+        }
+        return 0;
     }
 
     /**

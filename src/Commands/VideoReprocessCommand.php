@@ -19,13 +19,10 @@ class VideoReprocessCommand extends Command
             ->date(null, DT::utcDateTime(['m' => -3]))
             ->status(Media::STATUS_UPLOADED);
         foreach ($mediaQuery->get() as $media) {
-            ReprocessMedia::dispatch([
-                'file' => $media->file,
-                'media_id' => $media->_id
-            ])->onQueue('lowpriority');
+            ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('lowpriority');
 
             $media->status = Media::STATUS_QUEUED;
-            $media->save(false, ['status']);
+            $media->save();
 
             $this->line('<fg=yellow;options=bold>' . 'Video ' . $media->_id . ' need to send for reprocessing.' . PHP_EOL . '</>');
         }

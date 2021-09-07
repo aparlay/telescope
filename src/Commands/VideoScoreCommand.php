@@ -18,9 +18,10 @@ class VideoScoreCommand extends Command
         
         foreach ($mediaQuery->get() as $media) {
 
-            $mediaModal = new Media();
             $this->line('<fg=blue;options=bold>' . '--------------------------------' . PHP_EOL . '</>');
-            $media->sort_score = $mediaModal->getAwesomenessScoreAttribute() + ($mediaModal->getTimeScoreAttribute() / 2) + ($mediaModal->getLikeScoreAttribute() / 3) + ($mediaModal->visit_score / 3);
+            
+            $media->sort_score = $media->awesomeness_score + ($media->time_score / 2) + ($media->like_score / 3) + ($media->visit_score / 3);
+            
             $this->line('<fg=yellow;options=bold>' . '  - awesomeness_score set to ' . $media->awesomeness_score . PHP_EOL . '</>');
             $this->line('<fg=yellow;options=bold>' . '  - time_score set to ' . $media->time_score . PHP_EOL . '</>');
             $this->line('<fg=yellow;options=bold>' . '  - like_score set to ' . $media->like_score . PHP_EOL . '</>');
@@ -31,7 +32,7 @@ class VideoScoreCommand extends Command
         }
 
         $rows = [];
-        foreach ($mediaQuery->orderBy(['sort_score' => SORT_DESC])->get() as $media) {
+        foreach ($mediaQuery->orderBy('sort_score', 'DESC')->get() as $media) {
             $rows[] = [
                 $media->_id,
                 $media->sort_score,
