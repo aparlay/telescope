@@ -3,19 +3,23 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Api\V1\Notifications\ReportSent;
+use Aparlay\Core\Api\V1\Requests\ReportRequest;
 use Aparlay\Core\Api\V1\Resources\ReportResource;
-use Illuminate\Http\Request;
+use Aparlay\Core\Api\V1\Services\ReportService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Validator;
-use MongoDB\BSON\ObjectId;
 
 class ReportController extends Controller
 {
+    protected $reportService;
+
+    public function __construct(ReportService $reportService)
+    {
+        $this->reportService = $reportService;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -99,37 +103,15 @@ class ReportController extends Controller
      *     ),
      * )
      */
-    public function user(User $user, Request $request): Response
+    public function user(User $user, ReportRequest $request): Response
     {
         if (($loggedInUser = Auth::user()) && Gate::forUser($loggedInUser)->denies('interact', $user->_id)) {
             return $this->error('You cannot report this user at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'reason' => 'required|max:255',
-            ]
-        );
+        $report = $this->reportService->createUserReport($user, $request);
 
-        if ($validator->fails()) {
-            return $this->error(
-                __('The given data was invalid.'),
-                $validator->errors()->toArray(),
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
-        }
-
-        $model = new Report([
-            'reason' => $request->post('reason'),
-            'type' => Report::TYPE_USER,
-            'status' => Report::STATUS_REPORTED,
-            'user_id' => new ObjectId($user->_id),
-        ]);
-        $model->save();
-        $model->notify(new ReportSent());
-
-        return $this->response(new ReportResource($model), '', Response::HTTP_CREATED);
+        return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
     }
 
     /**
@@ -215,36 +197,14 @@ class ReportController extends Controller
      *     ),
      * )
      */
-    public function media(Media $media, Request $request): Response
+    public function media(Media $media, ReportRequest $request): Response
     {
         if (($loggedInUser = Auth::user()) && Gate::forUser($loggedInUser)->denies('interact', $media->created_by)) {
             return $this->error('You cannot report this video at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'reason' => 'required|max:255',
-            ]
-        );
+        $report = $this->reportService->createMediaReport($media, $request);
 
-        if ($validator->fails()) {
-            return $this->error(
-                __('The given data was invalid.'),
-                $validator->errors()->toArray(),
-                Response::HTTP_UNPROCESSABLE_ENTITY
-            );
-        }
-
-        $model = new Report([
-                                'reason' => $request->post('reason'),
-                                'type' => Report::TYPE_MEDIA,
-                                'status' => Report::STATUS_REPORTED,
-                                'media_id' => new ObjectId($media->_id),
-                            ]);
-        $model->save();
-        $model->notify(new ReportSent());
-
-        return $this->response(new ReportResource($model), '', Response::HTTP_CREATED);
+        return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
     }
 }

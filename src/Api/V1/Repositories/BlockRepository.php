@@ -33,13 +33,11 @@ class BlockRepository implements RepositoryInterface
     public function create(array $data)
     {
         $creator = auth()->user();
+        $this->model->user = $data['user'];
+        $this->model->creator = ['_id' => new ObjectId($creator->_id)];
+        $this->model->save();
 
-        $modal = new Block(
-            array_merge($data, ['creator' => ['_id' => new ObjectId($creator->_id)]])
-        );
-        $modal->save();
-
-        return $modal;
+        return $this->model;
     }
 
     public function update(array $data, $id)
