@@ -2,13 +2,13 @@
 
 namespace Aparlay\Core\Commands;
 
-use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaLike;
-use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Analytic;
 use Aparlay\Core\Models\Email;
+use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaLike;
+use Aparlay\Core\Models\MediaVisit;
 use Illuminate\Console\Command;
 use Illuminate\Http\Response;
 
@@ -16,7 +16,7 @@ class AnalyticsDailyCommand extends Command
 {
     public $signature = 'report:analyticsDaily';
 
-    public $description = 'Aparlay Ws Client';
+    public $description = 'Analytic report daily';
 
     public function handle()
     {
