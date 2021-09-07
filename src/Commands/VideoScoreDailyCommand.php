@@ -21,7 +21,7 @@ class VideoScoreDailyCommand extends Command
         foreach ($mediaQuery->get() as $media) {
             $media->sort_score = $media->awesomeness_score + ($media->time_score / 2) + ($media->like_score / 3) + ($media->visit_score / 3);
 
-            $this->line('<fg=yellow;options=bold>' . $media->_id . ' score set to ' . $media->sort_score . PHP_EOL . '</>');
+            $this->line('<fg=yellow;options=bold>'.$media->_id.' score set to '.$media->sort_score.PHP_EOL.'</>');
 
             $media->save();
         }

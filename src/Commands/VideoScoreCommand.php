@@ -15,8 +15,6 @@ class VideoScoreCommand extends Command
     public function handle()
     {
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower();
-        
-        foreach ($mediaQuery->get() as $media) {
 
             $this->line('<fg=blue;options=bold>' . '--------------------------------' . PHP_EOL . '</>');
             
@@ -40,7 +38,7 @@ class VideoScoreCommand extends Command
                 $media->time_score,
                 $media->like_score,
                 $media->visit_score,
-                'https://app.waptap.dev/share/' . $media->_id
+                'https://app.waptap.dev/share/'.$media->_id,
             ];
             $media->save();
         }
