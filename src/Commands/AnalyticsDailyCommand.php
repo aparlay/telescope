@@ -14,9 +14,9 @@ use Illuminate\Http\Response;
 
 class AnalyticsDailyCommand extends Command
 {
-    public $signature = 'report:analyticsDaily';
+    public $signature = 'report:daily_analytics';
 
-    public $description = 'Analytic report daily';
+    public $description = 'This command is responsible for creating Daily Analytics Report';
 
     public function handle()
     {

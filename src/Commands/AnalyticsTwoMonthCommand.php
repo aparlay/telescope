@@ -14,9 +14,9 @@ use Illuminate\Http\Response;
 
 class AnalyticsTwoMonthCommand extends Command
 {
-    public $signature = 'report:analyticsTwoMonth';
+    public $signature = 'report:two_month_analytics';
 
-    public $description = 'Analytic report two month';
+    public $description = 'This command is responsible for creating Two Month Analytics Report';
 
     public function handle()
     {
