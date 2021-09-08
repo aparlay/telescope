@@ -8,9 +8,9 @@ use Illuminate\Console\Command;
 
 class VideoUpdateInfoCommand extends Command
 {
-    public $signature = 'video:updateInfo';
+    public $signature = 'video:update_info';
 
-    public $description = 'Video Update Information';
+    public $description = 'This command is responsible for update video information.';
 
     public function handle()
     {

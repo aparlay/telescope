@@ -9,9 +9,9 @@ use Illuminate\Http\Response;
 
 class VideoScoreDailyCommand extends Command
 {
-    public $signature = 'video:scoreDaily';
+    public $signature = 'video:daily_score';
 
-    public $description = 'Video Score Daily';
+    public $description = 'This command is responsible for update video score daily';
 
     public function handle()
     {
