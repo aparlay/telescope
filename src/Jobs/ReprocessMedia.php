@@ -74,8 +74,8 @@ class ReprocessMedia implements ShouldQueue
 
                 return;
             }
-            
-            throw new Exception(__CLASS__ . PHP_EOL . 'Nighter video file nor media object found!');
+
+            throw new Exception(__CLASS__.PHP_EOL.'Nighter video file nor media object found!');
         } catch (FileOpenException $e) {
             return $e->getMessage();
         }
