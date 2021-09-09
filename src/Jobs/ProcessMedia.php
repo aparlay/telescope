@@ -40,7 +40,7 @@ class ProcessMedia implements ShouldQueue
     public function __construct(string $mediaId, string $file)
     {
         if (($this->media = Media::media($mediaId)->first()) === null) {
-            throw new Exception(__CLASS__ . PHP_EOL . 'Media not found with id ' . $mediaId);
+            throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$mediaId);
         }
 
         $this->file = $file;
@@ -61,21 +61,21 @@ class ProcessMedia implements ShouldQueue
         ]);
 
         if (($media = Media::find($this->media_id)) === null) {
-            throw new Exception(__CLASS__ . PHP_EOL . 'Media not found!');
+            throw new Exception(__CLASS__.PHP_EOL.'Media not found!');
         }
 
         $keepStatus = null;
         if ($media->is_completed) {
             $keepStatus = $media->status;
         }
-        
+
         // check quality
         $media->status = Media::STATUS_IN_PROGRESS;
         $optimizeReq = new OptimizeRequest();
-        $toRemoveFiles[] = $src = config('app.media.path') . $this->file;
+        $toRemoveFiles[] = $src = config('app.media.path').$this->file;
         $optimizeReq->setSrc($src);
         [$response, $status] = $client->Quality($optimizeReq)->wait();
-        
+
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
@@ -91,8 +91,8 @@ class ProcessMedia implements ShouldQueue
                 case 'low':
                     $media->addToSet('processing_log', '1. Quality checked: Low');
                     break;
-                default :
-                    $media->addToSet('processing_log', '1. Quality checked: UnKnown [' . $quality . ']');
+                default:
+                    $media->addToSet('processing_log', '1. Quality checked: UnKnown ['.$quality.']');
             }
             $media->save(); //false, ['status', 'length', 'processing_log']
         }
@@ -114,8 +114,8 @@ class ProcessMedia implements ShouldQueue
                 case 'OK':
                     $media->addToSet('processing_log', '2. Audio checked: OK');
                     break;
-                default :
-                    $media->addToSet('processing_log', '2. Audio checked: Low Volume (' . $volume . ')');
+                default:
+                    $media->addToSet('processing_log', '2. Audio checked: Low Volume ('.$volume.')');
             }
             $media->save(); //false, ['status', 'length', 'processing_log']
         }
@@ -125,20 +125,20 @@ class ProcessMedia implements ShouldQueue
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save(); //false, ['status', 'length', 'processing_log']
-            throw new Exception(__CLASS__ . PHP_EOL . 'Cannot check video duration');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
         }
-        
-        $media->length = (float)$response->GetSec();
-        $media->addToSet('processing_log', '3. Duration checked: ' . $media->length . ' Sec');
+
+        $media->length = (float) $response->GetSec();
+        $media->addToSet('processing_log', '3. Duration checked: '.$media->length.' Sec');
         if ($media->length > 60.0) {
-            $toRemoveFiles[] = $src = config('app.media.path') . '1-trimed-' . $this->file;
+            $toRemoveFiles[] = $src = config('app.media.path').'1-trimed-'.$this->file;
             $optimizeReq->setDes($src);
             [$response, $status] = $client->Trim($optimizeReq)->wait();
             if ($status->code !== 0) {
                 VarDumper::dump($status);
                 $media->status = Media::STATUS_FAILED;
                 $media->save(); //false, ['status', 'length', 'processing_log']
-                throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video trim');
+                throw new Exception(__CLASS__.PHP_EOL.'Cannot do video trim');
             }
             $media->length = 60.0;
             $media->addToSet('processing_log', '4. Video is trimmed to 60 Sec: Ok');
@@ -148,13 +148,13 @@ class ProcessMedia implements ShouldQueue
 
         // normalize audio
         if ($volume === 'OK') {
-            $toRemoveFiles[] = $src = config('app.media.path') . '2-normalized-' . $this->file;
+            $toRemoveFiles[] = $src = config('app.media.path').'2-normalized-'.$this->file;
             $optimizeReq->setDes($src);
             [$response, $status] = $client->NormalizeAudio($optimizeReq)->wait();
             if ($status->code !== 0) {
                 $media->status = Media::STATUS_FAILED;
                 $media->save(); //false, ['status', 'length', 'processing_log']
-                throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do audio normalization');
+                throw new Exception(__CLASS__.PHP_EOL.'Cannot do audio normalization');
             }
             $media->addToSet('processing_log', '5. Audio normalization: Ok');
             $media->save(); //false, ['status', 'length', 'processing_log']
@@ -162,16 +162,16 @@ class ProcessMedia implements ShouldQueue
 
         // watermark
         $optimizeReq->setSrc($src);
-        $mp4ConvertedFile = basename($this->file, '.' . pathinfo($this->file, PATHINFO_EXTENSION)) . '.mp4';
-        $toRemoveFiles[] = $src = config('app.media.path') . '3-watermarked-' . $mp4ConvertedFile;
+        $mp4ConvertedFile = basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION)).'.mp4';
+        $toRemoveFiles[] = $src = config('app.media.path').'3-watermarked-'.$mp4ConvertedFile;
         $optimizeReq->setDes($src);
-        $optimizeReq->setUsername('@' . $media->user->username);
+        $optimizeReq->setUsername('@'.$media->user->username);
         [$response, $status] = $client->Watermark($optimizeReq)->wait();
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save(); //false, ['status', 'length', 'processing_log']
-            throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video watermarking');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot do video watermarking');
         }
         $media->addToSet('processing_log', '6. Video Watermarking: Ok');
         $media->save(); //false, ['status', 'length', 'processing_log']
@@ -179,20 +179,20 @@ class ProcessMedia implements ShouldQueue
         // check quality
         $uploadReq = new UploadRequest();
         $uploadReq->setSrc($src);
-        $uploadReq->setDes('videos/' . $mp4ConvertedFile);
+        $uploadReq->setDes('videos/'.$mp4ConvertedFile);
         [$response, $status] = $client->UploadVideo($uploadReq)->wait();
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save(); //false, ['status', 'length', 'processing_log']
-            throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video upload');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot do video upload');
         }
 
-        $media->file = config('app.cdn,videos') . $mp4ConvertedFile;
+        $media->file = config('app.cdn,videos').$mp4ConvertedFile;
         $media->addToSet('processing_log', '7. Video Uploading: Ok');
         $media->save(); //false, ['status', 'file', 'length', 'processing_log']
 
-        $toRemoveFiles[] = $cover = config('app.media.path') . str_replace('.mp4', '.jpg', $mp4ConvertedFile);
+        $toRemoveFiles[] = $cover = config('app.media.path').str_replace('.mp4', '.jpg', $mp4ConvertedFile);
 
         $optimizeReq->setSrc($src);
         $optimizeReq->setDes($cover);
@@ -201,19 +201,19 @@ class ProcessMedia implements ShouldQueue
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save(); // false, ['status', 'length', 'processing_log']
-            throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video cover');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot do video cover');
         }
         $media->addToSet('processing_log', '8. Video Cover generating: Ok');
         $media->save(); // false, ['status', 'length', 'processing_log']
 
         $uploadReq->setSrc($cover);
-        $uploadReq->setDes('covers/' . str_replace('.mp4', '.jpg', $mp4ConvertedFile));
+        $uploadReq->setDes('covers/'.str_replace('.mp4', '.jpg', $mp4ConvertedFile));
         [$response, $status] = $client->UploadCover($uploadReq)->wait();
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save(); // false, ['status', 'length', 'processing_log']
-            throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do cover upload');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot do cover upload');
         }
         $media->addToSet('processing_log', '9. Video Cover uploading: Ok');
         $media->save(); // false, ['status', 'length', 'processing_log']
@@ -227,9 +227,9 @@ class ProcessMedia implements ShouldQueue
                 VarDumper::dump($status);
                 $media->status = Media::STATUS_FAILED;
                 $media->save(); // false, ['status', 'length', 'processing_log']
-                throw new Exception(__CLASS__ . PHP_EOL . 'Cannot remove ' . $toRemoveFile);
+                throw new Exception(__CLASS__.PHP_EOL.'Cannot remove '.$toRemoveFile);
             }
-            $media->addToSet('processing_log', ++$i . '. Remove files: ' . $toRemoveFile);
+            $media->addToSet('processing_log', ++$i.'. Remove files: '.$toRemoveFile);
         }
 
         $media->file = $mp4ConvertedFile;
@@ -240,12 +240,12 @@ class ProcessMedia implements ShouldQueue
         WsChannel::Push($media->creator['_id'], 'media.create', [
             'media' => $media->simple_array,
             'message' => 'All done',
-            'progress' => 100
+            'progress' => 100,
         ]);
 
         $msg = "New post from is waiting for moderation {$media->slack_admin_url}.";
-        $msg .= PHP_EOL . '_*Log:*_ ' . PHP_EOL . implode("\n", $media->processing_log);
-        $msg .= PHP_EOL . '_*Errors:*_ ' . PHP_EOL . implode("\n", $media->firstErrors);
+        $msg .= PHP_EOL.'_*Log:*_ '.PHP_EOL.implode("\n", $media->processing_log);
+        $msg .= PHP_EOL.'_*Errors:*_ '.PHP_EOL.implode("\n", $media->firstErrors);
 
         return (new SlackMessage())
             ->from('Reporter', ':vhs:')
