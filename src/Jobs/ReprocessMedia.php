@@ -62,16 +62,18 @@ class ReprocessMedia implements ShouldQueue
                 }
 
                 ProcessMedia::dispatch($this->media_id, $b2File)->onQueue('lowpriority');
+
                 return;
             }
 
             if (($media = Media::find($this->media_id)) !== null && $storage->exists('upload/' . $media->file)) {
 
                 UploadMedia::dispatch($media->created_by, $media->_id, $media->file)->onQueue('lowpriority');
+
                 return;
             }
 
-            throw new Exception(__CLASS__.PHP_EOL.'Nighter video file nor media object found!');
+            throw new Exception(__CLASS__ . PHP_EOL . 'Nighter video file nor media object found!');
         } catch (FileOpenException $e) {
             return $e->getMessage();
         }
