@@ -69,7 +69,7 @@ class ProcessMedia implements ShouldQueue
             $keepStatus = $media->status;
         }
 
-        $withoutTuch = [
+        $withoutTouch = [
             'status' => false,
             'length' => false,
             'processing_log' => false,
@@ -85,7 +85,7 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
         }
 
         if ($response instanceof OptimizeResponse) {
@@ -100,7 +100,7 @@ class ProcessMedia implements ShouldQueue
                 default:
                     $media->addToSet('processing_log', '1. Quality checked: UnKnown [' . $quality . ']');
             }
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
         }
 
         // check audio
@@ -108,7 +108,7 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
         }
         
         if ($response instanceof OptimizeResponse) {
@@ -123,14 +123,14 @@ class ProcessMedia implements ShouldQueue
                 default:
                     $media->addToSet('processing_log', '2. Audio checked: Low Volume (' . $volume . ')');
             }
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
         }
 
         [$response, $status] = $client->Duration($optimizeReq)->wait();
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
             throw new Exception(__CLASS__ . PHP_EOL . 'Cannot check video duration');
         }
 
@@ -143,12 +143,12 @@ class ProcessMedia implements ShouldQueue
             if ($status->code !== 0) {
                 VarDumper::dump($status);
                 $media->status = Media::STATUS_FAILED;
-                $media->save($withoutTuch);
+                $media->save($withoutTouch);
                 throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video trim');
             }
             $media->length = 60.0;
             $media->addToSet('processing_log', '4. Video is trimmed to 60 Sec: Ok');
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
             $optimizeReq->setSrc($src);
         }
 
@@ -159,11 +159,11 @@ class ProcessMedia implements ShouldQueue
             [$response, $status] = $client->NormalizeAudio($optimizeReq)->wait();
             if ($status->code !== 0) {
                 $media->status = Media::STATUS_FAILED;
-                $media->save($withoutTuch);
+                $media->save($withoutTouch);
                 throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do audio normalization');
             }
             $media->addToSet('processing_log', '5. Audio normalization: Ok');
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
         }
 
         // watermark
@@ -176,11 +176,11 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
             throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video watermarking');
         }
         $media->addToSet('processing_log', '6. Video Watermarking: Ok');
-        $media->save($withoutTuch);
+        $media->save($withoutTouch);
 
         // check quality
         $uploadReq = new UploadRequest();
@@ -190,19 +190,19 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
             throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video upload');
         }
 
         $media->file = config('app.cdn,videos') . $mp4ConvertedFile;
         $media->addToSet('processing_log', '7. Video Uploading: Ok');
-        $withoutTuchWithFile = [
+        $withoutTouchWithFile = [
             'status' => false,
             'file' => false,
             'length' => false,
             'processing_log' => false,
         ];
-        $media->save($withoutTuchWithFile);
+        $media->save($withoutTouchWithFile);
 
         $toRemoveFiles[] = $cover = config('app.media.path') . str_replace('.mp4', '.jpg', $mp4ConvertedFile);
 
@@ -212,11 +212,11 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
             throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video cover');
         }
         $media->addToSet('processing_log', '8. Video Cover generating: Ok');
-        $media->save($withoutTuch);
+        $media->save($withoutTouch);
 
         $uploadReq->setSrc($cover);
         $uploadReq->setDes('covers/' . str_replace('.mp4', '.jpg', $mp4ConvertedFile));
@@ -224,11 +224,11 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
-            $media->save($withoutTuch);
+            $media->save($withoutTouch);
             throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do cover upload');
         }
         $media->addToSet('processing_log', '9. Video Cover uploading: Ok');
-        $media->save($withoutTuch);
+        $media->save($withoutTouch);
 
         $i = 10;
         foreach ($toRemoveFiles as $toRemoveFile) {
@@ -238,7 +238,7 @@ class ProcessMedia implements ShouldQueue
             if ($status->code !== 0) {
                 VarDumper::dump($status);
                 $media->status = Media::STATUS_FAILED;
-                $media->save($withoutTuch);
+                $media->save($withoutTouch);
                 throw new Exception(__CLASS__ . PHP_EOL . 'Cannot remove ' . $toRemoveFile);
             }
             $media->addToSet('processing_log', ++$i . '. Remove files: ' . $toRemoveFile);
@@ -246,13 +246,13 @@ class ProcessMedia implements ShouldQueue
 
         $media->file = $mp4ConvertedFile;
         $media->status = $keepStatus ?? Media::STATUS_COMPLETED;
-        $tuchWithTrue = [
+        $touchWithTrue = [
             'status' => true,
             'length' => true,
             'processing_log' => true,
             'file' => true,
         ];
-        $media->save($tuchWithTrue);
+        $media->save($touchWithTrue);
 
         $media->refresh();
         WsChannel::Push($media->creator['_id'], 'media.create', [

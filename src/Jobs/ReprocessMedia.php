@@ -54,8 +54,7 @@ class ReprocessMedia implements ShouldQueue
         
         try {
             $b2File = $this->file;
-            ProcessMedia::dispatch($this->media_id, $b2File)->onQueue('lowpriority');
-            return;
+
             if ($b2->exists($this->file)) {
                 if (! $storage->exists($b2File)) {
                     $b2->writeStream($b2File, $storage->readStream('upload/' . $b2File));

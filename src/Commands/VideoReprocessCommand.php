@@ -16,7 +16,7 @@ class VideoReprocessCommand extends Command
     public function handle()
     {
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])
-            // ->date(null, DT::utcDateTime(['m' => -3]))
+            ->date(null, DT::utcDateTime(['m' => -3]))
             ->status(Media::STATUS_UPLOADED);
         foreach ($mediaQuery->get() as $media) {
             ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('lowpriority');
