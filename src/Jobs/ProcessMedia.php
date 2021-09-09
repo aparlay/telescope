@@ -131,7 +131,7 @@ class ProcessMedia implements ShouldQueue
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
-            throw new Exception(__CLASS__ . PHP_EOL . 'Cannot check video duration');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
         }
 
         $media->length = (float) $response->GetSec();
@@ -144,7 +144,7 @@ class ProcessMedia implements ShouldQueue
                 VarDumper::dump($status);
                 $media->status = Media::STATUS_FAILED;
                 $media->save($withoutTouch);
-                throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video trim');
+                throw new Exception(__CLASS__.PHP_EOL.'Cannot do video trim');
             }
             $media->length = 60.0;
             $media->addToSet('processing_log', '4. Video is trimmed to 60 Sec: Ok');
@@ -160,7 +160,7 @@ class ProcessMedia implements ShouldQueue
             if ($status->code !== 0) {
                 $media->status = Media::STATUS_FAILED;
                 $media->save($withoutTouch);
-                throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do audio normalization');
+                throw new Exception(__CLASS__.PHP_EOL.'Cannot do audio normalization');
             }
             $media->addToSet('processing_log', '5. Audio normalization: Ok');
             $media->save($withoutTouch);
@@ -177,7 +177,7 @@ class ProcessMedia implements ShouldQueue
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
-            throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video watermarking');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot do video watermarking');
         }
         $media->addToSet('processing_log', '6. Video Watermarking: Ok');
         $media->save($withoutTouch);
@@ -191,7 +191,7 @@ class ProcessMedia implements ShouldQueue
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
-            throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video upload');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot do video upload');
         }
 
         $media->file = config('app.cdn,videos').$mp4ConvertedFile;
@@ -213,7 +213,7 @@ class ProcessMedia implements ShouldQueue
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
-            throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do video cover');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot do video cover');
         }
         $media->addToSet('processing_log', '8. Video Cover generating: Ok');
         $media->save($withoutTouch);
@@ -225,7 +225,7 @@ class ProcessMedia implements ShouldQueue
             VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
-            throw new Exception(__CLASS__ . PHP_EOL . 'Cannot do cover upload');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot do cover upload');
         }
         $media->addToSet('processing_log', '9. Video Cover uploading: Ok');
         $media->save($withoutTouch);
@@ -239,7 +239,7 @@ class ProcessMedia implements ShouldQueue
                 VarDumper::dump($status);
                 $media->status = Media::STATUS_FAILED;
                 $media->save($withoutTouch);
-                throw new Exception(__CLASS__ . PHP_EOL . 'Cannot remove ' . $toRemoveFile);
+                throw new Exception(__CLASS__.PHP_EOL.'Cannot remove '.$toRemoveFile);
             }
             $media->addToSet('processing_log', ++$i.'. Remove files: '.$toRemoveFile);
         }
