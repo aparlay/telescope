@@ -11,7 +11,7 @@ class VideoReprocessCommand extends Command
 {
     public $signature = 'video:reprocess';
 
-    public $description = 'Video Reprocess';
+    public $description = 'This command is responsible for update video reprocess';
 
     public function handle()
     {

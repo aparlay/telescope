@@ -10,7 +10,7 @@ class VideoScoreCommand extends Command
 {
     public $signature = 'video:score';
 
-    public $description = 'Video Score';
+    public $description = 'This command is responsible for update video score';
 
     public function handle()
     {
