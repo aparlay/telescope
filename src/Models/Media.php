@@ -331,10 +331,10 @@ class Media extends BaseModel
     {
         $timestamp = Carbon::parse($this->created_at)->timestamp;
         $windowDuration = 86400 * 10;
-        $startUtc = DT::timestampToUtc($timestamp - $windowDuration);
-        $endUtc = DT::timestampToUtc($timestamp + $windowDuration);
+        $startTime = Carbon::createFromTimestamp($timestamp - $windowDuration)->toDateTimeString();
+        $endTime = Carbon::createFromTimestamp($timestamp + $windowDuration)->toDateTimeString();
         $meanLikes = [];
-        foreach (Analytic::date($startUtc, $endUtc)->get() as $analytic) {
+        foreach (Analytic::date($startTime, $endTime)->get() as $analytic) {
             if (isset($analytic['media']['mean_likes']) && 0 !== $analytic['media']['mean_likes']) {
                 $meanLikes[] = $analytic['media']['mean_likes'];
             }
