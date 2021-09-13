@@ -1,19 +1,19 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
-use Aparlay\Core\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\User as BaseUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserRepository implements RepositoryInterface
 {
-    protected User $model;
+    protected User | BaseUser $model;
 
     public function __construct($model)
     {
-        if (! ($model instanceof User)) {
+        if (! ($model instanceof BaseUser)) {
             throw new \InvalidArgumentException('$model should be of User type');
         }
 
@@ -121,7 +121,7 @@ class UserRepository implements RepositoryInterface
      * @param string $email
      * @return User|null
      */
-    public static function findByEmail(string $email): ?User
+    public function findByEmail(string $email): ?User
     {
         return User::email($email)->first();
     }
@@ -132,7 +132,7 @@ class UserRepository implements RepositoryInterface
      * @param string $phoneNumber
      * @return User|null
      */
-    public static function findByPhoneNumber(string $phoneNumber): ?User
+    public function findByPhoneNumber(string $phoneNumber): ?User
     {
         return User::phoneNumber($phoneNumber)->first();
     }
@@ -143,13 +143,13 @@ class UserRepository implements RepositoryInterface
      * @param string $userName
      * @return User|null
      */
-    public static function findByUsername(string $userName): ?User
+    public function findByUsername(string $userName): ?User
     {
         return User::username($userName)->first();
     }
 
     /**
-     * Responsible for match old password.
+     * Responsible for change old password.
      *
      * @param string $password
      * @return bool
@@ -161,6 +161,11 @@ class UserRepository implements RepositoryInterface
         return $this->model->save();
     }
 
+    /**
+     * Responsible for delete user account.
+     *
+     * @return bool
+     */
     public function deleteAccount()
     {
         $randString = random_int(1, 100);

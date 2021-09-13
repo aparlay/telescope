@@ -4,7 +4,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Resources\BlockResource;
-use Aparlay\Core\Services\BlockService;
+use Aparlay\Core\Api\V1\Services\BlockService;
 use Illuminate\Http\Response;
 
 class BlockController extends Controller

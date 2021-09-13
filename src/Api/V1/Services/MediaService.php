@@ -1,12 +1,14 @@
 <?php
 
-namespace Aparlay\Core\Services;
+namespace Aparlay\Core\Api\V1\Services;
 
+use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Models\Alert;
-use Aparlay\Core\Models\MediaVisit;
+use Aparlay\Core\Api\V1\Repositories\MediaRepository;
+use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
@@ -14,6 +16,22 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaService
 {
+    protected MediaRepository $mediaRepository;
+
+    public function __construct()
+    {
+        $this->mediaRepository = new MediaRepository(new Media());
+    }
+
+    /**
+     * @param  MediaRequest  $request
+     * @return Media
+     */
+    public function create(MediaRequest $request): Media
+    {
+        return $this->mediaRepository->store($request);
+    }
+
     /**
      * @param  int  $length
      * @return string
@@ -66,11 +84,11 @@ class MediaService
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public static function delete(Media $media): void
+    public function delete(Media $media): void
     {
         $model = Media::media($media->_id)->firstOrFail();
 
-        if ($model !== null && $media->status !== Media::STATUS_USER_DELETED) {
+        if ($model !== null && $model->status !== Media::STATUS_USER_DELETED) {
             $model->update(['status' => Media::STATUS_USER_DELETED]);
         }
     }
@@ -80,7 +98,7 @@ class MediaService
      * @return LengthAwarePaginator
      * @throws InvalidArgumentException|Exception
      */
-    public static function getByType(string $type)
+    public function getByType(string $type)
     {
         $query = Media::query();
         if (! auth()->guest() && $type === 'following') {
@@ -128,7 +146,7 @@ class MediaService
      * @return LengthAwarePaginator
      * @throws InvalidArgumentException
      */
-    public static function getByUser(User $user)
+    public function getByUser(User $user)
     {
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();

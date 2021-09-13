@@ -1,12 +1,12 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use MongoDB\BSON\ObjectId;
 
-class MediaLikeRepository
+class MediaLikeRepository implements RepositoryInterface
 {
     protected MediaLike $model;
 
@@ -33,14 +33,13 @@ class MediaLikeRepository
     public function create(array $data)
     {
         $creator = auth()->user();
-        $modal = new MediaLike(
-            array_merge($data, [
-                'creator' => ['_id' => new ObjectId($creator->_id)],
-            ])
-        );
-        $modal->save();
 
-        return $modal;
+        $this->model->media_id = $data['media_id'];
+        $this->model->user_id = $data['user_id'];
+        $this->model->creator = ['_id' => new ObjectId($creator->_id)];
+        $this->model->save();
+
+        return $this->model;
     }
 
     public function update(array $data, $id)

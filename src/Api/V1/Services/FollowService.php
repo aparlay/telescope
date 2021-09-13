@@ -1,10 +1,10 @@
 <?php
 
-namespace Aparlay\Core\Services;
+namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Repositories\FollowRepository;
+use Aparlay\Core\Api\V1\Repositories\FollowRepository;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
 use MongoDB\BSON\ObjectId;

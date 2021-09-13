@@ -36,7 +36,7 @@ use MongoDB\BSON\ObjectId;
  * @method static |self|Builder user(ObjectId $userId)      get media visits for thew given user
  * @method static |self|Builder date(string $date)          get media visits for thew given date
  */
-class MediaVisit extends Model
+class MediaVisit extends BaseModel
 {
     use HasFactory;
     use Notifiable;
@@ -51,11 +51,6 @@ class MediaVisit extends Model
      * @var string
      */
     protected $collection = 'media_visits';
-
-    protected $dispatchesEvents = [
-        'saving' => MediaVisitSaving::class,
-        'saved' => MediaVisitSaved::class,
-    ];
 
     /**
      * The attributes that are mass assignable.

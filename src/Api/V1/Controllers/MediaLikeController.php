@@ -5,7 +5,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Resources\MediaLikeResource;
-use Aparlay\Core\Services\MediaLikeService;
+use Aparlay\Core\Api\V1\Services\MediaLikeService;
 use Illuminate\Http\Response;
 
 class MediaLikeController extends Controller

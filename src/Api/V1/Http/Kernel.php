@@ -12,7 +12,7 @@ class Kernel extends AluaKernel
      * @var array
      */
     protected $commands = [
-        Commands\userData::class,
+        Commands\UserData::class,
     ];
 
     /**

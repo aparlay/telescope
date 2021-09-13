@@ -3,8 +3,6 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\MediaLikeFactory;
-use Aparlay\Core\Events\MediaLikeCreated;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -34,7 +32,7 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
  * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
  */
-class MediaLike extends Model
+class MediaLike extends BaseModel
 {
     use HasFactory;
     use Notifiable;
@@ -62,10 +60,6 @@ class MediaLike extends Model
         'updated_by',
     ];
 
-    protected $dispatchesEvents = [
-        'created' => MediaLikeCreated::class,
-    ];
-
     /**
      * The accessors to append to the model's array form.
      *
@@ -88,70 +82,6 @@ class MediaLike extends Model
      */
     protected $casts = [
     ];
-
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::created(function ($like) {
-            $media = $like->mediaObj;
-            $media->like_count++;
-            $media->addToSet('likes', [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ], 10);
-            $media->count_fields_updated_at = array_merge(
-                $media->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
-            );
-            $media->save();
-
-            $user = $media->userObj;
-            $user->like_count++;
-            $user->addToSet('likes', [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ], 10);
-            $user->count_fields_updated_at = array_merge(
-                $user->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
-            );
-            $user->save();
-        });
-
-        static::deleted(function ($like) {
-            $media = $like->mediaObj;
-            $media->like_count--;
-            $media->removeFromSet('likes', [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ]);
-            $media->count_fields_updated_at = array_merge(
-                $media->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
-            );
-            $media->save();
-
-            $user = $media->userObj;
-            $user->like_count--;
-            $user->removeFromSet('likes', [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ]);
-            $user->count_fields_updated_at = array_merge(
-                $user->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
-            );
-            $user->save();
-        });
-    }
 
     /**
      * Create a new factory instance for the model.

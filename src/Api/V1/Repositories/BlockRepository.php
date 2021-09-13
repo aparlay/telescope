@@ -1,12 +1,12 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
 use MongoDB\BSON\ObjectId;
 
-class BlockRepository
+class BlockRepository implements RepositoryInterface
 {
     protected Block $model;
 
@@ -33,13 +33,11 @@ class BlockRepository
     public function create(array $data)
     {
         $creator = auth()->user();
+        $this->model->user = $data['user'];
+        $this->model->creator = ['_id' => new ObjectId($creator->_id)];
+        $this->model->save();
 
-        $modal = new Block(
-            array_merge($data, ['creator' => ['_id' => new ObjectId($creator->_id)]])
-        );
-        $modal->save();
-
-        return $modal;
+        return $this->model;
     }
 
     public function update(array $data, $id)

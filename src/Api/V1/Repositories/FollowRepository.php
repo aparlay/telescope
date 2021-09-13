@@ -1,6 +1,6 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
@@ -34,12 +34,11 @@ class FollowRepository implements RepositoryInterface
     {
         $creator = auth()->user();
 
-        $modal = new Follow(
-            array_merge($data, ['creator' => ['_id' => new ObjectId($creator->_id)]])
-        );
-        $modal->save();
+        $this->model->user = $data['user'];
+        $this->model->creator = ['_id' => new ObjectId($creator->_id)];
+        $this->model->save();
 
-        return $modal;
+        return $this->model;
     }
 
     public function update(array $data, $id)

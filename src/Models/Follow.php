@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\CreatorFieldTrait;
+use Aparlay\Core\Api\V1\Models\UserFieldTrait;
 use Aparlay\Core\Database\Factories\FollowFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\FollowScope;
@@ -30,11 +32,13 @@ use MongoDB\BSON\ObjectId;
  * @method static |self|Builder creator(ObjectId|string $userId) get creator user
  * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
  */
-class Follow extends Model
+class Follow extends BaseModel
 {
     use HasFactory;
     use Notifiable;
     use FollowScope;
+    use UserFieldTrait;
+    use CreatorFieldTrait;
 
     public const STATUS_PENDING = 0;
 

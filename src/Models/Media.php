@@ -4,11 +4,6 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Database\Factories\MediaFactory;
-use Aparlay\Core\Events\MediaCreated;
-use Aparlay\Core\Events\MediaCreating;
-use Aparlay\Core\Events\MediaDeleted;
-use Aparlay\Core\Events\MediaSaved;
-use Aparlay\Core\Events\MediaSaving;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -64,7 +59,7 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
  * @method static |self|Builder availableForFollower()    get available content for followers
  */
-class Media extends Model
+class Media extends BaseModel
 {
     use HasFactory;
     use Notifiable;
@@ -180,14 +175,6 @@ class Media extends Model
     protected $casts = [
         'status' => 'integer',
         'visibility' => 'integer',
-    ];
-
-    protected $dispatchesEvents = [
-        'creating' => MediaCreating::class,
-        'created' => MediaCreated::class,
-        'saving' => MediaSaving::class,
-        'saved' => MediaSaved::class,
-        'deleted' => MediaDeleted::class,
     ];
 
     public static function getVisibilities()

@@ -36,7 +36,7 @@ class UploadMedia implements ShouldQueue
     /**
      * The maximum number of unhandled exceptions to allow before failing.
      */
-    public int $maxExceptions = 3;
+    public int $maxExceptions = 1;
 
     /**
      * Create a new job instance.
@@ -55,7 +55,11 @@ class UploadMedia implements ShouldQueue
             throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$userId);
         }
 
+        $storage = Storage::disk('upload');
         $this->file = $file;
+        if ($storage->exists($this->file)) {
+            throw new Exception(__CLASS__.PHP_EOL.'File not exists '.$this->file);
+        }
     }
 
     /**
@@ -70,11 +74,12 @@ class UploadMedia implements ShouldQueue
         $storage = Storage::disk('upload');
         $mediaServer = Storage::disk('media-ftp');
 
-        $newFilename = md5_file($storage->path($this->file)).'.'.pathinfo($this->file, PATHINFO_EXTENSION);
+        $newFilename = md5(time());
         $hash = '';
         $mime = '';
         $size = 0;
         if ($storage->exists($this->file)) {
+            $newFilename = md5_file($storage->path($this->file)).'.'.pathinfo($this->file, PATHINFO_EXTENSION);
             $filePath = $storage->path($this->file);
             $hash = sha1_file($filePath);
             $size = $storage->size($this->file);
@@ -84,7 +89,7 @@ class UploadMedia implements ShouldQueue
             ProcessMedia::dispatch($this->user->_id, $this->media->_id, $newFilename)->onQueue('lowpriority');
             BackblazeVideoUploader::dispatch($this->user->_id, $this->media->_id, $this->file)->onQueue('lowpriority');
         } else {
-            $this->user->notify(new JobFailed(self::class, $this->attempts(), 'File not exists'));
+            throw new Exception(__CLASS__.PHP_EOL.'File not exists '.$this->file);
         }
 
         $this->media->mime_type = $mime;

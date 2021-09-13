@@ -1,8 +1,8 @@
 <?php
 
-namespace Aparlay\Core\Repositories;
+namespace Aparlay\Core\Api\V1\Repositories;
 
-use Aparlay\Core\Models\Email;
+use Aparlay\Core\Api\V1\Models\Email;
 
 class EmailRepository
 {
@@ -30,5 +30,29 @@ class EmailRepository
         $modal->save();
 
         return $modal;
+    }
+
+    public function __construct($model)
+    {
+    }
+
+    public function all()
+    {
+        // TODO: Implement all() method.
+    }
+
+    public function update(array $data, $id)
+    {
+        // TODO: Implement update() method.
+    }
+
+    public function delete($id)
+    {
+        // TODO: Implement delete() method.
+    }
+
+    public function find($id)
+    {
+        // TODO: Implement find() method.
     }
 }
