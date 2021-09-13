@@ -17,12 +17,11 @@ class VideoScoreCommand extends Command
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower();
 
         foreach ($mediaQuery->get() as $media) {
-            
             $msg = '<fg=blue;options=bold>';
             $msg .= '--------------------------------'.'</>';
             $msg .= PHP_EOL;
             $this->line($msg);
-            
+
             $media->sort_score = $media->awesomeness_score;
             $media->sort_score += ($media->time_score / 2);
             $media->sort_score += ($media->like_score / 3);
