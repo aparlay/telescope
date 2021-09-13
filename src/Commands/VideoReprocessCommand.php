@@ -24,7 +24,7 @@ class VideoReprocessCommand extends Command
             $media->status = Media::STATUS_QUEUED;
             $media->save();
 
-            $msg  = '<fg=yellow;options=bold>';
+            $msg = '<fg=yellow;options=bold>';
             $msg .= 'Video '.$media->_id.' need to send for reprocessing'.'</>';
             $msg .= PHP_EOL;
             $this->line($msg);
