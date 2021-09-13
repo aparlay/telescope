@@ -54,7 +54,6 @@ class UpdateMediaInfo implements ShouldQueue
         }
 
         $this->file = $file;
-        $this->handle();
     }
 
     /**

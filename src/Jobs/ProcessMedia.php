@@ -45,8 +45,6 @@ class ProcessMedia implements ShouldQueue
 
         $this->file = $file;
         $this->media_id = $mediaId;
-
-        $this->handle();
     }
 
     /**

@@ -19,7 +19,10 @@ class VideoUpdateInfoCommand extends Command
         foreach ($mediaQuery->get() as $media) {
             UpdateMediaInfo::dispatch($media->creator['_id'], $media->_id, $media->file)->onQueue('lowpriority');
 
-            $this->line('<fg=yellow;options=bold>'.'Video '.$media->_id.' '.$media->file.' need to send for update info.'.PHP_EOL.'</>');
+            $msg  = '<fg=yellow;options=bold>';
+            $msg .= 'Video '.$media->_id.' '.$media->file.' need to send for update info.'.'</>';
+            $msg .= PHP_EOL;
+            $this->line($msg);
         }
     }
 }

@@ -19,8 +19,16 @@ class VideoScoreHourlyCommand extends Command
             ->date(DT::utcDateTime(['d' => -1]), DT::utcNow())
             ->availableForFollower();
         foreach ($mediaQuery->get() as $media) {
-            $media->sort_score = $media->awesomeness_score + ($media->time_score / 2) + ($media->like_score / 3) + ($media->visit_score / 3);
-            $this->line('<fg=yellow;options=bold>'.$media->_id.' score set to '.$media->sort_score.PHP_EOL.'</>');
+            $media->sort_score  = $media->awesomeness_score;
+            $media->sort_score += ($media->time_score / 2);
+            $media->sort_score += ($media->like_score / 3);
+            $media->sort_score += ($media->visit_score / 3);
+            
+            $msg = '<fg=yellow;options=bold>';
+            $msg .= $media->_id.' score set to '.$media->sort_score.'</>';
+            $msg .= PHP_EOL;
+            $this->line($msg);
+            
             $media->save();
         }
 
