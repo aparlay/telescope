@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
 use MathPHP\Statistics\Descriptive;
@@ -304,7 +305,7 @@ class Media extends BaseModel
      */
     public function getTimeScoreAttribute(): int
     {
-        $oldness = time() - DT::utcToTimestamp(strtotime($this->created_at));
+        $oldness = time() - Carbon::parse($this->created_at)->timestamp;
 
         return match (true) {
             $oldness <= 21600 => 10,
@@ -328,7 +329,7 @@ class Media extends BaseModel
      */
     public function getLikeScoreAttribute(): int
     {
-        $timestamp = DT::utcToTimestamp(strtotime($this->created_at));
+        $timestamp = Carbon::parse($this->created_at)->timestamp;
         $windowDuration = 86400 * 10;
         $startUtc = DT::timestampToUtc($timestamp - $windowDuration);
         $endUtc = DT::timestampToUtc($timestamp + $windowDuration);
