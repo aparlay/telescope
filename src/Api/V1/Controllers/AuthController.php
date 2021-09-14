@@ -143,7 +143,7 @@ class AuthController extends Controller
         if (! empty($user)) {
             /* Through exception for suspended/banned/NotFound accounts */
             $this->userService->isUserEligible($user);
-    
+
             // Send the OTP or Throw exception if send OTP limit is reached
             $this->otpService->sendOtp($user, $request->headers->get('X-DEVICE-ID'));
         }
