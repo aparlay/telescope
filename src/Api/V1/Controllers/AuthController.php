@@ -112,7 +112,12 @@ class AuthController extends Controller
     {
         /* Find the user based on username */
         if (! ($user = $this->userService->findByIdentity($request->username))) {
-            throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
+            throw new BlockedException(
+                'Your user account not found or does not match with password!',
+                null,
+                'Unprocessable entity',
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
 
         /* Through exception for suspended/banned/NotFound accounts */

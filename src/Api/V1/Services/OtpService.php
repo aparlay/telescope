@@ -115,6 +115,7 @@ class OtpService
             ->validated($checkValidated)
             ->remainingAttempt($limit)
             ->first();
+        
         if ($model) {
             if ($validateOnly) {
                 $model->validated = true;
@@ -130,9 +131,19 @@ class OtpService
             ->recentFirst()
             ->first()
             ->increment('incorrect', 1);
+        
+        $previousOTP = Otp::identity($identity)
+                        ->recentFirst()
+                        ->first();
 
-        throw ValidationException::withMessages([
-            'otp' => ['Incorrect otp.'],
-        ]);
+        if ($previousOTP->incorrect > 3) {
+            throw ValidationException::withMessages([
+                'otp' => ['Too many failed attempts, please try again by requesting new code.']
+            ]);
+        } else {
+            throw ValidationException::withMessages([
+                'otp' => ['Invalid Code.'],
+            ]);
+        }
     }
 }
