@@ -41,10 +41,10 @@ class MeResource extends JsonResource
                 'tips' => (bool) $this->features['tips'],
                 'demo' => (bool) $this->features['demo'],
             ],
-            'gender' => User::getGenders()[$this->gender],
-            'interested_in' => User::getInterestedIns()[$this->interested_in],
-            'status' => User::getStatuses()[$this->status],
-            'visibility' => User::getVisibilities()[$this->visibility],
+            'gender' => (int) $this->gender,
+            'interested_in' => (int) $this->interested_in,
+            'status' => (int) $this->status,
+            'visibility' => (int) $this->visibility,
             'promo_link' => $this->promo_link,
             'follower_count' => (int) $this->follower_count,
             'following_count' => (int) $this->following_count,
@@ -63,7 +63,7 @@ class MeResource extends JsonResource
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [
-                'self' => ['href' => route('core.api.v1.user.show', ['user' => $this])],
+                'self' => ['href' => url("/v1/user/view?id={$this->_id}")],
             ],
         ];
     }
