@@ -47,9 +47,8 @@ class MediaLikeService
      */
     public function unlike(Media $media)
     {
-        if (($like = $this->mediaLikeRepository->isLiked($media)) === null) {
-            throw new BlockedException('No Record Found', null, null, Response::HTTP_NOT_FOUND);
+        if (($like = $this->mediaLikeRepository->isLiked($media)) !== null) {
+            $like->delete();
         }
-        $like->delete();
     }
 }
