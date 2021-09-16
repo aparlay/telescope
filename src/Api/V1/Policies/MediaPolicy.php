@@ -42,11 +42,9 @@ class MediaPolicy
             return Response::allow();
         }
 
-        /*
         if ($media->visibility === Media::VISIBILITY_PRIVATE && $userId === null) {
-            return Response::deny(__('You can only view media that you\'ve created.'));;
+            return Response::deny(__('You can only view media that you\'ve created.'));
         }
-        */
 
         return Response::deny(__('You can only view media that you\'ve created.'));
     }
