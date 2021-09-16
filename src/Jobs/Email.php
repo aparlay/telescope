@@ -56,7 +56,6 @@ class Email implements ShouldQueue
         $this->subject = $subject;
         $this->type = $type;
         $this->payload = $payload;
-        $this->handle();
     }
 
     /**

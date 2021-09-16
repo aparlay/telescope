@@ -57,7 +57,6 @@ class UploadAvatar implements ShouldQueue
         if (($this->user = User::user($userId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'User not found!');
         }
-        $this->handle();
     }
 
     /**

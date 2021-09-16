@@ -33,14 +33,13 @@ class MediaLikeRepository implements RepositoryInterface
     public function create(array $data)
     {
         $creator = auth()->user();
-        $modal = new MediaLike(
-            array_merge($data, [
-                'creator' => ['_id' => new ObjectId($creator->_id)],
-            ])
-        );
-        $modal->save();
 
-        return $modal;
+        $this->model->media_id = $data['media_id'];
+        $this->model->user_id = $data['user_id'];
+        $this->model->creator = ['_id' => new ObjectId($creator->_id)];
+        $this->model->save();
+
+        return $this->model;
     }
 
     public function update(array $data, $id)
