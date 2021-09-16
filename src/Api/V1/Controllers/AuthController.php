@@ -143,15 +143,15 @@ class AuthController extends Controller
     public function requestOtp(RequestOtpRequest $request): Response
     {
         /* Find the user based on username */
-        if (! ($user = $this->userService->findByIdentity($request->username))) {
-            throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
+        $user = $this->userService->findByIdentity($request->username);
+
+        if (! empty($user)) {
+            /* Through exception for suspended/banned/NotFound accounts */
+            $this->userService->isUserEligible($user);
+
+            // Send the OTP or Throw exception if send OTP limit is reached
+            $this->otpService->sendOtp($user, $request->headers->get('X-DEVICE-ID'));
         }
-
-        /* Through exception for suspended/banned/NotFound accounts */
-        $this->userService->isUserEligible($user);
-
-        // Send the OTP or Throw exception if send OTP limit is reached
-        $this->otpService->sendOtp($user, $request->headers->get('X-DEVICE-ID'));
 
         /* Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
         if ($this->userService->getIdentityType($request->username) === Login::IDENTITY_EMAIL) {
