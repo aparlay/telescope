@@ -5,6 +5,7 @@
 
 namespace Aparlay\Core\Microservices\ffmpeg;
 
+use Aparlay\Core\Microservices\ffmpeg\GPBMetadata\Media;
 use Google\Protobuf\Internal\GPBType;
 use Google\Protobuf\Internal\GPBUtil;
 use Google\Protobuf\Internal\RepeatedField;
@@ -40,7 +41,7 @@ class OptimizeRequest extends \Google\Protobuf\Internal\Message
      */
     public function __construct($data = null)
     {
-        \GPBMetadata\Media::initOnce();
+        Media::initOnce();
         parent::__construct($data);
     }
 
