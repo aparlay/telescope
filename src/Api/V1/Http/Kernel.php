@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Http;
 
-use App\Http\Kernel as AluaKernel;
+use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
-class Kernel extends AluaKernel
+class Kernel extends HttpKernel
 {
     /**
      * The package route middleware.
@@ -14,8 +14,19 @@ class Kernel extends AluaKernel
      * @var array
      */
     protected $routeMiddleware = [
-
         'device-id' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceId::class,
         'cookies-auth' => \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
+    ];
+
+    /**
+     * The priority-sorted list of middleware.
+     *
+     * Forces non-global middleware to always be in the given order.
+     *
+     * @var string[]
+     */
+    protected $middlewarePriority = [
+        \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ];
 }
