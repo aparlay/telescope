@@ -305,7 +305,7 @@ class Media extends BaseModel
      */
     public function getTimeScoreAttribute(): int
     {
-        $oldness = time() - Carbon::parse($this->created_at)->timestamp;
+        $oldness = time() - $this->created_at->timestamp;
 
         return match (true) {
             $oldness <= 21600 => 10,
@@ -329,7 +329,7 @@ class Media extends BaseModel
      */
     public function getLikeScoreAttribute(): int
     {
-        $timestamp = Carbon::parse($this->created_at)->timestamp;
+        $timestamp = $this->created_at->timestamp;
         $windowDuration = 86400 * 10;
         $startTime = Carbon::createFromTimestamp($timestamp - $windowDuration)->toDateTimeString();
         $endTime = Carbon::createFromTimestamp($timestamp + $windowDuration)->toDateTimeString();
