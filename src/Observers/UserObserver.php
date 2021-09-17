@@ -40,7 +40,34 @@ class UserObserver
      * @return void
      * @throws Exception
      */
-    public function saved(User $user)
+    public function created(User $user)
+    {
+        if (! $user->wasRecentlyCreated && $user->wasChanged('avatar')) {
+            dispatch((new UpdateAvatar((string) $user->_id))->onQueue('low'));
+        }
+
+        if (! $user->wasRecentlyCreated && $user->wasChanged('status')) {
+            switch ($user->status) {
+                case User::STATUS_DEACTIVATED:
+                case User::STATUS_BLOCKED:
+                    dispatch((new DeleteUserMedia((string) $user->_id))->onQueue('low'));
+                    dispatch((new DeleteUserConnect((string) $user->_id))->onQueue('low'));
+                    break;
+            }
+        }
+
+        if (! $user->wasRecentlyCreated && $user->wasChanged('visibility')) {
+            dispatch((new UpdateMedia((string) $user->_id, ['visibility' => $user->visibility]))->onQueue('low'));
+        }
+    }
+
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function updated(User $user)
     {
         if (! $user->wasRecentlyCreated && $user->wasChanged('avatar')) {
             dispatch((new UpdateAvatar((string) $user->_id))->onQueue('low'));
