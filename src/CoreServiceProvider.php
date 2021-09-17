@@ -5,6 +5,8 @@ namespace Aparlay\Core;
 use Aparlay\Core\Api\V1\Http\Kernel;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
+use Aparlay\Core\Commands\AnalyticsDailyCommand;
+use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\VideoReprocessCommand;
 use Aparlay\Core\Commands\VideoScoreCommand;
@@ -66,6 +68,8 @@ class CoreServiceProvider extends ServiceProvider
                 VideoScoreHourlyCommand::class,
                 VideoUpdateInfoCommand::class,
                 WsCommand::class,
+                AnalyticsTwoMonthCommand::class,
+                AnalyticsDailyCommand::class,
             ]);
         }
 
