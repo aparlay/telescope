@@ -34,12 +34,13 @@ class MediaLikeRepository implements RepositoryInterface
     {
         $creator = auth()->user();
 
-        $this->model->media_id = $data['media_id'];
-        $this->model->user_id = $data['user_id'];
-        $this->model->creator = ['_id' => new ObjectId($creator->_id)];
-        $this->model->save();
+        $model = new MediaLike();
+        $model->media_id = $data['media_id'];
+        $model->user_id = $data['user_id'];
+        $model->creator = ['_id' => new ObjectId($creator->_id)];
+        $model->save();
 
-        return $this->model;
+        return $model;
     }
 
     public function update(array $data, $id)
