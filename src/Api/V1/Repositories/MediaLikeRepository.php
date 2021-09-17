@@ -36,13 +36,11 @@ class MediaLikeRepository implements RepositoryInterface
         $creator = auth()->user();
 
         try {
-            $model = new MediaLike();
-            $model->media_id = $data['media_id'];
-            $model->user_id = $data['user_id'];
-            $model->creator = ['_id' => new ObjectId($creator->_id)];
-            $model->save();
-
-            return $model;
+            return MediaLike::create([
+                'media_id' => $data['media_id'],
+                'user_id' => $data['user_id'],
+                'creator' => ['_id' => new ObjectId($creator->_id)],
+            ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
