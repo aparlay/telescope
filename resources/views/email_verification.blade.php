@@ -379,8 +379,8 @@
                             <td class="wrapper">
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <img src="" alt="" width="126"
-                                            height="96" border="0" style="margin: 20px auto">
+                                        <img src="{{ config('app.email.logo') }}" alt="{{ config('app.email.srcAltName') }}" width="126"
+                                         height="96" border="0" style="margin: 20px auto">
                                     </tr>
                                     <tr>
                                         <td>
