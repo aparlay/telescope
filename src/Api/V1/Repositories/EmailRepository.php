@@ -16,8 +16,7 @@ class EmailRepository
         /* Set the Default Values and required to be input parameters */
         $modal = new Email();
 
-        try{
-
+        try {
             $attributes = [
                 'to' => $email['to'],
                 'user' => [
@@ -28,18 +27,16 @@ class EmailRepository
                 'status' => Email::STATUS_QUEUED,
                 'type' => Email::TYPE_OTP,
             ];
-    
+
             $modal->attributes = $attributes;
             $modal->save();
+
             return $modal;
-            
         } catch (\Exception $e) {
-            
             Log::error($e->getMessage());
 
             return null;
         }
-       
     }
 
     public function __construct($model)

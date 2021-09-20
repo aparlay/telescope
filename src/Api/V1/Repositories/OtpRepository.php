@@ -18,8 +18,7 @@ class OtpRepository
     {
         /* Set the Default Values and required to be input parameters */
         try {
-
-           $data = [
+            $data = [
                 'identity'      => $otp['identity'],
                 'otp'           => (string) random_int(
                     config('app.otp.length.min'),
@@ -33,15 +32,11 @@ class OtpRepository
             ];
 
             return Otp::create($data);
-
         } catch (\Exception $e) {
-            
             Log::error($e->getMessage());
 
             return null;
         }
-        
-        
     }
 
     /**

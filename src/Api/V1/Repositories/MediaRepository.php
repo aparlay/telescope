@@ -31,7 +31,6 @@ class MediaRepository implements RepositoryInterface
         $user = auth()->user();
 
         try {
-            
             $this->model->visibility = $request->input('visibility', 0);
             $this->model->creator = [
                 '_id'      => new ObjectId($user->_id),
@@ -41,13 +40,13 @@ class MediaRepository implements RepositoryInterface
             $this->model->user_id = new ObjectId($user->_id);
             $this->model->description = $request->input('description');
             $this->model->count_fields_updated_at = [];
-    
+
             if ($request->hasFile('file')) {
                 $file = $request->file;
-    
+
                 $this->model->file = uniqid('tmp_', true).'.'.$file->extension();
                 $path = Storage::path('upload').'/'.$this->model->file;
-    
+
                 if (! $file->storeAs('upload', $path)) {
                     $this->error(__('Cannot upload the file.'));
                 }
@@ -57,18 +56,13 @@ class MediaRepository implements RepositoryInterface
             }
             $this->model->save();
             $this->model->refresh();
-    
-            return $this->model;
 
+            return $this->model;
         } catch (\Exception $e) {
-            
             Log::error($e->getMessage());
 
             return null;
         }
-
-
-       
 
         // $media = new Media([
         //    'visibility'  => $request->input('visibility', 0),

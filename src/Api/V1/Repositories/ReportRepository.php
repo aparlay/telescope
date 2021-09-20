@@ -60,10 +60,8 @@ class ReportRepository implements RepositoryInterface
      * @return array
      */
     public function createUserReport(User $user, ReportRequest $request)
-    {   
-
+    {
         try {
-            
             $this->model->reason = $request->post('reason');
             $this->model->type = Report::TYPE_USER;
             $this->model->status = Report::STATUS_REPORTED;
@@ -73,11 +71,10 @@ class ReportRepository implements RepositoryInterface
 
             return $this->model;
         } catch (\Exception $e) {
-            
             Log::error($e->getMessage());
 
             return null;
-        }  
+        }
     }
 
     /**
