@@ -60,15 +60,24 @@ class ReportRepository implements RepositoryInterface
      * @return array
      */
     public function createUserReport(User $user, ReportRequest $request)
-    {
-        $this->model->reason = $request->post('reason');
-        $this->model->type = Report::TYPE_USER;
-        $this->model->status = Report::STATUS_REPORTED;
-        $this->model->user_id = new ObjectId($user->_id);
-        $this->model->save();
-        $this->model->notify(new ReportSent());
+    {   
 
-        return $this->model;
+        try {
+            
+            $this->model->reason = $request->post('reason');
+            $this->model->type = Report::TYPE_USER;
+            $this->model->status = Report::STATUS_REPORTED;
+            $this->model->user_id = new ObjectId($user->_id);
+            $this->model->save();
+            $this->model->notify(new ReportSent());
+
+            return $this->model;
+        } catch (\Exception $e) {
+            
+            Log::error($e->getMessage());
+
+            return null;
+        }  
     }
 
     /**
