@@ -33,11 +33,17 @@ class BlockRepository implements RepositoryInterface
     public function create(array $data)
     {
         $creator = auth()->user();
-        $this->model->user = $data['user'];
-        $this->model->creator = ['_id' => new ObjectId($creator->_id)];
-        $this->model->save();
 
-        return $this->model;
+        try {
+            return Block::create([
+                'user' => $data['user'],
+                'creator' => ['_id' => new ObjectId($creator->_id)],
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return null;
+        }
     }
 
     public function update(array $data, $id)

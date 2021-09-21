@@ -61,14 +61,18 @@ class ReportRepository implements RepositoryInterface
      */
     public function createUserReport(User $user, ReportRequest $request)
     {
-        $this->model->reason = $request->post('reason');
-        $this->model->type = Report::TYPE_USER;
-        $this->model->status = Report::STATUS_REPORTED;
-        $this->model->user_id = new ObjectId($user->_id);
-        $this->model->save();
-        $this->model->notify(new ReportSent());
+        try {
+            return Report::create([
+                'reason' => $request->post('reason'),
+                'type' => Report::TYPE_USER,
+                'status' => Report::STATUS_REPORTED,
+                'user_id' => new ObjectId($user->_id),
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
 
-        return $this->model;
+            return null;
+        }
     }
 
     /**
@@ -80,13 +84,17 @@ class ReportRepository implements RepositoryInterface
      */
     public function createMediaReport(Media $media, ReportRequest $request)
     {
-        $this->model->reason = $request->post('reason');
-        $this->model->type = Report::TYPE_MEDIA;
-        $this->model->status = Report::STATUS_REPORTED;
-        $this->model->media_id = new ObjectId($media->_id);
-        $this->model->save();
-        $this->model->notify(new ReportSent());
+        try {
+            return Report::create([
+                'reason' => $request->post('reason'),
+                'type' => Report::TYPE_USER,
+                'status' => Report::STATUS_REPORTED,
+                'media_id' => new ObjectId($media->_id),
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
 
-        return $this->model;
+            return null;
+        }
     }
 }
