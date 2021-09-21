@@ -8,12 +8,14 @@ use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Models\Report;
 use Aparlay\Core\Observers\BaseModelObserver;
 use Aparlay\Core\Observers\BlockObserver;
 use Aparlay\Core\Observers\MediaLikeObserver;
 use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\MediaVisitObserver;
 use Aparlay\Core\Observers\UserObserver;
+use Aparlay\Core\Observers\ReportObserver;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -43,6 +45,7 @@ class EventServiceProvider extends ServiceProvider
         Media::observe(MediaObserver::class);
         MediaVisit::observe(MediaVisitObserver::class);
         User::observe(UserObserver::class);
+        Report::observe(ReportObserver::class);
         parent::boot();
     }
 }

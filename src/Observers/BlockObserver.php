@@ -43,7 +43,7 @@ class BlockObserver
      * @return void
      */
     public function created(Block $block)
-    {
+    {  
         $block->creatorObj->block_count++;
         $block->creatorObj->addToSet('blocks', [
             '_id' => new ObjectId($block->user['_id']),

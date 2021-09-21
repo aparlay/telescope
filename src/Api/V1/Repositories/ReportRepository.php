@@ -60,15 +60,16 @@ class ReportRepository implements RepositoryInterface
      * @return array
      */
     public function createUserReport(User $user, ReportRequest $request)
-    {
+    {    
         try {
+           
             return Report::create([
                 'reason' => $request->post('reason'),
                 'type' => Report::TYPE_USER,
                 'status' => Report::STATUS_REPORTED,
-                'user_id' => new ObjectId($user->_id),
-                'notify' => new ReportSent(),
+                'user_id' => new ObjectId($user->_id)
             ]);
+
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
@@ -90,8 +91,7 @@ class ReportRepository implements RepositoryInterface
                 'reason' => $request->post('reason'),
                 'type' => Report::TYPE_USER,
                 'status' => Report::STATUS_REPORTED,
-                'media_id' => new ObjectId($media->_id),
-                'notify' => new ReportSent(),
+                'media_id' => new ObjectId($media->_id)
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
