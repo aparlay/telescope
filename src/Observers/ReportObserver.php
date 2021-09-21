@@ -8,7 +8,7 @@ use Aparlay\Core\Api\V1\Notifications\ReportSent;
 
 class ReportObserver
 {
-    
+
     /**
      * Handle the Report "created" event.
      *
@@ -16,8 +16,7 @@ class ReportObserver
      * @return void
      */
     public function created(Report $report)
-    {  
-       $report->notify( new ReportSent());
+    {
+        $report->notify(new ReportSent());
     }
-
 }

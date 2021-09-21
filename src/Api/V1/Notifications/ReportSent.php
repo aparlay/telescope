@@ -40,7 +40,7 @@ class ReportSent extends Notification implements ShouldQueue
      * @return SlackMessage
      */
     public function toSlack($notifiable)
-    {   
+    {
         $message = $notifiable->creator->slack_admin_url ?? 'A Guest user';
         $message .= ' reported '.$notifiable->slack_subject_admin_url;
         $message .= PHP_EOL.'_*Reason:*_ '.$notifiable->reason;
