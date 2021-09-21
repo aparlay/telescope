@@ -30,39 +30,34 @@ class MediaRepository implements RepositoryInterface
     {
         $user = auth()->user();
 
-        try {
-            $this->model->visibility = $request->input('visibility', 0);
-            $this->model->creator = [
-                '_id'      => new ObjectId($user->_id),
-                'username' => $user->username,
-                'avatar'   => $user->avatar,
-            ];
-            $this->model->user_id = new ObjectId($user->_id);
-            $this->model->description = $request->input('description');
-            $this->model->count_fields_updated_at = [];
+        $this->model->visibility = $request->input('visibility', 0);
+        $this->model->creator = [
+            '_id'      => new ObjectId($user->_id),
+            'username' => $user->username,
+            'avatar'   => $user->avatar,
+        ];
+        $this->model->user_id = new ObjectId($user->_id);
+        $this->model->description = $request->input('description');
+        $this->model->count_fields_updated_at = [];
 
-            if ($request->hasFile('file')) {
-                $file = $request->file;
+        if ($request->hasFile('file')) {
+            $file = $request->file;
 
-                $this->model->file = uniqid('tmp_', true).'.'.$file->extension();
-                $path = Storage::path('upload').'/'.$this->model->file;
+            $this->model->file = uniqid('tmp_', true).'.'.$file->extension();
+            $path = Storage::path('upload').'/'.$this->model->file;
 
-                if (! $file->storeAs('upload', $path)) {
-                    $this->error(__('Cannot upload the file.'));
-                }
-            } elseif (! empty($this->model->file)
-                && ! file_exists(Storage::path('upload').'/'.$this->model->file)) {
-                $this->error(__('Uploaded file does not exists.'));
+            if (! $file->storeAs('upload', $path)) {
+                $this->error(__('Cannot upload the file.'));
             }
-            $this->model->save();
-            $this->model->refresh();
-
-            return $this->model;
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
-            return null;
+        } elseif (! empty($this->model->file)
+            && ! file_exists(Storage::path('upload').'/'.$this->model->file)) {
+            $this->error(__('Uploaded file does not exists.'));
         }
+        $this->model->save();
+        $this->model->refresh();
+
+        return $this->model;
+
 
         // $media = new Media([
         //    'visibility'  => $request->input('visibility', 0),

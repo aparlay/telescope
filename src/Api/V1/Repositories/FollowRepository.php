@@ -34,11 +34,12 @@ class FollowRepository implements RepositoryInterface
     {
         $creator = auth()->user();
         try {
-            $this->model->user = $data['user'];
-            $this->model->creator = ['_id' => new ObjectId($creator->_id)];
-            $this->model->save();
 
-            return $this->model;
+            return Follow::create([
+                'user' => $data['user'],
+                'creator' => ['_id' => new ObjectId($creator->_id)],
+            ]);
+           
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
