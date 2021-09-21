@@ -2,26 +2,13 @@
 
 namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Report;
 use Aparlay\Core\Api\V1\Notifications\ReportSent;
 
-use MongoDB\BSON\ObjectId;
 
 class ReportObserver
 {
-     /**
-     * Handle the Report "creating" event.
-     *
-     * @param  Report  $report
-     * @return void
-     */
-    public function creating(Report  $report)
-    {
-        
-    }
-
-
+    
     /**
      * Handle the Report "created" event.
      *
