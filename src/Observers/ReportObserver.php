@@ -2,13 +2,11 @@
 
 namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Models\Report;
 use Aparlay\Core\Api\V1\Notifications\ReportSent;
-
+use Aparlay\Core\Models\Report;
 
 class ReportObserver
 {
-
     /**
      * Handle the Report "created" event.
      *
