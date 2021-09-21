@@ -31,7 +31,7 @@ class MediaCollection extends ResourceCollection
             '_meta' => [
                 'per_page' => $this->resource->perPage(),
                 'current_page' => $this->resource->currentPage(),
-                'page_count' => $this->resource->count(),
+                'page_count' => $this->resource->lastPage(),
                 'total_count' => $this->resource->total(),
             ],
         ];
