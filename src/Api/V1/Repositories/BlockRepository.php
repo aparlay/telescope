@@ -35,12 +35,10 @@ class BlockRepository implements RepositoryInterface
         $creator = auth()->user();
 
         try {
-            
             return Block::create([
                 'user' => $data['user'],
                 'creator' => ['_id' => new ObjectId($creator->_id)],
             ]);
-
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
