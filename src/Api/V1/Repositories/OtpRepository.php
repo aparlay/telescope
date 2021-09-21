@@ -18,7 +18,8 @@ class OtpRepository
     {
         /* Set the Default Values and required to be input parameters */
         try {
-            $data = [
+          
+            return Otp::create([
                 'identity'      => $otp['identity'],
                 'otp'           => (string) random_int(
                     config('app.otp.length.min'),
@@ -29,9 +30,7 @@ class OtpRepository
                 'device_id'     => $otp['device_id'],
                 'incorrect'     => 0,
                 'validated'     => false,
-            ];
-
-            return Otp::create($data);
+            ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 

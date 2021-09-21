@@ -62,16 +62,14 @@ class ReportRepository implements RepositoryInterface
     public function createUserReport(User $user, ReportRequest $request)
     {
         try {
-            $data = Report::create([
+            return Report::create([
                 'reason' => $request->post('reason'),
                 'type' => Report::TYPE_USER,
                 'status' => Report::STATUS_REPORTED,
                 'user_id' => new ObjectId($user->_id),
+                'notify' => new ReportSent()
             ]);
 
-            $this->model->notify(new ReportSent());
-
-            return $data;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
@@ -89,16 +87,14 @@ class ReportRepository implements RepositoryInterface
     public function createMediaReport(Media $media, ReportRequest $request)
     {
         try {
-            $data = Report::create([
+            return Report::create([
                 'reason' => $request->post('reason'),
                 'type' => Report::TYPE_USER,
                 'status' => Report::STATUS_REPORTED,
                 'media_id' => new ObjectId($media->_id),
+                'notify' => new ReportSent()
             ]);
 
-            $this->model->notify(new ReportSent());
-
-            return $data;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
