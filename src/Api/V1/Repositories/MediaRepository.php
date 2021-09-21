@@ -58,7 +58,6 @@ class MediaRepository implements RepositoryInterface
 
         return $this->model;
 
-
         // $media = new Media([
         //    'visibility'  => $request->input('visibility', 0),
         //    'creator'     => [
