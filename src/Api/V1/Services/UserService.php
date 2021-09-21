@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Services;
 use Aparlay\Core\Api\V1\Models\Login;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\UserRepository;
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Exception;
@@ -160,5 +161,30 @@ class UserService
         $this->userRepository = new UserRepository($user);
 
         return $this->userRepository->deleteAccount();
+    }
+
+    /**
+     * Responsible for set user avatar.
+     *
+     * @return string
+     */
+    public function changeDefaultAvatar()
+    {
+        /* Set gender by default value */
+        $gender = auth()->user()->gender ?? User::GENDER_MALE;
+
+        if (! empty($gender)) {
+            /* Set avatar based on Gender */
+            $femaleFilename = 'default_fm_'.random_int(1, 60).'.png';
+            $maleFilename = 'default_m_'.random_int(1, 120).'.png';
+            $filename = match ($gender) {
+                User::GENDER_FEMALE => $femaleFilename,
+                User::GENDER_MALE => $maleFilename,
+                default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
+            };
+        }
+        $avatar = Cdn::avatar($filename);
+
+        return $avatar;
     }
 }

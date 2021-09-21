@@ -89,6 +89,11 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
             $this->userService->uploadAvatar($request, $user);
         } else {
+            if ($request->has('avatar') && empty($request->avatar)) {
+                $request->request->add([
+                    'avatar' => $this->userService->changeDefaultAvatar($request),
+                ]);
+            }
             /* Update User Profile Information */
             $user->fill($request->all());
             if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
