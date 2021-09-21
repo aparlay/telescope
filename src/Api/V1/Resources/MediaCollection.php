@@ -21,11 +21,11 @@ class MediaCollection extends ResourceCollection
         return [
             'items' => $this->resource->items(),
             '_links' => [
-                "first" => [
-                    "href" => $this->resource->url($this->resource->onFirstPage()),
+                'first' => [
+                    'href' => $this->resource->url($this->resource->onFirstPage()),
                 ],
-                "last" => [
-                    "href" => $this->resource->url($this->resource->lastPage()),
+                'last' => [
+                    'href' => $this->resource->url($this->resource->lastPage()),
                 ],
             ],
             '_meta' => [
