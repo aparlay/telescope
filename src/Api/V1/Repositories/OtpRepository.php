@@ -18,7 +18,6 @@ class OtpRepository
     {
         /* Set the Default Values and required to be input parameters */
         try {
-          
             return Otp::create([
                 'identity'      => $otp['identity'],
                 'otp'           => (string) random_int(

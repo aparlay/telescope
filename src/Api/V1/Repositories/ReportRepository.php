@@ -67,9 +67,8 @@ class ReportRepository implements RepositoryInterface
                 'type' => Report::TYPE_USER,
                 'status' => Report::STATUS_REPORTED,
                 'user_id' => new ObjectId($user->_id),
-                'notify' => new ReportSent()
+                'notify' => new ReportSent(),
             ]);
-
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
@@ -92,9 +91,8 @@ class ReportRepository implements RepositoryInterface
                 'type' => Report::TYPE_USER,
                 'status' => Report::STATUS_REPORTED,
                 'media_id' => new ObjectId($media->_id),
-                'notify' => new ReportSent()
+                'notify' => new ReportSent(),
             ]);
-
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
