@@ -22,7 +22,7 @@ class UserResource extends JsonResource
         $followingIds = array_column($user->followings, '_id');
         $followingUser = array_search($this->_id, $followingIds);
         $isFollowed = isset($user->followings[$followingUser]) ? true : false;
-        
+
         $isBlocked = ! ($user = auth()->user()) && isset($user->block[(string) $this->_id]);
 
         return [
