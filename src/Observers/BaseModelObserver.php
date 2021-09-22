@@ -34,12 +34,12 @@ class BaseModelObserver
             $model->media_id = new ObjectId($model->media_id);
         }
 
-        if (!empty($model->casts)) {
+        if (! empty($model->casts)) {
             foreach ($model->casts as $field => $type) {
                 $value = match ($type) {
                     'array' => (array) $model->$field,
-                    'boolean' => (boolean) $model->$field,
-                    'integer' => (integer) $model->$field,
+                    'boolean' => (bool) $model->$field,
+                    'integer' => (int) $model->$field,
                     'float' => (float) $model->$field,
                     'string' => (string) $model->$field,
                     default => $model->$field,
@@ -48,6 +48,5 @@ class BaseModelObserver
                 $model->$field = $value;
             }
         }
-
     }
 }

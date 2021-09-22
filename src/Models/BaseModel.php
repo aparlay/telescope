@@ -8,7 +8,6 @@ use MongoDB\BSON\ObjectId;
 
 class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
 {
-
     protected $dates = [
         'created_at',
         'updated_at',

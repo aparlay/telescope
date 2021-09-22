@@ -158,7 +158,6 @@ class User extends Authenticatable implements JWTSubject
         'deleted_at',
     ];
 
-
     protected $attributes = [
         'count_fields_updated_at' => [],
         'setting' => [
@@ -208,7 +207,6 @@ class User extends Authenticatable implements JWTSubject
         'updated_at',
         'deleted_at',
     ];
-
 
     /**
      * The attributes that should be hidden for arrays.
