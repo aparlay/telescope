@@ -33,7 +33,7 @@ class MeRequest extends FormRequest
     public function rules()
     {
         return [
-            'avatar' => ['image', 'mimes:png,jpg,jpeg,gif', 'max:10485760'],
+            'avatar' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:10485760'],
             'username' => ['unique:users', 'min:2', 'max:255'],
         ];
     }
