@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Notifications\ReportSent;
 use Aparlay\Core\Api\V1\Requests\ReportRequest;
+use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
 class ReportRepository implements RepositoryInterface
