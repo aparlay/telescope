@@ -376,7 +376,6 @@ class User extends Authenticatable implements JWTSubject
         $this->attributes['count_fields_updated_at'] = $attributeValue;
     }
 
-
     /**
      * Get the phone associated with the user.
      */

@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
+use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
 class BlockRepository implements RepositoryInterface
