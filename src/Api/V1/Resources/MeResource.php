@@ -19,6 +19,7 @@ class MeResource extends JsonResource
     {
         return [
             '_id' => (string) $this->_id,
+            'referral_id' => (string) $this->referral_id,
             'username' => $this->username,
             'bio' => $this->bio,
             'full_name' => $this->full_name,

@@ -19,9 +19,9 @@ class ReportResource extends JsonResource
     {
         return [
             '_id' => (string) $this->_id,
-            'media_id' => $this->media_id,
-            'user_id' => $this->user_id,
-            'comment_id' => $this->comment_id,
+            'media_id' => (string) $this->media_id,
+            'user_id' => (string) $this->user_id,
+            'comment_id' => (string) $this->comment_id,
             'reason' => $this->reason,
             'type' => Report::getTypes()[$this->type],
             'status' => Report::getStatuses()[$this->status],

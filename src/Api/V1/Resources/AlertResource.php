@@ -21,7 +21,7 @@ class AlertResource extends JsonResource
             '_id' => (string) $this->_id,
             'title' => $this->title,
             'reason' => $this->reason,
-            'created_at' => DT::utcToTimestamp($this->created_at),
+            'created_at' => $this->created_at->valueOf(),
         ];
     }
 }

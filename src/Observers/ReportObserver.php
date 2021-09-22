@@ -5,7 +5,7 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Api\V1\Notifications\ReportSent;
 use Aparlay\Core\Models\Report;
 
-class ReportObserver
+class ReportObserver extends BaseModelObserver
 {
     /**
      * Handle the Report "created" event.
@@ -13,7 +13,7 @@ class ReportObserver
      * @param  Report  $report
      * @return void
      */
-    public function created(Report $report)
+    public function created(Report $report): void
     {
         $report->notify(new ReportSent());
     }

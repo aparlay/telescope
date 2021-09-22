@@ -10,7 +10,7 @@ use Aparlay\Core\Jobs\UpdateMedia;
 use Aparlay\Core\Models\User;
 use Exception;
 
-class UserObserver
+class UserObserver extends BaseModelObserver
 {
     /**
      * Handle the User "creating" event.
@@ -19,7 +19,7 @@ class UserObserver
      * @return void
      * @throws Exception
      */
-    public function creating(User $user)
+    public function creating(User $user): void
     {
         if (empty($user->avatar)) {
             $maleAvatar = 'default_m_'.random_int(1, 120).'.png';
@@ -37,10 +37,11 @@ class UserObserver
     /**
      * Create a new event instance.
      *
+     * @param  User  $user
      * @return void
      * @throws Exception
      */
-    public function saved(User $user)
+    public function saved(User $user): void
     {
         if (! $user->wasRecentlyCreated && $user->wasChanged('avatar')) {
             dispatch((new UpdateAvatar((string) $user->_id))->onQueue('low'));

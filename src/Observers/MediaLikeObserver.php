@@ -7,7 +7,7 @@ use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use MongoDB\BSON\ObjectId;
 
-class MediaLikeObserver
+class MediaLikeObserver extends BaseModelObserver
 {
     /**
      * Handle the MediaLike "creating" event.
@@ -15,7 +15,7 @@ class MediaLikeObserver
      * @param  MediaLike  $mediaLike
      * @return void
      */
-    public function creating(MediaLike $mediaLike)
+    public function creating(MediaLike $mediaLike): void
     {
         $creator = User::user($mediaLike->creator['_id'])->first();
 
@@ -32,7 +32,7 @@ class MediaLikeObserver
      * @param  MediaLike  $mediaLike
      * @return void
      */
-    public function created(MediaLike $mediaLike)
+    public function created(MediaLike $mediaLike): void
     {
         $media = $mediaLike->mediaObj;
         $media->like_count++;
@@ -68,7 +68,7 @@ class MediaLikeObserver
      * @param  MediaLike  $mediaLike
      * @return void
      */
-    public function deleted(MediaLike $mediaLike)
+    public function deleted(MediaLike $mediaLike): void
     {
         $media = $mediaLike->mediaObj;
         $media->like_count--;

@@ -150,6 +150,22 @@ class Media extends BaseModel
         'visits' => [],
         'status' => self::STATUS_QUEUED,
         'is_protected' => false,
+        'like_count' => 0,
+        'visit_count' => 0,
+        'comment_count' => 0,
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'status' => 'integer',
+        'visibility' => 'integer',
+        'like_count' => 'integer',
+        'visit_count' => 'integer',
+        'comment_count' => 'integer',
     ];
 
     /**
@@ -167,16 +183,6 @@ class Media extends BaseModel
      * @var array
      */
     protected $appends = [];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'status' => 'integer',
-        'visibility' => 'integer',
-    ];
 
     public static function getVisibilities()
     {

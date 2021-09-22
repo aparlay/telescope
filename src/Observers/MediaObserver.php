@@ -9,11 +9,12 @@ use Aparlay\Core\Models\Media;
 use Exception;
 use MongoDB\BSON\ObjectId;
 
-class MediaObserver
+class MediaObserver extends BaseModelObserver
 {
     /**
      * Create a new event instance.
      *
+     * @param Media $media
      * @return void
      * @throws Exception
      */
@@ -61,14 +62,16 @@ class MediaObserver
     /**
      * Create a new event instance.
      *
+     * @param Media $model
      * @return void
      * @throws Exception
      */
-    public function saving(Media $media)
+    public function saving($model): void
     {
-        $media->hashtags = MediaService::extractHashtags($media->description);
+        parent::saving($model);
+        $model->hashtags = MediaService::extractHashtags($model->description);
 
-        $extractedPeople = MediaService::extractPeople($media->description);
+        $extractedPeople = MediaService::extractPeople($model->description);
         if (! empty($extractedPeople)) {
             $users = [];
             $usersQuery = \Aparlay\Core\Models\User::select([
@@ -76,32 +79,33 @@ class MediaObserver
             ])->usernames($extractedPeople)->limit(20)->get();
             if (! $usersQuery->isEmpty()) {
                 foreach ($usersQuery->toArray() as $user) {
-                    $users[] = $media->createSimpleUser($user);
+                    $users[] = $model->createSimpleUser($user);
                 }
             }
-            $media->people = $users;
+            $model->people = $users;
         }
 
-        if ($media->wasChanged('file') && str_contains($media->file, config('app.cdn.videos'))) {
-            $media->file = str_replace(config('app.cdn.videos'), '', $media->file);
+        if ($model->wasChanged('file') && str_contains($model->file, config('app.cdn.videos'))) {
+            $model->file = str_replace(config('app.cdn.videos'), '', $model->file);
         }
 
-        if ($media->status === Media::STATUS_DENIED) {
-            $media->visibility = Media::VISIBILITY_PRIVATE;
+        if ($model->status === Media::STATUS_DENIED) {
+            $model->visibility = Media::VISIBILITY_PRIVATE;
         }
 
-        if ($media->wasRecentlyCreated) {
-            $media->slug = MediaService::generateSlug(6);
+        if ($model->wasRecentlyCreated) {
+            $model->slug = MediaService::generateSlug(6);
         }
     }
 
     /**
      * Create a new event instance.
      *
+     * @param Media $media
      * @return void
      * @throws Exception
      */
-    public function saved(Media $media)
+    public function saved(Media $media): void
     {
         if ($media->wasRecentlyCreated === false) {
             $creatorUser = $media->userObj;
@@ -129,10 +133,11 @@ class MediaObserver
     /**
      * Create a new event instance.
      *
+     * @param Media $media
      * @return void
      * @throws Exception
      */
-    public function deleted(Media $media)
+    public function deleted(Media $media): void
     {
         $creatorUser = $media->userObj;
         $creatorUser->media_count--;
