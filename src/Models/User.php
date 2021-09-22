@@ -351,6 +351,15 @@ class User extends Authenticatable implements JWTSubject
         $this->attributes['count_fields_updated_at'] = $attributeValue;
     }
 
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function mediaObjs()
+    {
+        return $this->hasMany(Media::class, 'user_id');
+    }
+
     /**
      * Get the media's skin score.
      *
