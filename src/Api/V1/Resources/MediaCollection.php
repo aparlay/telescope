@@ -21,7 +21,7 @@ class MediaCollection extends ResourceCollection
         $links = [
             'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
             'last' => ['href' => $this->resource->url($this->resource->lastPage())],
-            'self' => ['href' => $this->resource->url($this->resource->currentPage())]
+            'self' => ['href' => $this->resource->url($this->resource->currentPage())],
         ];
 
         if ($this->resource->previousPageUrl()) {
@@ -32,7 +32,7 @@ class MediaCollection extends ResourceCollection
 
         if ($this->resource->nextPageUrl()) {
             $links['next'] = [
-                'href' => str_replace('http://', 'https://', $this->resource->nextPageUrl())
+                'href' => str_replace('http://', 'https://', $this->resource->nextPageUrl()),
             ];
         }
 
