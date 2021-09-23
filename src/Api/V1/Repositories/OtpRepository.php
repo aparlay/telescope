@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Otp;
 use Aparlay\Core\Helpers\DT;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class OtpRepository
@@ -17,20 +18,24 @@ class OtpRepository
     public static function create(array $otp)
     {
         /* Set the Default Values and required to be input parameters */
-        $data = [
-            'identity'      => $otp['identity'],
-            'otp'           => (string) random_int(
-                config('app.otp.length.min'),
-                config('app.otp.length.max')
-            ),
-            'expired_at'    => DT::utcDateTime(['s' => config('app.otp.duration')]),
-            'type'          => Str::contains($otp['identity'], '@') ? Otp::TYPE_EMAIL : Otp::TYPE_SMS,
-            'device_id'     => $otp['device_id'],
-            'incorrect'     => 0,
-            'validated'     => false,
-        ];
+        try {
+            return Otp::create([
+                'identity'      => $otp['identity'],
+                'otp'           => (string) random_int(
+                    config('app.otp.length.min'),
+                    config('app.otp.length.max')
+                ),
+                'expired_at'    => DT::utcDateTime(['s' => config('app.otp.duration')]),
+                'type'          => Str::contains($otp['identity'], '@') ? Otp::TYPE_EMAIL : Otp::TYPE_SMS,
+                'device_id'     => $otp['device_id'],
+                'incorrect'     => 0,
+                'validated'     => false,
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
 
-        return Otp::create($data);
+            return null;
+        }
     }
 
     /**

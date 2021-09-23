@@ -17,7 +17,12 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $isFollowed = ! ($user = auth()->user()) && isset($user->following[(string) $this->_id]);
+        $user = auth()->user();
+
+        $followingIds = array_column($user->followings, '_id');
+        $followingUser = array_search($this->_id, $followingIds);
+        $isFollowed = isset($user->followings[$followingUser]) ? true : false;
+
         $isBlocked = ! ($user = auth()->user()) && isset($user->block[(string) $this->_id]);
 
         return [
@@ -30,9 +35,9 @@ class UserResource extends JsonResource
             'is_followed' => $isFollowed,
             'is_blocked' => $isBlocked,
             'promo_link' => $this->promo_link,
-            'follower_count' => (int) $this->follower_count,
-            'following_count' => (int) $this->following_count,
-            'like_count' => (int) $this->like_count,
+            'follower_count' => $this->follower_count,
+            'following_count' => $this->following_count,
+            'like_count' => $this->like_count,
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [

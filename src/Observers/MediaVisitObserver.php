@@ -4,29 +4,30 @@ namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaVisit;
-use Aparlay\Core\Observers\BaseModelObserver;
 use Exception;
 
-class MediaVisitObserver
+class MediaVisitObserver extends BaseModelObserver
 {
     /**
      * Create a new event instance.
      *
+     * @param MediaVisit $model
      * @return void
      * @throws Exception
      */
-    public function saving(MediaVisit $mediaVisit)
+    public function saving($model): void
     {
-        BaseModelObserver::dispatch($mediaVisit);
-        $mediaVisit->push('media_ids', $mediaVisit->media_id, true);
+        parent::saving($model);
+        $model->push('media_ids', $model->media_id, true);
     }
 
     /**
      * Create a new event instance.
      *
+     * @param  MediaVisit  $mediaVisit
      * @return void
      */
-    public function saved(MediaVisit $mediaVisit)
+    public function saved(MediaVisit $mediaVisit): void
     {
         if ($mediaVisit->wasChanged('media_ids')) {
             $media = $mediaVisit->mediaObj;

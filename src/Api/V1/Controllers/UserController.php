@@ -88,6 +88,9 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
             $this->userService->uploadAvatar($request, $user);
         } else {
+            if ($request->has('avatar') && empty($request->avatar)) {
+                $request->merge(['avatar' => $this->userService->changeDefaultAvatar($request)]);
+            }
             /* Update User Profile Information */
             $user->fill($request->all());
             if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
@@ -96,6 +99,7 @@ class UserController extends Controller
             $user->save();
             $user->refresh();
         }
+
         /* Return the updated user data */
         return $this->response(
             new MeResource($user),

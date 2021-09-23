@@ -10,7 +10,7 @@ use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use MongoDB\BSON\ObjectId;
 
-class BlockObserver
+class BlockObserver extends BaseModelObserver
 {
     /**
      * Handle the Block "creating" event.
@@ -18,7 +18,7 @@ class BlockObserver
      * @param  Block  $block
      * @return void
      */
-    public function creating(Block $block)
+    public function creating(Block $block): void
     {
         $user = User::user($block->user['_id'])->first();
         $creator = User::user($block->creator['_id'])->first();
@@ -42,7 +42,7 @@ class BlockObserver
      * @param  Block  $block
      * @return void
      */
-    public function created(Block $block)
+    public function created(Block $block): void
     {
         $block->creatorObj->block_count++;
         $block->creatorObj->addToSet('blocks', [
@@ -89,7 +89,7 @@ class BlockObserver
      * @param  Block  $block
      * @return void
      */
-    public function deleted(Block $block)
+    public function deleted(Block $block): void
     {
         $block->creatorObj->block_count--;
         $block->creatorObj->removeFromSet('blocks', [

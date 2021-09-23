@@ -76,23 +76,29 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
 
     /* Authentication Group */
     Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
-        Route::match(['put', 'patch'], '/alert/{alert}', [AlertController::class, 'update'])->name('alert.update');
+        Route::match(['put', 'patch'], '/alert/{alert}', [AlertController::class, 'update'])
+            ->name('alert.update');
     });
 
     /* OTP Endpoints */
-    Route::match(['put', 'patch'], '/change-password', [AuthController::class, 'changePassword'])->name('user.change-password');
+    Route::match(['put', 'patch'], '/change-password', [AuthController::class, 'changePassword'])
+        ->name('user.change-password');
     Route::patch('/validate-otp', [AuthController::class, 'validateOtp'])->name('user.validateOtp');
     Route::post('/request-otp', [AuthController::class, 'requestOtp'])->name('user.requestOtp');
 
     Route::post('/login', [AuthController::class, 'login'])->name('user.login');
     Route::post('/register', [AuthController::class, 'register'])->name('user.register');
-    Route::match(['put', 'patch'], '/refresh', [AuthController::class, 'refresh'])->name('user.refreshToken');
+    Route::match(['put', 'patch'], '/refresh', [AuthController::class, 'refresh'])
+        ->name('user.refreshToken');
 
     /* Without Middleware Endpoints */
-    Route::get('/version/{os}/{version}', [VersionController::class, 'show'])->name('version.show')
+    Route::get('/version/{os}/{version}', [VersionController::class, 'show'])
+        ->name('version.show')
         ->withoutMiddleware(['device-id']);
-    Route::get('/cache', [SiteController::class, 'cache'])->name('site.cache')
+    Route::get('/cache', [SiteController::class, 'cache'])
+        ->name('site.cache')
         ->withoutMiddleware(['device-id']);
-    Route::get('/health', [SiteController::class, 'health'])->name('site.health')
+    Route::get('/health', [SiteController::class, 'health'])
+        ->name('site.health')
         ->withoutMiddleware(['device-id']);
 });

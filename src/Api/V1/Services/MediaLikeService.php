@@ -32,7 +32,8 @@ class MediaLikeService
                 'media_id' => new ObjectId($media->_id),
                 'user_id' => new ObjectId($media->userObj->_id),
             ]);
-            $statusCode = Response::HTTP_CREATED;
+
+            $statusCode = $like ? Response::HTTP_CREATED : Response::HTTP_UNPROCESSABLE_ENTITY;
         }
 
         return ['data' => $like, 'statusCode' => $statusCode];

@@ -5,7 +5,14 @@ namespace Aparlay\Core;
 use Aparlay\Core\Api\V1\Http\Kernel;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
+use Aparlay\Core\Commands\AnalyticsDailyCommand;
+use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CoreCommand;
+use Aparlay\Core\Commands\VideoReprocessCommand;
+use Aparlay\Core\Commands\VideoScoreCommand;
+use Aparlay\Core\Commands\VideoScoreDailyCommand;
+use Aparlay\Core\Commands\VideoScoreHourlyCommand;
+use Aparlay\Core\Commands\VideoUpdateInfoCommand;
 use Aparlay\Core\Commands\WsCommand;
 use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
@@ -55,7 +62,14 @@ class CoreServiceProvider extends ServiceProvider
 
             $this->commands([
                 CoreCommand::class,
+                VideoReprocessCommand::class,
+                VideoScoreCommand::class,
+                VideoScoreDailyCommand::class,
+                VideoScoreHourlyCommand::class,
+                VideoUpdateInfoCommand::class,
                 WsCommand::class,
+                AnalyticsTwoMonthCommand::class,
+                AnalyticsDailyCommand::class,
             ]);
         }
 

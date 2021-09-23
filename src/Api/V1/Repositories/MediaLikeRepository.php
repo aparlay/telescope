@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
+use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
 class MediaLikeRepository implements RepositoryInterface
@@ -28,18 +29,23 @@ class MediaLikeRepository implements RepositoryInterface
      * Create MediaLike.
      *
      * @param array $data
-     * @return MediaLike
+     * @return MediaLike|null
      */
     public function create(array $data)
     {
         $creator = auth()->user();
 
-        $this->model->media_id = $data['media_id'];
-        $this->model->user_id = $data['user_id'];
-        $this->model->creator = ['_id' => new ObjectId($creator->_id)];
-        $this->model->save();
+        try {
+            return MediaLike::create([
+                'media_id' => $data['media_id'],
+                'user_id' => $data['user_id'],
+                'creator' => ['_id' => new ObjectId($creator->_id)],
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
 
-        return $this->model;
+            return null;
+        }
     }
 
     public function update(array $data, $id)

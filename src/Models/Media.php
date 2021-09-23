@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
 use MathPHP\Statistics\Descriptive;
@@ -149,6 +150,22 @@ class Media extends BaseModel
         'visits' => [],
         'status' => self::STATUS_QUEUED,
         'is_protected' => false,
+        'like_count' => 0,
+        'visit_count' => 0,
+        'comment_count' => 0,
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'status' => 'integer',
+        'visibility' => 'integer',
+        'like_count' => 'integer',
+        'visit_count' => 'integer',
+        'comment_count' => 'integer',
     ];
 
     /**
@@ -166,16 +183,6 @@ class Media extends BaseModel
      * @var array
      */
     protected $appends = [];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'status' => 'integer',
-        'visibility' => 'integer',
-    ];
 
     public static function getVisibilities()
     {
@@ -234,7 +241,7 @@ class Media extends BaseModel
      */
     public function userObj()
     {
-        return $this->belongsTo(User::class, 'creator._id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -304,7 +311,7 @@ class Media extends BaseModel
      */
     public function getTimeScoreAttribute(): int
     {
-        $oldness = time() - DT::utcToTimestamp($this->created_at);
+        $oldness = time() - $this->created_at->timestamp;
 
         return match (true) {
             $oldness <= 21600 => 10,
@@ -328,12 +335,12 @@ class Media extends BaseModel
      */
     public function getLikeScoreAttribute(): int
     {
-        $timestamp = DT::utcToTimestamp($this->created_at);
+        $timestamp = $this->created_at->timestamp;
         $windowDuration = 86400 * 10;
-        $startUtc = DT::timestampToUtc($timestamp - $windowDuration);
-        $endUtc = DT::timestampToUtc($timestamp + $windowDuration);
+        $startTime = Carbon::createFromTimestamp($timestamp - $windowDuration)->toDateTimeString();
+        $endTime = Carbon::createFromTimestamp($timestamp + $windowDuration)->toDateTimeString();
         $meanLikes = [];
-        foreach (Analytic::date($startUtc, $endUtc)->get() as $analytic) {
+        foreach (Analytic::date($startTime, $endTime)->get() as $analytic) {
             if (isset($analytic['media']['mean_likes']) && 0 !== $analytic['media']['mean_likes']) {
                 $meanLikes[] = $analytic['media']['mean_likes'];
             }
@@ -365,6 +372,25 @@ class Media extends BaseModel
             $z >= -2.5 && $z <= -2 => 1,
             default => 0,
         };
+    }
+
+    /**
+     * Get the media visit score.
+     */
+    public function getVisitScoreAttribute(): int
+    {
+        $totalLengthWatched = self::availableForFollower()->sum('length_watched');
+        $totalLength = self::availableForFollower()->sum('length');
+
+        $ratio = $this->length > 0 ? $this->length_watched / $this->length : 0;
+
+        if ($ratio && $totalLengthWatched && $totalLength) {
+            $avgRatio = $totalLengthWatched / $totalLength;
+
+            return $ratio > 0 ? (10 * ($ratio / ($ratio + $avgRatio))) : 0;
+        }
+
+        return 0;
     }
 
     /**

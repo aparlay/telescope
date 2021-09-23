@@ -158,14 +158,22 @@ class User extends Authenticatable implements JWTSubject
         'deleted_at',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+    protected $attributes = [
+        'count_fields_updated_at' => [],
+        'setting' => [
+            'otp' => false,
+            'notifications' => [
+                'unread_message_alerts' => false,
+                'new_followers' => false,
+                'news_and_updates' => false,
+                'tips' => false,
+                'new_subscribers' => false,
+            ],
+        ],
+        'features' => [
+            'tips' => false,
+            'demo' => false,
+        ],
     ];
 
     /**
@@ -174,17 +182,22 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
-        'email_verified_at' => 'datetime',
-        'phone_number_verified_at' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime',
+        'username' => 'string',
+        'full_name' => 'string',
+        'email' => 'string',
         'status' => 'integer',
-    ];
-
-    protected $attributes = [
-        'count_fields_updated_at' => [],
+        'email_verified' => 'boolean',
+        'phone_number_verified' => 'boolean',
+        'gender' => 'boolean',
+        'avatar' => 'string',
+        'interested_in' => 'integer',
+        'visibility' => 'integer',
+        'follower_count' => 'integer',
+        'following_count' => 'integer',
+        'like_count' => 'integer',
+        'block_count' => 'integer',
+        'followed_hashtag_count' => 'integer',
+        'media_count' => 'integer',
     ];
 
     protected $dates = [
@@ -193,6 +206,16 @@ class User extends Authenticatable implements JWTSubject
         'created_at',
         'updated_at',
         'deleted_at',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 
     public static function getFeatures(): array
@@ -349,6 +372,14 @@ class User extends Authenticatable implements JWTSubject
         }
 
         $this->attributes['count_fields_updated_at'] = $attributeValue;
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function mediaObjs()
+    {
+        return $this->hasMany(Media::class, 'created_by');
     }
 
     /**
