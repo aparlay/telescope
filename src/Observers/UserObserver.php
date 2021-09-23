@@ -41,13 +41,13 @@ class UserObserver extends BaseModelObserver
      * @return void
      * @throws Exception
      */
-    public function saved(User $user): void
+    public function updated(User $user)
     {
-        if (! $user->wasRecentlyCreated && $user->wasChanged('avatar')) {
+        if ($user->wasChanged('avatar')) {
             dispatch((new UpdateAvatar((string) $user->_id))->onQueue('low'));
         }
 
-        if (! $user->wasRecentlyCreated && $user->wasChanged('status')) {
+        if ($user->wasChanged('status')) {
             switch ($user->status) {
                 case User::STATUS_DEACTIVATED:
                 case User::STATUS_BLOCKED:
@@ -57,7 +57,7 @@ class UserObserver extends BaseModelObserver
             }
         }
 
-        if (! $user->wasRecentlyCreated && $user->wasChanged('visibility')) {
+        if ($user->wasChanged('visibility')) {
             dispatch((new UpdateMedia((string) $user->_id, ['visibility' => $user->visibility]))->onQueue('low'));
         }
     }
