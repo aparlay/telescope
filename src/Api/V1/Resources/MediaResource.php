@@ -37,6 +37,12 @@ class MediaResource extends JsonResource
             $visits[] = $this->createSimpleUser($visit);
         }
 
+        $isLiked = false;
+        if (auth()->user() && $likes) {
+            $likeUserIds = array_column($likes, '_id');
+            $isLiked = in_array((string) auth()->user()->_id, $likeUserIds);
+        }
+
         return [
             '_id' => (string) $this->_id,
             'description' => $this->description,
@@ -51,7 +57,7 @@ class MediaResource extends JsonResource
             'file' => Cdn::video($this->is_completed ? $this->file : 'default.mp4'),
             'cover' => Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg'),
             'creator' => $this->createSimpleUser($this->creator),
-            'is_liked' => $this->is_liked,
+            'is_liked' => $isLiked,
             'is_visited' => $this->is_visited,
             'is_adult' => $this->is_adult,
             'like_count' => $this->like_count,
