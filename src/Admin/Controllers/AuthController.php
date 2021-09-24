@@ -28,7 +28,7 @@ class AuthController extends Controller
         //make sure only admin type user can login
         $credentials['type'] = 1;
 
-        if(Auth::guard('admin')->attempt($credentials, $remember)) {
+        if (Auth::guard('admin')->attempt($credentials, $remember)) {
             return redirect()->intended('admin/dashboard');
         } else {
             return back()->withErrors([

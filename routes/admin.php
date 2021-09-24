@@ -1,7 +1,7 @@
 <?php
 
-use Aparlay\Core\Admin\Controllers\DashboardController;
 use Aparlay\Core\Admin\Controllers\AuthController;
+use Aparlay\Core\Admin\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,20 +15,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['admin'])->name('admin.')->prefix('admin')->group(function() {
-
+Route::middleware(['admin'])->name('admin.')->prefix('admin')->group(function () {
     Route::get('/', function () {
         return redirect('/admin/login');
     });
 
     /*Authenticated Routes */
-    Route::middleware(['auth:admin'])->group(function() {
+    Route::middleware(['auth:admin'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     });
 
     /* Login Routes */
-    Route::middleware(['guest:admin'])->group(function() {
+    Route::middleware(['guest:admin'])->group(function () {
         Route::get('login', [AuthController::class, 'viewLogin'])->name('login');
         Route::post('login', [AuthController::class, 'postLogin'])->name('login.post');
     });
