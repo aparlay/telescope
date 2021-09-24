@@ -60,6 +60,10 @@ class CoreServiceProvider extends ServiceProvider
                 __DIR__.'/../resources/views/admin' => base_path('resources/views/admin'),
             ], 'views');
 
+            $this->publishes([
+                __DIR__.'/../public' => public_path('admin')
+            ], 'public');
+
             $this->commands([
                 CoreCommand::class,
                 VideoReprocessCommand::class,
