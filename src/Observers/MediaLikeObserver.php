@@ -63,7 +63,7 @@ class MediaLikeObserver
         $user->save();
 
         // Reset the Redis cache
-        $cacheKey = (new MediaLike())->getCollection() . ':creator:' . $mediaLike->creator['_id'];
+        $cacheKey = (new MediaLike())->getCollection().':creator:'.$mediaLike->creator['_id'];
         Redis::del($cacheKey);
         MediaLike::cacheByUserId($mediaLike->creator['_id']);
     }
@@ -103,7 +103,7 @@ class MediaLikeObserver
         $user->save();
 
         // Reset the Redis cache
-        $cacheKey = (new MediaLike())->getCollection() . ':creator:' . $mediaLike->creator['_id'];
+        $cacheKey = (new MediaLike())->getCollection().':creator:'.$mediaLike->creator['_id'];
         Redis::del($cacheKey);
         MediaLike::cacheByUserId($mediaLike->creator['_id']);
     }
