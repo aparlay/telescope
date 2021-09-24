@@ -18,16 +18,27 @@ class MediaCollection extends ResourceCollection
      */
     public function toArray($request): array | Arrayable | JsonSerializable
     {
+        $links = [
+            'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
+            'last' => ['href' => $this->resource->url($this->resource->lastPage())],
+            'self' => ['href' => $this->resource->url($this->resource->currentPage())],
+        ];
+
+        if ($this->resource->previousPageUrl()) {
+            $links['prev'] = [
+                'href' => str_replace('http://', 'https://', $this->resource->previousPageUrl()),
+            ];
+        }
+
+        if ($this->resource->nextPageUrl()) {
+            $links['next'] = [
+                'href' => str_replace('http://', 'https://', $this->resource->nextPageUrl()),
+            ];
+        }
+
         return [
             'items' => $this->resource->items(),
-            '_links' => [
-                'next' => [
-                    'href' => str_replace('http://', 'https://', $this->resource->nextPageUrl()),
-                ],
-                'prev' => [
-                    'href' => str_replace('http://', 'https://', $this->resource->previousPageUrl()),
-                ],
-            ],
+            '_links' => $links,
             '_meta' => [
                 'per_page' => $this->resource->perPage(),
                 'current_page' => $this->resource->currentPage(),
