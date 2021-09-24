@@ -61,7 +61,7 @@ class CoreServiceProvider extends ServiceProvider
             ], 'views');
 
             $this->publishes([
-                __DIR__.'/../public' => public_path('admin')
+                __DIR__.'/../public' => public_path('admin'),
             ], 'public');
 
             $this->commands([
