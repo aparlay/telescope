@@ -27,7 +27,6 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
 
     /* Media Prefix Group */
     Route::prefix('media')->name('media.')->group(function () {
-        Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
 
@@ -38,6 +37,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
 
         /* Authentication Group */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
+            Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list')->withoutMiddleware(['auth:api']);
             Route::post('/', [MediaController::class, 'store'])->name('create');
             Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
             Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
