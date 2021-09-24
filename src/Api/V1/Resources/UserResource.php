@@ -31,7 +31,7 @@ class UserResource extends JsonResource
             'bio' => $this->bio,
             'full_name' => $this->full_name,
             'avatar' => $this->avatar,
-            'visibility' => User::getVisibilities()[$this->visibility],
+            'visibility' => $this->visibility,
             'is_followed' => $isFollowed,
             'is_blocked' => $isBlocked,
             'promo_link' => $this->promo_link,
