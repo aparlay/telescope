@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core;
 
-use Aparlay\Core\Api\V1\Http\Kernel;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
@@ -71,9 +70,10 @@ class CoreServiceProvider extends ServiceProvider
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,
             ]);
+        } else {
+            app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
+            app()->make(\Aparlay\Core\Admin\Http\Kernel::class);
         }
-
-        app()->make(Kernel::class);
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'default_view');
 
