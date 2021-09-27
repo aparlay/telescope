@@ -33,13 +33,15 @@ class MediaPolicy
             return Response::allow();
         }
 
-        $isFollowed = Follow::select(['created_by', '_id'])
-            ->creator($userId)
-            ->user($media->created_by)
-            ->accepted()
-            ->exists();
-        if ($isFollowed) {
-            return Response::allow();
+        if (! auth()->guest()) {
+            $isFollowed = Follow::select(['created_by', '_id'])
+                ->creator($userId)
+                ->user($media->created_by)
+                ->accepted()
+                ->exists();
+            if ($isFollowed) {
+                return Response::allow();
+            }
         }
 
         return Response::deny(__('You can only view media that you\'ve created.'));
