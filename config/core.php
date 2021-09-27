@@ -13,7 +13,7 @@ return [
     ],
 
     'admin' => [
-        'url' => env('ADMIN_DOMAIN', 'https://ltoptop.waptap.dev')
+        'url' => env('ADMIN_DOMAIN', 'https://ltoptop.waptap.dev'),
     ],
 
 ];
