@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['admin'])->name('admin.')->prefix('admin')->group(function () {
+Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin.')->group(function () {
     Route::get('/', function () {
-        return redirect('/admin/login');
+        return redirect()->route('core.admin.dashboard');
     });
 
     /*Authenticated Routes */
-    Route::middleware(['auth:admin'])->group(function () {
+    Route::middleware(['admin-auth:admin'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     });

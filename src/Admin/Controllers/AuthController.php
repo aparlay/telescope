@@ -18,14 +18,15 @@ class AuthController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postLogin(Request $request)
     {
         $credentials = $request->only(['email', 'password']);
         $remember = $request->get('remember');
 
-        //make sure only admin type user can login
+        //make sure only admin type user can do login
         $credentials['type'] = 1;
 
         if (Auth::guard('admin')->attempt($credentials, $remember)) {
@@ -45,6 +46,6 @@ class AuthController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('admin.login');
+        return redirect()->route('core.admin.login');
     }
 }
