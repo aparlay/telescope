@@ -172,7 +172,7 @@ class UserService
     {
         /* Set gender by default value */
         $user = auth()->user();
-        $gender = !empty($user->gender) ? $user->gender : User::GENDER_MALE;
+        $gender = ! empty($user->gender) ? $user->gender : User::GENDER_MALE;
 
         if (! empty($gender)) {
             /* Set avatar based on Gender */
