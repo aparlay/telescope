@@ -96,7 +96,7 @@ class MediaLike extends BaseModel
      */
     public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
