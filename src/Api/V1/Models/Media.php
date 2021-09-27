@@ -13,6 +13,7 @@ use MongoDB\BSON\UTCDateTime;
  * Class Media.
  *
  * @property ObjectId    $_id
+ * @property ObjectId    $user_id
  * @property string      $description
  * @property string      $location
  * @property string      $hash
