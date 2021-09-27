@@ -17,13 +17,16 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $user = auth()->user();
+        $user = auth()->user() ?: false;
+        $isFollowed = false;
+        $isBlocked = false;
+        if ($user) {
+            $followingIds = array_column($user->followings, '_id');
+            $isFollowed = in_array((string) $this->_id, $followingIds);
 
-        $followingIds = array_column($user->followings, '_id');
-        $followingUser = array_search($this->_id, $followingIds);
-        $isFollowed = isset($user->followings[$followingUser]) ? true : false;
-
-        $isBlocked = ! ($user = auth()->user()) && isset($user->block[(string) $this->_id]);
+            $blockedIds = array_column($user->blocks, '_id');
+            $isBlocked = in_array((string) $this->_id, $blockedIds);
+        }
 
         return [
             '_id' => (string) $this->_id,

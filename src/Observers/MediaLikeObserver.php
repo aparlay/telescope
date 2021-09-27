@@ -5,6 +5,7 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
 class MediaLikeObserver extends BaseModelObserver
@@ -60,6 +61,11 @@ class MediaLikeObserver extends BaseModelObserver
         );
 
         $user->save();
+
+        // Reset the Redis cache
+        $cacheKey = (new MediaLike())->getCollection().':creator:'.$mediaLike->creator['_id'];
+        Redis::del($cacheKey);
+        MediaLike::cacheByUserId($mediaLike->creator['_id']);
     }
 
     /**
@@ -95,5 +101,10 @@ class MediaLikeObserver extends BaseModelObserver
             ['likes' => DT::utcNow()]
         );
         $user->save();
+
+        // Reset the Redis cache
+        $cacheKey = (new MediaLike())->getCollection().':creator:'.$mediaLike->creator['_id'];
+        Redis::del($cacheKey);
+        MediaLike::cacheByUserId($mediaLike->creator['_id']);
     }
 }

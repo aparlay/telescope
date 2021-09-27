@@ -27,17 +27,17 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
 
     /* Media Prefix Group */
     Route::prefix('media')->name('media.')->group(function () {
-        Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
 
         /* Cache Group */
-        Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function () {
-            Route::get('/{media}', [MediaController::class, 'show'])->name('show');
+        Route::middleware(['cache.headers:public;max_age=2628000;etag', 'auth:api', 'cookies-auth'])->group(function () {
+            Route::get('/{media}', [MediaController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
         });
 
         /* Authentication Group */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
+            Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list')->withoutMiddleware(['auth:api']);
             Route::post('/', [MediaController::class, 'store'])->name('create');
             Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
             Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
@@ -52,7 +52,6 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
 
         Route::post('/{user}/report', [ReportController::class, 'user'])->name('report');
         Route::get('/{user}/media', [MediaController::class, 'listByUser'])->name('media.list');
-        Route::get('/{user}', [UserController::class, 'show'])->name('show');
 
         /* Authentication Group with user prifix */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
@@ -60,6 +59,7 @@ Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')
             Route::delete('/{user}/block', [BlockController::class, 'destroy'])->name('unblock');
             Route::put('/{user}/follow', [FollowController::class, 'store'])->name('follow');
             Route::delete('/{user}/follow', [FollowController::class, 'destroy'])->name('unfollow');
+            Route::get('/{user}', [UserController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
         });
     });
 
