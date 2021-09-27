@@ -88,7 +88,7 @@ class ReportRepository implements RepositoryInterface
         try {
             return Report::create([
                 'reason' => $request->post('reason'),
-                'type' => Report::TYPE_USER,
+                'type' => Report::TYPE_MEDIA,
                 'status' => Report::STATUS_REPORTED,
                 'media_id' => new ObjectId($media->_id),
             ]);
