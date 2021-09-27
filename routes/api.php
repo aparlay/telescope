@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware(['api', 'format-response', 'device-id'])->name('core.api.v1.')->prefix('v1')->group(function () {
+Route::middleware(['api', 'format-response', 'device-id','throttle:device-id'])->name('core.api.v1.')->prefix('v1')->group(function () {
 
     /* Media Prefix Group */
     Route::prefix('media')->name('media.')->group(function () {
