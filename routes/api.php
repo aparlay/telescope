@@ -39,7 +39,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-trottle:60'
             Route::put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
         });
-
     });
 
     Route::prefix('user')->name('user.')->group(function () {
