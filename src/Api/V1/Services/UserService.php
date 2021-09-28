@@ -171,7 +171,8 @@ class UserService
     public function changeDefaultAvatar()
     {
         /* Set gender by default value */
-        $gender = auth()->user()->gender ?? User::GENDER_MALE;
+        $user = auth()->user();
+        $gender = ! empty($user->gender) ? $user->gender : User::GENDER_MALE;
 
         if (! empty($gender)) {
             /* Set avatar based on Gender */
