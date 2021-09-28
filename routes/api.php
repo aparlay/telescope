@@ -30,11 +30,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'throttle:device-id'])
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
 
-        /* Cache Group */
-        Route::middleware(['cache.headers:public;max_age=2628000;etag', 'auth:api', 'cookies-auth'])->group(function () {
-            Route::get('/{media}', [MediaController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
-        });
-
         /* Authentication Group */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list')->withoutMiddleware(['auth:api']);
@@ -43,6 +38,11 @@ Route::middleware(['api', 'format-response', 'device-id', 'throttle:device-id'])
             Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
             Route::put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
+        });
+
+        /* Cache Group */
+        Route::middleware(['cache.headers:public;max_age=2628000;etag', 'auth:api', 'cookies-auth'])->group(function () {
+            Route::get('/{media}', [MediaController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
         });
     });
 
