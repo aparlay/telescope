@@ -40,10 +40,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-trottle:60'
             Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
         });
 
-        /* Cache Group */
-        Route::middleware(['cache.headers:public;max_age=2628000;etag', 'auth:api', 'cookies-auth'])->group(function () {
-            Route::get('/{media}', [MediaController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
-        });
     });
 
     Route::prefix('user')->name('user.')->group(function () {
