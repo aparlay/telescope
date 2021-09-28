@@ -23,17 +23,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware(['api', 'format-response', 'device-id', 'throttle:device-id'])->name('core.api.v1.')->prefix('v1')->group(function () {
+Route::middleware(['api', 'format-response', 'device-id', 'custom-throttle:60'])->name('core.api.v1.')->prefix('v1')->group(function () {
 
     /* Media Prefix Group */
     Route::prefix('media')->name('media.')->group(function () {
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
-
-        /* Cache Group */
-        Route::middleware(['cache.headers:public;max_age=2628000;etag', 'auth:api', 'cookies-auth'])->group(function () {
-            Route::get('/{media}', [MediaController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
-        });
 
         /* Authentication Group */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
@@ -43,6 +38,11 @@ Route::middleware(['api', 'format-response', 'device-id', 'throttle:device-id'])
             Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
             Route::put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
+        });
+
+        /* Cache Group */
+        Route::middleware(['cache.headers:public;max_age=2628000;etag', 'auth:api', 'cookies-auth'])->group(function () {
+            Route::get('/{media}', [MediaController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
         });
     });
 

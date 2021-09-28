@@ -16,6 +16,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'device-id' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceId::class,
         'cookies-auth' => \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
+        'custom-throttle' => \Aparlay\Core\Api\V1\Http\Middleware\CustomTrottle::class,
     ];
 
     /**
