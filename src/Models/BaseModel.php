@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Observers\BaseModelObserver;
 use Illuminate\Support\Facades\Auth;
 use MongoDB\BSON\ObjectId;
 
