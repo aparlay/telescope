@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core;
 
+use Aparlay\Core\Admin\Providers\AdminRepositoryServiceProvider;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
@@ -38,6 +39,7 @@ class CoreServiceProvider extends ServiceProvider
         }
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
+        $this->app->register(AdminRepositoryServiceProvider::class);
 
         $this->mergeConfig();
     }

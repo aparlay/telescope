@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/css/adminLTE/adminlte.min.css') }}">
     @yield('styles')
 </head>
-<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
     @include('default_view::admin.parts.header')
     @include('default_view::admin.parts.left-sidebar')
