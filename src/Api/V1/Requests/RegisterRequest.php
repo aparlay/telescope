@@ -9,6 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use MongoDB\BSON\ObjectId;
 
 /**
  * @property string email
@@ -63,6 +64,18 @@ class RegisterRequest extends FormRequest
             $this->phone_number = $this->username;
         }
 
+        if (! empty($this->referral_id) && ! ($this->referral_id instanceof ObjectID)) {
+            if (($user = User::user($this->referral_id)->first()) !== null) {
+                $this->referral_id = $user->_id;
+            } elseif (($user = User::username($this->referral_id)->first()) !== null) {
+                $this->referral_id = $user->_id;
+            } elseif (($user = User::email($this->referral_id)->first()) !== null) {
+                $this->referral_id = $user->_id;
+            } elseif (($user = User::phoneNumber($this->referral_id)->first()) !== null) {
+                $this->referral_id = $user->_id;
+            }
+        }
+
         $this->username = uniqid('', false);
 
         /* Set gender by default value */
@@ -114,6 +127,7 @@ class RegisterRequest extends FormRequest
                     'new_subscribers' => false,
                 ],
             ],
+            'referral_id' => $this->referral_id,
             'features' => array_fill_keys(array_keys(User::getFeatures()), false),
         ]);
     }
