@@ -11,7 +11,7 @@ class DashboardController extends Controller
 
     public function __construct(
         AnalyticRepositoryInterface $analytic
-    ){
+    ) {
         $this->analytic = $analytic;
     }
 

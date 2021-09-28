@@ -8,7 +8,8 @@ class AnalyticRepository implements AnalyticRepositoryInterface
 {
     protected $model;
 
-    public function __construct(Analytic $analytic) {
+    public function __construct(Analytic $analytic)
+    {
         $this->model = $analytic;
     }
 
