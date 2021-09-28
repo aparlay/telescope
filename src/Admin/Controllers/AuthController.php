@@ -30,7 +30,7 @@ class AuthController extends Controller
         $credentials['type'] = 1;
 
         if (Auth::guard('admin')->attempt($credentials, $remember)) {
-            return redirect()->intended('admin/dashboard');
+            return redirect()->intended('dashboard');
         } else {
             return back()->withErrors([
                 'error' => 'The provided credentials are incorrect.',
