@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core;
 
-use Aparlay\Core\Api\V1\Http\Kernel;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
@@ -57,8 +56,8 @@ class CoreServiceProvider extends ServiceProvider
             ], 'config');
 
             $this->publishes([
-                __DIR__.'/../resources/views/admin' => base_path('resources/views/admin'),
-            ], 'views');
+                __DIR__.'/../public/admin' => public_path('admin'),
+            ], 'public');
 
             $this->commands([
                 CoreCommand::class,
@@ -71,9 +70,10 @@ class CoreServiceProvider extends ServiceProvider
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,
             ]);
+        } else {
+            app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
+            app()->make(\Aparlay\Core\Admin\Http\Kernel::class);
         }
-
-        app()->make(Kernel::class);
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'default_view');
 
