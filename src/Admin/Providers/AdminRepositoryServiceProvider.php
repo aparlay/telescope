@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 class AdminRepositoryServiceProvider extends ServiceProvider
 {
     /**
-     * Register Repositories
+     * Register Repositories.
      *
      * @return void
      */
