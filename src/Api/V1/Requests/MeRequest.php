@@ -34,7 +34,19 @@ class MeRequest extends FormRequest
     {
         return [
             'avatar' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:10485760'],
-            'username' => ['unique:users', 'min:2', 'max:255'],
+            'username' => ['unique:users', 'min:2', 'max:255', 'alpha_num'],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'username.alpha_num' => 'Username is invalid',
         ];
     }
 
