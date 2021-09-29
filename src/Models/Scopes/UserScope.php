@@ -129,6 +129,7 @@ trait UserScope
 
     /**
      * @param $query
+     * @return mixed
      */
     public function scopeRecentFirst($query): mixed
     {

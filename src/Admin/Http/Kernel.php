@@ -1,6 +1,6 @@
 <?php
 
-namespace Aparlay\Core\Api\V1\Http;
+namespace Aparlay\Core\Admin\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -14,9 +14,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'device-id' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceId::class,
-        'cookies-auth' => \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
-        'device-id-trottle' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceIdTrottle::class,
+        'admin-auth' => \Aparlay\Core\Admin\Http\Middleware\Authenticate::class,
     ];
 
     /**
@@ -27,7 +25,5 @@ class Kernel extends HttpKernel
      * @var string[]
      */
     protected $middlewarePriority = [
-        \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
-        \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ];
 }
