@@ -14,7 +14,7 @@ class AnalyticRepository implements AnalyticRepositoryInterface
         $this->model = $analytic;
     }
 
-    public function getUserAnalytics(): Collection
+    public function getAnalytics(): Collection
     {
         return $this->model->latest()->take(20)->get()->sortBy('date');
     }

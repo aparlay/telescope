@@ -17,7 +17,7 @@ class DashboardController extends Controller
 
     public function dashboard()
     {
-        $data_analytics = $this->analytic->getUserAnalytics();
+        $data_analytics = $this->analytic->getAnalytics();
 
         return view('default_view::admin.pages.dashboard.index')->with(['data_analytics' => $data_analytics]);
     }
