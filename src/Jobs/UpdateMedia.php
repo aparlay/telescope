@@ -63,8 +63,7 @@ class UpdateMedia implements ShouldQueue
     {
         Media::creator($this->user->_id)->chunk(200, function ($models) {
             foreach ($models as $model) {
-                $model->attributes = $this->attributes;
-                $model->save();
+                $model->update($this->attributes);
             }
         });
     }
