@@ -34,7 +34,7 @@ class MeRequest extends FormRequest
     {
         return [
             'avatar' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:10485760'],
-            'username' => ['unique:users', 'min:2', 'max:255', 'alpha_num'],
+            'username' => ['unique:users', 'min:2', 'max:255', 'alpha_dash'],
         ];
     }
 
@@ -46,7 +46,7 @@ class MeRequest extends FormRequest
     public function messages()
     {
         return [
-            'username.alpha_num' => 'Username is invalid',
+            'username.alpha_dash' => 'Username is invalid',
         ];
     }
 
