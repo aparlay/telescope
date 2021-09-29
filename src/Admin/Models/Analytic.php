@@ -6,5 +6,4 @@ namespace Aparlay\Core\Admin\Models;
 
 class Analytic extends AnalyticBase
 {
-
 }
