@@ -46,7 +46,7 @@ class MeRequest extends FormRequest
     public function messages()
     {
         return [
-            'username.alpha_num' => 'Username is invalid',
+            'username.alpha_dash' => 'Username is invalid',
         ];
     }
 
