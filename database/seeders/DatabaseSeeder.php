@@ -23,8 +23,6 @@ class DatabaseSeeder extends Seeder
         DB::collection('media_visits')->truncate();
         DB::collection('users')->truncate();
         DB::collection('versions')->truncate();
-        DB::collection('orders')->truncate();
-        DB::collection('transactions')->truncate();
         $this->call([
             AlertSeeder::class,
             AnalyticSeeder::class,
