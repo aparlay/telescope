@@ -412,15 +412,16 @@ class User extends Authenticatable implements JWTSubject
     public function getUserFollowingsAttribute()
     {
         $followings = [];
-        if (!empty($this->followings)) {
+        if (! empty($this->followings)) {
             foreach ($this->followings as $following) {
                 $followings[] = [
                     '_id' => (string) $following['_id'],
                     'username' => $following['username'],
-                    'avatar' => $following['avatar']
+                    'avatar' => $following['avatar'],
                 ];
             }
         }
+
         return $followings;
     }
 }
