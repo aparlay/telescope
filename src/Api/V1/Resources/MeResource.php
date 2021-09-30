@@ -18,12 +18,12 @@ class MeResource extends JsonResource
     public function toArray($request)
     {
         $followings = [];
-        if (!empty($this->followings)) {
+        if (! empty($this->followings)) {
             foreach ($this->followings as $Userfollowings) {
                 $followings[] = [
                     '_id' => (string) $Userfollowings['_id'],
                     'username' => (string) $Userfollowings['username'],
-                    'avatar' => (string) $Userfollowings['avatar']
+                    'avatar' => (string) $Userfollowings['avatar'],
                 ];
             }
         }
