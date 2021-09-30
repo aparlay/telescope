@@ -14,9 +14,9 @@ trait UserFieldTrait
     public function setUserAttribute($user)
     {
         $user = User::user($user['_id'])->first();
-
+        
         $this->attributes['user'] = [
-            '_id' => new ObjectId($user->_id),
+            '_id' => $user->_id,
             'username' => $user->username,
             'avatar' => $user->avatar,
         ];
