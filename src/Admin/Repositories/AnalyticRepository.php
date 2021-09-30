@@ -1,9 +1,8 @@
 <?php
 
-namespace Aparlay\Core\Admin\Repositories\Analytic;
+namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Analytic;
-use Aparlay\Core\Admin\Repositories\RepositoryInterface;
 use Illuminate\Support\Collection;
 
 class AnalyticRepository implements RepositoryInterface

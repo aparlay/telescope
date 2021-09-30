@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Services\AnalyticService;
-use Illuminate\Routing\Controller;
 
 class DashboardController extends Controller
 {

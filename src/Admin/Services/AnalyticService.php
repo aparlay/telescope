@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Analytic;
-use Aparlay\Core\Admin\Repositories\Analytic\AnalyticRepository;
+use Aparlay\Core\Admin\Repositories\AnalyticRepository;
 use Illuminate\Support\Collection;
 
 class AnalyticService
