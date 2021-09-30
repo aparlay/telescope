@@ -106,7 +106,7 @@
 @endsection
 @section('scripts')
     <script src="{{ asset('admin/assets/js/chartjs/chart.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/admin_analytics.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/adminAnalytics.js') }}"></script>
 @endsection
 
 
