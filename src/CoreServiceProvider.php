@@ -39,7 +39,6 @@ class CoreServiceProvider extends ServiceProvider
         }
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
-        $this->app->register(AdminRepositoryServiceProvider::class);
 
         $this->mergeConfig();
     }

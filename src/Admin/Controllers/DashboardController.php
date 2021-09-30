@@ -2,22 +2,22 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
-use Aparlay\Core\Admin\Repositories\Analytic\AnalyticRepositoryInterface;
+use Aparlay\Core\Admin\Services\AnalyticService;
 use Illuminate\Routing\Controller;
 
 class DashboardController extends Controller
 {
-    private $analytic;
+    protected $analyticService;
 
     public function __construct(
-        AnalyticRepositoryInterface $analytic
+        AnalyticService $analyticService
     ) {
-        $this->analytic = $analytic;
+        $this->analyticService = $analyticService;
     }
 
     public function dashboard()
     {
-        $data_analytics = $this->analytic->getAnalytics();
+        $data_analytics = $this->analyticService->getAnalytics();
 
         return view('default_view::admin.pages.dashboard.index')->with(['data_analytics' => $data_analytics]);
     }
