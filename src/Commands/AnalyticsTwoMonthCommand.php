@@ -66,7 +66,7 @@ class AnalyticsTwoMonthCommand extends Command
             if (($model = Analytic::Where(['date' => $analytics['date']])->first()) === null) {
                 $model = new Analytic();
             }
-            
+
             $model->create($analytics);
 
             $this->line('<fg=yellow;options=bold>'.$date.' analytics stored.'.PHP_EOL.'</>');
