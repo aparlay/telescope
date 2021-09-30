@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core;
 
-use Aparlay\Core\Admin\Providers\AdminRepositoryServiceProvider;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
