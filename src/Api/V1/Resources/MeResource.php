@@ -17,17 +17,6 @@ class MeResource extends JsonResource
      */
     public function toArray($request)
     {
-        $followings = [];
-        if (!empty($this->followings)) {
-            foreach ($this->followings as $following) {
-                $followings[] = [
-                    '_id' => (string) $following['_id'],
-                    'username' => $following['username'],
-                    'avatar' => $following['avatar']
-                ];
-            }
-        }
-
         return [
             '_id' => (string) $this->_id,
             'referral_id' => (string) $this->referral_id,
@@ -69,7 +58,7 @@ class MeResource extends JsonResource
             'blocks' => $this->blocks,
             'likes' => $this->likes,
             'followers' => $this->followers,
-            'followings' => $followings,
+            'followings' => $this->user_followings,
             'medias' => $this->medias,
             'alerts' => AlertResource::collection($this->alerts),
             'created_at' => $this->created_at->valueOf(),
