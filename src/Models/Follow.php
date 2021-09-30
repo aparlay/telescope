@@ -108,7 +108,7 @@ class Follow extends BaseModel
                 ['followers' => DT::utcNow()]
             );
             $follow->userObj->save();
-            
+
             $follow->creatorObj->following_count++;
             $follow->creatorObj->addToSet('followings', [
                 '_id' => $follow->user['_id'],

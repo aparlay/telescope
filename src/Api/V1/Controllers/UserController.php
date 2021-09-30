@@ -99,7 +99,7 @@ class UserController extends Controller
             $user->save();
             $user->refresh();
         }
-        
+
         /* Return the updated user data */
         return $this->response(
             new MeResource($user),
