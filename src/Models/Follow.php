@@ -99,7 +99,7 @@ class Follow extends BaseModel
         static::created(function ($follow) {
             $follow->userObj->follower_count++;
             $follow->userObj->addToSet('followers', [
-                '_id' => $follow->creator['_id'],
+                '_id' => new ObjectId($follow->creator['_id']),
                 'username' => $follow->creator['username'],
                 'avatar' => $follow->creator['avatar'],
             ], 10);
@@ -111,7 +111,7 @@ class Follow extends BaseModel
 
             $follow->creatorObj->following_count++;
             $follow->creatorObj->addToSet('followings', [
-                '_id' => $follow->user['_id'],
+                '_id' => new ObjectId($follow->user['_id']),
                 'username' => $follow->user['username'],
                 'avatar' => $follow->user['avatar'],
             ]);
@@ -125,7 +125,7 @@ class Follow extends BaseModel
         static::deleted(function ($follow) {
             $follow->userObj->follower_count--;
             $follow->userObj->removeFromSet('followers', [
-                '_id' => $follow->creator['_id'],
+                '_id' => new ObjectId($follow->creator['_id']),
                 'username' => $follow->creator['username'],
                 'avatar' => $follow->creator['avatar'],
             ]);
@@ -137,7 +137,7 @@ class Follow extends BaseModel
 
             $follow->creatorObj->following_count--;
             $follow->creatorObj->removeFromSet('followings', [
-                '_id' => $follow->user['_id'],
+                '_id' => new ObjectId($follow->user['_id']),
                 'username' => $follow->user['username'],
                 'avatar' => $follow->user['avatar'],
             ]);
