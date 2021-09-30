@@ -19,11 +19,11 @@ class MeResource extends JsonResource
     {
         $followings = [];
         if (!empty($this->followings)) {
-            foreach ($this->followings as $Userfollowings) {
+            foreach ($this->followings as $following) {
                 $followings[] = [
-                    '_id' => (string) $Userfollowings['_id'],
-                    'username' => (string) $Userfollowings['username'],
-                    'avatar' => (string) $Userfollowings['avatar']
+                    '_id' => (string) $following['_id'],
+                    'username' => $following['username'],
+                    'avatar' => $following['avatar']
                 ];
             }
         }
