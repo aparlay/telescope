@@ -26,8 +26,7 @@ class EmailRepository
             'type' => Email::TYPE_OTP,
         ];
 
-        $modal->attributes = $attributes;
-        $modal->save();
+        $modal->create($attributes);
 
         return $modal;
     }
