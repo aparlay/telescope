@@ -6,7 +6,6 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class SimpleUserCast implements CastsAttributes
 {
-
     /**
      * SimpleUserCast constructor.
      */
@@ -26,6 +25,7 @@ class SimpleUserCast implements CastsAttributes
                 ];
             }
         }
+
         return $data;
     }
 
