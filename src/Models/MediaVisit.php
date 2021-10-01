@@ -82,7 +82,6 @@ class MediaVisit extends BaseModel
      */
     protected $casts = [
         '_id' => 'string',
-        'created_at' => 'timestamp',
     ];
 
     /**
