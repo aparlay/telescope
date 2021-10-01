@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
+use Aparlay\Core\Api\V1\Casts\SimpleUser;
 use Aparlay\Core\Models\Follow as FollowBase;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,4 +31,14 @@ class Follow extends FollowBase
 {
     use UserFieldTrait;
     use CreatorFieldTrait;
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'user' => SimpleUser::class,
+        'creator' => SimpleUser::class,
+    ];
 }

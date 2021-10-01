@@ -6,6 +6,7 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use MongoDB\BSON\ObjectId;
 
 class UserFactory extends Factory
 {
@@ -67,10 +68,10 @@ class UserFactory extends Factory
                     'new_subscribers' => $this->faker->boolean(),
                 ],
             ],
-            'blocks' => [],
-            'likes' => [],
-            'followers' => [],
-            'followings' => [],
+            'blocks' => $this->simpleUser(),
+            'likes' => $this->simpleUser(),
+            'followers' => $this->simpleUser(),
+            'followings' => $this->simpleUser(),
             'followed_hashtags' => [],
             'medias' => [],
             'promo_link' => null,
@@ -90,5 +91,19 @@ class UserFactory extends Factory
                 'email_verified_at' => null,
             ];
         });
+    }
+
+    protected function simpleUser($count = 5): array
+    {
+        $data = [];
+        for ($i=1; $i <= $count; $i++) {
+            $data[] = [
+                '_id' => new ObjectId(),
+                'username' => $this->faker->userName(),
+                'avatar' => $this->faker->imageUrl()
+            ];
+        }
+
+        return $data;
     }
 }

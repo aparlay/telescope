@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Api\V1\Services\UserService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
@@ -49,6 +50,7 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @return Response
+     * @throws AuthorizationException
      */
     public function destroy(): Response
     {
@@ -66,9 +68,9 @@ class UserController extends Controller
                 ->cookie($cookie1)
                 ->cookie($cookie2)
                 ->cookie($cookie3);
-        } else {
-            return $user;
         }
+
+        return $user;
     }
 
     /**

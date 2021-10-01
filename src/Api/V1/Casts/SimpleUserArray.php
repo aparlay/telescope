@@ -1,12 +1,12 @@
 <?php
 
-namespace Aparlay\Core\Models\Casts;
+namespace Aparlay\Core\Api\V1\Casts;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Jenssegers\Mongodb\Eloquent\Model;
 use MongoDB\BSON\ObjectId;
 
-class SimpleUser implements CastsAttributes
+class SimpleUserArray implements CastsAttributes
 {
     /**
      * Cast the given value.
@@ -21,7 +21,12 @@ class SimpleUser implements CastsAttributes
     {
         $value = $value ?? [];
 
-        return array_map([$this, 'castString'], $value);
+        foreach ($value as $key => $item) {
+            $value[$key] = $this->castString($item);
+        }
+        //$result = array_map([$this, 'castString'], $value);
+
+        return $value;
     }
 
     /**

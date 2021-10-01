@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
+use Aparlay\Core\Api\V1\Casts\SimpleUser;
+use Aparlay\Core\Api\V1\Casts\SimpleUserArray;
 use Aparlay\Core\Models\Media as MediaBase;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;
@@ -50,6 +52,24 @@ class Media extends MediaBase
 {
     use Notifiable;
     use CreatorFieldTrait;
+
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'status' => 'integer',
+        'visibility' => 'integer',
+        'like_count' => 'integer',
+        'visit_count' => 'integer',
+        'comment_count' => 'integer',
+        'creator' => SimpleUser::class,
+        'people' => SimpleUserArray::class,
+        'likes' => SimpleUserArray::class,
+        'visits' => SimpleUserArray::class,
+    ];
 
     /**
      * Get the Slack representation of the notification.

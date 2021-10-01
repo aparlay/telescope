@@ -5,7 +5,6 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Casts\SimpleUser;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -168,10 +167,6 @@ class Media extends BaseModel
         'like_count' => 'integer',
         'visit_count' => 'integer',
         'comment_count' => 'integer',
-        'creator' => SimpleUser::class,
-        'people' => SimpleUser::class,
-        'likes' => SimpleUser::class,
-        'visits' => SimpleUser::class,
     ];
 
     /**

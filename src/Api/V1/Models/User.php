@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
+use Aparlay\Core\Api\V1\Casts\SimpleUserArray;
 use Aparlay\Core\Models\User as UserBase;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -47,4 +48,26 @@ use MongoDB\BSON\UTCDateTime;
  */
 class User extends UserBase
 {
+    protected $casts = [
+        'username' => 'string',
+        'full_name' => 'string',
+        'email' => 'string',
+        'status' => 'integer',
+        'email_verified' => 'boolean',
+        'phone_number_verified' => 'boolean',
+        'gender' => 'boolean',
+        'avatar' => 'string',
+        'interested_in' => 'integer',
+        'visibility' => 'integer',
+        'follower_count' => 'integer',
+        'following_count' => 'integer',
+        'like_count' => 'integer',
+        'block_count' => 'integer',
+        'followed_hashtag_count' => 'integer',
+        'media_count' => 'integer',
+        'likes' => SimpleUserArray::class,
+        'followings' => SimpleUserArray::class,
+        'followers' => SimpleUserArray::class,
+        'blocks' => SimpleUserArray::class,
+    ];
 }

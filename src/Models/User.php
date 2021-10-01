@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Models\Casts\SimpleUser;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\UserScope;
@@ -195,10 +194,6 @@ class User extends Authenticatable implements JWTSubject
         'block_count' => 'integer',
         'followed_hashtag_count' => 'integer',
         'media_count' => 'integer',
-        'likes' => SimpleUser::class,
-        'followings' => SimpleUser::class,
-        'followers' => SimpleUser::class,
-        'block' => SimpleUser::class,
     ];
 
     protected $dates = [
