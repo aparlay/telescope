@@ -96,11 +96,11 @@ class UserFactory extends Factory
     protected function simpleUser($count = 5): array
     {
         $data = [];
-        for ($i=1; $i <= $count; $i++) {
+        for ($i = 1; $i <= $count; $i++) {
             $data[] = [
                 '_id' => new ObjectId(),
                 'username' => $this->faker->userName(),
-                'avatar' => $this->faker->imageUrl()
+                'avatar' => $this->faker->imageUrl(),
             ];
         }
 

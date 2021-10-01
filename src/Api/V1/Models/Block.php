@@ -7,7 +7,6 @@ use Aparlay\Core\Models\Block as BlockBase;
 
 class Block extends BlockBase
 {
-
     /**
      * The attributes that should be cast to native types.
      *

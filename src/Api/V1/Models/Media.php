@@ -53,7 +53,6 @@ class Media extends MediaBase
     use Notifiable;
     use CreatorFieldTrait;
 
-
     /**
      * The attributes that should be cast to native types.
      *
