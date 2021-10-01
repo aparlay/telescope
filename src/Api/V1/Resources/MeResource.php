@@ -58,7 +58,7 @@ class MeResource extends JsonResource
             'blocks' => $this->blocks,
             'likes' => $this->likes,
             'followers' => $this->followers,
-            'followings' => $this->user_followings,
+            'followings' => $this->followings,
             'medias' => $this->medias,
             'alerts' => AlertResource::collection($this->alerts),
             'created_at' => $this->created_at->valueOf(),

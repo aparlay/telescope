@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\CustomCasts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Events\UserCreated;
 use Aparlay\Core\Events\UserCreating;
@@ -198,6 +199,10 @@ class User extends Authenticatable implements JWTSubject
         'block_count' => 'integer',
         'followed_hashtag_count' => 'integer',
         'media_count' => 'integer',
+        'likes' => SimpleUserCast::class,
+        'followings' => SimpleUserCast::class,
+        'followers' => SimpleUserCast::class,
+        'block' => SimpleUserCast::class,
     ];
 
     protected $dates = [
@@ -402,26 +407,5 @@ class User extends Authenticatable implements JWTSubject
     public function getCollection(): string
     {
         return $this->collection;
-    }
-
-    /**
-     * Get the user followings.
-     *
-     * @return array
-     */
-    public function getUserFollowingsAttribute()
-    {
-        $followings = [];
-        if (! empty($this->followings)) {
-            foreach ($this->followings as $following) {
-                $followings[] = [
-                    '_id' => (string) $following['_id'],
-                    'username' => $following['username'],
-                    'avatar' => $following['avatar'],
-                ];
-            }
-        }
-
-        return $followings;
     }
 }
