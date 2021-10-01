@@ -53,24 +53,6 @@ class Media extends MediaBase
     use Notifiable;
     use CreatorFieldTrait;
 
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'status' => 'integer',
-        'visibility' => 'integer',
-        'like_count' => 'integer',
-        'visit_count' => 'integer',
-        'comment_count' => 'integer',
-        'creator' => SimpleUser::class,
-        'people' => SimpleUserArray::class,
-        'likes' => SimpleUserArray::class,
-        'visits' => SimpleUserArray::class,
-    ];
-
     /**
      * Get the Slack representation of the notification.
      *

@@ -31,14 +31,4 @@ class Follow extends FollowBase
 {
     use UserFieldTrait;
     use CreatorFieldTrait;
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'user' => SimpleUser::class,
-        'creator' => SimpleUser::class,
-    ];
 }

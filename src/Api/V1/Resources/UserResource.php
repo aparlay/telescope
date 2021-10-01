@@ -2,12 +2,13 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
-use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
+    use SimpleUserTrait;
+
     /**
      * Transform the resource into an array.
      *
