@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
-use Aparlay\Core\Api\V1\Casts\SimpleUser;
 use Aparlay\Core\Models\Follow as FollowBase;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;

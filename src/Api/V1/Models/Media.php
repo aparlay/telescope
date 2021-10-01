@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
-use Aparlay\Core\Api\V1\Casts\SimpleUser;
-use Aparlay\Core\Api\V1\Casts\SimpleUserArray;
 use Aparlay\Core\Models\Media as MediaBase;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;

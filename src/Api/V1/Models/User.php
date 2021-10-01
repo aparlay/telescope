@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
-use Aparlay\Core\Api\V1\Casts\SimpleUserArray;
 use Aparlay\Core\Models\User as UserBase;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
