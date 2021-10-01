@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Models\Casts\SimpleUser;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Casts\SimpleUser;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
