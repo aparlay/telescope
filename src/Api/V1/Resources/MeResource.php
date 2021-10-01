@@ -20,7 +20,6 @@ class MeResource extends JsonResource
      */
     public function toArray($request)
     {
-
         $followers = [];
         foreach ($this->followers as $follower) {
             $followers[] = $this->createSimpleUser($follower);
