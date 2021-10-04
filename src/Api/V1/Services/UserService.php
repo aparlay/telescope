@@ -171,7 +171,7 @@ class UserService
     public function changeDefaultAvatar()
     {
         /* Set gender by default value */
-        $gender = isset(auth()->user()->gender) ? auth()->user()->gender : User::GENDER_MALE;
+        $gender = auth()->user()->gender ?? User::GENDER_MALE;
 
         /* Set avatar based on Gender */
         $femaleFilename = 'default_fm_' . random_int(1, 60).'.png';
