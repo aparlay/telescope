@@ -1,11 +1,5 @@
 @extends('default_view::admin.layouts.layout')
 @section('title', 'Users')
-@section('styles')
-    @livewireStyles
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
-@endsection
 @section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -99,7 +93,4 @@
             </div>
         </div>
     </div>
-@endsection
-@section('scripts')
-    @livewireScripts
 @endsection
