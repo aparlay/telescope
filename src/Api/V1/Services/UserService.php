@@ -174,8 +174,8 @@ class UserService
         $gender = auth()->user()->gender ?? User::GENDER_MALE;
 
         /* Set avatar based on Gender */
-        $femaleFilename = 'default_fm_' . random_int(1, 60).'.png';
-        $maleFilename = 'default_m_' . random_int(1, 120).'.png';
+        $femaleFilename = 'default_fm_'.random_int(1, 60).'.png';
+        $maleFilename = 'default_m_'.random_int(1, 120).'.png';
 
         $filename = match ($gender) {
             User::GENDER_FEMALE => $femaleFilename,
