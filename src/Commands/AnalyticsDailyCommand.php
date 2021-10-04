@@ -65,7 +65,7 @@ class AnalyticsDailyCommand extends Command
         if (($model = Analytic::Where(['date' => $analytics['date']])->first()) === null) {
             $model = new Analytic();
         }
-        $model->create($analytics);
+        $model->fill($analytics)->save();
 
         $this->info(Response::HTTP_OK);
     }
