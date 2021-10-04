@@ -46,7 +46,7 @@ class Analytic extends BaseModel
         'created_at',
         'updated_at',
         'created_by',
-        'update_by'
+        'update_by',
     ];
 
     /**
