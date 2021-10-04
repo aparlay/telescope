@@ -1,0 +1,40 @@
+<?php
+
+namespace Aparlay\Core\Admin\Models;
+
+use Aparlay\Core\Models\User as UserBase;
+
+class User extends UserBase
+{
+    /**
+     * @return string
+     */
+    public function getStatusColor()
+    {
+        $colors = [
+            self::STATUS_PENDING => 'secondary',
+            self::STATUS_VERIFIED => 'success',
+            self::STATUS_ACTIVE => 'primary',
+            self::STATUS_SUSPENDED => 'warning',
+            self::STATUS_BLOCKED => 'danger',
+            self::STATUS_DEACTIVATED => 'danger',
+        ];
+
+        return $colors[$this->status];
+    }
+
+    /**
+     * @return string
+     */
+    public function getGenderColor()
+    {
+        $colors = [
+            self::GENDER_MALE => 'success',
+            self::GENDER_FEMALE => 'primary',
+            self::GENDER_NOT_MENTION => 'info',
+            self::GENDER_TRANSGENDER => 'indigo',
+        ];
+
+        return $colors[$this->gender];
+    }
+}

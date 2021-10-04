@@ -1,6 +1,7 @@
 <?php
 
 use Aparlay\Core\Admin\Controllers\AuthController;
+use Aparlay\Core\Admin\Controllers\UserController;
 use Aparlay\Core\Admin\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,11 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
     Route::middleware(['admin-auth:admin'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    });
+
+    /* User Routes */
+    Route::middleware(['admin-auth:admin'])->name('user.')->group(function() {
+       Route::get('user', [UserController::class, 'index'])->name('index');
     });
 
     /* Login Routes */
