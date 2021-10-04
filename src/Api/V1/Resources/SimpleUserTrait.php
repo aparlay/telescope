@@ -25,7 +25,7 @@ trait SimpleUserTrait
         $userArray['is_liked'] = false;
         if ($user) {
             $userArray['is_followed'] = isset($this->creator['_id'], $user->following[(string) $this->creator['_id']]);
-            $userArray['is_liked'] = isset($this->creator) && (string) $this->creator['_id'] === (string) $user->_id;
+            $userArray['is_liked'] = isset($this->creator) && (string) $this->creator['_id'] === (string) $user->_id ? true : false;
         }
 
         $output = [];
