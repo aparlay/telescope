@@ -45,6 +45,8 @@ class Analytic extends BaseModel
         'email',
         'created_at',
         'updated_at',
+        'created_by',
+        'update_by'
     ];
 
     /**
