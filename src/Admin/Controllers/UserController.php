@@ -14,12 +14,13 @@ class UserController extends Controller
     ) {
         $this->userService = $userService;
     }
+
     /**
      * @throws \ErrorException
      */
     public function index(Request $request)
     {
-        if($request->get('username') || $request->get('email')) {
+        if ($request->get('username') || $request->get('email')) {
             $users = $this->userService->getUserFilter();
         } else {
             $users = $this->userService->getUsers();
