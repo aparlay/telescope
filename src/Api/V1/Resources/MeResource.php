@@ -8,15 +8,38 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class MeResource extends JsonResource
 {
+    use SimpleUserTrait;
+
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return array
+     * @throws \Exception
      */
     public function toArray($request)
     {
+        $followers = [];
+        foreach ($this->followers as $follower) {
+            $followers[] = $this->createSimpleUser($follower);
+        }
+
+        $likes = [];
+        foreach ($this->likes as $like) {
+            $likes[] = $this->createSimpleUser($like);
+        }
+
+        $followings = [];
+        foreach ($this->followings as $following) {
+            $followings[] = $this->createSimpleUser($following);
+        }
+
+        $blocks = [];
+        foreach ($this->blocks as $block) {
+            $blocks[] = $this->createSimpleUser($block);
+        }
+
         return [
             '_id' => (string) $this->_id,
             'referral_id' => (string) $this->referral_id,
@@ -55,10 +78,10 @@ class MeResource extends JsonResource
             'media_count' => $this->followed_hashtag_count,
             'is_followed' => false,
             'is_blocked' => false,
-            'blocks' => $this->blocks,
-            'likes' => $this->likes,
-            'followers' => $this->followers,
-            'followings' => $this->followings,
+            'blocks' => $blocks,
+            'likes' => $likes,
+            'followers' => $followers,
+            'followings' => $followings,
             'medias' => $this->medias,
             'alerts' => AlertResource::collection($this->alerts),
             'created_at' => $this->created_at->valueOf(),

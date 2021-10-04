@@ -12,6 +12,16 @@ class DT
         return new UTCDatetime();
     }
 
+    public static function milliSecNow(): float
+    {
+        return (new Carbon())->valueOf();
+    }
+
+    public static function now(): string
+    {
+        return (new Carbon())->format('Y-m-d H:i:s');
+    }
+
     /**
      * @param $config
      * @return UTCDateTime
