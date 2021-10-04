@@ -69,6 +69,7 @@ class MediaObserver extends BaseModelObserver
     public function saving($model): void
     {
         parent::saving($model);
+        $model->description = (string) $model->description;
         $model->hashtags = MediaService::extractHashtags($model->description);
 
         $extractedPeople = MediaService::extractPeople($model->description);
