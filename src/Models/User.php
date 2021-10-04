@@ -3,11 +3,8 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\UserFactory;
-use Aparlay\Core\Events\UserCreated;
-use Aparlay\Core\Events\UserCreating;
-use Aparlay\Core\Events\UserSaved;
-use Aparlay\Core\Events\UserUpdated;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Casts\SimpleUser;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
