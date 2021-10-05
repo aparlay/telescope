@@ -397,7 +397,6 @@ class Media extends BaseModel
         );
     }
 
-
     /**
      * Route notifications for the Slack channel.
      *

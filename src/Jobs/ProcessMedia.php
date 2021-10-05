@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Microservices\ffmpeg\MediaClient;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeRequest;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeResponse;
@@ -258,7 +259,12 @@ class ProcessMedia implements ShouldQueue
         $media->refresh();
         $media->notify(new VideoPending());
         WsChannel::Push($media->creator['_id'], 'media.create', [
-            'media' => $media->simple_array,
+            'media' => [
+                '_id' => (string)$media->_id,
+                'file' => Cdn::video($media->is_completed ? $media->file : 'default.mp4'),
+                'cover' => Cdn::cover($media->is_completed ? $media->filename.'.jpg' : 'default.jpg'),
+                'status' => $media->status
+            ],
             'message' => 'All done',
             'progress' => 100,
         ]);
