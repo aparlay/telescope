@@ -12,9 +12,9 @@ class UploadService
 {
     public static function chunkUpload(Request $request): array
     {
-        $config = new Config([
-            'tempDir' => '/var/www/aparlay/alua/storage/app/chunk/', //With write access
-        ]);
+        $config = new Config(['tempDir' => Storage::disk('upload')]);
+        Log::error(Storage::disk('local')->path('chunk'));
+        $config->setTempDir(Storage::disk('local')->path('chunk'));
 
         $result = ['data' => [], 'code' => 400];
 
