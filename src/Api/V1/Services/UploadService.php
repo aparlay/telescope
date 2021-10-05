@@ -13,12 +13,12 @@ class UploadService
     public static function chunkUpload(Request $request): array
     {
         $config = new Config();
-        $config->setTempDir(storage_path('app/chunk'));
+        $config->setTempDir(sys_get_temp_dir());
         $code = 500;
 
         $result = ['data' => [], 'code' => $code];
 
-        $flowRequest = new FlowRequest();
+        $flowRequest = new FlowRequest($request->all(), $request->file('file'));
         $fileName = strtolower($flowRequest->getFileName());
         $fileName = uniqid('tmp_', true).'.'.pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -33,7 +33,7 @@ class UploadService
             abort(400, __('Invalid chunk uploaded'));
         }
 
-        if ($file->validateFile() && $file->save(storage_path('app/upload').'/'.$fileName)) {
+        if ($file->validateFile() && $file->save('/var/www/aparlay/alua/storage/app/upload/'.$fileName)) {
             $result['data'] = ['file' => $fileName];
             $result['code'] = 201;
 
