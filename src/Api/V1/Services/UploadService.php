@@ -11,9 +11,9 @@ class UploadService
 {
     public static function chunkUpload(Request $request): array
     {
-        $config = new Config(array(
+        $config = new Config([
             'tempDir' => '/var/www/aparlay/alua/storage/app/chunk/', //With write access
-        ));
+        ]);
 
         $result = ['data' => [], 'code' => 500];
 
