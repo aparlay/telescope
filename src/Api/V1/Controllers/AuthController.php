@@ -254,9 +254,9 @@ class AuthController extends Controller
     {
         $user = User::create($request->all());
         $deviceId = $request->headers->get('X-DEVICE-ID');
-        
+
         $this->otpService->sendOtp($user, $deviceId);
-        
+
         return $this->response(
             new RegisterResource($user),
             'Entity has been created successfully!',
