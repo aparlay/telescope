@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
-use _HumbugBox8efea8300da8\PhpParser\Node\Expr\Cast\Object_;
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Microservices\ffmpeg\MediaClient;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeRequest;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeResponse;
@@ -11,16 +11,16 @@ use Aparlay\Core\Microservices\ffmpeg\UploadRequest;
 use Aparlay\Core\Microservices\ws\WsChannel;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Notifications\JobFailed;
+use Aparlay\Core\Notifications\VideoPending;
 use Exception;
 use Grpc\ChannelCredentials;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
-use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 
 class ProcessMedia implements ShouldQueue
@@ -54,6 +54,7 @@ class ProcessMedia implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
@@ -61,7 +62,8 @@ class ProcessMedia implements ShouldQueue
             'credentials' => ChannelCredentials::createInsecure(),
         ]);
 
-        if (($media = Media::find($this->media_id)) === null) {
+        if (($media = Media::media($this->media_id)->first()) === null) {
+            Log::error(__CLASS__.PHP_EOL.'Media not found!');
             throw new Exception(__CLASS__.PHP_EOL.'Media not found!');
         }
 
@@ -84,7 +86,6 @@ class ProcessMedia implements ShouldQueue
         [$response, $status] = $client->Quality($optimizeReq)->wait();
 
         if ($status->code !== 0) {
-            VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
         }
@@ -107,7 +108,6 @@ class ProcessMedia implements ShouldQueue
         // check audio
         [$response, $status] = $client->LowVolume($optimizeReq)->wait();
         if ($status->code !== 0) {
-            VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
         }
@@ -129,10 +129,10 @@ class ProcessMedia implements ShouldQueue
 
         [$response, $status] = $client->Duration($optimizeReq)->wait();
         if ($status->code !== 0) {
-            VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
-            throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
+            Log::error(__CLASS__.PHP_EOL.'Cannot check video duration');
+            //throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
         }
 
         $media->length = (float) $response->GetSec();
@@ -142,9 +142,9 @@ class ProcessMedia implements ShouldQueue
             $optimizeReq->setDes($src);
             [$response, $status] = $client->Trim($optimizeReq)->wait();
             if ($status->code !== 0) {
-                VarDumper::dump($status);
                 $media->status = Media::STATUS_FAILED;
                 $media->save($withoutTouch);
+                Log::error(__CLASS__.PHP_EOL.'Cannot do video trim');
                 throw new Exception(__CLASS__.PHP_EOL.'Cannot do video trim');
             }
             $media->length = 60.0;
@@ -161,6 +161,7 @@ class ProcessMedia implements ShouldQueue
             if ($status->code !== 0) {
                 $media->status = Media::STATUS_FAILED;
                 $media->save($withoutTouch);
+                Log::error(__CLASS__.PHP_EOL.'Cannot do audio normalization');
                 throw new Exception(__CLASS__.PHP_EOL.'Cannot do audio normalization');
             }
             $media->addToSet('processing_log', '5. Audio normalization: Ok');
@@ -172,12 +173,12 @@ class ProcessMedia implements ShouldQueue
         $mp4ConvertedFile = basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION)).'.mp4';
         $toRemoveFiles[] = $src = config('app.media.path').'3-watermarked-'.$mp4ConvertedFile;
         $optimizeReq->setDes($src);
-        $optimizeReq->setUsername('@'.$media->user->username);
+        $optimizeReq->setUsername('@'.$media->userObj->username);
         [$response, $status] = $client->Watermark($optimizeReq)->wait();
         if ($status->code !== 0) {
-            VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
+            Log::error(__CLASS__.PHP_EOL.'Cannot do video watermarking');
             throw new Exception(__CLASS__.PHP_EOL.'Cannot do video watermarking');
         }
         $media->addToSet('processing_log', '6. Video Watermarking: Ok');
@@ -189,9 +190,9 @@ class ProcessMedia implements ShouldQueue
         $uploadReq->setDes('videos/'.$mp4ConvertedFile);
         [$response, $status] = $client->UploadVideo($uploadReq)->wait();
         if ($status->code !== 0) {
-            VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
+            Log::error(__CLASS__.PHP_EOL.'Cannot do video upload');
             throw new Exception(__CLASS__.PHP_EOL.'Cannot do video upload');
         }
 
@@ -211,9 +212,9 @@ class ProcessMedia implements ShouldQueue
         $optimizeReq->setDes($cover);
         [$response, $status] = $client->CreateCover($optimizeReq)->wait();
         if ($status->code !== 0) {
-            VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
+            Log::error(__CLASS__.PHP_EOL.'Cannot do video cover');
             throw new Exception(__CLASS__.PHP_EOL.'Cannot do video cover');
         }
         $media->addToSet('processing_log', '8. Video Cover generating: Ok');
@@ -223,9 +224,9 @@ class ProcessMedia implements ShouldQueue
         $uploadReq->setDes('covers/'.str_replace('.mp4', '.jpg', $mp4ConvertedFile));
         [$response, $status] = $client->UploadCover($uploadReq)->wait();
         if ($status->code !== 0) {
-            VarDumper::dump($status);
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
+            Log::error(__CLASS__.PHP_EOL.'Cannot do cover upload');
             throw new Exception(__CLASS__.PHP_EOL.'Cannot do cover upload');
         }
         $media->addToSet('processing_log', '9. Video Cover uploading: Ok');
@@ -237,9 +238,9 @@ class ProcessMedia implements ShouldQueue
             $removeReq->setFile($toRemoveFile);
             [$response, $status] = $client->Remove($removeReq)->wait();
             if ($status->code !== 0) {
-                VarDumper::dump($status);
                 $media->status = Media::STATUS_FAILED;
                 $media->save($withoutTouch);
+                Log::error(__CLASS__.PHP_EOL.'Cannot remove '.$toRemoveFile);
                 throw new Exception(__CLASS__.PHP_EOL.'Cannot remove '.$toRemoveFile);
             }
             $media->addToSet('processing_log', ++$i.'. Remove files: '.$toRemoveFile);
@@ -256,24 +257,21 @@ class ProcessMedia implements ShouldQueue
         $media->save($touchWithTrue);
 
         $media->refresh();
+        $media->notify(new VideoPending());
         WsChannel::Push($media->creator['_id'], 'media.create', [
-            'media' => $media->simple_array,
+            'media' => [
+                '_id' => (string)$media->_id,
+                'file' => Cdn::video($media->is_completed ? $media->file : 'default.mp4'),
+                'cover' => Cdn::cover($media->is_completed ? $media->filename.'.jpg' : 'default.jpg'),
+                'status' => $media->status
+            ],
             'message' => 'All done',
             'progress' => 100,
         ]);
-
-        $msg = "New post from is waiting for moderation {$media->slack_admin_url}.";
-        $msg .= PHP_EOL.'_*Log:*_ '.PHP_EOL.implode("\n", $media->processing_log);
-        $msg .= PHP_EOL.'_*Errors:*_ '.PHP_EOL.implode("\n", $media->firstErrors);
-
-        return (new SlackMessage())
-            ->from('Reporter', ':vhs:')
-            ->to('#waptap-report')
-            ->content($msg);
     }
 
     public function failed(Throwable $exception): void
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        $this->media->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
     }
 }
