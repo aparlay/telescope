@@ -43,6 +43,7 @@ class UploadService
 
         $fileName = strtolower($request->input('flowFilename'));
         $fileName = uniqid('tmp_', true).'.'.pathinfo($fileName, PATHINFO_EXTENSION);
+        Log::error(Storage::disk('upload')->path($fileName));
         if ($file->validateFile() && $file->save(Storage::disk('upload')->path($fileName))) {
             $file->deleteChunks();
             $result['data'] = ['file' => $fileName];
