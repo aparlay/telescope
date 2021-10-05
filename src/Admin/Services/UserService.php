@@ -48,21 +48,20 @@ class UserService extends DataGrid
 
     public function appendBadges($users)
     {
-        foreach($users as $user)
-        {
+        foreach ($users as $user) {
             $statusBadge = [
                 'status' => $user->getStatuses()[$user->status],
-                'color' => $user->getStatusColor()
+                'color' => $user->getStatusColor(),
             ];
 
             $genderBadge = [
                 'gender' => $user->getGenders()[$user->gender],
-                'color' => $user->getGenderColor()
+                'color' => $user->getGenderColor(),
             ];
 
             $isVerifiedBadge = [
                 'is_verified' => $user->email_verified ? 'Email Verified' : 'Email Not-verified',
-                'color' => $user->email_verified ? 'success' : 'danger'
+                'color' => $user->email_verified ? 'success' : 'danger',
             ];
 
             $user->status_badge = $statusBadge;
@@ -70,5 +69,4 @@ class UserService extends DataGrid
             $user->isverified_badge = $isVerifiedBadge;
         }
     }
-
 }
