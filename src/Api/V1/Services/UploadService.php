@@ -11,13 +11,22 @@ class UploadService
 {
     public static function chunkUpload(Request $request): array
     {
-        $config = new Config([
-            'tempDir' => '/var/www/aparlay/alua/storage/app/chunk/', //With write access
-        ]);
+        $config = new Config(['tempDir' => Storage::disk('upload')]);
+        $chunkPath = Storage::disk('local')->path('chunk');
+        $config->setTempDir($chunkPath);
 
-        $result = ['data' => [], 'code' => 500];
+        $result = ['data' => [], 'code' => 200];
 
-        $file = new File($config, new \Flow\Request($request->all(), $request->file('file')));
+        $FILE = [
+            'name' => $request->file('file')?->getClientOriginalName(),
+            'type' => $request->file('file')?->getType(),
+            'tmp_name' => $request->file('file')?->getFilename(),
+            'error' => $request->file('file')?->getError(),
+            'size' => $request->file('file')?->getSize(),
+        ];
+        $fileRequest = new \Flow\Request($request->all(), $FILE);
+        $file = new File($config, $fileRequest);
+
         if ($request->isMethod('GET')) {
             $result['code'] = $file->checkChunk() ? 200 : 204;
 
@@ -25,16 +34,27 @@ class UploadService
         }
 
         if ($file->validateChunk()) {
-            $file->saveChunk();
+            if (! $request->hasFile('file') && ! $request->file('file')?->isValid()) {
+                abort(400, __('Cannot find uploaded file'));
+            }
+
+            $chunkName = str_replace($chunkPath, '', $file->getChunkPath($fileRequest->getCurrentChunkNumber()));
+            if ($request->file->storeAs('chunk', $chunkName, 'local') === false) {
+                abort(400, __('Cannot move uploaded file'));
+            }
         } else {
             abort(400, __('Invalid chunk uploaded'));
         }
 
-        $fileName = strtolower($request->input('flowFilename'));
-        $fileName = uniqid('tmp_', true).'.'.pathinfo($fileName, PATHINFO_EXTENSION);
-        if ($file->validateFile() && $file->save('/var/www/aparlay/alua/storage/app/upload/'.$fileName)) {
+        $fileName = uniqid('tmp_', true).'.'.$request->file->getClientOriginalExtension();
+        $destinationPath = Storage::disk('upload')->path($fileName);
+        if ($file->validateFile() && $file->save($destinationPath)) {
             $file->deleteChunks();
-            $result['data'] = ['file' => $fileName];
+            $result['data'] = [
+                'code' => 201,
+                'status' => 'OK',
+                'data' => ['file' => $fileName],
+            ];
             $result['code'] = 201;
 
             return $result;

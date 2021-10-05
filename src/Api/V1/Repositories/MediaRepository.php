@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class MediaRepository implements RepositoryInterface
 {
@@ -28,7 +29,7 @@ class MediaRepository implements RepositoryInterface
      * @param MediaRequest $request
      * @return Media|null
      */
-    public function store(MediaRequest $request): ?Media
+    public function store(MediaRequest $request)
     {
         $user = auth()->user();
         try {
@@ -48,13 +49,11 @@ class MediaRepository implements RepositoryInterface
             if ($request->hasFile('file')) {
                 $file = $request->file;
                 $model->file = uniqid('tmp_', true).'.'.$file->extension();
-                $path = Storage::path('upload').'/'.$model->file;
-
-                if (! $file->storeAs('upload', $path)) {
-                    Log::error('Cannot upload the file.');
+                if (! $file->storeAs('upload', $model->file, 'local')) {
+                    throw new UnprocessableEntityHttpException('Cannot upload the file.');
                 }
-            } elseif (! empty($model->file) && ! file_exists(Storage::path('upload').'/'.$model->file)) {
-                Log::error('Uploaded file does not exists.');
+            } elseif (empty($model->file) || ! Storage::disk('upload')->exists($model->file)) {
+                throw new UnprocessableEntityHttpException('Uploaded file does not exists.');
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -64,7 +63,7 @@ class MediaRepository implements RepositoryInterface
 
         $model->refresh();
 
-        return $this->model;
+        return $model;
     }
 
     public function all()
