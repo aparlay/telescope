@@ -69,27 +69,17 @@ class Media extends BaseModel
     use SimpleUserTrait;
 
     public const VISIBILITY_PUBLIC = 1;
-
     public const VISIBILITY_PRIVATE = 0;
 
     public const STATUS_QUEUED = 0;
-
     public const STATUS_UPLOADED = 1;
-
     public const STATUS_IN_PROGRESS = 2;
-
     public const STATUS_COMPLETED = 3;
-
     public const STATUS_FAILED = 4;
-
     public const STATUS_CONFIRMED = 5;
-
     public const STATUS_DENIED = 6;
-
     public const STATUS_IN_REVIEW = 7;
-
     public const STATUS_ADMIN_DELETED = 9;
-
     public const STATUS_USER_DELETED = 10;
 
     /**

@@ -15,6 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use MongoDB\BSON\ObjectId;
 use Throwable;
 
 class UploadMedia implements ShouldQueue
@@ -45,7 +46,7 @@ class UploadMedia implements ShouldQueue
      *
      * @throws Exception
      */
-    public function __construct(string $userId, string $mediaId, string $file)
+    public function __construct(string|ObjectId $userId, string|ObjectId $mediaId, string $file)
     {
         if (($this->user = User::user($userId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'User not found with id '.$userId);

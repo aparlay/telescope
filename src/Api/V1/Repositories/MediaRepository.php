@@ -2,8 +2,10 @@
 
 namespace Aparlay\Core\Api\V1\Repositories;
 
+use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 
@@ -24,37 +26,43 @@ class MediaRepository implements RepositoryInterface
      * Store a newly created resource in storage.
      *
      * @param MediaRequest $request
-     * @return Media
+     * @return Media|null
      */
-    public function store(MediaRequest $request): Media
+    public function store(MediaRequest $request): ?Media
     {
         $user = auth()->user();
+        try {
+            $model = Media::create([
+                'user_id' => new ObjectId($user->_id),
+                'file' => $request->input('file', ''),
+                'description' => $request->input('description', ''),
+                'count_fields_updated_at' => [],
+                'visibility' => $request->input('visibility', $user->visibility),
+                'creator' => [
+                    '_id'      => new ObjectId($user->_id),
+                    'username' => $user->username,
+                    'avatar'   => $user->avatar,
+                ],
+            ]);
 
-        $this->model->visibility = $request->input('visibility', 0);
-        $this->model->creator = [
-            '_id'      => new ObjectId($user->_id),
-            'username' => $user->username,
-            'avatar'   => $user->avatar,
-        ];
-        $this->model->user_id = new ObjectId($user->_id);
-        $this->model->description = $request->input('description');
-        $this->model->count_fields_updated_at = [];
+            if ($request->hasFile('file')) {
+                $file = $request->file;
+                $model->file = uniqid('tmp_', true).'.'.$file->extension();
+                $path = Storage::path('upload').'/'.$model->file;
 
-        if ($request->hasFile('file')) {
-            $file = $request->file;
-
-            $this->model->file = uniqid('tmp_', true).'.'.$file->extension();
-            $path = Storage::path('upload').'/'.$this->model->file;
-
-            if (! $file->storeAs('upload', $path)) {
-                $this->error(__('Cannot upload the file.'));
+                if (! $file->storeAs('upload', $path)) {
+                    Log::error('Cannot upload the file.');
+                }
+            } elseif (! empty($model->file) && ! file_exists(Storage::path('upload').'/'.$model->file)) {
+                Log::error('Uploaded file does not exists.');
             }
-        } elseif (! empty($this->model->file)
-            && ! file_exists(Storage::path('upload').'/'.$this->model->file)) {
-            $this->error(__('Uploaded file does not exists.'));
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return null;
         }
-        $this->model->save();
-        $this->model->refresh();
+
+        $model->refresh();
 
         return $this->model;
     }
