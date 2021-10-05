@@ -23,7 +23,7 @@ class UploadService
             'type' => $request->file('file')?->getType(),
             'tmp_name' => $request->file('file')?->getFilename(),
             'error' => $request->file('file')?->getError(),
-            'size' => $request->file('file')?->getSize()
+            'size' => $request->file('file')?->getSize(),
         ];
         $file = new File($config, new \Flow\Request($request->all(), $requestFile));
 
