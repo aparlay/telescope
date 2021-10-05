@@ -46,7 +46,7 @@ class VideoPending extends Notification implements ShouldQueue
         $message .= PHP_EOL.'_*Errors:*_ '.PHP_EOL.implode("\n", $notifiable->firstErrors);
 
         return (new SlackMessage())
-            ->to('waptap-testing')
+            ->to('#waptap-testing')
             ->content($message)
             ->success();
     }
