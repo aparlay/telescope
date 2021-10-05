@@ -105,7 +105,7 @@ class MediaService
         if (! auth()->guest() && $type === 'following') {
             $query->availableForFollower()->following(auth()->user()->_id)->recentFirst();
         } else {
-           $query->public()->confirmed()->sort();
+            $query->public()->confirmed()->sort();
         }
 
         if (! auth()->guest()) {
@@ -127,7 +127,7 @@ class MediaService
             }
 
             $data = $query->paginate(5);
-          
+
             if ($data->isEmpty() || $data->total() <= 5) {
                 if (! auth()->guest()) {
                     MediaVisit::user(auth()->user()->_id)->delete();
@@ -138,7 +138,7 @@ class MediaService
                     $data = $originalData;
                 }
             } 
-
+            
         } else {
             $data = $query->paginate(5);
         }
