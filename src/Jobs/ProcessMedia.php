@@ -18,9 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
-use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 
 class ProcessMedia implements ShouldQueue
