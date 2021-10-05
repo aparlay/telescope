@@ -50,7 +50,11 @@ class UploadService
         $destinationPath = Storage::disk('upload')->path($fileName);
         if ($file->validateFile() && $file->save($destinationPath)) {
             $file->deleteChunks();
-            $result['data'] = ['file' => $fileName];
+            $result['data'] = [
+                'code' => 201,
+                'status' => 'OK',
+                'data' => ['file' => $fileName],
+            ];
             $result['code'] = 201;
 
             return $result;

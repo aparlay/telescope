@@ -48,9 +48,7 @@ class MediaRepository implements RepositoryInterface
             if ($request->hasFile('file')) {
                 $file = $request->file;
                 $model->file = uniqid('tmp_', true).'.'.$file->extension();
-                $path = Storage::path('upload').'/'.$model->file;
-
-                if (! $file->storeAs('upload', $path)) {
+                if (! $file->storeAs('upload', $model->file, 'local')) {
                     Log::error('Cannot upload the file.');
                 }
             } elseif (! empty($model->file) && ! file_exists(Storage::path('upload').'/'.$model->file)) {
