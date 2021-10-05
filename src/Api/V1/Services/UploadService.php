@@ -2,12 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
-use Aparlay\Core\Jobs\DeleteAvatar;
-use Aparlay\Core\Jobs\UploadAvatar;
 use Flow\Config;
 use Flow\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UploadService
