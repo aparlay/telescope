@@ -101,6 +101,7 @@ class MediaService
     public function getByType(string $type)
     {
         $query = Media::query();
+        $originalQuery = Media::query();
         if (! auth()->guest() && $type === 'following') {
             $query->availableForFollower()->following(auth()->user()->_id)->recentFirst();
         } else {
@@ -111,10 +112,12 @@ class MediaService
             $query->notBlockedFor(auth()->user()->_id);
         }
 
+        $originalQuery = $query;
+        $originalData = $originalQuery->paginate(5, ['*'], 'page', 1);
+
+
         $deviceId = request()->headers->get('X-DEVICE-ID', '');
         $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
-
-        $originalQuery = $query;
       
         if ($type !== 'following') {
             if (! auth()->guest()) {
@@ -131,7 +134,7 @@ class MediaService
                     MediaVisit::user(auth()->user()->_id)->delete();
                 }
                 Cache::store('redis')->delete($cacheKey);
-                $data = $originalQuery->paginate(5, ['*'], 'page', 1);
+                $data = $originalData;
             }
         } else {
             $data = $query->paginate(5);
