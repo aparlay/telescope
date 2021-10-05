@@ -59,7 +59,7 @@ class MediaController extends Controller
     {
         $result = UploadService::chunkUpload($request);
 
-        return $this->response($result['data'], '', $result['code']);
+        return response($result['data'], $result['code'], []);
     }
 
     /**

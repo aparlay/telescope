@@ -25,15 +25,17 @@ class UploadService
         $file = new File($config);
         if ($request->isMethod('GET')) {
             $result['code'] = $file->checkChunk() ? 200 : 204;
+
+            return $result;
         } elseif ($file->validateChunk()) {
             $file->saveChunk();
         } else {
             abort(400, __('Invalid chunk uploaded'));
         }
+
         if ($file->validateFile() && $file->save(Storage::path('upload').'/'.$fileName)) {
-            $code = 201;
             $result['data'] = ['file' => $fileName];
-            $result['code'] = $code;
+            $result['code'] = 201;
 
             return $result;
         }
