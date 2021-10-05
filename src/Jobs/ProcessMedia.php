@@ -10,6 +10,7 @@ use Aparlay\Core\Microservices\ffmpeg\UploadRequest;
 use Aparlay\Core\Microservices\ws\WsChannel;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Notifications\JobFailed;
+use Aparlay\Core\Notifications\VideoPending;
 use Exception;
 use Grpc\ChannelCredentials;
 use Illuminate\Bus\Queueable;
@@ -262,14 +263,7 @@ class ProcessMedia implements ShouldQueue
             'progress' => 100,
         ]);
 
-        $msg = "New post from is waiting for moderation {$media->slack_admin_url}.";
-        $msg .= PHP_EOL.'_*Log:*_ '.PHP_EOL.implode("\n", $media->processing_log);
-        $msg .= PHP_EOL.'_*Errors:*_ '.PHP_EOL.implode("\n", $media->firstErrors);
-
-        return (new SlackMessage())
-            ->from('Reporter', ':vhs:')
-            ->to('#waptap-report')
-            ->content($msg);
+        $media->notify(new VideoPending());
     }
 
     public function failed(Throwable $exception): void
