@@ -43,7 +43,6 @@ class VideoPending extends Notification implements ShouldQueue
     {
         $message = "New post from is waiting for moderation {$notifiable->slack_admin_url}.";
         $message .= PHP_EOL.'_*Log:*_ '.PHP_EOL.implode("\n", $notifiable->processing_log);
-        $message .= PHP_EOL.'_*Errors:*_ '.PHP_EOL.implode("\n", $notifiable->firstErrors);
 
         return (new SlackMessage())
             ->to('#waptap-testing')
