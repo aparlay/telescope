@@ -4,8 +4,8 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
-use WdevRs\LaravelDatagrid\DataGrid\DataGrid;
 use MongoDB\BSON\Regex;
+use WdevRs\LaravelDatagrid\DataGrid\DataGrid;
 
 class UserService extends DataGrid
 {
@@ -32,12 +32,12 @@ class UserService extends DataGrid
 
         $query = User::query();
 
-        if($username) {
-            $query = $query->where('username', 'regex', new Regex('^' . $username));
+        if ($username) {
+            $query = $query->where('username', 'regex', new Regex('^'.$username));
         }
 
-        if($email) {
-            $query = $query->orWhere('email', 'regex', new Regex('^' . $email));
+        if ($email) {
+            $query = $query->orWhere('email', 'regex', new Regex('^'.$email));
         }
         $users = $query->paginate(20);
 
