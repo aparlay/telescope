@@ -55,11 +55,11 @@ class MediaController extends Controller
         );
     }
 
-    public function upload(): Response
+    public function upload(Request $request): Response
     {
-        $result = UploadService::chunkUpload();
+        $result = UploadService::chunkUpload($request);
 
-        return $this->response($result['data'], '', $result['code']);
+        return response($result['data'], $result['code'], []);
     }
 
     /**
