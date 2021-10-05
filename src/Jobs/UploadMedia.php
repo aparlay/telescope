@@ -75,7 +75,7 @@ class UploadMedia implements ShouldQueue
      */
     public function handle()
     {
-        if (($media = Media::find($this->media_id)) === null) {
+        if (($media = Media::media($this->media_id)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'Media not found!');
         }
 
