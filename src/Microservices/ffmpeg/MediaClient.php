@@ -139,7 +139,8 @@ class MediaClient extends \Grpc\BaseStub
      * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
-    public function NormalizeAudio(OptimizeRequest $argument, $metadata = [], $options = []) {
+    public function NormalizeAudio(OptimizeRequest $argument, $metadata = [], $options = [])
+    {
         return $this->_simpleRequest(
             '/media.Media/NormalizeAudio',
             $argument,
