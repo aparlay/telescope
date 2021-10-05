@@ -112,13 +112,14 @@ class MediaService
             $query->notBlockedFor(auth()->user()->_id);
         }
 
-        $originalQuery = $query;
-        $originalData = $originalQuery->paginate(5, ['*'], 'page', 1);
-
         $deviceId = request()->headers->get('X-DEVICE-ID', '');
         $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
       
         if ($type !== 'following') {
+
+            $originalQuery = $query;
+            $originalData = $originalQuery->paginate(5, ['*'], 'page', 1);
+            
             if (! auth()->guest()) {
                 $userId = auth()->user()->_id;
                 $query->notVisitedByUserAndDevice($userId, $deviceId);
