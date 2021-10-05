@@ -18,6 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
@@ -61,6 +62,7 @@ class ProcessMedia implements ShouldQueue
         ]);
 
         if (($media = Media::media($this->media_id)->first()) === null) {
+            Log::error(__CLASS__.PHP_EOL.'Media not found!');
             throw new Exception(__CLASS__.PHP_EOL.'Media not found!');
         }
 
@@ -128,6 +130,7 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
+            Log::error(__CLASS__.PHP_EOL.'Cannot check video duration');
             throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
         }
 
@@ -140,6 +143,7 @@ class ProcessMedia implements ShouldQueue
             if ($status->code !== 0) {
                 $media->status = Media::STATUS_FAILED;
                 $media->save($withoutTouch);
+                Log::error(__CLASS__.PHP_EOL.'Cannot do video trim');
                 throw new Exception(__CLASS__.PHP_EOL.'Cannot do video trim');
             }
             $media->length = 60.0;
@@ -156,6 +160,7 @@ class ProcessMedia implements ShouldQueue
             if ($status->code !== 0) {
                 $media->status = Media::STATUS_FAILED;
                 $media->save($withoutTouch);
+                Log::error(__CLASS__.PHP_EOL.'Cannot do audio normalization');
                 throw new Exception(__CLASS__.PHP_EOL.'Cannot do audio normalization');
             }
             $media->addToSet('processing_log', '5. Audio normalization: Ok');
@@ -172,6 +177,7 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
+            Log::error(__CLASS__.PHP_EOL.'Cannot do video watermarking');
             throw new Exception(__CLASS__.PHP_EOL.'Cannot do video watermarking');
         }
         $media->addToSet('processing_log', '6. Video Watermarking: Ok');
@@ -185,6 +191,7 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
+            Log::error(__CLASS__.PHP_EOL.'Cannot do video upload');
             throw new Exception(__CLASS__.PHP_EOL.'Cannot do video upload');
         }
 
@@ -206,6 +213,7 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
+            Log::error(__CLASS__.PHP_EOL.'Cannot do video cover');
             throw new Exception(__CLASS__.PHP_EOL.'Cannot do video cover');
         }
         $media->addToSet('processing_log', '8. Video Cover generating: Ok');
@@ -217,6 +225,7 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
+            Log::error(__CLASS__.PHP_EOL.'Cannot do cover upload');
             throw new Exception(__CLASS__.PHP_EOL.'Cannot do cover upload');
         }
         $media->addToSet('processing_log', '9. Video Cover uploading: Ok');
@@ -230,6 +239,7 @@ class ProcessMedia implements ShouldQueue
             if ($status->code !== 0) {
                 $media->status = Media::STATUS_FAILED;
                 $media->save($withoutTouch);
+                Log::error(__CLASS__.PHP_EOL.'Cannot remove '.$toRemoveFile);
                 throw new Exception(__CLASS__.PHP_EOL.'Cannot remove '.$toRemoveFile);
             }
             $media->addToSet('processing_log', ++$i.'. Remove files: '.$toRemoveFile);
@@ -264,6 +274,6 @@ class ProcessMedia implements ShouldQueue
 
     public function failed(Throwable $exception): void
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        $this->media->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
     }
 }
