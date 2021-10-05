@@ -101,7 +101,7 @@ class MediaService
     public function getByType(string $type)
     {
         $query = Media::query();
-        $originalQuery = Media::query();
+        
         if (! auth()->guest() && $type === 'following') {
             $query->availableForFollower()->following(auth()->user()->_id)->recentFirst();
         } else {
