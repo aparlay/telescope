@@ -115,7 +115,7 @@ class MediaService
         $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
 
         $originalQuery = $query;
-      
+
         if ($type !== 'following') {
             if (! auth()->guest()) {
                 $userId = auth()->user()->_id;
