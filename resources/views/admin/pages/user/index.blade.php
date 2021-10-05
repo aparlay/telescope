@@ -40,7 +40,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <form action="">
+                                    <form action="" id="filter">
                                         <td>
                                             <input type="text" name="username" class="form-control" value="{!! request()->username !!}">
                                         </td>
@@ -93,4 +93,29 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('input').blur(function() {
+                const field_value = $(this).val();
+
+                if(field_value.length > 2) {
+                    $('#filter').submit();
+                }
+
+                let has_value = false;
+                $('input').each(function() {
+                    if($(this).val().length > 1) {
+                        has_value = true;
+                    }
+                });
+
+                //remove params
+                if(!has_value) {
+                    window.location.href = '/user';
+                }
+            })
+        })
+    </script>
 @endsection
