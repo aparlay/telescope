@@ -25,7 +25,8 @@ class UploadService
             'error' => $request->file('file')?->getError(),
             'size' => $request->file('file')?->getSize(),
         ];
-        $file = new File($config, new \Flow\Request($request->all(), $requestFile));
+        $fileRequest = new \Flow\Request($request->all(), $requestFile);
+        $file = new File($config, $fileRequest);
 
         if ($request->isMethod('GET')) {
             $result['code'] = $file->checkChunk() ? 200 : 204;
@@ -34,6 +35,7 @@ class UploadService
         }
 
         if ($file->validateChunk()) {
+            Log::error($file->getChunkPath($fileRequest->getCurrentChunkNumber()));
             if (! $file->saveChunk()) {
                 abort(400, __('Cannot move uploaded file'));
             }
