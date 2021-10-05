@@ -18,7 +18,7 @@ class UploadService
         Log::error(Storage::disk('local')->path('chunk'));
         $config->setTempDir(Storage::disk('local')->path('chunk'));
 
-        $result = ['data' => [], 'code' => 400];
+        $result = ['data' => [], 'code' => 200];
 
         $FILE = [
             'name' => $request->file('file')?->getClientOriginalName(),
