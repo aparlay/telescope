@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
+use _HumbugBox8efea8300da8\PhpParser\Node\Expr\Cast\Object_;
 use Aparlay\Core\Microservices\ffmpeg\MediaClient;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeRequest;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeResponse;
@@ -18,6 +19,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use MongoDB\BSON\ObjectId;
 use Symfony\Component\VarDumper\VarDumper;
 use Throwable;
 
@@ -28,7 +30,7 @@ class ProcessMedia implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public Media $media;
+    public Media|null $media;
     public string $file;
     public string $media_id;
 
@@ -36,8 +38,9 @@ class ProcessMedia implements ShouldQueue
      * Create a new job instance.
      *
      * @return void
+     * @throws Exception
      */
-    public function __construct(string $mediaId, string $file)
+    public function __construct(string|ObjectId $mediaId, string|ObjectId $file)
     {
         if (($this->media = Media::media($mediaId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$mediaId);
