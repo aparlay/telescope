@@ -17,7 +17,7 @@ class UploadService
 
         $result = ['data' => [], 'code' => 500];
 
-        $file = new File($config, new \Flow\Request($request->all(), $request->file()));
+        $file = new File($config, new \Flow\Request($request->all(), $request->file('file')));
         if ($request->isMethod('GET')) {
             $result['code'] = $file->checkChunk() ? 200 : 204;
 
