@@ -399,7 +399,7 @@ class Media extends BaseModel
 
     public function getSlackAdminUrlAttribute()
     {
-        return "<{$this->admin_url}|video> By <{$this->userObj->slack_admin_url}|@{$this->userObj->username}>";
+        return "<{$this->admin_url}|video> By {$this->userObj->slack_admin_url}";
     }
 
     public function getAdminUrlAttribute()

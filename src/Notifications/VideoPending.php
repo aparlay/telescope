@@ -7,9 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class VideoPending extends Notification implements ShouldQueue
+class VideoPending extends Notification
 {
-    use Queueable;
 
     /**
      * Create a new notification instance.
