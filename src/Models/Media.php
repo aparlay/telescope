@@ -397,6 +397,17 @@ class Media extends BaseModel
         );
     }
 
+
+    public function getSlackAdminUrl()
+    {
+        return "<{$this->admin_url}|a video> By {$this->userObj->slack_admin_url}";
+    }
+
+    public function getAdminUrl()
+    {
+        return config('app.adminUrls.media').$this->_id;
+    }
+
     /**
      * Route notifications for the Slack channel.
      *
