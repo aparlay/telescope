@@ -34,7 +34,7 @@ class UploadService
         }
 
         if ($file->validateChunk()) {
-            $file->saveChunk();
+            Log::error($file->saveChunk());
         } else {
             abort(400, __('Invalid chunk uploaded'));
         }
