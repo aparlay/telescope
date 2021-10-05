@@ -105,7 +105,7 @@ class MediaService
         if (! auth()->guest() && $type === 'following') {
             $query->availableForFollower()->following(auth()->user()->_id)->recentFirst();
         } else {
-          //  $query->public()->confirmed()->sort();
+           $query->public()->confirmed()->sort();
         }
 
         if (! auth()->guest()) {
