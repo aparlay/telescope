@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Jobs;
 
-use _HumbugBox8efea8300da8\PhpParser\Node\Expr\Cast\Object_;
 use Aparlay\Core\Microservices\ffmpeg\MediaClient;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeRequest;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeResponse;
@@ -54,6 +53,7 @@ class ProcessMedia implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
     public function handle()
     {
