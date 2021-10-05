@@ -52,7 +52,7 @@
                                 </tr>
                                 @if(!count($users))
                                     <tr>
-                                        <td colspan="7" class="text-center">No Users.</td>
+                                        <td colspan="10" class="text-center">No users found.</td>
                                     </tr>
                                 @endif
                                 @foreach($users as $data)
@@ -86,10 +86,19 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-12 d-flex justify-content-center">
-                        {{ $users->links() }}
-                    </div>
                 </div>
+                @if(count($users))
+                    <div class="row">
+                        <div class="col-6">
+                            Showing <strong>{!! $users->firstItem() .'-' . $users->lastItem() !!}</strong> of <strong>{!! $users->total() !!}</strong> {!! $users->total() == 1 ? 'item' : 'items' !!}
+                        </div>
+                        @if($users->hasPages())
+                            <div class="col-6 d-flex justify-content-end">
+                                {{ $users->onEachSide(3)->links() }}
+                            </div>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
     </div>

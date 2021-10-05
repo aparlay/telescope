@@ -30,20 +30,24 @@ class UserService extends DataGrid
         $username = request()->username ?? null;
         $email = request()->email ?? null;
 
-        $query = User::query();
+        if($username || $email) {
+            $query = User::query();
 
-        if($username) {
-            $query = $query->where('username', 'regex', new Regex('^' . $username));
+            if($username) {
+                $query = $query->where('username', 'regex', new Regex('^' . $username));
+            }
+
+            if($email) {
+                $query = $query->orWhere('email', 'regex', new Regex('^' . $email));
+            }
+            $users = $query->paginate(20);
+
+            $this->appendBadges($users);
+
+            return $users;
+        } else {
+            return $this->getUsers();
         }
-
-        if($email) {
-            $query = $query->orWhere('email', 'regex', new Regex('^' . $email));
-        }
-        $users = $query->paginate(20);
-
-        $this->appendBadges($users);
-
-        return $users;
     }
 
     public function appendBadges($users)

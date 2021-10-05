@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\User;
-use Illuminate\Support\Collection;
 
 class UserRepository implements RepositoryInterface
 {

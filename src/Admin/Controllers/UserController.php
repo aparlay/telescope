@@ -18,13 +18,9 @@ class UserController extends Controller
     /**
      * @throws \ErrorException
      */
-    public function index(Request $request)
+    public function index()
     {
-        if ($request->get('username') || $request->get('email')) {
-            $users = $this->userService->getUserFilter();
-        } else {
-            $users = $this->userService->getUsers();
-        }
+        $users = $this->userService->getUserFilter();
 
         return view('default_view::admin.pages.user.index', compact('users'));
     }
