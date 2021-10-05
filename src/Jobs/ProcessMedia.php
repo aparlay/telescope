@@ -173,7 +173,7 @@ class ProcessMedia implements ShouldQueue
         $mp4ConvertedFile = basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION)).'.mp4';
         $toRemoveFiles[] = $src = config('app.media.path').'3-watermarked-'.$mp4ConvertedFile;
         $optimizeReq->setDes($src);
-        $optimizeReq->setUsername('@'.$media->user->username);
+        $optimizeReq->setUsername('@'.$media->userObj->username);
         [$response, $status] = $client->Watermark($optimizeReq)->wait();
         if ($status->code !== 0) {
             Log::error($status);
