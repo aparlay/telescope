@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
+use Aparlay\Core\Jobs\DeleteAvatar;
+use Aparlay\Core\Jobs\UploadAvatar;
 use Flow\Config;
 use Flow\File;
 use Illuminate\Http\Request;
@@ -18,14 +20,14 @@ class UploadService
 
         $result = ['data' => [], 'code' => 400];
 
-        $requestFile = [
+        $FILE = [
             'name' => $request->file('file')?->getClientOriginalName(),
             'type' => $request->file('file')?->getType(),
             'tmp_name' => $request->file('file')?->getFilename(),
             'error' => $request->file('file')?->getError(),
             'size' => $request->file('file')?->getSize(),
         ];
-        $fileRequest = new \Flow\Request($request->all(), $requestFile);
+        $fileRequest = new \Flow\Request($request->all(), $FILE);
         $file = new File($config, $fileRequest);
 
         if ($request->isMethod('GET')) {
@@ -35,8 +37,12 @@ class UploadService
         }
 
         if ($file->validateChunk()) {
-            Log::error($file->getChunkPath($fileRequest->getCurrentChunkNumber()));
-            if (! $file->saveChunk()) {
+            if (! $request->hasFile('file') && ! $request->file('file')?->isValid()) {
+                abort(400, __('Cannot find uploaded file'));
+            }
+
+            $chunkName = $file->getChunkPath($fileRequest->getCurrentChunkNumber());
+            if ($request->file->storeAs('chunk', $chunkName, 'local') === false) {
                 abort(400, __('Cannot move uploaded file'));
             }
         } else {
