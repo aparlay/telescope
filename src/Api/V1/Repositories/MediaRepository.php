@@ -64,7 +64,7 @@ class MediaRepository implements RepositoryInterface
 
         $model->refresh();
 
-        return $this->model;
+        return $model;
     }
 
     public function all()
