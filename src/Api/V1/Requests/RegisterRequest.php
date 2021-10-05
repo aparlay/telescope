@@ -64,7 +64,7 @@ class RegisterRequest extends FormRequest
             $this->phone_number = $this->username;
         }
 
-        if (! empty($this->referral_id) && ! ($this->referral_id instanceof ObjectID)) {
+        if (! empty($this->referral_id) && ! ($this->referral_id instanceof ObjectId)) {
             if (($user = User::user($this->referral_id)->first()) !== null) {
                 $this->referral_id = $user->_id;
             } elseif (($user = User::username($this->referral_id)->first()) !== null) {
