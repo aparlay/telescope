@@ -15,8 +15,8 @@ class UploadService
     public static function chunkUpload(Request $request): array
     {
         $config = new Config(['tempDir' => Storage::disk('upload')]);
-        Log::error(Storage::disk('local')->path('chunk'));
-        $config->setTempDir(Storage::disk('local')->path('chunk'));
+        $chunkPath = Storage::disk('local')->path('chunk');
+        $config->setTempDir($chunkPath);
 
         $result = ['data' => [], 'code' => 200];
 
@@ -41,7 +41,7 @@ class UploadService
                 abort(400, __('Cannot find uploaded file'));
             }
 
-            $chunkName = $file->getChunkPath($fileRequest->getCurrentChunkNumber());
+            $chunkName = str_replace($chunkPath, '', $file->getChunkPath($fileRequest->getCurrentChunkNumber()));
             if ($request->file->storeAs('chunk', $chunkName, 'local') === false) {
                 abort(400, __('Cannot move uploaded file'));
             }
@@ -49,10 +49,9 @@ class UploadService
             abort(400, __('Invalid chunk uploaded'));
         }
 
-        $fileName = strtolower($request->input('flowFilename'));
-        $fileName = uniqid('tmp_', true).'.'.pathinfo($fileName, PATHINFO_EXTENSION);
-        Log::error(Storage::disk('upload')->path($fileName));
-        if ($file->validateFile() && $file->save(Storage::disk('upload')->path($fileName))) {
+        $fileName = uniqid('tmp_', true).'.'.$request->file->getClientOriginalExtension();
+        $destinationPath = Storage::disk('upload')->path($fileName);
+        if ($file->validateFile() && $file->save($destinationPath)) {
             $file->deleteChunks();
             $result['data'] = ['file' => $fileName];
             $result['code'] = 201;
