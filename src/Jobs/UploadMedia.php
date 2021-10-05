@@ -96,8 +96,8 @@ class UploadMedia implements ShouldQueue
                 $mediaServer->writeStream($newFilename, $storage->readStream($this->file));
             }
             $mediaServer->setVisibility($newFilename, Filesystem::VISIBILITY_PUBLIC);
-            ProcessMedia::dispatch($this->media_id, $newFilename)->onQueue('lowpriority');
-            BackblazeVideoUploader::dispatch($this->user_id, $this->media_id, $this->file)->onQueue('lowpriority');
+            ProcessMedia::dispatch($this->media_id, $newFilename)->onQueue('low');
+            BackblazeVideoUploader::dispatch($this->user_id, $this->media_id, $this->file)->onQueue('low');
         } else {
             throw new Exception(__CLASS__.PHP_EOL.'File not exists '.$this->file);
         }
