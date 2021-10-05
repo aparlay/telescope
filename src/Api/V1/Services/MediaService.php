@@ -128,13 +128,17 @@ class MediaService
 
             $data = $query->paginate(5);
 
-            if ($data->isEmpty()) {
+            if ($data->isEmpty() || $data->total() <= 5) {
                 if (! auth()->guest()) {
                     MediaVisit::user(auth()->user()->_id)->delete();
                 }
                 Cache::store('redis')->delete($cacheKey);
-                $data = $originalData;
-            }
+
+                if($data->isEmpty()) {
+                    $data = $originalData;
+                }
+            } 
+            
         } else {
             $data = $query->paginate(5);
         }
