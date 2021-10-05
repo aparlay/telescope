@@ -17,7 +17,7 @@ class UploadService
 
         $result = ['data' => [], 'code' => 500];
 
-        $file = new File($config);
+        $file = new File($config, new \Flow\Request($request->all(), $request->file()));
         if ($request->isMethod('GET')) {
             $result['code'] = $file->checkChunk() ? 200 : 204;
 
@@ -33,6 +33,7 @@ class UploadService
         $fileName = strtolower($request->input('flowFilename'));
         $fileName = uniqid('tmp_', true).'.'.pathinfo($fileName, PATHINFO_EXTENSION);
         if ($file->validateFile() && $file->save('/var/www/aparlay/alua/storage/app/upload/'.$fileName)) {
+            $file->deleteChunks();
             $result['data'] = ['file' => $fileName];
             $result['code'] = 201;
 
