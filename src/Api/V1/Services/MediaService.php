@@ -117,7 +117,7 @@ class MediaService
 
         $deviceId = request()->headers->get('X-DEVICE-ID', '');
         $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
-      
+
         if ($type !== 'following') {
             if (! auth()->guest()) {
                 $userId = auth()->user()->_id;
