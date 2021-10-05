@@ -92,7 +92,9 @@ class UploadMedia implements ShouldQueue
             $hash = sha1_file($filePath);
             $size = $storage->size($this->file);
             $mime = $storage->mimeType($this->file);
-            $mediaServer->writeStream($newFilename, $storage->readStream($this->file));
+            if (!$mediaServer->exists($newFilename)) {
+                $mediaServer->writeStream($newFilename, $storage->readStream($this->file));
+            }
             $mediaServer->setVisibility($newFilename, Filesystem::VISIBILITY_PUBLIC);
             ProcessMedia::dispatch($this->user_id, $this->media_id, $newFilename)->onQueue('lowpriority');
             BackblazeVideoUploader::dispatch($this->user_id, $this->media_id, $this->file)->onQueue('lowpriority');
