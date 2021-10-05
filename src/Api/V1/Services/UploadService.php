@@ -13,7 +13,7 @@ class UploadService
     public static function chunkUpload(Request $request): array
     {
         $config = new Config();
-        $config->setTempDir(Storage::path('chunk'));
+        $config->setTempDir(Storage::disk('local')->path('chunk'));
         $code = 500;
 
         $result = ['data' => [], 'code' => $code];
@@ -33,7 +33,7 @@ class UploadService
             abort(400, __('Invalid chunk uploaded'));
         }
 
-        if ($file->validateFile() && $file->save(Storage::path('upload').'/'.$fileName)) {
+        if ($file->validateFile() && $file->save(Storage::disk('upload')->path($fileName))) {
             $result['data'] = ['file' => $fileName];
             $result['code'] = 201;
 
