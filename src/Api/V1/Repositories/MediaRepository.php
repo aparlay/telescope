@@ -52,7 +52,7 @@ class MediaRepository implements RepositoryInterface
                 if (! $file->storeAs('upload', $model->file, 'local')) {
                     throw new UnprocessableEntityHttpException('Cannot upload the file.');
                 }
-            } elseif (empty($model->file) || !Storage::disk('upload')->exists($model->file)) {
+            } elseif (empty($model->file) || ! Storage::disk('upload')->exists($model->file)) {
                 throw new UnprocessableEntityHttpException('Uploaded file does not exists.');
             }
         } catch (\Exception $e) {
