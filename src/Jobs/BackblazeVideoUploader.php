@@ -26,6 +26,8 @@ class BackblazeVideoUploader implements ShouldQueue
 
     public User $user;
     public Media $media;
+    public string $user_id;
+    public string $media_id;
     public string $file;
 
     /**
@@ -55,6 +57,8 @@ class BackblazeVideoUploader implements ShouldQueue
             throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$userId);
         }
 
+        $this->user_id = (string)$userId;
+        $this->media_id = (string)$mediaId;
         $this->file = $file;
     }
 
@@ -67,6 +71,13 @@ class BackblazeVideoUploader implements ShouldQueue
      */
     public function handle()
     {
+        if (($this->user = User::user($this->user_id)->first()) === null) {
+            throw new Exception(__CLASS__.PHP_EOL.'User not found with id '.$this->user_id);
+        }
+
+        if (($this->media = Media::media($this->media_id)->first()) === null) {
+            throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$this->media_id);
+        }
         $storage = Storage::disk('upload');
         $b2 = Storage::disk('b2-videos');
 

@@ -16,7 +16,6 @@ use Grpc\ChannelCredentials;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
@@ -257,13 +256,12 @@ class ProcessMedia implements ShouldQueue
         $media->save($touchWithTrue);
 
         $media->refresh();
+        $media->notify(new VideoPending());
         WsChannel::Push($media->creator['_id'], 'media.create', [
             'media' => $media->simple_array,
             'message' => 'All done',
             'progress' => 100,
         ]);
-
-        $media->notify(new VideoPending());
     }
 
     public function failed(Throwable $exception): void
