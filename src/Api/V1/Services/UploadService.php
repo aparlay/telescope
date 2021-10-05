@@ -34,7 +34,9 @@ class UploadService
         }
 
         if ($file->validateChunk()) {
-            Log::error($file->saveChunk());
+            if (!$file->saveChunk()) {
+                abort(400, __('Cannot move uploaded file'));
+            }
         } else {
             abort(400, __('Invalid chunk uploaded'));
         }
