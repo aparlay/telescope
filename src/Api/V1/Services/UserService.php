@@ -189,7 +189,7 @@ class UserService
     }
 
     /**
-     * For check neet to send OTP.
+     * Check required OTP during login.
      * @return bool
      */
     public function requireOtp(): bool
