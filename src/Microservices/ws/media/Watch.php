@@ -36,6 +36,7 @@ class Watch implements WsEventDispatcher
             throw new InvalidArgumentException('one of the userId or anonymousId is mandatory field for the "media.watch" event.');
         }
 
+        $this->mediaId = ! empty($this->mediaId) ? new ObjectId($this->mediaId) : null;
         $this->userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
         $this->deviceId = ! empty($this->deviceId) ? (string) $this->deviceId : null;
     }
@@ -49,7 +50,6 @@ class Watch implements WsEventDispatcher
         if (empty($this->mediaId)) {
             return;
         }
-        $this->mediaId = ($this->mediaId instanceof ObjectId) ? $this->mediaId : new ObjectId($this->mediaId);
 
         if (empty($this->userId)) {
             $this->anonymousVisit();
@@ -68,7 +68,7 @@ class Watch implements WsEventDispatcher
             if ($this->durationWatched <= $media->length) {
                 $media->length_watched += $this->durationWatched;
             }
-            $media->visit_count++;
+            $media->visit_count = MediaVisit::media($media->_id)->count();
             $media->count_fields_updated_at = array_merge(
                 $media->count_fields_updated_at,
                 ['visits' => DT::utcNow()]
