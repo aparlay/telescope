@@ -62,8 +62,8 @@ class MediaResource extends JsonResource
             'comments' => [],
             'slug' => $this->slug,
             'alerts' => AlertResource::collection($this->alerts),
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
+            'created_by' => (string) $this->created_by,
+            'updated_by' => (string) $this->updated_by,
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [
