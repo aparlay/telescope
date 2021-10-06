@@ -5,15 +5,16 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
 class FollowObserver extends BaseModelObserver
 {
     /**
-     * Handle the Block "creating" event.
+     * Handle the Follow "creating" event.
      *
-     * @param  Follow  $block
+     * @param  Follow  $follow
      * @return void
      */
     public function creating(Follow $follow): void
@@ -108,5 +109,7 @@ class FollowObserver extends BaseModelObserver
         $cacheKey = (new Follow())->getCollection().':creator:'.$follow->creator['_id'];
         Redis::del($cacheKey);
         Follow::cacheByUserId($follow->creator['_id']);
+
+        Log::debug(Follow::class);
     }
 }
