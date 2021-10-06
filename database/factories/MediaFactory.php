@@ -26,6 +26,11 @@ class MediaFactory extends Factory
      */
     public function definition()
     {
+        self::macro('disableEvents', function () {
+            $this->model::flushEventListeners();
+
+            return $this;
+        });
         return [
             'description' => $this->faker->sentence(5),
             'notes' => $this->faker->sentence(5),
