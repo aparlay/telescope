@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -90,66 +92,6 @@ class Follow extends BaseModel
     }
 
     /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::created(function ($follow) {
-            $follow->userObj->follower_count++;
-            $follow->userObj->addToSet('followers', [
-                '_id' => new ObjectId($follow->creator['_id']),
-                'username' => $follow->creator['username'],
-                'avatar' => $follow->creator['avatar'],
-            ], 10);
-            $follow->userObj->count_fields_updated_at = array_merge(
-                $follow->userObj->count_fields_updated_at,
-                ['followers' => DT::utcNow()]
-            );
-            $follow->userObj->save();
-
-            $follow->creatorObj->following_count++;
-            $follow->creatorObj->addToSet('followings', [
-                '_id' => new ObjectId($follow->user['_id']),
-                'username' => $follow->user['username'],
-                'avatar' => $follow->user['avatar'],
-            ]);
-            $follow->creatorObj->count_fields_updated_at = array_merge(
-                $follow->creatorObj->count_fields_updated_at,
-                ['followings' => DT::utcNow()]
-            );
-            $follow->creatorObj->save();
-        });
-
-        static::deleted(function ($follow) {
-            $follow->userObj->follower_count--;
-            $follow->userObj->removeFromSet('followers', [
-                '_id' => new ObjectId($follow->creator['_id']),
-                'username' => $follow->creator['username'],
-                'avatar' => $follow->creator['avatar'],
-            ]);
-            $follow->userObj->count_fields_updated_at = array_merge(
-                $follow->userObj->count_fields_updated_at,
-                ['followers' => DT::utcNow()]
-            );
-            $follow->userObj->save();
-
-            $follow->creatorObj->following_count--;
-            $follow->creatorObj->removeFromSet('followings', [
-                '_id' => new ObjectId($follow->user['_id']),
-                'username' => $follow->user['username'],
-                'avatar' => $follow->user['avatar'],
-            ]);
-            $follow->creatorObj->count_fields_updated_at = array_merge(
-                $follow->creatorObj->count_fields_updated_at,
-                ['followings' => DT::utcNow()]
-            );
-            $follow->creatorObj->save();
-        });
-    }
-
-    /**
      * Create a new factory instance for the model.
      */
     protected static function newFactory(): Factory
@@ -171,5 +113,30 @@ class Follow extends BaseModel
     public function creatorObj()
     {
         return $this->belongsTo(User::class, 'creator._id');
+    }
+
+    /**
+     * @param ObjectId|string $userId
+     */
+    public static function cacheByUserId(ObjectId | string $userId): void
+    {
+        $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
+        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+
+        if (! Redis::exists($cacheKey)) {
+            $followerIds = self::project(['user._id' => true, '_id' => false])
+                ->creator(new ObjectId($userId))
+                ->pluck('user._id')
+                ->toArray();
+
+            if (empty($followerIds)) {
+                $followerIds = [''];
+            }
+
+            $followerIds = array_map('strval', $followerIds);
+
+            Redis::sAdd($cacheKey, ...$followerIds);
+            Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
+        }
     }
 }

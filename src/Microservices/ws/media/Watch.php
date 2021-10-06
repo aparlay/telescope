@@ -7,7 +7,7 @@ use Aparlay\Core\Microservices\ws\WsEventDispatcher;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
 use Exception;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use InvalidArgumentException;
 use MongoDB\BSON\ObjectId;
 
@@ -36,7 +36,7 @@ class Watch implements WsEventDispatcher
             throw new InvalidArgumentException('one of the userId or anonymousId is mandatory field for the "media.watch" event.');
         }
 
-        $this->mediaId = new ObjectId($this->mediaId);
+        $this->mediaId = ! empty($this->mediaId) ? new ObjectId($this->mediaId) : null;
         $this->userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
         $this->deviceId = ! empty($this->deviceId) ? (string) $this->deviceId : null;
     }
@@ -64,7 +64,7 @@ class Watch implements WsEventDispatcher
     private function anonymousVisit()
     {
         /** @var Media $media */
-        if ($this->durationWatched > 1 && ($media = Media::find($this->mediaId)) !== null) {
+        if ($this->durationWatched > 3 && ($media = Media::media($this->mediaId)->first()) !== null) {
             if ($this->durationWatched <= $media->length) {
                 $media->length_watched += $this->durationWatched;
             }
@@ -77,13 +77,13 @@ class Watch implements WsEventDispatcher
 
             $cacheKey = (new MediaVisit())->getCollection().$this->deviceId;
             $visited = [];
-            if (Cache::store('redis')->has($cacheKey)) {
-                $visited = Cache::store('redis')->get($cacheKey);
+            if (Redis::exists($cacheKey)) {
+                $visited = Redis::get($cacheKey);
             }
 
             $visited[] = $this->mediaId;
 
-            Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
+            Redis::set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
         }
     }
 
@@ -94,11 +94,30 @@ class Watch implements WsEventDispatcher
     {
         if (($model = MediaVisit::user($this->userId)->date(date('Y-m-d'))->first()) === null) {
             $model = new MediaVisit();
+            $model->date = date('Y-m-d');
             $model->user_id = $this->userId;
         }
 
         $model->media_id = $this->mediaId;
         $model->duration = $this->durationWatched;
+
+        $media = $model->mediaObj;
+        if ($model->duration > ($media->length / 4)) {
+            if ($model->duration <= $media->length) {
+                $media->length_watched += $model->duration;
+            }
+            $media->visit_count++;
+            $media->addToSet('visits', [
+                '_id' => $model->userObj->_id,
+                'username' => $model->userObj->username,
+                'avatar' => $model->userObj->avatar,
+            ], 10);
+            $media->count_fields_updated_at = array_merge(
+                $media->count_fields_updated_at,
+                ['visits' => DT::utcNow()]
+            );
+            $media->save();
+        }
 
         if (! $model->save()) {
             throw new Exception('Cannot save data.');

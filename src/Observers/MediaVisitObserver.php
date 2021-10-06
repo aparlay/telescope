@@ -17,8 +17,8 @@ class MediaVisitObserver extends BaseModelObserver
      */
     public function saving($model): void
     {
+        $model->addToSet('media_ids', $model->media_id);
         parent::saving($model);
-        $model->push('media_ids', $model->media_id, true);
     }
 
     /**
@@ -29,7 +29,7 @@ class MediaVisitObserver extends BaseModelObserver
      */
     public function saved(MediaVisit $mediaVisit): void
     {
-        if ($mediaVisit->wasChanged('media_ids')) {
+        if ($mediaVisit->wasRecentlyCreated || $mediaVisit->wasChanged('media_ids')) {
             $media = $mediaVisit->mediaObj;
 
             if ($mediaVisit->duration > ($media->length / 4)) {
@@ -38,7 +38,8 @@ class MediaVisitObserver extends BaseModelObserver
                 }
                 $media->visit_count++;
                 $media->addToSet('visits', [
-                    '_id' => $mediaVisit->userObj->_id, 'username' => $mediaVisit->userObj->username,
+                    '_id' => $mediaVisit->userObj->_id,
+                    'username' => $mediaVisit->userObj->username,
                     'avatar' => $mediaVisit->userObj->avatar,
                 ], 10);
                 $media->count_fields_updated_at = array_merge(

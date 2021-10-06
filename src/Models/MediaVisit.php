@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
@@ -116,15 +117,15 @@ class MediaVisit extends BaseModel
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
 
         if (! Redis::exists($cacheKey)) {
-            $visitedMediaIds = self::project(['media_id' => true, '_id' => false])
+            $visitedMediaIds = self::project(['media_ids' => true, '_id' => false])
                 ->creator($userId)
-                ->pluck('media_id')
+                ->pluck('media_ids')
                 ->toArray();
 
             if (empty($visitedMediaIds)) {
                 $visitedMediaIds = [''];
             }
-
+            $visitedMediaIds = Arr::flatten($visitedMediaIds);
             $visitedMediaIds = array_map('strval', $visitedMediaIds);
 
             Redis::sAdd($cacheKey, ...$visitedMediaIds);

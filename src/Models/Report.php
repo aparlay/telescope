@@ -40,13 +40,10 @@ class Report extends BaseModel
     use ReportScope;
 
     public const TYPE_USER = 0;
-
     public const TYPE_MEDIA = 1;
-
     public const TYPE_COMMENT = 2;
 
     public const STATUS_REPORTED = 0;
-
     public const STATUS_REVISED = 1;
 
     /**

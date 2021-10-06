@@ -4,6 +4,7 @@ namespace Aparlay\Core\Providers;
 
 use Aparlay\Core\Models\BaseModel;
 use Aparlay\Core\Models\Block;
+use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\MediaVisit;
@@ -11,6 +12,7 @@ use Aparlay\Core\Models\Report;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Observers\BaseModelObserver;
 use Aparlay\Core\Observers\BlockObserver;
+use Aparlay\Core\Observers\FollowObserver;
 use Aparlay\Core\Observers\MediaLikeObserver;
 use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\MediaVisitObserver;
@@ -40,6 +42,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         BaseModel::observe(BaseModelObserver::class);
+        Follow::observe(FollowObserver::class);
         Block::observe(BlockObserver::class);
         MediaLike::observe(MediaLikeObserver::class);
         Media::observe(MediaObserver::class);

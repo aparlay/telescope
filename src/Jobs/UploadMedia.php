@@ -5,6 +5,7 @@ namespace Aparlay\Core\Jobs;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
+use App;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\FileExistsException;
@@ -27,6 +28,8 @@ class UploadMedia implements ShouldQueue
 
     public User $user;
     public Media $media;
+    public string $user_id;
+    public string $media_id;
     public string $file;
 
     /**
@@ -56,10 +59,11 @@ class UploadMedia implements ShouldQueue
             throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$userId);
         }
 
-        $storage = Storage::disk('upload');
+        $this->user_id = (string) $userId;
+        $this->media_id = (string) $mediaId;
         $this->file = $file;
-        if ($storage->exists($this->file)) {
-            throw new Exception(__CLASS__.PHP_EOL.'File not exists '.$this->file);
+        if (! Storage::disk('upload')->exists($this->file) && ! App::runningInConsole()) {
+            throw new Exception(__CLASS__.PHP_EOL.'File not exists ');
         }
     }
 
@@ -72,6 +76,10 @@ class UploadMedia implements ShouldQueue
      */
     public function handle()
     {
+        if (($media = Media::media($this->media_id)->first()) === null) {
+            throw new Exception(__CLASS__.PHP_EOL.'Media not found!');
+        }
+
         $storage = Storage::disk('upload');
         $mediaServer = Storage::disk('media-ftp');
 
@@ -87,18 +95,17 @@ class UploadMedia implements ShouldQueue
             $mime = $storage->mimeType($this->file);
             $mediaServer->writeStream($newFilename, $storage->readStream($this->file));
             $mediaServer->setVisibility($newFilename, Filesystem::VISIBILITY_PUBLIC);
-            ProcessMedia::dispatch($this->user->_id, $this->media->_id, $newFilename)->onQueue('lowpriority');
-            BackblazeVideoUploader::dispatch($this->user->_id, $this->media->_id, $this->file)->onQueue('lowpriority');
+            ProcessMedia::dispatch($this->media_id, $newFilename)->onQueue('low');
+            BackblazeVideoUploader::dispatch($this->user_id, $this->media_id, $this->file)->onQueue('low');
         } else {
             throw new Exception(__CLASS__.PHP_EOL.'File not exists '.$this->file);
         }
-
-        $this->media->mime_type = $mime;
-        $this->media->hash = $hash;
-        $this->media->size = $size;
-        $this->media->file = $newFilename;
-        $this->media->status = Media::STATUS_UPLOADED;
-        $this->media->save();
+        $media->mime_type = $mime;
+        $media->hash = $hash;
+        $media->size = $size;
+        $media->file = $newFilename;
+        $media->status = Media::STATUS_UPLOADED;
+        $media->save();
     }
 
     /**
