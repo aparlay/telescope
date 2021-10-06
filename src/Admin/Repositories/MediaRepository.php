@@ -3,8 +3,8 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Media;
-use Illuminate\Support\Collection;
 use Aparlay\Core\Helpers\Cdn;
+use Illuminate\Support\Collection;
 
 class MediaRepository implements RepositoryInterface
 {
@@ -46,13 +46,13 @@ class MediaRepository implements RepositoryInterface
 
     public function getList(array $options = [])
     {
-        $onPage = !empty($options['onPage']) ? $options['onPage'] :  20;
+        $onPage = ! empty($options['onPage']) ? $options['onPage'] : 20;
 
         $mediaCollection = $this->model->paginate($onPage);
 
-        foreach($mediaCollection as $collect){
+        foreach ($mediaCollection as $collect) {
             $collect->status_text = $this->model->getStatus_color($collect->status);
-            $collect->cover = Cdn::cover(!empty($value['file']) ? $value['file'].'.jpg' : 'default.jpg');
+            $collect->cover = Cdn::cover(! empty($value['file']) ? $value['file'].'.jpg' : 'default.jpg');
         }
 
         return $mediaCollection;

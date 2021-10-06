@@ -12,7 +12,7 @@ class Media extends MediaBase
      */
     public function getStatus_color(int $status)
     {
-        if(empty($status)){
+        if (empty($status)) {
             return ['color' => '', 'text' => ''];
         }
         $colors = [
@@ -25,7 +25,7 @@ class Media extends MediaBase
             self::STATUS_DENIED => ['color' => 'danger', 'text' => 'Denied'],
             self::STATUS_IN_REVIEW => ['color' => 'info', 'text' => 'Under Review'],
             self::STATUS_ADMIN_DELETED => ['color' => 'danger', 'text' => 'Deleted By Admin'],
-            self::STATUS_USER_DELETED => ['color' => 'danger', 'text' => 'Delete']
+            self::STATUS_USER_DELETED => ['color' => 'danger', 'text' => 'Delete'],
         ];
 
         return $colors[$status];
