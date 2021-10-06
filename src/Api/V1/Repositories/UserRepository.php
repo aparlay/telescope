@@ -183,7 +183,7 @@ class UserRepository implements RepositoryInterface
     public function requireOtp(): bool
     {
         if ($this->isUserEligible()) {
-            return ($this->model->setting['otp'] || $this->model->status === User::STATUS_PENDING);
+            return $this->model->setting['otp'] || $this->model->status === User::STATUS_PENDING;
         }
 
         return false;
