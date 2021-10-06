@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notification;
 
 class VideoPending extends Notification
 {
-
     /**
      * Create a new notification instance.
      *
