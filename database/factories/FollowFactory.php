@@ -23,6 +23,12 @@ class FollowFactory extends Factory
      */
     public function definition()
     {
+        self::macro('disableEvents', function () {
+            $this->model::flushEventListeners();
+
+            return $this;
+        });
+
         return [
             'user' => function () {
                 $user = User::factory()->create();

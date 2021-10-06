@@ -35,7 +35,7 @@ class RemoveResponse extends \Google\Protobuf\Internal\Message
      */
     public function __construct($data = null)
     {
-        \GPBMetadata\Media::initOnce();
+        \Aparlay\Core\Microservices\ffmpeg\GPBMetadata\Media::initOnce();
         parent::__construct($data);
     }
 

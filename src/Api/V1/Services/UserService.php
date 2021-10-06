@@ -187,4 +187,13 @@ class UserService
 
         return $avatar;
     }
+
+    /**
+     * Check required OTP during login.
+     * @return bool
+     */
+    public function requireOtp(): bool
+    {
+        return $this->userRepository->requireOtp();
+    }
 }

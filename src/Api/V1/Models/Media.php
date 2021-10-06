@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
+use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media as MediaBase;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;
@@ -43,6 +44,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
  * @property-read int $skin_score
+ * @property-read bool $is_liked
  *
  * @OA\Schema()
  */
@@ -73,14 +75,29 @@ class Media extends MediaBase
     /**
      * Get the user's full name.
      */
+    public function getIsFollowedAttribute(): bool
+    {
+        if (auth()->guest()) {
+            return false;
+        }
+
+        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->_id;
+        Follow::cacheByUserId(auth()->user()->_id);
+
+        return Redis::sismember($cacheKey, (string) $this->creator['_id']);
+    }
+
+    /**
+     * Get the user's full name.
+     */
     public function getIsLikedAttribute(): bool
     {
         if (auth()->guest()) {
             return false;
         }
 
-        $mediaLikeCacheKey = (new MediaLike())->getCollection().':creator:'.auth()->user()->id;
-        MediaLike::cacheByUserId(auth()->user()->id);
+        $mediaLikeCacheKey = (new MediaLike())->getCollection().':creator:'.auth()->user()->_id;
+        MediaLike::cacheByUserId(auth()->user()->_id);
 
         return Redis::sismember($mediaLikeCacheKey, (string) $this->_id);
     }
@@ -94,8 +111,8 @@ class Media extends MediaBase
             return false;
         }
 
-        $mediaVisitCacheKey = (new MediaVisit())->getCollection().':creator:'.auth()->user()->id;
-        MediaLike::cacheByUserId(auth()->user()->id);
+        $mediaVisitCacheKey = (new MediaVisit())->getCollection().':creator:'.auth()->user()->_id;
+        MediaLike::cacheByUserId(auth()->user()->_id);
 
         return Redis::sismember($mediaVisitCacheKey, (string) $this->_id);
     }

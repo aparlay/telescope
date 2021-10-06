@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
-use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -50,7 +50,7 @@ class MediaResource extends JsonResource
             'people' => $people,
             'file' => Cdn::video($this->is_completed ? $this->file : 'default.mp4'),
             'cover' => Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg'),
-            'creator' => $this->createSimpleUser($this->creator),
+            'creator' => $this->createSimpleUser($this->creator, ['_id', 'username', 'avatar', 'is_followed']),
             'is_liked' => $this->is_liked,
             'is_visited' => $this->is_visited,
             'is_adult' => $this->is_adult,
@@ -62,8 +62,8 @@ class MediaResource extends JsonResource
             'comments' => [],
             'slug' => $this->slug,
             'alerts' => AlertResource::collection($this->alerts),
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
+            'created_by' => (string) $this->created_by,
+            'updated_by' => (string) $this->updated_by,
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [

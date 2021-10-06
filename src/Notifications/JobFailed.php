@@ -49,7 +49,7 @@ class JobFailed extends Notification
         $message .= PHP_EOL.'_*Exceptions:*_ '.! empty($this->exception) ? $this->exception : ' attempts done.';
 
         return (new SlackMessage())
-            ->to('waptap-testing')
+            ->to('#waptap-testing')
             ->content($message)
             ->success();
     }
