@@ -134,11 +134,10 @@ class MediaService
                 }
                 Cache::store('redis')->delete($cacheKey);
 
-                if($data->isEmpty()) {
+                if ($data->isEmpty()) {
                     $data = $originalData;
                 }
-            } 
-            
+            }
         } else {
             $data = $query->paginate(5);
         }
