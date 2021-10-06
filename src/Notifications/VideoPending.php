@@ -1,16 +1,14 @@
 <?php
 
-namespace Aparlay\Core\Api\V1\Notifications;
+namespace Aparlay\Core\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class ReportSent extends Notification implements ShouldQueue
+class VideoPending extends Notification
 {
-    use Queueable;
-
     /**
      * Create a new notification instance.
      *
@@ -41,9 +39,8 @@ class ReportSent extends Notification implements ShouldQueue
      */
     public function toSlack($notifiable)
     {
-        $message = $notifiable->creator->slack_admin_url ?? 'A Guest user';
-        $message .= ' reported '.$notifiable->slack_subject_admin_url;
-        $message .= PHP_EOL.'_*Reason:*_ '.$notifiable->reason;
+        $message = "New {$notifiable->slack_admin_url} is waiting for moderation.";
+        $message .= PHP_EOL.'_*Log:*_ '.PHP_EOL.implode("\n", $notifiable->processing_log);
 
         return (new SlackMessage())
             ->to('#waptap-testing')

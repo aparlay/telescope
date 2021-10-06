@@ -7,9 +7,9 @@ use Aparlay\Core\Microservices\ws\WsEventDispatcher;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
 use Exception;
-use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
 use MongoDB\BSON\ObjectId;
+use Swoole\Coroutine\Redis;
 
 class Watch implements WsEventDispatcher
 {
@@ -36,7 +36,6 @@ class Watch implements WsEventDispatcher
             throw new InvalidArgumentException('one of the userId or anonymousId is mandatory field for the "media.watch" event.');
         }
 
-        $this->mediaId = new ObjectId($this->mediaId);
         $this->userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
         $this->deviceId = ! empty($this->deviceId) ? (string) $this->deviceId : null;
     }
@@ -50,6 +49,7 @@ class Watch implements WsEventDispatcher
         if (empty($this->mediaId)) {
             return;
         }
+        $this->mediaId = ($this->mediaId instanceof ObjectId) ? $this->mediaId : new ObjectId($this->mediaId);
 
         if (empty($this->userId)) {
             $this->anonymousVisit();
@@ -64,7 +64,7 @@ class Watch implements WsEventDispatcher
     private function anonymousVisit()
     {
         /** @var Media $media */
-        if ($this->durationWatched > 1 && ($media = Media::find($this->mediaId)) !== null) {
+        if ($this->durationWatched > 1 && ($media = Media::media($this->mediaId)) !== null) {
             if ($this->durationWatched <= $media->length) {
                 $media->length_watched += $this->durationWatched;
             }
@@ -77,13 +77,13 @@ class Watch implements WsEventDispatcher
 
             $cacheKey = (new MediaVisit())->getCollection().$this->deviceId;
             $visited = [];
-            if (Cache::store('redis')->has($cacheKey)) {
-                $visited = Cache::store('redis')->get($cacheKey);
+            if (Redis::exists($cacheKey)) {
+                $visited = Redis::get($cacheKey);
             }
 
             $visited[] = $this->mediaId;
 
-            Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
+            Redis::set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
         }
     }
 
@@ -94,6 +94,7 @@ class Watch implements WsEventDispatcher
     {
         if (($model = MediaVisit::user($this->userId)->date(date('Y-m-d'))->first()) === null) {
             $model = new MediaVisit();
+            $model->date = date('Y-m-d');
             $model->user_id = $this->userId;
         }
 

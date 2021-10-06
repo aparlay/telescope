@@ -4,7 +4,6 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Casts\SimpleUser;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -64,43 +63,29 @@ class User extends Authenticatable implements JWTSubject
     use UserScope;
 
     public const TYPE_USER = 0;
-
     public const TYPE_ADMIN = 1;
 
     public const STATUS_PENDING = 0;
-
     public const STATUS_VERIFIED = 1;
-
     public const STATUS_ACTIVE = 2;
-
     public const STATUS_SUSPENDED = 3;
-
     public const STATUS_BLOCKED = 4;
-
     public const STATUS_DEACTIVATED = 10;
 
     public const GENDER_FEMALE = 0;
-
     public const GENDER_MALE = 1;
-
     public const GENDER_TRANSGENDER = 2;
-
     public const GENDER_NOT_MENTION = 3;
 
     public const INTERESTED_IN_FEMALE = 0;
-
     public const INTERESTED_IN_MALE = 1;
-
     public const INTERESTED_IN_TRANSGENDER = 2;
-
     public const INTERESTED_IN_COUPLE = 3;
 
     public const VISIBILITY_PUBLIC = 1;
-
     public const VISIBILITY_PRIVATE = 0;
 
     public const FEATURE_TIPS = 'tips';
-
     public const FEATURE_DEMO = 'demo';
 
     /**
@@ -171,6 +156,18 @@ class User extends Authenticatable implements JWTSubject
             'tips' => false,
             'demo' => false,
         ],
+        'status' => self::STATUS_PENDING,
+        'email_verified' => false,
+        'phone_number_verified' => false,
+        'gender' => self::GENDER_MALE,
+        'interested_in' => self::INTERESTED_IN_MALE,
+        'visibility' => self::VISIBILITY_PUBLIC,
+        'follower_count' => 0,
+        'following_count' => 0,
+        'like_count' => 0,
+        'block_count' => 0,
+        'followed_hashtag_count' => 0,
+        'media_count' => 0,
     ];
 
     /**

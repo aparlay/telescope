@@ -4,37 +4,58 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Flow\Config;
 use Flow\File;
-use Flow\Request as FlowRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class UploadService
 {
-    public static function chunkUpload(): array
+    public static function chunkUpload(Request $request): array
     {
-        $config = new Config();
-        $config->setTempDir(Storage::path('chunk'));
-        $code = 500;
+        $config = new Config(['tempDir' => Storage::disk('upload')]);
+        $chunkPath = Storage::disk('local')->path('chunk');
+        $config->setTempDir($chunkPath);
 
-        $result = ['data' => [], 'code' => $code];
+        $result = ['data' => [], 'code' => 200];
 
-        $flowRequest = new FlowRequest();
+        $FILE = [
+            'name' => $request->file('file')?->getClientOriginalName(),
+            'type' => $request->file('file')?->getType(),
+            'tmp_name' => $request->file('file')?->getFilename(),
+            'error' => $request->file('file')?->getError(),
+            'size' => $request->file('file')?->getSize(),
+        ];
+        $fileRequest = new \Flow\Request($request->all(), $FILE);
+        $file = new File($config, $fileRequest);
 
-        $fileName = strtolower($flowRequest->getFileName());
-        $fileName = uniqid('tmp_', true).'.'.pathinfo($fileName, PATHINFO_EXTENSION);
-
-        $file = new File($config);
-
-        if (request()->isMethod('get')) {
+        if ($request->isMethod('GET')) {
             $result['code'] = $file->checkChunk() ? 200 : 204;
-        } elseif ($file->validateChunk()) {
-            $file->saveChunk();
+
+            return $result;
+        }
+
+        if ($file->validateChunk()) {
+            if (! $request->hasFile('file') && ! $request->file('file')?->isValid()) {
+                abort(400, __('Cannot find uploaded file'));
+            }
+
+            $chunkName = str_replace($chunkPath, '', $file->getChunkPath($fileRequest->getCurrentChunkNumber()));
+            if ($request->file->storeAs('chunk', $chunkName, 'local') === false) {
+                abort(400, __('Cannot move uploaded file'));
+            }
         } else {
             abort(400, __('Invalid chunk uploaded'));
         }
-        if ($file->validateFile() && $file->save(Storage::path('upload').'/'.$fileName)) {
-            $code = 201;
-            $result['data'] = ['file' => $fileName];
-            $result['code'] = $code;
+
+        $fileName = uniqid('tmp_', true).'.'.$request->file->getClientOriginalExtension();
+        $destinationPath = Storage::disk('upload')->path($fileName);
+        if ($file->validateFile() && $file->save($destinationPath)) {
+            $file->deleteChunks();
+            $result['data'] = [
+                'code' => 201,
+                'status' => 'OK',
+                'data' => ['file' => $fileName],
+            ];
+            $result['code'] = 201;
 
             return $result;
         }

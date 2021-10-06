@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
+use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User as UserBase;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
@@ -42,9 +44,24 @@ use MongoDB\BSON\UTCDateTime;
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
+ * @property-read bool $is_followed
  *
  * @OA\Schema()
  */
 class User extends UserBase
 {
+    /**
+     * Get the user's full name.
+     */
+    public function getIsFollowedAttribute(): bool
+    {
+        if (auth()->guest()) {
+            return false;
+        }
+
+        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->_id;
+        Follow::cacheByUserId(auth()->user()->_id);
+
+        return Redis::sismember($cacheKey, (string) $this->_id);
+    }
 }

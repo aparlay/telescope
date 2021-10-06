@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -69,27 +70,17 @@ class Media extends BaseModel
     use SimpleUserTrait;
 
     public const VISIBILITY_PUBLIC = 1;
-
     public const VISIBILITY_PRIVATE = 0;
 
     public const STATUS_QUEUED = 0;
-
     public const STATUS_UPLOADED = 1;
-
     public const STATUS_IN_PROGRESS = 2;
-
     public const STATUS_COMPLETED = 3;
-
     public const STATUS_FAILED = 4;
-
     public const STATUS_CONFIRMED = 5;
-
     public const STATUS_DENIED = 6;
-
     public const STATUS_IN_REVIEW = 7;
-
     public const STATUS_ADMIN_DELETED = 9;
-
     public const STATUS_USER_DELETED = 10;
 
     /**
@@ -404,5 +395,27 @@ class Media extends BaseModel
             [self::STATUS_COMPLETED, self::STATUS_CONFIRMED, self::STATUS_ADMIN_DELETED],
             true
         );
+    }
+
+    public function getSlackAdminUrlAttribute()
+    {
+        return "<{$this->admin_url}|video> By {$this->userObj->slack_admin_url}";
+    }
+
+    public function getAdminUrlAttribute()
+    {
+        return config('app.adminUrls.media').$this->_id;
+    }
+
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @param Notification $notification
+     *
+     * @return string
+     */
+    public function routeNotificationForSlack($notification)
+    {
+        return config('app.slack_webhook_url');
     }
 }
