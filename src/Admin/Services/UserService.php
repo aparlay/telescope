@@ -56,8 +56,8 @@ class UserService extends DataGrid
         $user = $this->userRepository->find($id);
 
         $statusBadge = [
-            'status' => $user->getStatuses()[$user->status],
-            'color' => $user->getStatusColor(),
+            'status' => $user->status_name,
+            'color' => $user->status_color,
         ];
 
         $user->status_badge = $statusBadge;
