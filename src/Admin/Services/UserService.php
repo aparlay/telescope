@@ -65,7 +65,6 @@ class UserService extends DataGrid
         $user->status_badge = $statusBadge;
 
         return $user;
-
     }
 
     public function appendBadges($users)
