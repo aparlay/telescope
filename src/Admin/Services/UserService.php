@@ -25,7 +25,7 @@ class UserService extends DataGrid
         return $users;
     }
 
-    public function getUserFilter()
+    public function getFilteredUsers()
     {
         $username = request()->username ?? null;
         $email = request()->email ?? null;

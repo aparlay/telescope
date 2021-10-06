@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userService->getUserFilter();
+        $users = $this->userService->getFilteredUsers();
 
         return view('default_view::admin.pages.user.index', compact('users'));
     }
