@@ -7,9 +7,9 @@ use Aparlay\Core\Microservices\ws\WsEventDispatcher;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
 use Exception;
+use Illuminate\Support\Facades\Redis;
 use InvalidArgumentException;
 use MongoDB\BSON\ObjectId;
-use Swoole\Coroutine\Redis;
 
 class Watch implements WsEventDispatcher
 {
