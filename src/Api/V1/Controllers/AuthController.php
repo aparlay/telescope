@@ -193,7 +193,7 @@ class AuthController extends Controller
         $this->userService->isUserEligible($user);
         $deviceId = $request->headers->get('X-DEVICE-ID');
 
-        if ($this->userService->isUnverified($user)) {
+        if ($this->userService->requireOtp()) {
             if ($request->otp) {
                 $this->otpService->validateOtp($request->otp, $request->username);
                 $this->userService->verify();
