@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
+use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media as MediaBase;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;
@@ -69,6 +70,21 @@ class Media extends MediaBase
             ->from('Reporter', ':radioactive_sign:')
             ->to('#alua-report')
             ->content($message);
+    }
+
+    /**
+     * Get the user's full name.
+     */
+    public function getIsFollowedAttribute(): bool
+    {
+        if (auth()->guest()) {
+            return false;
+        }
+
+        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->_id;
+        Follow::cacheByUserId(auth()->user()->_id);
+
+        return Redis::sismember($cacheKey, (string) $this->creator['_id']);
     }
 
     /**
