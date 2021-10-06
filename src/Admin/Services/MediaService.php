@@ -17,7 +17,7 @@ class MediaService
 
     public function getList()
     {
-        $mediaCollection = $this->mediaRepository->getList();
+        $mediaCollection = $this->mediaRepository->all();
 
         foreach ($mediaCollection as $collect) {
             $collect->status_text = $collect->status_color;

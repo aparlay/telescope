@@ -19,7 +19,7 @@ class MediaRepository implements RepositoryInterface
 
     public function all()
     {
-        // TODO: Implement all() method.
+        return $this->model->orderBy('created_at', 'desc')->paginate(20);
     }
 
     public function create(array $data)
@@ -40,10 +40,5 @@ class MediaRepository implements RepositoryInterface
     public function find($id)
     {
         // TODO: Implement find() method.
-    }
-
-    public function getList()
-    {
-        return $this->model->orderBy('created_at', 'desc')->paginate(20);
     }
 }
