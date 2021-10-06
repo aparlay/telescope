@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Redis;
@@ -36,7 +37,8 @@ class MediaLikeObserver extends BaseModelObserver
     public function created(MediaLike $mediaLike): void
     {
         $media = $mediaLike->mediaObj;
-        $media->like_count++;
+        $likeCount = MediaLike::media($media->_id)->count();
+        $media->like_count = $likeCount;
         $media->addToSet('likes', [
             '_id' => new ObjectId($mediaLike->creator['_id']),
             'username' => $mediaLike->creator['username'],
@@ -49,7 +51,8 @@ class MediaLikeObserver extends BaseModelObserver
         $media->save();
 
         $user = $media->userObj;
-        $user->like_count++;
+        $likeCount = MediaLike::user($user->_id)->count();
+        $user->like_count = $likeCount;
         $user->addToSet('likes', [
             '_id' => new ObjectId($mediaLike->creator['_id']),
             'username' => $mediaLike->creator['username'],
@@ -77,7 +80,8 @@ class MediaLikeObserver extends BaseModelObserver
     public function deleted(MediaLike $mediaLike): void
     {
         $media = $mediaLike->mediaObj;
-        $media->like_count--;
+        $likeCount = MediaLike::media($media->_id)->count();
+        $media->like_count = $likeCount;
         $media->removeFromSet('likes', [
             '_id' => new ObjectId($mediaLike->creator['_id']),
             'username' => $mediaLike->creator['username'],
@@ -90,7 +94,8 @@ class MediaLikeObserver extends BaseModelObserver
         $media->save();
 
         $user = $media->userObj;
-        $user->like_count--;
+        $likeCount = MediaLike::user($user->_id)->count();
+        $user->like_count = $likeCount;
         $user->removeFromSet('likes', [
             '_id' => new ObjectId($mediaLike->creator['_id']),
             'username' => $mediaLike->creator['username'],
