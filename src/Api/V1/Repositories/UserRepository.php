@@ -185,6 +185,7 @@ class UserRepository implements RepositoryInterface
         if ($this->isUserEligible()) {
             return $this->model->setting['otp'] || $this->model->status === User::STATUS_PENDING;
         }
+
         return false;
     }
 }
