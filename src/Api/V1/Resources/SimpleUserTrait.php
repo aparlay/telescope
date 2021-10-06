@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
-use Aparlay\Core\Helpers\Cdn;
 use Exception;
 
 trait SimpleUserTrait
