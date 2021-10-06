@@ -192,7 +192,7 @@ class AuthController extends Controller
         $user = auth()->user();
         $this->userService->isUserEligible($user);
         $deviceId = $request->headers->get('X-DEVICE-ID');
-        
+
         if ($this->userService->requireOtp()) {
             if ($request->otp) {
                 $this->otpService->validateOtp($request->otp, $request->username);
@@ -256,7 +256,7 @@ class AuthController extends Controller
         $deviceId = $request->headers->get('X-DEVICE-ID');
 
         $this->otpService->sendOtp($user, $deviceId);
-        
+
         return $this->response(
             new RegisterResource($user),
             'Entity has been created successfully!',
