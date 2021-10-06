@@ -52,7 +52,18 @@
                     </table>
                 </div>
                 <div class="col-12 d-flex justify-content-center">
-                    {{ $media_list->links() }}
+                    @if(count($media_list))
+                        <div class="row">
+                            <div class="col-6">
+                                Showing <strong>{!! $media_list->firstItem() .'-' . $media_list->lastItem() !!}</strong> of <strong>{!! $media_list->total() !!}</strong> {!! $media_list->total() == 1 ? 'item' : 'items' !!}
+                            </div>
+                            @if($media_list->hasPages())
+                                <div class="col-6 d-flex justify-content-end">
+                                    {{ $media_list->links() }}
+                                </div>
+                            @endif
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
