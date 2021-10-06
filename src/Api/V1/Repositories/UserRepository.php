@@ -175,4 +175,16 @@ class UserRepository implements RepositoryInterface
 
         return $this->model->save();
     }
+
+    /**
+     * For check need to send OTP.
+     * @return bool
+     */
+    public function requireOtp(): bool
+    {
+        if ($this->isUserEligible()) {
+            return ($this->model->setting['otp'] || $this->model->status === User::STATUS_PENDING) && empty($this->model->otp);
+        }
+        return false;
+    }
 }

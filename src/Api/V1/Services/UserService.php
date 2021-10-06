@@ -187,4 +187,13 @@ class UserService
 
         return $avatar;
     }
+
+    /**
+     * For check neet to send OTP.
+     * @return bool
+     */
+    public function requireOtp(): bool
+    {
+        return $this->userRepository->requireOtp();
+    }
 }
