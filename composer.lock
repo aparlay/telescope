@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5143338022fdbc2662c9e0cdeb24fc96",
+    "content-hash": "1451af96c388dab8b0fc61eec273e756",
     "packages": [
         {
             "name": "aparlay/telescope",
@@ -13191,11 +13191,11 @@
         "php": "^8.0",
         "ext-curl": "*",
         "ext-dom": "*",
+        "ext-grpc": "^1.35",
         "ext-json": "*",
         "ext-mongodb": "*",
         "ext-openssl": "*",
-        "ext-swoole": "*",
-        "ext-grpc": "^1.35"
+        "ext-swoole": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.1.0"
