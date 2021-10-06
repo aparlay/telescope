@@ -5,9 +5,8 @@ namespace Aparlay\Core\Admin\Services;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use MongoDB\BSON\Regex;
-use WdevRs\LaravelDatagrid\DataGrid\DataGrid;
 
-class UserService extends DataGrid
+class UserService
 {
     protected UserRepository $userRepository;
 
