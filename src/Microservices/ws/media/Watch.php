@@ -100,6 +100,23 @@ class Watch implements WsEventDispatcher
 
         $model->media_id = $this->mediaId;
         $model->duration = $this->durationWatched;
+        $media = $model->mediaObj;
+        if ($model->duration > ($media->length / 4)) {
+            if ($mediaVisit->duration <= $media->length) {
+                $media->length_watched += $mediaVisit->duration;
+            }
+            $media->visit_count = MediaVisit::media($media->_id)->count();
+            $media->addToSet('visits', [
+                '_id' => $model->userObj->_id,
+                'username' => $model->userObj->username,
+                'avatar' => $model->userObj->avatar,
+            ], 10);
+            $media->count_fields_updated_at = array_merge(
+                $media->count_fields_updated_at,
+                ['visits' => DT::utcNow()]
+            );
+            $media->save();
+        }
 
         if (! $model->save()) {
             throw new Exception('Cannot save data.');
