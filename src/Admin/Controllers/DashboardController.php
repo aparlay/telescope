@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Services\AnalyticService;
-use Flow\Request;
 
 class DashboardController extends Controller
 {

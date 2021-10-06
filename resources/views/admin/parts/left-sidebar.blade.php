@@ -38,7 +38,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('core.admin.media.index') }}" class="nav-link {{ Route::currentRouteName() === 'core.admin.user.index' ? 'active' : '' }}">
+                    <a href="{{ route('core.admin.media.index') }}" class="nav-link {{ Route::currentRouteName() === 'core.admin.media.index' ? 'active' : '' }}">
                         <i class="nav-icon far fa-file-video text-info"></i>
                         <p>Media</p>
                     </a>
