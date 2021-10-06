@@ -25,7 +25,7 @@ class UserService extends DataGrid
         return $users;
     }
 
-    public function getUserFilter()
+    public function getFilteredUsers()
     {
         $username = request()->username ?? null;
         $email = request()->email ?? null;
@@ -41,8 +41,6 @@ class UserService extends DataGrid
                 $query = $query->orWhere('email', 'regex', new Regex('^'.$email));
             }
             $users = $query->paginate(20);
-
-            $this->appendBadges($users);
 
             return $users;
         } else {
@@ -71,13 +69,13 @@ class UserService extends DataGrid
     {
         foreach ($users as $user) {
             $statusBadge = [
-                'status' => $user->getStatuses()[$user->status],
-                'color' => $user->getStatusColor(),
+                'status' => $user->status_name,
+                'color' => $user->status_color,
             ];
 
             $genderBadge = [
-                'gender' => $user->getGenders()[$user->gender],
-                'color' => $user->getGenderColor(),
+                'gender' => $user->gender_name,
+                'color' => $user->gender_color,
             ];
 
             $isVerifiedBadge = [
