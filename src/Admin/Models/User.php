@@ -9,7 +9,7 @@ class User extends UserBase
     /**
      * @return string
      */
-    public function getStatusColor()
+    public function getStatusColorAttribute()
     {
         $colors = [
             self::STATUS_PENDING => 'secondary',
@@ -26,7 +26,15 @@ class User extends UserBase
     /**
      * @return string
      */
-    public function getGenderColor()
+    public function getStatusNameAttribute()
+    {
+        return $this->getStatuses()[$this->status];
+    }
+
+    /**
+     * @return string
+     */
+    public function getGenderColorAttribute()
     {
         $colors = [
             self::GENDER_MALE => 'success',
@@ -36,5 +44,13 @@ class User extends UserBase
         ];
 
         return $colors[$this->gender];
+    }
+
+    /**
+     * @return string
+     */
+    public function getGenderNameAttribute()
+    {
+        return $this->getGenders()[$this->gender];
     }
 }

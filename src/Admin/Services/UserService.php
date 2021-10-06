@@ -42,8 +42,6 @@ class UserService extends DataGrid
             }
             $users = $query->paginate(20);
 
-            $this->appendBadges($users);
-
             return $users;
         } else {
             return $this->getUsers();
@@ -54,13 +52,13 @@ class UserService extends DataGrid
     {
         foreach ($users as $user) {
             $statusBadge = [
-                'status' => $user->getStatuses()[$user->status],
-                'color' => $user->getStatusColor(),
+                'status' => $user->status_name,
+                'color' => $user->status_color,
             ];
 
             $genderBadge = [
-                'gender' => $user->getGenders()[$user->gender],
-                'color' => $user->getGenderColor(),
+                'gender' => $user->gender_name,
+                'color' => $user->gender_color,
             ];
 
             $isVerifiedBadge = [

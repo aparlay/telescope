@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core;
 
+use Aparlay\Core\Admin\Providers\AdminServiceProvider;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
@@ -17,7 +18,6 @@ use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -39,6 +39,7 @@ class CoreServiceProvider extends ServiceProvider
         }
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
+        $this->app->register(AdminServiceProvider::class);
 
         $this->mergeConfig();
     }
@@ -74,8 +75,6 @@ class CoreServiceProvider extends ServiceProvider
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
             app()->make(\Aparlay\Core\Admin\Http\Kernel::class);
-
-            Paginator::useBootstrap();
         }
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'default_view');
