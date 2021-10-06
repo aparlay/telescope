@@ -19,9 +19,11 @@ class MediaCollection extends ResourceCollection
     public function toArray($request): array | Arrayable | JsonSerializable
     {
         $links = [
+            'prev' => ['href' => $this->resource->url($this->resource->previousPageUrl())],
             'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
             'last' => ['href' => $this->resource->url($this->resource->lastPage())],
             'self' => ['href' => $this->resource->url($this->resource->currentPage())],
+            'next' => ['href' => $this->resource->url($this->resource->nextPageUrl())],
         ];
 
         if ($this->resource->previousPageUrl()) {
