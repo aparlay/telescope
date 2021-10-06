@@ -39,6 +39,7 @@ class MediaResource extends JsonResource
 
         $creator = new User();
         $creator->_id = $this->creator['_id'];
+
         return [
             '_id' => (string) $this->_id,
             'description' => $this->description,
