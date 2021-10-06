@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
+use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UploadService;
@@ -29,7 +30,7 @@ class MediaController extends Controller
     {
         $type = request()?->input('type') ?? '';
 
-        return $this->response(new MediaCollection($this->mediaService->getByType($type)), '', Response::HTTP_OK);
+        return $this->response(new MediaFeedsCollection($this->mediaService->getByType($type)), '', Response::HTTP_OK);
     }
 
     /**
