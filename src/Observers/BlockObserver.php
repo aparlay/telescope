@@ -44,7 +44,8 @@ class BlockObserver extends BaseModelObserver
      */
     public function created(Block $block): void
     {
-        $block->creatorObj->block_count++;
+        $blockCount = Block::creator($block->creator['_id'])->count();
+        $block->creatorObj->block_count = $blockCount;
         $block->creatorObj->addToSet('blocks', [
             '_id' => new ObjectId($block->user['_id']),
             'username' => $block->user['username'],
@@ -91,7 +92,8 @@ class BlockObserver extends BaseModelObserver
      */
     public function deleted(Block $block): void
     {
-        $block->creatorObj->block_count--;
+        $blockCount = Block::creator($block->creator['_id'])->count();
+        $block->creatorObj->block_count = $blockCount;
         $block->creatorObj->removeFromSet('blocks', [
             '_id' => new ObjectId($block->user['_id']),
             'username' => $block->user['username'],

@@ -5,6 +5,7 @@ namespace Aparlay\Core\Jobs;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
+use App;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\FileExistsException;
@@ -61,8 +62,8 @@ class UploadMedia implements ShouldQueue
         $this->user_id = (string) $userId;
         $this->media_id = (string) $mediaId;
         $this->file = $file;
-        if (! Storage::disk('upload')->exists($this->file)) {
-            throw new Exception(__CLASS__.PHP_EOL.'File not exists '.$this->file);
+        if (! Storage::disk('upload')->exists($this->file) && ! App::runningInConsole()) {
+            throw new Exception(__CLASS__.PHP_EOL.'File not exists ');
         }
     }
 

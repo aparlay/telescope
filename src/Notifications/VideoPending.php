@@ -7,10 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class VideoPending extends Notification implements ShouldQueue
+class VideoPending extends Notification
 {
-    use Queueable;
-
     /**
      * Create a new notification instance.
      *
@@ -41,12 +39,11 @@ class VideoPending extends Notification implements ShouldQueue
      */
     public function toSlack($notifiable)
     {
-        $message = "New post from is waiting for moderation {$notifiable->slack_admin_url}.";
+        $message = "New {$notifiable->slack_admin_url} is waiting for moderation.";
         $message .= PHP_EOL.'_*Log:*_ '.PHP_EOL.implode("\n", $notifiable->processing_log);
-        $message .= PHP_EOL.'_*Errors:*_ '.PHP_EOL.implode("\n", $notifiable->firstErrors);
 
         return (new SlackMessage())
-            ->to('waptap-testing')
+            ->to('#waptap-testing')
             ->content($message)
             ->success();
     }
