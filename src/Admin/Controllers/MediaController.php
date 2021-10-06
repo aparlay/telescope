@@ -21,7 +21,7 @@ class MediaController extends Controller
     public function index(Request $request)
     {
         $breadcrumbs = [
-            'title' => 'Media'
+            'title' => 'Media',
         ];
 
         $media_list = $this->mediaService->getList();
