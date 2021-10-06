@@ -50,7 +50,7 @@ class MediaResource extends JsonResource
             'people' => $people,
             'file' => Cdn::video($this->is_completed ? $this->file : 'default.mp4'),
             'cover' => Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg'),
-            'creator' => $this->createSimpleUser($this->creator),
+            'creator' => $this->createSimpleUser($this->creator, ['_id', 'username', 'avatar', 'is_followed'], $this->userObj),
             'is_liked' => $this->is_liked,
             'is_visited' => $this->is_visited,
             'is_adult' => $this->is_adult,

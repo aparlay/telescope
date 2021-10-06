@@ -5,6 +5,7 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
 class FollowObserver extends BaseModelObserver
@@ -64,6 +65,11 @@ class FollowObserver extends BaseModelObserver
             ['followings' => DT::utcNow()]
         );
         $follow->creatorObj->save();
+
+        // Reset the Redis cache
+        $cacheKey = (new Follow())->getCollection().':creator:'.$follow->creator['_id'];
+        Redis::del($cacheKey);
+        Follow::cacheByUserId($follow->creator['_id']);
     }
 
     /**
@@ -97,5 +103,10 @@ class FollowObserver extends BaseModelObserver
             ['followings' => DT::utcNow()]
         );
         $follow->creatorObj->save();
+
+        // Reset the Redis cache
+        $cacheKey = (new Follow())->getCollection().':creator:'.$follow->creator['_id'];
+        Redis::del($cacheKey);
+        Follow::cacheByUserId($follow->creator['_id']);
     }
 }

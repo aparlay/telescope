@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Helpers\Cdn;
 use Exception;
 
@@ -16,16 +18,15 @@ trait SimpleUserTrait
      */
     public function createSimpleUser(
         array $userArray,
-        array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked']
+        array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked'],
+        User|Media|null $subject = null
     ): array {
         $user = auth()->user();
         $userArray['_id'] = (string) $userArray['_id'];
         $userArray['avatar'] = $userArray['avatar'] ?? Cdn::avatar('default.jpg');
-        $userArray['is_followed'] = false;
-        $userArray['is_liked'] = false;
-        if ($user) {
-            $userArray['is_followed'] = isset($this->creator['_id'], $user->following[(string) $this->creator['_id']]);
-            $userArray['is_liked'] = isset($this->creator) && (string) $this->creator['_id'] === (string) $user->_id;
+        if ($user && $subject !== null) {
+            $userArray['is_followed'] = $subject instanceof User ? $subject->is_followed : false;
+            $userArray['is_liked'] = $subject instanceof Media ? $subject->is_liked : false;
         }
 
         $output = [];
