@@ -45,6 +45,6 @@ class AnalyticRepository implements RepositoryInterface
 
     public function getAnalytics(): Collection
     {
-        return $this->model->latest()->take(20)->get()->sortBy('date');
+        return $this->model->orderBy('date')->take(20)->get();
     }
 }

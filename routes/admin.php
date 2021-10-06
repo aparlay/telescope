@@ -30,6 +30,8 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
     /* User Routes */
     Route::middleware(['admin-auth:admin'])->name('user.')->group(function () {
         Route::get('user', [UserController::class, 'index'])->name('index');
+        Route::get('user/{id}', [UserController::class, 'view'])->name('view');
+        Route::post('user/{id}', [UserController::class, 'update'])->name('update');
     });
 
     /* Login Routes */
