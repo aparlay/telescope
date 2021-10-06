@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
-use Illuminate\Support\Collection;
+use Aparlay\Core\Helpers\Cdn;
 
 class MediaService
 {
@@ -15,8 +15,15 @@ class MediaService
         $this->mediaRepository = new MediaRepository(new Media());
     }
 
-    public function getList(array $options = [])
+    public function getList()
     {
-        return $this->mediaRepository->getList($options);
+        $mediaCollection = $this->mediaRepository->getList();
+
+        foreach ($mediaCollection as $collect) {
+            $collect->status_text = $collect->status_color;
+            $collect->cover = Cdn::cover(! empty($value['file']) ? $value['file'].'.jpg' : 'default.jpg');
+        }
+
+        return $mediaCollection;
     }
 }

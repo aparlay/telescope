@@ -44,28 +44,26 @@
                                     <td>{{ $media->visit_count }}</td>
                                     <td>{{ $media->sort_score }}</td>
                                     <td>
-                                        <a class="btn btn-primary btn-sm" href="/media/view/?id{{ $media->id }}/" title="View"><i class="fas fa-eye"></i> View</a>
+                                        <a class="btn btn-primary btn-sm" href="/media/{{ $media->id }}" title="View"><i class="fas fa-eye"></i> View</a>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                <div class="col-12 d-flex justify-content-center">
-                    @if(count($media_list))
-                        <div class="row">
-                            <div class="col-6">
-                                Showing <strong>{!! $media_list->firstItem() .'-' . $media_list->lastItem() !!}</strong> of <strong>{!! $media_list->total() !!}</strong> {!! $media_list->total() == 1 ? 'item' : 'items' !!}
-                            </div>
-                            @if($media_list->hasPages())
-                                <div class="col-6 d-flex justify-content-end">
-                                    {{ $media_list->links() }}
-                                </div>
-                            @endif
+            </div>
+            @if(count($media_list))
+                <div class="row">
+                    <div class="col-6">
+                        Showing <strong>{!! $media_list->firstItem() .'-' . $media_list->lastItem() !!}</strong> of <strong>{!! $media_list->total() !!}</strong> {!! $media_list->total() == 1 ? 'item' : 'items' !!}
+                    </div>
+                    @if($media_list->hasPages())
+                        <div class="col-6 d-flex justify-content-end">
+                            {{ $media_list->links() }}
                         </div>
                     @endif
                 </div>
-            </div>
+            @endif
         </div>
     </div>
 

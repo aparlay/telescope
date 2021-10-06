@@ -20,10 +20,11 @@ class MediaController extends Controller
      */
     public function index(Request $request)
     {
-        $breadcrumbs = ['title' => 'Media'];
-        $onPage = ($request->get('on_page') && (int) $request->get('on_page') <= 100) ? (int) $request->get('on_page') : 20;
+        $breadcrumbs = [
+            'title' => 'Media'
+        ];
 
-        $media_list = $this->mediaService->getList(['onPage' => $onPage]);
+        $media_list = $this->mediaService->getList();
 
         return view('default_view::admin.pages.media.index')->with([
             'media_list'  => $media_list,

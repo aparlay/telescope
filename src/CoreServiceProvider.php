@@ -76,8 +76,6 @@ class CoreServiceProvider extends ServiceProvider
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
             app()->make(\Aparlay\Core\Admin\Http\Kernel::class);
-
-            Paginator::useBootstrap();
         }
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'default_view');

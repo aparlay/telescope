@@ -10,11 +10,8 @@ class Media extends MediaBase
      * @param  int  $status
      * @return string
      */
-    public function getStatus_color(int $status)
+    public function getStatusColorAttribute()
     {
-        if (empty($status)) {
-            return ['color' => '', 'text' => ''];
-        }
         $colors = [
             self::STATUS_QUEUED => ['color' => 'secondary', 'text' => 'Queued'],
             self::STATUS_UPLOADED => ['color' => 'secondary', 'text' => 'Uploaded'],
@@ -28,6 +25,6 @@ class Media extends MediaBase
             self::STATUS_USER_DELETED => ['color' => 'danger', 'text' => 'Delete'],
         ];
 
-        return $colors[$status];
+        return $colors[$this->status];
     }
 }
