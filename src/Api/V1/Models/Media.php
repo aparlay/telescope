@@ -80,8 +80,8 @@ class Media extends MediaBase
             return false;
         }
 
-        $mediaLikeCacheKey = (new MediaLike())->getCollection().':creator:'.auth()->user()->id;
-        MediaLike::cacheByUserId(auth()->user()->id);
+        $mediaLikeCacheKey = (new MediaLike())->getCollection().':creator:'.auth()->user()->_id;
+        MediaLike::cacheByUserId(auth()->user()->_id);
 
         return Redis::sismember($mediaLikeCacheKey, (string) $this->_id);
     }
@@ -95,8 +95,8 @@ class Media extends MediaBase
             return false;
         }
 
-        $mediaVisitCacheKey = (new MediaVisit())->getCollection().':creator:'.auth()->user()->id;
-        MediaLike::cacheByUserId(auth()->user()->id);
+        $mediaVisitCacheKey = (new MediaVisit())->getCollection().':creator:'.auth()->user()->_id;
+        MediaLike::cacheByUserId(auth()->user()->_id);
 
         return Redis::sismember($mediaVisitCacheKey, (string) $this->_id);
     }

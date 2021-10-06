@@ -59,8 +59,8 @@ class User extends UserBase
             return false;
         }
 
-        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->id;
-        Follow::cacheByUserId(auth()->user()->id);
+        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->_id;
+        Follow::cacheByUserId(auth()->user()->_id);
 
         return Redis::sismember($cacheKey, (string) $this->_id);
     }
