@@ -19,11 +19,11 @@ class MediaFeedsCollection extends ResourceCollection
     public function toArray($request): array | Arrayable | JsonSerializable
     {
         $links = [
-            'prev' => ['href' => str_replace('http://', 'https://',$this->resource->url($this->resource->lastPage()))],
+            'prev' => ['href' => str_replace('http://', 'https://', $this->resource->url($this->resource->lastPage()))],
             'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
             'last' => ['href' => $this->resource->url($this->resource->lastPage())],
             'self' => ['href' => $this->resource->url($this->resource->currentPage())],
-            'next' => ['href' => str_replace('http://', 'https://',$this->resource->url($this->resource->onFirstPage()))],
+            'next' => ['href' => str_replace('http://', 'https://', $this->resource->url($this->resource->onFirstPage()))],
         ];
 
         return [
