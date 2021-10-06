@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
@@ -123,9 +124,9 @@ class Follow extends BaseModel
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
 
         if (! Redis::exists($cacheKey)) {
-            $followerIds = self::project(['created_by' => true, '_id' => false])
+            $followerIds = self::project(['user._id' => true, '_id' => false])
                 ->creator(new ObjectId($userId))
-                ->pluck('created_by')
+                ->pluck('user._id')
                 ->toArray();
 
             if (empty($followerIds)) {
