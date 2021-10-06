@@ -24,4 +24,11 @@ class UserController extends Controller
 
         return view('default_view::admin.pages.user.index', compact('users'));
     }
+
+    public function view($id)
+    {
+        $user = $this->userService->find($id);
+
+        return view('default_view::admin.pages.user.view', compact('user'));
+    }
 }

@@ -39,11 +39,11 @@ class UserRepository implements RepositoryInterface
 
     public function find($id)
     {
-        // TODO: Implement find() method.
+        return $this->model->findOrFail($id);
     }
 
     public function getUsers()
     {
-        return $this->model->paginate(20);
+        return $this->model->orderBy('created_at', 'desc')->paginate(20);
     }
 }

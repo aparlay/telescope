@@ -48,6 +48,23 @@ class UserService extends DataGrid
         }
     }
 
+    /**
+     * @param $id
+     */
+    public function find($id)
+    {
+        $user = $this->userRepository->find($id);
+
+        $statusBadge = [
+            'status' => $user->status_name,
+            'color' => $user->status_color,
+        ];
+
+        $user->status_badge = $statusBadge;
+
+        return $user;
+    }
+
     public function appendBadges($users)
     {
         foreach ($users as $user) {
