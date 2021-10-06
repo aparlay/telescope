@@ -177,7 +177,7 @@ class UserRepository implements RepositoryInterface
     }
 
     /**
-     * For check need to send OTP.
+     * Check required OTP during login.
      * @return bool
      */
     public function requireOtp(): bool
@@ -185,7 +185,6 @@ class UserRepository implements RepositoryInterface
         if ($this->isUserEligible()) {
             return ($this->model->setting['otp'] || $this->model->status === User::STATUS_PENDING);
         }
-
         return false;
     }
 }
