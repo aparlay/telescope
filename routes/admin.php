@@ -32,7 +32,7 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
     Route::middleware(['admin-auth:admin'])->name('media.')->group(function () {
         Route::get('media', [MediaController::class, 'index'])->name('index');
     });
-  
+
     /* User Routes */
     Route::middleware(['admin-auth:admin'])->name('user.')->group(function () {
         Route::get('user', [UserController::class, 'index'])->name('index');
