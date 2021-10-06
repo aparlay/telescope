@@ -37,6 +37,8 @@ class MediaResource extends JsonResource
             $visits[] = $this->createSimpleUser($visit);
         }
 
+        $creator = new User();
+        $creator->_id = $this->creator['_id'];
         return [
             '_id' => (string) $this->_id,
             'description' => $this->description,
@@ -50,11 +52,7 @@ class MediaResource extends JsonResource
             'people' => $people,
             'file' => Cdn::video($this->is_completed ? $this->file : 'default.mp4'),
             'cover' => Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg'),
-            'creator' => $this->createSimpleUser(
-                $this->creator,
-                ['_id', 'username', 'avatar', 'is_followed'],
-                new User(['_id' => $this->creator['_id']])
-            ),
+            'creator' => $this->createSimpleUser($this->creator, ['_id', 'username', 'avatar', 'is_followed'], $creator),
             'is_liked' => $this->is_liked,
             'is_visited' => $this->is_visited,
             'is_adult' => $this->is_adult,
