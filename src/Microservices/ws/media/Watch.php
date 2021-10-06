@@ -68,7 +68,7 @@ class Watch implements WsEventDispatcher
             if ($this->durationWatched <= $media->length) {
                 $media->length_watched += $this->durationWatched;
             }
-            $media->visit_count = MediaVisit::media($media->_id)->count();
+            $media->visit_count++;
             $media->count_fields_updated_at = array_merge(
                 $media->count_fields_updated_at,
                 ['visits' => DT::utcNow()]
@@ -106,7 +106,7 @@ class Watch implements WsEventDispatcher
             if ($model->duration <= $media->length) {
                 $media->length_watched += $model->duration;
             }
-            $media->visit_count = MediaVisit::media($media->_id)->count();
+            $media->visit_count++;
             $media->addToSet('visits', [
                 '_id' => $model->userObj->_id,
                 'username' => $model->userObj->username,
