@@ -23,7 +23,7 @@ class MediaFeedsCollection extends ResourceCollection
             'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
             'last' => ['href' => $this->resource->url($this->resource->lastPage())],
             'self' => ['href' => $this->resource->url($this->resource->currentPage())],
-            'next' => ['href' => str_replace('http://', 'https://', $this->resource->url($this->resource->onFirstPage()))],
+            'next' => ['href' => str_replace('http://', 'https://', $this->resource->url($this->resource->onFirstPage()))], // because of the caching and removing visited videos in feed next page is always the first page
         ];
 
         return [
