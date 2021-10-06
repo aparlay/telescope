@@ -64,7 +64,7 @@ class Watch implements WsEventDispatcher
     private function anonymousVisit()
     {
         /** @var Media $media */
-        if ($this->durationWatched > 1 && ($media = Media::media($this->mediaId)) !== null) {
+        if ($this->durationWatched > 3 && ($media = Media::media($this->mediaId)) !== null) {
             if ($this->durationWatched <= $media->length) {
                 $media->length_watched += $this->durationWatched;
             }
