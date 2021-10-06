@@ -7,7 +7,6 @@ use Aparlay\Core\Models\Media as MediaBase;
 class Media extends MediaBase
 {
     /**
-     * @param  int  $status
      * @return string
      */
     public function getStatusColorAttribute()

@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Services\MediaService;
-use Illuminate\Http\Request;
 
 class MediaController extends Controller
 {
@@ -18,16 +17,16 @@ class MediaController extends Controller
     /**
      * @throws \ErrorException
      */
-    public function index(Request $request)
+    public function index()
     {
         $breadcrumbs = [
             'title' => 'Media'
         ];
 
-        $media_list = $this->mediaService->getList();
+        $medias = $this->mediaService->getList();
 
         return view('default_view::admin.pages.media.index')->with([
-            'media_list'  => $media_list,
+            'media_list'  => $medias,
             'breadcrumbs' => $breadcrumbs,
         ]);
     }
