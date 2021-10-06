@@ -157,6 +157,18 @@ class User extends Authenticatable implements JWTSubject
             'tips' => false,
             'demo' => false,
         ],
+        'status' => self::STATUS_PENDING,
+        'email_verified' => false,
+        'phone_number_verified' => false,
+        'gender' => self::GENDER_MALE,
+        'interested_in' => self::INTERESTED_IN_MALE,
+        'visibility' => self::VISIBILITY_PUBLIC,
+        'follower_count' => 0,
+        'following_count' => 0,
+        'like_count' => 0,
+        'block_count' => 0,
+        'followed_hashtag_count' => 0,
+        'media_count' => 0,
     ];
 
     /**

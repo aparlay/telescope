@@ -7,9 +7,9 @@ namespace Aparlay\Core\Microservices\ffmpeg;
 class MediaClient extends \Grpc\BaseStub
 {
     /**
-     * @param string $hostname hostname
-     * @param array $opts channel options
-     * @param \Grpc\Channel $channel (optional) re-use channel object
+     * @param  string  $hostname  hostname
+     * @param  array  $opts  channel options
+     * @param  \Grpc\Channel  $channel  (optional) re-use channel object
      */
     public function __construct($hostname, $opts, $channel = null)
     {
@@ -17,9 +17,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\DownloadRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  \Aparlay\Core\Microservices\ffmpeg\DownloadRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function DownloadVideo(
@@ -37,16 +37,13 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\OptimizeRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  OptimizeRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
-    public function Quality(
-        OptimizeRequest $argument,
-        $metadata = [],
-        $options = []
-    ) {
+    public function Quality(OptimizeRequest $argument, $metadata = [], $options = [])
+    {
         return $this->_simpleRequest(
             '/media.Media/Quality',
             $argument,
@@ -57,9 +54,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\OptimizeRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  OptimizeRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function BlackBars(
@@ -77,9 +74,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\OptimizeRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  OptimizeRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function LowVolume(
@@ -97,9 +94,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\OptimizeRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  OptimizeRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function Duration(
@@ -117,9 +114,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\OptimizeRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  OptimizeRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function Trim(
@@ -137,16 +134,13 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\OptimizeRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  OptimizeRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
-    public function NormalizeAudio(
-        OptimizeRequest $argument,
-        $metadata = [],
-        $options = []
-    ) {
+    public function NormalizeAudio(OptimizeRequest $argument, $metadata = [], $options = [])
+    {
         return $this->_simpleRequest(
             '/media.Media/NormalizeAudio',
             $argument,
@@ -157,9 +151,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\OptimizeRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  OptimizeRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function Watermark(
@@ -177,9 +171,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\OptimizeRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  OptimizeRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function CreateCover(
@@ -197,9 +191,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\OptimizeRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  OptimizeRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function Optimize(
@@ -217,9 +211,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\UploadRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  UploadRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function UploadVideo(
@@ -237,9 +231,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\UploadRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  UploadRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function UploadCover(
@@ -257,9 +251,9 @@ class MediaClient extends \Grpc\BaseStub
     }
 
     /**
-     * @param \Aparlay\Core\Microservices\ffmpeg\RemoveRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
+     * @param  RemoveRequest  $argument  input argument
+     * @param  array  $metadata  metadata
+     * @param  array  $options  call options
      * @return \Grpc\UnaryCall
      */
     public function Remove(

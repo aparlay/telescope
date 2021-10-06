@@ -5,6 +5,7 @@
 
 namespace Aparlay\Core\Microservices\ffmpeg;
 
+use Aparlay\Core\Microservices\ffmpeg\GPBMetadata\Media;
 use Google\Protobuf\Internal\GPBType;
 use Google\Protobuf\Internal\GPBUtil;
 use Google\Protobuf\Internal\RepeatedField;
@@ -40,7 +41,7 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
      */
     public function __construct($data = null)
     {
-        \GPBMetadata\Media::initOnce();
+        Media::initOnce();
         parent::__construct($data);
     }
 
@@ -55,8 +56,9 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string bucket_name = 1;</code>.
-     * @param string $var
+     * @param  string  $var
      * @return $this
+     * @throws \Exception
      */
     public function setBucketName($var)
     {
@@ -77,8 +79,9 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string bucket_id = 2;</code>.
-     * @param string $var
+     * @param  string  $var
      * @return $this
+     * @throws \Exception
      */
     public function setBucketId($var)
     {
@@ -99,8 +102,9 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string file = 3;</code>.
-     * @param string $var
+     * @param  string  $var
      * @return $this
+     * @throws \Exception
      */
     public function setFile($var)
     {
