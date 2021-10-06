@@ -25,8 +25,8 @@ trait SimpleUserTrait
         $userArray['_id'] = (string) $userArray['_id'];
         $userArray['avatar'] = $userArray['avatar'] ?? Cdn::avatar('default.jpg');
         if ($user && $subject !== null) {
-            $userArray['is_followed'] = $subject instanceof User ? $subject->is_followed : false;
-            $userArray['is_liked'] = $subject instanceof Media ? $subject->is_liked : false;
+            $userArray['is_followed'] = $subject->is_followed ?? false;
+            $userArray['is_liked'] = $subject->is_liked ?? false;
         }
 
         $output = [];

@@ -43,6 +43,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
  * @property-read int $skin_score
+ * @property-read boolean $is_liked
  *
  * @OA\Schema()
  */
