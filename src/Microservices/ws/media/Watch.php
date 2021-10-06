@@ -100,10 +100,11 @@ class Watch implements WsEventDispatcher
 
         $model->media_id = $this->mediaId;
         $model->duration = $this->durationWatched;
+
         $media = $model->mediaObj;
         if ($model->duration > ($media->length / 4)) {
-            if ($mediaVisit->duration <= $media->length) {
-                $media->length_watched += $mediaVisit->duration;
+            if ($model->duration <= $media->length) {
+                $media->length_watched += $model->duration;
             }
             $media->visit_count = MediaVisit::media($media->_id)->count();
             $media->addToSet('visits', [
