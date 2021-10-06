@@ -17,6 +17,7 @@ use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -73,6 +74,8 @@ class CoreServiceProvider extends ServiceProvider
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
             app()->make(\Aparlay\Core\Admin\Http\Kernel::class);
+
+            Paginator::useBootstrap();
         }
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'default_view');

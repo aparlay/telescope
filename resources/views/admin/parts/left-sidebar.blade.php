@@ -38,6 +38,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('core.admin.media.index') }}" class="nav-link {{ Route::currentRouteName() === 'core.admin.user.index' ? 'active' : '' }}">
+                        <i class="nav-icon far fa-file-video text-info"></i>
+                        <p>Media</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('core.admin.logout') }}" class="nav-link">
                         <i class="nav-icon fas fa-sign-out-alt text-info"></i>
                         <p>Logout</p>
