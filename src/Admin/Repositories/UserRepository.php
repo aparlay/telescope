@@ -39,7 +39,7 @@ class UserRepository implements RepositoryInterface
 
     public function find($id)
     {
-        return $this->model->find($id);
+        return $this->model->findOrFail($id);
     }
 
     public function getUsers()
