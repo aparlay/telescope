@@ -31,6 +31,7 @@ class MediaFactory extends Factory
 
             return $this;
         });
+
         return [
             'description' => $this->faker->sentence(5),
             'notes' => $this->faker->sentence(5),
