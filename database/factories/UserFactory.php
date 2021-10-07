@@ -59,7 +59,7 @@ class UserFactory extends Factory
                 'medias' => DT::utcNow(),
             ],
             'setting' => [
-                'otp' => $this->faker->boolean(),
+                'otp' => false,
                 'notifications' => [
                     'unread_message_alerts' => $this->faker->boolean(),
                     'new_followers' => $this->faker->boolean(),
