@@ -74,16 +74,6 @@ class Watch implements WsEventDispatcher
                 ['visits' => DT::utcNow()]
             );
             $media->save();
-
-            $cacheKey = (new MediaVisit())->getCollection().$this->deviceId;
-            $visited = [];
-            if (Redis::exists($cacheKey)) {
-                $visited = Redis::get($cacheKey);
-            }
-
-            $visited[] = $this->mediaId;
-
-            Redis::set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
         }
     }
 
