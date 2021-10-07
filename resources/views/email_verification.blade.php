@@ -390,7 +390,7 @@
                                             <hr/>
                                             <p class="undernote">
                                                 <b>If you did not make this request, please contact us at</b>
-                                                <a href="">support@app.com</a>
+                                                <a href="">{{ config('app.email.support_email') }}</a>
                                             </p>
                                         </td>
                                     </tr>
