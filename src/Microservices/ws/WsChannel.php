@@ -10,7 +10,7 @@ class WsChannel
     public const REDIS_CHANNEL = 'websocket_events';
 
     /**
-     * @param  ObjectId|string  $recipientId
+     * @param  string  $recipientId
      * @param  string  $event
      * @param  array  $properties
      * @param  array|null  $context
@@ -19,7 +19,7 @@ class WsChannel
      * @return void
      */
     public static function Push(
-        ObjectId | string $recipientId,
+        string $recipientId,
         string $event = '',
         array $properties = [],
         array $context = null,
@@ -32,7 +32,7 @@ class WsChannel
             'event' => $event,
             'context' => $context,
             'properties' => $properties,
-            'recipientId' => (string) $recipientId,
+            'recipientId' => $recipientId,
             'timestamp' => date(DATE_RFC3339_EXTENDED),
         ];
 

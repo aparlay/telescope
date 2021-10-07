@@ -262,7 +262,7 @@ class ProcessMedia implements ShouldQueue
 
         $media->refresh();
         $media->notify(new VideoPending());
-        WsChannel::Push($media->creator['_id'], 'media.create', [
+        WsChannel::Push((string) $media->creator['_id'], 'media.create', [
             'media' => [
                 '_id' => (string) $media->_id,
                 'file' => Cdn::video($media->is_completed ? $media->file : 'default.mp4'),
