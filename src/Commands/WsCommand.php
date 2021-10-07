@@ -71,25 +71,22 @@ class WsCommand extends Command
                         $client->push($message);
                     });
                 });
-                go(function () use ($client) {
-                    while (true) {
-                        if (($frame = $client->recv()) instanceof Frame) {
-                            $this->info('New WS message arrived!');
-                            $this->info($frame->data);
-                            $data = json_decode($frame->data, true);
-                            if (isset($data['event'], $data['properties'])) {
-                                $properties = $data['properties'];
-                                $properties['deviceId'] = $data['deviceId'] ?? null;
-                                $properties['userId'] = $data['userId'] ?? null;
-                                $properties['anonymousId'] = $data['anonymousId'] ?? null;
-                                $dispatcher = WsDispatcherFactory::construct($data['event'], $properties);
-                                $dispatcher->execute();
-                            }
+                while (true) {
+                    if (($frame = $client->recv()) instanceof Frame) {
+                        $this->info('New WS message arrived!');
+                        $this->info($frame->data);
+                        $data = json_decode($frame->data, true);
+                        if (isset($data['event'], $data['properties'])) {
+                            $properties = $data['properties'];
+                            $properties['deviceId'] = $data['deviceId'] ?? null;
+                            $properties['userId'] = $data['userId'] ?? null;
+                            $properties['anonymousId'] = $data['anonymousId'] ?? null;
+                            $dispatcher = WsDispatcherFactory::construct($data['event'], $properties);
+                            $dispatcher->execute();
                         }
-                        Co::sleep(0.1);
                     }
-                });
-
+                    Co::sleep(0.1);
+                }
             }
 
             $client->close();
