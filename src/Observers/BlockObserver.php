@@ -15,71 +15,73 @@ class BlockObserver extends BaseModelObserver
     /**
      * Handle the Block "creating" event.
      *
-     * @param  Block  $block
+     * @param  Block  $model
      * @return void
      */
-    public function creating(Block $block): void
+    public function creating($model): void
     {
-        $user = User::user($block->user['_id'])->first();
-        $creator = User::user($block->creator['_id'])->first();
+        $user = User::user($model->user['_id'])->first();
+        $creator = User::user($model->creator['_id'])->first();
 
-        $block->user = [
+        $model->user = [
             '_id' => new ObjectId($user->_id),
             'username' => $user->username,
             'avatar' => $user->avatar,
         ];
 
-        $block->creator = [
+        $model->creator = [
             '_id' => new ObjectId($creator->_id),
             'username' => $creator->username,
             'avatar' => $creator->avatar,
         ];
+
+        parent::creating($model);
     }
 
     /**
      * Handle the Block "created" event.
      *
-     * @param  Block  $block
+     * @param  Block  $model
      * @return void
      */
-    public function created(Block $block): void
+    public function created($model): void
     {
-        $blockCount = Block::creator($block->creator['_id'])->count();
-        $block->creatorObj->block_count = $blockCount;
-        $block->creatorObj->addToSet('blocks', [
-            '_id' => new ObjectId($block->user['_id']),
-            'username' => $block->user['username'],
-            'avatar' => $block->user['avatar'],
+        $blockCount = Block::creator($model->creator['_id'])->count();
+        $model->creatorObj->block_count = $blockCount;
+        $model->creatorObj->addToSet('blocks', [
+            '_id' => new ObjectId($model->user['_id']),
+            'username' => $model->user['username'],
+            'avatar' => $model->user['avatar'],
         ]);
-        $block->creatorObj->count_fields_updated_at = array_merge(
-            $block->creatorObj->count_fields_updated_at,
+        $model->creatorObj->count_fields_updated_at = array_merge(
+            $model->creatorObj->count_fields_updated_at,
             ['blocks' => DT::utcNow()]
         );
-        $block->creatorObj->save();
+        $model->creatorObj->save();
 
-        if (($follow = Follow::creator($block->creator['_id'])->user($block->user['_id'])->first()) !== null) {
+        if (($follow = Follow::creator($model->creator['_id'])->user($model->user['_id'])->first()) !== null) {
             $follow->delete();
         }
 
-        if (($follow = Follow::creator($block->user['_id'])->user($block->creator['_id'])->first()) !== null) {
+        if (($follow = Follow::creator($model->user['_id'])->user($model->creator['_id'])->first()) !== null) {
             $follow->delete();
         }
 
-        foreach (Media::creator($block->user['_id'])->get() as $media) {
-            $media->addToSet('blocked_user_ids', new ObjectId($block->creator['_id']));
+        foreach (Media::creator($model->user['_id'])->get() as $media) {
+            $media->addToSet('blocked_user_ids', new ObjectId($model->creator['_id']));
             $media->save();
         }
 
-        foreach (Media::creator($block->creator['_id'])->get() as $media) {
-            $media->addToSet('blocked_user_ids', new ObjectId($block->user['_id']));
+        foreach (Media::creator($model->creator['_id'])->get() as $media) {
+            $media->addToSet('blocked_user_ids', new ObjectId($model->user['_id']));
             $media->save();
         }
 
-        foreach (MediaLike::creator($block->user['_id'])->user($block->creator['_id'])->get() as $mediaLike) {
+        foreach (MediaLike::creator($model->user['_id'])->user($model->creator['_id'])->get() as $mediaLike) {
             $mediaLike->delete();
         }
 
-        foreach (MediaLike::creator($block->creator['_id'])->user($block->user['_id'])->get() as $mediaLike) {
+        foreach (MediaLike::creator($model->creator['_id'])->user($model->user['_id'])->get() as $mediaLike) {
             $mediaLike->delete();
         }
     }
@@ -87,31 +89,31 @@ class BlockObserver extends BaseModelObserver
     /**
      * Handle the Block "deleted" event.
      *
-     * @param  Block  $block
+     * @param  Block  $model
      * @return void
      */
-    public function deleted(Block $block): void
+    public function deleted($model): void
     {
-        $blockCount = Block::creator($block->creator['_id'])->count();
-        $block->creatorObj->block_count = $blockCount;
-        $block->creatorObj->removeFromSet('blocks', [
-            '_id' => new ObjectId($block->user['_id']),
-            'username' => $block->user['username'],
-            'avatar' => $block->user['avatar'],
+        $blockCount = Block::creator($model->creator['_id'])->count();
+        $model->creatorObj->block_count = $blockCount;
+        $model->creatorObj->removeFromSet('blocks', [
+            '_id' => new ObjectId($model->user['_id']),
+            'username' => $model->user['username'],
+            'avatar' => $model->user['avatar'],
         ]);
-        $block->creatorObj->count_fields_updated_at = array_merge(
-            $block->creatorObj->count_fields_updated_at,
+        $model->creatorObj->count_fields_updated_at = array_merge(
+            $model->creatorObj->count_fields_updated_at,
             ['blocks' => DT::utcNow()]
         );
-        $block->creatorObj->save();
+        $model->creatorObj->save();
 
-        foreach (Media::creator($block->user['_id'])->get() as $media) {
-            $media->removeFromSet('blocked_user_ids', new ObjectId($block->creator['_id']));
+        foreach (Media::creator($model->user['_id'])->get() as $media) {
+            $media->removeFromSet('blocked_user_ids', new ObjectId($model->creator['_id']));
             $media->save();
         }
 
-        foreach (Media::creator($block->creator['_id'])->get() as $media) {
-            $media->removeFromSet('blocked_user_ids', new ObjectId($block->user['_id']));
+        foreach (Media::creator($model->creator['_id'])->get() as $media) {
+            $media->removeFromSet('blocked_user_ids', new ObjectId($model->user['_id']));
             $media->save();
         }
     }

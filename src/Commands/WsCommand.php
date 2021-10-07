@@ -82,10 +82,8 @@ class WsCommand extends Command
                             $properties['deviceId'] = $data['deviceId'] ?? null;
                             $properties['userId'] = $data['userId'] ?? null;
                             $properties['anonymousId'] = $data['anonymousId'] ?? null;
-                            go(function () use ($data, $properties) {
-                                $dispatcher = WsDispatcherFactory::construct($data['event'], $properties);
-                                $dispatcher->execute();
-                            });
+                            $dispatcher = WsDispatcherFactory::construct($data['event'], $properties);
+                            $dispatcher->execute();
                         }
                     }
                     Co::sleep(0.1);

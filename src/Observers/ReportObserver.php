@@ -10,11 +10,11 @@ class ReportObserver extends BaseModelObserver
     /**
      * Handle the Report "created" event.
      *
-     * @param  Report  $report
+     * @param  Report  $model
      * @return void
      */
-    public function created(Report $report): void
+    public function created($model): void
     {
-        $report->notify(new ReportSent());
+        $model->notify(new ReportSent());
     }
 }

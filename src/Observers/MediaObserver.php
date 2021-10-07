@@ -20,7 +20,7 @@ class MediaObserver extends BaseModelObserver
      * @return void
      * @throws Exception
      */
-    public function created(Media $media)
+    public function created($media)
     {
         $creatorUser = $media->userObj;
 
@@ -79,6 +79,8 @@ class MediaObserver extends BaseModelObserver
         if ($model->wasRecentlyCreated) {
             $model->slug = MediaService::generateSlug(6);
         }
+
+        parent::saving($model);
     }
 
     /**
@@ -88,7 +90,7 @@ class MediaObserver extends BaseModelObserver
      * @return void
      * @throws Exception
      */
-    public function saved(Media $media): void
+    public function saved($media): void
     {
         if ($media->status === Media::STATUS_USER_DELETED && $media->isDirty('status')) {
             $media->userObj->media_count--;
@@ -116,7 +118,7 @@ class MediaObserver extends BaseModelObserver
      * @return void
      * @throws Exception
      */
-    public function deleted(Media $media): void
+    public function deleted($media): void
     {
         $creatorUser = $media->userObj;
         $creatorUser->media_count--;

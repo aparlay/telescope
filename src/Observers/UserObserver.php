@@ -15,50 +15,52 @@ class UserObserver extends BaseModelObserver
     /**
      * Handle the User "creating" event.
      *
-     * @param  User  $user
+     * @param  User  $model
      * @return void
      * @throws Exception
      */
-    public function creating(User $user): void
+    public function creating($model): void
     {
-        if (empty($user->avatar)) {
+        if (empty($model->avatar)) {
             $maleAvatar = 'default_m_'.random_int(1, 120).'.png';
             $femaleAvatar = 'default_fm_'.random_int(1, 60).'.png';
-            $filename = match ($user->gender) {
+            $filename = match ($model->gender) {
                 User::GENDER_FEMALE => $femaleAvatar,
                 User::GENDER_MALE => $maleAvatar,
                 default => (random_int(0, 1)) ? $maleAvatar : $femaleAvatar,
             };
 
-            $user->avatar = Cdn::avatar($filename);
+            $model->avatar = Cdn::avatar($filename);
         }
+
+        parent::creating($model);
     }
 
     /**
      * Create a new event instance.
      *
-     * @param  User  $user
+     * @param  User  $model
      * @return void
      * @throws Exception
      */
-    public function updated(User $user)
+    public function updated($model)
     {
-        if ($user->wasChanged('avatar')) {
-            dispatch((new UpdateAvatar((string) $user->_id))->onQueue('low'));
+        if ($model->wasChanged('avatar')) {
+            dispatch((new UpdateAvatar((string) $model->_id))->onQueue('low'));
         }
 
-        if ($user->wasChanged('status')) {
-            switch ($user->status) {
+        if ($model->wasChanged('status')) {
+            switch ($model->status) {
                 case User::STATUS_DEACTIVATED:
                 case User::STATUS_BLOCKED:
-                    dispatch((new DeleteUserMedia((string) $user->_id))->onQueue('low'));
-                    dispatch((new DeleteUserConnect((string) $user->_id))->onQueue('low'));
+                    dispatch((new DeleteUserMedia((string) $model->_id))->onQueue('low'));
+                    dispatch((new DeleteUserConnect((string) $model->_id))->onQueue('low'));
                     break;
             }
         }
 
-        if ($user->wasChanged('visibility')) {
-            dispatch((new UpdateMedia((string) $user->_id, ['visibility' => $user->visibility]))->onQueue('low'));
+        if ($model->wasChanged('visibility')) {
+            dispatch((new UpdateMedia((string) $model->_id, ['visibility' => $model->visibility]))->onQueue('low'));
         }
     }
 }

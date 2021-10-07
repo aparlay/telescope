@@ -3,13 +3,6 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\MediaVisitFactory;
-use Aparlay\Core\Events\MediaCreated;
-use Aparlay\Core\Events\MediaCreating;
-use Aparlay\Core\Events\MediaDeleted;
-use Aparlay\Core\Events\MediaSaved;
-use Aparlay\Core\Events\MediaSaving;
-use Aparlay\Core\Events\MediaVisitSaved;
-use Aparlay\Core\Events\MediaVisitSaving;
 use Aparlay\Core\Models\Scopes\MediaVisitScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
