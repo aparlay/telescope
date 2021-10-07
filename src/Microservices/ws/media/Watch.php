@@ -34,6 +34,10 @@ class Watch implements WsEventDispatcher
             throw new InvalidArgumentException('mediaId is mandatory field for the "media.watch" event.');
         }
 
+        if (empty($this->redis)) {
+            throw new InvalidArgumentException('redis connection is mandatory for the "media.watch" event.');
+        }
+
         if (empty($this->userId) && empty($this->anonymousId)) {
             throw new InvalidArgumentException('one of the userId or anonymousId is mandatory field for the "media.watch" event.');
         }
@@ -41,8 +45,6 @@ class Watch implements WsEventDispatcher
         $this->mediaId = ! empty($this->mediaId) ? new ObjectId($this->mediaId) : null;
         $this->userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
         $this->deviceId = ! empty($this->deviceId) ? (string) $this->deviceId : null;
-
-        $this->redis = Redis::connection('ws');
     }
 
     /**

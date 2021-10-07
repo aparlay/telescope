@@ -61,10 +61,10 @@ class WsCommand extends Command
             $ret = $client->upgrade('/');
             if ($ret) {
                 $this->info('Connection established successfully!');
-                go(function () use ($client) {
-                    ini_set('default_socket_timeout', -1);
-                    $redis = Redis::connection('ws');
-                    $redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
+                ini_set('default_socket_timeout', -1);
+                $redis = Redis::connection('ws');
+                $redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
+                go(function () use ($client, $redis) {
                     $redis->subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
                         $this->info('New broadcasting message arrived!');
                         $this->info($message);
@@ -81,6 +81,7 @@ class WsCommand extends Command
                             $properties['deviceId'] = $data['deviceId'] ?? null;
                             $properties['userId'] = $data['userId'] ?? null;
                             $properties['anonymousId'] = $data['anonymousId'] ?? null;
+                            $properties['redis'] = $redis;
                             $dispatcher = WsDispatcherFactory::construct($data['event'], $properties);
                             $dispatcher->execute();
                         }
