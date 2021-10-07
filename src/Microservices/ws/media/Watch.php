@@ -20,8 +20,6 @@ class Watch implements WsEventDispatcher
     public $durationWatched;
     public $durationTotal;
 
-    private $redis;
-
     public function __construct($config = [])
     {
         foreach ($config as $property => $value) {
@@ -32,10 +30,6 @@ class Watch implements WsEventDispatcher
 
         if (empty($this->mediaId)) {
             throw new InvalidArgumentException('mediaId is mandatory field for the "media.watch" event.');
-        }
-
-        if (empty($this->redis)) {
-            throw new InvalidArgumentException('redis connection is mandatory for the "media.watch" event.');
         }
 
         if (empty($this->userId) && empty($this->anonymousId)) {
@@ -80,17 +74,6 @@ class Watch implements WsEventDispatcher
                 ['visits' => DT::utcNow()]
             );
             $media->save();
-
-            $cacheKey = (new MediaVisit())->getCollection().$this->deviceId;
-            $visited = [];
-
-            if ($this->redis->exists($cacheKey)) {
-                $visited = $this->redis->get($cacheKey);
-            }
-
-            $visited[] = $this->mediaId;
-
-            $this->redis->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
         }
     }
 
