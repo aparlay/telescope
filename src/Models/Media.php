@@ -407,6 +407,11 @@ class Media extends BaseModel
         return config('app.adminUrls.media').$this->_id;
     }
 
+    public function getFilenameAttribute()
+    {
+        return basename($this->file, '.' . pathinfo($this->file, PATHINFO_EXTENSION));
+    }
+
     /**
      * Route notifications for the Slack channel.
      *
