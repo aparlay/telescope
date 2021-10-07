@@ -89,7 +89,6 @@ class WsCommand extends Command
                         Co::sleep(0.1);
                     }
                 });
-
             }
 
             $client->close();
