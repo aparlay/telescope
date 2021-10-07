@@ -13,12 +13,11 @@ trait UserScope
 
     public function scopeFilter($query, $filters)
     {
-        foreach($filters as $key => $filter)
-        {
-            if(is_numeric($filter)) {
+        foreach ($filters as $key => $filter) {
+            if (is_numeric($filter)) {
                 $query->where($key, $filter);
-            }else {
-                $query->where($key, 'regex', new Regex('^' . $filter));
+            } else {
+                $query->where($key, 'regex', new Regex('^'.$filter));
             }
         }
 
