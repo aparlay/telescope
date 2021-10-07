@@ -1,5 +1,5 @@
 {
-    "name": "laravel/telescope",
+    "name": "aparlay/telescope",
     "description": "An elegant debug assistant for the Laravel framework.",
     "keywords": ["laravel", "monitoring", "debugging"],
     "license": "MIT",
@@ -16,6 +16,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
+        "jenssegers/mongodb": "^3.8",
         "laravel/framework": "^8.29",
         "symfony/var-dumper": "^5.0"
     },
@@ -47,6 +48,6 @@
     "config": {
         "sort-packages": true
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

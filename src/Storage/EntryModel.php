@@ -3,7 +3,7 @@
 namespace Laravel\Telescope\Storage;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 use Laravel\Telescope\Database\Factories\EntryModelFactory;
 
 class EntryModel extends Model
@@ -169,7 +169,7 @@ class EntryModel extends Model
             return $this;
         }
 
-        $query->where('should_display_on_index', true);
+        $query->orderBy('created_at', 'desc');
 
         return $this;
     }
