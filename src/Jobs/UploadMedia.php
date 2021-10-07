@@ -97,7 +97,7 @@ class UploadMedia implements ShouldQueue
             $hash = sha1_file($filePath);
             $size = $storage->size($this->file);
             $mime = $storage->mimeType($this->file);
-            if (!$mediaServer->exists($newFilename)) {
+            if (! $mediaServer->exists($newFilename)) {
                 $mediaServer->writeStream($newFilename, $storage->readStream($this->file));
             }
             $mediaServer->setVisibility($newFilename, Filesystem::VISIBILITY_PUBLIC);
