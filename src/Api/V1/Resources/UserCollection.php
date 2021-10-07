@@ -9,7 +9,6 @@ use JsonSerializable;
 
 class UserCollection extends ResourceCollection
 {
-
     /**
      * The resource that this resource collects.
      *

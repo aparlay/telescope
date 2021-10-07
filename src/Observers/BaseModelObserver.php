@@ -33,7 +33,6 @@ class BaseModelObserver
         $model->updated_by = ! is_null($loggedInUser) ? new ObjectId($loggedInUser->_id) : $model->updated_by;
     }
 
-
     /**
      * Create a new event instance.
      *
