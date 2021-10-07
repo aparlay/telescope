@@ -87,7 +87,10 @@ class OtpService
 
         /** Prepare email content and dispatch the job to schedule the email */
         $email = $otp->identity;
-        $subject = $otp->otp.' is your verification code';
+        $subject = __(':code is your :app verification code', [
+            'code' => $otp->otp,
+            'app' => strtolower(config('app.name')),
+        ]);
         $type = Email::TEMPLATE_EMAIL_VERIFICATION;
         $payload = [
             'otp'               => $otp->otp,

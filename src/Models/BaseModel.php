@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasEvents;
 use Illuminate\Support\Facades\Auth;
 use MongoDB\BSON\ObjectId;
 
@@ -11,23 +12,6 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
         'created_at',
         'updated_at',
     ];
-
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $loggedInUser = Auth::user();
-            $model->created_by = ! is_null($loggedInUser) ? new ObjectId($loggedInUser->_id) : $model->created_by;
-            $model->updated_by = ! is_null($loggedInUser) ? new ObjectId($loggedInUser->_id) : $model->updated_by;
-        });
-
-        static::updating(function ($model) {
-            $model->updated_by = ! is_null($loggedInUser = Auth::user()) ? new ObjectId(
-                $loggedInUser->_id
-            ) : $model->updated_by;
-        });
-    }
 
     public function addToSet(string $attribute, mixed $item, int $length = null): void
     {

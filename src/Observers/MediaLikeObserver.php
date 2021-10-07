@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Redis;
@@ -14,35 +13,37 @@ class MediaLikeObserver extends BaseModelObserver
     /**
      * Handle the MediaLike "creating" event.
      *
-     * @param  MediaLike  $mediaLike
+     * @param  MediaLike  $model
      * @return void
      */
-    public function creating(MediaLike $mediaLike): void
+    public function creating($model): void
     {
-        $creator = User::user($mediaLike->creator['_id'])->first();
+        $creator = User::user($model->creator['_id'])->first();
 
-        $mediaLike->creator = [
+        $model->creator = [
             '_id' => new ObjectId($creator->_id),
             'username' => $creator->username,
             'avatar' => $creator->avatar,
         ];
+
+        parent::creating($model);
     }
 
     /**
      * Handle the MediaLike "created" event.
      *
-     * @param  MediaLike  $mediaLike
+     * @param  MediaLike  $model
      * @return void
      */
-    public function created(MediaLike $mediaLike): void
+    public function created($model): void
     {
-        $media = $mediaLike->mediaObj;
+        $media = $model->mediaObj;
         $likeCount = MediaLike::media($media->_id)->count();
         $media->like_count = $likeCount;
         $media->addToSet('likes', [
-            '_id' => new ObjectId($mediaLike->creator['_id']),
-            'username' => $mediaLike->creator['username'],
-            'avatar' => $mediaLike->creator['avatar'],
+            '_id' => new ObjectId($model->creator['_id']),
+            'username' => $model->creator['username'],
+            'avatar' => $model->creator['avatar'],
         ], 10);
         $media->count_fields_updated_at = array_merge(
             $media->count_fields_updated_at,
@@ -54,9 +55,9 @@ class MediaLikeObserver extends BaseModelObserver
         $likeCount = MediaLike::user($user->_id)->count();
         $user->like_count = $likeCount;
         $user->addToSet('likes', [
-            '_id' => new ObjectId($mediaLike->creator['_id']),
-            'username' => $mediaLike->creator['username'],
-            'avatar' => $mediaLike->creator['avatar'],
+            '_id' => new ObjectId($model->creator['_id']),
+            'username' => $model->creator['username'],
+            'avatar' => $model->creator['avatar'],
         ], 10);
         $user->count_fields_updated_at = array_merge(
             $user->count_fields_updated_at,
@@ -66,26 +67,26 @@ class MediaLikeObserver extends BaseModelObserver
         $user->save();
 
         // Reset the Redis cache
-        $cacheKey = (new MediaLike())->getCollection().':creator:'.$mediaLike->creator['_id'];
+        $cacheKey = (new MediaLike())->getCollection().':creator:'.$model->creator['_id'];
         Redis::del($cacheKey);
-        MediaLike::cacheByUserId($mediaLike->creator['_id']);
+        MediaLike::cacheByUserId($model->creator['_id']);
     }
 
     /**
      * Handle the MediaLike "deleted" event.
      *
-     * @param  MediaLike  $mediaLike
+     * @param  MediaLike  $model
      * @return void
      */
-    public function deleted(MediaLike $mediaLike): void
+    public function deleted($model): void
     {
-        $media = $mediaLike->mediaObj;
+        $media = $model->mediaObj;
         $likeCount = MediaLike::media($media->_id)->count();
         $media->like_count = $likeCount;
         $media->removeFromSet('likes', [
-            '_id' => new ObjectId($mediaLike->creator['_id']),
-            'username' => $mediaLike->creator['username'],
-            'avatar' => $mediaLike->creator['avatar'],
+            '_id' => new ObjectId($model->creator['_id']),
+            'username' => $model->creator['username'],
+            'avatar' => $model->creator['avatar'],
         ]);
         $media->count_fields_updated_at = array_merge(
             $media->count_fields_updated_at,
@@ -97,9 +98,9 @@ class MediaLikeObserver extends BaseModelObserver
         $likeCount = MediaLike::user($user->_id)->count();
         $user->like_count = $likeCount;
         $user->removeFromSet('likes', [
-            '_id' => new ObjectId($mediaLike->creator['_id']),
-            'username' => $mediaLike->creator['username'],
-            'avatar' => $mediaLike->creator['avatar'],
+            '_id' => new ObjectId($model->creator['_id']),
+            'username' => $model->creator['username'],
+            'avatar' => $model->creator['avatar'],
         ]);
         $user->count_fields_updated_at = array_merge(
             $user->count_fields_updated_at,
@@ -108,8 +109,8 @@ class MediaLikeObserver extends BaseModelObserver
         $user->save();
 
         // Reset the Redis cache
-        $cacheKey = (new MediaLike())->getCollection().':creator:'.$mediaLike->creator['_id'];
+        $cacheKey = (new MediaLike())->getCollection().':creator:'.$model->creator['_id'];
         Redis::del($cacheKey);
-        MediaLike::cacheByUserId($mediaLike->creator['_id']);
+        MediaLike::cacheByUserId($model->creator['_id']);
     }
 }

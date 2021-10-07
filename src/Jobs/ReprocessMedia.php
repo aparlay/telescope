@@ -47,6 +47,10 @@ class ReprocessMedia implements ShouldQueue
      */
     public function handle()
     {
+        if (config('app.is_testing')) {
+            return;
+        }
+
         $b2 = Storage::disk('b2-videos');
         $storage = Storage::disk('public');
 

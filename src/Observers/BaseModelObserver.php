@@ -3,13 +3,36 @@
 namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Models\BaseModel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 use MongoDB\BSON\ObjectId;
 
 class BaseModelObserver
 {
+    /**
+     * Create a new event instance.
+     *
+     * @param  BaseModel  $model
+     * @return void
+     */
+    public function creating($model): void
+    {
+        $loggedInUser = Auth::user();
+        $model->created_by = ! is_null($loggedInUser) ? new ObjectId($loggedInUser->_id) : $model->created_by;
+        $model->updated_by = ! is_null($loggedInUser) ? new ObjectId($loggedInUser->_id) : $model->updated_by;
+    }
+
+    /**
+     * Create a new event instance.
+     *
+     * @param  BaseModel  $model
+     * @return void
+     */
+    public function updating($model): void
+    {
+        $loggedInUser = Auth::user();
+        $model->updated_by = ! is_null($loggedInUser) ? new ObjectId($loggedInUser->_id) : $model->updated_by;
+    }
+
     /**
      * Create a new event instance.
      *

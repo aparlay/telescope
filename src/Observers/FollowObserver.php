@@ -14,105 +14,107 @@ class FollowObserver extends BaseModelObserver
     /**
      * Handle the Follow "creating" event.
      *
-     * @param  Follow  $follow
+     * @param  Follow  $model
      * @return void
      */
-    public function creating(Follow $follow): void
+    public function creating($model): void
     {
-        $user = User::user($follow->user['_id'])->first();
-        $creator = User::user($follow->creator['_id'])->first();
+        $user = User::user($model->user['_id'])->first();
+        $creator = User::user($model->creator['_id'])->first();
 
-        $follow->user = [
+        $model->user = [
             '_id' => new ObjectId($user->_id),
             'username' => $user->username,
             'avatar' => $user->avatar,
         ];
 
-        $follow->creator = [
+        $model->creator = [
             '_id' => new ObjectId($creator->_id),
             'username' => $creator->username,
             'avatar' => $creator->avatar,
         ];
+
+        parent::creating($model);
     }
 
     /**
      * Handle the Follow "created" event.
      *
-     * @param  Follow  $follow
+     * @param  Follow  $model
      * @return void
      */
-    public function created(Follow $follow): void
+    public function created($model): void
     {
-        $followersCount = Follow::user($follow->user['_id'])->count();
-        $follow->userObj->follower_count = $followersCount;
-        $follow->userObj->addToSet('followers', [
-            '_id' => new ObjectId($follow->creator['_id']),
-            'username' => $follow->creator['username'],
-            'avatar' => $follow->creator['avatar'],
+        $followersCount = Follow::user($model->user['_id'])->count();
+        $model->userObj->follower_count = $followersCount;
+        $model->userObj->addToSet('followers', [
+            '_id' => new ObjectId($model->creator['_id']),
+            'username' => $model->creator['username'],
+            'avatar' => $model->creator['avatar'],
         ], 10);
-        $follow->userObj->count_fields_updated_at = array_merge(
-            $follow->userObj->count_fields_updated_at,
+        $model->userObj->count_fields_updated_at = array_merge(
+            $model->userObj->count_fields_updated_at,
             ['followers' => DT::utcNow()]
         );
-        $follow->userObj->save();
+        $model->userObj->save();
 
-        $followingCount = Follow::creator($follow->creator['_id'])->count();
-        $follow->creatorObj->following_count = $followingCount;
-        $follow->creatorObj->addToSet('followings', [
-            '_id' => new ObjectId($follow->user['_id']),
-            'username' => $follow->user['username'],
-            'avatar' => $follow->user['avatar'],
+        $followingCount = Follow::creator($model->creator['_id'])->count();
+        $model->creatorObj->following_count = $followingCount;
+        $model->creatorObj->addToSet('followings', [
+            '_id' => new ObjectId($model->user['_id']),
+            'username' => $model->user['username'],
+            'avatar' => $model->user['avatar'],
         ]);
-        $follow->creatorObj->count_fields_updated_at = array_merge(
-            $follow->creatorObj->count_fields_updated_at,
+        $model->creatorObj->count_fields_updated_at = array_merge(
+            $model->creatorObj->count_fields_updated_at,
             ['followings' => DT::utcNow()]
         );
-        $follow->creatorObj->save();
+        $model->creatorObj->save();
 
         // Reset the Redis cache
-        $cacheKey = (new Follow())->getCollection().':creator:'.$follow->creator['_id'];
+        $cacheKey = (new Follow())->getCollection().':creator:'.$model->creator['_id'];
         Redis::del($cacheKey);
-        Follow::cacheByUserId($follow->creator['_id']);
+        Follow::cacheByUserId($model->creator['_id']);
     }
 
     /**
      * Handle the Follow "deleted" event.
      *
-     * @param  Follow  $follow
+     * @param  Follow  $model
      * @return void
      */
-    public function deleted(Follow $follow): void
+    public function deleted($model): void
     {
-        $followersCount = Follow::user($follow->user['_id'])->count();
-        $follow->userObj->follower_count = $followersCount;
-        $follow->userObj->removeFromSet('followers', [
-            '_id' => new ObjectId($follow->creator['_id']),
-            'username' => $follow->creator['username'],
-            'avatar' => $follow->creator['avatar'],
+        $followersCount = Follow::user($model->user['_id'])->count();
+        $model->userObj->follower_count = $followersCount;
+        $model->userObj->removeFromSet('followers', [
+            '_id' => new ObjectId($model->creator['_id']),
+            'username' => $model->creator['username'],
+            'avatar' => $model->creator['avatar'],
         ]);
-        $follow->userObj->count_fields_updated_at = array_merge(
-            $follow->userObj->count_fields_updated_at,
+        $model->userObj->count_fields_updated_at = array_merge(
+            $model->userObj->count_fields_updated_at,
             ['followers' => DT::utcNow()]
         );
-        $follow->userObj->save();
+        $model->userObj->save();
 
-        $followingCount = Follow::creator($follow->creator['_id'])->count();
-        $follow->creatorObj->following_count = $followingCount;
-        $follow->creatorObj->removeFromSet('followings', [
-            '_id' => new ObjectId($follow->user['_id']),
-            'username' => $follow->user['username'],
-            'avatar' => $follow->user['avatar'],
+        $followingCount = Follow::creator($model->creator['_id'])->count();
+        $model->creatorObj->following_count = $followingCount;
+        $model->creatorObj->removeFromSet('followings', [
+            '_id' => new ObjectId($model->user['_id']),
+            'username' => $model->user['username'],
+            'avatar' => $model->user['avatar'],
         ]);
-        $follow->creatorObj->count_fields_updated_at = array_merge(
-            $follow->creatorObj->count_fields_updated_at,
+        $model->creatorObj->count_fields_updated_at = array_merge(
+            $model->creatorObj->count_fields_updated_at,
             ['followings' => DT::utcNow()]
         );
-        $follow->creatorObj->save();
+        $model->creatorObj->save();
 
         // Reset the Redis cache
-        $cacheKey = (new Follow())->getCollection().':creator:'.$follow->creator['_id'];
+        $cacheKey = (new Follow())->getCollection().':creator:'.$model->creator['_id'];
         Redis::del($cacheKey);
-        Follow::cacheByUserId($follow->creator['_id']);
+        Follow::cacheByUserId($model->creator['_id']);
 
         Log::debug(Follow::class);
     }

@@ -2,16 +2,15 @@
 
 namespace Aparlay\Core\Admin\Repositories;
 
-use Aparlay\Core\Admin\Models\Analytic;
-use Illuminate\Support\Collection;
+use Aparlay\Core\Admin\Models\User;
 
-class AnalyticRepository implements RepositoryInterface
+class UserRepository implements RepositoryInterface
 {
-    protected Analytic $model;
+    protected User $model;
 
     public function __construct($model)
     {
-        if (! ($model instanceof Analytic)) {
+        if (! ($model instanceof User)) {
             throw new \InvalidArgumentException('$model should be of User type');
         }
 
@@ -40,11 +39,11 @@ class AnalyticRepository implements RepositoryInterface
 
     public function find($id)
     {
-        // TODO: Implement find() method.
+        return $this->model->findOrFail($id);
     }
 
-    public function getAnalytics(): Collection
+    public function getUsers()
     {
-        return $this->model->orderBy('date')->take(20)->get();
+        return $this->model->orderBy('created_at', 'desc')->paginate(20);
     }
 }

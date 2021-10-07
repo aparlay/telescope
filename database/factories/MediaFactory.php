@@ -7,6 +7,7 @@ use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 use Str;
 
@@ -26,19 +27,18 @@ class MediaFactory extends Factory
      */
     public function definition()
     {
+        /*self::macro('disableEvents', function () {
+            Media::flushEventListeners();
+
+            return $this;
+        });*/
+
         return [
             'description' => $this->faker->sentence(5),
             'notes' => $this->faker->sentence(5),
             'location' => null,
             'hash' => $this->faker->sha1(),
-            'file' => function () {
-                $fileName = Str::random(10).'.mp4';
-//                UploadedFile::fake()
-//                    ->create($fileName, (string)(1024 * 1024 * rand(1, 1024)), 'video/mp4')
-//                    ->storeAs('upload', $fileName);
-
-                return $fileName;
-            },
+            'file' => 'waptap.mp4',
             'files_history' => [],
             'mime_type' => 'video/mp4',
             'size' => $this->faker->randomDigitNotZero(),

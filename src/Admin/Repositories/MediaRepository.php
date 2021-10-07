@@ -2,17 +2,16 @@
 
 namespace Aparlay\Core\Admin\Repositories;
 
-use Aparlay\Core\Admin\Models\Analytic;
-use Illuminate\Support\Collection;
+use Aparlay\Core\Admin\Models\Media;
 
-class AnalyticRepository implements RepositoryInterface
+class MediaRepository implements RepositoryInterface
 {
-    protected Analytic $model;
+    protected Media $model;
 
     public function __construct($model)
     {
-        if (! ($model instanceof Analytic)) {
-            throw new \InvalidArgumentException('$model should be of User type');
+        if (! ($model instanceof Media)) {
+            throw new \InvalidArgumentException('$model should be of Media type');
         }
 
         $this->model = $model;
@@ -20,7 +19,7 @@ class AnalyticRepository implements RepositoryInterface
 
     public function all()
     {
-        // TODO: Implement all() method.
+        return $this->model->orderBy('created_at', 'desc')->paginate(20);
     }
 
     public function create(array $data)
@@ -41,10 +40,5 @@ class AnalyticRepository implements RepositoryInterface
     public function find($id)
     {
         // TODO: Implement find() method.
-    }
-
-    public function getAnalytics(): Collection
-    {
-        return $this->model->orderBy('date')->take(20)->get();
     }
 }
