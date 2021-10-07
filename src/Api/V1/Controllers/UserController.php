@@ -82,7 +82,7 @@ class UserController extends Controller
      */
     public function update(MeRequest $request): object
     {
-        $user = $this->userService->findByIdentity(auth()->user()->username);
+        $user = auth()->user();
         /* Check the update permission */
         $this->authorize('update', User::class);
 
