@@ -210,7 +210,7 @@ class AuthController extends Controller
                         'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
                     ];
                 }
-                throw new BlockedException('OTP has been sent.', null, null, Response::HTTP_LOCKED, $response);
+                throw new BlockedException('OTP has been sent.', null, null, Response::HTTP_I_AM_A_TEAPOT, $response);
             }
         }
 
