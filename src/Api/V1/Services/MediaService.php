@@ -112,7 +112,7 @@ class MediaService
             $query->notBlockedFor(auth()->user()->_id);
         }
 
-        $deviceId = request()->headers->get('X-DEVICE-ID', '');
+        $deviceId = request()->header('X-DEVICE-ID', '');
         $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
 
         if ($type !== 'following') {

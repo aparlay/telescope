@@ -150,7 +150,7 @@ class AuthController extends Controller
             $this->userService->isUserEligible($user);
 
             // Send the OTP or Throw exception if send OTP limit is reached
-            $this->otpService->sendOtp($user, $request->headers->get('X-DEVICE-ID'));
+            $this->otpService->sendOtp($user, $request->header('X-DEVICE-ID'));
         }
 
         /* Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
@@ -191,7 +191,7 @@ class AuthController extends Controller
         /** Through exception for suspended/banned/NotFound accounts */
         $user = auth()->user();
         $this->userService->isUserEligible($user);
-        $deviceId = $request->headers->get('X-DEVICE-ID');
+        $deviceId = $request->header('X-DEVICE-ID');
 
         if ($this->userService->requireOtp()) {
             if ($request->otp) {
@@ -199,6 +199,7 @@ class AuthController extends Controller
                 $this->userService->verify();
             } else {
                 $this->otpService->sendOtp($user, $deviceId);
+                $response = [];
                 if ($identityField === Login::IDENTITY_PHONE_NUMBER) {
                     $response = [
                         'message' => 'If you enter your phone number correctly you will receive an OTP sms soon.',
@@ -253,7 +254,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): Response
     {
         $user = User::create($request->all());
-        $deviceId = $request->headers->get('X-DEVICE-ID');
+        $deviceId = $request->header('X-DEVICE-ID');
 
         $this->otpService->sendOtp($user, $deviceId);
 

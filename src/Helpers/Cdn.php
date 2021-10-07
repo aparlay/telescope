@@ -14,7 +14,7 @@ class Cdn
     public static function avatar(string $url): string
     {
         if (empty($url)) {
-            throw new Exception('Url is missing');
+            throw new Exception('avatar file is missing');
         }
 
         /* Return the input file url if cdn is not enabled */
@@ -34,7 +34,7 @@ class Cdn
     public static function cover(string $url): string
     {
         if (empty($url)) {
-            throw new Exception('Url is missing');
+            throw new Exception('cover file is missing');
         }
 
         if (! config('app.cdn.enabled')) {
@@ -52,7 +52,7 @@ class Cdn
     public static function video(string $url): string
     {
         if (empty($url)) {
-            throw new Exception('Url is missing');
+            throw new Exception('video file is missing');
         }
 
         if (! config('app.cdn.enabled')) {
