@@ -138,7 +138,6 @@
                     const field_value = $(this).val();
                     const clean_field_name = $(this).attr('name').match(/\[(.*?)\]/)[1];
                     const field_with_limit = ['username', 'email', 'full_name']
-                    console.log($.inArray(clean_field_name, field_with_limit))
 
                     if(field_value.length > 2 || $.inArray(clean_field_name, field_with_limit) === -1) {
                         $('#filter').submit();
