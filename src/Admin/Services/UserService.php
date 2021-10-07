@@ -35,7 +35,7 @@ class UserService
         foreach ($filter as $key => $value) {
             if (! $this->canFilterField($key) || empty($value)) {
                 unset($filter[$key]);
-            } elseif(is_numeric($value)) {
+            } elseif (is_numeric($value)) {
                 $filter[$key] = intval($value);
             }
         }
@@ -51,7 +51,7 @@ class UserService
             $filters = $this->cleanFields($fields);
         }
 
-        if (!empty($filters)) {
+        if (! empty($filters)) {
             $users = $this->userRepository->getFilteredUsers($filters);
 
             $this->appendBadges($users);
