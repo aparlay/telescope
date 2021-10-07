@@ -76,6 +76,10 @@ class UploadMedia implements ShouldQueue
      */
     public function handle()
     {
+        if (config('app.is_testing')) {
+            return;
+        }
+
         if (($media = Media::media($this->media_id)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'Media not found!');
         }
@@ -93,7 +97,9 @@ class UploadMedia implements ShouldQueue
             $hash = sha1_file($filePath);
             $size = $storage->size($this->file);
             $mime = $storage->mimeType($this->file);
-            $mediaServer->writeStream($newFilename, $storage->readStream($this->file));
+            if (!$mediaServer->exists($newFilename)) {
+                $mediaServer->writeStream($newFilename, $storage->readStream($this->file));
+            }
             $mediaServer->setVisibility($newFilename, Filesystem::VISIBILITY_PUBLIC);
             ProcessMedia::dispatch($this->media_id, $newFilename)->onQueue('low');
             BackblazeVideoUploader::dispatch($this->user_id, $this->media_id, $this->file)->onQueue('low');

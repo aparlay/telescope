@@ -70,6 +70,10 @@ class UploadAvatar implements ShouldQueue
      */
     public function handle()
     {
+        if (config('app.is_testing')) {
+            return;
+        }
+
         $resource = Storage::disk('public')->readStream($this->file);
         $filename = basename($this->file);
         Storage::disk('b2-avatars')->writeStream($filename, $resource);
