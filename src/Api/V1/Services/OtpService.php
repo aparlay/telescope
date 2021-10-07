@@ -89,7 +89,7 @@ class OtpService
         $email = $otp->identity;
         $subject = __(':code is your :app verification code', [
             'code' => $otp->otp,
-            'app' => strtolower(config('app.name'))
+            'app' => strtolower(config('app.name')),
         ]);
         $type = Email::TEMPLATE_EMAIL_VERIFICATION;
         $payload = [
