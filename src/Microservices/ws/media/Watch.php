@@ -20,6 +20,8 @@ class Watch implements WsEventDispatcher
     public $durationWatched;
     public $durationTotal;
 
+    private $redis;
+
     public function __construct($config = [])
     {
         foreach ($config as $property => $value) {
@@ -39,6 +41,8 @@ class Watch implements WsEventDispatcher
         $this->mediaId = ! empty($this->mediaId) ? new ObjectId($this->mediaId) : null;
         $this->userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
         $this->deviceId = ! empty($this->deviceId) ? (string) $this->deviceId : null;
+
+        $this->redis = Redis::connection('ws');
     }
 
     /**
@@ -77,13 +81,14 @@ class Watch implements WsEventDispatcher
 
             $cacheKey = (new MediaVisit())->getCollection().$this->deviceId;
             $visited = [];
-            if (Redis::exists($cacheKey)) {
-                $visited = Redis::get($cacheKey);
+
+            if ($this->redis->exists($cacheKey)) {
+                $visited = $this->redis->get($cacheKey);
             }
 
             $visited[] = $this->mediaId;
 
-            Redis::set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
+            $this->redis->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
         }
     }
 

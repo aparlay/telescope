@@ -65,7 +65,7 @@ class WsCommand extends Command
                     ini_set('default_socket_timeout', -1);
                     $redis = Redis::connection('ws');
                     $redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
-                    Redis::subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
+                    $redis->subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
                         $this->info('New broadcasting message arrived!');
                         $this->info($message);
                         $client->push($message);
