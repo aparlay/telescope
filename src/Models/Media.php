@@ -409,7 +409,7 @@ class Media extends BaseModel
 
     public function getFilenameAttribute()
     {
-        return basename($this->file, '.' . pathinfo($this->file, PATHINFO_EXTENSION));
+        return basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION));
     }
 
     /**
