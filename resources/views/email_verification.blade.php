@@ -421,7 +421,6 @@
             <td>&nbsp;</td>
         </tr>
     </table>
-    <img src="{{ URL::to($tracking_url) }}">
 </body>
 </html>
 
