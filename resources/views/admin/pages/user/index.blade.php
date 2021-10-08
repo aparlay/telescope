@@ -38,7 +38,7 @@
                                 <th scope="col">Likes</th>
                                 <th scope="col">Medias</th>
                                 <th scope="col">Created At</th>
-                                <th scrope="col">Action</th>
+                                <th scope="col">Action</th>
                             </tr>
                             </thead>
                             <tbody>

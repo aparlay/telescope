@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
@@ -64,13 +65,12 @@ class FollowRepository implements RepositoryInterface
     /**
      * Check if already followed by the given user.
      *
-     * @param User $user
-     * @return Follow|void
+     * @param  User|Authenticatable  $creator
+     * @param  User  $user
+     * @return Follow|null
      */
-    public function isFollowed(User $user)
+    public function isFollowed(User|Authenticatable $creator, User $user): ?Follow
     {
-        $creator = auth()->user();
-
         return Follow::user($user->_id)->creator($creator->_id)->first();
     }
 }

@@ -27,7 +27,8 @@ class MediaLikeService
     public function create(Media $media)
     {
         $statusCode = Response::HTTP_OK;
-        if (($like = $this->mediaLikeRepository->isLiked($media)) === null) {
+        $creator = auth()->user();
+        if (($like = $this->mediaLikeRepository->isLiked($creator, $media)) === null) {
             $like = $this->mediaLikeRepository->create([
                 'media_id' => new ObjectId($media->_id),
                 'user_id' => new ObjectId($media->user_id),
@@ -43,13 +44,15 @@ class MediaLikeService
      * Responsible to unlike the given media.
      *
      * @param  Media  $media
-     * @return void
-     * @throws BlockedException
+     * @return array
      */
-    public function unlike(Media $media)
+    public function unlike(Media $media): array
     {
-        if (($like = $this->mediaLikeRepository->isLiked($media)) !== null) {
+        $creator = auth()->user();
+        if (($like = $this->mediaLikeRepository->isLiked($creator, $media)) !== null) {
             $like->delete();
         }
+
+        return [];
     }
 }

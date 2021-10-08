@@ -27,7 +27,8 @@ class FollowService
     public function follow(User $user): array
     {
         $statusCode = Response::HTTP_OK;
-        if (($follow = $this->followRepository->isFollowed($user)) === null) {
+        $creator = auth()->user();
+        if (($follow = $this->followRepository->isFollowed($creator, $user)) === null) {
             $follow = $this->followRepository->create(['user' => ['_id' => new ObjectId($user->_id)]]);
             $statusCode = Response::HTTP_CREATED;
         }
@@ -40,14 +41,13 @@ class FollowService
      *
      * @param  User  $user
      * @return array
-     * @throws BlockedException
      */
     public function unfollow(User $user): array
     {
-        if (($follow = $this->followRepository->isFollowed($user)) === null) {
-            throw new BlockedException('No Record Found', null, null, Response::HTTP_NOT_FOUND);
+        $creator = auth()->user();
+        if (($follow = $this->followRepository->isFollowed($creator, $user)) !== null) {
+            $follow->delete();
         }
-        $follow->delete();
 
         return [];
     }

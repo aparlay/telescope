@@ -2,8 +2,10 @@
 
 namespace Aparlay\Core\Api\V1\Repositories;
 
+use Aparlay\Core\Admin\Http\Middleware\Authenticate;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
@@ -65,13 +67,12 @@ class BlockRepository implements RepositoryInterface
     /**
      * Check if already blocked by the given user.
      *
+     * @param User|Authenticatable $creator
      * @param User $user
-     * @return Block|void
+     * @return Block|null
      */
-    public function isBlocked(User $user)
+    public function isBlocked(User|Authenticatable $creator, User $user): ?Block
     {
-        $creator = auth()->user();
-
         return Block::user($user->_id)->creator($creator->_id)->first();
     }
 }

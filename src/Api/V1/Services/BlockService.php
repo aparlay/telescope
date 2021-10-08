@@ -27,7 +27,9 @@ class BlockService
     public function create(User $user)
     {
         $statusCode = Response::HTTP_OK;
-        if (($block = $this->blockRepository->isBlocked($user)) === null) {
+        $creator = auth()->user();
+
+        if (($block = $this->blockRepository->isBlocked($creator, $user)) === null) {
             $block = $this->blockRepository->create(['user' => ['_id' => new ObjectId($user->_id)]]);
             $statusCode = Response::HTTP_CREATED;
         }
@@ -39,14 +41,15 @@ class BlockService
      * Responsible to unblock the given user.
      *
      * @param  User  $user
-     * @return void
-     * @throws BlockedException
+     * @return array
      */
-    public function unblock(User $user)
+    public function unblock(User $user): array
     {
-        if (($block = $this->blockRepository->isBlocked($user)) === null) {
-            throw new BlockedException('No Record Found', null, null, Response::HTTP_NOT_FOUND);
+        $creator = auth()->user();
+        if (($block = $this->blockRepository->isBlocked($creator, $user)) === null) {
+            $block->delete();
         }
-        $block->delete();
+
+        return [];
     }
 }

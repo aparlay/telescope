@@ -4,6 +4,8 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
+use Aparlay\Core\Api\V1\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
@@ -66,13 +68,12 @@ class MediaLikeRepository implements RepositoryInterface
     /**
      * Check if already liked the media.
      *
-     * @param Media $media
-     * @return MediaLike|void
+     * @param  User|Authenticatable  $creator
+     * @param  Media  $media
+     * @return MediaLike|null
      */
-    public function isLiked(Media $media)
+    public function isLiked(User|Authenticatable $creator, Media $media): ?MediaLike
     {
-        $creator = auth()->user();
-
         return MediaLike::media($media->_id)->creator($creator->_id)->first();
     }
 }

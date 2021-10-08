@@ -174,8 +174,8 @@ class FollowController extends Controller
     public function destroy(User $user): Response
     {
         // Unfollow the user or throw exception if not followed
-        $this->followService->unfollow($user);
+        $response = $this->followService->unfollow($user);
 
-        return $this->response([], '', Response::HTTP_NO_CONTENT);
+        return $this->response($response, '', Response::HTTP_NO_CONTENT);
     }
 }
