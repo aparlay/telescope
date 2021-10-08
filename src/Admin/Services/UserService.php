@@ -33,7 +33,7 @@ class UserService
     public function cleanFields(array $filter): array
     {
         foreach ($filter as $key => $value) {
-            if (! $this->canFilterField($key) || !isset($value)) {
+            if (! $this->canFilterField($key) || ! isset($value)) {
                 unset($filter[$key]);
             } elseif (is_numeric($value)) {
                 $filter[$key] = (int) $value;
