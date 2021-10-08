@@ -5,6 +5,7 @@ namespace Aparlay\Core\Jobs;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
@@ -64,6 +65,15 @@ class UpdateAvatar implements ShouldQueue
      */
     public function handle()
     {
+        $avatar = $this->user->avatar;
+        Media::creator($this->user->_id)->update(['$set' => ['creator.avatar' => $avatar]]);
+        Follow::creator($this->user->_id)->update(['$set' => ['creator.avatar' => $avatar]]);
+        Follow::user($this->user->_id)->update(['$set' => ['user.avatar' => $avatar]]);
+        Block::creator($this->user->_id)->update(['$set' => ['creator.avatar' => $avatar]]);
+        Block::user($this->user->_id)->update(['$set' => ['user.avatar' => $avatar]]);
+        MediaLike::creator($this->user->_id)->update(['$set' => ['creator.avatar' => $avatar]]);
+
+        /*
         Media::creator($this->user->_id)->chunk(200, function ($models) {
             foreach ($models as $media) {
                 $creator = $media->creator;
@@ -108,6 +118,7 @@ class UpdateAvatar implements ShouldQueue
                 $block->save();
             }
         });
+        */
     }
 
     public function failed(Throwable $exception)
