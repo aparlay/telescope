@@ -99,6 +99,7 @@ class AuthController extends Controller
 
         $loginRequest = new LoginRequest(['password' => $request->password, 'username' => $user->username]);
         $loginRequest->headers = $request->headers;
+
         return $this->login($loginRequest);
     }
 
