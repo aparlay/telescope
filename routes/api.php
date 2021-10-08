@@ -41,7 +41,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-trottle'])-
         });
 
         /* Cache Group */
-        Route::middleware(['cache.headers:no_store;max_age=0;etag', 'auth:api', 'cookies-auth'])->group(function () {
+        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::get('/{media}', [MediaController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
         });
     });
