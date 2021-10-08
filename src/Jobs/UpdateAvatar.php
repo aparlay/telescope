@@ -65,16 +65,16 @@ class UpdateAvatar implements ShouldQueue
      */
     public function handle()
     {
-        /*
-        $avatar = $this->user->avatar;
-        Media::creator($this->user->_id)->update(['$set' => ['creator.avatar' => $avatar]]);
-        Follow::creator($this->user->_id)->update(['$set' => ['creator.avatar' => $avatar]]);
-        Follow::user($this->user->_id)->update(['$set' => ['user.avatar' => $avatar]]);
-        Block::creator($this->user->_id)->update(['$set' => ['creator.avatar' => $avatar]]);
-        Block::user($this->user->_id)->update(['$set' => ['user.avatar' => $avatar]]);
-        MediaLike::creator($this->user->_id)->update(['$set' => ['creator.avatar' => $avatar]]);
-        */
 
+        $avatar = $this->user->avatar;
+        Media::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
+        Follow::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
+        Follow::user($this->user->_id)->update(['user.avatar' => $avatar]);
+        Block::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
+        Block::user($this->user->_id)->update(['user.avatar' => $avatar]);
+        MediaLike::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
+
+        /*
         Media::creator($this->user->_id)->chunk(200, function ($models) {
             foreach ($models as $media) {
                 $creator = $media->creator;
@@ -119,6 +119,7 @@ class UpdateAvatar implements ShouldQueue
                 $block->save();
             }
         });
+        */
     }
 
     public function failed(Throwable $exception)
