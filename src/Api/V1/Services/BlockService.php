@@ -46,7 +46,7 @@ class BlockService
     public function unblock(User $user): array
     {
         $creator = auth()->user();
-        if (($block = $this->blockRepository->isBlocked($creator, $user)) === null) {
+        if (($block = $this->blockRepository->isBlocked($creator, $user)) !== null) {
             $block->delete();
         }
 
