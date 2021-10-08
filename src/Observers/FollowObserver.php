@@ -115,7 +115,5 @@ class FollowObserver extends BaseModelObserver
         $cacheKey = (new Follow())->getCollection().':creator:'.$model->creator['_id'];
         Redis::del($cacheKey);
         Follow::cacheByUserId($model->creator['_id']);
-
-        Log::debug(Follow::class);
     }
 }
