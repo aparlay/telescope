@@ -88,7 +88,7 @@ class MediaObserver extends BaseModelObserver
     {
         $model->slug = MediaService::generateSlug(6);
 
-        parent::saving($model);
+        parent::creating($model);
     }
 
     /**
