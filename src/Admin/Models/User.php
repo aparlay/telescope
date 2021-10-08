@@ -2,10 +2,13 @@
 
 namespace Aparlay\Core\Admin\Models;
 
+use Aparlay\Core\Admin\Models\Scopes\UserScope;
 use Aparlay\Core\Models\User as UserBase;
 
 class User extends UserBase
 {
+    use UserScope;
+
     /**
      * @return string
      */

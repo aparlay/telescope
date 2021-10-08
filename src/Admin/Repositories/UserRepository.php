@@ -19,7 +19,7 @@ class UserRepository implements RepositoryInterface
 
     public function all()
     {
-        // TODO: Implement all() method.
+        return $this->model->recent()->paginate(config('core.admin.lists.page_count'));
     }
 
     public function create(array $data)
@@ -42,8 +42,13 @@ class UserRepository implements RepositoryInterface
         return $this->model->findOrFail($id);
     }
 
-    public function getUsers()
+    public function getFilteredUsers($filters)
     {
-        return $this->model->orderBy('created_at', 'desc')->paginate(20);
+        return $this->model->filter($filters)->recent()->paginate(config('core.admin.lists.page_count'));
+    }
+
+    public function getUserStatues()
+    {
+        return $this->model->getStatuses();
     }
 }
