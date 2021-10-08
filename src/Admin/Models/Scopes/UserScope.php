@@ -15,7 +15,7 @@ trait UserScope
     {
         foreach ($filters as $key => $filter) {
             if (is_numeric($filter)) {
-                $query->where($key, $filter);
+                $query->where($key, (int) $filter);
             } else {
                 $query->where($key, 'regex', new Regex('^'.$filter));
             }

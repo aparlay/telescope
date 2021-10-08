@@ -132,32 +132,55 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+            // do not submit when there are less than 3 characters
+            // only check username, email, fullname for length
+            // clean url when filter fields are empty
+
             var originalFormData = $('form#filter').serialize();
             $('input, select').blur(function() {
+
+                const fieldValue = $(this).val();
+                const cleanFieldName = $(this).attr('name').match(/\[(.*?)\]/)[1];
+                const fieldWithLimit = ['username', 'email', 'full_name']
+
+                if(validInput(fieldValue, cleanFieldName, fieldWithLimit)) {
+                    $('#filter').submit();
+                    return;
+                } else {
+                    $(this).val('');
+                }
+
                 if(isDirty(originalFormData)) {
-                    const field_value = $(this).val();
-                    const clean_field_name = $(this).attr('name').match(/\[(.*?)\]/)[1];
-                    const field_with_limit = ['username', 'email', 'full_name']
-
-                    if(field_value.length > 2 || $.inArray(clean_field_name, field_with_limit) === -1) {
-                        $('#filter').submit();
-                        return;
-                    }
-
-
-                    let has_value = false;
+                    let resetFilter = false;
+                    let canSubmitForm = false;
                     $('input, select').each(function() {
-                        if($(this).val().length === '') {
-                            has_value = true;
+                        const fieldValue = $(this).val();
+                        const cleanFieldName = $(this).attr('name')?.match(/\[(.*?)\]/)[1];
+                        if(validInput(fieldValue, cleanFieldName, fieldWithLimit)) {
+                            canSubmitForm = true;
+                            resetFilter = false;
+                        } else {
+                            resetFilter = true;
                         }
                     });
 
-                    //remove params
-                    if(!has_value) {
+
+
+                    if(canSubmitForm) {
+                        $('#filter').submit();
+                    }
+
+                    if(resetFilter && !canSubmitForm) {
                         window.location.href = '/user';
                     }
                 }
             })
+
+
+
+            function validInput(value, field_name = '', fieldWithLimit) {
+                return (value.length > 2 || $.inArray(field_name, fieldWithLimit) === -1) && value.length !== 0;
+            }
 
             function isDirty(originalFOrm) {
                 return originalFOrm !== $('form#filter').serialize();
