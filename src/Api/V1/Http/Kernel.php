@@ -17,7 +17,7 @@ class Kernel extends HttpKernel
         'device-id' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceId::class,
         'cookies-auth' => \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
         'device-id-trottle' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceIdTrottle::class,
-        'cache-headers-remover' => \Aparlay\Core\Api\V1\Http\Middleware\CacheHeaderPolicy::class,
+        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
     ];
 
     /**
