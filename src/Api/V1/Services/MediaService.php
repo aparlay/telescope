@@ -117,7 +117,7 @@ class MediaService
 
         if ($type !== 'following') {
             $originalQuery = $query;
-            $originalData = $originalQuery->paginate(5, ['*'], 'page', 1);
+            $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
             if (! auth()->guest()) {
                 $userId = auth()->user()->_id;
@@ -126,7 +126,7 @@ class MediaService
                 $query->notVisitedByDevice($deviceId);
             }
 
-            $data = $query->paginate(5);
+            $data = $query->paginate(5)->withQueryString();
 
             if ($data->isEmpty() || $data->total() <= 5) {
                 if (! auth()->guest()) {
@@ -139,7 +139,7 @@ class MediaService
                 }
             }
         } else {
-            $data = $query->paginate(5);
+            $data = $query->paginate(5)->withQueryString();
         }
 
         $visited = Cache::store('redis')->get($cacheKey, []);
