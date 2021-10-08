@@ -65,7 +65,6 @@ class UpdateAvatar implements ShouldQueue
      */
     public function handle()
     {
-
         $avatar = $this->user->avatar;
         Media::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
         Follow::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
