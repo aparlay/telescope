@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
@@ -61,11 +62,7 @@ class UpdateMedia implements ShouldQueue
      */
     public function handle(): void
     {
-        Media::creator($this->user->_id)->chunk(200, function ($models) {
-            foreach ($models as $model) {
-                $model->update($this->attributes);
-            }
-        });
+        Media::creator($this->user->_id)->update($this->attributes);
     }
 
     public function failed(Throwable $exception): void
