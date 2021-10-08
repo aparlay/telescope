@@ -6,7 +6,7 @@ use MongoDB\BSON\Regex;
 
 trait UserScope
 {
-    public function scopeDesc($query)
+    public function scopeRecent($query)
     {
         return $query->orderBy('created_at', 'desc');
     }

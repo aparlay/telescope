@@ -19,7 +19,7 @@ class UserRepository implements RepositoryInterface
 
     public function all()
     {
-        return $this->model->desc()->paginate(config('core.admin.lists.page_count'));
+        return $this->model->recent()->paginate(config('core.admin.lists.page_count'));
     }
 
     public function create(array $data)
@@ -44,7 +44,7 @@ class UserRepository implements RepositoryInterface
 
     public function getFilteredUsers($filters)
     {
-        return $this->model->filter($filters)->desc()->paginate(config('core.admin.lists.page_count'));
+        return $this->model->filter($filters)->recent()->paginate(config('core.admin.lists.page_count'));
     }
 
     public function getUserStatues()
