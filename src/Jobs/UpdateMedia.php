@@ -22,6 +22,7 @@ class UpdateMedia implements ShouldQueue
     use SerializesModels;
 
     public User $user;
+    public string $user_id;
 
     public array $attributes;
 
@@ -52,6 +53,7 @@ class UpdateMedia implements ShouldQueue
     public function __construct(string $userId, array $attributes)
     {
         $this->attributes = $attributes;
+        $this->user_id = $userId;
         if (($this->user = User::user($userId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'User not found!');
         }
@@ -67,6 +69,8 @@ class UpdateMedia implements ShouldQueue
 
     public function failed(Throwable $exception): void
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
     }
 }

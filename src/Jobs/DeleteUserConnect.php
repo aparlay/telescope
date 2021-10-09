@@ -92,6 +92,8 @@ class DeleteUserConnect implements ShouldQueue
 
     public function failed(Throwable $exception)
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
     }
 }

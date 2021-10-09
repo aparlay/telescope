@@ -3,14 +3,15 @@
 namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Mail\EmailEnvelope;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Mail;
+use Throwable;
 
 class Email implements ShouldQueue
 {
@@ -68,8 +69,13 @@ class Email implements ShouldQueue
         Mail::to($this->email)->send($send);
     }
 
+    /**
+     * @param  Throwable  $exception
+     */
     public function failed(Throwable $exception): void
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
     }
 }

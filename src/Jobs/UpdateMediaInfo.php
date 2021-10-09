@@ -14,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class UpdateMediaInfo implements ShouldQueue
 {
@@ -25,6 +26,8 @@ class UpdateMediaInfo implements ShouldQueue
     public User $user;
     public Media $media;
     public string $file;
+    public string $user_id;
+    public string $media_id;
 
     /**
      * The number of times the job may be attempted.
@@ -53,6 +56,8 @@ class UpdateMediaInfo implements ShouldQueue
             throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$userId);
         }
 
+        $this->user_id = $userId;
+        $this->media_id = $mediaId;
         $this->file = $file;
     }
 
@@ -86,8 +91,13 @@ class UpdateMediaInfo implements ShouldQueue
         }
     }
 
+    /**
+     * @param  Throwable  $exception
+     */
     public function failed(Throwable $exception): void
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
     }
 }
