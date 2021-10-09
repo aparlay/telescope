@@ -65,30 +65,30 @@ class WsCommand extends Command
                     ini_set('default_socket_timeout', -1);
                     $redis = Redis::connection();
                     $redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
-                    Redis::subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
+                    $redis->subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
                         $this->info('New broadcasting message arrived!');
                         $this->info($message);
                         $client->push($message);
                     });
                 });
-                go(function () use ($client) {
-                    while (true) {
-                        if (($frame = $client->recv()) instanceof Frame) {
-                            $this->info('New WS message arrived!');
-                            $this->info($frame->data);
-                            $data = json_decode($frame->data, true);
-                            if (isset($data['event'], $data['properties'])) {
-                                $properties = $data['properties'];
-                                $properties['deviceId'] = $data['deviceId'] ?? null;
-                                $properties['userId'] = $data['userId'] ?? null;
-                                $properties['anonymousId'] = $data['anonymousId'] ?? null;
-                                $dispatcher = WsDispatcherFactory::construct($data['event'], $properties);
-                                $dispatcher->execute();
-                            }
+
+                while (true) {
+                    if (($frame = $client->recv()) instanceof Frame) {
+                        $this->info('New WS message arrived!');
+                        $this->info($frame->data);
+                        $data = json_decode($frame->data, true);
+                        if (isset($data['event'], $data['properties'])) {
+                            $properties = $data['properties'];
+                            $properties['deviceId'] = $data['deviceId'] ?? null;
+                            $properties['userId'] = $data['userId'] ?? null;
+                            $properties['anonymousId'] = $data['anonymousId'] ?? null;
+
+                            $dispatcher = WsDispatcherFactory::construct($data['event'], $properties);
+                            $dispatcher->execute();
                         }
-                        Co::sleep(0.1);
                     }
-                });
+                    Co::sleep(0.1);
+                }
             }
 
             $client->close();

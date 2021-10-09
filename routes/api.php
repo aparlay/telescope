@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::middleware(['api', 'format-response', 'device-id', 'device-id-trottle'])->name('core.api.v1.')->prefix('v1')->group(function () {
-
     /* Media Prefix Group */
     Route::prefix('media')->name('media.')->group(function () {
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
@@ -41,7 +40,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-trottle'])-
         });
 
         /* Cache Group */
-        Route::middleware(['cache.headers:public;max_age=2628000;etag', 'auth:api', 'cookies-auth'])->group(function () {
+        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::get('/{media}', [MediaController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
         });
     });

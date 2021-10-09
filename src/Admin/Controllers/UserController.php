@@ -21,8 +21,9 @@ class UserController extends Controller
     public function index()
     {
         $users = $this->userService->getFilteredUsers();
+        $userStatuses = $this->userService->getUserStatuses();
 
-        return view('default_view::admin.pages.user.index', compact('users'));
+        return view('default_view::admin.pages.user.index', compact('users', 'userStatuses'));
     }
 
     public function view($id)

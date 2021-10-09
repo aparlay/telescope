@@ -169,8 +169,8 @@ class BlockController extends Controller
     public function destroy(User $user): Response
     {
         // Unblock the user or throw exception if not Blocked
-        $this->blockService->unBlock($user);
+        $response = $this->blockService->unBlock($user);
 
-        return $this->response([], '', Response::HTTP_NO_CONTENT);
+        return $this->response($response, '', Response::HTTP_NO_CONTENT);
     }
 }

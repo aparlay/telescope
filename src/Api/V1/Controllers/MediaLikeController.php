@@ -178,8 +178,8 @@ class MediaLikeController extends Controller
         $this->authorize('delete', [MediaLike::class, $media]);
 
         // Unlike the media or throw exception if not liked
-        $this->mediaLikeService->unLike($media);
+        $response = $this->mediaLikeService->unLike($media);
 
-        return $this->response([], '', Response::HTTP_NO_CONTENT);
+        return $this->response($response, '', Response::HTTP_NO_CONTENT);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Repositories;
 
-use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Services\MediaService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
@@ -37,6 +37,7 @@ class MediaRepository implements RepositoryInterface
                 'user_id' => new ObjectId($user->_id),
                 'file' => $request->input('file', ''),
                 'description' => $request->input('description', ''),
+                'slug' => MediaService::generateSlug(6),
                 'count_fields_updated_at' => [],
                 'visibility' => $request->input('visibility', $user->visibility),
                 'creator' => [

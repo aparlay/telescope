@@ -97,7 +97,10 @@ class AuthController extends Controller
             $this->userService->resetPassword($request->password);
         }
 
-        return $this->login(new LoginRequest(['password' => $request->password, 'username' => $user->username]));
+        $loginRequest = new LoginRequest(['username' => $user->username, 'password' => $request->password]);
+        $loginRequest->headers = $request->headers;
+
+        return $this->login($loginRequest);
     }
 
     /**

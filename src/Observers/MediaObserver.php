@@ -79,12 +79,20 @@ class MediaObserver extends BaseModelObserver
         if ($model->status === Media::STATUS_DENIED) {
             $model->visibility = Media::VISIBILITY_PRIVATE;
         }
+    }
 
-        if ($model->wasRecentlyCreated) {
-            $model->slug = MediaService::generateSlug(6);
-        }
+    /**
+     * Create a new event instance.
+     *
+     * @param Media $model
+     * @return void
+     * @throws Exception
+     */
+    public function creating($model): void
+    {
+        $model->slug = MediaService::generateSlug(6);
 
-        parent::saving($model);
+        parent::creating($model);
     }
 
     /**

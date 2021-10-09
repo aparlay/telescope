@@ -4,11 +4,12 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
-use MongoDB\BSON\Regex;
 
 class UserService
 {
     protected UserRepository $userRepository;
+
+    protected $filterableFields = ['username', 'email', 'full_name', 'status', 'visibility', 'follower_count', 'like_count', 'media_count'];
 
     public function __construct()
     {
@@ -17,29 +18,44 @@ class UserService
 
     public function getUsers()
     {
-        $users = $this->userRepository->getUsers();
+        $users = $this->userRepository->all();
 
         $this->appendBadges($users);
 
         return $users;
     }
 
+    public function canFilterField(string $field): bool
+    {
+        return in_array($field, $this->filterableFields) ?? false;
+    }
+
+    public function cleanFields(array $filter): array
+    {
+        foreach ($filter as $key => $value) {
+            if (! $this->canFilterField($key) || ! isset($value)) {
+                unset($filter[$key]);
+            } elseif (is_numeric($value)) {
+                $filter[$key] = (int) $value;
+            }
+        }
+
+        return $filter;
+    }
+
     public function getFilteredUsers()
     {
-        $username = request()->username ?? null;
-        $email = request()->email ?? null;
+        $fields = request()->UserSearch ?? [];
 
-        if ($username || $email) {
-            $query = User::query();
+        $filters = [];
+        if (! empty($fields)) {
+            $filters = $this->cleanFields($fields);
+        }
 
-            if ($username) {
-                $query = $query->where('username', 'regex', new Regex('^'.$username));
-            }
+        if (! empty($filters)) {
+            $users = $this->userRepository->getFilteredUsers($filters);
 
-            if ($email) {
-                $query = $query->orWhere('email', 'regex', new Regex('^'.$email));
-            }
-            $users = $query->paginate(20);
+            $this->appendBadges($users);
 
             return $users;
         } else {
@@ -86,5 +102,10 @@ class UserService
             $user->gender_badge = $genderBadge;
             $user->isverified_badge = $isVerifiedBadge;
         }
+    }
+
+    public function getUserStatuses()
+    {
+        return $this->userRepository->getUserStatues();
     }
 }

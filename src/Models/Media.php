@@ -404,7 +404,12 @@ class Media extends BaseModel
 
     public function getAdminUrlAttribute()
     {
-        return config('app.adminUrls.media').$this->_id;
+        return config('app.admin_urls.media').$this->_id;
+    }
+
+    public function getFilenameAttribute()
+    {
+        return basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION));
     }
 
     /**

@@ -9,7 +9,7 @@ class Kernel extends HttpKernel
     /**
      * The package route middleware.
      *
-     * These middleware may be assigned to groups or used individually.
+     * These middlewares may be assigned to group or used individually.
      *
      * @var array
      */
@@ -17,6 +17,7 @@ class Kernel extends HttpKernel
         'device-id' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceId::class,
         'cookies-auth' => \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
         'device-id-trottle' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceIdTrottle::class,
+        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
     ];
 
     /**
