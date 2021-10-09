@@ -78,8 +78,8 @@ class UserService
         if (($fileName = $request->avatar->storeAs('avatars', $avatar, 'public')) !== false) {
             /* Store avatar name in database */
             $oldFileName = $user->avatar;
-            $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
-            $user->save();
+            $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/' . $avatar)], $user->_id);
+
             dispatch((new UploadAvatar((string) $user->_id, $fileName))->delay(10)->onQueue('high'));
             if (! str_contains($oldFileName, 'default_')) {
                 $deleteOldFiles = new DeleteAvatar((string) $user->_id, basename($oldFileName));

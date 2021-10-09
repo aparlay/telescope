@@ -29,10 +29,10 @@ class OtpService
      * @return bool
      * @throws BlockedException
      */
-    public static function sendOtp(User | Authenticatable $user, string $deviceId)
+    public function sendOtp(User | Authenticatable $user, string $deviceId)
     {
-        $otp = self::generateOtp($user->email, $deviceId);
-        self::sendByEmail($user, $otp);
+        $otp = $this->generateOtp($user->email, $deviceId);
+        $this->sendByEmail($user, $otp);
 
         return true;
     }
@@ -44,7 +44,7 @@ class OtpService
      * @return \Aparlay\Core\Models\Otp
      * @throws BlockedException
      */
-    public static function generateOtp(string $identity, string $device_id = null)
+    public function generateOtp(string $identity, string $device_id = null)
     {
         $previousOTP = Otp::identity($identity)->get();
 
@@ -58,7 +58,7 @@ class OtpService
         }
 
         // Expire all the Previous OTPs of the given user
-        OtpRepository::expire($previousOTP);
+        $this->otpRepository->expire($previousOTP);
 
         /** Prepare request params for new OTP request */
         $request = [
@@ -66,7 +66,7 @@ class OtpService
             'device_id'     => $device_id,
         ];
 
-        return OtpRepository::create($request);
+        return $this->otpRepository->create($request);
     }
 
     /**
@@ -75,7 +75,7 @@ class OtpService
      * @param object $otp
      * @return bool
      */
-    public static function sendByEmail(User | Authenticatable $user, object $otp)
+    public function sendByEmail(User | Authenticatable $user, object $otp)
     {
         /** Prepare email request data and insert in Email table */
         $request = [
@@ -108,7 +108,7 @@ class OtpService
      * @return bool
      * @throws ValidationException
      */
-    public static function validateOtp(string $otp, string $identity, bool $validateOnly = false, bool $checkValidated = false)
+    public function validateOtp(string $otp, string $identity, bool $validateOnly = false, bool $checkValidated = false)
     {
         // Validate the otp for the given user
         $limit = config('app.otp.invalid_attempt_limit');
@@ -120,11 +120,11 @@ class OtpService
             ->first();
 
         if ($model) {
+            $this->otpRepository = new OtpRepository($model);
             if ($validateOnly) {
-                $model->validated = true;
-                $model->save();
+                $this->otpRepository->validatedOtp(true);
             } else {
-                $model->delete();
+                $this->otpRepository->delete($model->_id);
             }
 
             return true;

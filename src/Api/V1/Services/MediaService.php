@@ -89,7 +89,8 @@ class MediaService
         $model = Media::media($media->_id)->firstOrFail();
 
         if ($model !== null && $model->status !== Media::STATUS_USER_DELETED) {
-            $model->update(['status' => Media::STATUS_USER_DELETED]);
+            $this->mediaRepository = new MediaRepository($model);
+            $this->mediaRepository->updateStatus(Media::STATUS_USER_DELETED);
         }
     }
 
