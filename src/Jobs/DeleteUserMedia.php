@@ -68,6 +68,8 @@ class DeleteUserMedia implements ShouldBeUnique
 
     public function failed(Throwable $exception): void
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
     }
 }

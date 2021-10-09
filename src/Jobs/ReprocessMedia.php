@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
 use Flow\FileOpenException;
@@ -29,6 +30,7 @@ class ReprocessMedia implements ShouldQueue
      * Create a new job instance.
      *
      * @return void
+     * @throws Exception
      */
     public function __construct(string $mediaId, string $file)
     {
@@ -44,13 +46,11 @@ class ReprocessMedia implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Filesystem\FileExistsException
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function handle()
     {
-        if (config('app.is_testing')) {
-            return;
-        }
-
         $b2 = Storage::disk('b2-videos');
         $storage = Storage::disk('public');
 
@@ -74,12 +74,14 @@ class ReprocessMedia implements ShouldQueue
 
             throw new Exception(__CLASS__.PHP_EOL.'Nighter video file nor media object found!');
         } catch (FileOpenException $e) {
-            return $e->getMessage();
+            throw new Exception(__CLASS__.PHP_EOL.$e->getMessage());
         }
     }
 
     public function failed(Throwable $exception): void
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
     }
 }
