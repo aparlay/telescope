@@ -49,7 +49,7 @@ class MediaObserver extends BaseModelObserver
             $creatorUser->save();
         }
 
-        if (!config('app.is_testing')) {
+        if (! config('app.is_testing')) {
             dispatch((new UploadMedia($media->userObj->_id, $media->_id, $media->file))->onQueue('low'));
         }
     }

@@ -81,7 +81,7 @@ class UserService
             $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
             $user->save();
 
-            if (!config('app.is_testing')) {
+            if (! config('app.is_testing')) {
                 dispatch((new UploadAvatar((string) $user->_id, $fileName))->delay(10)->onQueue('high'));
             }
 

@@ -80,7 +80,7 @@ class UploadMedia implements ShouldQueue
             throw new Exception(__CLASS__.PHP_EOL.'Media not found!');
         }
         $storage = Storage::disk('upload');
-        if (!$storage->exists($this->file)) {
+        if (! $storage->exists($this->file)) {
             throw new Exception(__CLASS__.PHP_EOL.'File not exists '.$this->file);
         }
 

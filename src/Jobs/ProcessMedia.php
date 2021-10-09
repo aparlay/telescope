@@ -14,7 +14,7 @@ use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Aparlay\Core\Notifications\VideoPending;
 use Exception;
-use \Grpc\ChannelCredentials;
+use Grpc\ChannelCredentials;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
