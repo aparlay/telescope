@@ -26,6 +26,7 @@ class UploadAvatar implements ShouldQueue
     public User $user;
 
     public string $file;
+    public string $user_id;
 
     /**
      * The number of times the job may be attempted.
@@ -54,6 +55,7 @@ class UploadAvatar implements ShouldQueue
     public function __construct(string $userId, string $file)
     {
         $this->file = $file;
+        $this->user_id = $userId;
         if (($this->user = User::user($userId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'User not found!');
         }
@@ -70,10 +72,6 @@ class UploadAvatar implements ShouldQueue
      */
     public function handle()
     {
-        if (config('app.is_testing')) {
-            return;
-        }
-
         $resource = Storage::disk('public')->readStream($this->file);
         $filename = basename($this->file);
         Storage::disk('b2-avatars')->writeStream($filename, $resource);
@@ -86,8 +84,13 @@ class UploadAvatar implements ShouldQueue
         }
     }
 
-    public function failed(Throwable $exception)
+    /**
+     * @param  Throwable  $exception
+     */
+    public function failed(Throwable $exception): void
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
     }
 }

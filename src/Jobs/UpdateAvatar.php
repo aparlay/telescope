@@ -23,9 +23,9 @@ class UpdateAvatar implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public string $avatar;
-
     public User $user;
+    public string $avatar;
+    public string $user_id;
 
     /**
      * The number of times the job may be attempted.
@@ -53,6 +53,7 @@ class UpdateAvatar implements ShouldQueue
      */
     public function __construct(string $userId)
     {
+        $this->user_id = $userId;
         if (($this->user = User::user($userId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'User not found!');
         }
@@ -72,57 +73,12 @@ class UpdateAvatar implements ShouldQueue
         Block::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
         Block::user($this->user->_id)->update(['user.avatar' => $avatar]);
         MediaLike::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
-
-        /*
-        Media::creator($this->user->_id)->chunk(200, function ($models) {
-            foreach ($models as $media) {
-                $creator = $media->creator;
-                $creator['avatar'] = $this->user->avatar;
-                $media->creator = $creator;
-                $media->save();
-            }
-        });
-
-        Follow::creator($this->user->_id)->chunk(200, function ($models) {
-            foreach ($models as $follow) {
-                $creator = $follow->creator;
-                $creator['avatar'] = $this->user->avatar;
-                $follow->creator = $creator;
-                $follow->save();
-            }
-        });
-
-        Follow::user($this->user->_id)->chunk(200, function ($models) {
-            foreach ($models as $follow) {
-                $userArray = $follow->user;
-                $userArray['avatar'] = $this->user->avatar;
-                $follow->user = $userArray;
-                $follow->save();
-            }
-        });
-
-        Block::creator($this->user->_id)->chunk(200, function ($models) {
-            foreach ($models as $block) {
-                $creator = $block->creator;
-                $creator['avatar'] = $this->user->avatar;
-                $block->creator = $creator;
-                $block->save();
-            }
-        });
-
-        Block::user($this->user->_id)->chunk(200, function ($models) {
-            foreach ($models as $block) {
-                $userArray = $block->user;
-                $userArray['avatar'] = $this->user->avatar;
-                $block->user = $userArray;
-                $block->save();
-            }
-        });
-        */
     }
 
     public function failed(Throwable $exception)
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
     }
 }

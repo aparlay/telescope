@@ -10,10 +10,11 @@ use Aparlay\Core\Microservices\ffmpeg\RemoveRequest;
 use Aparlay\Core\Microservices\ffmpeg\UploadRequest;
 use Aparlay\Core\Microservices\ws\WsChannel;
 use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Aparlay\Core\Notifications\VideoPending;
 use Exception;
-use Grpc\ChannelCredentials;
+use \Grpc\ChannelCredentials;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -42,10 +43,6 @@ class ProcessMedia implements ShouldQueue
      */
     public function __construct(string|ObjectId $mediaId, string|ObjectId $file)
     {
-        if (config('app.is_testing')) {
-            return;
-        }
-
         if (($this->media = Media::media($mediaId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$mediaId);
         }
@@ -276,6 +273,8 @@ class ProcessMedia implements ShouldQueue
 
     public function failed(Throwable $exception): void
     {
-        $this->media->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
     }
 }

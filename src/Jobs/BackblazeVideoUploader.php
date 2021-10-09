@@ -71,10 +71,6 @@ class BackblazeVideoUploader implements ShouldQueue
      */
     public function handle()
     {
-        if (config('app.is_testing')) {
-            return;
-        }
-
         if (($this->user = User::user($this->user_id)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'User not found with id '.$this->user_id);
         }
@@ -124,6 +120,8 @@ class BackblazeVideoUploader implements ShouldQueue
 
     public function failed(Throwable $exception): void
     {
-        $this->user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
     }
 }
