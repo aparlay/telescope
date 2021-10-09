@@ -68,7 +68,7 @@ class MediaRepository implements RepositoryInterface
     }
 
     /**
-     * Set Media status
+     * Set Media status.
      * @param  int  $status
      * @return void
      */

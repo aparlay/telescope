@@ -59,7 +59,7 @@ class MediaLikeRepository implements RepositoryInterface
      * Delete MediaLike.
      *
      * @param string $id
-     * @return Void
+     * @return void
      */
     public function delete($id)
     {
