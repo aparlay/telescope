@@ -72,8 +72,8 @@ class OtpRepository implements RepositoryInterface
     }
 
     /**
-     * Set OTP validated
-     * @param  boolean  $validated
+     * Set OTP validated.
+     * @param  bool  $validated
      * @return void
      */
     public function validatedOtp($validated = true)

@@ -58,7 +58,7 @@ class BlockRepository implements RepositoryInterface
      * Delete block.
      *
      * @param string $id
-     * @return Void
+     * @return void
      */
     public function delete($id)
     {

@@ -56,7 +56,7 @@ class FollowRepository implements RepositoryInterface
      * Delete Follow.
      *
      * @param string $id
-     * @return Void
+     * @return void
      */
     public function delete($id)
     {
