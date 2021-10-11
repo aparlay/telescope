@@ -103,8 +103,8 @@ trait MediaScope
         $user = User::user($userId)->first();
 
         $userIds = [];
-        foreach (array_column($user['followings'], '_id') as $followingId) {
-            $userIds[] = new ObjectId($followingId);
+        foreach ($user['followings'] as $following) {
+            $userIds[] = new ObjectId($following['_id']);
         }
 
         return $query->whereIn('creator._id', $userIds);
