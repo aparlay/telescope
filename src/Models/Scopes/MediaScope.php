@@ -104,7 +104,7 @@ trait MediaScope
 
         $userIds = [];
         foreach ($user['followings'] as $following) {
-            $userIds[] = new ObjectId($following['_id']);
+            $userIds[] = $following['_id'] instanceof ObjectId ? $following['_id'] : new ObjectId($following['_id']);
         }
 
         return $query->whereIn('creator._id', $userIds);
