@@ -4,14 +4,16 @@ namespace Aparlay\Core\Admin\Services;
 
 class AdminBaseService
 {
+    public $filterableField = [];
+    public $sorterableField = [];
     /**
      * @param string $field
      * @param $filterableField
      * @return bool
      */
-    public function canFilterField(string $field, $filterableField): bool
+    public function canFilterField(string $field): bool
     {
-        return in_array($field, $filterableField) ? true : false;
+        return in_array($field, $this->filterableField) ? true : false;
     }
 
     /**
@@ -19,9 +21,9 @@ class AdminBaseService
      * @param array $sorterableField
      * @return bool
      */
-    public function canSortField(string $field, array $sorterableField): bool
+    public function canSortField(string $field): bool
     {
-        return in_array($field, $sorterableField) ? true : false;
+        return in_array($field, $this->sorterableField) ? true : false;
     }
 
     /**
@@ -29,10 +31,10 @@ class AdminBaseService
      * @param array $filterableField
      * @return array
      */
-    public function cleanFilterFields(array $filter, array $filterableField): array
+    public function cleanFilterFields(array $filter): array
     {
         foreach ($filter as $key => $value) {
-            if (! $this->canFilterField($key, $filterableField) || ! isset($value)) {
+            if (! $this->canFilterField($key) || ! isset($value)) {
                 unset($filter[$key]);
             } elseif (is_numeric($value)) {
                 $filter[$key] = intval($value);
@@ -49,9 +51,9 @@ class AdminBaseService
      * @param array $sorterableField
      * @return array
      */
-    public function cleanSortFields(array $sort, array $sorterableField): array
+    public function cleanSortFields(array $sort): array
     {
-        if (! isset($sort['field']) || ! $this->canSortField($sort['field'], $sorterableField)) {
+        if (! isset($sort['field']) || ! $this->canSortField($sort['field'])) {
             $sort = ['field' => 'created_at', 'by' => 'desc'];
         } elseif (! isset($sort['by'])) {
             $sort['by'] = 'desc';

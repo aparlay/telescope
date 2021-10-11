@@ -9,11 +9,11 @@ class UserService extends AdminBaseService
 {
     protected UserRepository $userRepository;
 
-    protected $filterableFields = ['username', 'email', 'full_name', 'status', 'visibility', 'follower_count', 'like_count', 'media_count'];
-
     public function __construct()
     {
         $this->userRepository = new UserRepository(new User());
+
+        $this->filterableField = ['username', 'email', 'full_name', 'status', 'visibility', 'follower_count', 'like_count', 'media_count'];
     }
 
     public function getUsers()
@@ -31,7 +31,7 @@ class UserService extends AdminBaseService
 
         $filters = [];
         if (! empty($fields)) {
-            $filters = $this->cleanFilterFields($fields, $this->filterableFields);
+            $filters = $this->cleanFilterFields($fields);
         }
 
         if (! empty($filters)) {
