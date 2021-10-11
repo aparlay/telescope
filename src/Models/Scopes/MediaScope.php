@@ -102,7 +102,12 @@ trait MediaScope
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
         $user = User::user($userId)->first();
 
-        return $query->whereIn('creator._id', array_column($user['followings'], '_id'));
+        $userIds = [];
+        foreach (array_column($user['followings'], '_id') as $followingId) {
+            $userIds[] = new ObjectId($followingId);
+        }
+
+        return $query->whereIn('creator._id', $userIds);
     }
 
     /**
