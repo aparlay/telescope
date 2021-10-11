@@ -28,9 +28,13 @@ class MediaController extends Controller
      */
     public function index(): Response
     {
-        $type = request()?->input('type') ?? '';
+        if (($type = request()?->input('type')) !== null) {
+            $collection = new MediaCollection($this->mediaService->getByType($type));
+        } else {
+            $collection = new MediaFeedsCollection($this->mediaService->getPublicFeeds());
+        }
 
-        return $this->response(new MediaFeedsCollection($this->mediaService->getByType($type)), '', Response::HTTP_OK);
+        return $this->response($collection, '', Response::HTTP_OK);
     }
 
     /**
