@@ -64,7 +64,7 @@ class UpdateMedia implements ShouldQueue
      */
     public function handle(): void
     {
-        Media::creator($this->user->_id)->update($this->attributes);
+        Media::creator($this->user_id)->update($this->attributes);
     }
 
     public function failed(Throwable $exception): void

@@ -54,11 +54,11 @@ class MeResource extends JsonResource
             'setting' => [
                 'otp' => $this->setting['otp'],
                 'notifications' => [
-                    'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'],
-                    'new_followers' => $this->setting['notifications']['new_followers'],
-                    'news_and_updates' => $this->setting['notifications']['news_and_updates'],
-                    'tips' => $this->setting['notifications']['tips'],
-                    'new_subscribers' => $this->setting['notifications']['new_subscribers'],
+                    'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? [],
+                    'new_followers' => $this->setting['notifications']['new_followers'] ?? [],
+                    'news_and_updates' => $this->setting['notifications']['news_and_updates'] ?? [],
+                    'tips' => $this->setting['notifications']['tips'] ?? [],
+                    'new_subscribers' => $this->setting['notifications']['new_subscribers'] ?? [],
                 ],
             ],
             'features' => [
