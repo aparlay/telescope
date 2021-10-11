@@ -102,7 +102,7 @@ class UserRepository implements RepositoryInterface
 
     public function update(array $data, $id)
     {
-        $this->model->where('_id', $id)->update($data);
+        return $this->model->where('_id', $id)->update($data);
     }
 
     public function delete($id)

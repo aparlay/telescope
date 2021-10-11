@@ -78,8 +78,7 @@ class OtpRepository implements RepositoryInterface
      */
     public function validatedOtp($validated = true)
     {
-        $this->model->validated = $validated;
-        $this->model->update(['validated']);
+        $this->model->update(['validated' => $validated]);
     }
 
     public function all()
