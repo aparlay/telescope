@@ -72,9 +72,9 @@ class MediaRepository implements RepositoryInterface
      * @param  int  $status
      * @return void
      */
-    public function updateStatus($status)
+    public function updateStatus($status, $id)
     {
-        $this->model->update(['status' => $status]);
+        $this->model->media($id)->update(['status' => $status]);
     }
 
     public function all()

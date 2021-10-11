@@ -90,7 +90,7 @@ class MediaService
 
         if ($model !== null && $model->status !== Media::STATUS_USER_DELETED) {
             $this->mediaRepository = new MediaRepository($model);
-            $this->mediaRepository->updateStatus(Media::STATUS_USER_DELETED);
+            $this->mediaRepository->updateStatus(Media::STATUS_USER_DELETED, $model->_id);
         }
     }
 
