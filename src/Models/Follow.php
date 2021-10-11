@@ -39,8 +39,6 @@ class Follow extends BaseModel
     use HasFactory;
     use Notifiable;
     use FollowScope;
-    use UserFieldTrait;
-    use CreatorFieldTrait;
 
     public const STATUS_PENDING = 0;
 
