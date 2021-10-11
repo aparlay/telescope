@@ -6,6 +6,7 @@ class AdminBaseService
 {
     public $filterableField = [];
     public $sorterableField = [];
+
     /**
      * @param string $field
      * @param $filterableField
