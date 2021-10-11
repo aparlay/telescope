@@ -5,7 +5,7 @@ namespace Aparlay\Core\Admin\Services;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 
-class UserService
+class UserService extends AdminBaseService
 {
     protected UserRepository $userRepository;
 
@@ -25,31 +25,13 @@ class UserService
         return $users;
     }
 
-    public function canFilterField(string $field): bool
-    {
-        return in_array($field, $this->filterableFields) ?? false;
-    }
-
-    public function cleanFields(array $filter): array
-    {
-        foreach ($filter as $key => $value) {
-            if (! $this->canFilterField($key) || ! isset($value)) {
-                unset($filter[$key]);
-            } elseif (is_numeric($value)) {
-                $filter[$key] = (int) $value;
-            }
-        }
-
-        return $filter;
-    }
-
     public function getFilteredUsers()
     {
         $fields = request()->UserSearch ?? [];
 
         $filters = [];
         if (! empty($fields)) {
-            $filters = $this->cleanFields($fields);
+            $filters = $this->cleanFilterFields($fields, $this->filterableFields);
         }
 
         if (! empty($filters)) {
