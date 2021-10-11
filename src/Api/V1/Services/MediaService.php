@@ -152,6 +152,7 @@ class MediaService
             default => $this->getFollowingFeed(),
         };
     }
+
     /**
      * @return LengthAwarePaginator
      * @throws Exception
