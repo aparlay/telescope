@@ -21,7 +21,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Aparlay\\Core\\Tests\\": "tests"
+            "Aparlay\\Core\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "stable",
