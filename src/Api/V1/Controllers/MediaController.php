@@ -29,7 +29,7 @@ class MediaController extends Controller
     public function index(): Response
     {
         if (($type = request()?->input('type')) !== null) {
-            $collection = new MediaCollection($this->mediaService->getByType($type));
+            $collection = new MediaCollection($this->mediaService->getFeedByType($type));
         } else {
             $collection = new MediaFeedsCollection($this->mediaService->getPublicFeeds());
         }
