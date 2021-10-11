@@ -52,13 +52,13 @@ class MeResource extends JsonResource
             'phone_number_verified' => $this->phone_number_verified,
             'avatar' => $this->avatar,
             'setting' => [
-                'otp' => $this->setting['otp'],
+                'otp' => $this->setting['otp'] ?? false,
                 'notifications' => [
-                    'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? [],
-                    'new_followers' => $this->setting['notifications']['new_followers'] ?? [],
-                    'news_and_updates' => $this->setting['notifications']['news_and_updates'] ?? [],
-                    'tips' => $this->setting['notifications']['tips'] ?? [],
-                    'new_subscribers' => $this->setting['notifications']['new_subscribers'] ?? [],
+                    'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? false,
+                    'new_followers' => $this->setting['notifications']['new_followers'] ?? false,
+                    'news_and_updates' => $this->setting['notifications']['news_and_updates'] ?? false,
+                    'tips' => $this->setting['notifications']['tips'] ?? false,
+                    'new_subscribers' => $this->setting['notifications']['new_subscribers'] ?? false,
                 ],
             ],
             'features' => [

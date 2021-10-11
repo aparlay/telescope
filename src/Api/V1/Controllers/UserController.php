@@ -103,10 +103,7 @@ class UserController extends Controller
         }
 
         /* Return the updated user data */
-        return $this->response(
-            new MeResource($user),
-            Response::HTTP_OK
-        );
+        return $this->response(new MeResource($user), Response::HTTP_OK);
     }
 
     public function show(User $user): Response

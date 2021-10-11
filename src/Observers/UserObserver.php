@@ -43,7 +43,7 @@ class UserObserver extends BaseModelObserver
      * @return void
      * @throws Exception
      */
-    public function updated($model)
+    public function updated($model): void
     {
         if ($model->wasChanged('avatar')) {
             dispatch((new UpdateAvatar((string) $model->_id))->onQueue('low'));
