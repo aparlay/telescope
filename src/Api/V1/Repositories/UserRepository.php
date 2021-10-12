@@ -102,7 +102,7 @@ class UserRepository implements RepositoryInterface
 
     public function update(array $data, $id)
     {
-        return $this->model->_id->update($data);
+        return $this->model->user($id)->update($data);
     }
 
     public function delete($id)
@@ -165,7 +165,6 @@ class UserRepository implements RepositoryInterface
      * Responsible for delete user account.
      *
      * @return bool
-     * @throws \Exception
      */
     public function deleteAccount()
     {
@@ -180,7 +179,6 @@ class UserRepository implements RepositoryInterface
     /**
      * Check required OTP during login.
      * @return bool
-     * @throws ValidationException
      */
     public function requireOtp(): bool
     {

@@ -12,7 +12,7 @@ use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
-use Psr\SimpleCache\InvalidArgumentException;
+use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 
 class MediaService
 {
