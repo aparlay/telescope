@@ -30,7 +30,6 @@ use MongoDB\BSON\ObjectId;
  *
  * @property User $userObj
  * @property Media $mediaObj
- *
  */
 class Report extends BaseModel
 {

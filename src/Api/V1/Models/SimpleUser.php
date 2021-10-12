@@ -1,9 +1,9 @@
 <?php
+
 namespace Aparlay\Core\Api\V1\Models;
 
 /**
- * Class SimpleUser
- * @package common\models
+ * Class SimpleUser.
  *
  * @OA\Schema(title="SimpleUser")
  */

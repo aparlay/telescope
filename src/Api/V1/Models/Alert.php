@@ -5,12 +5,11 @@ namespace Aparlay\Core\Api\V1\Models;
 use Aparlay\Core\Models\Alert as AlertBase;
 
 /**
- *
  * @OA\Schema()
  */
 class Alert extends AlertBase
 {
-    /**
+    /*
      * @OA\Property(property="_id", type="string", example="60237caf5e41025e1e3c80b1")
      * @OA\Property(property="user_id", type="string", example="60237caf5e41025e1e3c80b1")
      * @OA\Property(property="media_id", type="string", example="60237caf5e41025e1e3c80b1")

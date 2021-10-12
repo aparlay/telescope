@@ -51,7 +51,6 @@ use MongoDB\BSON\UTCDateTime;
 class User extends UserBase
 {
     /**
-     *
      * @OA\Property(property="_id", type="string", example="60237caf5e41025e1e3c80b1")
      * @OA\Property(property="referral_id", type="string", example="60237caf5e41025e1e3c80b1")
      * @OA\Property(property="username", type="string", example="john")

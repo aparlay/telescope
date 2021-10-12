@@ -50,7 +50,7 @@ use MongoDB\BSON\UTCDateTime;
  */
 class Media extends MediaBase
 {
-    /**
+    /*
      *
      * @OA\Property(property="_id", type="string", example="60237caf5e41025e1e3c80b1")
      * @OA\Property(property="description", type="string", example="a short description for the video file")

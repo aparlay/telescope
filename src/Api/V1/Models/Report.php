@@ -6,12 +6,11 @@ use Aparlay\Core\Models\Report as ReportBase;
 use Illuminate\Notifications\Notifiable;
 
 /**
- *
  * @OA\Schema()
  */
 class Report extends ReportBase
 {
-    /**
+    /*
      * @OA\Property(property="_id", type="string", example="60237caf5e41025e1e3c80b1")
      * @OA\Property(property="user_id", type="string", example=null)
      * @OA\Property(property="media_id", type="string", example="60237caf5e41025e1e3c80b1")
