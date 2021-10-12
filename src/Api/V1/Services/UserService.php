@@ -75,7 +75,7 @@ class UserService
 
         $extension = $request->avatar->getClientOriginalExtension();
         $avatar = uniqid((string) $user->_id, false).'.'.$extension;
-        if (($fileName = $request->avatar->storeAs('avatars', $avatar, 'public')) !== false) {
+        if (($fileName = $request->avatar->storePubliclyAs('avatars', $avatar, 'public')) !== false) {
             /* Store avatar name in database */
             $oldFileName = $user->avatar;
             $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
