@@ -12,7 +12,7 @@ use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
-use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaService
 {
@@ -89,19 +89,24 @@ class MediaService
         $model = Media::media($media->_id)->firstOrFail();
 
         if ($model !== null && $model->status !== Media::STATUS_USER_DELETED) {
-            $this->mediaRepository = new MediaRepository($model);
-            $this->mediaRepository->updateStatus(Media::STATUS_USER_DELETED, $model->_id);
+            $this->mediaRepository->update(['status' => Media::STATUS_USER_DELETED], $model->_id);
         }
     }
 
     /**
+     * @param  string  $type
      * @return LengthAwarePaginator
-     * @throws InvalidArgumentExceptionAlias
+     * @throws InvalidArgumentException|Exception
      */
-    public function getPublicFeeds(): LengthAwarePaginator
+    public function getByType(string $type)
     {
         $query = Media::query();
-        $query->public()->confirmed()->sort();
+
+        if (! auth()->guest() && $type === 'following') {
+            $query->availableForFollower()->following(auth()->user()->_id)->recentFirst();
+        } else {
+            $query->public()->confirmed()->sort();
+        }
 
         if (! auth()->guest()) {
             $query->notBlockedFor(auth()->user()->_id);
@@ -109,27 +114,32 @@ class MediaService
 
         $deviceId = request()->header('X-DEVICE-ID', '');
         $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
-        $originalQuery = $query;
-        $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
-        if (! auth()->guest()) {
-            $userId = auth()->user()->_id;
-            $query->notVisitedByUserAndDevice($userId, $deviceId);
-        } else {
-            $query->notVisitedByDevice($deviceId);
-        }
+        if ($type !== 'following') {
+            $originalQuery = $query;
+            $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
-        $data = $query->paginate(5)->withQueryString();
-
-        if ($data->isEmpty() || $data->total() <= 5) {
             if (! auth()->guest()) {
-                MediaVisit::user(auth()->user()->_id)->delete();
+                $userId = auth()->user()->_id;
+                $query->notVisitedByUserAndDevice($userId, $deviceId);
+            } else {
+                $query->notVisitedByDevice($deviceId);
             }
-            Cache::store('redis')->delete($cacheKey);
 
-            if ($data->isEmpty()) {
-                $data = $originalData;
+            $data = $query->paginate(5)->withQueryString();
+
+            if ($data->isEmpty() || $data->total() <= 5) {
+                if (! auth()->guest()) {
+                    MediaVisit::user(auth()->user()->_id)->delete();
+                }
+                Cache::store('redis')->delete($cacheKey);
+
+                if ($data->isEmpty()) {
+                    $data = $originalData;
+                }
             }
+        } else {
+            $data = $query->paginate(5)->withQueryString();
         }
 
         $visited = Cache::store('redis')->get($cacheKey, []);
@@ -142,40 +152,9 @@ class MediaService
     }
 
     /**
-     * @param  string  $type
-     * @return LengthAwarePaginator
-     * @throws Exception
-     */
-    public function getFeedByType(string $type): LengthAwarePaginator
-    {
-        return match ($this) {
-            'following' => $this->getFollowingFeed(),
-            default => $this->getFollowingFeed(),
-        };
-    }
-
-    /**
-     * @return LengthAwarePaginator
-     * @throws Exception
-     */
-    public function getFollowingFeed(): LengthAwarePaginator
-    {
-        $query = Media::query();
-
-        if (! auth()->guest()) {
-            $query->availableForFollower()
-                ->following(auth()->user()->_id)
-                ->notBlockedFor(auth()->user()->_id)
-                ->recentFirst();
-        }
-
-        return $query->paginate(5)->withQueryString();
-    }
-
-    /**
      * @param  User  $user
      * @return LengthAwarePaginator
-     * @throws InvalidArgumentExceptionAlias
+     * @throws InvalidArgumentException
      */
     public function getByUser(User $user)
     {

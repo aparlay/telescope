@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Services\MediaService;
+use Aparlay\Core\Models\Media as BaseMedia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
@@ -12,12 +13,12 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class MediaRepository implements RepositoryInterface
 {
-    protected Media $model;
+    protected Media | BaseMedia $model;
 
     public function __construct($model)
     {
-        if (! ($model instanceof Media)) {
-            throw new \InvalidArgumentException('$model should be of Media type');
+        if (! ($model instanceof BaseMedia)) {
+            throw new \InvalidArgumentException('$model should be of User type');
         }
 
         $this->model = $model;
@@ -67,16 +68,6 @@ class MediaRepository implements RepositoryInterface
         return $model;
     }
 
-    /**
-     * Set Media status.
-     * @param  int  $status
-     * @return void
-     */
-    public function updateStatus($status, $id)
-    {
-        $this->model->media($id)->update(['status' => $status]);
-    }
-
     public function all()
     {
         // TODO: Implement all() method.
@@ -89,7 +80,8 @@ class MediaRepository implements RepositoryInterface
 
     public function update(array $data, $id)
     {
-        // TODO: Implement update() method.
+        $model = $this->model->media($id)->firstOrFail();
+        return $model->update($data);
     }
 
     public function delete($id)
