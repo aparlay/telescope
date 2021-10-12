@@ -5,7 +5,6 @@ namespace Aparlay\Core\Api\V1\Repositories;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Api\V1\Notifications\ReportSent;
 use Aparlay\Core\Api\V1\Requests\ReportRequest;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
@@ -58,7 +57,7 @@ class ReportRepository implements RepositoryInterface
      *
      * @param User $user
      * @param ReportRequest $request
-     * @return array
+     * @return \Illuminate\Database\Eloquent\Model|Report|null
      */
     public function createUserReport(User $user, ReportRequest $request)
     {
@@ -81,7 +80,7 @@ class ReportRepository implements RepositoryInterface
      *
      * @param Media $media
      * @param ReportRequest $request
-     * @return array
+     * @return \Illuminate\Database\Eloquent\Model|Report|null
      */
     public function createMediaReport(Media $media, ReportRequest $request)
     {
