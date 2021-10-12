@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Api\V1\Models;
 
 use Aparlay\Core\Models\Report as ReportBase;
-use Illuminate\Notifications\Notifiable;
 
 /**
  * @OA\Schema()
@@ -19,5 +18,4 @@ class Report extends ReportBase
      * @OA\Property(property="created_at", type="string", example="1612850111566")
      * @OA\Property(property="updated_at", type="string", example="1612850111566")
      */
-    use Notifiable;
 }
