@@ -96,9 +96,9 @@ class MediaService
     /**
      * @param  string  $type
      * @return LengthAwarePaginator
-     * @throws InvalidArgumentException|Exception
+     * @throws InvalidArgumentExceptionAlias
      */
-    public function getByType(string $type)
+    public function getPublicFeeds(): LengthAwarePaginator
     {
         $query = Media::query();
 
@@ -154,7 +154,7 @@ class MediaService
     /**
      * @param  User  $user
      * @return LengthAwarePaginator
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentExceptionAlias
      */
     public function getByUser(User $user)
     {
