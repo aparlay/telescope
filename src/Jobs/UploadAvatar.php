@@ -72,10 +72,10 @@ class UploadAvatar implements ShouldQueue
      */
     public function handle()
     {
-        $resource = Storage::disk('public')->readStream(Storage::disk('public')->path($this->file));
+        $local = Storage::disk('public');
         $filename = basename($this->file);
-        Storage::disk('b2-avatars')->writeStream($filename, $resource);
-        Storage::disk('gc-avatars')->writeStream($filename, $resource);
+        Storage::disk('b2-avatars')->writeStream($filename, $local->readStream('/'.$this->file));
+        Storage::disk('gc-avatars')->writeStream($filename, $local->readStream('/'.$this->file));
 
         $this->user->avatar = Cdn::avatar($filename);
         if ($this->user->save()) {
