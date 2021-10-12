@@ -53,8 +53,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
- *
- * @OA\Schema()
  */
 class User extends Authenticatable implements JWTSubject
 {

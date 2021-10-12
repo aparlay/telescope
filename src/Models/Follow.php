@@ -19,7 +19,6 @@ use MongoDB\BSON\ObjectId;
  * Class Follow.
  *
  * @property ObjectId   $_id
- * @property string     $hashtag
  * @property int        $status
  * @property array      $user
  * @property array      $creator

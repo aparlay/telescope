@@ -10,24 +10,19 @@ use MongoDB\BSON\ObjectId;
 /**
  * Class Follow.
  *
- * @property ObjectId   $_id
- * @property string     $hashtag
- * @property int        $status
- * @property array      $user
- * @property array      $creator
- * @property bool       $is_deleted
- * @property string     $created_at
- * @property User       $creatorObj
- * @property User       $userObj
- * @property mixed|null $creator_id
- * @property mixed|null $user_id
- * @property string     $aliasModel
- *
- * @method static |self|Builder creator(ObjectId|string $userId) get creator user
- * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
+ * @OA\Schema()
  */
 class Follow extends FollowBase
 {
+    /*
+     *
+     * @OA\Property(property="_id", type="string", example="60237caf5e41025e1e3c80b1")
+     * @OA\Property(property="status", type="integer", example=1, description="ACCEPTED = 1, PENDING = 0")
+     * @OA\Property(property="created_at", type="string", example="1612850111566")
+     * @OA\Property(property="creator", ref="#/components/schemas/SimpleUser")
+     * @OA\Property(property="user", ref="#/components/schemas/SimpleUser")
+     */
+
     use UserFieldTrait;
     use CreatorFieldTrait;
 }

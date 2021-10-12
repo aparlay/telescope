@@ -19,7 +19,9 @@ trait AlertScope
     }
 
     /**
+     * @param  Builder  $query
      * @param  ObjectId|string  $mediaId
+     * @return Builder
      */
     public function scopeMedia(Builder $query, ObjectId | string $mediaId): Builder
     {
@@ -29,7 +31,9 @@ trait AlertScope
     }
 
     /**
+     * @param  Builder  $query
      * @param  ObjectId|string  $userId
+     * @return Builder
      */
     public function scopeUser(Builder $query, ObjectId | string $userId): Builder
     {
