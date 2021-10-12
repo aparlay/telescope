@@ -18,7 +18,7 @@ class MediaRepository implements RepositoryInterface
     public function __construct($model)
     {
         if (! ($model instanceof BaseMedia)) {
-            throw new \InvalidArgumentException('$model should be of User type');
+            throw new \InvalidArgumentException('$model should be of Media type');
         }
 
         $this->model = $model;
