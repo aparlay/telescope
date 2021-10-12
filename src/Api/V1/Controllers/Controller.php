@@ -15,7 +15,7 @@ use Illuminate\Routing\Controller as BaseController;
  *     title="Waptap Api",
  *     termsOfService="https://www.waptap.com/terms/",
  *     @OA\Contact(
- *         email="john@waptap.com"
+ *         email="info@waptap.com"
  *     ),
  *     @OA\License(
  *         name="Apache 2.0",

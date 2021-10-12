@@ -56,7 +56,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read string $slack_admin_url
  * @property-read int $skin_score
  *
- * @OA\Schema()
  *
  * @method static |self|Builder creator(ObjectId|string $userId) get creator user
  * @method static |self|Builder user(ObjectId|string $userId)    get blocked user

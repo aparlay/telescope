@@ -85,7 +85,7 @@ class BlockController extends Controller
      *         response=429,
      *         description="TOO MANY REQUESTS",
      *         @OA\JsonContent(ref="#/components/schemas/429"),
-     *     ),
+     *     )
      * )
      */
     public function store(User $user): Response

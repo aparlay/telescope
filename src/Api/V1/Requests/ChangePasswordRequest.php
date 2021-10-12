@@ -9,6 +9,13 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
 /**
+ * @OA\Schema(
+ *      title="Change Password request",
+ *      description="Change password request body data",
+ *      type="object",
+ *      required={"name"}
+ * )
+ *
  * @property string email
  * @property string otp
  * @property string password
@@ -16,6 +23,14 @@ use Illuminate\Validation\ValidationException;
  */
 class ChangePasswordRequest extends FormRequest
 {
+    /**
+     * @OA\Property(property="email", type="string", title="Email", description="Email of the user who want to the change the password", example="andrey@gmail.com")
+     * @OA\Property(property="phone_number", type="string", title="Phone Number", description="Phone number of the user who want to the change the password", example="+1482735414234")
+     * @OA\Property(property="otp", type="string", title="Otp", description="One time password sent to the user provided identity", example="4234")
+     * @OA\Property(property="password", type="string", title="Otp", description="New password for the user alpha-numeric and underscore at least 8 chars", example="A_Very5ecure_password")
+     * @OA\Property(property="old_password", type="string", title="Otp", description="if user is going to change password it must provide the old password (current password)", example="A_Very5ecure_password_old")
+     */
+
     /**
      * Determine if the user is authorized to make this request.
      *
