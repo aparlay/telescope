@@ -53,10 +53,12 @@ class AdminBaseService
      */
     public function cleanSortFields(array $sort): array
     {
-        if (! isset($sort['field']) || ! $this->canSortField($sort['field'])) {
-            $sort = ['field' => 'created_at', 'by' => 'desc'];
-        } elseif (! isset($sort['by'])) {
-            $sort['by'] = 'desc';
+        foreach($sort as $field => $direction) {
+            if(!$this->canSortField($field)) {
+                $sort = ['created_at', 'desc'];
+            } elseif (! isset($sort[$field])) {
+                $sort[$field] = 'desc';
+            }
         }
 
         return $sort;
