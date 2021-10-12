@@ -403,6 +403,184 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
+    public function getByUser()
+    {
+        $user = User::factory()->create();
+        $userMediaOwner = User::factory()->create();
+
+        Media::factory()->count(2)->create(
+            [
+               'status' => Media::STATUS_CONFIRMED,
+               'visibility' => Media::VISIBILITY_PUBLIC,
+               'created_by' => new ObjectId($userMediaOwner->_id),
+               'creator' => [
+                   '_id' => new ObjectId($userMediaOwner->_id),
+                   'username' => $userMediaOwner->username,
+                   'avatar' => $userMediaOwner->avatar,
+               ],
+            ],
+        );
+        Media::factory()->create(
+            [
+             'status' => Media::STATUS_COMPLETED,
+             'visibility' => Media::VISIBILITY_PRIVATE,
+             'created_by' => new ObjectId($userMediaOwner->_id),
+             'creator' => [
+                    '_id' => new ObjectId($userMediaOwner->_id),
+                    'username' => $userMediaOwner->username,
+                    'avatar' => $userMediaOwner->avatar,
+                ],
+            ],
+        );
+
+        $expectJsonStructure = [
+            'data' => [
+                'items'  => [
+                    [
+                        '_id',
+                        'description',
+                        'hash',
+                        'size',
+                        'length',
+                        'mime_type',
+                        'visibility',
+                        'status',
+                        'hashtags',
+                        'people',
+                        'file',
+                        'cover',
+                        'creator' => [
+                            '_id',
+                            'username',
+                            'avatar',
+                            'is_followed',
+                            'avatar',
+                        ],
+                        'is_liked',
+                        'is_visited',
+                        'is_adult',
+                        'like_count',
+                        'likes',
+                        'visit_count',
+                        'visits',
+                        'comment_count',
+                        'comments',
+                        'slug',
+                        'alerts',
+                        'created_by',
+                        'updated_by',
+                        'created_at',
+                        'updated_at',
+                        '_links'  => [
+                            'self'  => [
+                                'href',
+                            ],
+                            'index' => [
+                                'href',
+                            ],
+                        ],
+                    ],
+                ],
+                '_links' => [
+                    'first'  => [
+                        'href',
+                    ],
+                    'last'  => [
+                        'href',
+                    ],
+                ],
+                '_meta'  => [
+                    'total_count',
+                    'page_count',
+                    'current_page',
+                    'per_page',
+                ],
+            ],
+        ];
+
+        $assertableJson = [
+            'code' => 'integer',
+            'status' => 'string',
+            'data.items' => 'array',
+            'data.items.0._id' => 'string',
+            'data.items.0.description' => 'string',
+            'data.items.0.alerts' => 'array',
+            'data.items.0.comment_count' => 'integer',
+            'data.items.0.comments' => 'array',
+            'data.items.0.cover' => 'string',
+            'data.items.0.created_at' => 'integer',
+            'data.items.0.created_by' => 'string',
+            'data.items.0.visibility' => 'integer',
+            'data.items.0.creator' => 'array',
+            'data.items.0.creator.avatar' => 'string',
+            'data.items.0.creator.username' => 'string',
+            'data.items.0.creator._id' => 'string',
+            'data.items.0.description' => 'string',
+            'data.items.0.file' => 'string',
+            'data.items.0.hash' => 'string',
+            'data.items.0.hashtags' => 'array',
+            'data.items.0.is_adult' => 'boolean',
+            'data.items.0.is_liked' => 'boolean',
+            'data.items.0.is_visited' => 'boolean',
+            'data.items.0.length' => 'integer',
+            'data.items.0.like_count' => 'integer',
+            'data.items.0.likes' => 'array',
+            'data.items.0.mime_type' => 'string',
+            'data.items.0.people' => 'array',
+            'data.items.0.size' => 'integer',
+            'data.items.0.slug' => 'string',
+            'data.items.0.status' => 'integer',
+            'data.items.0.updated_at' => 'integer',
+            'data.items.0.updated_by' => 'string',
+            'data.items.0.visibility' => 'integer',
+            'data.items.0.visit_count' => 'integer',
+            'data.items.0.visits' => 'array',
+            'data.items.0._links' => 'array',
+            'data.items.0._links.self' => 'array',
+            'data.items.0._links.self.href' => 'string',
+            'data.items.0._links.index' => 'array',
+            'data.items.0._links.index.href' => 'string',
+        ];
+
+        $aa = $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get('/v1/user/'.$userMediaOwner->_id.'/media')
+            ->assertStatus(200)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 200)
+            ->assertJsonStructure($expectJsonStructure)
+            ->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
+            )
+            ->assertJsonFragment(['total_count' => 2]);
+
+        $this->actingAs($user)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get('/v1/user/'.$userMediaOwner->_id.'/media')
+            ->assertStatus(200)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 200)
+            ->assertJsonStructure($expectJsonStructure)
+            ->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
+            )
+            ->assertJsonFragment(['total_count' => 2]);
+
+        $this->actingAs($userMediaOwner)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get('/v1/user/'.$userMediaOwner->_id.'/media')
+            ->assertStatus(200)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 200)
+            ->assertJsonStructure($expectJsonStructure)
+            ->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
+            )
+            ->assertJsonFragment(['total_count' => 3]);
+    }
+
+    /**
+     * @test
+     */
     public function getMedias()
     {
         $user = User::factory()->create();
@@ -707,189 +885,6 @@ class MediaTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType($assertableJsonFollower)
             )
             ->assertJsonStructure($expectedJsonStructureFollower);
-
-        $this->actingAs($followerUser)
-            ->withHeaders(['X-DEVICE-ID' => uniqid('random-string')])
-            ->get('/v1/media')
-            ->assertStatus(200)
-            ->assertJsonPath('status', 'OK')
-            ->assertJsonPath('code', 200)
-            ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
-            )
-            ->assertJsonStructure($expectedJsonStructure);
-    }
-
-    /**
-     * @test
-     */
-    public function getMedias()
-    {
-        $user = User::factory()->create();
-        $followerUser = User::factory()->create();
-        Media::factory()->count(3)->create(
-            [
-                'visibility' => Media::VISIBILITY_PUBLIC,
-                'status'     => Media::STATUS_CONFIRMED,
-                'created_by' => new ObjectId($user->_id),
-                'creator'    => [
-                    '_id'      => new ObjectId($user->_id),
-                    'username' => $user->username,
-                    'avatar'   => $user->avatar,
-                ],
-            ]
-        );
-        Follow::factory()->create(
-            [
-                'user'    => [
-                    '_id'      => new ObjectId($user->_id),
-                    'username' => $user->username,
-                    'avatar'   => $user->avatar,
-                ],
-                'creator' => [
-                    '_id'      => new ObjectId($followerUser->_id),
-                    'username' => $followerUser->username,
-                    'avatar'   => $followerUser->avatar,
-                ],
-                'status'  => Follow::STATUS_ACCEPTED,
-            ]
-        );
-
-        $expectedJsonStructure = [
-            'data' => [
-                'items'  => [
-                    [
-                        '_id',
-                        'description',
-                        'hash',
-                        'size',
-                        'length',
-                        'mime_type',
-                        'visibility',
-                        'status',
-                        'hashtags',
-                        'people',
-                        'file',
-                        'cover',
-                        'creator' => [
-                            '_id',
-                            'username',
-                            'avatar',
-                            'is_followed',
-                        ],
-                        'is_liked',
-                        'is_visited',
-                        'is_adult',
-                        'like_count',
-                        'likes',
-                        'visit_count',
-                        'visits',
-                        'comment_count',
-                        'comments',
-                        'slug',
-                        'alerts',
-                        'created_by',
-                        'updated_by',
-                        'created_at',
-                        'updated_at',
-                        '_links'  => [
-                            'self'  => [
-                                'href',
-                            ],
-                            'index' => [
-                                'href',
-                            ],
-                        ],
-                    ],
-                ],
-                '_links' => [
-                    'prev'  => [
-                        'href',
-                    ],
-                    'first'  => [
-                        'href',
-                    ],
-                    'last'  => [
-                        'href',
-                    ],
-                    'self'  => [
-                        'href',
-                    ],
-                    'next'  => [
-                        'href',
-                    ],
-                ],
-                '_meta'  => [
-                    'total_count',
-                    'page_count',
-                    'current_page',
-                    'per_page',
-                ],
-            ],
-        ];
-
-        $assertableJson = [
-            'code' => 'integer',
-            'status' => 'string',
-            'data.items' => 'array',
-            'data.items.0.alerts' => 'array',
-            'data.items.0.comment_count' => 'integer',
-            'data.items.0.comments' => 'array',
-            'data.items.0.cover' => 'string',
-            'data.items.0.created_at' => 'integer',
-            'data.items.0.created_by' => 'string',
-            'data.items.0.creator' => 'array',
-            'data.items.0.creator.avatar' => 'string',
-            'data.items.0.creator.username' => 'string',
-            'data.items.0.creator._id' => 'string',
-            'data.items.0.visibility' => 'integer',
-            'data.items.0.description' => 'string',
-            'data.items.0.file' => 'string',
-            'data.items.0.hash' => 'string',
-            'data.items.0.hashtags' => 'array',
-            'data.items.0.is_adult' => 'boolean',
-            'data.items.0.is_liked' => 'boolean',
-            'data.items.0.is_visited' => 'boolean',
-            'data.items.0.length' => 'integer',
-            'data.items.0.like_count' => 'integer',
-            'data.items.0.likes' => 'array',
-            'data.items.0.mime_type' => 'string',
-            'data.items.0.people' => 'array',
-            'data.items.0.size' => 'integer',
-            'data.items.0.slug' => 'string',
-            'data.items.0.status' => 'integer',
-            'data.items.0.updated_at' => 'integer',
-            'data.items.0.updated_by' => 'string',
-            'data.items.0.visibility' => 'integer',
-            'data.items.0.visit_count' => 'integer',
-            'data.items.0.visits' => 'array',
-            'data.items.0._links' => 'array',
-            'data.items.0._links.self' => 'array',
-            'data.items.0._links.self.href' => 'string',
-            'data.items.0._links.index' => 'array',
-            'data.items.0._links.index.href' => 'string',
-        ];
-
-        $this->withHeaders(['X-DEVICE-ID' => uniqid('random-string')])
-            ->get('/v1/media')
-            ->assertStatus(200)
-            ->assertJsonPath('status', 'OK')
-            ->assertJsonPath('code', 200)
-            ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
-            )
-            ->assertJsonStructure($expectedJsonStructure);
-
-        $this->actingAs($followerUser)
-            ->withHeaders(['X-DEVICE-ID' => uniqid('random-string')])
-            ->get('/v1/media?type=following')
-            ->assertStatus(200)
-            ->assertJsonPath('status', 'OK')
-            ->assertJsonPath('code', 200)
-            ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
-            )
-            ->assertJsonStructure($expectedJsonStructure);
 
         $this->actingAs($followerUser)
             ->withHeaders(['X-DEVICE-ID' => uniqid('random-string')])
