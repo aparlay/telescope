@@ -76,8 +76,8 @@ class UploadAvatar implements ShouldQueue
         $b2 = Storage::disk('b2-avatars');
         $gc = Storage::disk('gc-avatars');
         $filename = basename($this->file);
-        $b2->writeStream($filename, $local->readStream('/'.$this->file));
-        $gc->writeStream($filename, $local->readStream('/'.$this->file));
+        $b2->writeStream($filename, $local->readStream($this->file));
+        $gc->writeStream($filename, $local->readStream($this->file));
 
         $this->user->avatar = Cdn::avatar($filename);
         if ($this->user->save() && $b2->exists($filename) && $gc->exists($filename)) {
