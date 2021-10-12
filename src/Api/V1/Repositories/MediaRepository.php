@@ -81,6 +81,7 @@ class MediaRepository implements RepositoryInterface
     public function update(array $data, $id)
     {
         $model = $this->model->media($id)->firstOrFail();
+
         return $model->update($data);
     }
 
