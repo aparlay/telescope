@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
+
 /**
  * @OA\Info(
  *     description="Waptap is creating an elegant web/mobile solution to share adult media (video/photo) among a network of your followers.",
@@ -278,7 +279,6 @@ use Illuminate\Routing\Controller as BaseController;
  *      )
  *  )
  */
-
 class Controller extends BaseController
 {
     use AuthorizesRequests;
