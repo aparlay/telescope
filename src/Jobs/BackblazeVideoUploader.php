@@ -94,7 +94,7 @@ class BackblazeVideoUploader implements ShouldQueue
             $fileHistory['hash'] = sha1_file($filePath);
             $fileHistory['size'] = $storage->size($this->file);
             $fileHistory['mime_type'] = $storage->mimeType($this->file);
-            if (!$b2->exists($newFilename)) {
+            if (! $b2->exists($newFilename)) {
                 $b2->writeStream($newFilename, $storage->readStream($this->file));
             }
             $storage->delete($this->file);
