@@ -89,24 +89,18 @@ class MediaService
         $model = Media::media($media->_id)->firstOrFail();
 
         if ($model !== null && $model->status !== Media::STATUS_USER_DELETED) {
-            $this->mediaRepository->update(['status' => Media::STATUS_USER_DELETED], $model->_id);
+            $model->update(['status' => Media::STATUS_USER_DELETED]);
         }
     }
 
     /**
-     * @param  string  $type
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
      */
     public function getPublicFeeds(): LengthAwarePaginator
     {
         $query = Media::query();
-
-        if (! auth()->guest() && $type === 'following') {
-            $query->availableForFollower()->following(auth()->user()->_id)->recentFirst();
-        } else {
-            $query->public()->confirmed()->sort();
-        }
+        $query->public()->confirmed()->sort();
 
         if (! auth()->guest()) {
             $query->notBlockedFor(auth()->user()->_id);
@@ -114,32 +108,27 @@ class MediaService
 
         $deviceId = request()->header('X-DEVICE-ID', '');
         $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
+        $originalQuery = $query;
+        $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
-        if ($type !== 'following') {
-            $originalQuery = $query;
-            $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
-
-            if (! auth()->guest()) {
-                $userId = auth()->user()->_id;
-                $query->notVisitedByUserAndDevice($userId, $deviceId);
-            } else {
-                $query->notVisitedByDevice($deviceId);
-            }
-
-            $data = $query->paginate(5)->withQueryString();
-
-            if ($data->isEmpty() || $data->total() <= 5) {
-                if (! auth()->guest()) {
-                    MediaVisit::user(auth()->user()->_id)->delete();
-                }
-                Cache::store('redis')->delete($cacheKey);
-
-                if ($data->isEmpty()) {
-                    $data = $originalData;
-                }
-            }
+        if (! auth()->guest()) {
+            $userId = auth()->user()->_id;
+            $query->notVisitedByUserAndDevice($userId, $deviceId);
         } else {
-            $data = $query->paginate(5)->withQueryString();
+            $query->notVisitedByDevice($deviceId);
+        }
+
+        $data = $query->paginate(5)->withQueryString();
+
+        if ($data->isEmpty() || $data->total() <= 5) {
+            if (! auth()->guest()) {
+                MediaVisit::user(auth()->user()->_id)->delete();
+            }
+            Cache::store('redis')->delete($cacheKey);
+
+            if ($data->isEmpty()) {
+                $data = $originalData;
+            }
         }
 
         $visited = Cache::store('redis')->get($cacheKey, []);
@@ -149,6 +138,37 @@ class MediaService
         Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
         return $data;
+    }
+
+    /**
+     * @param  string  $type
+     * @return LengthAwarePaginator
+     * @throws Exception
+     */
+    public function getFeedByType(string $type): LengthAwarePaginator
+    {
+        return match ($this) {
+            'following' => $this->getFollowingFeed(),
+            default => $this->getFollowingFeed(),
+        };
+    }
+
+    /**
+     * @return LengthAwarePaginator
+     * @throws Exception
+     */
+    public function getFollowingFeed(): LengthAwarePaginator
+    {
+        $query = Media::query();
+
+        if (! auth()->guest()) {
+            $query->availableForFollower()
+                ->following(auth()->user()->_id)
+                ->notBlockedFor(auth()->user()->_id)
+                ->recentFirst();
+        }
+
+        return $query->paginate(5)->withQueryString();
     }
 
     /**
