@@ -60,8 +60,8 @@ class DeleteAvatar implements ShouldQueue
      */
     public function handle(): void
     {
-        if (Storage::disk('public')->exists('avatars/' . $this->file)) {
-            Storage::disk('public')->delete('avatars/' . $this->file);
+        if (Storage::disk('public')->exists('avatars/'.$this->file)) {
+            Storage::disk('public')->delete('avatars/'.$this->file);
         }
         if (Storage::disk('b2-avatars')->exists($this->file)) {
             Storage::disk('b2-avatars')->delete($this->file);

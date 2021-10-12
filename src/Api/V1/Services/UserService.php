@@ -82,7 +82,7 @@ class UserService
             $user->save();
 
             if (! config('app.is_testing')) {
-                dispatch((new UploadAvatar((string) $user->_id, 'avatars/' . $fileName))->delay(10)->onQueue('high'));
+                dispatch((new UploadAvatar((string) $user->_id, 'avatars/'.$fileName))->delay(10)->onQueue('high'));
             }
 
             if (! str_contains($oldFileName, 'default_')) {
