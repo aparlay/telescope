@@ -75,13 +75,13 @@ class UserService
 
         $extension = $request->avatar->getClientOriginalExtension();
         $avatar = uniqid((string) $user->_id, false).'.'.$extension;
-        if (($fileName = $request->avatar->storeAs('avatars', $avatar, 'public')) !== false) {
+        if (($fileName = $request->avatar->storePubliclyAs('avatars', $avatar, 'public')) !== false) {
             /* Store avatar name in database */
             $oldFileName = $user->avatar;
             $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/'.$avatar)], $user->_id);
 
             if (! config('app.is_testing')) {
-                dispatch((new UploadAvatar((string) $user->_id, $fileName))->delay(10)->onQueue('high'));
+                dispatch((new UploadAvatar((string) $user->_id, 'avatars/'.$fileName))->delay(10)->onQueue('high'));
             }
 
             if (! str_contains($oldFileName, 'default_')) {
