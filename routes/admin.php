@@ -28,16 +28,15 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
         Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
         /* Media routes */
-        Route::name('media.')->group(function() {
+        Route::name('media.')->group(function () {
             Route::get('media', [MediaController::class, 'index'])->name('index');
         });
 
         /* User Routes */
-        Route::name('user.')->group(function() {
+        Route::name('user.')->group(function () {
             Route::get('user', [UserController::class, 'index'])->name('index');
             Route::get('user/{id}', [UserController::class, 'view'])->name('view');
         });
-
     });
 
     /* Login Routes */
