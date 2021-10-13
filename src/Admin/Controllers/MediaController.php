@@ -30,4 +30,11 @@ class MediaController extends Controller
             'breadcrumbs' => $breadcrumbs,
         ]);
     }
+
+    public function view($id)
+    {
+        $user = $this->mediaService->find($id);
+
+        return view('default_view::admin.pages.media.view', compact('media'));
+    }
 }
