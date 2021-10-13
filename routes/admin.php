@@ -27,16 +27,15 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-        # Media routes
+        // Media routes
         Route::get('media', [MediaController::class, 'index'])->name('index');
 
-        # User Routes
+        // User Routes
         Route::get('user', [UserController::class, 'index'])->name('index');
         Route::get('user/{id}', [UserController::class, 'view'])->name('view');
 
-        #Ajax Routes
+        //Ajax Routes
         Route::post('media/list', [MediaController::class, 'AjaxList'])->name('media.list');
-
     });
 
     /* Login Routes */

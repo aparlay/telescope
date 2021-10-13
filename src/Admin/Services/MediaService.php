@@ -26,7 +26,7 @@ class MediaService extends AdminBaseService
     public function fillListAttributes($mediaCollection)
     {
         foreach ($mediaCollection['data'] as &$collect) {
-            $collect['status'] = !empty($collect['status']) ? '<span class="badge bg-'.$collect['status']['color'].'">'.$collect['status']['text'].'</span>' : '';
+            $collect['status'] = ! empty($collect['status']) ? '<span class="badge bg-'.$collect['status']['color'].'">'.$collect['status']['text'].'</span>' : '';
             $collect['file'] = '<img src="'.Cdn::cover(! empty($collect['file']) ? $collect['file'].'.jpg?width=100' : 'default.jpg?width=100').'" />';
             $collect['creator_username'] = $collect['creator.username'];
             $collect['detail_url'] = '<a class="btn btn-primary btn-sm" href="'.'/media/view/'.$collect['id'].'" title="View"><i class="fas fa-eye"></i> View</a>';
@@ -52,6 +52,7 @@ class MediaService extends AdminBaseService
         } else {
             $result = $this->fillListAttributes($this->buildData($this->mediaRepository->all($sort)));
         }
+
         return $result;
     }
 }

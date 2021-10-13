@@ -8,6 +8,7 @@ class AdminBaseService
     public $sorterableField = [];
     public $sortDefault = ['created_by'=>'desc'];
     public $tableColumns = [];
+
     /**
      * @param string $field
      * @param $filterableField
@@ -62,6 +63,7 @@ class AdminBaseService
                 $sort[$field] = 'desc';
             }
         }
+
         return $sort;
     }
 
@@ -74,7 +76,7 @@ class AdminBaseService
     }
 
     /**
-     * @param integer $numberColumn
+     * @param int $numberColumn
      * @return array
      */
     public function getTableFieldByNumber(int $numberColumn): array
@@ -89,14 +91,15 @@ class AdminBaseService
     {
         $sortTable = $this->sortDefault;
         $sortRequest = request()->order ?? [];
-        if(isset($sortRequest[0])){
-            if(isset($sortRequest[0]['column']) && isset($sortRequest[0]['dir'])){
+        if (isset($sortRequest[0])) {
+            if (isset($sortRequest[0]['column']) && isset($sortRequest[0]['dir'])) {
                 $tableField = $this->getTableFieldByNumber($sortRequest[0]['column']);
-                if(!empty($tableField) && isset($tableField['name'])) {
+                if (! empty($tableField) && isset($tableField['name'])) {
                     $sortTable = [$tableField['name'] => $sortRequest[0]['dir']];
                 }
             }
         }
+
         return $this->cleanSortFields($sortTable);
     }
 
@@ -107,17 +110,19 @@ class AdminBaseService
     public function buildData($collectionList): array
     {
         $data = [];
-        foreach($collectionList as $collect){
+        foreach ($collectionList as $collect) {
             $dataArr = [];
-            foreach($this->tableColumns as $keyColumn => $column){
-                if(empty($column['name'])) continue;
-                if($column['name'] == 'status') {
+            foreach ($this->tableColumns as $keyColumn => $column) {
+                if (empty($column['name'])) {
+                    continue;
+                }
+                if ($column['name'] == 'status') {
                     $dataArr['status'] = $this->getColoredStatus($collect);
-                }else{
+                } else {
                     $dataArr[$column['name']] = $collect[$column['name']] ?? '';
                 }
             }
-            if(!empty($dataArr)) {
+            if (! empty($dataArr)) {
                 $dataArr['id'] = $collect['id'];
                 $data[] = $dataArr;
             }
@@ -127,19 +132,20 @@ class AdminBaseService
             'draw' => $collectionList->perPage() ?? config('core.admin.lists.page_count'),
             'recordsTotal' => $collectionList->total() ?? 0,
             'recordsFiltered' => $collectionList->total() ?? 0,
-            'data' => $data
+            'data' => $data,
         ];
     }
 
     public function getColoredStatus($collectStatus)
     {
-        if(is_array($collectStatus->status)){
+        if (is_array($collectStatus->status)) {
             $statuses = [];
-            foreach($collectStatus->status as $status){
+            foreach ($collectStatus->status as $status) {
                 $statuses[] = $collectStatus->status_color;
             }
+
             return $statuses;
-        }else{
+        } else {
             return $collectStatus->status_color;
         }
     }
