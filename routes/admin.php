@@ -22,21 +22,22 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
         return redirect()->route('core.admin.dashboard');
     });
 
-    /*Authenticated Routes */
+    /* Authenticated Routes */
     Route::middleware(['admin-auth:admin'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-    });
 
-    /* Media routes */
-    Route::middleware(['admin-auth:admin'])->name('media.')->group(function () {
-        Route::get('media', [MediaController::class, 'index'])->name('index');
-    });
+        /* Media routes */
+        Route::name('media.')->group(function() {
+            Route::get('media', [MediaController::class, 'index'])->name('index');
+        });
 
-    /* User Routes */
-    Route::middleware(['admin-auth:admin'])->name('user.')->group(function () {
-        Route::get('user', [UserController::class, 'index'])->name('index');
-        Route::get('user/{id}', [UserController::class, 'view'])->name('view');
+        /* User Routes */
+        Route::name('user.')->group(function() {
+            Route::get('user', [UserController::class, 'index'])->name('index');
+            Route::get('user/{id}', [UserController::class, 'view'])->name('view');
+        });
+
     });
 
     /* Login Routes */
