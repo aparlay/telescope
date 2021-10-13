@@ -16,7 +16,7 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('core.admin.dashboard') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="">Home</a></li>
                             <li class="breadcrumb-item">Media</li>
                         </ol>
                     </div><!-- /.col -->
@@ -30,34 +30,32 @@
                     <div class="col-md-3">
                         <div class="card card-primary card-outline">
                             <div class="ribbon-wrapper ribbon-xl">
-                                <div class="ribbon bg-{{ $user->status_badge['color'] }}">
-                                    {{ $user->status_badge['status'] }}
+                                <div class="ribbon ">
+                                    
                                 </div>
                             </div>
                             <div class="card-body box-profile">
                                 <div class="text-center">
-                                    <img src="{{ $user->avatar }}" alt="" class="profile-user-img img-fluid img-circle">
+                                    
                                 </div>
-                                <h3 class="profile-username text-center">{{ $user->username }}</h3>
-                                <p class="text-muted text-center">
-                                    <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
-                                </p>
+                                <h3 class="text-center"></h3>
+                                <p class="text-muted text-center"></p>
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
                                         <b>Medias</b>
-                                        <a class="float-right">{{ $user->media_count }}</a>
+                                        <a class="float-right"></a>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Followers</b>
-                                        <a class="float-right">{{ $user->follower_count }}</a>
+                                        <a class="float-right"></a>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Following</b>
-                                        <a class="float-right">{{ $user->following_count }}</a>
+                                        <a class="float-right"></a>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Blocks</b>
-                                        <a class="float-right">{{ $user->block_count }}</a>
+                                        <a class="float-right"></a>
                                     </li>
                                 </ul>
                                 <div class="row">
@@ -106,20 +104,20 @@
                                             <div class="form-group row">
                                                 <label for="username" class="col-sm-2 col-form-label">Username</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="username" name="username" value="{{ $user->username }}">
+                                                    <input type="text" class="form-control" id="username" name="username" value="">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="email" class="col-sm-2 col-form-label">Email</label>
                                                 <div class="col-sm-10">
-                                                    <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}">
+                                                    <input type="email" class="form-control" id="email" name="email" value="">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="email_verified" class="col-sm-2 col-form-label">Email Verified</label>
                                                 <div class="col-sm-10">
                                                     <div class="custom-control custom-switch mt-2">
-                                                        <input type="checkbox" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
+                                                        <input type="checkbox" class="custom-control-input" id="email_verified">
                                                         <label class="custom-control-label" for="email_verified"></label>
                                                     </div>
                                                 </div>
@@ -134,7 +132,7 @@
                                                 <label for="feature_tips" class="col-sm-2 col-form-label">Feature Tips</label>
                                                 <div class="col-sm-10">
                                                     <div class="custom-control custom-switch mt-2">
-                                                        <input type="checkbox" class="custom-control-input" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
+                                                        <input type="checkbox" class="custom-control-input" id="feature_tips">
                                                         <label class="custom-control-label" for="feature_tips"></label>
                                                     </div>
                                                 </div>
@@ -143,7 +141,7 @@
                                                 <label for="feature_demo" class="col-sm-2 col-form-label">Feature Demo User</label>
                                                 <div class="col-sm-10">
                                                     <div class="custom-control custom-switch mt-2">
-                                                        <input type="checkbox" class="custom-control-input" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
+                                                        <input type="checkbox" class="custom-control-input" id="feature_demo">
                                                         <label class="custom-control-label" for="feature_demo"></label>
                                                     </div>
                                                 </div>
@@ -152,9 +150,7 @@
                                                 <label for="gender" class="col-sm-2 col-form-label">Gender</label>
                                                 <div class="col-sm-10">
                                                     <select name="gender" id="gender" class="form-control">
-                                                        @foreach($user->getGenders() as $key => $gender)
-                                                            <option value="{{ $key }}" {!! $user->gender == $key ? 'selected' : '' !!}>{{ $gender }}</option>
-                                                        @endforeach
+                                                        
                                                     </select>
                                                 </div>
                                             </div>
@@ -162,9 +158,7 @@
                                                 <label for="interested_in" class="col-sm-2 col-form-label">Interested In</label>
                                                 <div class="col-sm-10">
                                                     <select name="interested_in" id="interested_in" class="form-control">
-                                                        @foreach($user->getInterestedIns() as $key => $interested_in)
-                                                            <option value="{{ $key }}" {!! $user->interested_in == $key ? 'selected' : '' !!}>{{ $interested_in }}</option>
-                                                        @endforeach
+                                                       
                                                     </select>
                                                 </div>
                                             </div>
@@ -172,9 +166,7 @@
                                                 <label for="type" class="col-sm-2 col-form-label">Type</label>
                                                 <div class="col-sm-10">
                                                     <select name="type" id="type" class="form-control">
-                                                        @foreach($user->getTypes() as $key => $type)
-                                                            <option value="{{ $key }}" {!! $user->type == $key ? 'selected' : '' !!}>{{ $type }}</option>
-                                                        @endforeach
+                                                        
                                                     </select>
                                                 </div>
                                             </div>
@@ -182,9 +174,7 @@
                                                 <label for="status" class="col-sm-2 col-form-label">Status</label>
                                                 <div class="col-sm-10">
                                                     <select name="status" id="status" class="form-control">
-                                                        @foreach($user->getStatuses() as $key => $status)
-                                                            <option value="{{ $key }}" {!! $user->status == $key ? 'selected' : '' !!}>{{ $status }}</option>
-                                                        @endforeach
+                                                        
                                                     </select>
                                                 </div>
                                             </div>
@@ -192,22 +182,20 @@
                                                 <label for="visibility" class="col-sm-2 col-form-label">Visibility</label>
                                                 <div class="col-sm-10">
                                                     <select name="visibility" id="visibility" class="form-control">
-                                                        @foreach($user->getVisibilities() as $key => $visibility)
-                                                            <option value="{{ $key }}" {!! $user->visibility == $key ? 'selected' : '' !!}>{{ $visibility }}</option>
-                                                        @endforeach
+                                                        
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="referral_id" class="col-sm-2 col-form-label">Referral User ID</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="referral_id" name="referral_id" value="{{ $user->referral_id }}">
+                                                    <input type="text" class="form-control" id="referral_id" name="referral_id" value="">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="promo_link" class="col-sm-2 col-form-label">Promo Link</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="promo_link" name="promo_link" value="{{ $user->promo_link }}">
+                                                    <input type="text" class="form-control" id="promo_link" name="promo_link" value="">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -219,13 +207,13 @@
                                             <div class="form-group row">
                                                 <label for="password" class="col-sm-2 col-form-label">Password</label>
                                                 <div class="col-sm-10 mt-2">
-                                                    <p>{{ $user->created_at }}</p>
+                                                    <p></p>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label for="password" class="col-sm-2 col-form-label">Password</label>
                                                 <div class="col-sm-10 mt-2">
-                                                    <p>{{ $user->updated_at }}</p>
+                                                    <p></p>
                                                 </div>
                                             </div>
                                             <div class="row">

@@ -26,4 +26,21 @@ class MediaService
 
         return $mediaCollection;
     }
+
+    /**
+     * @param $id
+     */
+    public function find($id)
+    {
+        $media = $this->mediaRepository->find($id);
+
+        // $statusBadge = [
+        //     'status' => $media->status_name,
+        //     'color' => $media->status_color,
+        // ];
+
+        // $user->status_badge = $statusBadge;
+
+        return $media;
+    }
 }

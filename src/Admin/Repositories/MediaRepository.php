@@ -39,6 +39,6 @@ class MediaRepository implements RepositoryInterface
 
     public function find($id)
     {
-        // TODO: Implement find() method.
+        return $this->model->findOrFail($id);
     }
 }
