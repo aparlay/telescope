@@ -23,11 +23,18 @@ class MediaController extends Controller
             'title' => 'Media',
         ];
 
-        $medias = $this->mediaService->getList();
+        //$medias = $this->mediaService->list();
+        $medias = [];
 
         return view('default_view::admin.pages.media.index')->with([
             'media_list'  => $medias,
             'breadcrumbs' => $breadcrumbs,
         ]);
+    }
+
+    public function AjaxList()
+    {
+        return json_encode($this->mediaService->list());
+        //exit();
     }
 }

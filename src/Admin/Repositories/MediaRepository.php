@@ -17,9 +17,9 @@ class MediaRepository implements RepositoryInterface
         $this->model = $model;
     }
 
-    public function all()
+    public function all($sort = [])
     {
-        return $this->model->orderBy('created_at', 'desc')->paginate(20);
+        return $this->model->sortBy($sort)->paginate(config('core.admin.lists.page_count'));
     }
 
     public function create(array $data)
