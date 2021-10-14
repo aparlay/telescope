@@ -18,7 +18,6 @@ use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\MediaVisitObserver;
 use Aparlay\Core\Observers\ReportObserver;
 use Aparlay\Core\Observers\UserObserver;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -39,6 +38,13 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         BaseModel::observe(BaseModelObserver::class);
+        Follow::observe(FollowObserver::class);
+        Block::observe(BlockObserver::class);
+        MediaLike::observe(MediaLikeObserver::class);
+        Media::observe(MediaObserver::class);
+        MediaVisit::observe(MediaVisitObserver::class);
+        User::observe(UserObserver::class);
+        Report::observe(ReportObserver::class);
         parent::boot();
     }
 }

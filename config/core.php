@@ -8,6 +8,8 @@ return [
         /*
          * Application Service Providers...
          */
+        \Aparlay\Core\Api\V1\Providers\AuthServiceProvider::class,
+        \Aparlay\Core\Admin\Providers\AdminServiceProvider::class,
     ],
 
     'admin' => [
