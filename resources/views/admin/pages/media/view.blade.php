@@ -43,20 +43,18 @@
                                 {{ $media->status_badge['status'] }}
                             </div>
                         </div>
+                        <video class="section" controls>
+                            <source src="{{URL::asset("/storage/app/upload/$media->file")}}" type="video/mp4">
+                        </video>
                         <div class="card-body box-profile">
-                            <div class="text-center">
-                                <video width="470" height="305" controls>
-                                    <source src="{{URL::asset("/images/upload/$media->file")}}" type="video/mp4">
-                                </video>
-                            </div>
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
                                     <b>Skin Score</b>
                                     <div>
-                                        @for ($i = 1; $i < 11; $i++)
+                                        @for ($i = 0; $i < 11; $i++)
                                             <div id="media-skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
                                                 <label class="btn btn-outline-secondary">
-                                                    <input type="radio" id="media-skin-score--{{$i}}" name="score" value="{{ $media->score }}" data-index="0" autocomplete="on" @if($media->scores == "") checked @endif>
+                                                    <input type="radio" id="media-skin-score--{{$i}}" name="score" value="{{ $media->score }}" data-index="{{ $i }}" autocomplete="off" @if($media->scores == "5") checked @endif>
                                                     {{ $i }}
                                                 </label>
                                         @endfor
@@ -66,7 +64,7 @@
                                 <li class="list-group-item">
                                     <b>Awesomeness Score</b>
                                     <div>
-                                        @for ($i = 1; $i < 11; $i++)
+                                        @for ($i = 0; $i < 11; $i++)
                                             <div id="media-skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
                                                 <label class="btn btn-outline-secondary">
                                                     <input type="radio" id="media-skin-score--0" name="sort_score" value="{{ $media->sort_score }}" data-index="0" autocomplete="off" @if($media->sort_score == "5") selected @endif>
