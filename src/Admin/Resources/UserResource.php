@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
     use SimpleUserTrait;
+
     /**
      * Transform the resource into an array.
      *
@@ -16,15 +17,14 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         $users = [];
-        foreach($this->resource as $user)
-        {
+        foreach ($this->resource as $user) {
             $users[] = $this->createSimpleUser($user);
         }
 
         return [
             'aaData' => $users,
             'iTotalDisplayRecords' => $this->total_filtered_users,
-            'iTotalRecords' => $this->total_users
+            'iTotalRecords' => $this->total_users,
         ];
     }
 }
