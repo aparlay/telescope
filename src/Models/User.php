@@ -214,56 +214,56 @@ class User extends Authenticatable implements JWTSubject
     public static function getFeatures(): array
     {
         return [
-            self::FEATURE_TIPS => __('Tips'),
-            self::FEATURE_DEMO => __('Demo'),
+            self::FEATURE_TIPS => __('tips'),
+            self::FEATURE_DEMO => __('demo'),
         ];
     }
 
     public static function getGenders(): array
     {
         return [
-            self::GENDER_FEMALE => __('Female'),
-            self::GENDER_MALE => __('Male'),
-            self::GENDER_TRANSGENDER => __('Transgender'),
-            self::GENDER_NOT_MENTION => __('Not Mention'),
+            self::GENDER_FEMALE => __('female'),
+            self::GENDER_MALE => __('male'),
+            self::GENDER_TRANSGENDER => __('transgender'),
+            self::GENDER_NOT_MENTION => __('not mention'),
         ];
     }
 
     public static function getInterestedIns(): array
     {
         return [
-            self::INTERESTED_IN_FEMALE => __('Female'),
-            self::INTERESTED_IN_MALE => __('Male'),
-            self::INTERESTED_IN_TRANSGENDER => __('Transgender'),
-            self::INTERESTED_IN_COUPLE => __('Couple'),
+            self::INTERESTED_IN_FEMALE => __('female'),
+            self::INTERESTED_IN_MALE => __('male'),
+            self::INTERESTED_IN_TRANSGENDER => __('transgender'),
+            self::INTERESTED_IN_COUPLE => __('couple'),
         ];
     }
 
     public static function getTypes(): array
     {
         return [
-            self::TYPE_USER => __('User'),
-            self::TYPE_ADMIN => __('Admin'),
+            self::TYPE_USER => __('user'),
+            self::TYPE_ADMIN => __('admin'),
         ];
     }
 
     public static function getVisibilities(): array
     {
         return [
-            self::VISIBILITY_PRIVATE => __('Private'),
-            self::VISIBILITY_PUBLIC => __('Public'),
+            self::VISIBILITY_PRIVATE => __('private'),
+            self::VISIBILITY_PUBLIC => __('public'),
         ];
     }
 
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_PENDING => __('Pending'),
-            self::STATUS_VERIFIED => __('Verified'),
-            self::STATUS_ACTIVE => __('Active'),
-            self::STATUS_SUSPENDED => __('Suspended'),
-            self::STATUS_BLOCKED => __('Banned'),
-            self::STATUS_DEACTIVATED => __('Deleted'),
+            self::STATUS_PENDING => __('pending'),
+            self::STATUS_VERIFIED => __('verified'),
+            self::STATUS_ACTIVE => __('active'),
+            self::STATUS_SUSPENDED => __('suspended'),
+            self::STATUS_BLOCKED => __('banned'),
+            self::STATUS_DEACTIVATED => __('deleted'),
         ];
     }
 

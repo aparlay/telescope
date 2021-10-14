@@ -15,7 +15,6 @@ class Version extends BaseModel
     use VersionScope;
 
     public const OS_ANDROID = 'android';
-
     public const OS_IOS = 'ios';
 
     /**

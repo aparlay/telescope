@@ -183,24 +183,24 @@ class Media extends BaseModel
     public static function getVisibilities()
     {
         return [
-            self::VISIBILITY_PRIVATE => __('Private'),
-            self::VISIBILITY_PUBLIC => __('Public'),
+            self::VISIBILITY_PRIVATE => __('private'),
+            self::VISIBILITY_PUBLIC => __('public'),
         ];
     }
 
     public static function getStatuses()
     {
         return [
-            self::STATUS_QUEUED => __('Queued'),
-            self::STATUS_UPLOADED => __('Uploaded'),
-            self::STATUS_IN_PROGRESS => __('In-Progress'),
-            self::STATUS_COMPLETED => __('Waiting For Review'),
-            self::STATUS_FAILED => __('Failed'),
-            self::STATUS_CONFIRMED => __('Confirmed'),
-            self::STATUS_DENIED => __('Denied'),
-            self::STATUS_ADMIN_DELETED => __('Deleted By Admin'),
-            self::STATUS_USER_DELETED => __('Deleted'),
-            self::STATUS_IN_REVIEW => __('Under review'),
+            self::STATUS_QUEUED => __('queued'),
+            self::STATUS_UPLOADED => __('uploaded'),
+            self::STATUS_IN_PROGRESS => __('in-progress'),
+            self::STATUS_COMPLETED => __('waiting for review'),
+            self::STATUS_FAILED => __('failed'),
+            self::STATUS_CONFIRMED => __('confirmed'),
+            self::STATUS_DENIED => __('denied'),
+            self::STATUS_ADMIN_DELETED => __('deleted by admin'),
+            self::STATUS_USER_DELETED => __('deleted'),
+            self::STATUS_IN_REVIEW => __('under review'),
         ];
     }
 

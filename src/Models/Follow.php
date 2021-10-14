@@ -74,8 +74,8 @@ class Follow extends BaseModel
      * @var array
      */
     protected $casts = [
-        'creator' => SimpleUserCast::class . ':is_like,is_followed',
-        'user' => SimpleUserCast::class . ':is_like,is_followed',
+        'creator' => SimpleUserCast::class . ':_id,username,avatar,is_liked,is_followed',
+        'user' => SimpleUserCast::class . ':_id,username,avatar,is_liked,is_followed',
         'is_deleted' => 'boolean',
         'status' => 'integer',
     ];
@@ -83,8 +83,8 @@ class Follow extends BaseModel
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_PENDING => __('Pending'),
-            self::STATUS_ACCEPTED => __('Accepted'),
+            self::STATUS_PENDING => __('pending'),
+            self::STATUS_ACCEPTED => __('accepted'),
         ];
     }
 

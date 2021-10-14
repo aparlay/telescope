@@ -97,17 +97,17 @@ class Alert extends BaseModel
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_NOT_VISITED => __('Not Visited'),
-            self::STATUS_VISITED => __('Visited'),
+            self::STATUS_NOT_VISITED => __('not visited'),
+            self::STATUS_VISITED => __('visited'),
         ];
     }
 
     public static function getTypes(): array
     {
         return [
-            self::TYPE_MEDIA_NOTICED => __('Video Notice'),
-            self::TYPE_MEDIA_REMOVED => __('Video Removed'),
-            self::TYPE_USER => __('User'),
+            self::TYPE_MEDIA_NOTICED => __('video notice'),
+            self::TYPE_MEDIA_REMOVED => __('video removed'),
+            self::TYPE_USER => __('user'),
         ];
     }
 
