@@ -50,7 +50,7 @@ use MongoDB\BSON\UTCDateTime;
  */
 class Media extends MediaBase
 {
-    /*
+    /**
      * @OA\Property(property="_id", type="string", example="60237caf5e41025e1e3c80b1")
      * @OA\Property(property="description", type="string", example="a short description for the video file")
      * @OA\Property(property="hash", type="string", description="Sha1 hash string of the file", example="ececbab702e0bf34e92f5370aafb8adf0fee0435")
@@ -100,55 +100,5 @@ class Media extends MediaBase
             ->from('Reporter', ':radioactive_sign:')
             ->to('#alua-report')
             ->content($message);
-    }
-
-    /**
-     * Get the user's full name.
-     */
-    public function getIsFollowedAttribute(): bool
-    {
-        if (auth()->guest()) {
-            return false;
-        }
-
-        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->_id;
-        Follow::cacheByUserId(auth()->user()->_id);
-
-        return Redis::sismember($cacheKey, (string) $this->creator['_id']);
-    }
-
-    /**
-     * Get the user's full name.
-     */
-    public function getIsLikedAttribute(): bool
-    {
-        if (auth()->guest()) {
-            return false;
-        }
-
-        $mediaLikeCacheKey = (new MediaLike())->getCollection().':creator:'.auth()->user()->_id;
-        MediaLike::cacheByUserId(auth()->user()->_id);
-
-        return Redis::sismember($mediaLikeCacheKey, (string) $this->_id);
-    }
-
-    /**
-     * Get the user's full name.
-     */
-    public function getIsVisitedAttribute(): bool
-    {
-        if (auth()->guest()) {
-            return false;
-        }
-
-        $mediaVisitCacheKey = (new MediaVisit())->getCollection().':creator:'.auth()->user()->_id;
-        MediaLike::cacheByUserId(auth()->user()->_id);
-
-        return Redis::sismember($mediaVisitCacheKey, (string) $this->_id);
-    }
-
-    public function getFilenameAttribute(): string
-    {
-        return basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION));
     }
 }
