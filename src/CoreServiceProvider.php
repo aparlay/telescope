@@ -4,7 +4,6 @@ namespace Aparlay\Core;
 
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
-use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
 use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CoreCommand;
