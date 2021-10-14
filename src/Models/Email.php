@@ -29,11 +29,8 @@ class Email extends BaseModel
     use EmailScope;
 
     public const STATUS_QUEUED = 0;
-
     public const STATUS_SENT = 1;
-
     public const STATUS_OPENED = 2;
-
     public const STATUS_FAILED = 3;
 
     public const TYPE_OTP = 0;
@@ -77,7 +74,8 @@ class Email extends BaseModel
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
+        'type' => 'integer',
+        'status' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

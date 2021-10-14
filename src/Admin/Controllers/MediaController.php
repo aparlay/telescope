@@ -33,8 +33,7 @@ class MediaController extends Controller
 
     public function view($id)
     {
-        $user = $this->mediaService->find($id);
-
+        $media = $this->mediaService->find($id);
         return view('default_view::admin.pages.media.view', compact('media'));
     }
 }

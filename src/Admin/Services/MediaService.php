@@ -34,12 +34,12 @@ class MediaService
     {
         $media = $this->mediaRepository->find($id);
 
-        // $statusBadge = [
-        //     'status' => $media->status_name,
-        //     'color' => $media->status_color,
-        // ];
+        $statusBadge = [
+            'status' => $media->status_color['text'],
+            'color' => $media->status_color['color'],
+        ];
 
-        // $user->status_badge = $statusBadge;
+        $media->status_badge = $statusBadge;
 
         return $media;
     }

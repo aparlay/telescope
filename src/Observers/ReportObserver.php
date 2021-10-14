@@ -15,6 +15,6 @@ class ReportObserver extends BaseModelObserver
      */
     public function created($model): void
     {
-        $model->notify(new ReportSent());
+        $model->notify(new ReportSent($model));
     }
 }

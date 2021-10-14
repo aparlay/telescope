@@ -81,19 +81,4 @@ class User extends UserBase
      * @OA\Property(property="created_at", type="number", example=1612850111566)
      * @OA\Property(property="updated_at", type="number", example=1612850111566)
      */
-
-    /**
-     * Get the user's full name.
-     */
-    public function getIsFollowedAttribute(): bool
-    {
-        if (auth()->guest()) {
-            return false;
-        }
-
-        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->_id;
-        Follow::cacheByUserId(auth()->user()->_id);
-
-        return Redis::sismember($cacheKey, (string) $this->_id);
-    }
 }

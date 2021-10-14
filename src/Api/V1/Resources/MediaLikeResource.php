@@ -7,8 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class MediaLikeResource extends JsonResource
 {
-    use SimpleUserTrait;
-
     /**
      * Transform the resource into an array.
      *
@@ -23,7 +21,7 @@ class MediaLikeResource extends JsonResource
             '_id' => (string) $this->_id,
             'media_id' => (string) $this->media_id,
             'user_id' => (string) $this->user_id,
-            'creator' => $this->createSimpleUser($this->creator),
+            'creator' => $this->creator,
             'created_at' => $this->created_at->valueOf(),
         ];
     }

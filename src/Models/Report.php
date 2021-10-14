@@ -84,22 +84,25 @@ class Report extends BaseModel
      * @var array
      */
     protected $casts = [
+        'reason' => 'string',
+        'type' => 'integer',
+        'status' => 'integer',
     ];
 
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_REPORTED => __('Reported'),
-            self::STATUS_REVISED => __('Revised'),
+            self::STATUS_REPORTED => __('reported'),
+            self::STATUS_REVISED => __('revised'),
         ];
     }
 
     public static function getTypes(): array
     {
         return [
-            self::TYPE_COMMENT => __('Comment'),
-            self::TYPE_MEDIA => __('Media'),
-            self::TYPE_USER => __('User'),
+            self::TYPE_COMMENT => __('comment'),
+            self::TYPE_MEDIA => __('media'),
+            self::TYPE_USER => __('user'),
         ];
     }
 

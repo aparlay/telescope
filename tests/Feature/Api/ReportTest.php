@@ -38,7 +38,7 @@ class ReportTest extends ApiTestCase
     /**
      * @test
      */
-    public function reportUser()
+    public function userReportUser()
     {
         $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
         $modal = User::factory()->create(['status' => User::STATUS_ACTIVE]);
@@ -198,7 +198,7 @@ class ReportTest extends ApiTestCase
     /**
      * @test
      */
-    public function mediaReportWithPermission()
+    public function reportMediaWithPermission()
     {
         $mediaCreator = User::factory()->create();
         $blockedUser = User::factory()->create();
@@ -233,5 +233,57 @@ class ReportTest extends ApiTestCase
                 'data' => [],
                 'message' => 'You cannot report this video at the moment.',
             ]);
+    }
+
+    /**
+     * @test
+     */
+    public function reportMedia()
+    {
+        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $mediaCreator = User::factory()->create();
+        $media = Media::factory()->for($mediaCreator, 'userObj')->create([
+            'is_protected' => true,
+            'created_by' => $mediaCreator->_id,
+            'creator' => [
+                '_id' => $mediaCreator->_id,
+                'username' => $mediaCreator->username,
+                'avatar' => $mediaCreator->avatar,
+            ],
+        ]);
+
+        $this->actingAs($user)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->json('POST', '/v1/media/'.$media->_id.'/report', ['reason' => 'Reason Test Case For Media'])
+            ->assertStatus(201)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 201)
+            ->assertJsonStructure([
+                'data' => [
+                    'reason',
+                    'type',
+                    'status',
+                    'media_id',
+                    'user_id',
+                    'updated_at',
+                    'created_at',
+                    '_id',
+                ],
+            ])->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType([
+                    'code' => 'integer',
+                    'status' => 'string',
+                    'data._id' => 'string',
+                    'data.media_id' => 'string',
+                    'data.user_id' => 'string',
+                    'data.comment_id' => 'string',
+                    'data.reason' => 'string',
+                    'data.type' => 'string',
+                    'data.status' => 'string',
+                    'data.created_at' => 'integer',
+                    'data.updated_at' => 'integer',
+                ])
+            );
+        $this->assertDatabaseHas('reports', ['media_id' => new ObjectId($media->_id), 'type' => Report::TYPE_MEDIA, 'created_by' => new ObjectId($user->_id)]);
     }
 }
