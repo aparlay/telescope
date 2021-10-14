@@ -42,13 +42,10 @@ class Alert extends BaseModel
     use AlertScope;
 
     public const TYPE_USER = 0;
-
     public const TYPE_MEDIA_REMOVED = 20;
-
     public const TYPE_MEDIA_NOTICED = 21;
 
     public const STATUS_NOT_VISITED = 0;
-
     public const STATUS_VISITED = 1;
 
     /**
@@ -92,6 +89,9 @@ class Alert extends BaseModel
      * @var array
      */
     protected $casts = [
+        'reason' => 'string',
+        'type' => 'integer',
+        'status' => 'integer',
     ];
 
     public static function getStatuses(): array
