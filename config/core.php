@@ -10,6 +10,7 @@ return [
          */
         \Aparlay\Core\Api\V1\Providers\AuthServiceProvider::class,
         \Aparlay\Core\Api\V1\Providers\EventServiceProvider::class,
+        \Aparlay\Core\Admin\Providers\AdminServiceProvider::class,
     ],
 
     'admin' => [
