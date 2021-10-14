@@ -64,7 +64,7 @@ class UserRepository implements RepositoryInterface
         return $this->model->findOrFail($id);
     }
 
-    public function getUserStatues()
+    public function getUserStatuses()
     {
         return $this->model->getStatuses();
     }

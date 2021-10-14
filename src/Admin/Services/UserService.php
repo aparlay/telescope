@@ -78,7 +78,7 @@ class UserService extends AdminBaseService
      */
     public function getUserStatuses(): array
     {
-        return $this->userRepository->getUserStatues();
+        return $this->userRepository->getUserStatuses();
     }
 
     /**
