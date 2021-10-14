@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Services\MediaService;
+use Illuminate\Http\Request;
 
 class MediaController extends Controller
 {
@@ -36,5 +37,16 @@ class MediaController extends Controller
         $media = $this->mediaService->find($id);
 
         return view('default_view::admin.pages.media.view', compact('media'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $media = $this->mediaService->find($id);
+        if ($media) {
+            $this->mediaService->updateMedia($request, $id);
+            return view('default_view::admin.pages.media.view', compact('media'));
+        } else {
+            die('User Not found..');
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace Aparlay\Core\Admin\Services;
 use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Helpers\Cdn;
+use Illuminate\Http\Request;
 
 class MediaService
 {
@@ -42,5 +43,18 @@ class MediaService
         $media->status_badge = $statusBadge;
 
         return $media;
+    }
+
+    /**
+     * @param $id
+     */
+    public function updateMedia(Request $request, $id)
+    {
+        $data = [
+            'description' => $request->description,
+            'status' => $request->status,
+            // 'skin_score' => $request->Media->skin_score,
+        ];
+        return $this->mediaRepository->update($data, $id);
     }
 }

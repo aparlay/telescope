@@ -31,6 +31,7 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
         Route::middleware(['admin-auth:admin'])->name('media.')->group(function () {
             Route::get('media', [MediaController::class, 'index'])->name('index');
             Route::get('media/{id}', [MediaController::class, 'view'])->name('view');
+            Route::post('media/{id}', [MediaController::class, 'update'])->name('update');
         });
 
         /* User Routes */
