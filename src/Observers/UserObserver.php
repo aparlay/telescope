@@ -45,8 +45,8 @@ class UserObserver extends BaseModelObserver
      */
     public function saving($model): void
     {
-        if (!empty($model->promo_link) && !str_starts_with($model->promo_link, 'http')) {
-            $model->promo_link = 'https://' . $model->promo_link;
+        if (! empty($model->promo_link) && ! str_starts_with($model->promo_link, 'http')) {
+            $model->promo_link = 'https://'.$model->promo_link;
         }
 
         parent::saving($model);
