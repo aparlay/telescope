@@ -19,7 +19,29 @@ class UserRepository implements RepositoryInterface
 
     public function all()
     {
-        return $this->model->recent()->paginate(config('core.admin.lists.page_count'));
+        // TODO: Implement all() method.
+    }
+
+    public function userAjax($offset, $limit, $sort)
+    {
+        return $this->model->sortBy($sort)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
+    }
+
+    public function filteredUserQuery($filters)
+    {
+        return $this->model->filter($filters);
+    }
+
+    public function getFilteredUserAjax($offset, $limit, $sort, $filters)
+    {
+        return $this->filteredUserQuery($filters)
+            ->sortBy($sort)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
     }
 
     public function create(array $data)
@@ -42,13 +64,18 @@ class UserRepository implements RepositoryInterface
         return $this->model->findOrFail($id);
     }
 
-    public function getFilteredUsers($filters)
-    {
-        return $this->model->filter($filters)->recent()->paginate(config('core.admin.lists.page_count'));
-    }
-
     public function getUserStatues()
     {
         return $this->model->getStatuses();
+    }
+
+    public function getVisibilities()
+    {
+        return $this->model->getVisibilities();
+    }
+
+    public function countCollection()
+    {
+        return $this->model->count();
     }
 }

@@ -13,35 +13,47 @@ class UserService extends AdminBaseService
     {
         $this->userRepository = new UserRepository(new User());
 
-        $this->filterableField = ['username', 'email', 'full_name', 'status', 'visibility', 'follower_count', 'like_count', 'media_count'];
+        $this->filterableField = ['username', 'email', 'status', 'visibility'];
+        $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
     }
 
-    public function getUsers()
+    /**
+     * @return mixed
+     */
+    public function getFilteredUsers(): mixed
     {
-        $users = $this->userRepository->all();
+        $offset = (int) request()->get('start');
+        $limit = (int) request()->get('length');
 
-        $this->appendBadges($users);
+        $filters = $this->getFilters();
+        $sort = $this->tableSort();
+        if(!empty($filters)) {
+            $users = $this->userRepository->getFilteredUserAjax($offset, $limit, $sort, $filters);
+        } else {
+            $users = $this->userRepository->userAjax($offset, $limit, $sort);
+        }
+
+        $this->appendAttributes($users, $filters);
 
         return $users;
     }
 
-    public function getFilteredUsers()
+    /**
+     * @param $users
+     * @param $filters
+     */
+    public function appendAttributes($users, $filters)
     {
-        $fields = request()->UserSearch ?? [];
+        $users->total_users = $this->userRepository->countCollection();
+        $users->total_filtered_users = !empty($filters) ? $this->userRepository->filteredUserQuery($filters)->count() : $users->total_users;
 
-        $filters = [];
-        if (! empty($fields)) {
-            $filters = $this->cleanFilterFields($fields);
-        }
-
-        if (! empty($filters)) {
-            $users = $this->userRepository->getFilteredUsers($filters);
-
-            $this->appendBadges($users);
-
-            return $users;
-        } else {
-            return $this->getUsers();
+        foreach ($users as $user)
+        {
+            $user->status_badge = [
+                'status' => $this->createBadge($user->status_color, $user->status_name),
+                'is_verified' => $this->createBadge($user->email_verified ? 'success' : 'danger',$user->email_verified ? 'Email Verified' : 'Email Not-verified'),
+                'gender' => $this->createBadge($user->gender_color, $user->gender_name)
+            ];
         }
     }
 
@@ -62,32 +74,19 @@ class UserService extends AdminBaseService
         return $user;
     }
 
-    public function appendBadges($users)
-    {
-        foreach ($users as $user) {
-            $statusBadge = [
-                'status' => $user->status_name,
-                'color' => $user->status_color,
-            ];
-
-            $genderBadge = [
-                'gender' => $user->gender_name,
-                'color' => $user->gender_color,
-            ];
-
-            $isVerifiedBadge = [
-                'is_verified' => $user->email_verified ? 'Email Verified' : 'Email Not-verified',
-                'color' => $user->email_verified ? 'success' : 'danger',
-            ];
-
-            $user->status_badge = $statusBadge;
-            $user->gender_badge = $genderBadge;
-            $user->isverified_badge = $isVerifiedBadge;
-        }
-    }
-
-    public function getUserStatuses()
+    /**
+     * @return array
+     */
+    public function getUserStatuses(): array
     {
         return $this->userRepository->getUserStatues();
+    }
+
+    /**
+     * @return array
+     */
+    public function getVisibilities(): array
+    {
+        return $this->userRepository->getVisibilities();
     }
 }

@@ -3,6 +3,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('admin/assets/css/user.css') }}">
 @stop
+@section('plugins.Datatables', true)
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -20,70 +21,43 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-12">
-                        @section('plugins.Datatables', true)
+                    <div class="col-12 table-responsive">
+                        <table id="datatables" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Fullname</th>
+                                    <th>Status</th>
+                                    <th>Visibility</th>
+                                    <th>Followers</th>
+                                    <th>Likes</th>
+                                    <th>Medias</th>
+                                    <th>Created_at</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-@section('scripts')
+@section('js')
     <script>
-        $(document).ready(function() {
-            // do not submit when there are less than 3 characters
-            // only check username, email, fullname for length
-            // clean url when filter fields are empty
+        var userStatus = '<option value=""></option>';
 
-            var originalFormData = $('form#filter').serialize();
-            $('input, select').blur(function() {
+        @foreach($userStatuses as $key => $status)
+            userStatus += '<option value="' + {{ $key }} + '">{{ $status }}</option>'
+        @endforeach
 
-                const fieldValue = $(this).val();
-                const cleanFieldName = $(this).attr('name').match(/\[(.*?)\]/)[1];
-                const fieldWithLimit = ['username', 'email', 'full_name']
+        var userVisibility = '<option value=""></option>';
 
-                if(validInput(fieldValue, cleanFieldName, fieldWithLimit)) {
-                    $('#filter').submit();
-                    return;
-                } else {
-                    $(this).val('');
-                }
-
-                if(isDirty(originalFormData)) {
-                    let resetFilter = false;
-                    let canSubmitForm = false;
-                    $('input, select').each(function() {
-                        const fieldValue = $(this).val();
-                        const cleanFieldName = $(this).attr('name')?.match(/\[(.*?)\]/)[1];
-                        if(validInput(fieldValue, cleanFieldName, fieldWithLimit)) {
-                            canSubmitForm = true;
-                            resetFilter = false;
-                        } else {
-                            resetFilter = true;
-                        }
-                    });
-
-
-
-                    if(canSubmitForm) {
-                        $('#filter').submit();
-                    }
-
-                    if(resetFilter && !canSubmitForm) {
-                        window.location.href = '/user';
-                    }
-                }
-            })
-
-
-
-            function validInput(value, field_name = '', fieldWithLimit) {
-                return (value.length > 2 || $.inArray(field_name, fieldWithLimit) === -1) && value.length !== 0;
-            }
-
-            function isDirty(originalFOrm) {
-                return originalFOrm !== $('form#filter').serialize();
-            }
-        })
+        @foreach($userVisibilities as $key => $visibility)
+            userVisibility += '<option value="' + {{ $key }} + '">{{ $visibility }}</option>'
+        @endforeach
     </script>
+    <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
 @endsection
+
