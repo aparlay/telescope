@@ -1,13 +1,16 @@
 <?php
 
-namespace Aparlay\Core\Api\V1\Models;
+namespace Aparlay\Core\Values;
+
+use Aparlay\Core\Casts\SimpleUser as SimpleUserCaster;
+use Illuminate\Contracts\Database\Eloquent\Castable;
 
 /**
  * Class SimpleUser.
  *
  * @OA\Schema(title="SimpleUser")
  */
-class SimpleUser
+class SimpleUser implements Castable
 {
     /**
      * @var string
@@ -37,4 +40,13 @@ class SimpleUser
      * @OA\Property(example=true)
      */
     public bool $is_liked;
+
+    /**
+     * @param  array  $arguments
+     * @return string
+     */
+    public static function castUsing(array $arguments): string
+    {
+        return SimpleUserCaster::class;
+    }
 }

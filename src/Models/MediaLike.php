@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaLikeFactory;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -81,6 +82,7 @@ class MediaLike extends BaseModel
      * @var array
      */
     protected $casts = [
+        'creator' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed',
     ];
 
     /**
@@ -124,9 +126,9 @@ class MediaLike extends BaseModel
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
 
         if (! Redis::exists($cacheKey)) {
-            $likedMediaIds = self::project(['media_id' => true, '_id' => false])
-                ->creator(new ObjectId($userId))
-                ->pluck('media_id')
+            $likedMediaIds = self::project(['media_ids' => true, '_id' => false])
+                ->creator($userId)
+                ->pluck('media_ids')
                 ->toArray();
 
             if (empty($likedMediaIds)) {

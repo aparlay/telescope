@@ -3,8 +3,8 @@
 namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Follow;
-use Aparlay\Core\Api\V1\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
@@ -52,9 +52,15 @@ class FollowRepository implements RepositoryInterface
         // TODO: Implement update() method.
     }
 
+    /**
+     * Delete Follow.
+     *
+     * @param string $id
+     * @return void
+     */
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $this->model->destroy($id);
     }
 
     public function find($id)
@@ -65,12 +71,24 @@ class FollowRepository implements RepositoryInterface
     /**
      * Check if already followed by the given user.
      *
-     * @param  User|Authenticatable  $creator
-     * @param  User  $user
-     * @return Follow|null
+     * @param  ObjectId|string  $creatorId
+     * @param  ObjectId|string  $userId
+     * @return Follow|Builder|Model|object|null
      */
-    public function isFollowed(User|Authenticatable $creator, User $user): ?Follow
+    public function getFollow(ObjectId|string $creatorId, ObjectId|string $userId): Follow|Builder|null
     {
-        return Follow::user($user->_id)->creator($creator->_id)->first();
+        return Follow::creator($creatorId)->user($userId)->first();
+    }
+
+    /**
+     * Check if already followed by the given user.
+     *
+     * @param  ObjectId|string  $creatorId
+     * @param  ObjectId|string  $userId
+     * @return bool
+     */
+    public function isFollowed(ObjectId|string $creatorId, ObjectId|string $userId): bool
+    {
+        return (bool) Follow::creator($creatorId)->user($userId)->first();
     }
 }

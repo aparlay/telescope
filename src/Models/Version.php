@@ -15,7 +15,6 @@ class Version extends BaseModel
     use VersionScope;
 
     public const OS_ANDROID = 'android';
-
     public const OS_IOS = 'ios';
 
     /**
@@ -57,7 +56,6 @@ class Version extends BaseModel
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',

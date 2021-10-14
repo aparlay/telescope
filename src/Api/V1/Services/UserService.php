@@ -78,8 +78,7 @@ class UserService
         if (($fileName = $request->avatar->storePubliclyAs('avatars', $avatar, 'public')) !== false) {
             /* Store avatar name in database */
             $oldFileName = $user->avatar;
-            $user->avatar = Storage::disk('public')->url('avatars/'.$avatar);
-            $user->save();
+            $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/'.$avatar)], $user->_id);
 
             if (! config('app.is_testing')) {
                 dispatch((new UploadAvatar((string) $user->_id, 'avatars/'.$avatar))->delay(10)->onQueue('low'));
