@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaLikeFactory;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -81,6 +82,7 @@ class MediaLike extends BaseModel
      * @var array
      */
     protected $casts = [
+        'creator' => SimpleUserCast::class . ':is_like,is_followed',
     ];
 
     /**
