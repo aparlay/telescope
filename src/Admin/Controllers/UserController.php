@@ -22,7 +22,10 @@ class UserController extends Controller
     {
         $users = $this->userService->getFilteredUsers();
         $userStatuses = $this->userService->getUserStatuses();
-echo '<pre>'; print_r($users); die;
+        echo '<pre>';
+        print_r($users);
+        die;
+
         return view('default_view::admin.pages.user.index', compact('users', 'userStatuses'));
     }
 
