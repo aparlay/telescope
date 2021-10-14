@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\BlockFactory;
 use Aparlay\Core\Models\Scopes\BlockScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -70,6 +71,8 @@ class Block extends BaseModel
      * @var array
      */
     protected $casts = [
+        'creator' => SimpleUserCast::class . ':is_followed',
+        'user' => SimpleUserCast::class . ':is_followed',
     ];
 
     /**

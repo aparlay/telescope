@@ -2,16 +2,13 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Api\V1\Models\CreatorFieldTrait;
-use Aparlay\Core\Api\V1\Models\UserFieldTrait;
+use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\FollowFactory;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\FollowScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
@@ -40,7 +37,6 @@ class Follow extends BaseModel
     use FollowScope;
 
     public const STATUS_PENDING = 0;
-
     public const STATUS_ACCEPTED = 1;
 
     /**
@@ -78,6 +74,10 @@ class Follow extends BaseModel
      * @var array
      */
     protected $casts = [
+        'creator' => SimpleUserCast::class . ':is_like,is_followed',
+        'user' => SimpleUserCast::class . ':is_like,is_followed',
+        'is_deleted' => 'boolean',
+        'status' => 'integer',
     ];
 
     public static function getStatuses(): array

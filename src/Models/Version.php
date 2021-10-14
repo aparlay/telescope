@@ -57,7 +57,6 @@ class Version extends BaseModel
      * @var array
      */
     protected $casts = [
-        '_id' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',

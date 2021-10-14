@@ -84,6 +84,9 @@ class Report extends BaseModel
      * @var array
      */
     protected $casts = [
+        'reason' => 'string',
+        'type' => 'integer',
+        'status' => 'integer',
     ];
 
     public static function getStatuses(): array
