@@ -1,4 +1,5 @@
-@extends('default_view::admin.layouts.layout')
+@extends('adminlte::page')
+
 @section('title', 'User Profile')
 @section('content')
     <div class="content-wrapper">
