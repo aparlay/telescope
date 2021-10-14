@@ -82,9 +82,8 @@ class AdminBaseService
     {
         $columnArr = $this->fillTableColumns();
         $filterFields = [];
-        foreach($columnArr as $column)
-        {
-            if($column['data']) {
+        foreach ($columnArr as $column) {
+            if ($column['data']) {
                 $filterFields[$column['data']] = $column['search']['value'];
             }
         }
@@ -99,11 +98,11 @@ class AdminBaseService
      */
     public function createBadge($color, $name): string
     {
-        return '<span class="badge bg-'. $color .'">' . $name . '</span>';
+        return '<span class="badge bg-'.$color.'">'.$name.'</span>';
     }
 
     /**
-     * @param integer $numberColumn
+     * @param int $numberColumn
      * @return array
      */
     public function getTableFieldByNumber(int $numberColumn): array
@@ -119,10 +118,10 @@ class AdminBaseService
         $sortTable = $this->sortDefault;
         $sortRequest = request()->order ?? [];
 
-        if(isset($sortRequest[0])){
-            if(isset($sortRequest[0]['column']) && isset($sortRequest[0]['dir'])){
+        if (isset($sortRequest[0])) {
+            if (isset($sortRequest[0]['column']) && isset($sortRequest[0]['dir'])) {
                 $tableField = $this->getTableFieldByNumber($sortRequest[0]['column']);
-                if(!empty($tableField) && isset($tableField['data'])) {
+                if (! empty($tableField) && isset($tableField['data'])) {
                     $sortTable = [$tableField['data'] => $sortRequest[0]['dir']];
                 }
             }

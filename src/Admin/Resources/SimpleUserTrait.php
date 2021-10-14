@@ -8,7 +8,6 @@ trait SimpleUserTrait
      * Create the simple user attribute.
      *
      * @param string[] $fields
-     *
      */
     public function createSimpleUser(
         $user,

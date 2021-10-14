@@ -27,7 +27,7 @@ class UserService extends AdminBaseService
 
         $filters = $this->getFilters();
         $sort = $this->tableSort();
-        if(!empty($filters)) {
+        if (! empty($filters)) {
             $users = $this->userRepository->getFilteredUserAjax($offset, $limit, $sort, $filters);
         } else {
             $users = $this->userRepository->userAjax($offset, $limit, $sort);
@@ -45,14 +45,13 @@ class UserService extends AdminBaseService
     public function appendAttributes($users, $filters)
     {
         $users->total_users = $this->userRepository->countCollection();
-        $users->total_filtered_users = !empty($filters) ? $this->userRepository->filteredUserQuery($filters)->count() : $users->total_users;
+        $users->total_filtered_users = ! empty($filters) ? $this->userRepository->filteredUserQuery($filters)->count() : $users->total_users;
 
-        foreach ($users as $user)
-        {
+        foreach ($users as $user) {
             $user->status_badge = [
                 'status' => $this->createBadge($user->status_color, $user->status_name),
-                'is_verified' => $this->createBadge($user->email_verified ? 'success' : 'danger',$user->email_verified ? 'Email Verified' : 'Email Not-verified'),
-                'gender' => $this->createBadge($user->gender_color, $user->gender_name)
+                'is_verified' => $this->createBadge($user->email_verified ? 'success' : 'danger', $user->email_verified ? 'Email Verified' : 'Email Not-verified'),
+                'gender' => $this->createBadge($user->gender_color, $user->gender_name),
             ];
         }
     }
