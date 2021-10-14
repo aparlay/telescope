@@ -35,19 +35,15 @@ class MediaController extends Controller
     public function view($id)
     {
         $media = $this->mediaService->find($id);
-
+        // echo '<pre>'; print_r($media); die;
         return view('default_view::admin.pages.media.view', compact('media'));
     }
 
     public function update(Request $request, $id)
     {
+        // echo '<pre>'; print_r($request->all()); die;
+        $this->mediaService->updateMedia($request, $id);
         $media = $this->mediaService->find($id);
-        if ($media) {
-            $this->mediaService->updateMedia($request, $id);
-
-            return view('default_view::admin.pages.media.view', compact('media'));
-        } else {
-            die('User Not found..');
-        }
+        return view('default_view::admin.pages.media.view', compact('media'));
     }
 }

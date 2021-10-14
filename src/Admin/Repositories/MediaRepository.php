@@ -29,7 +29,8 @@ class MediaRepository implements RepositoryInterface
 
     public function update(array $data, $id)
     {
-        return $this->model->media($id)->update($data);
+        $this->model->media($id)->update($data);
+        $this->model->refresh();
     }
 
     public function delete($id)

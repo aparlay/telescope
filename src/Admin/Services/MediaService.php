@@ -50,12 +50,10 @@ class MediaService
      */
     public function updateMedia(Request $request, $id)
     {
-        $data = [
-            'description' => $request->description,
-            'status' => $request->status,
-            // 'skin_score' => $request->Media->skin_score,
-        ];
-
-        return $this->mediaRepository->update($data, $id);
+        $request->request->add([
+            'visibility' => ($request->visibility == 'on') ? 1 : 0,
+            'is_music_licensed' => ($request->is_music_licensed == 'on') ? true : false,
+        ]);
+        return $this->mediaRepository->update($request->all(), $id);
     }
 }

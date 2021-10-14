@@ -174,7 +174,7 @@
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Show In Public Feed</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" id="visibility" {!! $media->visibility ? 'checked' : '' !!}>
+                                                    <input type="checkbox" class="custom-control-input" name="visibility" id="visibility" {!! ($media->visibility == 1) ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="visibility"></label>
                                                 </div>
                                             </div>
@@ -183,7 +183,7 @@
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Music Licensed</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" id="is_music_licensed" {!! $media->is_music_licensed ? 'checked' : '' !!}>
+                                                    <input type="checkbox" class="custom-control-input" name="is_music_licensed" id="is_music_licensed" {!! ($media->is_music_licensed == true) ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="is_music_licensed"></label>
                                                 </div>
                                             </div>
