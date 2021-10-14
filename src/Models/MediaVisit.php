@@ -110,7 +110,8 @@ class MediaVisit extends BaseModel
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
 
         if (! Redis::exists($cacheKey)) {
-            $visitedMediaIds = MediaVisit::creator($userId)
+            $visitedMediaIds = self::project(['media_ids' => true, '_id' => false])
+                ->user($userId)
                 ->pluck('media_ids')
                 ->toArray();
 
