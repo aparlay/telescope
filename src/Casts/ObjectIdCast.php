@@ -19,7 +19,7 @@ class ObjectIdCast implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -33,7 +33,7 @@ class ObjectIdCast implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        if (!empty($value)) {
+        if (! empty($value)) {
             $value = new ObjectId($value);
         }
 

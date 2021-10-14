@@ -390,7 +390,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get if the current login user follow this user or not
+     * Get if the current login user follow this user or not.
      */
     public function getIsFollowedAttribute(): bool
     {

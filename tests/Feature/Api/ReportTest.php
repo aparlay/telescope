@@ -286,5 +286,4 @@ class ReportTest extends ApiTestCase
             );
         $this->assertDatabaseHas('reports', ['media_id' => new ObjectId($media->_id), 'type' => Report::TYPE_MEDIA, 'created_by' => new ObjectId($user->_id)]);
     }
-
 }

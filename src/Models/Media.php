@@ -156,7 +156,7 @@ class Media extends BaseModel
      * @var array
      */
     protected $casts = [
-        'creator' => SimpleUserCast::class . ':is_followed',
+        'creator' => SimpleUserCast::class.':is_followed',
         'status' => 'integer',
         'visibility' => 'integer',
         'like_count' => 'integer',

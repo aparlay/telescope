@@ -6,7 +6,6 @@ use Aparlay\Core\Models\Report as ReportBase;
 
 /**
  * @OA\Schema()
- *
  */
 class Report extends ReportBase
 {

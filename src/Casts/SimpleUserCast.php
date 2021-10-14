@@ -34,7 +34,7 @@ class SimpleUserCast implements CastsAttributes
         $userArray = [
             '_id' => (string) $user->_id,
             'username' => $user->username,
-            'avatar' => $user->avatar ?? Cdn::avatar('default.jpg')
+            'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
         ];
 
         if (in_array('is_followed', $this->fields, true)) {

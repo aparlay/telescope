@@ -83,6 +83,6 @@ class FollowRepository implements RepositoryInterface
      */
     public function isFollowed(ObjectId|string $creatorId, ObjectId|string $userId): bool
     {
-        return (bool)Follow::creator($creatorId)->user($userId)->first();
+        return (bool) Follow::creator($creatorId)->user($userId)->first();
     }
 }
