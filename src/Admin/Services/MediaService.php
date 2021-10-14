@@ -54,6 +54,7 @@ class MediaService
             'visibility' => ($request->visibility == 'on') ? 1 : 0,
             'is_music_licensed' => ($request->is_music_licensed == 'on') ? true : false,
         ]);
+
         return $this->mediaRepository->update($request->all(), $id);
     }
 }

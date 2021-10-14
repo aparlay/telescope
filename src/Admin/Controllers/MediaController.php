@@ -44,6 +44,7 @@ class MediaController extends Controller
         // echo '<pre>'; print_r($request->all()); die;
         $this->mediaService->updateMedia($request, $id);
         $media = $this->mediaService->find($id);
+
         return view('default_view::admin.pages.media.view', compact('media'));
     }
 }
