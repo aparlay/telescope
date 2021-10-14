@@ -126,8 +126,7 @@ class MediaLike extends BaseModel
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
 
         if (! Redis::exists($cacheKey)) {
-            $likedMediaIds = self::project(['media_id' => true, '_id' => false])
-                ->creator(new ObjectId($userId))
+            $likedMediaIds = MediaLike::creator(new ObjectId($userId))
                 ->pluck('media_id')
                 ->toArray();
 
