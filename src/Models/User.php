@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -386,6 +387,21 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return Alert::user(auth()->user()->_id)->notVisited()->get();
+    }
+
+    /**
+     * Get if the current login user follow this user or not
+     */
+    public function getIsFollowedAttribute(): bool
+    {
+        if (auth()->guest()) {
+            return false;
+        }
+
+        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->_id;
+        Follow::cacheByUserId(auth()->user()->_id);
+
+        return Redis::sismember($cacheKey, (string) $this->_id);
     }
 
     /**
