@@ -45,6 +45,8 @@
     </div>
 @endsection
 @section('js')
+    <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script>
         var userStatus = '<option value=""></option>';
 

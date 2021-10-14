@@ -9,6 +9,8 @@ $(document).ready(function() {
         processing : true,
         serverSide : true,
         pageLength : 20,
+        responsive: true,
+        lengthChange: false,
         dom : 'rtip',
         orderMulti: false,
         autoWidth: false,
@@ -25,7 +27,16 @@ $(document).ready(function() {
             {data: 'follower_count', orderable: false},
             {data: 'like_count', orderable: false},
             {data: 'media_count', orderable: false},
-            {data: 'created_at'},
+            {data: 'created_at', render: function (response) {
+                    var datetime = new Date(response);
+                    return [datetime.getFullYear(),
+                            datetime.getMonth()+1,
+                            datetime.getDate(),
+                        ].join('-')+' '+
+                        [datetime.getHours(),
+                            datetime.getMinutes(),
+                            datetime.getSeconds()].join(':');
+                } },
             {data: null, render: function(response) {
                     return '<a class="btn btn-primary btn-sm" href="/user/'+ response._id +'" title="View"><i class="fas fa-eye"></i> View</a>'
                 }, orderable: false},
