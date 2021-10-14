@@ -4,18 +4,30 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Otp;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Otp as BaseOtp;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class OtpRepository
+class OtpRepository implements RepositoryInterface
 {
+    protected Otp | BaseOtp $model;
+
+    public function __construct($model)
+    {
+        if (! ($model instanceof BaseOtp)) {
+            throw new \InvalidArgumentException('$model should be of Otp type');
+        }
+
+        $this->model = $model;
+    }
+
     /**
      * Responsible to create OTP.
      * @param  array  $otp
      * @return Otp
      * @throws \Exception
      */
-    public static function create(array $otp)
+    public function create(array $otp)
     {
         /* Set the Default Values and required to be input parameters */
         try {
@@ -44,7 +56,7 @@ class OtpRepository
      * @return bool|void
      * @throws \Exception
      */
-    public static function expire(object $otps)
+    public function expire(object $otps)
     {
         if (count($otps) > 0) {
             foreach ($otps as $model) {
@@ -59,8 +71,14 @@ class OtpRepository
         }
     }
 
-    public function __construct($model)
+    /**
+     * Set OTP validated.
+     * @param  bool  $validated
+     * @return void
+     */
+    public function validatedOtp($validated = true)
     {
+        $this->model->update(['validated' => $validated]);
     }
 
     public function all()
@@ -75,7 +93,7 @@ class OtpRepository
 
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        return $this->model->destroy($id);
     }
 
     public function find($id)
