@@ -72,15 +72,17 @@ class UploadAvatar implements ShouldQueue
      */
     public function handle()
     {
-        $resource = Storage::disk('public')->readStream($this->file);
+        $local = Storage::disk('public');
+        $b2 = Storage::disk('b2-avatars');
+        $gc = Storage::disk('gc-avatars');
         $filename = basename($this->file);
-        Storage::disk('b2-avatars')->writeStream($filename, $resource);
-        Storage::disk('gc-avatars')->writeStream($filename, $resource);
+        $b2->writeStream($filename, $local->readStream($this->file));
+        $gc->writeStream($filename, $local->readStream($this->file));
 
         $this->user->avatar = Cdn::avatar($filename);
-        if ($this->user->save()) {
+        if ($this->user->save() && $b2->exists($filename) && $gc->exists($filename)) {
             $deleteUploaded = new DeleteAvatar((string) $this->user->_id, $this->file, ['public']);
-            dispatch($deleteUploaded->delay(100)->onQueue('low'));
+            dispatch($deleteUploaded->delay(300)->onQueue('low'));
         }
     }
 

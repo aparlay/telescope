@@ -1,13 +1,23 @@
-@extends('default_view::admin.layouts.layout')
+@extends('adminlte::page')
+
 @section('title', 'Dashboard')
-@section('styles')
-    <link rel="stylesheet" href="{{ asset('admin/assets/css/chartjs/chart.min.css') }}">
-@endsection
+
+{{-- Enable Chartjs plugins --}}
+@section('plugins.Chartjs', true)
+
+@section('content_header')
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0">Dashboard</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{{ route('core.admin.dashboard') }}">Home</a></li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+@stop
 @section('content')
-<div class="content-wrapper">
-
-    @include('default_view::admin.parts.breadcrumbs')
-
     <div class="content">
         <div class="container-fluid">
             <div class="d-none" data-chart="{{ $data_analytics }}" id="chart_data"></div>
@@ -89,10 +99,8 @@
             </div>
         </div>
     </div>
-</div>
 @endsection
-@section('scripts')
-    <script src="{{ asset('admin/assets/js/chartjs/chart.min.js') }}"></script>
+@section('js')
     <script src="{{ asset('admin/assets/js/adminAnalytics.js') }}"></script>
 @endsection
 

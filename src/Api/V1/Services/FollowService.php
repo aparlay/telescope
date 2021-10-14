@@ -28,7 +28,7 @@ class FollowService
     {
         $statusCode = Response::HTTP_OK;
         $creator = auth()->user();
-        if (($follow = $this->followRepository->isFollowed($creator, $user)) === null) {
+        if (($follow = $this->followRepository->getFollow($creator->_id, $user->_id)) === null) {
             $follow = $this->followRepository->create(['user' => ['_id' => new ObjectId($user->_id)]]);
             $statusCode = Response::HTTP_CREATED;
         }
@@ -45,7 +45,7 @@ class FollowService
     public function unfollow(User $user): array
     {
         $creator = auth()->user();
-        if (($follow = $this->followRepository->isFollowed($creator, $user)) !== null) {
+        if (($follow = $this->followRepository->getFollow($creator->_id, $user->_id)) !== null) {
             $this->followRepository->delete($follow->_id);
         }
 

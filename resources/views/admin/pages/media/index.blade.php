@@ -1,7 +1,7 @@
-@extends('default_view::admin.layouts.layout')
+@extends('adminlte::page')
 @section('title', 'Dashboard')
 
-@section('styles')
+@section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/media.css') }}">
 @endsection
 

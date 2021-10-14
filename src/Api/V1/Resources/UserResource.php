@@ -7,8 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
-    use SimpleUserTrait;
-
     /**
      * Transform the resource into an array.
      *

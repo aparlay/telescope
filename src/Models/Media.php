@@ -2,7 +2,10 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\MediaLike;
+use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
+use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\MediaScope;
@@ -12,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Redis;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
 use MathPHP\Statistics\Descriptive;
@@ -152,6 +156,7 @@ class Media extends BaseModel
      * @var array
      */
     protected $casts = [
+        'creator' => SimpleUserCast::class.':is_followed',
         'status' => 'integer',
         'visibility' => 'integer',
         'like_count' => 'integer',
@@ -178,24 +183,24 @@ class Media extends BaseModel
     public static function getVisibilities()
     {
         return [
-            self::VISIBILITY_PRIVATE => __('Private'),
-            self::VISIBILITY_PUBLIC => __('Public'),
+            self::VISIBILITY_PRIVATE => __('private'),
+            self::VISIBILITY_PUBLIC => __('public'),
         ];
     }
 
     public static function getStatuses()
     {
         return [
-            self::STATUS_QUEUED => __('Queued'),
-            self::STATUS_UPLOADED => __('Uploaded'),
-            self::STATUS_IN_PROGRESS => __('In-Progress'),
-            self::STATUS_COMPLETED => __('Waiting For Review'),
-            self::STATUS_FAILED => __('Failed'),
-            self::STATUS_CONFIRMED => __('Confirmed'),
-            self::STATUS_DENIED => __('Denied'),
-            self::STATUS_ADMIN_DELETED => __('Deleted By Admin'),
-            self::STATUS_USER_DELETED => __('Deleted'),
-            self::STATUS_IN_REVIEW => __('Under review'),
+            self::STATUS_QUEUED => __('queued'),
+            self::STATUS_UPLOADED => __('uploaded'),
+            self::STATUS_IN_PROGRESS => __('in-progress'),
+            self::STATUS_COMPLETED => __('waiting for review'),
+            self::STATUS_FAILED => __('failed'),
+            self::STATUS_CONFIRMED => __('confirmed'),
+            self::STATUS_DENIED => __('denied'),
+            self::STATUS_ADMIN_DELETED => __('deleted by admin'),
+            self::STATUS_USER_DELETED => __('deleted'),
+            self::STATUS_IN_REVIEW => __('under review'),
         ];
     }
 
@@ -409,6 +414,51 @@ class Media extends BaseModel
     public function getFilenameAttribute()
     {
         return basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION));
+    }
+
+    /**
+     * Get the user's full name.
+     */
+    public function getIsFollowedAttribute(): bool
+    {
+        if (auth()->guest()) {
+            return false;
+        }
+
+        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->_id;
+        Follow::cacheByUserId(auth()->user()->_id);
+
+        return Redis::sismember($cacheKey, (string) $this->creator['_id']);
+    }
+
+    /**
+     * Get the user's full name.
+     */
+    public function getIsLikedAttribute(): bool
+    {
+        if (auth()->guest()) {
+            return false;
+        }
+
+        $mediaLikeCacheKey = (new MediaLike())->getCollection().':creator:'.auth()->user()->_id;
+        MediaLike::cacheByUserId(auth()->user()->_id);
+
+        return Redis::sismember($mediaLikeCacheKey, (string) $this->_id);
+    }
+
+    /**
+     * Get the user's full name.
+     */
+    public function getIsVisitedAttribute(): bool
+    {
+        if (auth()->guest()) {
+            return false;
+        }
+
+        $mediaVisitCacheKey = (new MediaVisit())->getCollection().':creator:'.auth()->user()->_id;
+        MediaVisit::cacheByUserId(auth()->user()->_id);
+
+        return Redis::sismember($mediaVisitCacheKey, (string) $this->_id);
     }
 
     /**

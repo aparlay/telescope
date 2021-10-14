@@ -81,7 +81,7 @@ class UserService
             $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/'.$avatar)], $user->_id);
 
             if (! config('app.is_testing')) {
-                dispatch((new UploadAvatar((string) $user->_id, 'avatars/'.$fileName))->delay(10)->onQueue('high'));
+                dispatch((new UploadAvatar((string) $user->_id, 'avatars/'.$avatar))->delay(10)->onQueue('low'));
             }
 
             if (! str_contains($oldFileName, 'default_')) {
