@@ -17,9 +17,31 @@ class MediaRepository implements RepositoryInterface
         $this->model = $model;
     }
 
-    public function all($sort = [])
+    public function all()
     {
-        return $this->model->sortBy($sort)->paginate(config('core.admin.lists.page_count'));
+        // TODO: Implement all() method.
+    }
+
+    public function mediaAjax($offset, $limit, $sort)
+    {
+        return $this->model->sortBy($sort)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
+    }
+
+    public function countFilteredMediaAjax($filters)
+    {
+        return $this->model->filter($filters)->count();
+    }
+
+    public function getFilteredMediaAjax($offset, $limit, $sort, $filters)
+    {
+        return $this->model->filter($filters)
+            ->sortBy($sort)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
     }
 
     public function create(array $data)
@@ -40,5 +62,15 @@ class MediaRepository implements RepositoryInterface
     public function find($id)
     {
         // TODO: Implement find() method.
+    }
+
+    public function getMediaStatuses()
+    {
+        return $this->model->getStatuses();
+    }
+
+    public function countCollection()
+    {
+        return $this->model->count();
     }
 }

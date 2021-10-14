@@ -8,50 +8,83 @@ use Aparlay\Core\Helpers\Cdn;
 
 class MediaService extends AdminBaseService
 {
-    protected MediaRepository $mediaRepository;
+    protected MediaRepository $MediaRepository;
 
     public function __construct()
     {
-        $this->mediaRepository = new MediaRepository(new Media());
+        $this->userRepository = new MediaRepository(new Media());
+
         $this->filterableField = ['creator.username', 'status'];
         $this->sorterableField = ['creator.username', 'status', 'created_at'];
-        $this->sortDefault = ['created_by'=>'desc'];
     }
 
-    public function getStatuses(): array
+    /**
+     * @return mixed
+     */
+    public function getFilteredMedia(): mixed
     {
-        return $this->mediaRepository->getStatuses();
-    }
+        $offset = (int) request()->get('start');
+        $limit = (int) request()->get('length');
 
-    public function fillListAttributes($mediaCollection)
-    {
-        foreach ($mediaCollection['data'] as &$collect) {
-            $collect['status'] = !empty($collect['status']) ? '<span class="badge bg-'.$collect['status']['color'].'">'.$collect['status']['text'].'</span>' : '';
-            $collect['file'] = '<img src="'.Cdn::cover(! empty($collect['file']) ? $collect['file'].'.jpg?width=100' : 'default.jpg?width=100').'" />';
-            $collect['creator_username'] = $collect['creator.username'];
-            $collect['detail_url'] = '<a class="btn btn-primary btn-sm" href="'.'/media/view/'.$collect['id'].'" title="View"><i class="fas fa-eye"></i> View</a>';
-        }
-
-        return $mediaCollection;
-    }
-
-    public function list()
-    {
-        $result = [];
-        $this->fillTableColumns();
+        $filters = $this->getFilters();
         $sort = $this->tableSort();
-
-        $MediaSearch = request()->MediaSearch ?? [];
-
-        if (! empty($MediaSearch)) {
-            $filter = $this->cleanFilterFields($MediaSearch);
-        }
-
-        if (! empty($filter)) {
-            //return $this->fillListAttributes($this->mediaRepository->getFilteredMedia($filter, $sort));
+        if (! empty($filters)) {
+            $medias = $this->mediaRepository->getFilteredMediaAjax($offset, $limit, $sort, $filters);
         } else {
-            $result = $this->fillListAttributes($this->buildData($this->mediaRepository->all($sort)));
+            $medias = $this->mediaRepository->mediaAjax($offset, $limit, $sort);
         }
-        return $result;
+
+        $this->appendAttributes($medias, $filters);
+
+        return $medias;
+    }
+
+    /**
+     * @param $medias
+     * @param $filters
+     */
+    public function appendAttributes($medias, $filters)
+    {
+        $medias->total_medias = $this->mediaRepository->countCollection();
+        $medias->total_filtered_medias = ! empty($filters) ? $this->mediaRepository->countFilteredUserAjax($filters) : $medias->total_users;
+
+        foreach ($medias as $media) {
+            $media->status_badge = [
+                'status' => $this->createBadge($media->status_color, $media->status)
+            ];
+        }
+    }
+
+    /**
+     * @param $id
+     */
+    public function find($id)
+    {
+        $user = $this->userRepository->find($id);
+
+        $statusBadge = [
+            'status' => $user->status_name,
+            'color' => $user->status_color,
+        ];
+
+        $user->status_badge = $statusBadge;
+
+        return $user;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMediaStatuses(): array
+    {
+        return $this->userRepository->getMediaStatuses();
+    }
+
+    /**
+     * @return array
+     */
+    public function getVisibilities(): array
+    {
+        return $this->userRepository->getVisibilities();
     }
 }

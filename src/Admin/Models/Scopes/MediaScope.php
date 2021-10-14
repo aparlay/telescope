@@ -6,18 +6,25 @@ use MongoDB\BSON\Regex;
 
 trait MediaScope
 {
-    public function scopeSortBy($query, $sort)
+    public function scopeRecent($query)
     {
-        $key = array_keys($sort)[0];
+        return $query->orderBy('created_at', 'desc');
+    }
 
-        return $query->orderBy($key, $sort[$key]);
+    public function scopeSortBy($query, $sorts): mixed
+    {
+        foreach ($sorts as $field => $direction) {
+            $query->orderBy($field, $direction);
+        }
+
+        return $query;
     }
 
     public function scopeFilter($query, $filters)
     {
         foreach ($filters as $key => $filter) {
             if (is_numeric($filter)) {
-                $query->where($key, '=', (int) $filter);
+                $query->where($key, (int) $filter);
             } else {
                 $query->where($key, 'regex', new Regex('^'.$filter));
             }

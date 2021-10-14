@@ -22,21 +22,26 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
         return redirect()->route('core.admin.dashboard');
     });
 
-    /*Authenticated Routes */
+    /* Authenticated Routes */
     Route::middleware(['admin-auth:admin'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-        # Media routes
-        Route::get('media', [MediaController::class, 'index'])->name('index');
+        /* Media routes */
+        Route::name('media.')->group(function () {
+            Route::get('media', [MediaController::class, 'index'])->name('index');
+        });
 
-        # User Routes
-        Route::get('user', [UserController::class, 'index'])->name('index');
-        Route::get('user/{id}', [UserController::class, 'view'])->name('view');
+        /* User Routes */
+        Route::name('user.')->group(function () {
+            Route::get('user', [UserController::class, 'index'])->name('index');
+            Route::get('user/{id}', [UserController::class, 'view'])->name('view');
+        });
 
-        #Ajax Routes
-        Route::post('media/list', [MediaController::class, 'AjaxList'])->name('media.list');
-
+        /* Ajax Routes */
+        Route::name('ajax.')->prefix('ajax')->group(function () {
+            Route::get('media', [MediaController::class, 'indexAjax'])->name('index');
+        });
     });
 
     /* Login Routes */
