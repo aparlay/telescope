@@ -56,11 +56,11 @@
                                         @for ($i = 1; $i < 11; $i++)
                                             <div id="media-skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
                                                 <label class="btn btn-outline-secondary">
-                                                    <input type="radio" id="media-skin-score--0" name="Media[skin_score]" value="0" data-index="0" autocomplete="off" {!! $media->scores ? 'checked' : '' !!}>
+                                                    <input type="radio" id="media-skin-score--{{$i}}" name="score" value="{{ $media->score }}" data-index="0" autocomplete="on" @if($media->scores == "") checked @endif>
                                                     {{ $i }}
                                                 </label>
-                                            </div>
                                         @endfor
+                                        </div>
                                     </div>
                                 </li>
                                 <li class="list-group-item">
@@ -69,11 +69,12 @@
                                         @for ($i = 1; $i < 11; $i++)
                                             <div id="media-skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
                                                 <label class="btn btn-outline-secondary">
-                                                    <input type="radio" id="media-skin-score--0" name="Media[skin_score]" value="0" data-index="0" autocomplete="off" {!! $media->sort_score ? 'checked' : '' !!}>
+                                                    <input type="radio" id="media-skin-score--0" name="sort_score" value="{{ $media->sort_score }}" data-index="0" autocomplete="off" @if($media->sort_score == "5") selected @endif>
                                                     {{ $i }}
                                                 </label>
-                                            </div>
+                                            
                                         @endfor
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
@@ -126,7 +127,7 @@
                                         <div class="form-group row">
                                             <label for="bio" class="col-sm-2 col-form-label">Description</label>
                                             <div class="col-sm-10">
-                                                <textarea name="description" id="description" cols="30" rows="3" class="form-control"></textarea>
+                                                <textarea name="description" id="description" cols="30" rows="3" class="form-control">{{ $media->description }}</textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -188,29 +189,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="promo_link" class="col-sm-2 col-form-label">Skin Score</label>
-                                            <div class="col-sm-10">
-                                                @for ($i = 1; $i < 11; $i++)
-                                                    <div id="media-skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
-                                                        <label class="btn btn-outline-secondary">
-                                                            <input type="radio" id="media-skin-score--0" name="Media[skin_score]" value="0" data-index="0" autocomplete="off" {!! $media->scores ? 'checked' : '' !!}>
-                                                            {{ $i }}
-                                                        </label>
-                                                    </div>
-                                                @endfor
+                                            <label for="updated-at" class="col-sm-2 col-form-label">Skin Score</label>
+                                            <div class="col-sm-10 mt-2">
+                                                <p>{{ $media->scores }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="password" class="col-sm-2 col-form-label">Awesomeness Score</label>
-                                            <div class="col-sm-10">
-                                                @for ($i = 1; $i < 11; $i++)
-                                                    <div id="media-skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
-                                                        <label class="btn btn-outline-secondary">
-                                                            <input type="radio" id="media-skin-score--0" name="Media[skin_score]" value="0" data-index="0" autocomplete="off" {!! $media->sort_score ? 'checked' : '' !!}>
-                                                            {{ $i }}
-                                                        </label>
-                                                    </div>
-                                                @endfor
+                                            <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
+                                            <div class="col-sm-10 mt-2">
+                                                <p>{{ $media->sort_score }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
