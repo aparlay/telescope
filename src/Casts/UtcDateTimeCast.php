@@ -25,6 +25,7 @@ class UtcDateTimeCast implements CastsAttributes
         if ($value instanceof UTCDateTime) {
             return Date::createFromTimestampMs($value->toDateTime()->format('Uv'));
         }
+
         return $value;
     }
 
