@@ -46,7 +46,7 @@ class FollowService
     {
         $creator = auth()->user();
         if (($follow = $this->followRepository->getFollow($creator->_id, $user->_id)) !== null) {
-            $follow->delete();
+            $this->followRepository->delete($follow->_id);
         }
 
         return [];

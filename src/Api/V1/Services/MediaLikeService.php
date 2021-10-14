@@ -50,7 +50,7 @@ class MediaLikeService
     {
         $creator = auth()->user();
         if (($like = $this->mediaLikeRepository->isLiked($creator, $media)) !== null) {
-            $like->delete();
+            $this->mediaLikeRepository->delete($like->_id);
         }
 
         return [];

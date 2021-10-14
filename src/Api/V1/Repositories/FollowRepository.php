@@ -52,9 +52,15 @@ class FollowRepository implements RepositoryInterface
         // TODO: Implement update() method.
     }
 
+    /**
+     * Delete Follow.
+     *
+     * @param string $id
+     * @return void
+     */
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $this->model->destroy($id);
     }
 
     public function find($id)
