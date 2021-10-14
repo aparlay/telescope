@@ -37,6 +37,9 @@ class CoreServiceProvider extends ServiceProvider
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
+        $this->app->register(AuthServiceProvider::class);
+        $this->app->register(EventServiceProvider::class);
+        $this->app->register(AdminServiceProvider::class);
 
         $this->mergeConfig();
     }
