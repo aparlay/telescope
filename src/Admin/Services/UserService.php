@@ -45,7 +45,7 @@ class UserService extends AdminBaseService
     public function appendAttributes($users, $filters)
     {
         $users->total_users = $this->userRepository->countCollection();
-        $users->total_filtered_users = !empty($filters) ? $this->userRepository->filteredUserQuery($filters)->count() : $users->total_users;
+        $users->total_filtered_users = !empty($filters) ? $this->userRepository->countFilteredUserAjax($filters) : $users->total_users;
 
         foreach ($users as $user)
         {

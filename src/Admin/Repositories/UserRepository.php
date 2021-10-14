@@ -30,14 +30,14 @@ class UserRepository implements RepositoryInterface
             ->get();
     }
 
-    public function filteredUserQuery($filters)
+    public function countFilteredUserAjax($filters)
     {
-        return $this->model->filter($filters);
+        return $this->model->filter($filters)->count();
     }
 
     public function getFilteredUserAjax($offset, $limit, $sort, $filters)
     {
-        return $this->filteredUserQuery($filters)
+        return $this->model->filter($filters)
             ->sortBy($sort)
             ->skip($offset)
             ->take($limit)
