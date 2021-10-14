@@ -55,6 +55,7 @@ class MediaService
             'status' => $request->status,
             // 'skin_score' => $request->Media->skin_score,
         ];
+
         return $this->mediaRepository->update($data, $id);
     }
 }

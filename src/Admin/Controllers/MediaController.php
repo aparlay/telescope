@@ -44,6 +44,7 @@ class MediaController extends Controller
         $media = $this->mediaService->find($id);
         if ($media) {
             $this->mediaService->updateMedia($request, $id);
+
             return view('default_view::admin.pages.media.view', compact('media'));
         } else {
             die('User Not found..');
