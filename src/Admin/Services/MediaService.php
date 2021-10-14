@@ -50,7 +50,7 @@ class MediaService extends AdminBaseService
 
         foreach ($medias as $media) {
             $media->status_badge = [
-                'status' => $this->createBadge($media->status_color, $media->status)
+                'status' => $this->createBadge($media->status_color, $media->status),
             ];
         }
     }
