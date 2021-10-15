@@ -2,14 +2,14 @@
 
 namespace Aparlay\Core\Admin\Observers;
 
+use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Models\Media as ModelsMedia;
+use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Admin\Models\User as ModelsUser;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaLike;
 use Aparlay\Core\Jobs\UploadMedia;
-use Aparlay\Core\Admin\Models\Media;
-use Aparlay\Core\Admin\Models\User;
-use Aparlay\Core\Admin\Models\Media as ModelsMedia;
-use Aparlay\Core\Admin\Models\User as ModelsUser;
 use Exception;
 use MongoDB\BSON\ObjectId;
 
@@ -26,7 +26,7 @@ class MediaObserver
     {
         die('====created=====');
         // if ($media || isset($changedAttributes['status'])) {
-            
+
         //     foreach ($this->user->medias as $media) {
         //         if ((string)$media['_id'] === (string)$this->_id) {
         //             $this->user->removeFromSet('medias', $media);
@@ -52,7 +52,6 @@ class MediaObserver
         // if ($this->status === ModelsMedia::STATUS_COMPLETED || $this->status === ModelsMedia::STATUS_CONFIRMED) {
         //     Yii::$app->cache->delete('Media.Index.TotalCount.Public');
         // }
-
 
         // if ($this->status === ModelsMedia::STATUS_ADMIN_DELETED) {
         //     Yii::$app->cache->delete('Media.Index.TotalCount.Public');

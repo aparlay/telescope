@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Admin\Providers;
 
-use Aparlay\Core\Admin\Observers\MediaObserver;
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Observers\MediaObserver;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
