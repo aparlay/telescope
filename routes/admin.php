@@ -40,7 +40,7 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
 
         /* Ajax Routes */
         Route::name('ajax.')->prefix('ajax')->group(function () {
-            Route::get('user', [UserController::class, 'indexAjax'])->name('index');
+            Route::get('user', [UserController::class, 'indexAjax'])->name('user.index');
         });
     });
 

@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Resources\UserResource;
 use Aparlay\Core\Admin\Services\UserService;
+use ErrorException;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -17,7 +18,7 @@ class UserController extends Controller
     }
 
     /**
-     * @throws \ErrorException
+     * @throws ErrorException
      */
     public function index()
     {

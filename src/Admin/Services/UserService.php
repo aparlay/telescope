@@ -48,11 +48,14 @@ class UserService extends AdminBaseService
         $users->total_filtered_users = ! empty($filters) ? $this->userRepository->countFilteredUser($filters) : $users->total_users;
 
         foreach ($users as $user) {
-            $user->status_badge = [
+            $userBadges = [
                 'status' => $this->createBadge($user->status_color, $user->status_name),
                 'is_verified' => $this->createBadge($user->email_verified ? 'success' : 'danger', $user->email_verified ? 'Email Verified' : 'Email Not-verified'),
                 'gender' => $this->createBadge($user->gender_color, $user->gender_name),
             ];
+
+            $user->status_badge = implode('</br>', $userBadges);
+            $user->action = $this->createViewActionButton($user->_id, 'user');
         }
     }
 
