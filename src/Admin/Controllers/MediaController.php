@@ -35,6 +35,7 @@ class MediaController extends Controller
     public function view($id)
     {
         $media = $this->mediaService->find($id);
+
         return view('default_view::admin.pages.media.view', compact('media'));
     }
 
