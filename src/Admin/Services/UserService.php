@@ -28,9 +28,9 @@ class UserService extends AdminBaseService
         $filters = $this->getFilters();
         $sort = $this->tableSort();
         if (! empty($filters)) {
-            $users = $this->userRepository->getFilteredUserAjax($offset, $limit, $sort, $filters);
+            $users = $this->userRepository->getFilteredUser($offset, $limit, $sort, $filters);
         } else {
-            $users = $this->userRepository->userAjax($offset, $limit, $sort);
+            $users = $this->userRepository->all($offset, $limit, $sort);
         }
 
         $this->appendAttributes($users, $filters);
@@ -45,7 +45,7 @@ class UserService extends AdminBaseService
     public function appendAttributes($users, $filters)
     {
         $users->total_users = $this->userRepository->countCollection();
-        $users->total_filtered_users = ! empty($filters) ? $this->userRepository->countFilteredUserAjax($filters) : $users->total_users;
+        $users->total_filtered_users = ! empty($filters) ? $this->userRepository->countFilteredUser($filters) : $users->total_users;
 
         foreach ($users as $user) {
             $user->status_badge = [

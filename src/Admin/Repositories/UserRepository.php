@@ -17,12 +17,7 @@ class UserRepository implements RepositoryInterface
         $this->model = $model;
     }
 
-    public function all()
-    {
-        // TODO: Implement all() method.
-    }
-
-    public function userAjax($offset, $limit, $sort)
+    public function all($offset, $limit, $sort)
     {
         return $this->model->sortBy($sort)
             ->skip($offset)
@@ -30,12 +25,12 @@ class UserRepository implements RepositoryInterface
             ->get();
     }
 
-    public function countFilteredUserAjax($filters)
+    public function countFilteredUser($filters)
     {
         return $this->model->filter($filters)->count();
     }
 
-    public function getFilteredUserAjax($offset, $limit, $sort, $filters)
+    public function getFilteredUser($offset, $limit, $sort, $filters)
     {
         return $this->model->filter($filters)
             ->sortBy($sort)
