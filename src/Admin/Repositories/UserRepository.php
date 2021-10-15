@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\User;
 
-class UserRepository implements RepositoryInterface
+class UserRepository
 {
     protected User $model;
 
