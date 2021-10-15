@@ -137,6 +137,6 @@ class AdminBaseService
      */
     public function createViewActionButton($id, $resourceName): string
     {
-        return '<a class="btn btn-primary btn-sm" href="/' . $resourceName . '/' . $id . '" title="View"><i class="fas fa-eye"></i> View</a>';
+        return '<a class="btn btn-primary btn-sm" href="/'.$resourceName.'/'.$id.'" title="View"><i class="fas fa-eye"></i> View</a>';
     }
 }
