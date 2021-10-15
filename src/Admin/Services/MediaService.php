@@ -57,4 +57,12 @@ class MediaService
 
         return $this->mediaRepository->update($request->all(), $id);
     }
+
+    public function skinScore() {
+        return $this->mediaRepository->skinScore();
+    }
+
+    public function awesomenessScore() {
+        return $this->mediaRepository->awesomenessScore();
+    }
 }

@@ -51,28 +51,27 @@
                                 <li class="list-group-item">
                                     <b>Skin Score</b>
                                     <div>
-                                        @for ($i = 0; $i < 11; $i++)
-                                            <div id="media-skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
+                                    @foreach ($skin_score as $score)
+                                            <div id="media_skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
                                                 <label class="btn btn-outline-secondary">
-                                                    <input type="radio" id="media-skin-score--{{$i}}" name="score" value="{{ $media->score }}" data-index="{{ $i }}" autocomplete="off" @if($media->scores == "5") checked @endif>
-                                                    {{ $i }}
+                                                    <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($media->scores == $score) checked @endif>
+                                                    {{ $score }}
                                                 </label>
-                                        @endfor
-                                        </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Awesomeness Score</b>
                                     <div>
-                                        @for ($i = 0; $i < 11; $i++)
-                                            <div id="media-skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
+                                    @foreach ($awesomeness_score as $score)
+                                            <div id="media_awesomeness_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
                                                 <label class="btn btn-outline-secondary">
-                                                    <input type="radio" id="media-skin-score--0" name="sort_score" value="{{ $media->sort_score }}" data-index="0" autocomplete="off" @if($media->sort_score == "5") selected @endif>
-                                                    {{ $i }}
+                                                    <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($media->awesomeness_score == $score) checked @endif>
+                                                    {{ $score }}
                                                 </label>
-                                            
-                                        @endfor
-                                        </div>
+                                            </div>
+                                            @endforeach
                                     </div>
                                 </li>
                             </ul>
@@ -231,5 +230,14 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+@section('js')
+<script>
+    $(document).ready(function() {
+        
+    });
+</script>
 @endsection
 
