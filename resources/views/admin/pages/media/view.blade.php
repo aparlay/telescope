@@ -51,27 +51,35 @@
                                 <li class="list-group-item">
                                     <b>Skin Score</b>
                                     <div>
-                                    @foreach ($skin_score as $score)
-                                            <div id="media_skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
-                                                <label class="btn btn-outline-secondary">
-                                                    <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($media->scores == $score) checked @endif>
-                                                    {{ $score }}
-                                                </label>
-                                            </div>
+                                    @foreach ($score_types as $scoreType)
+                                        @foreach ($skin_score as $score)
+                                            @if($scoreType['type'] == 'skin')
+                                                <div id="media_skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
+                                                    <label class="btn btn-outline-secondary">
+                                                        <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                        {{ $score }}
+                                                    </label>
+                                                </div>
+                                            @endif
                                         @endforeach
+                                    @endforeach
                                     </div>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Awesomeness Score</b>
                                     <div>
-                                    @foreach ($awesomeness_score as $score)
-                                            <div id="media_awesomeness_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
-                                                <label class="btn btn-outline-secondary">
-                                                    <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($media->awesomeness_score == $score) checked @endif>
-                                                    {{ $score }}
-                                                </label>
-                                            </div>
-                                            @endforeach
+                                    @foreach ($score_types as $scoreType)
+                                        @foreach ($awesomeness_score as $score)
+                                            @if($scoreType['type'] == 'awesomeness')
+                                                <div id="media_awesomeness_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
+                                                    <label class="btn btn-outline-secondary">
+                                                        <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                        {{ $score }}
+                                                    </label>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @endforeach
                                     </div>
                                 </li>
                             </ul>
