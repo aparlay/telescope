@@ -53,7 +53,7 @@
                                 ['data' => 'email'],
                                 ['data' => 'full_name', 'orderable' => false],
                                 ['data' => 'status', 'visible' => false],
-                                ['data' => 'status_badge'],
+                                ['data' => 'status_badge', 'orderData' => 3, 'target' => 3],
                                 ['data' => 'visibility'],
                                 ['data' => 'follower_count', 'orderable' => false],
                                 ['data' => 'like_count', 'orderable' => false],
