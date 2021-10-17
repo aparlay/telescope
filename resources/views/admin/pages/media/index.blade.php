@@ -7,7 +7,7 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Users</h1>
+            <h1 class="m-0">Media</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -19,35 +19,108 @@
 @stop
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    @include('default_view::admin.parts.breadcrumbs')
 
-    <table id="datatables" class="table table-bordered table-hover" width="100%">
-        <thead>
-        <tr>
-            <th scope="col">Cover</th>
-            <th scope="col">Created By</th>
-            <th scope="col">Description</th>
-            <th scope="col">Status</th>
-            <th scope="col">Created At</th>
-            <th scope="col">Likes</th>
-            <th scope="col">Visits</th>
-            <th scope="col">Sort Score</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 table-responsive">
+                    @php
+                        $heads = [
+                            'Cover',
+                            'Created By',
+                            'Description',
+                            '',
+                            'Status',
+                            'Likes',
+                            'Visits',
+                            'Sort Score',
+                            'Created At',
+                            ''
+                        ];
+                    $config = [
+                        'processing' => true,
+                        'serverSide' => true,
+                        'pageLength' => config('core.admin.lists.page_count'),
+                        'responsive' => true,
+                        'lengthChange' => false,
+                        'dom' => 'rtip',
+                        'orderMulti' => false,
+                        'autoWidth' => false,
+                        'ajax' => route('core.admin.ajax.media.index'),
+                        'order' => [[8, 'desc']],
+                        'columns' => [
+                            ['data' => 'file', 'orderable' => false],
+                            ['data' => 'creator.username'],
+                            ['data' => 'description', 'orderable' => false],
+                            ['data' => 'status', 'visible' => false],
+                            ['data' => 'status_badge', 'orderData' => 3, 'target' => 3],
+                            ['data' => 'like_count', 'orderable' => false],
+                            ['data' => 'visit_count', 'orderable' => false],
+                            ['data' => 'sort_score', 'orderable' => false],
+                            ['data' => 'created_at'],
+                            ['data' => 'action', 'orderable' => false],
+                        ],
+                    ]
+                    @endphp
+                    <div id="accordion">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h4 class="card-title w-100">
+                                    <a class="d-block w-100" data-toggle="collapse" href="#collapseOne" aria-expanded="true">
+                                        Show/Hide Filter
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="collapse" data-parent="#accordion" style="">
+                                <div class="card-body">
+                                    <form action="" id="filters">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="username">Created By</label>
+                                                    <input type="text" data-column="0" name="creator.username" class="form-control" id="creator.username" placeholder="Enter username">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="status">Status</label>
+                                                    <select name="status" data-column="3" id="status" class="form-control">
+                                                        <option value="">-Select-</option>
+                                                        @foreach($mediaStatuses as $key => $status)
+                                                            <option value="{{ $key }}">{{ $status }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="row d-flex justify-content-end">
+                                                    <div class="col-2">
+                                                        <label for="clearFilter"></label>
+                                                        <button type="button" id="clearFilter" class="btn btn-block btn-danger"><i class="fas fa-trash"></i> Clear</button>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <label for="submitFilter"></label>
+                                                        <button type="button" id="submitFilter" class="btn btn-block btn-primary"><i class="fas fa-filter"></i> Filter</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <x-adminlte-datatable id="datatables" :heads="$heads" :config="$config">
+                    </x-adminlte-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
 
-        </tbody>
-    </table>
 @endsection
 @section('js')
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script>
-        var mediaStatus = '<option value=""></option>';
-        @foreach($mediaStatuses as $key => $status)
-            mediaStatus += '<option value="' + {{ $key }} + '">{{ $status }}</option>'
-        @endforeach
-    </script>
     <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
 @endsection

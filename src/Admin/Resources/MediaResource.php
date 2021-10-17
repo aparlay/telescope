@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MediaResource extends JsonResource
@@ -16,15 +17,10 @@ class MediaResource extends JsonResource
      */
     public function toArray($request)
     {
-        $medias = [];
-        foreach ($this->resource as $media) {
-            $medias[] = $this->createSimpleUser($media);
-        }
-
         return [
-            'aaData' => $medias,
-            'iTotalDisplayRecords' => $this->total_filtered_media,
-            'iTotalRecords' => $this->total_media,
+            'data' => $this->resource,
+            'recordsFiltered' => $this->total_filtered_media,
+            'recordsTotal' => $this->total_media,
         ];
     }
 }

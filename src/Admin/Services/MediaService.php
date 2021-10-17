@@ -8,11 +8,11 @@ use Aparlay\Core\Helpers\Cdn;
 
 class MediaService extends AdminBaseService
 {
-    protected MediaRepository $MediaRepository;
+    protected MediaRepository $mediaRepository;
 
     public function __construct()
     {
-        $this->userRepository = new MediaRepository(new Media());
+        $this->mediaRepository = new MediaRepository(new Media());
 
         $this->filterableField = ['creator.username', 'status'];
         $this->sorterableField = ['creator.username', 'status', 'created_at'];
@@ -29,7 +29,7 @@ class MediaService extends AdminBaseService
         $filters = $this->getFilters();
         $sort = $this->tableSort();
         if (! empty($filters)) {
-            $medias = $this->mediaRepository->getFilteredMediaAjax($offset, $limit, $sort, $filters);
+            $medias = $this->mediaRepository->getFilteredMedia($offset, $limit, $sort, $filters);
         } else {
             $medias = $this->mediaRepository->mediaAjax($offset, $limit, $sort);
         }
@@ -45,13 +45,14 @@ class MediaService extends AdminBaseService
      */
     public function appendAttributes($medias, $filters)
     {
-        $medias->total_medias = $this->mediaRepository->countCollection();
-        $medias->total_filtered_medias = ! empty($filters) ? $this->mediaRepository->countFilteredUserAjax($filters) : $medias->total_users;
+        $medias->total_media = $this->mediaRepository->countCollection();
+        $medias->total_filtered_media = ! empty($filters) ? $this->mediaRepository->countFilteredMedia($filters) : $medias->total_media;
 
         foreach ($medias as $media) {
-            $media->status_badge = [
-                'status' => $this->createBadge($media->status_color, $media->status)
-            ];
+            $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4','',$media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
+            $media->sort_score = $media->sort_score ?? '';
+            $media->status_badge = $this->createBadge($media->status_color, $media->status_name);
+            $media->action = $this->createViewActionButton($media->_id, 'media');
         }
     }
 
@@ -60,16 +61,10 @@ class MediaService extends AdminBaseService
      */
     public function find($id)
     {
-        $user = $this->userRepository->find($id);
+        $media = $this->mediaRepository->find($id);
+        $media->status_badge = $this->createBadge($media->status_color, $media->status_name);
 
-        $statusBadge = [
-            'status' => $user->status_name,
-            'color' => $user->status_color,
-        ];
-
-        $user->status_badge = $statusBadge;
-
-        return $user;
+        return $media;
     }
 
     /**
@@ -77,7 +72,7 @@ class MediaService extends AdminBaseService
      */
     public function getMediaStatuses(): array
     {
-        return $this->userRepository->getMediaStatuses();
+        return $this->mediaRepository->getMediaStatuses();
     }
 
     /**

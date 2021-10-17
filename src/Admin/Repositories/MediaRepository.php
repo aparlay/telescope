@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Media;
 
-class MediaRepository implements RepositoryInterface
+class MediaRepository
 {
     protected Media $model;
 
@@ -17,9 +17,12 @@ class MediaRepository implements RepositoryInterface
         $this->model = $model;
     }
 
-    public function all()
+    public function all($offset, $limit, $sort)
     {
-        // TODO: Implement all() method.
+        return $this->model->sortBy($sort)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
     }
 
     public function mediaAjax($offset, $limit, $sort)
@@ -30,12 +33,12 @@ class MediaRepository implements RepositoryInterface
             ->get();
     }
 
-    public function countFilteredMediaAjax($filters)
+    public function countFilteredMedia($filters)
     {
         return $this->model->filter($filters)->count();
     }
 
-    public function getFilteredMediaAjax($offset, $limit, $sort, $filters)
+    public function getFilteredMedia($offset, $limit, $sort, $filters)
     {
         return $this->model->filter($filters)
             ->sortBy($sort)
@@ -61,7 +64,7 @@ class MediaRepository implements RepositoryInterface
 
     public function find($id)
     {
-        // TODO: Implement find() method.
+        return $this->model->findOrFail($id);
     }
 
     public function getMediaStatuses()
