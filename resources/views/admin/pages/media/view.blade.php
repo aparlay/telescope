@@ -1,5 +1,25 @@
 @extends('adminlte::page')
 @section('title', 'Media View')
+@section('css')
+    <style>
+        .dropzone {
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 14px;
+            background: #e3e6ff;
+            border: 3px dotted #4e4e4e;            
+        }
+
+    </style>
+@stop
+@section('script')
+
+@stop
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
+@yield('styles')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
+@yield('scripts')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -222,7 +242,16 @@
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="upload">
-                                    upload
+                                    <div id="dropzone">
+                                        <form method="post" action="{{url('user/upload-media')}}" enctype="multipart/form-data" class="dropzone" id="dropzone">
+                                            @csrf
+                                        </form>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <button class="btn btn-block btn-primary upload-video-button" name="create-button"><i class="fa fa-upload"></i><strong>Upload</strong></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -232,4 +261,27 @@
         </div>
     </div>
 @endsection
-
+@section('script')
+<script type="text/javascript">
+    Dropzone.options.dropzone =
+        {
+        maxFilesize: 12,
+        renameFile: function(file) {
+            var dt = new Date();
+            var time = dt.getTime();
+            return time+file.name;
+        },
+        acceptedFiles: ".mp4,.gif",
+        addRemoveLinks: true,
+        uploadMultiple: false,
+        timeout: 5000,
+        success: function(file, response) 
+        {
+            console.log(response);
+        },
+        error: function(file, response)
+        {
+            return false;
+        }
+    };
+</script>

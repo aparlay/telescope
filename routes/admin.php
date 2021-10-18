@@ -38,6 +38,7 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
         Route::name('user.')->group(function () {
             Route::get('user', [UserController::class, 'index'])->name('index');
             Route::get('user/{id}', [UserController::class, 'view'])->name('view');
+            Route::match(['get', 'post'], 'user/upload-media', [UserController::class, 'uploadMedia'])->name('upload');
         });
     });
 
