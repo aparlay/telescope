@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
-use Aparlay\Core\Admin\Services\UserService;
 use Aparlay\Core\Admin\Services\UploadService;
+use Aparlay\Core\Admin\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
