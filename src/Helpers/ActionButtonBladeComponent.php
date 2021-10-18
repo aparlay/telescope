@@ -11,7 +11,7 @@ class ActionButtonBladeComponent
      */
     public static function getBadge($color, $name): string
     {
-        return '<span class="badge bg-' . $color . '">' . ucfirst($name) . '</span>';
+        return '<span class="badge bg-'.$color.'">'.ucfirst($name).'</span>';
     }
 
     /**
