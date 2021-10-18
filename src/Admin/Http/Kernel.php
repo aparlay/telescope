@@ -15,6 +15,8 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'admin-auth' => \Aparlay\Core\Admin\Http\Middleware\Authenticate::class,
+        'role' => \Maklad\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => \Maklad\Permission\Middlewares\PermissionMiddleware::class,
     ];
 
     /**
