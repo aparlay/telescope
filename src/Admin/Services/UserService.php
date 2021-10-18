@@ -50,7 +50,7 @@ class UserService extends AdminBaseService
 
         foreach ($users as $user) {
             $userBadges = [
-                'status' => ActionButtonBladeComponent::getBadge($user->status_color, $user->status_name), 
+                'status' => ActionButtonBladeComponent::getBadge($user->status_color, $user->status_name),
                 'is_verified' => ActionButtonBladeComponent::getBadge($user->email_verified ? 'success' : 'danger', $user->email_verified ? 'Email Verified' : 'Email Not-verified'),
                 'gender' => ActionButtonBladeComponent::getBadge($user->gender_color, $user->gender_name),
             ];
