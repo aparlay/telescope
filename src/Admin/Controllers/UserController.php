@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
+use Aparlay\Core\Admin\Resources\UserResource;
 use Aparlay\Core\Admin\Services\UserService;
+use ErrorException;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -16,14 +18,19 @@ class UserController extends Controller
     }
 
     /**
-     * @throws \ErrorException
+     * @throws ErrorException
      */
     public function index()
     {
-        $users = $this->userService->getFilteredUsers();
         $userStatuses = $this->userService->getUserStatuses();
+        $userVisibilities = $this->userService->getVisibilities();
 
-        return view('default_view::admin.pages.user.index', compact('users', 'userStatuses'));
+        return view('default_view::admin.pages.user.index', compact('userStatuses', 'userVisibilities'));
+    }
+
+    public function indexAjax()
+    {
+        return new UserResource($this->userService->getFilteredUsers());
     }
 
     public function view($id)

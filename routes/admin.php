@@ -28,14 +28,21 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
         Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
         /* Media routes */
-        Route::name('media.')->group(function () {
+        Route::middleware(['admin-auth:admin'])->name('media.')->group(function () {
             Route::get('media', [MediaController::class, 'index'])->name('index');
+            Route::get('media/{id}', [MediaController::class, 'view'])->name('view');
+            Route::post('media/{id}', [MediaController::class, 'update'])->name('update');
         });
 
         /* User Routes */
         Route::name('user.')->group(function () {
             Route::get('user', [UserController::class, 'index'])->name('index');
             Route::get('user/{id}', [UserController::class, 'view'])->name('view');
+        });
+
+        /* Ajax Routes */
+        Route::name('ajax.')->prefix('ajax')->group(function () {
+            Route::get('user', [UserController::class, 'indexAjax'])->name('user.index');
         });
     });
 

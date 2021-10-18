@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Services\MediaService;
+use Illuminate\Http\Request;
 
 class MediaController extends Controller
 {
@@ -29,5 +30,23 @@ class MediaController extends Controller
             'media_list'  => $medias,
             'breadcrumbs' => $breadcrumbs,
         ]);
+    }
+
+    public function view($id)
+    {
+        $media = $this->mediaService->find($id);
+        $skin_score = $this->mediaService->skinScore();
+        $awesomeness_score = $this->mediaService->awesomenessScore();
+        $score_types = $media->scores;
+
+        return view('default_view::admin.pages.media.view', compact('media', 'skin_score', 'awesomeness_score', 'score_types'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->mediaService->updateMedia($request, $id);
+        $media = $this->mediaService->find($id);
+
+        return view('default_view::admin.pages.media.view', compact('media'));
     }
 }

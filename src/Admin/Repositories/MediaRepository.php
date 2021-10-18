@@ -29,7 +29,8 @@ class MediaRepository implements RepositoryInterface
 
     public function update(array $data, $id)
     {
-        // TODO: Implement update() method.
+        $this->model->media($id)->update($data);
+        $this->model->refresh();
     }
 
     public function delete($id)
@@ -39,6 +40,16 @@ class MediaRepository implements RepositoryInterface
 
     public function find($id)
     {
-        // TODO: Implement find() method.
+        return $this->model->findOrFail($id);
+    }
+
+    public function skinScore()
+    {
+        return $this->model->getSkinScores();
+    }
+
+    public function awesomenessScore()
+    {
+        return $this->model->getAwesomenessScores();
     }
 }
