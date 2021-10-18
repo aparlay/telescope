@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
+use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 
 class UserService extends AdminBaseService
 {
@@ -49,13 +50,13 @@ class UserService extends AdminBaseService
 
         foreach ($users as $user) {
             $userBadges = [
-                'status' => $this->createBadge($user->status_color, $user->status_name),
-                'is_verified' => $this->createBadge($user->email_verified ? 'success' : 'danger', $user->email_verified ? 'Email Verified' : 'Email Not-verified'),
-                'gender' => $this->createBadge($user->gender_color, $user->gender_name),
+                'status' => ActionButtonBladeComponent::getBadge($user->status_color, $user->status_name),
+                'is_verified' => ActionButtonBladeComponent::getBadge($user->email_verified ? 'success' : 'danger', $user->email_verified ? 'Email Verified' : 'Email Not-verified'),
+                'gender' => ActionButtonBladeComponent::getBadge($user->gender_color, $user->gender_name),
             ];
 
             $user->status_badge = implode('</br>', $userBadges);
-            $user->action = $this->createViewActionButton($user->_id, 'user');
+            $user->action = ActionButtonBladeComponent::getViewActionButton($user->_id, 'user');
         }
     }
 
