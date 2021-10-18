@@ -71,51 +71,82 @@
                                 <li class="list-group-item">
                                     <b>Skin Score</b>
                                     <div>
-                                        @for ($i = 0; $i < 11; $i++)
-                                            <div id="media-skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
-                                                <label class="btn btn-outline-secondary">
-                                                    <input type="radio" id="media-skin-score--{{$i}}" name="score" value="{{ $media->score }}" data-index="{{ $i }}" autocomplete="off" @if($media->scores == "5") checked @endif>
-                                                    {{ $i }}
-                                                </label>
-                                        @endfor
-                                        </div>
+                                    @foreach ($score_types as $scoreType)
+                                        @foreach ($skin_score as $score)
+                                            @if($scoreType['type'] == 'skin')
+                                                <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
+                                                    <label class="btn btn-outline-secondary skin_score_lable">
+                                                        <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                        {{ $score }}
+                                                    </label>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @endforeach
                                     </div>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Awesomeness Score</b>
                                     <div>
-                                        @for ($i = 0; $i < 11; $i++)
-                                            <div id="media-skin_score" class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup">
-                                                <label class="btn btn-outline-secondary">
-                                                    <input type="radio" id="media-skin-score--0" name="sort_score" value="{{ $media->sort_score }}" data-index="0" autocomplete="off" @if($media->sort_score == "5") selected @endif>
-                                                    {{ $i }}
-                                                </label>
-                                            
-                                        @endfor
-                                        </div>
+                                    @foreach ($score_types as $scoreType)
+                                        @foreach ($awesomeness_score as $score)
+                                            @if($scoreType['type'] == 'awesomeness')
+                                                <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
+                                                    <label class="btn btn-outline-secondary awesomeness_score_label">
+                                                        <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                        {{ $score }}
+                                                    </label>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @endforeach
                                     </div>
                                 </li>
                             </ul>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#suspendMmodal">
-                                        <i class="fas fa-minus-circle"></i>
-                                        <strong>Save</strong>
-                                    </button>
+                            <form action="" class="form-horizontal" method="POST">
+                                <div class="row">
+                                    @csrf()
+                                    @if ($media->status !== 3 && $media->status !== 7)
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-block btn-success">
+                                            <i class="fas fa-minus-circle"></i>
+                                            <strong>Approve</strong>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-block btn-warning">
+                                            <i class="fas fa-times-circle"></i>
+                                            <strong>Denied</strong>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-block btn-danger">
+                                            <i class="fas fa-times-circle"></i>
+                                            <strong>Delete + Alert</strong>
+                                        </button>
+                                    </div>
+                                    @else
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-block btn-success" >
+                                            <i class="fas fa-minus-circle"></i>
+                                            <strong>Save</strong>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-block btn-warning" >
+                                            <i class="fas fa-times-circle"></i>
+                                            <strong>Denied</strong>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-block btn-danger" >
+                                            <i class="fas fa-times-circle"></i>
+                                            <strong>Delete + Alert</strong>
+                                        </button>
+                                    </div>
+                                    @endif
                                 </div>
-                                <div class="col-md-4">
-                                    <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#banModal">
-                                        <i class="fas fa-times-circle"></i>
-                                        <strong>Denied</strong>
-                                    </button>
-                                </div>
-                                <div class="col-md-4">
-                                    <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#banModal">
-                                        <i class="fas fa-times-circle"></i>
-                                        <strong>Delete + Alert</strong>
-                                    </button>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -209,13 +240,21 @@
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Skin Score</label>
                                             <div class="col-sm-10 mt-2">
-                                                <p>{{ $media->scores }}</p>
+                                            @foreach ($score_types as $scoreType)
+                                                @if($scoreType['type'] == 'skin')
+                                                    <p>{{ $scoreType['score'] }}</p>
+                                                @endif
+                                            @endforeach
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
                                             <div class="col-sm-10 mt-2">
-                                                <p>{{ $media->sort_score }}</p>
+                                            @foreach ($score_types as $scoreType)
+                                                @if($scoreType['type'] == 'awesomeness')
+                                                    <p>{{ $scoreType['score'] }}</p>
+                                                @endif
+                                            @endforeach
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -284,4 +323,16 @@
             return false;
         }
     };
+    
+    $('.skin_score_lable').click(function(){
+        $('.skin_score_lable').removeClass('active');
+        $(this).addClass('active');
+    });
+    
+    $('.awesomeness_score_label').click(function(){
+        $('.awesomeness_score_label').removeClass('active');
+        $(this).addClass('active');
+    });
+    
 </script>
+

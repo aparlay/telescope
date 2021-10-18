@@ -35,8 +35,11 @@ class MediaController extends Controller
     public function view($id)
     {
         $media = $this->mediaService->find($id);
+        $skin_score = $this->mediaService->skinScore();
+        $awesomeness_score = $this->mediaService->awesomenessScore();
+        $score_types = $media->scores;
 
-        return view('default_view::admin.pages.media.view', compact('media'));
+        return view('default_view::admin.pages.media.view', compact('media', 'skin_score', 'awesomeness_score', 'score_types'));
     }
 
     public function update(Request $request, $id)

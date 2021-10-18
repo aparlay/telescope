@@ -42,4 +42,14 @@ class MediaRepository implements RepositoryInterface
     {
         return $this->model->findOrFail($id);
     }
+
+    public function skinScore()
+    {
+        return $this->model->getSkinScores();
+    }
+
+    public function awesomenessScore()
+    {
+        return $this->model->getAwesomenessScores();
+    }
 }
