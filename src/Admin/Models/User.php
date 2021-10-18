@@ -4,10 +4,12 @@ namespace Aparlay\Core\Admin\Models;
 
 use Aparlay\Core\Admin\Models\Scopes\UserScope;
 use Aparlay\Core\Models\User as UserBase;
+use Maklad\Permission\Traits\HasRoles;
 
 class User extends UserBase
 {
     use UserScope;
+    use HasRoles;
 
     /**
      * @return string
