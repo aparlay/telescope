@@ -49,6 +49,7 @@ class MediaController extends Controller
         $skin_score = $this->mediaService->skinScore();
         $awesomeness_score = $this->mediaService->awesomenessScore();
         $score_types = $media->scores;
+
         return view('default_view::admin.pages.media.view', compact('media', 'skin_score', 'awesomeness_score', 'score_types'));
     }
 }

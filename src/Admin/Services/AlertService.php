@@ -12,5 +12,4 @@ class AlertService
     {
         $this->mediaRepository = new MediaRepository(new Media());
     }
-    
 }
