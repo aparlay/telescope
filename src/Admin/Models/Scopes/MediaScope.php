@@ -27,9 +27,9 @@ trait MediaScope
     {
         foreach ($filters as $key => $filter) {
             if (is_numeric($filter)) {
-                $query->where($key, (int)$filter);
+                $query->where($key, (int) $filter);
             } else {
-                $query->where($key, 'regex', new Regex('^' . $filter));
+                $query->where($key, 'regex', new Regex('^'.$filter));
             }
         }
 
