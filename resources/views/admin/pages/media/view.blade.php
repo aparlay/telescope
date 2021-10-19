@@ -1,25 +1,5 @@
 @extends('adminlte::page')
 @section('title', 'Media View')
-@section('css')
-    <style>
-        .dropzone {
-            max-width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 14px;
-            background: #e3e6ff;
-            border: 3px dotted #4e4e4e;            
-        }
-
-    </style>
-@stop
-@section('script')
-
-@stop
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
-@yield('styles')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
-@yield('scripts')
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -280,18 +260,29 @@
                                         </div>
                                     </form>
                                 </div>
+                                
+
                                 <div class="tab-pane" id="upload">
-                                    <div id="dropzone">
-                                        <form method="post" action="{{url('user/upload-media')}}" enctype="multipart/form-data" class="dropzone" id="dropzone">
-                                            @csrf
-                                        </form>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <button class="btn btn-block btn-primary upload-video-button" name="create-button"><i class="fa fa-upload"></i><strong>Upload</strong></button>
+                                    <!-- The timeline -->
+                                    <form method="post" action="{{url('user/upload-media1')}}" >
+                                        <div class="flow-drop" data-upload-url="{{url('user/upload-media')}}" ondragenter="jQuery(this).addClass('flow-dragover');" ondragend="jQuery(this).removeClass('flow-dragover');" ondrop="jQuery(this).removeClass('flow-dragover');">
+                                            Drop files here to upload or <a class="flow-browse"><u>select from your computer</u></a>
                                         </div>
-                                    </div>
+
+                                        <div class="flow-list col-md-12 mt-3"></div>
+
+                                        <input type="hidden" id="media-file" name="file" value="">
+                                        <input type="hidden" name="reupload_file" value="1" >
+
+                                        <div class="row">
+
+                                            <div class="col-4">
+                                                <button class="btn btn-block btn-primary upload-video-button" name="create-button"><i class="fa fa-upload"></i><strong>Upload</strong></button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -301,29 +292,9 @@
     </div>
 @endsection
 @section('script')
-<script type="text/javascript">
-    Dropzone.options.dropzone =
-        {
-        maxFilesize: 12,
-        renameFile: function(file) {
-            var dt = new Date();
-            var time = dt.getTime();
-            return time+file.name;
-        },
-        acceptedFiles: ".mp4,.gif",
-        addRemoveLinks: true,
-        uploadMultiple: false,
-        timeout: 5000,
-        success: function(file, response) 
-        {
-            console.log(response);
-        },
-        error: function(file, response)
-        {
-            return false;
-        }
-    };
-    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
+<script>
     $('.skin_score_lable').click(function(){
         $('.skin_score_lable').removeClass('active');
         $(this).addClass('active');
@@ -333,6 +304,170 @@
         $('.awesomeness_score_label').removeClass('active');
         $(this).addClass('active');
     });
-    
-</script>
 
+    $(document).ready(function() {
+        var flow = new Flow({
+            target: window.location.href,
+        });
+        // Flow.js isn't supported, fall back on a different method
+        if(!flow.support) location.href = '/user/index';
+        flow.assignBrowse(document.getElementById('media-file'));
+        $('.upload-video-button').prop("disabled",true);
+        
+        $('.flow-drop').show();
+        var csrfToken = $('meta[name="csrf-token"]').attr("content");
+        var r = new Flow({
+            singleFile: true,
+            target: $('.flow-drop').data('upload-url'),
+            chunkSize: 1024*1024*5,
+            query : {
+                "_token" : csrfToken
+            },
+            testChunks: false
+        });
+        // Flow.js isn't supported, fall back on a different method
+        if (!r.support) {
+            $('.flow-error').show();
+            return ;
+        }
+        // Show a place for dropping/selecting files
+        $('.flow-drop').show();
+        r.assignDrop($('.flow-drop')[0], false, false, {accept: 'video/*'});
+        r.assignBrowse($('.flow-browse')[0], false, false, {accept: 'video/*'});
+
+        // Handle file add event
+        r.on('fileAdded', function(file){
+            if (file.size > (1024*1024*1024)) {
+                alert("Maximum file size is 1G!");
+                return false;
+            }
+            if (!file.file.type.match('video.*')) {
+                alert("Only video files are allowed!");
+                return false;
+            }
+            // Show progress bar
+            $('.flow-progress, .flow-list').show();
+            // Add the file to the list
+            $('.flow-list').html(
+                '<p class="flow-file flow-file-'+file.uniqueIdentifier+'">' +
+                'Uploading <strong><span class="flow-file-name"></span></strong> ' +
+                '<span class="flow-file-size"></span> ' +
+                '<strong><span class="flow-file-progress">' +
+                '</span></strong> ' +
+                '</p>'
+            );
+            var $self = $('.flow-file-'+file.uniqueIdentifier);
+            $self.find('.flow-file-name').text(file.name);
+            $self.find('.flow-file-size').text(readablizeBytes(file.size));
+        });
+        r.on('filesSubmitted', function(file) {
+            r.upload();
+        });
+        r.on('complete', function(){
+            // Hide pause/resume when the upload has completed
+            $('.flow-progress .progress-resume-link, .flow-progress .progress-pause-link').hide();
+            $('.upload-video-button').prop("disabled", false);
+        });
+        r.on('fileSuccess', function(file,message){
+            var $self = $('.flow-file-'+file.uniqueIdentifier);
+            // Reflect that the file upload has completed
+            $self.find('.flow-file-progress').text('(completed)');
+            $self.find('.flow-file-pause, .flow-file-resume').remove();
+            var response = JSON.parse(message);
+            $('#media-file').val(response.file);
+        });
+        r.on('fileError', function(file, message){
+            // Reflect that the file upload has resulted in error
+            $('.flow-file-'+file.uniqueIdentifier+' .flow-file-progress').html('(file could not be uploaded: '+message+')');
+        });
+        r.on('fileProgress', function(file){
+            // Handle progress for both the file and the overall upload
+            $('.flow-file-'+file.uniqueIdentifier+' .flow-file-progress')
+                .html(Math.floor(file.progress()*100) + '% '
+                    + readablizeBytes(file.averageSpeed) + '/s '
+                    + secondsToStr(file.timeRemaining()) + ' remaining') ;
+            $('.progress-bar').css({width:Math.floor(r.progress()*100) + '%'});
+        });
+        r.on('uploadStart', function(){
+            // Show pause, hide resume
+            $('.flow-progress .progress-resume-link').hide();
+            $('.flow-progress .progress-pause-link').show();
+        });
+        r.on('catchAll', function() {
+            console.log.apply(console, arguments);
+        });
+        window.r = {
+            upload: function() {
+                r.resume();
+            },
+            flow: r
+        };
+    });
+
+    function readablizeBytes(bytes) {
+        var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
+        var e = Math.floor(Math.log(bytes) / Math.log(1024));
+        return (bytes / Math.pow(1024, e)).toFixed(2) + " " + s[e];
+    }
+
+    function secondsToStr (temp) {
+        function numberEnding (number) {
+            return (number > 1) ? 's' : '';
+        }
+        var years = Math.floor(temp / 31536000);
+        if (years) {
+            return years + ' year' + numberEnding(years);
+        }
+        var days = Math.floor((temp %= 31536000) / 86400);
+        if (days) {
+            return days + ' day' + numberEnding(days);
+        }
+        var hours = Math.floor((temp %= 86400) / 3600);
+        if (hours) {
+            return hours + ' hour' + numberEnding(hours);
+        }
+        var minutes = Math.floor((temp %= 3600) / 60);
+        if (minutes) {
+            return minutes + ' minute' + numberEnding(minutes);
+        }
+        var seconds = temp % 60;
+        return seconds + ' second' + numberEnding(seconds);
+    }
+
+</script>
+@section('css')
+    <style>
+        /* Uploader: Drag & Drop */
+        .flow-error {display:none; font-style:italic;}
+        .flow-drop {padding: 30px 15px; text-align:center; color:#666; font-weight:bold;background-color:#eee; border:2px dashed #aaa; border-radius:10px; margin-top:20px; z-index:9999; display:none;}
+        .flow-dragover {padding:30px; color:#555; background-color:#ddd; border:1px solid #999;}
+        /* Uploader: Progress bar */
+        .flow-progress {margin:30px 0 30px 0; width:100%; display:none;}
+        .progress-container {height:7px; background:#9CBD94; position:relative; }
+        .progress-bar {position:absolute; top:0; left:0; bottom:0; background:#45913A; width:0;}
+        .progress-text {line-height:9px; padding-left:10px;}
+        .progress-pause {padding:0 0 0 7px;}
+        .progress-resume-link {display:none;}
+        .is-paused .progress-resume-link {display:inline;}
+        .is-paused .progress-pause-link {display:none;}
+        .is-complete .progress-pause {display:none;}
+
+        /* Uploader: List of items being uploaded */
+        .flow-list {overflow:auto; margin-right:-20px; display:none;}
+        .uploader-item {width:148px; height:90px; background-color:#666; position:relative; border:2px solid black; float:left; margin:0 6px 6px 0;}
+        .uploader-item-thumbnail {width:100%; height:100%; position:absolute; top:0; left:0;}
+        .uploader-item img.uploader-item-thumbnail {opacity:0;}
+        .uploader-item-creating-thumbnail {padding:0 5px; color:white;}
+        .uploader-item-title {position:absolute; line-height:11px; padding:3px 50px 3px 5px; bottom:0; left:0; right:0; color:white; background-color:rgba(0,0,0,0.6); min-height:27px;}
+        .uploader-item-status {position:absolute; bottom:3px; right:3px;}
+        .row {margin-top: 10px;}
+        /* Uploader: Hover & Active status */
+        .uploader-item:hover, .is-active .uploader-item {border-color:#4a873c; cursor:pointer; }
+        .uploader-item:hover .uploader-item-title, .is-active .uploader-item .uploader-item-title {background-color:rgba(74,135,60,0.8);}
+
+        /* Uploader: Error status */
+        .is-error .uploader-item:hover, .is-active.is-error .uploader-item {border-color:#900;}
+        .is-error .uploader-item:hover .uploader-item-title, .is-active.is-error .uploader-item .uploader-item-title {background-color:rgba(153,0,0,0.6);}
+        .is-error .uploader-item-creating-thumbnail {display:none;}
+    </style>
+@stop
