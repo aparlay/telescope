@@ -13,6 +13,5 @@ class AdminServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
         Media::observe(MediaObserver::class);
-        // parent::boot();
     }
 }
