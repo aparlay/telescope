@@ -334,8 +334,8 @@ class UserController extends Controller
                 $user->status = User::STATUS_ACTIVE;
             }
             $user->save();
-            $user->refresh();
         }
+        $user->refresh();
 
         /* Return the updated user data */
         return $this->response(new MeResource($user), Response::HTTP_OK);

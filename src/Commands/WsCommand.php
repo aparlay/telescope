@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 use JWTAuth;
 use Swoole\Coroutine\Http\Client;
 use Swoole\Runtime;
-use Swoole\Timer;
 use Swoole\WebSocket\Frame;
 use Tymon\JWTAuth\Claims\Audience;
 use Tymon\JWTAuth\Claims\Collection;

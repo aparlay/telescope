@@ -43,6 +43,50 @@
                         <p>Media</p>
                     </a>
                 </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{ route('payment.admin.payment.index') }}" class="nav-link {{ Route::currentRouteName() === 'core.admin.media.index' ? 'active' : '' }}">
+                        <i class="nav-icon far fa-money text-info"></i>
+                        <p>Payment</p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: block;">
+                        <li class="nav-item">
+                            <a href="pages/layout/top-nav.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Tip</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/layout/boxed.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Subscription</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/layout/fixed-sidebar.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Credit Cards</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/layout/fixed-topnav.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Orders</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/layout/fixed-footer.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Transactions</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('core.admin.media.index') }}" class="nav-link {{ Route::currentRouteName() === 'core.admin.media.index' ? 'active' : '' }}">
+                        <i class="nav-icon far fa-file-video text-info"></i>
+                        <p>Payout</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('core.admin.logout') }}" class="nav-link">
                         <i class="nav-icon fas fa-sign-out-alt text-info"></i>

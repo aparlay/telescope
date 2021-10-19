@@ -54,9 +54,15 @@ class BlockRepository implements RepositoryInterface
         // TODO: Implement update() method.
     }
 
+    /**
+     * Delete block.
+     *
+     * @param string $id
+     * @return void
+     */
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $this->model->destroy($id);
     }
 
     public function find($id)

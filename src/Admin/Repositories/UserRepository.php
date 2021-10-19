@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\User;
 
-class UserRepository implements RepositoryInterface
+class UserRepository
 {
     protected User $model;
 
@@ -17,9 +17,26 @@ class UserRepository implements RepositoryInterface
         $this->model = $model;
     }
 
-    public function all()
+    public function all($offset, $limit, $sort)
     {
-        return $this->model->recent()->paginate(config('core.admin.lists.page_count'));
+        return $this->model->sortBy($sort)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
+    }
+
+    public function countFilteredUser($filters)
+    {
+        return $this->model->filter($filters)->count();
+    }
+
+    public function getFilteredUser($offset, $limit, $sort, $filters)
+    {
+        return $this->model->filter($filters)
+            ->sortBy($sort)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
     }
 
     public function create(array $data)
@@ -42,13 +59,18 @@ class UserRepository implements RepositoryInterface
         return $this->model->findOrFail($id);
     }
 
-    public function getFilteredUsers($filters)
-    {
-        return $this->model->filter($filters)->recent()->paginate(config('core.admin.lists.page_count'));
-    }
-
-    public function getUserStatues()
+    public function getUserStatuses()
     {
         return $this->model->getStatuses();
+    }
+
+    public function getVisibilities()
+    {
+        return $this->model->getVisibilities();
+    }
+
+    public function countCollection()
+    {
+        return $this->model->count();
     }
 }

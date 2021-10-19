@@ -47,7 +47,7 @@ class BlockService
     {
         $creator = auth()->user();
         if (($block = $this->blockRepository->isBlocked($creator, $user)) !== null) {
-            $block->delete();
+            $this->blockRepository->delete($block->_id);
         }
 
         return [];

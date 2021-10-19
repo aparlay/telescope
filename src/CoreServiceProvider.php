@@ -4,10 +4,10 @@ namespace Aparlay\Core;
 
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
-use Aparlay\Core\Api\V1\Providers\EventServiceProvider;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
 use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CoreCommand;
+use Aparlay\Core\Commands\RoleCommand;
 use Aparlay\Core\Commands\VideoReprocessCommand;
 use Aparlay\Core\Commands\VideoScoreCommand;
 use Aparlay\Core\Commands\VideoScoreDailyCommand;
@@ -38,7 +38,6 @@ class CoreServiceProvider extends ServiceProvider
             $this->app->register(TelescopeServiceProvider::class);
         }
         $this->app->register(AuthServiceProvider::class);
-        $this->app->register(EventServiceProvider::class);
         $this->app->register(AdminServiceProvider::class);
 
         $this->mergeConfig();
@@ -63,6 +62,7 @@ class CoreServiceProvider extends ServiceProvider
 
             $this->commands([
                 CoreCommand::class,
+                RoleCommand::class,
                 VideoReprocessCommand::class,
                 VideoScoreCommand::class,
                 VideoScoreDailyCommand::class,

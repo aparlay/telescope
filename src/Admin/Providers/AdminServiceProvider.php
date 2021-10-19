@@ -13,5 +13,6 @@ class AdminServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
         MediaResource::withoutWrapping();
+        UserResource::withoutWrapping();
     }
 }

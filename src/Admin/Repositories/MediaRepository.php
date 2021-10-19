@@ -54,7 +54,8 @@ class MediaRepository
 
     public function update(array $data, $id)
     {
-        // TODO: Implement update() method.
+        $this->model->media($id)->update($data);
+        $this->model->refresh();
     }
 
     public function delete($id)
@@ -75,5 +76,16 @@ class MediaRepository
     public function countCollection()
     {
         return $this->model->count();
+        return $this->model->findOrFail($id);
+    }
+
+    public function skinScore()
+    {
+        return $this->model->getSkinScores();
+    }
+
+    public function awesomenessScore()
+    {
+        return $this->model->getAwesomenessScores();
     }
 }
