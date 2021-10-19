@@ -24,7 +24,7 @@ class Media extends MediaBase
             self::STATUS_DENIED => 'danger',
             self::STATUS_IN_REVIEW => 'info',
             self::STATUS_ADMIN_DELETED => 'danger',
-            self::STATUS_USER_DELETED => 'danger'
+            self::STATUS_USER_DELETED => 'danger',
         ];
 
         return $colors[$this->status];

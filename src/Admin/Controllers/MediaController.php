@@ -25,7 +25,7 @@ class MediaController extends Controller
         $mediaStatuses = $this->mediaService->getMediaStatuses();
 
         return view('default_view::admin.pages.media.index')->with([
-            'mediaStatuses' => $mediaStatuses
+            'mediaStatuses' => $mediaStatuses,
         ]);
     }
 

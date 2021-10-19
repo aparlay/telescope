@@ -50,7 +50,7 @@ class MediaService extends AdminBaseService
         $medias->total_filtered_media = ! empty($filters) ? $this->mediaRepository->countFilteredMedia($filters) : $medias->total_media;
 
         foreach ($medias as $media) {
-            $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4','',$media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
+            $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
             $media->sort_score = $media->sort_score ?? '';
             $media->status_badge = $this->createBadge($media->status_color, $media->status_name);
             $media->action = $this->createViewActionButton($media->_id, 'media');
