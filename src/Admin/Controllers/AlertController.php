@@ -10,7 +10,8 @@ class AlertController extends Controller
 {
     protected $alertService;
 
-    public function __construct(AlertService $alertService) {
+    public function __construct(AlertService $alertService)
+    {
         $this->alertService = $alertService;
     }
 
@@ -35,7 +36,6 @@ class AlertController extends Controller
         $model = new Alert();
 
         if ($request->all()) {
-
             $media_id = $request->Alert['media_id'];
             $user_id = $request->Alert['user_id'];
             $reason = $request->Alert['reason'];
@@ -46,7 +46,7 @@ class AlertController extends Controller
             $media_id = $media->_id ?? null;
             $user_id = $user->_id;
 
-            $viewUrl = $media_id ? ['/media/', 'id' => (string)$media_id] : ['/user/view', 'id' => (string)$user_id];
+            $viewUrl = $media_id ? ['/media/', 'id' => (string) $media_id] : ['/user/view', 'id' => (string) $user_id];
 
             $model->user_id = $user_id;
             $model->media_id = $media_id;
@@ -58,20 +58,22 @@ class AlertController extends Controller
             if ($model->save()) {
                 $msg = [
                     'type' => 'success',
-                    'text' => 'Alert saved successfully.'
+                    'text' => 'Alert saved successfully.',
                 ];
             } else {
                 $msg = [
                     'type' => 'danger',
-                    'text' => 'There are some issues.'
+                    'text' => 'There are some issues.',
                 ];
             }
 
-            if (($post = $request->get('post-action', false)) !== false) {die('1111');
+            if (($post = $request->get('post-action', false)) !== false) {
+                die('1111');
+
                 return redirect($post)->with($msg['type'], $msg['text']);
             }
 
-            return redirect($viewUrl['0'] . $viewUrl['id'])->with($msg['type'], $msg['text']);
+            return redirect($viewUrl['0'].$viewUrl['id'])->with($msg['type'], $msg['text']);
         }
     }
 }
