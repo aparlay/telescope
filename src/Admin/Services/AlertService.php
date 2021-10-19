@@ -36,5 +36,4 @@ class AlertService
     {
         return $this->alertRepository->findMediaModel($media_id);
     }
-    
 }

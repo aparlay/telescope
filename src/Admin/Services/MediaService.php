@@ -56,11 +56,11 @@ class MediaService
             'scores' => [
                 [
                     'type' => 'skin',
-                    'score' => $request->skin_score
+                    'score' => $request->skin_score,
                 ],
                 [
                     'type' => 'awesomeness',
-                    'score' => $request->awesomeness_score
+                    'score' => $request->awesomeness_score,
                 ],
             ],
         ]);

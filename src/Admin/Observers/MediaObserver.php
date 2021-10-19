@@ -23,7 +23,8 @@ class MediaObserver
      * @throws Exception
      */
     public function created($media)
-    {}
+    {
+    }
 
     /**
      * Create a new event instance.
@@ -33,7 +34,8 @@ class MediaObserver
      * @throws Exception
      */
     public function saving($model): void
-    {}
+    {
+    }
 
     /**
      * Create a new event instance.

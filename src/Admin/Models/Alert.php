@@ -22,5 +22,4 @@ class Alert extends MediaBase
             'app' => 'You receive a notice due to fraud',
         ];
     }
-    
 }
