@@ -92,8 +92,9 @@ class DefineRolesPermissions extends Migration
             $user->assignRole('super-administrator');
         }
 
-        $user = User::where('email', 'ramin@aparlay.com')->firstOrFail();
-        $user->assignRole('super-administrator');
+        if (($user = User::where('email', 'ramin@aparlay.com')->first()) !== null) {
+            $user->assignRole('super-administrator');
+        }
     }
 
     /**
