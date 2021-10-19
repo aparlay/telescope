@@ -271,7 +271,7 @@
 
                                         <div class="flow-list col-md-12 mt-3"></div>
 
-                                        <input type="hidden" id="media-file" name="file" value="">
+                                        <input type="hidden" id="media-file" name="file">
                                         <input type="hidden" name="reupload_file" value="1" >
 
                                         <div class="row">
@@ -374,7 +374,7 @@
             $self.find('.flow-file-progress').text('(completed)');
             $self.find('.flow-file-pause, .flow-file-resume').remove();
             var response = JSON.parse(message);
-            $('#media-file').val(response.file);
+            $('#media-file').val(response.data.file);
         });
         r.on('fileError', function(file, message){
             // Reflect that the file upload has resulted in error
