@@ -3,14 +3,14 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\Alert;
+use Aparlay\Core\Admin\Services\AlertService;
 use Illuminate\Http\Request;
 
 class AlertController extends Controller
 {
     protected $alertService;
 
-    public function __construct() {
-        AlertService $alertService
+    public function __construct(AlertService $alertService) {
         $this->alertService = $alertService;
     }
 
@@ -35,32 +35,43 @@ class AlertController extends Controller
         $model = new Alert();
 
         if ($request->all()) {
-            $media = $this->findMediaModel($model->media_id);
-            $user = $this->findUserModel($model->user_id);
 
-            $model->media_id = $media->_id ?? null;
-            $model->user_id = $user->_id;
+            $media_id = $request->Alert['media_id'];
+            $user_id = $request->Alert['user_id'];
+            $reason = $request->Alert['reason'];
+            $type = $request->Alert['type'];
 
-            $viewUrl = $model->media_id ? ['/media/view', 'id' => (string)$model->media_id] : ['/user/view', 'id' => (string)$model->user_id];
+            $media = $this->alertService->findMediaModel($media_id);
+            $user = $this->alertService->findUserModel($user_id);
+            $media_id = $media->_id ?? null;
+            $user_id = $user->_id;
+
+            $viewUrl = $media_id ? ['/media/', 'id' => (string)$media_id] : ['/user/view', 'id' => (string)$user_id];
+
+            $model->user_id = $user_id;
+            $model->media_id = $media_id;
+            $model->reason = $reason;
+            $model->type = $type;
+
+            $msg = [];
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'Alert saved successfully.'));
+                $msg = [
+                    'type' => 'success',
+                    'text' => 'Alert saved successfully.'
+                ];
             } else {
-                $text = array_values(ArrayHelper::getColumn($model->errors, '0'));
-                if ($text) {
-                    Yii::$app->session->setFlash('danger', implode("<br/>", $text));
-                }
+                $msg = [
+                    'type' => 'danger',
+                    'text' => 'There are some issues.'
+                ];
             }
 
-            if (($post = Yii::$app->request->get('post-action', false)) !== false) {
-                return $this->redirect($post);
+            if (($post = $request->get('post-action', false)) !== false) {die('1111');
+                return redirect($post)->with($msg['type'], $msg['text']);
             }
 
-            return $this->redirect($viewUrl);
+            return redirect($viewUrl['0'] . $viewUrl['id'])->with($msg['type'], $msg['text']);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 }

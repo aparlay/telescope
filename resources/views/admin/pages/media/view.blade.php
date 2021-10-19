@@ -22,6 +22,21 @@
                             Download
                         </button>                            
                     </h1>
+                    <br>
+                    <div id="app">
+                    @if ($message = Session::get('success'))
+                    <div class="alert alert-success alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button>	
+                            <strong>{{ $message }}</strong>
+                    </div>
+                    @endif
+                    @if ($message = Session::get('danger'))
+                    <div class="alert alert-danger alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button>	
+                            <strong>{{ $message }}</strong>
+                    </div>
+                    @endif
+                    </div>
                 </div><!-- /.col -->
                 <div class="col-sm-5">
                     <ol class="breadcrumb float-sm-right">
@@ -281,7 +296,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="/alert/create" method="post" role="form">
+                    <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="{{url('/alert/create')}}" method="post" role="form">
                         @csrf()
                         <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
                             <label class="has-star" for="media-delete-alert-modal-form-reason">Reason</label>
