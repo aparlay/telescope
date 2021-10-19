@@ -264,11 +264,11 @@
 
                                 <div class="tab-pane" id="upload">
                                     <!-- The timeline -->
-                                    <form method="post" action="{{url('user/upload-media1')}}" >
+                                    <form method="post" action="{{url('media/'.$media->_id)}}" >
                                         <div class="flow-drop" data-upload-url="{{url('user/upload-media')}}" ondragenter="jQuery(this).addClass('flow-dragover');" ondragend="jQuery(this).removeClass('flow-dragover');" ondrop="jQuery(this).removeClass('flow-dragover');">
                                             Drop files here to upload or <a class="flow-browse"><u>select from your computer</u></a>
                                         </div>
-
+                                        @csrf
                                         <div class="flow-list col-md-12 mt-3"></div>
 
                                         <input type="hidden" id="media-file" name="file">
