@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
 use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CoreCommand;
+use Aparlay\Core\Commands\RoleCommand;
 use Aparlay\Core\Commands\VideoReprocessCommand;
 use Aparlay\Core\Commands\VideoScoreCommand;
 use Aparlay\Core\Commands\VideoScoreDailyCommand;
@@ -61,6 +62,7 @@ class CoreServiceProvider extends ServiceProvider
 
             $this->commands([
                 CoreCommand::class,
+                RoleCommand::class,
                 VideoReprocessCommand::class,
                 VideoScoreCommand::class,
                 VideoScoreDailyCommand::class,

@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
+use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -60,6 +61,7 @@ class User extends Authenticatable implements JWTSubject
     use HasFactory;
     use Notifiable;
     use UserScope;
+    use HasRoles;
 
     public const TYPE_USER = 0;
     public const TYPE_ADMIN = 1;
