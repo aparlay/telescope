@@ -23,7 +23,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
     });
 
     /* Authenticated Routes */
-    Route::middleware(['admin-auth:admin', 'role:support,administrator,super-administrator'])->group(function () {
+    Route::middleware(['admin-auth:admin', 'role:support|administrator|super-administrator'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard'])
             ->middleware(['permission:dashboard'])
             ->name('dashboard');
