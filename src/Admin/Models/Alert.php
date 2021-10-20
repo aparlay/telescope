@@ -10,7 +10,6 @@ class Alert extends MediaBase
     {
         return [
             'app' => 'Your video has been removed due to copyright claims',
-            'app' => 'Your video has been removed due to blood and drug scense',
         ];
     }
 
@@ -18,8 +17,6 @@ class Alert extends MediaBase
     {
         return [
             'app' => 'You receive a notice due to users reports',
-            'app' => 'You receive a notice due to so many fake traffic',
-            'app' => 'You receive a notice due to fraud',
         ];
     }
 }
