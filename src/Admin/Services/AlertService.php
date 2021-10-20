@@ -4,7 +4,6 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Repositories\AlertRepository;
-use Illuminate\Http\Request;
 
 class AlertService
 {

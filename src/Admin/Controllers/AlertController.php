@@ -68,8 +68,6 @@ class AlertController extends Controller
             }
 
             if (($post = $request->get('post-action', false)) !== false) {
-                die('1111');
-
                 return redirect($post)->with($msg['type'], $msg['text']);
             }
 
