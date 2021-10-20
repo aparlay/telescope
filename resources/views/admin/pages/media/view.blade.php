@@ -341,6 +341,12 @@
         $('.awesomeness_score_label').removeClass('active');
         $(this).addClass('active');
     });
+
+    $(window).load(function(){
+        setTimeout(function(){
+            $('.alert').hide();
+        }, 500);
+    });
     
 </script>
 @endsection

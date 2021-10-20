@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin.')->group(function () {
+Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.admin.')->group(function () {
     Route::get('/', function () {
         return redirect()->route('core.admin.dashboard');
     });
