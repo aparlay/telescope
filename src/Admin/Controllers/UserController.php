@@ -40,6 +40,7 @@ class UserController extends Controller
     public function view($id)
     {
         $user = $this->userService->find($id);
+
         return view('default_view::admin.pages.user.edit', compact('user'));
     }
 

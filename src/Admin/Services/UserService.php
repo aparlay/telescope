@@ -100,7 +100,7 @@ class UserService extends AdminBaseService
     {
         $user = $this->userRepository->find($id);
 
-        if(request()->hasFile('avatar')) {
+        if (request()->hasFile('avatar')) {
             $this->uploadAvatar($user);
         }
 
@@ -108,7 +108,7 @@ class UserService extends AdminBaseService
             'email_verified' => request()->input('email_verified') == 'on',
             'features' => [
                 'tips' => request()->input('features.tips') == 'on',
-                'demo' => request()->input('features.demo') == 'on'
+                'demo' => request()->input('features.demo') == 'on',
             ],
         ]);
 

@@ -3,9 +3,9 @@
 namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\User;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Contracts\Validation\Validator;
 
 class UserRequest extends FormRequest
 {
@@ -28,12 +28,12 @@ class UserRequest extends FormRequest
     {
         return [
             'email' => ['required',
-                'unique:users, email,'. request()->route('user'),
-                'max:255'
+                'unique:users, email,'.request()->route('user'),
+                'max:255',
             ],
             'username' => ['required',
-                'unique:users, username,'. request()->route('user'),
-                'max:255'
+                'unique:users, username,'.request()->route('user'),
+                'max:255',
             ],
             'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
