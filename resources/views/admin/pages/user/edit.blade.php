@@ -1,6 +1,7 @@
 @extends('adminlte::page')
 @section('title', 'User Profile')
-@section('content')
+@section('plugins.Select2', true)
+@section('content_header')
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -16,13 +17,14 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('core.admin.dashboard') }}">Home</a></li>
-                        <li class="breadcrumb-item">Users</li>
+                        <li class="breadcrumb-item"><a href="{{ route('core.admin.user.index') }}">Users</a></li>
+                        <li class="breadcrumb-item">Details</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+@stop
+@section('content')
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -35,7 +37,7 @@
                         </div>
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img src="{{ $user->avatar }}" alt="" class="profile-user-img img-fluid img-circle">
+                                <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="profile-user-img img-fluid img-circle">
                             </div>
                             <h3 class="profile-username text-center">{{ $user->username }}</h3>
                             <p class="text-muted text-center">
@@ -94,12 +96,25 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="user-info">
-                                    <form action="" class="form-horizontal" method="POST">
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            @foreach ($errors->all() as $error)
+                                                <p>{{$error}}</p>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    @if ($message = Session::get('success'))
+                                        <div class="alert alert-success">
+                                            <p>{{ $message }}</p>
+                                        </div>
+                                    @endif
+                                    <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data">
                                         @csrf()
+                                        @method('PUT')
                                         <div class="form-group row">
                                             <label for="avatar" class="col-sm-2 col-form-label">Avatar</label>
                                             <div class="col-sm-10">
-                                                <input type="file" class="form-control-file" id="avatar" name="avatar">
+                                                <input type="file" class="form-control-file" id="avatar" name="avatar" accept="image/*">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -118,7 +133,7 @@
                                             <label for="email_verified" class="col-sm-2 col-form-label">Email Verified</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
+                                                    <input type="checkbox" name="email_verified" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="email_verified"></label>
                                                 </div>
                                             </div>
@@ -126,14 +141,14 @@
                                         <div class="form-group row">
                                             <label for="bio" class="col-sm-2 col-form-label">Bio</label>
                                             <div class="col-sm-10">
-                                                <textarea name="bio" id="" cols="30" rows="3" class="form-control"></textarea>
+                                                <textarea name="bio" id="bio" cols="30" rows="3" class="form-control"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="feature_tips" class="col-sm-2 col-form-label">Feature Tips</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
+                                                    <input type="checkbox" class="custom-control-input" name="features[tips]" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="feature_tips"></label>
                                                 </div>
                                             </div>
@@ -142,7 +157,7 @@
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Feature Demo User</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
+                                                    <input type="checkbox" class="custom-control-input" name="features[demo]" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="feature_demo"></label>
                                                 </div>
                                             </div>
@@ -175,6 +190,17 @@
                                                         <option value="{{ $key }}" {!! $user->type == $key ? 'selected' : '' !!}>{{ $type }}</option>
                                                     @endforeach
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="role_ids" class="col-sm-2 col-form-control">Role</label>
+                                            <div class="col-sm-10">
+                                                <x-adminlte-select2 id="sel2Category" class="select2-blue" name="role_ids[]"
+                                                                    igroup-size="sm"  multiple>
+                                                    @foreach(\Maklad\Permission\Models\Role::all() as $role)
+                                                        <option value="{{ $role->_id }}" {{ $user->role_ids && in_array($role->_id, $user->role_ids) ? 'selected' : '' }}>{{ ucfirst(str_replace('-', ' ', $role->name)) }}</option>
+                                                    @endforeach
+                                                </x-adminlte-select2>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -216,13 +242,13 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="password" class="col-sm-2 col-form-label">Password</label>
+                                            <label for="password" class="col-sm-2 col-form-label">Created At</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $user->created_at }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="password" class="col-sm-2 col-form-label">Password</label>
+                                            <label for="password" class="col-sm-2 col-form-label">Updated At</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $user->updated_at }}</p>
                                             </div>
