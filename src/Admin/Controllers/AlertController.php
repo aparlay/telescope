@@ -36,10 +36,10 @@ class AlertController extends Controller
 
         if ($request->all()) {
 
-            $media_id = $request->Alert['media_id'];
-            $user_id = $request->Alert['user_id'];
-            $reason = $request->Alert['reason'];
-            $type = $request->Alert['type'];
+            $media_id = $request->media_id;
+            $user_id = $request->user_id;
+            $reason = $request->reason;
+            $type = $request->type;
 
             $media = $this->alertService->findMediaModel($media_id);
             $user = $this->alertService->findUserModel($user_id);

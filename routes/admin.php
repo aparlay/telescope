@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "admin" middleware group. Now create something great!
 |
 */
-
+// echo '<pre>'; print_r($_REQUEST); die;
 Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin.')->group(function () {
     Route::get('/', function () {
         return redirect()->route('core.admin.dashboard');

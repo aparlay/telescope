@@ -109,7 +109,7 @@
                                         </button>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-warning">
+                                        <button type="submit" class="btn btn-block btn-warning" name="Media[status]" value="6">
                                             <i class="fas fa-times-circle"></i>
                                             <strong>Denied</strong>
                                         </button>
@@ -128,7 +128,7 @@
                                         </button>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-warning"  data-toggle="modal" data-target="#delete-alert-modal">
+                                        <button type="submit" class="btn btn-block btn-warning"  name="Media[status]" value="6">
                                             <i class="fas fa-times-circle"></i>
                                             <strong>Denied</strong>
                                         </button>
@@ -301,19 +301,19 @@
                         <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
                             <label class="has-star" for="media-delete-alert-modal-form-reason">Reason</label>
                             <div>
-                                <input type="text" id="media-delete-alert-modal-form-reason" class="form-control" name="Alert[reason]" placeholder="Type the message..." aria-required="true" data-krajee-typeahead="typeahead_7864e59a"></div>
+                                <input type="text" id="media-delete-alert-modal-form-reason" class="form-control" name="reason" placeholder="Type the message..." aria-required="true" data-krajee-typeahead="typeahead_7864e59a"></div>
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-type">
-                                <input type="hidden" id="alert-type" class="form-control" name="Alert[type]" value="20">
+                                <input type="hidden" id="alert-type" class="form-control" name="type" value="20">
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-media_id">
-                                <input type="hidden" id="alert-media_id" class="form-control" name="Alert[media_id]" value="{{ $media->_id }}">
+                                <input type="hidden" id="alert-media_id" class="form-control" name="media_id" value="{{ $media->_id }}">
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-user_id required">
-                                <input type="hidden" id="alert-user_id" class="form-control" name="Alert[user_id]" value="{{ $media->created_by }}">
+                                <input type="hidden" id="alert-user_id" class="form-control" name="user_id" value="{{ $media->created_by }}">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>

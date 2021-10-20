@@ -53,6 +53,7 @@ class MediaService
         $request->request->add([
             'visibility' => ($request->visibility == 'on') ? 1 : 0,
             'is_music_licensed' => ($request->is_music_licensed == 'on') ? true : false,
+            'status' => $request->status,
             'scores' => [
                 [
                     'type' => 'skin',
