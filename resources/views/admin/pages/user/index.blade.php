@@ -3,6 +3,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('admin/assets/css/user.css') }}">
 @stop
+@section('plugins.Datatables', true)
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -20,70 +21,120 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-12">
-                        @section('plugins.Datatables', true)
+                    <div class="col-12 table-responsive">
+                        @php
+                            $heads = [
+                                'Username',
+                                'Email',
+                                'Fullname',
+                                '',
+                                'Status',
+                                'Visibility',
+                                'Followers',
+                                'Likes',
+                                'Medias',
+                                'Created at',
+                                ''
+                            ];
+
+                        $config = [
+                            'processing' => true,
+                            'serverSide' => true,
+                            'pageLength' => config('core.admin.lists.page_count'),
+                            'responsive' => true,
+                            'lengthChange' => false,
+                            'dom' => 'rtip',
+                            'orderMulti' => false,
+                            'autoWidth' => false,
+                            'ajax' => route('core.admin.ajax.user.index'),
+                            'order' => [[8, 'asc']],
+                            'columns' => [
+                                ['data' => 'username'],
+                                ['data' => 'email'],
+                                ['data' => 'full_name', 'orderable' => false],
+                                ['data' => 'status', 'visible' => false],
+                                ['data' => 'status_badge', 'orderData' => 3, 'target' => 3],
+                                ['data' => 'visibility'],
+                                ['data' => 'follower_count', 'orderable' => false],
+                                ['data' => 'like_count', 'orderable' => false],
+                                ['data' => 'media_count', 'orderable' => false],
+                                ['data' => 'created_at'],
+                                ['data' => 'action', 'orderable' => false],
+                            ],
+                        ]
+                        @endphp
+                        <div id="accordion">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h4 class="card-title w-100">
+                                        <a class="d-block w-100" data-toggle="collapse" href="#collapseOne" aria-expanded="true">
+                                            Show/Hide Filter
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseOne" class="collapse" data-parent="#accordion" style="">
+                                    <div class="card-body">
+                                        <form action="" id="filters">
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label for="username">Username</label>
+                                                        <input type="text" data-column="0" name="username" class="form-control" id="username" placeholder="Enter username">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label for="email">Email</label>
+                                                        <input type="email" data-column="1" name="email" class="form-control" id="email" placeholder="Enter email">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label for="status">Status</label>
+                                                        <select name="status" data-column="3" id="status" class="form-control">
+                                                            <option value="">-Select-</option>
+                                                            @foreach($userStatuses as $key => $status)
+                                                                <option value="{{ $key }}">{{ $status }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label for="visibility">Visibility</label>
+                                                        <select name="visibility" data-column="5" id="visibility" class="form-control">
+                                                            <option value="">-Select-</option>
+                                                            @foreach($userVisibilities as $key => $visibility)
+                                                                <option value="{{ $key }}">{{ $visibility }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row d-flex justify-content-end">
+                                                <div class="col-1">
+                                                    <button type="button" id="clearFilter" class="btn btn-block btn-danger"><i class="fas fa-trash"></i> Clear</button>
+                                                </div>
+                                                <div class="col-1">
+                                                    <button type="button" id="submitFilter" class="btn btn-block btn-primary"><i class="fas fa-filter"></i> Filter</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <x-adminlte-datatable id="datatables" :heads="$heads" :config="$config">
+                        </x-adminlte-datatable>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-@section('scripts')
-    <script>
-        $(document).ready(function() {
-            // do not submit when there are less than 3 characters
-            // only check username, email, fullname for length
-            // clean url when filter fields are empty
-
-            var originalFormData = $('form#filter').serialize();
-            $('input, select').blur(function() {
-
-                const fieldValue = $(this).val();
-                const cleanFieldName = $(this).attr('name').match(/\[(.*?)\]/)[1];
-                const fieldWithLimit = ['username', 'email', 'full_name']
-
-                if(validInput(fieldValue, cleanFieldName, fieldWithLimit)) {
-                    $('#filter').submit();
-                    return;
-                } else {
-                    $(this).val('');
-                }
-
-                if(isDirty(originalFormData)) {
-                    let resetFilter = false;
-                    let canSubmitForm = false;
-                    $('input, select').each(function() {
-                        const fieldValue = $(this).val();
-                        const cleanFieldName = $(this).attr('name')?.match(/\[(.*?)\]/)[1];
-                        if(validInput(fieldValue, cleanFieldName, fieldWithLimit)) {
-                            canSubmitForm = true;
-                            resetFilter = false;
-                        } else {
-                            resetFilter = true;
-                        }
-                    });
-
-
-
-                    if(canSubmitForm) {
-                        $('#filter').submit();
-                    }
-
-                    if(resetFilter && !canSubmitForm) {
-                        window.location.href = '/user';
-                    }
-                }
-            })
-
-
-
-            function validInput(value, field_name = '', fieldWithLimit) {
-                return (value.length > 2 || $.inArray(field_name, fieldWithLimit) === -1) && value.length !== 0;
-            }
-
-            function isDirty(originalFOrm) {
-                return originalFOrm !== $('form#filter').serialize();
-            }
-        })
-    </script>
+@section('js')
+    <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
 @endsection
+

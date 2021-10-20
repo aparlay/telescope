@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
+use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 
 class UserService extends AdminBaseService
 {
@@ -13,35 +14,49 @@ class UserService extends AdminBaseService
     {
         $this->userRepository = new UserRepository(new User());
 
-        $this->filterableField = ['username', 'email', 'full_name', 'status', 'visibility', 'follower_count', 'like_count', 'media_count'];
+        $this->filterableField = ['username', 'email', 'status', 'visibility'];
+        $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
     }
 
-    public function getUsers()
+    /**
+     * @return mixed
+     */
+    public function getFilteredUsers(): mixed
     {
-        $users = $this->userRepository->all();
+        $offset = (int) request()->get('start');
+        $limit = (int) request()->get('length');
 
-        $this->appendBadges($users);
+        $filters = $this->getFilters();
+        $sort = $this->tableSort();
+        if (! empty($filters)) {
+            $users = $this->userRepository->getFilteredUser($offset, $limit, $sort, $filters);
+        } else {
+            $users = $this->userRepository->all($offset, $limit, $sort);
+        }
+
+        $this->appendAttributes($users, $filters);
 
         return $users;
     }
 
-    public function getFilteredUsers()
+    /**
+     * @param $users
+     * @param $filters
+     */
+    public function appendAttributes($users, $filters)
     {
-        $fields = request()->UserSearch ?? [];
+        $users->total_users = $this->userRepository->countCollection();
+        $users->total_filtered_users = ! empty($filters) ? $this->userRepository->countFilteredUser($filters) : $users->total_users;
 
-        $filters = [];
-        if (! empty($fields)) {
-            $filters = $this->cleanFilterFields($fields);
-        }
+        foreach ($users as $user) {
+            $userBadges = [
+                'status' => ActionButtonBladeComponent::getBadge($user->status_color, $user->status_name),
+                'is_verified' => ActionButtonBladeComponent::getBadge($user->email_verified ? 'success' : 'danger', $user->email_verified ? 'Email Verified' : 'Email Not-verified'),
+                'gender' => ActionButtonBladeComponent::getBadge($user->gender_color, $user->gender_name),
+            ];
 
-        if (! empty($filters)) {
-            $users = $this->userRepository->getFilteredUsers($filters);
-
-            $this->appendBadges($users);
-
-            return $users;
-        } else {
-            return $this->getUsers();
+            $user->status_badge = implode('</br>', $userBadges);
+            $user->action = ActionButtonBladeComponent::getViewActionButton($user->_id, 'user');
         }
     }
 
@@ -62,32 +77,19 @@ class UserService extends AdminBaseService
         return $user;
     }
 
-    public function appendBadges($users)
+    /**
+     * @return array
+     */
+    public function getUserStatuses(): array
     {
-        foreach ($users as $user) {
-            $statusBadge = [
-                'status' => $user->status_name,
-                'color' => $user->status_color,
-            ];
-
-            $genderBadge = [
-                'gender' => $user->gender_name,
-                'color' => $user->gender_color,
-            ];
-
-            $isVerifiedBadge = [
-                'is_verified' => $user->email_verified ? 'Email Verified' : 'Email Not-verified',
-                'color' => $user->email_verified ? 'success' : 'danger',
-            ];
-
-            $user->status_badge = $statusBadge;
-            $user->gender_badge = $genderBadge;
-            $user->isverified_badge = $isVerifiedBadge;
-        }
+        return $this->userRepository->getUserStatuses();
     }
 
-    public function getUserStatuses()
+    /**
+     * @return array
+     */
+    public function getVisibilities(): array
     {
-        return $this->userRepository->getUserStatues();
+        return $this->userRepository->getVisibilities();
     }
 }
