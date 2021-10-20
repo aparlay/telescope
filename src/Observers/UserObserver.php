@@ -37,6 +37,22 @@ class UserObserver extends BaseModelObserver
     }
 
     /**
+     * Handle the User "creating" event.
+     *
+     * @param  User  $model
+     * @return void
+     * @throws Exception
+     */
+    public function saving($model): void
+    {
+        if (! empty($model->promo_link) && ! str_starts_with($model->promo_link, 'http')) {
+            $model->promo_link = 'https://'.$model->promo_link;
+        }
+
+        parent::saving($model);
+    }
+
+    /**
      * Create a new event instance.
      *
      * @param  User  $model
