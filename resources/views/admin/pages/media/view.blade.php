@@ -109,7 +109,7 @@
                                         </button>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-warning" name="Media[status]" value="6">
+                                        <button type="submit" class="btn btn-block btn-warning" name="status" value="6">
                                             <i class="fas fa-times-circle"></i>
                                             <strong>Denied</strong>
                                         </button>
@@ -128,7 +128,7 @@
                                         </button>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-warning"  name="Media[status]" value="6">
+                                        <button type="submit" class="btn btn-block btn-warning"  name="status" value="6">
                                             <i class="fas fa-times-circle"></i>
                                             <strong>Denied</strong>
                                         </button>
