@@ -37,6 +37,7 @@ Route::domain(config('core.admin.url'))->middleware(['admin'])->name('core.admin
             Route::get('media', [MediaController::class, 'index'])->name('index');
             Route::get('media/{id}', [MediaController::class, 'view'])->name('view');
             Route::post('media/{id}', [MediaController::class, 'update'])->name('update');
+            Route::post('reprocess/{id}', [MediaController::class, 'reprocess'])->name('reprocess');
         });
 
         /* User Routes */

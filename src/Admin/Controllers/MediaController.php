@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Services\MediaService;
+use Aparlay\Core\Jobs\ReprocessMedia;
 use Illuminate\Http\Request;
 
 class MediaController extends Controller
@@ -51,5 +52,13 @@ class MediaController extends Controller
         $score_types = $media->scores;
 
         return view('default_view::admin.pages.media.view', compact('media', 'skin_score', 'awesomeness_score', 'score_types'));
+    }
+
+    public function reprocess($id)
+    {
+        $media = $this->mediaService->find($id);
+        
+        ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('lowpriority');
+        return redirect('media/'.(string) $media->_id)->with('success', 'Video is placed in queue for reprocessing.');
     }
 }

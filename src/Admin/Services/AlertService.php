@@ -35,4 +35,9 @@ class AlertService
     {
         return $this->alertRepository->findMediaModel($media_id);
     }
+
+    public function create($request)
+    {
+        return $this->alertRepository->store($request);
+    }
 }

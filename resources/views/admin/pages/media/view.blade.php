@@ -1,6 +1,7 @@
 @extends('adminlte::page')
 @section('title', 'Media View')
 @section('content')
+
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -9,34 +10,19 @@
                     <h1 class="m-0">Media View
                         <a class="btn btn-default btn-sm border-primary col-md-1.5 ml-1 text-primary" name="" value="" href=""><i class="fas fa-chevron-left"></i> <strong>Previous</strong></a>
                         <a class="btn btn-default btn-sm border-primary col-md-1 ml-1 text-primary" name="" value="" href=""><strong>Next</strong> <i class="fas fa-chevron-right"></i></a>
-                        <button class="ml-1 btn btn-sm btn-danger col-md-2">
+                        <button class="ml-1 btn btn-sm btn-danger col-md-2" data-toggle="modal" data-target="#reprocessModel">
                             <i class="fas fa-exclamation-triangle"></i>
                             Reprocessing
                         </button>
-                        <button class="ml-1 btn btn-sm btn-warning col-md-2">
+                        <button class="ml-1 btn btn-sm btn-warning col-md-2" data-toggle="modal" data-target="#alert-modal" >
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
                         <button class="ml-1 btn btn-sm btn-info col-md-2">
                             <i class="fas fa-cloud-download-alt"></i>
                             Download
-                        </button>                            
+                        </button>
                     </h1>
-                    <br>
-                    <div id="app">
-                    @if ($message = Session::get('success'))
-                    <div class="alert alert-success alert-block">
-                        <button type="button" class="close" data-dismiss="alert">×</button>	
-                            <strong>{{ $message }}</strong>
-                    </div>
-                    @endif
-                    @if ($message = Session::get('danger'))
-                    <div class="alert alert-danger alert-block">
-                        <button type="button" class="close" data-dismiss="alert">×</button>	
-                            <strong>{{ $message }}</strong>
-                    </div>
-                    @endif
-                    </div>
                 </div><!-- /.col -->
                 <div class="col-sm-5">
                     <ol class="breadcrumb float-sm-right">
@@ -46,6 +32,20 @@
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
+    </div>
+    <div id="app">
+        @if ($message = Session::get('success'))
+            <div class="alert alert-success alert-block">
+                <button type="button" class="close" data-dismiss="alert">×</button>	
+                <i class="icon fas fa-check"></i><strong>{{ $message }}</strong>
+            </div>
+        @endif
+        @if ($message = Session::get('danger'))
+            <div class="alert alert-danger alert-block">
+                <button type="button" class="close" data-dismiss="alert">×</button>	
+                    <strong>{{ $message }}</strong>
+            </div>
+        @endif
     </div>
     <!-- /.content-header -->
     <div class="content">
@@ -326,6 +326,62 @@
             </div>
         </div>
     </div>
+
+    <!-- Alert model -->
+    <div id="alert-modal" class="fade modal" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="alert-modal-label">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="delete-alert-modal-label" class="modal-title">Media Alert</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="alert-modal-form" class="form-vertical kv-form-bs4" action="{{url('/alert/create')}}" method="post" role="form">
+                        @csrf()
+                        <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
+                            <label class="has-star" for="alert-modal-form-reason">Reason</label>
+                            <div>
+                                <input type="text" id="alert-modal-form-reason" class="form-control" name="reason" placeholder="Type the message..." aria-required="true"></div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <input type="hidden" id="alert-media_id" class="form-control" name="media_id" value="{{ $media->_id }}">
+                            <input type="hidden" id="alert-user_id" class="form-control" name="user_id" value="{{ $media->created_by }}">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" form="alert-modal-form">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reprocess media confirmation box -->
+    <div class="modal fade" id="reprocessModel" tabindex="-1" role="dialog" aria-labelledby="reprocessModel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="{{url('reprocess/'.$media->_id)}}" method="post" role="form">
+                            @csrf()
+                <div class="modal-content">
+                <div class="modal-header bootstrap-dialog-header btn-warning">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to reprocessing this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><span class="fa fa-ban"></span> Cancel</button>
+                    <button type="submit" class="btn btn-warning"><span class="fas fa-check"></span> Ok</button>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -344,4 +400,3 @@
     
 </script>
 @endsection
-

@@ -5,6 +5,8 @@ namespace Aparlay\Core\Admin\Repositories;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AlertRepository implements RepositoryInterface
@@ -23,6 +25,23 @@ class AlertRepository implements RepositoryInterface
     public function all()
     {
         return $this->model->orderBy('created_at', 'desc')->paginate(20);
+    }
+
+    /**
+     * Create alert.
+     *
+     * @param array $data
+     * @return Alert|null
+     */
+    public function store(Request $request)
+    {
+        try {
+            return Alert::create($request->all());
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return null;
+        }
     }
 
     public function create(array $data)
