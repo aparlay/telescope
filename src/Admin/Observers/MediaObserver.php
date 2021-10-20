@@ -3,15 +3,7 @@
 namespace Aparlay\Core\Admin\Observers;
 
 use Aparlay\Core\Admin\Models\Media;
-use Aparlay\Core\Admin\Models\Media as ModelsMedia;
-use Aparlay\Core\Admin\Models\User;
-use Aparlay\Core\Admin\Models\User as ModelsUser;
-use Aparlay\Core\Admin\Services\MediaService;
-use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Jobs\DeleteMediaLike;
-use Aparlay\Core\Jobs\UploadMedia;
 use Exception;
-use MongoDB\BSON\ObjectId;
 
 class MediaObserver
 {
@@ -35,6 +27,9 @@ class MediaObserver
      */
     public function saving($model): void
     {
+        if ($model->wasChanged('file') && str_contains($model->file, config('app.cdn.videos'))) {
+            $model->file = str_replace(config('app.cdn.videos'), '', $model->file);
+        }
     }
 
     /**
