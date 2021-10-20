@@ -62,6 +62,7 @@ class AlertController extends Controller
             if (($post = $request->get('post-action', false)) !== false) {
                 return redirect($post)->with($msg['type'], $msg['text']);
             }
+
             return redirect($viewUrl['0'].$viewUrl['id'])->with($msg['type'], $msg['text']);
         }
     }
