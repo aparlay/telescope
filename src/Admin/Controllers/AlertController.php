@@ -36,7 +36,6 @@ class AlertController extends Controller
         $model = new Alert();
 
         if ($request->all()) {
-
             $media_id = $request->media_id;
             $user_id = $request->user_id;
             $reason = $request->reason;
