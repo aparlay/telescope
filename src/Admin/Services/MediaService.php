@@ -53,6 +53,17 @@ class MediaService
         $request->request->add([
             'visibility' => ($request->visibility == 'on') ? 1 : 0,
             'is_music_licensed' => ($request->is_music_licensed == 'on') ? true : false,
+            'status' => $request->status,
+            'scores' => [
+                [
+                    'type' => 'skin',
+                    'score' => $request->skin_score,
+                ],
+                [
+                    'type' => 'awesomeness',
+                    'score' => $request->awesomeness_score,
+                ],
+            ],
         ]);
 
         return $this->mediaRepository->update($request->all(), $id);
