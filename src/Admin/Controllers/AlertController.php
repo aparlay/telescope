@@ -32,7 +32,7 @@ class AlertController extends Controller
      * @return mixed
      */
     public function create(Request $request)
-    { 
+    {
         $msg = [];
         if ($return = $this->alertService->create($request)) {
             $msg = [
@@ -50,6 +50,6 @@ class AlertController extends Controller
             return redirect($post)->with($msg['type'], $msg['text']);
         }
 
-        return redirect('/media/'. $request->media_id)->with($msg['type'], $msg['text']);
+        return redirect('/media/'.$request->media_id)->with($msg['type'], $msg['text']);
     }
 }

@@ -8,5 +8,4 @@ use Aparlay\Core\Models\Alert as MediaBase;
 class Alert extends MediaBase
 {
     use AlertScope;
-
 }
