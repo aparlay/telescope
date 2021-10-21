@@ -351,6 +351,7 @@
 @endsection
 @section('script')
 <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
+<script src="{{ URL::asset('admin/assets/js/jquery.min.js') }}"></script>
 <script src="{{ asset('admin/assets/js/adminUploadMedia.js') }}"></script>
 <script src="{{ asset('admin/assets/js/adminMedia.js') }}"></script>
 @endsection
