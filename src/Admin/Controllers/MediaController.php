@@ -57,8 +57,9 @@ class MediaController extends Controller
     public function reprocess($id)
     {
         $media = $this->mediaService->find($id);
-        
+
         ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('lowpriority');
+
         return redirect('media/'.(string) $media->_id)->with('success', 'Video is placed in queue for reprocessing.');
     }
 }
