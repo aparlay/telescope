@@ -22,6 +22,21 @@
                             Download
                         </button>                            
                     </h1>
+                    <br>
+                    <div id="app">
+                    @if (Session::get('success'))
+                    <div class="alert alert-success alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button>	
+                            <strong>{{ Session::get('success') }}</strong>
+                    </div>
+                    @endif
+                    @if (Session::get('danger'))
+                    <div class="alert alert-danger alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button>	
+                            <strong>{{ Session::get('danger') }}</strong>
+                    </div>
+                    @endif
+                    </div>
                 </div><!-- /.col -->
                 <div class="col-sm-5">
                     <ol class="breadcrumb float-sm-right">
@@ -43,17 +58,19 @@
                                 {{ $media->status_badge['status'] }}
                             </div>
                         </div>
-                            <video class="section" controls>
-                                <source src="{{URL::asset("/storage/app/upload/$media->file")}}" type="video/mp4">
+                            <video width="100%" controls poster="{{ $media->url('cover') . $media->filename . '.jpg' }}" style="max-height:400px">
+                                <source src="{{ $media->url() . $media->file }}">
+                                Your browser does not support the video tag.
                             </video>
+
                             <form action="" class="form-horizontal" method="POST">
                             <div class="card-body box-profile">
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
                                         <b>Skin Score</b>
                                         <div>
-                                        @foreach ($score_types as $scoreType)
-                                            @foreach ($skin_score as $score)
+                                        @foreach ($scoreTypes as $scoreType)
+                                            @foreach ($skinScore as $score)
                                                 @if($scoreType['type'] == 'skin')
                                                     <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
                                                         <label class="btn btn-outline-secondary skin_score_lable">
@@ -69,8 +86,8 @@
                                     <li class="list-group-item">
                                         <b>Awesomeness Score</b>
                                         <div>
-                                        @foreach ($score_types as $scoreType)
-                                            @foreach ($awesomeness_score as $score)
+                                        @foreach ($scoreTypes as $scoreType)
+                                            @foreach ($awesomenessScore as $score)
                                                 @if($scoreType['type'] == 'awesomeness')
                                                     <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
                                                         <label class="btn btn-outline-secondary awesomeness_score_label">
@@ -94,7 +111,7 @@
                                         </button>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-warning">
+                                        <button type="submit" class="btn btn-block btn-warning" name="status" value="6">
                                             <i class="fas fa-times-circle"></i>
                                             <strong>Denied</strong>
                                         </button>
@@ -113,7 +130,7 @@
                                         </button>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-warning"  data-toggle="modal" data-target="#delete-alert-modal">
+                                        <button type="submit" class="btn btn-block btn-warning"  name="status" value="6">
                                             <i class="fas fa-times-circle"></i>
                                             <strong>Denied</strong>
                                         </button>
@@ -220,7 +237,7 @@
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Skin Score</label>
                                             <div class="col-sm-10 mt-2">
-                                            @foreach ($score_types as $scoreType)
+                                            @foreach ($scoreTypes as $scoreType)
                                                 @if($scoreType['type'] == 'skin')
                                                     <p>{{ $scoreType['score'] }}</p>
                                                 @endif
@@ -230,7 +247,7 @@
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
                                             <div class="col-sm-10 mt-2">
-                                            @foreach ($score_types as $scoreType)
+                                            @foreach ($scoreTypes as $scoreType)
                                                 @if($scoreType['type'] == 'awesomeness')
                                                     <p>{{ $scoreType['score'] }}</p>
                                                 @endif
@@ -301,24 +318,24 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="/alert/create" method="post" role="form">
+                    <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="{{url('/alert/create')}}" method="post" role="form">
                         @csrf()
                         <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
                             <label class="has-star" for="media-delete-alert-modal-form-reason">Reason</label>
                             <div>
-                                <input type="text" id="media-delete-alert-modal-form-reason" class="form-control" name="Alert[reason]" placeholder="Type the message..." aria-required="true" data-krajee-typeahead="typeahead_7864e59a"></div>
+                                <input type="text" id="media-delete-alert-modal-form-reason" class="form-control" name="reason" placeholder="Type the message..." aria-required="true" data-krajee-typeahead="typeahead_7864e59a"></div>
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-type">
-                                <input type="hidden" id="alert-type" class="form-control" name="Alert[type]" value="20">
+                                <input type="hidden" id="alert-type" class="form-control" name="type" value="20">
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-media_id">
-                                <input type="hidden" id="alert-media_id" class="form-control" name="Alert[media_id]" value="{{ $media->_id }}">
+                                <input type="hidden" id="alert-media_id" class="form-control" name="media_id" value="{{ $media->_id }}">
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-user_id required">
-                                <input type="hidden" id="alert-user_id" class="form-control" name="Alert[user_id]" value="{{ $media->created_by }}">
+                                <input type="hidden" id="alert-user_id" class="form-control" name="user_id" value="{{ $media->created_by }}">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -333,9 +350,10 @@
     </div>
 @endsection
 @section('script')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
 <script src="{{ asset('admin/assets/js/adminUploadMedia.js') }}"></script>
+<script src="{{ asset('admin/assets/js/adminMedia.js') }}"></script>
+@endsection
 @section('css')
     <style>
         /* Uploader: Drag & Drop */
@@ -365,7 +383,6 @@
         /* Uploader: Hover & Active status */
         .uploader-item:hover, .is-active .uploader-item {border-color:#4a873c; cursor:pointer; }
         .uploader-item:hover .uploader-item-title, .is-active .uploader-item .uploader-item-title {background-color:rgba(74,135,60,0.8);}
-
         /* Uploader: Error status */
         .is-error .uploader-item:hover, .is-active.is-error .uploader-item {border-color:#900;}
         .is-error .uploader-item:hover .uploader-item-title, .is-active.is-error .uploader-item .uploader-item-title {background-color:rgba(153,0,0,0.6);}

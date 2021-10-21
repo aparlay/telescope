@@ -60,4 +60,14 @@ class Media extends MediaBase
             10 => '10',
         ];
     }
+
+    public function url($type = 'video')
+    {
+        switch ($type) {
+            case 'video':
+                return config('app.cdn.videos');
+            case 'cover':
+                return config('app.cdn.covers');
+        }
+    }
 }

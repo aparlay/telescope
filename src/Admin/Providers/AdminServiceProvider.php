@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Providers;
 
 use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Observers\MediaObserver;
+use Aparlay\Core\Admin\Resources\UserResource;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -13,5 +14,6 @@ class AdminServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
         Media::observe(MediaObserver::class);
+        UserResource::withoutWrapping();
     }
 }

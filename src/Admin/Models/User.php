@@ -9,6 +9,8 @@ class User extends UserBase
 {
     use UserScope;
 
+    public string $guard_name = 'admin';
+
     /**
      * @return string
      */
