@@ -118,14 +118,13 @@ class UserService extends AdminBaseService
             ],
         ]);
 
-        if(request()->input('password_hash')) {
+        if (request()->input('password_hash')) {
             request()->request->add([
-               'password_hash' => bcrypt(request()->input('password_hash'))
+               'password_hash' => bcrypt(request()->input('password_hash')),
             ]);
         } else {
             request()->request->remove('password_hash');
         }
-
 
         $user->syncRoles(request()->input('role'));
 
