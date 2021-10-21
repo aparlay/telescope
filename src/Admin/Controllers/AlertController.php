@@ -34,7 +34,7 @@ class AlertController extends Controller
     public function create(Request $request)
     {
         $msg = [];
-        if ($return = $this->alertService->create($request)) {
+        if ($this->alertService->create($request)) {
             $msg = [
                 'type' => 'success',
                 'text' => 'Alert saved successfully.',
