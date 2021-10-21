@@ -9,12 +9,12 @@
                 <div class="col-sm-7">
                     <h1 class="m-0">Media View
                         <a class="btn btn-default btn-sm border-primary col-md-1.5 ml-1 text-primary" name="" value="" href=""><i class="fas fa-chevron-left"></i> <strong>Previous</strong></a>
-                        <a class="btn btn-default btn-sm border-primary col-md-1 ml-1 text-primary" name="" value="" href=""><strong>Next</strong> <i class="fas fa-chevron-right"></i></a>
-                        <button class="ml-1 btn btn-sm btn-danger col-md-2" data-toggle="modal" data-target="#reprocessModel">
+                        <a class="btn btn-default btn-sm border-primary col-md-1.5 ml-1 text-primary" name="" value="" href=""><strong>Next</strong> <i class="fas fa-chevron-right"></i></a>
+                        <button class=" btn btn-sm btn-danger col-md-2" data-toggle="modal" data-target="#reprocessModel">
                             <i class="fas fa-exclamation-triangle"></i>
                             Reprocessing
                         </button>
-                        <button class="ml-1 btn btn-sm btn-warning col-md-2" data-toggle="modal" data-target="#alert-modal" >
+                        <button class=" btn btn-sm btn-warning col-md-2" data-toggle="modal" data-target="#alert-modal" >
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
@@ -28,8 +28,10 @@
                                 <strong>Download</strong>
                                 <b class="caret"></b>
                             </a>
-                            <div id="w0" class="dropdown-menu show" x-placement="bottom-start" style="position: absolute; transform: translate3d(8px, 31px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                <a class="dropdown-item" href="/media/download-original?id=6167ed15d5f2dc2dec4e151a&amp;hash=8061b535db5b53855ae7864039e1f41eee54b3cc">Oct 14, 2021 - 3.043 MiB</a>
+                            <div id="w0" class="dropdown-menu show" x-placement="bottom-start">
+                                @foreach ($media->files_history as $file)
+                                    <a class="dropdown-item" href="{{url('download-original/' . $media->_id . '/' . $file['hash'] )}}">{{ $file['created_at'] }} - {{ $file['size'] }}</a>
+                                @endforeach
                             </div>
                         </div>
                     </h1>

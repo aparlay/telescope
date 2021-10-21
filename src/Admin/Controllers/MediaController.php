@@ -5,6 +5,7 @@ namespace Aparlay\Core\Admin\Controllers;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Jobs\ReprocessMedia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
@@ -61,5 +62,45 @@ class MediaController extends Controller
         ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('lowpriority');
 
         return redirect('media/'.(string) $media->_id)->with('success', 'Video is placed in queue for reprocessing.');
+    }
+
+    public function downloadOriginal($id, $hash = '')
+    {
+        $media = $this->mediaService->find($id);
+        $matchedFile = $media->files_history[0] ?? [
+            'hash' => $media->hash,
+            'size' => $media->size,
+            'mime_type' => $media->mime_type,
+            'file' => $media->file,
+        ];
+        foreach ($media->files_history as $file) {
+            if ($file['hash'] === $hash) {
+                $matchedFile = $file;
+                break;
+            }
+        }
+
+        $backblazeBucket = config('app.backblaze.videos.bucket');
+        $backblaze = Storage::create(Storage::STORAGE_BACKBLAZE, $backblazeBucket);
+
+        try {
+            $b2File = $matchedFile['file'];
+            if ($backblaze->fileExists($b2File)) {
+                return Yii::$app->response->sendStreamAsFile(
+                    $backblaze->readStream($b2File),
+                    'orig.' . $b2File,
+                    [
+                        'fileSize' => $backblaze->fileSize($b2File),
+                        'mimeType' => $backblaze->mimeType($b2File),
+                        'inline' => false
+                    ]
+                );
+            }
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Video file not found.'));
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'Video file download failed.'));
+        }
+
+        return $this->redirect(['media/view', 'id' => $id]);
     }
 }

@@ -48,6 +48,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('reprocess/{id}', [MediaController::class, 'reprocess'])
                 ->middleware(['permission:edit medias'])
                 ->name('reprocess');
+            Route::post('download-original/{id}/{hash}', [MediaController::class, 'downloadOriginal'])
+                ->middleware(['permission:edit medias'])
+                ->name('downloadOriginal');
         });
 
         /* User Routes */
