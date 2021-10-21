@@ -88,11 +88,11 @@ class MediaController extends Controller
             if ($backblaze->fileExists($b2File)) {
                 return Yii::$app->response->sendStreamAsFile(
                     $backblaze->readStream($b2File),
-                    'orig.' . $b2File,
+                    'orig.'.$b2File,
                     [
                         'fileSize' => $backblaze->fileSize($b2File),
                         'mimeType' => $backblaze->mimeType($b2File),
-                        'inline' => false
+                        'inline' => false,
                     ]
                 );
             }
