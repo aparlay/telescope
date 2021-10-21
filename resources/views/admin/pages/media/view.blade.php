@@ -58,9 +58,11 @@
                                 {{ $media->status_badge['status'] }}
                             </div>
                         </div>
-                            <video class="section" controls>
-                                <source src="{{URL::asset("/storage/app/upload/$media->file")}}" type="video/mp4">
+                            <video width="100%" controls poster="{{ $media->url('cover') . $media->filename . '.jpg' }}" style="max-height:400px">
+                                <source src="{{ $media->url() . $media->file }}">
+                                Your browser does not support the video tag.
                             </video>
+
                             <form action="" class="form-horizontal" method="POST">
                             <div class="card-body box-profile">
                                 <ul class="list-group list-group-unbordered mb-3">

@@ -204,6 +204,16 @@ class Media extends BaseModel
         ];
     }
 
+    public function url($type = 'video')
+    {
+        switch ($type) {
+            case 'video':
+                return config('app.cdn.videos');
+            case 'cover':
+                return config('app.cdn.covers');
+        }
+    }
+
     /**
      * Create a new factory instance for the model.
      */
