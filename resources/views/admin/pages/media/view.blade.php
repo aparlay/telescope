@@ -18,10 +18,20 @@
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
-                        <button class="ml-1 btn btn-sm btn-info col-md-2">
+                        <!-- <button class="ml-1 btn btn-sm btn-info col-md-2">
                             <i class="fas fa-cloud-download-alt"></i>
                             Download
-                        </button>
+                        </button> -->
+                        <div class="btn-group col-md-1 mr-2 show">
+                            <a class="dropdown-toggle btn btn-info btn-sm" href="#" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fas fa-cloud-download-alt"></i>
+                                <strong>Download</strong>
+                                <b class="caret"></b>
+                            </a>
+                            <div id="w0" class="dropdown-menu show" x-placement="bottom-start" style="position: absolute; transform: translate3d(8px, 31px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a class="dropdown-item" href="/media/download-original?id=6167ed15d5f2dc2dec4e151a&amp;hash=8061b535db5b53855ae7864039e1f41eee54b3cc">Oct 14, 2021 - 3.043 MiB</a>
+                            </div>
+                        </div>
                     </h1>
                 </div><!-- /.col -->
                 <div class="col-sm-5">
