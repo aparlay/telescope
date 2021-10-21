@@ -33,35 +33,23 @@ class AlertController extends Controller
      */
     public function create(Request $request)
     {
-        if ($request->all()) {
-            $media_id = $request->media_id;
-            $user_id = $request->user_id;
-
-            $media = $this->alertService->findMediaModel($media_id);
-            $user = $this->alertService->findUserModel($user_id);
-            $media_id = $media->_id ?? null;
-            $user_id = $user->_id;
-
-            $viewUrl = $media_id ? ['/media/', 'id' => (string) $media_id] : ['/user/view', 'id' => (string) $user_id];
-
-            $msg = [];
-            if ($this->alertService->create($request)) {
-                $msg = [
-                    'type' => 'success',
-                    'text' => 'Alert saved successfully.',
-                ];
-            } else {
-                $msg = [
-                    'type' => 'danger',
-                    'text' => 'There are some issues.',
-                ];
-            }
-
-            if (($post = $request->get('post-action', false)) !== false) {
-                return redirect($post)->with($msg['type'], $msg['text']);
-            }
-
-            return redirect($viewUrl['0'].$viewUrl['id'])->with($msg['type'], $msg['text']);
+        $msg = [];
+        if ($return = $this->alertService->create($request)) {
+            $msg = [
+                'type' => 'success',
+                'text' => 'Alert saved successfully.',
+            ];
+        } else {
+            $msg = [
+                'type' => 'danger',
+                'text' => 'There are some issues.',
+            ];
         }
+
+        if (($post = $request->get('post-action', false)) !== false) {
+            return redirect($post)->with($msg['type'], $msg['text']);
+        }
+
+        return redirect('/media/'.$request->media_id)->with($msg['type'], $msg['text']);
     }
 }
