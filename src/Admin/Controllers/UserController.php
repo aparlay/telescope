@@ -7,6 +7,7 @@ use Aparlay\Core\Admin\Resources\UserResource;
 use Aparlay\Core\Admin\Services\UserService;
 use ErrorException;
 use Illuminate\Http\RedirectResponse;
+use Maklad\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -40,7 +41,9 @@ class UserController extends Controller
     public function view($id)
     {
         $user = $this->userService->find($id);
-        return view('default_view::admin.pages.user.edit', compact('user'));
+        $roles = Role::all();
+
+        return view('default_view::admin.pages.user.edit', compact('user', 'roles'));
     }
 
     /**

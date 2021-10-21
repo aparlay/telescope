@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Validation\Validator;
 
@@ -37,14 +38,20 @@ class UserRequest extends FormRequest
             ],
             'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
-            'type' => [Rule::in(array_keys(User::getTypes()))],
+            'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
         ];
     }
 
+    /**
+     * @param Validator $validator
+     * @return void
+     */
     public function failedValidation(Validator $validator)
     {
         $errors = $validator->errors(); // Here is your array of errors
 
-        return back()->withErrors($errors);
+        throw new HttpResponseException(
+            redirect()->back()->withErrors($errors)
+        );
     }
 }

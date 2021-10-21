@@ -104,15 +104,32 @@ class UserService extends AdminBaseService
             $this->uploadAvatar($user);
         }
 
+        //data casting
         request()->request->add([
             'email_verified' => request()->input('email_verified') == 'on',
+            'type' => (int) request()->input('type'),
+            'status' => (int) request()->input('status'),
+            'gender' => (int) request()->input('gender'),
+            'interested_in' => (int) request()->input('interested_in'),
+            'visibility' => (int) request()->input('visibility'),
             'features' => [
                 'tips' => request()->input('features.tips') == 'on',
                 'demo' => request()->input('features.demo') == 'on'
             ],
         ]);
 
-        return $this->userRepository->update(request()->except(['_token', '_method', 'avatar']), $id);
+        if(request()->input('password_hash')) {
+            request()->request->add([
+               'password_hash' => bcrypt(request()->input('password_hash'))
+            ]);
+        } else {
+            request()->request->remove('password_hash');
+        }
+
+
+        $user->syncRoles(request()->input('role'));
+
+        return $this->userRepository->update(request()->except(['_token', '_method', 'avatar', 'role']), $id);
     }
 
     public function uploadAvatar($user): bool

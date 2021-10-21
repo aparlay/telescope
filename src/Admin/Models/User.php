@@ -11,6 +11,8 @@ class User extends UserBase
 
     public string $guard_name = 'admin';
 
+    protected $hidden = ['password_hash'];
+
     /**
      * @return string
      */

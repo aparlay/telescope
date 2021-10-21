@@ -193,14 +193,14 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="role_ids" class="col-sm-2 col-form-control">Role</label>
+                                            <label for="role" class="col-sm-2 col-form-control">Role</label>
                                             <div class="col-sm-10">
-                                                <x-adminlte-select2 id="sel2Category" class="select2-blue" name="role_ids[]"
-                                                                    igroup-size="sm"  multiple>
-                                                    @foreach(\Maklad\Permission\Models\Role::all() as $role)
-                                                        <option value="{{ $role->_id }}" {{ $user->role_ids && in_array($role->_id, $user->role_ids) ? 'selected' : '' }}>{{ ucfirst(str_replace('-', ' ', $role->name)) }}</option>
+                                                <select name="role" class="form-control" id="role">
+                                                    <option value=""></option>
+                                                    @foreach($roles as $role)
+                                                        <option value="{{ $role->name }}" {{ in_array($role->_id, $user->role_ids) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $role->name)) }}</option>
                                                     @endforeach
-                                                </x-adminlte-select2>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -238,17 +238,17 @@
                                         <div class="form-group row">
                                             <label for="password" class="col-sm-2 col-form-label">Password</label>
                                             <div class="col-sm-10">
-                                                <input type="password" class="form-control" id="password" name="password">
+                                                <input type="password" class="form-control" id="password" name="password_hash">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="password" class="col-sm-2 col-form-label">Created At</label>
+                                            <label class="col-sm-2 col-form-label">Created At</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $user->created_at }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="password" class="col-sm-2 col-form-label">Updated At</label>
+                                            <label class="col-sm-2 col-form-label">Updated At</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $user->updated_at }}</p>
                                             </div>
