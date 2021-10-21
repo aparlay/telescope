@@ -24,16 +24,16 @@
                     </h1>
                     <br>
                     <div id="app">
-                    @if ($message = Session::get('success'))
+                    @if (Session::get('success'))
                     <div class="alert alert-success alert-block">
                         <button type="button" class="close" data-dismiss="alert">×</button>	
-                            <strong>{{ $message }}</strong>
+                            <strong>{{ Session::get('success') }}</strong>
                     </div>
                     @endif
-                    @if ($message = Session::get('danger'))
+                    @if (Session::get('danger'))
                     <div class="alert alert-danger alert-block">
                         <button type="button" class="close" data-dismiss="alert">×</button>	
-                            <strong>{{ $message }}</strong>
+                            <strong>{{ Session::get('danger') }}</strong>
                     </div>
                     @endif
                     </div>
@@ -67,8 +67,8 @@
                                     <li class="list-group-item">
                                         <b>Skin Score</b>
                                         <div>
-                                        @foreach ($score_types as $scoreType)
-                                            @foreach ($skin_score as $score)
+                                        @foreach ($scoreTypes as $scoreType)
+                                            @foreach ($skinScore as $score)
                                                 @if($scoreType['type'] == 'skin')
                                                     <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
                                                         <label class="btn btn-outline-secondary skin_score_lable">
@@ -84,8 +84,8 @@
                                     <li class="list-group-item">
                                         <b>Awesomeness Score</b>
                                         <div>
-                                        @foreach ($score_types as $scoreType)
-                                            @foreach ($awesomeness_score as $score)
+                                        @foreach ($scoreTypes as $scoreType)
+                                            @foreach ($awesomenessScore as $score)
                                                 @if($scoreType['type'] == 'awesomeness')
                                                     <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
                                                         <label class="btn btn-outline-secondary awesomeness_score_label">
@@ -235,7 +235,7 @@
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Skin Score</label>
                                             <div class="col-sm-10 mt-2">
-                                            @foreach ($score_types as $scoreType)
+                                            @foreach ($scoreTypes as $scoreType)
                                                 @if($scoreType['type'] == 'skin')
                                                     <p>{{ $scoreType['score'] }}</p>
                                                 @endif
@@ -245,7 +245,7 @@
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
                                             <div class="col-sm-10 mt-2">
-                                            @foreach ($score_types as $scoreType)
+                                            @foreach ($scoreTypes as $scoreType)
                                                 @if($scoreType['type'] == 'awesomeness')
                                                     <p>{{ $scoreType['score'] }}</p>
                                                 @endif

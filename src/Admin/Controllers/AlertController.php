@@ -33,13 +33,9 @@ class AlertController extends Controller
      */
     public function create(Request $request)
     {
-        $model = new Alert();
-
         if ($request->all()) {
             $media_id = $request->media_id;
             $user_id = $request->user_id;
-            $reason = $request->reason;
-            $type = $request->type;
 
             $media = $this->alertService->findMediaModel($media_id);
             $user = $this->alertService->findUserModel($user_id);
@@ -48,14 +44,8 @@ class AlertController extends Controller
 
             $viewUrl = $media_id ? ['/media/', 'id' => (string) $media_id] : ['/user/view', 'id' => (string) $user_id];
 
-            $model->user_id = $user_id;
-            $model->media_id = $media_id;
-            $model->reason = $reason;
-            $model->type = $type;
-
             $msg = [];
-
-            if ($model->save()) {
+            if ($this->alertService->create($request)) {
                 $msg = [
                     'type' => 'success',
                     'text' => 'Alert saved successfully.',

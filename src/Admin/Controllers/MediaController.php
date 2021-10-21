@@ -35,21 +35,21 @@ class MediaController extends Controller
     public function view($id)
     {
         $media = $this->mediaService->find($id);
-        $skin_score = $this->mediaService->skinScore();
-        $awesomeness_score = $this->mediaService->awesomenessScore();
-        $score_types = $media->scores;
+        $skinScore = $this->mediaService->skinScore();
+        $awesomenessScore = $this->mediaService->awesomenessScore();
+        $scoreTypes = $media->scores;
 
-        return view('default_view::admin.pages.media.view', compact('media', 'skin_score', 'awesomeness_score', 'score_types'));
+        return view('default_view::admin.pages.media.view', compact('media', 'skinScore', 'awesomenessScore', 'scoreTypes'));
     }
 
     public function update(Request $request, $id)
     {
         $this->mediaService->updateMedia($request, $id);
         $media = $this->mediaService->find($id);
-        $skin_score = $this->mediaService->skinScore();
-        $awesomeness_score = $this->mediaService->awesomenessScore();
-        $score_types = $media->scores;
+        $skinScore = $this->mediaService->skinScore();
+        $awesomenessScore = $this->mediaService->awesomenessScore();
+        $scoreTypes = $media->scores;
 
-        return view('default_view::admin.pages.media.view', compact('media', 'skin_score', 'awesomeness_score', 'score_types'));
+        return view('default_view::admin.pages.media.view', compact('media', 'skinScore', 'awesomenessScore', 'scoreTypes'));
     }
 }

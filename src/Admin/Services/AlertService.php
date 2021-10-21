@@ -3,15 +3,23 @@
 namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Alert;
+use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\AlertRepository;
+use Aparlay\Core\Admin\Repositories\MediaRepository;
+use Aparlay\Core\Admin\Repositories\UserRepository;
 
 class AlertService
 {
     protected AlertRepository $alertRepository;
+    protected UserRepository $userRepository;
+    protected MediaRepository $mediaRepository;
 
     public function __construct()
     {
         $this->alertRepository = new AlertRepository(new Alert());
+        $this->userRepository = new UserRepository(new User());
+        $this->mediaRepository = new MediaRepository(new Media());
     }
 
     /**
@@ -22,7 +30,7 @@ class AlertService
      */
     public function findUserModel($user_id)
     {
-        return $this->alertRepository->findUserModel($user_id);
+        return $this->userRepository->find($user_id);
     }
 
     /**
@@ -33,6 +41,11 @@ class AlertService
      */
     public function findMediaModel($media_id)
     {
-        return $this->alertRepository->findMediaModel($media_id);
+        return $this->mediaRepository->find($media_id);
+    }
+
+    public function create($request)
+    {
+        return $this->alertRepository->store($request);
     }
 }
