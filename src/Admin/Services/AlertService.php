@@ -22,32 +22,10 @@ class AlertService
         $this->mediaRepository = new MediaRepository(new Media());
     }
 
-    /**
-     * Finds the Alert model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $_id
-     * @return User the loaded model
-     */
-    public function findUserModel($user_id)
-    {
-        return $this->userRepository->find($user_id);
-    }
-
-    /**
-     * Finds the Alert model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $_id
-     * @return Media the loaded model
-     */
-    public function findMediaModel($media_id)
-    {
-        return $this->mediaRepository->find($media_id);
-    }
-
     public function create($request)
     {
-        $this->alertService->findMediaModel($request->media_id);
-        $this->alertService->findUserModel($request->user_id);
+        $this->mediaRepository->find($request->media_id);
+        $this->userRepository->find($request->user_id);
 
         return $this->alertRepository->store($request);
     }
