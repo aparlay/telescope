@@ -46,6 +46,9 @@ class AlertService
 
     public function create($request)
     {
+        $this->alertService->findMediaModel($request->media_id);
+        $this->alertService->findUserModel($request->user_id);
+        
         return $this->alertRepository->store($request);
     }
 }
