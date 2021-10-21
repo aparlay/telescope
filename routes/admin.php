@@ -45,6 +45,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('media/{id}', [MediaController::class, 'update'])
                 ->middleware(['permission:edit medias'])
                 ->name('update');
+            Route::post('reprocess/{id}', [MediaController::class, 'reprocess'])
+                ->middleware(['permission:edit medias'])
+                ->name('reprocess');
         });
 
         /* User Routes */
