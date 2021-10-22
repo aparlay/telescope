@@ -17,7 +17,7 @@ class AlertRolePermission extends Migration
     {
         $roles = [
             'super-administrator' => [
-                
+
                 'create alerts',
             ],
             'administrator' => [
@@ -25,7 +25,7 @@ class AlertRolePermission extends Migration
                 'create alerts',
             ],
             'support' => [
-                
+
                 'create alerts',
             ],
         ];
