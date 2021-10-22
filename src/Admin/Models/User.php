@@ -20,7 +20,7 @@ class User extends UserBase
     protected $casts = [
         'gender' => 'integer',
         'type' => 'integer',
-        'email_verified' => 'boolean'
+        'email_verified' => 'boolean',
     ];
 
     /**
