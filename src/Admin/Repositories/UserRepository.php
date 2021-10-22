@@ -46,7 +46,7 @@ class UserRepository
 
     public function update(array $data, $id)
     {
-        return $this->model->user($id)->update($data);
+        return $this->find($id)->fill($data)->save();
     }
 
     public function delete($id)

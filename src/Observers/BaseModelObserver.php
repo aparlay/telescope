@@ -56,20 +56,5 @@ class BaseModelObserver
         if (! empty($model->media_id) && is_string($model->media_id)) {
             $model->media_id = new ObjectId($model->media_id);
         }
-
-        if (! empty($model->casts)) {
-            foreach ($model->casts as $field => $type) {
-                $value = match ($type) {
-                    'array' => (array) $model->$field,
-                    'boolean' => (bool) $model->$field,
-                    'integer' => (int) $model->$field,
-                    'float' => (float) $model->$field,
-                    'string' => (string) $model->$field,
-                    default => $model->$field,
-                };
-
-                $model->$field = $value;
-            }
-        }
     }
 }
