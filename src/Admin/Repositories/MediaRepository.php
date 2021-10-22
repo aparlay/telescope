@@ -56,6 +56,6 @@ class MediaRepository implements RepositoryInterface
 
     public function pendingMedia($order)
     {
-        return $this->model->completed()->orderBy('created_at', 'asc')->get();
+        return $this->model->completed()->orderBy('created_at', 'asc')->limit(2)->get();
     }
 }
