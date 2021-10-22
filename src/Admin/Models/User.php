@@ -30,7 +30,7 @@ class User extends UserBase
         'status',
         'visibility',
         'referral_id',
-        'promo_link'
+        'promo_link',
     ];
 
     protected $casts = [
