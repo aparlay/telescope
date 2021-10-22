@@ -53,6 +53,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('download-original/{id}/{hash}', [MediaController::class, 'downloadOriginal'])
                 ->middleware(['permission:edit medias'])
                 ->name('downloadOriginal');
+            Route::get('pending/{id}/{order}', [MediaController::class, 'pending'])
+                ->middleware(['permission:show medias'])
+                ->name('pending');
         });
 
         /* User Routes */

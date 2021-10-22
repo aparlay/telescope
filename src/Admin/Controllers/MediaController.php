@@ -61,7 +61,25 @@ class MediaController extends Controller
 
         ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('lowpriority');
 
-        return redirect('media/'.(string) $media->_id)->with('success', 'Video is placed in queue for reprocessing.');
+        return redirect('media/' . (string) $media->_id)->with('success', 'Video is placed in queue for reprocessing.');
+    }
+
+    public function pending($id, $order)
+    {
+        $order = (int)$order;
+        $medias = [];
+        
+        if (in_array($order, [SORT_ASC, SORT_DESC], true)) {
+            $medias = $this->mediaService->pending($order);
+        }
+
+        foreach ($medias as $media) {
+            if ($id != (string)$media->_id) {
+                return redirect('media/' . (string) $media->_id);
+            }
+        }
+
+        return redirect('media');
     }
 
     public function downloadOriginal($id, $hash = '')

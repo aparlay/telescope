@@ -34,4 +34,9 @@ trait MediaScope
     {
         return $query->where('visibility', Media::VISIBILITY_PRIVATE);
     }
+
+    public function scopeCompleted(Builder $query): Builder
+    {
+        return $query->where('status', Media::STATUS_COMPLETED);
+    }
 }

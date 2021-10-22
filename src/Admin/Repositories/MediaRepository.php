@@ -31,7 +31,6 @@ class MediaRepository implements RepositoryInterface
     {
         $model = $this->model->media($id)->firstOrFail();
         $model->update($data);
-
         return $model->refresh();
     }
 
@@ -53,5 +52,10 @@ class MediaRepository implements RepositoryInterface
     public function awesomenessScore()
     {
         return $this->model->getAwesomenessScores();
+    }
+
+    public function pendingMedia($order)
+    {
+        return $this->model->completed()->orderBy('created_at', 'asc')->get();
     }
 }

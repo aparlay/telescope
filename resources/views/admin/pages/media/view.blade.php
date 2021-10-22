@@ -1,8 +1,8 @@
 @extends('adminlte::page')
 @section('title', 'Media View')
 @section('content')
-@inject('dt', 'Aparlay\Core\Helpers\DT');
-@inject('size', 'Aparlay\Core\Helpers\BladeHelper');
+@inject('dt', 'Aparlay\Core\Helpers\DT')
+@inject('size', 'Aparlay\Core\Helpers\BladeHelper')
 @include('default_view::admin.layouts.media_view_header')
     <div class="content">
         <div class="container-fluid">

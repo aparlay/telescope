@@ -46,6 +46,14 @@ class MediaService
     }
 
     /**
+     * @param $order
+     */
+    public function pending($order)
+    {
+        return $this->mediaRepository->pendingMedia($order);
+    }
+
+    /**
      * @param $id
      */
     public function updateMedia(Request $request, $id)
