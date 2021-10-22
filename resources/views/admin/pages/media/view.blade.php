@@ -2,6 +2,7 @@
 @section('title', 'Media View')
 @section('content')
 @inject('dt', 'Aparlay\Core\Helpers\DT');
+@inject('size', 'Aparlay\Core\Helpers\BladeHelper');
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -26,7 +27,7 @@
                             </a>
                             <div id="w0" class="dropdown-menu show" x-placement="bottom-start">
                                 @foreach ($media->files_history as $file)
-                                    <a class="dropdown-item" href="{{url('download-original/' . $media->_id . '/' . $file['hash'] )}}">{{ $dt->strToUtc($file['created_at']) }} - {{ $file['size'] }}</a>
+                                    <a class="dropdown-item" href="{{url('download-original/' . $media->_id . '/' . $file['hash'] )}}">{{ $file['created_at'] }} - {{ $size->fileSize($file['size']) }}</a>
                                 @endforeach
                             </div>
                         </div>
@@ -187,7 +188,7 @@
                                         <div class="form-group row">
                                             <label for="size" class="col-sm-2 col-form-label">Size</label>
                                             <div class="col-sm-10 mt-2">
-                                                <p>{{ $media->size }}</p>
+                                                <p>{{ $size->fileSize($media->size) }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
