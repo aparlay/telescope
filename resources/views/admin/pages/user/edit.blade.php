@@ -96,18 +96,7 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="user-info">
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger">
-                                            @foreach ($errors->all() as $error)
-                                                <p>{{$error}}</p>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                    @if ($message = Session::get('success'))
-                                        <div class="alert alert-success">
-                                            <p>{{ $message }}</p>
-                                        </div>
-                                    @endif
+                                    @include('default_view::admin.parts.messages')
                                     <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data">
                                         @csrf()
                                         @method('PUT')
@@ -192,17 +181,19 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label for="role" class="col-sm-2 col-form-control">Role</label>
-                                            <div class="col-sm-10">
-                                                <select name="role" class="form-control" id="role">
-                                                    <option value=""></option>
-                                                    @foreach($roles as $role)
-                                                        <option value="{{ $role->name }}" {{ in_array($role->_id, $user->role_ids) ? 'selected' : '' }}>{{ ucwords(str_replace('-', ' ', $role->name)) }}</option>
-                                                    @endforeach
-                                                </select>
+                                        @hasrole('super-administrator')
+                                            <div class="form-group row">
+                                                <label for="role" class="col-sm-2 col-form-control">Role</label>
+                                                <div class="col-sm-10">
+                                                    <select name="role" class="form-control" id="role">
+                                                        <option value=""></option>
+                                                        @foreach($roles as $role)
+                                                            <option value="{{ $role->name }}" {{ $user->role_ids && in_array($role->_id, $user->role_ids) ? 'selected' : '' }}>{{ $role->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endhasrole
                                         <div class="form-group row">
                                             <label for="status" class="col-sm-2 col-form-label">Status</label>
                                             <div class="col-sm-10">
@@ -233,12 +224,6 @@
                                             <label for="promo_link" class="col-sm-2 col-form-label">Promo Link</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="promo_link" name="promo_link" value="{{ $user->promo_link }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="password" class="col-sm-2 col-form-label">Password</label>
-                                            <div class="col-sm-10">
-                                                <input type="password" class="form-control" id="password" name="password_hash">
                                             </div>
                                         </div>
                                         <div class="form-group row">

@@ -13,6 +13,16 @@ class User extends UserBase
 
     protected $hidden = ['password_hash'];
 
+    public const SUPER_ADMINISTRATOR = 'super-administrator';
+    public const ADMINISTRATOR = 'administrator';
+    public const SUPPORT = 'support';
+
+    protected $casts = [
+        'gender' => 'integer',
+        'type' => 'integer',
+        'email_verified' => 'boolean'
+    ];
+
     /**
      * @return string
      */
