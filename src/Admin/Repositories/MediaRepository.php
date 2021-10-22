@@ -76,7 +76,6 @@ class MediaRepository
     public function countCollection()
     {
         return $this->model->count();
-        return $this->model->findOrFail($id);
     }
 
     public function skinScore()

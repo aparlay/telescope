@@ -52,8 +52,8 @@ class MediaService extends AdminBaseService
         foreach ($medias as $media) {
             $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
             $media->sort_score = $media->sort_score ?? '';
-            $media->status_badge = $this->createBadge($media->status_color, $media->status_name);
-            $media->action = $this->createViewActionButton($media->_id, 'media');
+            $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
+            $media->action = ActionButtonBladeComponent::getViewActionButton('media', $media->_id);
         }
     }
 
@@ -63,7 +63,7 @@ class MediaService extends AdminBaseService
     public function find($id)
     {
         $media = $this->mediaRepository->find($id);
-        $media->status_badge = $this->createBadge($media->status_color, $media->status_name);
+        $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
 
         return $media;
     }
@@ -82,23 +82,6 @@ class MediaService extends AdminBaseService
     public function getVisibilities(): array
     {
         return $this->userRepository->getVisibilities();
-    }
-
-    /**
-     * @param $id
-     */
-    public function find($id)
-    {
-        $media = $this->mediaRepository->find($id);
-
-        $statusBadge = [
-            'status' => $media->status_color['text'],
-            'color' => $media->status_color['color'],
-        ];
-
-        $media->status_badge = $statusBadge;
-
-        return $media;
     }
 
     /**

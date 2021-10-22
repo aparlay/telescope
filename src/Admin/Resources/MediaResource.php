@@ -7,8 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class MediaResource extends JsonResource
 {
-    use SimpleMediaTrait;
-
     /**
      * Transform the resource into an array.
      *
