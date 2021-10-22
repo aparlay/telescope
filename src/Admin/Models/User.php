@@ -17,10 +17,28 @@ class User extends UserBase
     public const ADMINISTRATOR = 'administrator';
     public const SUPPORT = 'support';
 
+    protected $fillable = [
+        'username',
+        'email',
+        'email_verified',
+        'bio',
+        'features.tips',
+        'features.demo',
+        'gender',
+        'interested_in',
+        'type',
+        'status',
+        'visibility',
+        'referral_id',
+        'promo_link'
+    ];
+
     protected $casts = [
-        'gender' => 'integer',
         'type' => 'integer',
-        'email_verified' => 'boolean'
+        'status' => 'integer',
+        'gender' => 'integer',
+        'interested_in' => 'integer',
+        'visibility' => 'integer',
     ];
 
     /**
