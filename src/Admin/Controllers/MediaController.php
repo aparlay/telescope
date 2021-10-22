@@ -80,27 +80,20 @@ class MediaController extends Controller
             }
         }
 
-        $backblazeBucket = config('app.backblaze.videos.bucket');
-        $backblaze = Storage::create(Storage::STORAGE_BACKBLAZE, $backblazeBucket);
+        $backblaze = Storage::disk('upload');
 
         try {
             $b2File = $matchedFile['file'];
-            if ($backblaze->fileExists($b2File)) {
-                return Yii::$app->response->sendStreamAsFile(
-                    $backblaze->readStream($b2File),
-                    'orig.'.$b2File,
-                    [
-                        'fileSize' => $backblaze->fileSize($b2File),
-                        'mimeType' => $backblaze->mimeType($b2File),
-                        'inline' => false,
-                    ]
-                );
+            if ($backblaze->exists($b2File)) {
+                return response()->download($b2File, 'orig.' . $b2File, [
+                    'Content-Type'  => Storage::mimeType($b2File),
+                ]);
             }
-            Yii::$app->session->setFlash('error', Yii::t('app', 'Video file not found.'));
+            return redirect('/media/'.$id)->with('danger', 'Video file not found.');
         } catch (\Exception $e) {
-            Yii::$app->session->setFlash('error', Yii::t('app', 'Video file download failed.'));
+            return redirect('/media/'.$id)->with('danger', 'Video file download failed.');
         }
 
-        return $this->redirect(['media/view', 'id' => $id]);
+        return redirect('/media/'.$id);
     }
 }

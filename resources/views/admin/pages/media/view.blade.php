@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 @section('title', 'Media View')
 @section('content')
-
+@inject('dt', 'Aparlay\Core\Helpers\DT');
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -18,10 +18,6 @@
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
-                        <!-- <button class="ml-1 btn btn-sm btn-info col-md-2">
-                            <i class="fas fa-cloud-download-alt"></i>
-                            Download
-                        </button> -->
                         <div class="btn-group col-md-1 mr-2 show">
                             <a class="dropdown-toggle btn btn-info btn-sm" href="#" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fas fa-cloud-download-alt"></i>
@@ -30,7 +26,7 @@
                             </a>
                             <div id="w0" class="dropdown-menu show" x-placement="bottom-start">
                                 @foreach ($media->files_history as $file)
-                                    <a class="dropdown-item" href="{{url('download-original/' . $media->_id . '/' . $file['hash'] )}}">{{ $file['created_at'] }} - {{ $file['size'] }}</a>
+                                    <a class="dropdown-item" href="{{url('download-original/' . $media->_id . '/' . $file['hash'] )}}">{{ $dt->strToUtc($file['created_at']) }} - {{ $file['size'] }}</a>
                                 @endforeach
                             </div>
                         </div>
