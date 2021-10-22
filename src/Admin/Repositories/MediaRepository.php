@@ -31,7 +31,7 @@ class MediaRepository implements RepositoryInterface
     {
         $model = $this->model->media($id)->firstOrFail();
         $model->update($data);
-        $model->refresh();
+        return $model->refresh();
     }
 
     public function delete($id)

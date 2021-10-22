@@ -1,53 +1,7 @@
 @extends('adminlte::page')
 @section('title', 'Media View')
 @section('content')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-7">
-                    <h1 class="m-0">Media View
-                        <a class="btn btn-default btn-sm border-primary col-md-1.5 ml-1 text-primary" name="" value="" href=""><i class="fas fa-chevron-left"></i> <strong>Previous</strong></a>
-                        <a class="btn btn-default btn-sm border-primary col-md-1 ml-1 text-primary" name="" value="" href=""><strong>Next</strong> <i class="fas fa-chevron-right"></i></a>
-                        <button class="ml-1 btn btn-sm btn-danger col-md-2">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Reprocessing
-                        </button>
-                        <button class="ml-1 btn btn-sm btn-warning col-md-2">
-                            <i class="fas fa-minus-circle"></i>
-                            Alert
-                        </button>
-                        <button class="ml-1 btn btn-sm btn-info col-md-2">
-                            <i class="fas fa-cloud-download-alt"></i>
-                            Download
-                        </button>                            
-                    </h1>
-                    <br>
-                    <div id="app">
-                    @if (Session::get('success'))
-                    <div class="alert alert-success alert-block">
-                        <button type="button" class="close" data-dismiss="alert">×</button>	
-                            <strong>{{ Session::get('success') }}</strong>
-                    </div>
-                    @endif
-                    @if (Session::get('danger'))
-                    <div class="alert alert-danger alert-block">
-                        <button type="button" class="close" data-dismiss="alert">×</button>	
-                            <strong>{{ Session::get('danger') }}</strong>
-                    </div>
-                    @endif
-                    </div>
-                </div><!-- /.col -->
-                <div class="col-sm-5">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="">Home</a></li>
-                        <li class="breadcrumb-item">Media</li>
-                    </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+@include('default_view::admin.layouts.media_view_header')
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -220,6 +174,7 @@
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Show In Public Feed</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
+                                                    <input type="hidden" value="0" name="visibility" >
                                                     <input type="checkbox" class="custom-control-input" name="visibility" id="visibility" {!! ($media->visibility == 1) ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="visibility"></label>
                                                 </div>
@@ -229,6 +184,7 @@
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Music Licensed</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
+                                                    <input type="hidden" value="0" name="is_music_licensed" >
                                                     <input type="checkbox" class="custom-control-input" name="is_music_licensed" id="is_music_licensed" {!! ($media->is_music_licensed == true) ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="is_music_licensed"></label>
                                                 </div>
@@ -331,6 +287,6 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('admin/assets/js/adminMedia.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/media.js') }}"></script>
 @endsection
 
