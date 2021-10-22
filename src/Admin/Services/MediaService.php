@@ -50,10 +50,21 @@ class MediaService
      */
     public function updateMedia(Request $request, $id)
     {
-        $request->request->add([
-            'visibility' => ($request->visibility == 'on') ? 1 : 0,
-            'is_music_licensed' => ($request->is_music_licensed == 'on') ? true : false,
-            'scores' => [
+        $data = [];
+        if ($request->has('visibility')) {
+            $data['visibility'] = ($request->visibility == 'on') ? 1 : 0;
+        }
+        if ($request->has('is_music_licensed')) {
+            $data['is_music_licensed'] = ($request->is_music_licensed == 'on') ? true : false;
+        }
+        if ($request->has('description')) {
+            $data['description'] = $request->description;
+        }
+        if ($request->has('status')) {
+            $data['status'] = $request->status;
+        }
+        if ($request->has('skin_score')) {
+            $data['scores'] = [
                 [
                     'type' => 'skin',
                     'score' => $request->skin_score,
@@ -62,10 +73,10 @@ class MediaService
                     'type' => 'awesomeness',
                     'score' => $request->awesomeness_score,
                 ],
-            ],
-        ]);
+            ];
+        }
 
-        return $this->mediaRepository->update($request->all(), $id);
+        return $this->mediaRepository->update($data, $id);
     }
 
     public function skinScore()
