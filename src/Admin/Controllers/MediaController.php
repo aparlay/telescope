@@ -85,10 +85,11 @@ class MediaController extends Controller
         try {
             $b2File = $matchedFile['file'];
             if ($backblaze->exists($b2File)) {
-                return response()->download($b2File, 'orig.' . $b2File, [
+                return response()->download($b2File, 'orig.'.$b2File, [
                     'Content-Type'  => Storage::mimeType($b2File),
                 ]);
             }
+
             return redirect('/media/'.$id)->with('danger', 'Video file not found.');
         } catch (\Exception $e) {
             return redirect('/media/'.$id)->with('danger', 'Video file download failed.');
