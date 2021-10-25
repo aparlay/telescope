@@ -31,7 +31,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
         Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
         Route::middleware(['admin-auth:admin'])->name('alert.')->group(function () {
-            Route::post('/alert/create', [AlertController::class, 'create'])->name('create');
+            Route::post('/alert/create', [AlertController::class, 'create'])
+            ->middleware(['permission:create alerts'])
+            ->name('create');
         });
 
         /* Media routes */

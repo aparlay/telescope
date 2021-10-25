@@ -17,14 +17,14 @@ class UploadService
 
         $result = ['data' => [], 'code' => 200];
 
-        $FILE = [
+        $fileArray = [
             'name' => $request->file('file')?->getClientOriginalName(),
             'type' => $request->file('file')?->getType(),
             'tmp_name' => $request->file('file')?->getFilename(),
             'error' => $request->file('file')?->getError(),
             'size' => $request->file('file')?->getSize(),
         ];
-        $fileRequest = new \Flow\Request($request->all(), $FILE);
+        $fileRequest = new \Flow\Request($request->all(), $fileArray);
         $file = new File($config, $fileRequest);
 
         if ($request->isMethod('GET')) {
