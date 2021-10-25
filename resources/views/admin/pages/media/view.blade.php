@@ -238,7 +238,7 @@
                                 <div class="tab-pane" id="upload">
                                     <!-- The timeline -->
                                     <form method="post" action="{{url('media/'.$media->_id)}}" >
-                                        <div class="flow-drop" data-upload-url="{{url('user/upload-media')}}" ondragenter="jQuery(this).addClass('flow-dragover');" ondragend="jQuery(this).removeClass('flow-dragover');" ondrop="jQuery(this).removeClass('flow-dragover');">
+                                        <div class="flow-drop" data-upload-url="{{ route('core.admin.user.media.upload') }}" ondragenter="jQuery(this).addClass('flow-dragover');" ondragend="jQuery(this).removeClass('flow-dragover');" ondrop="jQuery(this).removeClass('flow-dragover');">
                                             Drop files here to upload or <a class="flow-browse"><u>select from your computer</u></a>
                                         </div>
                                         @csrf
@@ -274,7 +274,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="{{url('/alert/create')}}" method="post" role="form">
+                    <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="{{route('core.admin.alert.alert.create')}}" method="post" role="form">
                         @csrf()
                         <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
                             <label class="has-star" for="media-delete-alert-modal-form-reason">Reason</label>
