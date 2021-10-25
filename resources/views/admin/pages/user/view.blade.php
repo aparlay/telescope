@@ -91,7 +91,7 @@
                                     <a href="#upload" class="nav-link" data-toggle="tab">Upload</a>
                                 </li>
                                 <li class="nav-items">
-                                    <a href="#credit-card" class="nav-link" data-toggle="tab">Credit Card</a>
+                                    <a href="#credit-card" class="nav-link" data-toggle="tab">Credit Cards</a>
                                 </li>
                             </ul>
                         </div>
