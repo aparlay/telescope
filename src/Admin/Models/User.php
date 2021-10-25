@@ -33,6 +33,11 @@ class User extends UserBase
         'promo_link'
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
         'type' => 'integer',
         'status' => 'integer',
