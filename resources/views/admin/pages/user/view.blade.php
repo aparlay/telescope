@@ -1,5 +1,6 @@
 @extends('adminlte::page')
 @section('title', 'User Profile')
+@section('plugins.Datatables', true)
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -88,6 +89,9 @@
                                 </li>
                                 <li class="nav-items">
                                     <a href="#upload" class="nav-link" data-toggle="tab">Upload</a>
+                                </li>
+                                <li class="nav-items">
+                                    <a href="#credit-card" class="nav-link" data-toggle="tab">Credit Card</a>
                                 </li>
                             </ul>
                         </div>
@@ -240,6 +244,55 @@
                                 <div class="tab-pane" id="upload">
                                     upload
                                 </div>
+                                <div class="tab-pane" id="credit-card">
+                                    <div class="content">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-12 table-responsive">
+                                                        @php
+                                                            $heads = [
+                                                                '',
+                                                                'Card Number',
+                                                                'Expiration Month',
+                                                                'Expiration Year',
+                                                                'Created at',
+                                                                '',
+                                                            ];
+
+                                                        $config = [
+                                                            'processing' => true,
+                                                            'serverSide' => true,
+                                                            'pageLength' => config('core.admin.lists.page_count'),
+                                                            'responsive' => true,
+                                                            'lengthChange' => false,
+                                                            'bInfo' => false,
+                                                            'dom' => 'rtip',
+                                                            'aoSearchCols' => [
+                                                                ["sSearch" => $user->username ],
+                                                                null, null, null, null, null
+                                                            ],
+                                                            'orderMulti' => false,
+                                                            'autoWidth' => false,
+                                                            'ajax' => route('payment.admin.ajax.credit-card.index'),
+                                                            'order' => [[1, 'asc']],
+                                                            'columns' => [
+                                                                ['data' => 'creator.username','visible' => false],
+                                                                ['data' => 'card_number'],
+                                                                ['data' => 'expire_month', 'orderable' => false],
+                                                                ['data' => 'expire_year', 'orderable' => false],
+                                                                ['data' => 'created_at'],
+                                                                ['data' => 'view_button', 'orderable' => false],
+                                                            ],
+                                                        ]
+                                                        @endphp
+                                                        <x-adminlte-datatable id="datatables" :heads="$heads" :config="$config">
+                                                        </x-adminlte-datatable>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -248,4 +301,10 @@
         </div>
     </div>
 @endsection
+@section('js')
+    <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
+@endsection
+
 
