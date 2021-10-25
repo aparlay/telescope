@@ -131,8 +131,8 @@ class UserService extends AdminBaseService
         if (auth()->user()->hasRole(User::ROLE_SUPER_ADMINISTRATOR)) {
             $user->syncRoles(request()->input('role'));
         }
-        $user->fill($data);
-        $user->save();
+
+        $this->userRepository->update($data, $id);
     }
 
     public function uploadAvatar($user): bool
