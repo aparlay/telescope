@@ -13,9 +13,9 @@ class User extends UserBase
 
     protected $hidden = ['password_hash'];
 
-    public const SUPER_ADMINISTRATOR = 'super-administrator';
-    public const ADMINISTRATOR = 'administrator';
-    public const SUPPORT = 'support';
+    public const ROLE_SUPER_ADMINISTRATOR = 'super-administrator';
+    public const ROLE_ADMINISTRATOR = 'administrator';
+    public const ROLE_SUPPORT = 'support';
 
     protected $fillable = [
         'username',
@@ -30,7 +30,7 @@ class User extends UserBase
         'status',
         'visibility',
         'referral_id',
-        'promo_link'
+        'promo_link',
     ];
 
     /**

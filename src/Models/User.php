@@ -193,6 +193,7 @@ class User extends Authenticatable implements JWTSubject
         'block_count' => 'integer',
         'followed_hashtag_count' => 'integer',
         'media_count' => 'integer',
+        'type' => 'integer',
     ];
 
     protected $dates = [
@@ -412,5 +413,14 @@ class User extends Authenticatable implements JWTSubject
     public function getCollection(): string
     {
         return $this->collection;
+    }
+
+    public function setAttribute($key, $value)
+    {
+        if ($this->hasCast($key)) {
+            $value = $this->castAttribute($key, $value);
+        }
+
+        return parent::setAttribute($key, $value);
     }
 }

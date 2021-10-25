@@ -11,6 +11,7 @@ return [
         \Aparlay\Core\Api\V1\Providers\AuthServiceProvider::class,
         \Aparlay\Core\Admin\Providers\AuthServiceProvider::class,
         \Aparlay\Core\Admin\Providers\AdminServiceProvider::class,
+        \Aparlay\Core\Admin\Providers\EventServiceProvider::class,
     ],
 
     'admin' => [

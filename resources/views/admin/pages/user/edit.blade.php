@@ -181,7 +181,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        @hasrole('super-administrator')
+                                        @role('super-administrator')
                                             <div class="form-group row">
                                                 <label for="role" class="col-sm-2 col-form-control">Role</label>
                                                 <div class="col-sm-10">
@@ -193,7 +193,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                        @endhasrole
+                                        @endrole
                                         <div class="form-group row">
                                             <label for="status" class="col-sm-2 col-form-label">Status</label>
                                             <div class="col-sm-10">
