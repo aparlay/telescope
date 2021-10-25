@@ -25,35 +25,39 @@
                                     <li class="list-group-item">
                                         <b>Skin Score</b>
                                         <div>
-                                        @foreach ($scoreTypes as $scoreType)
-                                            @foreach ($skinScore as $score)
-                                                @if($scoreType['type'] == 'skin')
-                                                    <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
-                                                        <label class="btn btn-outline-secondary skin_score_lable">
-                                                            <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
-                                                            {{ $score }}
-                                                        </label>
-                                                    </div>
-                                                @endif
+                                        @if ($scoreTypes)
+                                            @foreach ($scoreTypes as $scoreType)
+                                                @foreach ($skinScore as $score)
+                                                    @if($scoreType['type'] == 'skin')
+                                                        <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
+                                                            <label class="btn btn-outline-secondary skin_score_lable">
+                                                                <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                {{ $score }}
+                                                            </label>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
                                             @endforeach
-                                        @endforeach
+                                        @endif
                                         </div>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Awesomeness Score</b>
                                         <div>
-                                        @foreach ($scoreTypes as $scoreType)
-                                            @foreach ($awesomenessScore as $score)
-                                                @if($scoreType['type'] == 'awesomeness')
-                                                    <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
-                                                        <label class="btn btn-outline-secondary awesomeness_score_label">
-                                                            <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
-                                                            {{ $score }}
-                                                        </label>
-                                                    </div>
-                                                @endif
+                                        @if ($scoreTypes)
+                                            @foreach ($scoreTypes as $scoreType)
+                                                @foreach ($awesomenessScore as $score)
+                                                    @if($scoreType['type'] == 'awesomeness')
+                                                        <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
+                                                            <label class="btn btn-outline-secondary awesomeness_score_label">
+                                                                <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                {{ $score }}
+                                                            </label>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
                                             @endforeach
-                                        @endforeach
+                                        @endif
                                         </div>
                                     </li>
                                 </ul>
@@ -195,21 +199,25 @@
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Skin Score</label>
                                             <div class="col-sm-10 mt-2">
-                                            @foreach ($scoreTypes as $scoreType)
-                                                @if($scoreType['type'] == 'skin')
-                                                    <p>{{ $scoreType['score'] }}</p>
-                                                @endif
-                                            @endforeach
+                                            @if ($scoreTypes)
+                                                @foreach ($scoreTypes as $scoreType)
+                                                    @if($scoreType['type'] == 'skin')
+                                                        <p>{{ $scoreType['score'] }}</p>
+                                                    @endif
+                                                @endforeach
+                                            @endif
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
                                             <div class="col-sm-10 mt-2">
-                                            @foreach ($scoreTypes as $scoreType)
-                                                @if($scoreType['type'] == 'awesomeness')
-                                                    <p>{{ $scoreType['score'] }}</p>
-                                                @endif
-                                            @endforeach
+                                            @if ($scoreTypes)
+                                                @foreach ($scoreTypes as $scoreType)
+                                                    @if($scoreType['type'] == 'awesomeness')
+                                                        <p>{{ $scoreType['score'] }}</p>
+                                                    @endif
+                                                @endforeach
+                                            @endif
                                             </div>
                                         </div>
                                         <div class="form-group row">
