@@ -12,7 +12,7 @@ $(document).ready(function() {
     var r = new Flow({
         singleFile: true,
         target: $('.flow-drop').data('upload-url'),
-        chunkSize: 1024*1024*5,
+        chunkSize: 1024*1024*15,
         query : {
             "_token" : csrfToken
         },

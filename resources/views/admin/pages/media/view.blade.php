@@ -306,11 +306,10 @@
     </div>
 @endsection
 @section('script')
+<script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
-<script src="{{ URL::asset('admin/assets/js/jquery.min.js') }}"></script>
-<script src="{{ asset('admin/assets/js/uploadMedia.js') }}"></script>
+<script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
 <script src="{{ asset('admin/assets/js/media.js') }}"></script>
-@endsection
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}" >
+<link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}" >
 @stop
