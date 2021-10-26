@@ -1,6 +1,7 @@
 @extends('adminlte::page')
 @section('title', 'User Profile')
-@section('content')
+@section('plugins.Select2', true)
+@section('content_header')
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -16,13 +17,14 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('core.admin.dashboard') }}">Home</a></li>
-                        <li class="breadcrumb-item">Users</li>
+                        <li class="breadcrumb-item"><a href="{{ route('core.admin.user.index') }}">Users</a></li>
+                        <li class="breadcrumb-item">Details</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+@stop
+@section('content')
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -35,7 +37,7 @@
                         </div>
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img src="{{ $user->avatar }}" alt="" class="profile-user-img img-fluid img-circle">
+                                <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="profile-user-img img-fluid img-circle">
                             </div>
                             <h3 class="profile-username text-center">{{ $user->username }}</h3>
                             <p class="text-muted text-center">
@@ -89,17 +91,22 @@
                                 <li class="nav-items">
                                     <a href="#upload" class="nav-link" data-toggle="tab">Upload</a>
                                 </li>
+                                <li class="nav-items">
+                                    <a href="#credit-card" class="nav-link" data-toggle="tab">Credit Cards</a>
+                                </li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="user-info">
-                                    <form action="" class="form-horizontal" method="POST">
+                                    @include('default_view::admin.parts.messages')
+                                    <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data">
                                         @csrf()
+                                        @method('PUT')
                                         <div class="form-group row">
                                             <label for="avatar" class="col-sm-2 col-form-label">Avatar</label>
                                             <div class="col-sm-10">
-                                                <input type="file" class="form-control-file" id="avatar" name="avatar">
+                                                <input type="file" class="form-control-file" id="avatar" name="avatar" accept="image/*">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -118,7 +125,7 @@
                                             <label for="email_verified" class="col-sm-2 col-form-label">Email Verified</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
+                                                    <input type="checkbox" name="email_verified" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="email_verified"></label>
                                                 </div>
                                             </div>
@@ -126,14 +133,14 @@
                                         <div class="form-group row">
                                             <label for="bio" class="col-sm-2 col-form-label">Bio</label>
                                             <div class="col-sm-10">
-                                                <textarea name="bio" id="" cols="30" rows="3" class="form-control"></textarea>
+                                                <textarea name="bio" id="bio" cols="30" rows="3" class="form-control"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="feature_tips" class="col-sm-2 col-form-label">Feature Tips</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
+                                                    <input type="checkbox" class="custom-control-input" name="features[tips]" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="feature_tips"></label>
                                                 </div>
                                             </div>
@@ -142,7 +149,7 @@
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Feature Demo User</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
+                                                    <input type="checkbox" class="custom-control-input" name="features[demo]" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="feature_demo"></label>
                                                 </div>
                                             </div>
@@ -177,6 +184,19 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        @role('super-administrator')
+                                            <div class="form-group row">
+                                                <label for="role" class="col-sm-2 col-form-control">Role</label>
+                                                <div class="col-sm-10">
+                                                    <select name="role" class="form-control" id="role">
+                                                        <option value=""></option>
+                                                        @foreach($roles as $role)
+                                                            <option value="{{ $role->name }}" {{ $user->role_ids && in_array($role->_id, $user->role_ids) ? 'selected' : '' }}>{{ $role->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        @endrole
                                         <div class="form-group row">
                                             <label for="status" class="col-sm-2 col-form-label">Status</label>
                                             <div class="col-sm-10">
@@ -210,19 +230,13 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="password" class="col-sm-2 col-form-label">Password</label>
-                                            <div class="col-sm-10">
-                                                <input type="password" class="form-control" id="password" name="password">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="password" class="col-sm-2 col-form-label">Password</label>
+                                            <label class="col-sm-2 col-form-label">Created At</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $user->created_at }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="password" class="col-sm-2 col-form-label">Password</label>
+                                            <label class="col-sm-2 col-form-label">Updated At</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $user->updated_at }}</p>
                                             </div>
@@ -240,6 +254,55 @@
                                 <div class="tab-pane" id="upload">
                                     upload
                                 </div>
+                                <div class="tab-pane" id="credit-card">
+                                    <div class="content">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-12 table-responsive">
+                                                        @php
+                                                            $heads = [
+                                                                '',
+                                                                'Card Number',
+                                                                'Expiration Month',
+                                                                'Expiration Year',
+                                                                'Created at',
+                                                                '',
+                                                            ];
+
+                                                        $config = [
+                                                            'processing' => true,
+                                                            'serverSide' => true,
+                                                            'pageLength' => config('core.admin.lists.page_count'),
+                                                            'responsive' => true,
+                                                            'lengthChange' => false,
+                                                            'bInfo' => false,
+                                                            'dom' => 'rtip',
+                                                            'aoSearchCols' => [
+                                                                ["sSearch" => $user->username ],
+                                                                null, null, null, null, null
+                                                            ],
+                                                            'orderMulti' => false,
+                                                            'autoWidth' => false,
+                                                            'ajax' => route('payment.admin.ajax.credit-card.index'),
+                                                            'order' => [[1, 'asc']],
+                                                            'columns' => [
+                                                                ['data' => 'creator.username','visible' => false],
+                                                                ['data' => 'card_number'],
+                                                                ['data' => 'expire_month', 'orderable' => false],
+                                                                ['data' => 'expire_year', 'orderable' => false],
+                                                                ['data' => 'created_at'],
+                                                                ['data' => 'view_button', 'orderable' => false],
+                                                            ],
+                                                        ]
+                                                        @endphp
+                                                        <x-adminlte-datatable id="datatables" :heads="$heads" :config="$config">
+                                                        </x-adminlte-datatable>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -248,4 +311,10 @@
         </div>
     </div>
 @endsection
+@section('js')
+    <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
+@endsection
+
 
