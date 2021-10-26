@@ -93,7 +93,7 @@
                                     <a href="#upload" class="nav-link" data-toggle="tab">Upload</a>
                                 </li>
                                 <li class="nav-items">
-                                    <a href="#payout" class="nav-link" data-toggle="tab">Payout</a>
+                                    <a href="#payment" class="nav-link" data-toggle="tab">Payments</a>
                                 </li>
                             </ul>
                         </div>
@@ -255,7 +255,7 @@
                                 <div class="tab-pane" id="upload">
                                     upload
                                 </div>
-                                <div class="tab-pane" id="payout">
+                                <div class="tab-pane" id="payment">
                                     <div class="content">
                                             <div class="container-fluid">
                                                 <div class="row">
