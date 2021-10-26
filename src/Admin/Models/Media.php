@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Admin\Models;
 
-use Aparlay\Core\Models\Scopes\MediaScope;
 use Aparlay\Core\Models\Media as MediaBase;
+use Aparlay\Core\Models\Scopes\MediaScope;
 
 class Media extends MediaBase
 {
