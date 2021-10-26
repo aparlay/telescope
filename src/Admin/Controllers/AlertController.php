@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
+use Aparlay\Core\Admin\Requests\AlertRequest;
 use Aparlay\Core\Admin\Services\AlertService;
 
 class AlertController
@@ -14,7 +15,7 @@ class AlertController
         $this->alertService = $alertService;
     }
 
-    public function store()
+    public function store(AlertRequest $request)
     {
         if($this->alertService->store()) {
             return back()->with('success', 'Alert added successfully.');

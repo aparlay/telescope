@@ -25,14 +25,11 @@ class AlertService
 
     public function store()
     {
-        $media = $this->mediaRepository->find(request()->input('media_id'));
-        $user = $this->userRepository->find(request()->input('user_id'));
-
         $request = request()->only(['type', 'reason']);
 
         $data = [
-            'user_id' => new ObjectId($user->_id),
-            'media_id' => $media->_id ? new ObjectId($media->_id) : null,
+            'user_id' => new ObjectId($this->userRepository->find(request()->input('user_id'))->_id),
+            'media_id' => request()->input('media_id') ? new ObjectId($this->mediaRepository->find(request()->input('media_id'))->_id) : null,
             'status' => Alert::STATUS_NOT_VISITED
         ];
 
