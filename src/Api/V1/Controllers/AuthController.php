@@ -570,7 +570,7 @@ class AuthController extends Controller
         $result = $this->respondWithToken($token);
         $cookie1 = Cookie::make(
             '__Secure_token',
-            $result['access_token'],
+            $result['token'],
             $result['token_expired_at'] / 60
         );
         $cookie2 = Cookie::make(
