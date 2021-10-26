@@ -1,5 +1,6 @@
 @extends('adminlte::page')
 @section('title', 'User Profile')
+@section('plugins.Datatables', true)
 @section('plugins.Select2', true)
 @section('content_header')
     <!-- Content Header (Page header) -->
@@ -92,7 +93,7 @@
                                     <a href="#upload" class="nav-link" data-toggle="tab">Upload</a>
                                 </li>
                                 <li class="nav-items">
-                                    <a href="#credit-card" class="nav-link" data-toggle="tab">Credit Cards</a>
+                                    <a href="#payout" class="nav-link" data-toggle="tab">Payout</a>
                                 </li>
                             </ul>
                         </div>
@@ -254,10 +255,11 @@
                                 <div class="tab-pane" id="upload">
                                     upload
                                 </div>
-                                <div class="tab-pane" id="credit-card">
+                                <div class="tab-pane" id="payout">
                                     <div class="content">
                                             <div class="container-fluid">
                                                 <div class="row">
+                                                    <h4>Credit Cards</h4>
                                                     <div class="col-12 table-responsive">
                                                         @php
                                                             $heads = [
@@ -296,6 +298,53 @@
                                                         ]
                                                         @endphp
                                                         <x-adminlte-datatable id="datatables" :heads="$heads" :config="$config">
+                                                        </x-adminlte-datatable>
+                                                    </div>
+
+
+                                                    <h4>Tips</h4>
+                                                    <div class="col-12 table-responsive">
+                                                    @php
+                                                        $heads = [
+                                                            '',
+                                                            'Creator',
+                                                            '',
+                                                            'Amount',
+                                                            'Status',
+                                                            '',
+                                                            'Created at',
+                                                            '',
+                                                        ];
+
+                                                    $config = [
+                                                        'processing' => true,
+                                                        'serverSide' => true,
+                                                        'pageLength' => config('core.admin.lists.page_count'),
+                                                        'responsive' => true,
+                                                        'lengthChange' => false,
+                                                        'bInfo' => false,
+                                                        'dom' => 'rtip',
+                                                        'orderMulti' => false,
+                                                        'aoSearchCols' => [
+                                                            ["sSearch" => $user->username ],
+                                                            null, null, null, null, null
+                                                        ],
+                                                        'autoWidth' => false,
+                                                        'ajax' => route('payment.admin.ajax.tip.index'),
+                                                        'order' => [[1, 'asc']],
+                                                        'columns' => [
+                                                            ['data' => 'user.username','visible' => false],
+                                                            ['data' => 'link_to_creator', 'orderData' => 3, 'target' => 3],
+                                                            ['data' => 'creator.username','visible' => false],
+                                                            ['data' => 'amount'],
+                                                            ['data' => 'status_button','orderData' => 6, 'target' => 6],
+                                                            ['data' => 'status','visible' => false],
+                                                            ['data' => 'created_at'],
+                                                            ['data' => 'view_button', 'orderable' => false],
+                                                        ],
+                                                    ]
+                                                    @endphp
+                                                        <x-adminlte-datatable id="datatables1" :heads="$heads" :config="$config">
                                                         </x-adminlte-datatable>
                                                     </div>
                                                 </div>
