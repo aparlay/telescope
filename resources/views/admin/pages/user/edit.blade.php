@@ -8,7 +8,7 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">User Profile
-                        <button class="ml-4 btn btn-sm btn-danger col-md-1">
+                        <button class="ml-4 btn btn-sm btn-danger col-md-1" data-toggle="modal" data-target="#alertModal">
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
@@ -63,16 +63,30 @@
                             </ul>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#suspendMmodal">
-                                        <i class="fas fa-minus-circle"></i>
-                                        <strong>Suspend</strong>
-                                    </button>
+                                    @if($user->status == \App\Models\User::STATUS_SUSPENDED)
+                                        <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#activateModal">
+                                            <i class="fas fa-check"></i>
+                                            <strong>Reactivate</strong>
+                                        </button>
+                                    @else
+                                        <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#suspendModal">
+                                            <i class="fas fa-minus-circle"></i>
+                                            <strong>Suspend</strong>
+                                        </button>
+                                    @endif
                                 </div>
                                 <div class="col-md-6">
-                                    <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#banModal">
-                                        <i class="fas fa-times-circle"></i>
-                                        <strong>Ban</strong>
-                                    </button>
+                                    @if($user->status == \App\Models\User::STATUS_BLOCKED)
+                                        <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#activateModal">
+                                            <i class="fas fa-check"></i>
+                                            <strong>Reactivate</strong>
+                                        </button>
+                                    @else
+                                        <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#banModal">
+                                            <i class="fas fa-times-circle"></i>
+                                            <strong>Ban</strong>
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -307,6 +321,111 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="alertModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <form action="{{ route('core.admin.alert.store') }}" method="post">
+                <input type="hidden" name="user_id" value="{{ $user->_id }}">
+                <input type="hidden" name="type" value="{{ \Aparlay\Core\Models\Alert::TYPE_USER}}">
+                <!-- Modal content-->
+                <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLiveLabel">Alert User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Reason <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="reason" placeholder="Type your message." />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="banModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form action="{{ route('core.admin.user.update.status', ['id' => $user->_id, \App\Models\User::STATUS_BLOCKED])  }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" id="exampleModalLiveLabel">Ban User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to ban this user?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                            <button type="submit" class="btn btn-danger">Ban</button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+    </div>
+    <div id="suspendModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{{ route('core.admin.user.update.status', ['id' => $user->_id, \App\Models\User::STATUS_SUSPENDED])  }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="exampleModalLiveLabel">Suspend</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to suspend this user?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                            <button type="submit" class="btn btn-warning">Suspend</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="activateModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{{ route('core.admin.user.update.status', ['id' => $user->_id, \App\Models\User::STATUS_ACTIVE])  }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="exampleModalLiveLabel">Reactivate</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to reactivate this user?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        <button type="submit" class="btn btn-warning">Reactivate</button>
+
+                    </div>
+                </form>
             </div>
         </div>
     </div>

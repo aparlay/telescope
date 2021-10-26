@@ -160,4 +160,9 @@ class UserService extends AdminBaseService
 
         return false;
     }
+
+    public function updateStatus($id, $status): bool
+    {
+        return $this->userRepository->update(['status' => $status], $id);
+    }
 }

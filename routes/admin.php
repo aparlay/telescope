@@ -4,6 +4,7 @@ use Aparlay\Core\Admin\Controllers\AuthController;
 use Aparlay\Core\Admin\Controllers\DashboardController;
 use Aparlay\Core\Admin\Controllers\MediaController;
 use Aparlay\Core\Admin\Controllers\UserController;
+use Aparlay\Core\Admin\Controllers\AlertController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,11 +54,19 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::put('user/{id}', [UserController::class, 'update'])
                 ->middleware(['permission:edit users'])
                 ->name('update');
+            Route::patch('user/{id}/{status}', [UserController::class, 'updateStatus'])
+                ->middleware(['permission:edit users'])
+                ->name('update.status');
+        });
+
+        Route::name('alert.')->group(function() {
+           Route::post('alert', [AlertController::class, 'store'])
+               ->name('store');
         });
 
         /* Ajax Routes */
         Route::name('ajax.')->prefix('ajax')->group(function () {
-            Route::get('user', [UserController::class, 'indexAjax'])
+            Route::get('user', [UserController  ::class, 'indexAjax'])
                 ->middleware(['permission:list users'])
                 ->name('user.index');
         });
