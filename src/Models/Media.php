@@ -42,6 +42,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $likes
  * @property array       $comments
  * @property int         $status
+ * @property int         $tips
  * @property array       $hashtags
  * @property array       $people
  * @property array       $creator
@@ -124,6 +125,7 @@ class Media extends BaseModel
         'count_fields_updated_at',
         'visibility',
         'status',
+        'tips',
         'is_music_licensed',
         'hashtags',
         'people',
@@ -162,6 +164,7 @@ class Media extends BaseModel
         'like_count' => 'integer',
         'visit_count' => 'integer',
         'comment_count' => 'integer',
+        'tips' => 'integer',
     ];
 
     /**
