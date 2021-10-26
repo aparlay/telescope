@@ -1,6 +1,5 @@
 <?php
 
-
 use Aparlay\Core\Admin\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Permission;

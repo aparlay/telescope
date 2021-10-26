@@ -33,7 +33,7 @@ class AlertService
         $data = [
             'user_id' => new ObjectId($user->_id),
             'media_id' => $media->_id ? new ObjectId($media->_id) : null,
-            'status' => Alert::STATUS_NOT_VISITED
+            'status' => Alert::STATUS_NOT_VISITED,
         ];
 
         $alertData = array_merge($request, $data);
