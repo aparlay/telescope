@@ -2,10 +2,12 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
+use Aparlay\Core\Admin\Requests\UserRequest;
 use Aparlay\Core\Admin\Resources\UserResource;
 use Aparlay\Core\Admin\Services\UserService;
 use ErrorException;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Maklad\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -28,6 +30,9 @@ class UserController extends Controller
         return view('default_view::admin.pages.user.index', compact('userStatuses', 'userVisibilities'));
     }
 
+    /**
+     * @return UserResource
+     */
     public function indexAjax()
     {
         return new UserResource($this->userService->getFilteredUsers());
@@ -36,7 +41,20 @@ class UserController extends Controller
     public function view($id)
     {
         $user = $this->userService->find($id);
+        $roles = Role::all();
 
-        return view('default_view::admin.pages.user.view', compact('user'));
+        return view('default_view::admin.pages.user.edit', compact('user', 'roles'));
+    }
+
+    /**
+     * @param $id
+     * @param UserRequest $request
+     * @return RedirectResponse
+     */
+    public function update($id, UserRequest $request): RedirectResponse
+    {
+        $this->userService->update($id);
+
+        return back()->with('success', 'User updated successfully.');
     }
 }
