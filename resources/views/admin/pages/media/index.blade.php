@@ -78,7 +78,7 @@
                                             <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label for="username">Created By</label>
-                                                    <input type="text" data-column="0" name="creator.username" class="form-control" id="creator.username" placeholder="Enter username">
+                                                    <input type="text" data-column="1" name="creator.username" class="form-control" id="creator.username" placeholder="Enter username">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">

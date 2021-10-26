@@ -8,6 +8,7 @@ use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
 trait MediaScope
@@ -233,5 +234,27 @@ trait MediaScope
     public function scopeSort($query): mixed
     {
         return $query->orderBy('sort_score', 'desc');
+    }
+
+    public function scopeSortBy($query, $sorts): mixed
+    {
+        foreach ($sorts as $field => $direction) {
+            $query->orderBy($field, $direction);
+        }
+
+        return $query;
+    }
+
+    public function scopeFilter($query, $filters)
+    {
+        foreach ($filters as $key => $filter) {
+            if (is_numeric($filter)) {
+                $query->where($key, (int) $filter);
+            } else {
+                $query->where($key, 'regex', new Regex('^'.$filter));
+            }
+        }
+
+        return $query;
     }
 }
