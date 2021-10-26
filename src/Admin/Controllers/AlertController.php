@@ -17,7 +17,7 @@ class AlertController
 
     public function store(AlertRequest $request)
     {
-        if($this->alertService->store()) {
+        if ($this->alertService->store()) {
             return back()->with('success', 'Alert added successfully.');
         }
 

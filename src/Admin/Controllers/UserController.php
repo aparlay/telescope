@@ -66,11 +66,12 @@ class UserController extends Controller
      */
     public function updateStatus($id, $status): RedirectResponse
     {
-        if($this->userService->updateStatus($id, $status)) {
-            if($status == User::STATUS_ACTIVE) {
+        if ($this->userService->updateStatus($id, $status)) {
+            if ($status == User::STATUS_ACTIVE) {
                 return back()->with('success', 'User Reactivated successfully.');
             }
-            return back()->with('success', 'User ' . ucfirst(User::getStatuses()[$status]) . ' successfully.');
+
+            return back()->with('success', 'User '.ucfirst(User::getStatuses()[$status]).' successfully.');
         }
 
         return back()->with('error', 'Update status failed.');

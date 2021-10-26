@@ -6,5 +6,4 @@ use Aparlay\Core\Models\Alert as BaseAlert;
 
 class Alert extends BaseAlert
 {
-
 }
