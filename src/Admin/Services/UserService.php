@@ -19,7 +19,6 @@ class UserService extends AdminBaseService
 
         $this->filterableField = ['username', 'email', 'status', 'visibility'];
         $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
-//        $this->editableFields = ['username', 'email', '']
     }
 
     /**
