@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Helpers\Cdn;
 use Illuminate\Http\Request;
+use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 
 class MediaService extends AdminBaseService
 {
@@ -53,7 +54,7 @@ class MediaService extends AdminBaseService
             $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
             $media->sort_score = $media->sort_score ?? '';
             $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
-            $media->action = ActionButtonBladeComponent::getViewActionButton('media', $media->_id);
+            $media->action = ActionButtonBladeComponent::getViewActionButton($media->_id, 'media');
         }
     }
 
