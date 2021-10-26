@@ -30,9 +30,9 @@ class AlertRequest extends FormRequest
         return [
             'type' => [
                 'required',
-                Rule::in(array_keys(Alert::getTypes()))
+                Rule::in(array_keys(Alert::getTypes())),
             ],
-            'user_id' => ['required']
+            'user_id' => ['required'],
         ];
     }
 

@@ -59,8 +59,8 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('update.status');
         });
 
-        Route::name('alert.')->group(function() {
-           Route::post('alert', [AlertController::class, 'store'])
+        Route::name('alert.')->group(function () {
+            Route::post('alert', [AlertController::class, 'store'])
                ->middleware('permission:create alerts')
                ->name('store');
         });
