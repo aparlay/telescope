@@ -64,7 +64,13 @@ class MediaService extends AdminBaseService
     public function find($id)
     {
         $media = $this->mediaRepository->find($id);
-        $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
+
+        $statusBadge = [
+            'status' => $media->status_name,
+            'color' => $media->status_color,
+        ];
+
+        $media->status_badge = $statusBadge;
 
         return $media;
     }
@@ -88,33 +94,38 @@ class MediaService extends AdminBaseService
     /**
      * @param $id
      */
-    public function updateMedia(Request $request, $id)
+    public function update($id)
     {
-        $data = [];
-        if ($request->has('visibility')) {
-            $data['visibility'] = ($request->visibility == 'on') ? 1 : 0;
+        $data = request()->only([
+            'description',
+            'status',
+            'skin_score',
+            'visibility',
+            'is_music_licensed',
+        ]);
+
+        if (request()->has('visibility')) {
+            $dataModified['visibility'] = (request()->visibility == 'on') ? 1 : 0;
         }
-        if ($request->has('is_music_licensed')) {
-            $data['is_music_licensed'] = ($request->is_music_licensed == 'on') ? true : false;
+        if (request()->has('is_music_licensed')) {
+            $dataModified['is_music_licensed'] = (request()->is_music_licensed == 'on') ? true : false;
         }
-        if ($request->has('description')) {
-            $data['description'] = $request->description;
-        }
-        if ($request->has('status')) {
-            $data['status'] = $request->status;
-        }
-        if ($request->has('skin_score')) {
-            $data['scores'] = [
+
+        if (request()->has('skin_score')) {
+            $dataModified['scores'] = [
                 [
                     'type' => 'skin',
-                    'score' => $request->skin_score,
+                    'score' => request()->skin_score,
                 ],
                 [
                     'type' => 'awesomeness',
-                    'score' => $request->awesomeness_score,
+                    'score' => request()->awesomeness_score,
                 ],
             ];
         }
+
+        $data = array_merge($data, $dataModified);
+        
 
         return $this->mediaRepository->update($data, $id);
     }

@@ -55,7 +55,7 @@ class MediaRepository
     public function update(array $data, $id)
     {
         $model = $this->model->media($id)->firstOrFail();
-        $model->update($data);
+        $model->fill($data)->save();
 
         return $model->refresh();
     }
