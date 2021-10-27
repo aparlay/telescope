@@ -27,18 +27,18 @@
                                     <li class="list-group-item">
                                         <b>Skin Score</b>
                                         <div>
-                                        @if ($scoreTypes)
-                                            @foreach ($scoreTypes as $scoreType)
-                                                @foreach ($skinScore as $score)
-                                                    @if($scoreType['type'] == 'skin')
-                                                        <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
-                                                            <label class="btn btn-outline-secondary skin_score_lable">
-                                                                <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
-                                                                {{ $score }}
-                                                            </label>
-                                                        </div>
-                                                    @endif
-                                                @endforeach
+                                        <input type="hidden" name="visibility" value="{{ $media->visibility }}">
+                                        <input type="hidden" name="is_music_licensed" value="{{ $media->is_music_licensed}}">
+                                        @foreach ($scoreTypes as $scoreType)
+                                            @foreach ($skinScore as $score)
+                                                @if($scoreType['type'] == 'skin')
+                                                    <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
+                                                        <label class="btn btn-outline-secondary skin_score_lable">
+                                                            <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                            {{ $score }}
+                                                        </label>
+                                                    </div>
+                                                @endif
                                             @endforeach
                                         @endif
                                         </div>
