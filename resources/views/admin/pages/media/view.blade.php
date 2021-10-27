@@ -201,15 +201,6 @@
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Skin Score</label>
                                             <div class="col-sm-10 mt-2">
-<<<<<<< HEAD
-                                            @if ($scoreTypes)
-                                                @foreach ($scoreTypes as $scoreType)
-                                                    @if($scoreType['type'] == 'skin')
-                                                        <p>{{ $scoreType['score'] }}</p>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-=======
                                                 <div>
                                                     @foreach ($scoreTypes as $scoreType)
                                                         @foreach ($skinScore as $score)
@@ -224,21 +215,11 @@
                                                         @endforeach
                                                     @endforeach
                                                 </div>
->>>>>>> 8bdfdc352eafa6a10caa48c6f1256b882bcc1091
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
                                             <div class="col-sm-10 mt-2">
-<<<<<<< HEAD
-                                            @if ($scoreTypes)
-                                                @foreach ($scoreTypes as $scoreType)
-                                                    @if($scoreType['type'] == 'awesomeness')
-                                                        <p>{{ $scoreType['score'] }}</p>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-=======
                                                 <div>
                                                     @foreach ($scoreTypes as $scoreType)
                                                         @foreach ($awesomenessScore as $score)
@@ -253,7 +234,6 @@
                                                         @endforeach
                                                     @endforeach
                                                 </div>
->>>>>>> 8bdfdc352eafa6a10caa48c6f1256b882bcc1091
                                             </div>
                                         </div>
                                         <div class="form-group row">
