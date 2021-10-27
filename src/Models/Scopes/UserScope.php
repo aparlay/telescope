@@ -146,6 +146,7 @@ trait UserScope
         return $query;
     }
 
+    //TODO: scope too general, must refactor
     public function scopeFilter($query, $filters)
     {
         foreach ($filters as $key => $filter) {
