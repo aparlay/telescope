@@ -29,7 +29,7 @@ class MediaService extends AdminBaseService
         $limit = (int) request()->get('length');
 
         $filters = $this->getFilters();
-        if($moderation){
+        if ($moderation) {
             $filters['status'] = 3;
         }
 
