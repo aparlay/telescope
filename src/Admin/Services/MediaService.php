@@ -125,7 +125,6 @@ class MediaService extends AdminBaseService
         }
 
         $data = array_merge($data, $dataModified);
-        
 
         return $this->mediaRepository->update($data, $id);
     }
