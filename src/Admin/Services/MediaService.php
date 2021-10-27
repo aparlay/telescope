@@ -23,12 +23,16 @@ class MediaService extends AdminBaseService
     /**
      * @return mixed
      */
-    public function getFilteredMedia(): mixed
+    public function getFilteredMedia($moderation = false): mixed
     {
         $offset = (int) request()->get('start');
         $limit = (int) request()->get('length');
 
         $filters = $this->getFilters();
+        if($moderation){
+            $filters['status'] = 3;
+        }
+
         $sort = $this->tableSort();
         if (! empty($filters)) {
             $medias = $this->mediaRepository->getFilteredMedia($offset, $limit, $sort, $filters);

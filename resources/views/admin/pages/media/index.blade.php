@@ -7,12 +7,12 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Media</h1>
+            <h1 class="m-0">Media @if($moderation) moderation @endif</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ route('core.admin.dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Media</a></li>
+                <li class="breadcrumb-item"><a href="#">Media @if($moderation) moderation @endif</a></li>
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -46,14 +46,15 @@
                         'dom' => 'rtip',
                         'orderMulti' => false,
                         'autoWidth' => false,
-                        'ajax' => route('core.admin.ajax.media.index'),
+                        'ajax' => $moderation ? route('core.admin.ajax.media.moderation') : route('core.admin.ajax.media.index'),
                         'order' => [[8, 'desc']],
+                        'searching' => true,
                         'columns' => [
                             ['data' => 'file', 'orderable' => false],
-                            ['data' => 'creator.username'],
+                            ['data' => 'creator.username','search' => 'thelm','moderate'=>true],
                             ['data' => 'description', 'orderable' => false],
                             ['data' => 'status', 'visible' => false],
-                            ['data' => 'status_badge', 'orderData' => 3, 'target' => 3],
+                            ['data' => 'status_badge', 'orderData' => 3, 'target' => 3, 'orderable' => $moderation ? false : true],
                             ['data' => 'like_count', 'orderable' => false],
                             ['data' => 'visit_count', 'orderable' => false],
                             ['data' => 'sort_score', 'orderable' => false],
@@ -82,15 +83,17 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
-                                                <div class="form-group">
-                                                    <label for="status">Status</label>
-                                                    <select name="status" data-column="3" id="status" class="form-control">
-                                                        <option value="">-Select-</option>
-                                                        @foreach($mediaStatuses as $key => $status)
-                                                            <option value="{{ $key }}">{{ $status }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+                                                @if(!$moderation)
+                                                    <div class="form-group">
+                                                        <label for="status">Status</label>
+                                                        <select name="status" data-column="3" id="status" class="form-control">
+                                                            <option value="">-Select-</option>
+                                                            @foreach($mediaStatuses as $key => $status)
+                                                                <option value="{{ $key }}">{{ $status }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                @endif
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="row d-flex justify-content-end">

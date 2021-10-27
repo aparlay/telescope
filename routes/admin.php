@@ -34,6 +34,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('media', [MediaController::class, 'index'])
                 ->middleware(['permission:list medias'])
                 ->name('index');
+            Route::get('media/moderation', [MediaController::class, 'moderation'])
+                ->middleware(['permission:list medias'])
+                ->name('moderation');
             Route::get('media/{id}', [MediaController::class, 'view'])
                 ->middleware(['permission:show medias'])
                 ->name('view');
@@ -63,6 +66,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('media', [MediaController::class, 'indexAjax'])
                 ->middleware(['permission:list medias'])
                 ->name('media.index');
+            Route::get('moderation', [MediaController::class, 'moderationAjax'])
+                ->middleware(['permission:list medias'])
+                ->name('media.moderation');
         });
     });
 
