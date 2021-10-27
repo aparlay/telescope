@@ -51,7 +51,7 @@
                         'searching' => true,
                         'columns' => [
                             ['data' => 'file', 'orderable' => false],
-                            ['data' => 'creator.username','search' => 'thelm','moderate'=>true],
+                            ['data' => 'creator.username'],
                             ['data' => 'description', 'orderable' => false],
                             ['data' => 'status', 'visible' => false],
                             ['data' => 'status_badge', 'orderData' => 3, 'target' => 3, 'orderable' => $moderation ? false : true],
