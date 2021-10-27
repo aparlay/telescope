@@ -23,7 +23,7 @@ class MediaService extends AdminBaseService
     /**
      * @return mixed
      */
-    public function getFilteredMedia($moderation = false): mixed
+    public function getFilteredMedia(): mixed
     {
         $offset = (int) request()->get('start');
         $limit = (int) request()->get('length');
