@@ -2,10 +2,8 @@
 
 namespace Aparlay\Core\Admin\Models;
 
-use Aparlay\Core\Admin\Models\Scopes\AlertScope;
-use Aparlay\Core\Models\Alert as MediaBase;
+use Aparlay\Core\Models\Alert as AlertBase;
 
-class Alert extends MediaBase
+class Alert extends AlertBase
 {
-    use AlertScope;
 }

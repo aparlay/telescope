@@ -4,28 +4,58 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
+use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\Cdn;
 use Illuminate\Http\Request;
 
-class MediaService
+class MediaService extends AdminBaseService
 {
     protected MediaRepository $mediaRepository;
 
     public function __construct()
     {
         $this->mediaRepository = new MediaRepository(new Media());
+
+        $this->filterableField = ['creator.username', 'status'];
+        $this->sorterableField = ['creator.username', 'status', 'created_at'];
     }
 
-    public function getList()
+    /**
+     * @return mixed
+     */
+    public function getFilteredMedia(): mixed
     {
-        $mediaCollection = $this->mediaRepository->all();
+        $offset = (int) request()->get('start');
+        $limit = (int) request()->get('length');
 
-        foreach ($mediaCollection as $collect) {
-            $collect->status_text = $collect->status_color;
-            $collect->cover = Cdn::cover(! empty($value['file']) ? $value['file'].'.jpg' : 'default.jpg');
+        $filters = $this->getFilters();
+        $sort = $this->tableSort();
+        if (! empty($filters)) {
+            $medias = $this->mediaRepository->getFilteredMedia($offset, $limit, $sort, $filters);
+        } else {
+            $medias = $this->mediaRepository->mediaAjax($offset, $limit, $sort);
         }
 
-        return $mediaCollection;
+        $this->appendAttributes($medias, $filters);
+
+        return $medias;
+    }
+
+    /**
+     * @param $medias
+     * @param $filters
+     */
+    public function appendAttributes($medias, $filters)
+    {
+        $medias->total_media = $this->mediaRepository->countCollection();
+        $medias->total_filtered_media = ! empty($filters) ? $this->mediaRepository->countFilteredMedia($filters) : $medias->total_media;
+
+        foreach ($medias as $media) {
+            $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
+            $media->sort_score = $media->sort_score ?? '';
+            $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
+            $media->action = ActionButtonBladeComponent::getViewActionButton($media->_id, 'media');
+        }
     }
 
     /**
@@ -36,8 +66,8 @@ class MediaService
         $media = $this->mediaRepository->find($id);
 
         $statusBadge = [
-            'status' => $media->status_color['text'],
-            'color' => $media->status_color['color'],
+            'status' => $media->status_name,
+            'color' => $media->status_color,
         ];
 
         $media->status_badge = $statusBadge;
@@ -54,35 +84,55 @@ class MediaService
     }
 
     /**
+     * @return array
+     */
+    public function getMediaStatuses(): array
+    {
+        return $this->mediaRepository->getMediaStatuses();
+    }
+
+    /**
+     * @return array
+     */
+    public function getVisibilities(): array
+    {
+        return $this->userRepository->getVisibilities();
+    }
+
+    /**
      * @param $id
      */
-    public function updateMedia(Request $request, $id)
+    public function update($id)
     {
-        $data = [];
-        if ($request->has('visibility')) {
-            $data['visibility'] = ($request->visibility == 'on') ? 1 : 0;
+        $data = request()->only([
+            'description',
+            'status',
+            'skin_score',
+            'visibility',
+            'is_music_licensed',
+        ]);
+
+        if (request()->has('visibility')) {
+            $dataModified['visibility'] = (request()->visibility == 'on') ? 1 : 0;
         }
-        if ($request->has('is_music_licensed')) {
-            $data['is_music_licensed'] = ($request->is_music_licensed == 'on') ? true : false;
+        if (request()->has('is_music_licensed')) {
+            $dataModified['is_music_licensed'] = (request()->is_music_licensed == 'on') ? true : false;
         }
-        if ($request->has('description')) {
-            $data['description'] = $request->description;
-        }
-        if ($request->has('status')) {
-            $data['status'] = $request->status;
-        }
-        if ($request->has('skin_score')) {
-            $data['scores'] = [
+
+        if (request()->has('skin_score')) {
+            $dataModified['scores'] = [
                 [
                     'type' => 'skin',
-                    'score' => $request->skin_score,
+                    'score' => request()->skin_score,
                 ],
                 [
                     'type' => 'awesomeness',
-                    'score' => $request->awesomeness_score,
+                    'score' => request()->awesomeness_score,
                 ],
             ];
         }
+
+        $data = array_merge($data, $dataModified);
 
         return $this->mediaRepository->update($data, $id);
     }

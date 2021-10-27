@@ -14,7 +14,7 @@ use Illuminate\Http\Response;
 
 class AnalyticsDailyCommand extends Command
 {
-    public $signature = 'report:daily_analytics';
+    public $signature = 'analytics:daily';
 
     public $description = 'This command is responsible for creating Daily Analytics Report';
 
@@ -62,7 +62,7 @@ class AnalyticsDailyCommand extends Command
             ],
         ];
 
-        if (($model = Analytic::Where(['date' => $analytics['date']])->first()) === null) {
+        if (($model = Analytic::where('date', $analytics['date'])->first()) === null) {
             $model = new Analytic();
         }
         $model->fill($analytics)->save();

@@ -35,14 +35,6 @@ class AlertRolePermission extends Migration
                 $role->givePermissionTo(Permission::firstOrCreate(['name' => $name, 'guard_name' => 'admin']));
             }
         }
-
-        foreach (User::where('type', User::TYPE_ADMIN)->limit(5)->get() as $user) {
-            $user->assignRole('super-administrator');
-        }
-
-        if (($user = User::where('email', 'ramin@aparlay.com')->first()) !== null) {
-            $user->assignRole('super-administrator');
-        }
     }
 
     /**

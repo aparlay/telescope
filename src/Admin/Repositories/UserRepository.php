@@ -46,7 +46,7 @@ class UserRepository
 
     public function update(array $data, $id)
     {
-        // TODO: Implement update() method.
+        return $this->find($id)->fill($data)->save();
     }
 
     public function delete($id)
