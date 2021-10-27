@@ -61,7 +61,7 @@ class MediaController extends Controller
 
         ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('lowpriority');
 
-        return redirect('media/'.(string) $media->_id)->with('success', 'Video is placed in queue for reprocessing.');
+        return redirect()->route('core.admin.media.view', ['id' => (string) $media->_id])->with('success', 'Video is placed in queue for reprocessing.');
     }
 
     public function pending($id, $order)
@@ -75,11 +75,10 @@ class MediaController extends Controller
 
         foreach ($medias as $media) {
             if ($id != (string) $media->_id) {
-                return redirect('media/'.(string) $media->_id);
+                return redirect()->route('core.admin.media.view', ['id' => (string) $media->_id]);
             }
         }
-
-        return redirect('media');
+        return redirect()->route('core.admin.media.index');
     }
 
     public function downloadOriginal($id, $hash = '')
@@ -108,11 +107,10 @@ class MediaController extends Controller
                 ]);
             }
 
-            return redirect('/media/'.$id)->with('danger', 'Video file not found.');
+            return redirect()->route('core.admin.media.view', ['id' => $id])->with('danger', 'Video file not found.');
         } catch (\Exception $e) {
-            return redirect('/media/'.$id)->with('danger', 'Video file download failed.');
+            return redirect()->route('core.admin.media.view', ['id' => $id])->with('danger', 'Video file download failed.');
         }
-
-        return redirect('/media/'.$id);
+        return redirect()->route('core.admin.media.view', ['id' => $id]);
     }
 }
