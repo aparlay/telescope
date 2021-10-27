@@ -78,6 +78,7 @@ class MediaController extends Controller
                 return redirect()->route('core.admin.media.view', ['id' => (string) $media->_id]);
             }
         }
+
         return redirect()->route('core.admin.media.index');
     }
 
@@ -111,6 +112,7 @@ class MediaController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('core.admin.media.view', ['id' => $id])->with('danger', 'Video file download failed.');
         }
+
         return redirect()->route('core.admin.media.view', ['id' => $id]);
     }
 }
