@@ -3,6 +3,7 @@
 @section('content')
 @inject('cdn', 'Aparlay\Core\Helpers\Cdn')
 @include('default_view::admin.layouts.media_view_header')
+@include('default_view::admin.parts.messages')
     <div class="content">
         <div class="container-fluid">
             <div class="row">
