@@ -92,6 +92,6 @@ class MediaRepository
 
     public function pendingMedia($order)
     {
-        return $this->model->completed()->orderBy('created_at', 'asc')->limit(2)->get();
+        return $this->model->completed()->recentFirst()->limit(2)->get();
     }
 }
