@@ -29,11 +29,12 @@ class UserRequest extends FormRequest
     {
         return [
             'email' => ['required',
-                'unique:users, email,'.request()->route('user'),
+                'email',
+                Rule::unique('users', 'email')->ignore($this->user->_id, '_id'),
                 'max:255',
             ],
             'username' => ['required',
-                'unique:users, username,'.request()->route('user'),
+                Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
                 'max:255',
             ],
             'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
