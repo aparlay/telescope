@@ -53,4 +53,13 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
     {
         return $this->collection;
     }
+
+    public function setAttribute($key, $value)
+    {
+        if ($this->hasCast($key)) {
+            $value = $this->castAttribute($key, $value);
+        }
+
+        return parent::setAttribute($key, $value);
+    }
 }

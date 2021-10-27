@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
+use Aparlay\Core\Admin\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use function redirect;
@@ -26,7 +27,7 @@ class AuthController extends Controller
         $remember = $request->get('remember');
 
         //make sure only admin type user can do login
-        $credentials['type'] = 1;
+        $credentials['type'] = User::TYPE_ADMIN;
 
         if (Auth::guard('admin')->attempt($credentials, $remember)) {
             return redirect()->intended('dashboard');
