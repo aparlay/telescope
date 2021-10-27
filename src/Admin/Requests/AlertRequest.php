@@ -32,7 +32,7 @@ class AlertRequest extends FormRequest
                 'required',
                 Rule::in(array_keys(Alert::getTypes())),
             ],
-            'user_id' => ['required'],
+            'user_id' => ['required','exists:\Aparlay\Core\Admin\Models\User,_id'],
         ];
     }
 

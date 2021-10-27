@@ -11,7 +11,7 @@ class AlertRepository
     public function __construct($model)
     {
         if (! ($model instanceof Alert)) {
-            throw new \InvalidArgumentException('$model should be of User type');
+            throw new \InvalidArgumentException('$model should be of Alert type');
         }
 
         $this->model = $model;
