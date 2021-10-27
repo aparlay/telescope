@@ -17,8 +17,8 @@ class UserService extends AdminBaseService
     {
         $this->userRepository = new UserRepository(new User());
 
-        $this->filterableField = ['creator.username', 'email', 'status', 'visibility'];
-        $this->sorterableField = ['creator.username', 'email', 'status', 'visibility', 'created_at'];
+        $this->filterableField = ['username', 'email', 'status', 'visibility'];
+        $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
     }
 
     /**
