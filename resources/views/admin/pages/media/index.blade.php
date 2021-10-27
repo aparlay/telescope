@@ -46,9 +46,8 @@
                         'dom' => 'rtip',
                         'orderMulti' => false,
                         'autoWidth' => false,
-                        'ajax' => $moderation ? route('core.admin.ajax.media.moderation') : route('core.admin.ajax.media.index'),
+                        'ajax' => route('core.admin.ajax.media.index'),
                         'order' => [[8, 'desc']],
-                        'searching' => true,
                         'columns' => [
                             ['data' => 'file', 'orderable' => false],
                             ['data' => 'creator.username'],
@@ -61,7 +60,11 @@
                             ['data' => 'created_at'],
                             ['data' => 'action', 'orderable' => false],
                         ],
-                    ]
+                    ];
+                    if($moderation){
+                        $config['searching'] = true;
+                        $config['searchCols'] = [null,null,null,["search" => 3]];
+                    }
                     @endphp
                     <div id="accordion">
                         <div class="card card-primary">

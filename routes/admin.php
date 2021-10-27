@@ -66,9 +66,6 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('media', [MediaController::class, 'indexAjax'])
                 ->middleware(['permission:list medias'])
                 ->name('media.index');
-            Route::get('moderation', [MediaController::class, 'moderationAjax'])
-                ->middleware(['permission:list medias'])
-                ->name('media.moderation');
         });
     });
 

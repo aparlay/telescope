@@ -27,13 +27,9 @@ class MediaService extends AdminBaseService
     {
         $offset = (int) request()->get('start');
         $limit = (int) request()->get('length');
-
         $filters = $this->getFilters();
-        if ($moderation) {
-            $filters['status'] = 3;
-        }
-
         $sort = $this->tableSort();
+
         if (! empty($filters)) {
             $medias = $this->mediaRepository->getFilteredMedia($offset, $limit, $sort, $filters);
         } else {

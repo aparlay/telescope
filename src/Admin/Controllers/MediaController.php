@@ -46,11 +46,6 @@ class MediaController extends Controller
         return new MediaResource($this->mediaService->getFilteredMedia());
     }
 
-    public function moderationAjax(Route $route)
-    {
-        return new MediaResource($this->mediaService->getFilteredMedia(true));
-    }
-
     public function view($id)
     {
         $media = $this->mediaService->find($id);
