@@ -280,7 +280,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="{{url('/alert/create')}}" method="post" role="form">
+                    <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="{{route('core.admin.alert.create')}}" method="post" role="form">
                         @csrf()
                         <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
                             <label class="has-star" for="media-delete-alert-modal-form-reason">Reason</label>
@@ -322,7 +322,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="alert-modal-form" class="form-vertical kv-form-bs4" action="{{url('/alert/create')}}" method="post" role="form">
+                    <form id="alert-modal-form" class="form-vertical kv-form-bs4" action="{{route('core.admin.alert.create')}}" method="post" role="form">
                         @csrf()
                         <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
                             <label class="has-star" for="alert-modal-form-reason">Reason</label>
@@ -346,7 +346,7 @@
     <!-- Reprocess media confirmation box -->
     <div class="modal fade" id="reprocessModel" tabindex="-1" role="dialog" aria-labelledby="reprocessModel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form action="{{url('reprocess/'.$media->_id)}}" method="post" role="form">
+            <form action="{{route('core.admin.media.reprocess', ['id' => $media->_id])}}" method="post" role="form">
                             @csrf()
                 <div class="modal-content">
                 <div class="modal-header bootstrap-dialog-header btn-warning">
