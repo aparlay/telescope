@@ -104,15 +104,10 @@ class MediaService extends AdminBaseService
             'is_music_licensed',
         ]);
 
-        if (request()->has('visibility')) {
-            $dataModified['visibility'] = (request()->visibility == 'on') ? 1 : 0;
-        }
-        if (request()->has('is_music_licensed')) {
-            $dataModified['is_music_licensed'] = (request()->is_music_licensed == 'on') ? true : false;
-        }
-
-        if (request()->has('skin_score')) {
-            $dataModified['scores'] = [
+        $dataModified = [
+            'visibility' => request()->boolean('visibility'),
+            'is_music_licensed' => request()->boolean('is_music_licensed'),
+            'scores' => [
                 [
                     'type' => 'skin',
                     'score' => request()->skin_score,
@@ -121,8 +116,8 @@ class MediaService extends AdminBaseService
                     'type' => 'awesomeness',
                     'score' => request()->awesomeness_score,
                 ],
-            ];
-        }
+            ],
+        ];
 
         $data = array_merge($data, $dataModified);
 

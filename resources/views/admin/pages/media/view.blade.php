@@ -25,6 +25,8 @@
                                     <li class="list-group-item">
                                         <b>Skin Score</b>
                                         <div>
+                                        <input type="hidden" name="visibility" value="{{ $media->visibility }}">
+                                        <input type="hidden" name="is_music_licensed" value="{{ $media->is_music_licensed}}">
                                         @foreach ($scoreTypes as $scoreType)
                                             @foreach ($skinScore as $score)
                                                 @if($scoreType['type'] == 'skin')
