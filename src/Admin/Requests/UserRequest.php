@@ -27,31 +27,26 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        switch ($this->method()) {
-            case 'PATCH':
-                return [
-                    'status' => [
-                        'required',
-                        Rule::in(array_keys(User::getStatuses()))
-                    ]
-                ];
-            case 'PUT':
-                return [
-                    'email' => ['required',
-                        'email',
-                        Rule::unique('users', 'email')->ignore($this->user->_id, '_id'),
-                        'max:255',
-                    ],
-                    'username' => ['required',
-                        Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
-                        'max:255',
-                    ],
-                    'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
-                    'gender' => [Rule::in(array_keys(User::getGenders()))],
-                    'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
-                ];
-            default: break;
-        }
+        return [
+            'email' => [
+                'email',
+                Rule::unique('users', 'email')->ignore($this->user->_id, '_id'),
+                Rule::requiredIf(!request()->isMethod('PATCH')),
+                'max:255',
+            ],
+            'username' => [
+                Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
+                Rule::requiredIf(!request()->isMethod('PATCH')),
+                'max:255',
+            ],
+            'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
+            'gender' => [Rule::in(array_keys(User::getGenders()))],
+            'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
+            'status' => [
+                Rule::requiredIf(request()->isMethod('PATCH')),
+                Rule::in(array_keys(User::getStatuses()))
+            ]
+        ];
     }
 
 
