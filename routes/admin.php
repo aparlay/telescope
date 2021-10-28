@@ -51,11 +51,28 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
 
         /* User Routes */
         Route::name('user.')->group(function () {
-            Route::get('user', [UserController::class, 'index'])->name('index');
-            Route::get('user/{id}', [UserController::class, 'view'])->name('view');
+            Route::get('user', [UserController::class, 'index'])
+                ->middleware(['permission:list users'])
+                ->name('index');
+            Route::get('user/{id}', [UserController::class, 'view'])
+                ->middleware(['permission:show users'])
+                ->name('view');
+            Route::put('user/{id}', [UserController::class, 'update'])
+                ->middleware(['permission:edit users'])
+                ->name('update');
             Route::match(['get', 'post'], 'user/upload-media', [UserController::class, 'uploadMedia'])
-                ->middleware(['permission:edit medias'])
-                ->name('media.upload');
+                    ->middleware(['permission:upload medias'])
+                    ->name('media.upload');
+        });
+
+        /* Ajax Routes */
+        Route::name('ajax.')->prefix('ajax')->group(function () {
+            Route::get('user', [UserController::class, 'indexAjax'])
+                ->middleware(['permission:list users'])
+                ->name('user.index');
+            Route::get('media', [MediaController::class, 'indexAjax'])
+                ->middleware(['permission:list medias'])
+                ->name('media.index');
         });
     });
 

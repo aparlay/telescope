@@ -19,21 +19,6 @@
                             Download
                         </button>                            
                     </h1>
-                    <br>
-                    <div id="app">
-                    @if (Session::get('success'))
-                    <div class="alert alert-success alert-block">
-                        <button type="button" class="close" data-dismiss="alert">×</button>	
-                            <strong>{{ Session::get('success') }}</strong>
-                    </div>
-                    @endif
-                    @if (Session::get('danger'))
-                    <div class="alert alert-danger alert-block">
-                        <button type="button" class="close" data-dismiss="alert">×</button>	
-                            <strong>{{ Session::get('danger') }}</strong>
-                    </div>
-                    @endif
-                    </div>
                 </div><!-- /.col -->
                 <div class="col-sm-5">
                     <ol class="breadcrumb float-sm-right">

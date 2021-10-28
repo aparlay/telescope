@@ -2,11 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
-use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media as MediaBase;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
@@ -70,6 +68,7 @@ class Media extends MediaBase
      * @OA\Property(property="likes", type="array", @OA\Items (ref="#/components/schemas/SimpleUser"))
      * @OA\Property(property="visit_count", type="number", example=432345)
      * @OA\Property(property="visits", type="array", @OA\Items (ref="#/components/schemas/SimpleUser"))
+     * @OA\Property(property="tips", type="number", example=130000, description="tipped value in cent")
      * @OA\Property(property="comment_count", type="number", example=5325)
      * @OA\Property(property="comments", type="array", @OA\Items ())
      * @OA\Property(property="is_adult", type="boolean", example=true)

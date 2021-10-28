@@ -1,7 +1,9 @@
 @extends('adminlte::page')
 @section('title', 'Media View')
 @section('content')
+@inject('cdn', 'Aparlay\Core\Helpers\Cdn')
 @include('default_view::admin.layouts.media_view_header')
+@include('default_view::admin.parts.messages')
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -12,8 +14,8 @@
                                 {{ $media->status_badge['status'] }}
                             </div>
                         </div>
-                            <video width="100%" controls poster="{{ $media->url('cover') . $media->filename . '.jpg' }}" style="max-height:400px">
-                                <source src="{{ $media->url() . $media->file }}">
+                            <video width="100%" controls poster="{{ $cdn->cover($media->filename).'.jpg' }}" style="max-height:400px">
+                                <source src="{{ $cdn->video($media->file) }}">
                                 Your browser does not support the video tag.
                             </video>
 
@@ -23,6 +25,8 @@
                                     <li class="list-group-item">
                                         <b>Skin Score</b>
                                         <div>
+                                        <input type="hidden" name="visibility" value="{{ $media->visibility }}">
+                                        <input type="hidden" name="is_music_licensed" value="{{ $media->is_music_licensed}}">
                                         @foreach ($scoreTypes as $scoreType)
                                             @foreach ($skinScore as $score)
                                                 @if($scoreType['type'] == 'skin')
@@ -116,7 +120,7 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="media-info">
-                                    <form action="" class="form-horizontal" method="POST">
+                                    <form action="{{route('core.admin.media.update', ['id' => $media->_id])}}" class="form-horizontal" method="POST">
                                         @csrf()
                                         <div class="form-group row">
                                             <label for="id" class="col-sm-2 col-form-label">ID</label>
@@ -193,21 +197,39 @@
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Skin Score</label>
                                             <div class="col-sm-10 mt-2">
-                                            @foreach ($scoreTypes as $scoreType)
-                                                @if($scoreType['type'] == 'skin')
-                                                    <p>{{ $scoreType['score'] }}</p>
-                                                @endif
-                                            @endforeach
+                                                <div>
+                                                    @foreach ($scoreTypes as $scoreType)
+                                                        @foreach ($skinScore as $score)
+                                                            @if($scoreType['type'] == 'skin')
+                                                                <div id="skin_score_form_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
+                                                                    <label class="btn btn-outline-secondary skin_score_lable_form">
+                                                                        <input type="radio" id="media_skin_score_form_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                        {{ $score }}
+                                                                    </label>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
                                             <div class="col-sm-10 mt-2">
-                                            @foreach ($scoreTypes as $scoreType)
-                                                @if($scoreType['type'] == 'awesomeness')
-                                                    <p>{{ $scoreType['score'] }}</p>
-                                                @endif
-                                            @endforeach
+                                                <div>
+                                                    @foreach ($scoreTypes as $scoreType)
+                                                        @foreach ($awesomenessScore as $score)
+                                                            @if($scoreType['type'] == 'awesomeness')
+                                                                <div id="awesomeness_score_form_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
+                                                                    <label class="btn btn-outline-secondary awesomeness_score_label_form">
+                                                                        <input type="radio" id="media_awesomeness_score_form_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                        {{ $score }}
+                                                                    </label>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -306,6 +328,7 @@
     </div>
 @endsection
 @section('script')
+@section('js')
 <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
 <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
@@ -313,3 +336,4 @@
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}" >
 @stop
+
