@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Resources\MediaResource;
 use Aparlay\Core\Admin\Services\MediaService;
 use ErrorException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class MediaController extends Controller
 {
@@ -25,11 +26,22 @@ class MediaController extends Controller
         $mediaStatuses = $this->mediaService->getMediaStatuses();
 
         return view('default_view::admin.pages.media.index')->with([
+            'moderation' => false,
             'mediaStatuses' => $mediaStatuses,
         ]);
     }
 
-    public function indexAjax()
+    public function moderation()
+    {
+        $mediaStatuses = $this->mediaService->getMediaStatuses();
+
+        return view('default_view::admin.pages.media.index')->with([
+            'moderation' => true,
+            'mediaStatuses' => $mediaStatuses,
+        ]);
+    }
+
+    public function indexAjax(Route $route)
     {
         return new MediaResource($this->mediaService->getFilteredMedia());
     }
