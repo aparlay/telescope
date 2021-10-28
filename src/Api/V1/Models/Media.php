@@ -2,11 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
-use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media as MediaBase;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 

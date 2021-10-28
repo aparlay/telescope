@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
+use Aparlay\Core\Admin\Resources\MediaResource;
 use Aparlay\Core\Admin\Services\MediaService;
+use ErrorException;
 use Illuminate\Http\Request;
 
 class MediaController extends Controller
@@ -20,16 +22,16 @@ class MediaController extends Controller
      */
     public function index()
     {
-        $breadcrumbs = [
-            'title' => 'Media',
-        ];
-
-        $medias = $this->mediaService->getList();
+        $mediaStatuses = $this->mediaService->getMediaStatuses();
 
         return view('default_view::admin.pages.media.index')->with([
-            'media_list'  => $medias,
-            'breadcrumbs' => $breadcrumbs,
+            'mediaStatuses' => $mediaStatuses,
         ]);
+    }
+
+    public function indexAjax()
+    {
+        return new MediaResource($this->mediaService->getFilteredMedia());
     }
 
     public function view($id)

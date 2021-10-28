@@ -32,7 +32,7 @@ class LoginTest extends ApiTestCase
             ->assertJsonPath('code', 200)
             ->assertJsonStructure([
                 'data' => [
-                    'access_token',
+                    'token',
                     'token_expired_at',
                     'refresh_token',
                     'refresh_token_expired_at',
@@ -41,7 +41,7 @@ class LoginTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
-                    'data.access_token' => 'string',
+                    'data.token' => 'string',
                     'data.token_expired_at' => 'integer',
                     'data.refresh_token' => 'string',
                     'data.refresh_token_expired_at' => 'integer',
@@ -182,7 +182,7 @@ class LoginTest extends ApiTestCase
             ->assertJsonPath('code', 200)
             ->assertJsonStructure([
                 'data' => [
-                    'access_token',
+                    'token',
                     'token_expired_at',
                     'refresh_token',
                     'refresh_token_expired_at',
@@ -191,7 +191,7 @@ class LoginTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
-                    'data.access_token' => 'string',
+                    'data.token' => 'string',
                     'data.token_expired_at' => 'integer',
                     'data.refresh_token' => 'string',
                     'data.refresh_token_expired_at' => 'integer',

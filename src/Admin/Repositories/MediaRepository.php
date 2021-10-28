@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Media;
 
-class MediaRepository implements RepositoryInterface
+class MediaRepository
 {
     protected Media $model;
 
@@ -17,9 +17,34 @@ class MediaRepository implements RepositoryInterface
         $this->model = $model;
     }
 
-    public function all()
+    public function all($offset, $limit, $sort)
     {
-        return $this->model->orderBy('created_at', 'desc')->paginate(20);
+        return $this->model->sortBy($sort)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
+    }
+
+    public function mediaAjax($offset, $limit, $sort)
+    {
+        return $this->model->sortBy($sort)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
+    }
+
+    public function countFilteredMedia($filters)
+    {
+        return $this->model->filter($filters)->count();
+    }
+
+    public function getFilteredMedia($offset, $limit, $sort, $filters)
+    {
+        return $this->model->filter($filters)
+            ->sortBy($sort)
+            ->skip($offset)
+            ->take($limit)
+            ->get();
     }
 
     public function create(array $data)
@@ -41,6 +66,16 @@ class MediaRepository implements RepositoryInterface
     public function find($id)
     {
         return $this->model->findOrFail($id);
+    }
+
+    public function getMediaStatuses()
+    {
+        return $this->model->getStatuses();
+    }
+
+    public function countCollection()
+    {
+        return $this->model->count();
     }
 
     public function skinScore()

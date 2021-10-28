@@ -9,13 +9,13 @@ use Illuminate\Http\Response;
 
 class VideoScoreDailyCommand extends Command
 {
-    public $signature = 'video:daily_score';
+    public $signature = 'video:score-daily';
 
     public $description = 'This command is responsible for update video score daily';
 
     public function handle()
     {
-        $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])
+        $mediaQuery = Media::where('is_fake', ['$exists' => false])
             ->date(DT::utcDateTime(['d' => -6]), DT::utcDateTime(['d' => -1]))
             ->availableForFollower();
         foreach ($mediaQuery->get() as $media) {
