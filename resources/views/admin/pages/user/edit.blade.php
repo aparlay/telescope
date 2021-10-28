@@ -279,10 +279,7 @@
                                                             'lengthChange' => false,
                                                             'bInfo' => false,
                                                             'dom' => 'rtip',
-                                                            'aoSearchCols' => [
-                                                                ["sSearch" => $user->username ],
-                                                                null, null, null, null, null
-                                                            ],
+                                                            'searchCols' => [['search' => $user->username]],
                                                             'orderMulti' => false,
                                                             'autoWidth' => false,
                                                             'ajax' => route('payment.admin.ajax.credit-card.index'),
@@ -325,10 +322,7 @@
                                                             'bInfo' => false,
                                                             'dom' => 'rtip',
                                                             'orderMulti' => false,
-                                                            'aoSearchCols' => [
-                                                                ["sSearch" => $user->username ],
-                                                                null, null, null, null, null
-                                                            ],
+                                                            'searchCols' => [['search' => $user->username]],
                                                             'autoWidth' => false,
                                                             'ajax' => route('payment.admin.ajax.tip.index'),
                                                             'order' => [[1, 'asc']],
@@ -371,10 +365,7 @@
                                                             'bInfo' => false,
                                                             'dom' => 'rtip',
                                                             'orderMulti' => false,
-                                                            'aoSearchCols' => [
-                                                                ["sSearch" => $user->username ],
-                                                                null, null, null, null, null
-                                                            ],
+                                                            'searchCols' => [['search' => $user->username]],
                                                             'autoWidth' => false,
                                                             'ajax' => route('payment.admin.ajax.subscription.index'),
                                                             'order' => [[1, 'asc']],
