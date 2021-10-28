@@ -31,12 +31,12 @@ class UserRequest extends FormRequest
             'email' => [
                 'email',
                 Rule::unique('users', 'email')->ignore($this->user->_id, '_id'),
-                Rule::requiredIf(!request()->isMethod('PATCH')),
+                Rule::requiredIf(! request()->isMethod('PATCH')),
                 'max:255',
             ],
             'username' => [
                 Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
-                Rule::requiredIf(!request()->isMethod('PATCH')),
+                Rule::requiredIf(! request()->isMethod('PATCH')),
                 'max:255',
             ],
             'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
@@ -44,11 +44,10 @@ class UserRequest extends FormRequest
             'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
             'status' => [
                 Rule::requiredIf(request()->isMethod('PATCH')),
-                Rule::in(array_keys(User::getStatuses()))
-            ]
+                Rule::in(array_keys(User::getStatuses())),
+            ],
         ];
     }
-
 
     /**
      * @param Validator $validator
