@@ -50,7 +50,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('user/{id}', [UserController::class, 'view'])
                 ->middleware(['permission:show users'])
                 ->name('view');
-            Route::put('user/{id}', [UserController::class, 'update'])
+            Route::put('user/{user}', [UserController::class, 'update'])
                 ->middleware(['permission:edit users'])
                 ->name('update');
         });

@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
+use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Requests\UserRequest;
 use Aparlay\Core\Admin\Resources\UserResource;
 use Aparlay\Core\Admin\Services\UserService;
@@ -51,9 +52,9 @@ class UserController extends Controller
      * @param UserRequest $request
      * @return RedirectResponse
      */
-    public function update($id, UserRequest $request): RedirectResponse
+    public function update(User $user, UserRequest $request): RedirectResponse
     {
-        $this->userService->update($id);
+        $this->userService->update($user);
 
         return back()->with('success', 'User updated successfully.');
     }
