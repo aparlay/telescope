@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Alert;
 
-class AlertRepository
+class AlertRepository implements RepositoryInterface
 {
     protected Alert $model;
 
@@ -17,8 +17,28 @@ class AlertRepository
         $this->model = $model;
     }
 
-    public function store($data)
+    public function all()
     {
-        return $this->model->create($data);
+        // TODO: Implement all() method.
+    }
+
+    public function create(array $data)
+    {
+        return Alert::create($data);
+    }
+
+    public function update(array $data, $id)
+    {
+        // TODO: Implement update() method.
+    }
+
+    public function delete($id)
+    {
+        // TODO: Implement delete() method.
+    }
+
+    public function find($id)
+    {
+        // TODO: Implement find() method.
     }
 }
