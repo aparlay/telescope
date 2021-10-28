@@ -32,8 +32,8 @@ class UserRequest extends FormRequest
                 return [
                     'status' => [
                         'required',
-                        Rule::in(array_keys(User::getStatuses()))
-                    ]
+                        Rule::in(array_keys(User::getStatuses())),
+                    ],
                 ];
             case 'PUT':
                 return [
@@ -53,7 +53,6 @@ class UserRequest extends FormRequest
             default: break;
         }
     }
-
 
     /**
      * @param Validator $validator
