@@ -64,6 +64,7 @@
                     if($moderation){
                         $config['searching'] = true;
                         $config['searchCols'] = [null,null,null,["search" => 3]];
+                        $config['bInfo'] = false;
                     }
                     @endphp
                     <div id="accordion">
