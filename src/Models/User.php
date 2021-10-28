@@ -296,7 +296,7 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [
-            'device_id' => 'sss',
+            'device_id' => request()?->header('x-device-id'),
         ];
     }
 
