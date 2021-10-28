@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Admin\Providers;
 
 use Aparlay\Core\Admin\Models\Alert;
-use Aparlay\Core\Admin\Observers\AlertObserver;
+use Aparlay\Core\Observers\BaseModelObserver;
 
 class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
 {
@@ -14,7 +14,7 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
      */
     public function boot()
     {
-        Alert::observe(new AlertObserver());
+        Alert::observe(new BaseModelObserver());
         parent::boot();
     }
 }

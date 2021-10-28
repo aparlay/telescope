@@ -25,16 +25,6 @@ class AlertService
 
     public function store()
     {
-        $request = request()->only(['type', 'reason']);
-
-        $data = [
-            'user_id' => new ObjectId($this->userRepository->find(request()->input('user_id'))->_id),
-            'media_id' => request()->input('media_id') ? new ObjectId($this->mediaRepository->find(request()->input('media_id'))->_id) : null,
-            'status' => Alert::STATUS_NOT_VISITED,
-        ];
-
-        $alertData = array_merge($request, $data);
-
-        return $this->alertRepository->store($alertData);
+        return $this->alertRepository->store(request()->only(['user_id', 'media_id', 'status', 'type', 'reason']));
     }
 }

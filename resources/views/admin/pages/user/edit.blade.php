@@ -26,6 +26,7 @@
         </div><!-- /.container-fluid -->
 @stop
 @section('content')
+    @include('default_view::admin.parts.messages')
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -114,7 +115,6 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="user-info">
-                                    @include('default_view::admin.parts.messages')
                                     <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data">
                                         @csrf()
                                         @method('PUT')
@@ -378,6 +378,7 @@
             <form action="{{ route('core.admin.alert.store') }}" method="post">
                 <input type="hidden" name="user_id" value="{{ $user->_id }}">
                 <input type="hidden" name="type" value="{{ \Aparlay\Core\Models\Alert::TYPE_USER}}">
+                <input type="hidden" name="status" value="{{ \Aparlay\Core\Admin\Models\Alert::STATUS_NOT_VISITED }}">
                 <!-- Modal content-->
                 <div class="modal-content">
                         <div class="modal-header">
@@ -405,9 +406,10 @@
         <div class="modal-dialog">
                 <!-- Modal content-->
                 <div class="modal-content">
-                    <form action="{{ route('core.admin.user.update.status', ['id' => $user->_id, \App\Models\User::STATUS_BLOCKED])  }}" method="POST">
+                    <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
                         @csrf
                         @method('PATCH')
+                        <input type="hidden" value="{{ \App\Models\User::STATUS_BLOCKED }}" name="status">
                         <div class="modal-header bg-danger">
                             <h5 class="modal-title" id="exampleModalLiveLabel">Ban User</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -430,9 +432,10 @@
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
-                <form action="{{ route('core.admin.user.update.status', ['id' => $user->_id, \App\Models\User::STATUS_SUSPENDED])  }}" method="POST">
+                <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
                     @csrf
                     @method('PATCH')
+                    <input type="hidden" name="status" value="{{ \App\Models\User::STATUS_SUSPENDED }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Suspend</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -456,9 +459,10 @@
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
-                <form action="{{ route('core.admin.user.update.status', ['id' => $user->_id, \App\Models\User::STATUS_ACTIVE])  }}" method="POST">
+                <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
                     @csrf
                     @method('PATCH')
+                    <input type="hidden" name="status" value="{{ \App\Models\User::STATUS_ACTIVE }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Reactivate</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
