@@ -304,49 +304,98 @@
 
                                                     <h4>Tips</h4>
                                                     <div class="col-12 table-responsive">
-                                                    @php
-                                                        $heads = [
-                                                            '',
-                                                            'Creator',
-                                                            '',
-                                                            'Amount',
-                                                            'Status',
-                                                            '',
-                                                            'Created at',
-                                                            '',
-                                                        ];
+                                                        @php
+                                                            $heads = [
+                                                                '',
+                                                                'Creator',
+                                                                '',
+                                                                'Amount',
+                                                                'Status',
+                                                                '',
+                                                                'Created at',
+                                                                '',
+                                                            ];
 
-                                                    $config = [
-                                                        'processing' => true,
-                                                        'serverSide' => true,
-                                                        'pageLength' => config('core.admin.lists.page_count'),
-                                                        'responsive' => true,
-                                                        'lengthChange' => false,
-                                                        'bInfo' => false,
-                                                        'dom' => 'rtip',
-                                                        'orderMulti' => false,
-                                                        'aoSearchCols' => [
-                                                            ["sSearch" => $user->username ],
-                                                            null, null, null, null, null
-                                                        ],
-                                                        'autoWidth' => false,
-                                                        'ajax' => route('payment.admin.ajax.tip.index'),
-                                                        'order' => [[1, 'asc']],
-                                                        'columns' => [
-                                                            ['data' => 'user.username','visible' => false],
-                                                            ['data' => 'link_to_creator', 'orderData' => 3, 'target' => 3],
-                                                            ['data' => 'creator.username','visible' => false],
-                                                            ['data' => 'amount'],
-                                                            ['data' => 'status_button','orderData' => 6, 'target' => 6],
-                                                            ['data' => 'status','visible' => false],
-                                                            ['data' => 'created_at'],
-                                                            ['data' => 'view_button', 'orderable' => false],
-                                                        ],
-                                                    ]
-                                                    @endphp
+                                                        $config = [
+                                                            'processing' => true,
+                                                            'serverSide' => true,
+                                                            'pageLength' => config('core.admin.lists.page_count'),
+                                                            'responsive' => true,
+                                                            'lengthChange' => false,
+                                                            'bInfo' => false,
+                                                            'dom' => 'rtip',
+                                                            'orderMulti' => false,
+                                                            'aoSearchCols' => [
+                                                                ["sSearch" => $user->username ],
+                                                                null, null, null, null, null
+                                                            ],
+                                                            'autoWidth' => false,
+                                                            'ajax' => route('payment.admin.ajax.tip.index'),
+                                                            'order' => [[1, 'asc']],
+                                                            'columns' => [
+                                                                ['data' => 'user.username','visible' => false],
+                                                                ['data' => 'link_to_creator', 'orderData' => 3, 'target' => 3],
+                                                                ['data' => 'creator.username','visible' => false],
+                                                                ['data' => 'amount'],
+                                                                ['data' => 'status_button','orderData' => 6, 'target' => 6],
+                                                                ['data' => 'status','visible' => false],
+                                                                ['data' => 'created_at'],
+                                                                ['data' => 'view_button', 'orderable' => false],
+                                                            ],
+                                                        ]
+                                                        @endphp
                                                         <x-adminlte-datatable id="datatables1" :heads="$heads" :config="$config">
                                                         </x-adminlte-datatable>
                                                     </div>
+
+
+                                                    <h4>Subscriptions</h4>
+                                                    <div class="col-12 table-responsive">
+                                                        @php
+                                                            $heads = [
+                                                                '',
+                                                                'User',
+                                                                '',
+                                                                'Status',
+                                                                '',
+                                                                'Created at',
+                                                                '',
+                                                            ];
+
+                                                        $config = [
+                                                            'processing' => true,
+                                                            'serverSide' => true,
+                                                            'pageLength' => config('core.admin.lists.page_count'),
+                                                            'responsive' => true,
+                                                            'lengthChange' => false,
+                                                            'bInfo' => false,
+                                                            'dom' => 'rtip',
+                                                            'orderMulti' => false,
+                                                            'aoSearchCols' => [
+                                                                ["sSearch" => $user->username ],
+                                                                null, null, null, null, null
+                                                            ],
+                                                            'autoWidth' => false,
+                                                            'ajax' => route('payment.admin.ajax.subscription.index'),
+                                                            'order' => [[1, 'asc']],
+                                                            'columns' => [
+                                                                ['data' => 'creator.username','visible' => false],
+                                                                ['data' => 'link_to_user', 'orderData' => 2, 'target' => 2],
+                                                                ['data' => 'user.username','visible' => false],
+                                                                ['data' => 'status_button','orderData' => 5, 'target' => 5],
+                                                                ['data' => 'status','visible' => false],
+                                                                ['data' => 'created_at'],
+                                                                ['data' => 'view_button', 'orderable' => false]
+                                                            ],
+                                                        ]
+                                                        @endphp
+                                                        <x-adminlte-datatable id="datatables2" :heads="$heads" :config="$config">
+                                                        </x-adminlte-datatable>
+                                                    </div>
+
+
+
+                                                    
                                                 </div>
                                             </div>
                                         </div>
