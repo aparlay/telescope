@@ -29,16 +29,18 @@
                                         <div>
                                         <input type="hidden" name="visibility" value="{{ $media->visibility }}">
                                         <input type="hidden" name="is_music_licensed" value="{{ $media->is_music_licensed}}">
-                                        @foreach ($scoreTypes as $scoreType)
-                                            @foreach ($skinScore as $score)
-                                                @if($scoreType['type'] == 'skin')
-                                                    <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
-                                                        <label class="btn btn-outline-secondary skin_score_lable">
-                                                            <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
-                                                            {{ $score }}
-                                                        </label>
-                                                    </div>
-                                                @endif
+                                        @if ($scoreTypes)
+                                            @foreach ($scoreTypes as $scoreType)
+                                                @foreach ($skinScore as $score)
+                                                    @if($scoreType['type'] == 'skin')
+                                                        <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
+                                                            <label class="btn btn-outline-secondary skin_score_lable">
+                                                                <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                {{ $score }}
+                                                            </label>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
                                             @endforeach
                                         @endif
                                         </div>
@@ -202,6 +204,7 @@
                                             <label for="updated-at" class="col-sm-2 col-form-label">Skin Score</label>
                                             <div class="col-sm-10 mt-2">
                                                 <div>
+                                                @if ($scoreTypes)
                                                     @foreach ($scoreTypes as $scoreType)
                                                         @foreach ($skinScore as $score)
                                                             @if($scoreType['type'] == 'skin')
@@ -214,6 +217,7 @@
                                                             @endif
                                                         @endforeach
                                                     @endforeach
+                                                @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -221,6 +225,7 @@
                                             <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
                                             <div class="col-sm-10 mt-2">
                                                 <div>
+                                                @if ($scoreTypes)
                                                     @foreach ($scoreTypes as $scoreType)
                                                         @foreach ($awesomenessScore as $score)
                                                             @if($scoreType['type'] == 'awesomeness')
@@ -233,6 +238,7 @@
                                                             @endif
                                                         @endforeach
                                                     @endforeach
+                                                @endif
                                                 </div>
                                             </div>
                                         </div>
