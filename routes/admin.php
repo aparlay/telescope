@@ -48,13 +48,13 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('user', [UserController::class, 'index'])
                 ->middleware(['permission:list users'])
                 ->name('index');
-            Route::get('user/{id}', [UserController::class, 'view'])
+            Route::get('user/{user}', [UserController::class, 'view'])
                 ->middleware(['permission:show users'])
                 ->name('view');
             Route::put('user/{user}', [UserController::class, 'update'])
                 ->middleware(['permission:edit users'])
                 ->name('update');
-            Route::patch('user/{id}/{status}', [UserController::class, 'updateStatus'])
+            Route::patch('user/{user}', [UserController::class, 'updateStatus'])
                 ->middleware(['permission:edit users'])
                 ->name('update.status');
         });

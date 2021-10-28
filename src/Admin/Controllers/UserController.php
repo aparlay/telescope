@@ -39,16 +39,16 @@ class UserController extends Controller
         return new UserResource($this->userService->getFilteredUsers());
     }
 
-    public function view($id)
+    public function view(User $user)
     {
-        $user = $this->userService->find($id);
+        $user = $this->userService->find($user->_id);
         $roles = Role::all();
 
         return view('default_view::admin.pages.user.edit', compact('user', 'roles'));
     }
 
     /**
-     * @param $id
+     * @param User $user
      * @param UserRequest $request
      * @return RedirectResponse
      */
@@ -60,13 +60,14 @@ class UserController extends Controller
     }
 
     /**
-     * @param $id
+     * @param User $user
      * @param $status
      * @return RedirectResponse
      */
-    public function updateStatus($id, $status): RedirectResponse
+    public function updateStatus(User $user, UserRequest $request): RedirectResponse
     {
-        if ($this->userService->updateStatus($id, $status)) {
+        $status = request()->input('status');
+        if ($this->userService->updateStatus($user->_id)) {
             if ($status == User::STATUS_ACTIVE) {
                 return back()->with('success', 'User Reactivated successfully.');
             }
