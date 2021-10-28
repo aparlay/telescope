@@ -3,28 +3,39 @@
 namespace Aparlay\Core\Admin\Models;
 
 use Aparlay\Core\Models\Media as MediaBase;
+use Aparlay\Core\Models\Scopes\MediaScope;
 
 class Media extends MediaBase
 {
+    use MediaScope;
+
     /**
      * @return string
      */
     public function getStatusColorAttribute()
     {
         $colors = [
-            self::STATUS_QUEUED => ['color' => 'secondary', 'text' => 'Queued'],
-            self::STATUS_UPLOADED => ['color' => 'secondary', 'text' => 'Uploaded'],
-            self::STATUS_IN_PROGRESS => ['color' => 'secondary', 'text' => 'In-Progress'],
-            self::STATUS_COMPLETED => ['color' => 'warning', 'text' => 'Completed'],
-            self::STATUS_FAILED => ['color' => 'danger', 'text' => 'Failed'],
-            self::STATUS_CONFIRMED => ['color' => 'indigo', 'text' => 'Confirmed'],
-            self::STATUS_DENIED => ['color' => 'danger', 'text' => 'Denied'],
-            self::STATUS_IN_REVIEW => ['color' => 'info', 'text' => 'Under Review'],
-            self::STATUS_ADMIN_DELETED => ['color' => 'danger', 'text' => 'Deleted By Admin'],
-            self::STATUS_USER_DELETED => ['color' => 'danger', 'text' => 'Delete'],
+            self::STATUS_QUEUED => 'secondary',
+            self::STATUS_UPLOADED => 'secondary',
+            self::STATUS_IN_PROGRESS => 'secondary',
+            self::STATUS_COMPLETED => 'warning',
+            self::STATUS_FAILED => 'danger',
+            self::STATUS_CONFIRMED => 'indigo',
+            self::STATUS_DENIED => 'danger',
+            self::STATUS_IN_REVIEW => 'info',
+            self::STATUS_ADMIN_DELETED => 'danger',
+            self::STATUS_USER_DELETED => 'danger',
         ];
 
         return $colors[$this->status];
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusNameAttribute()
+    {
+        return $this->getStatuses()[$this->status];
     }
 
     public function getSkinScores()

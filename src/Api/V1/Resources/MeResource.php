@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class MeResource extends JsonResource
 {
     use SimpleUserTrait;
+    use SimpleMediaTrait;
 
     /**
      * Transform the resource into an array.
@@ -37,6 +38,11 @@ class MeResource extends JsonResource
         $blocks = [];
         foreach ($this->blocks as $block) {
             $blocks[] = $this->createSimpleUser($block);
+        }
+
+        $medias = [];
+        foreach ($this->medias as $media) {
+            $medias[] = $this->createSimpleMedia($media);
         }
 
         return [
@@ -81,7 +87,7 @@ class MeResource extends JsonResource
             'likes' => $likes,
             'followers' => $followers,
             'followings' => $followings,
-            'medias' => $this->medias,
+            'medias' => $medias,
             'alerts' => AlertResource::collection($this->alerts),
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),

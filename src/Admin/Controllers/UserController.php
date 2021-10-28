@@ -52,9 +52,9 @@ class UserController extends Controller
      * @param UserRequest $request
      * @return RedirectResponse
      */
-    public function update($id, UserRequest $request): RedirectResponse
+    public function update(User $user, UserRequest $request): RedirectResponse
     {
-        $this->userService->update($id);
+        $this->userService->update($user);
 
         return back()->with('success', 'User updated successfully.');
     }

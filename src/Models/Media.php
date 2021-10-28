@@ -336,8 +336,8 @@ class Media extends BaseModel
     {
         $timestamp = $this->created_at->timestamp;
         $windowDuration = 86400 * 10;
-        $startTime = Carbon::createFromTimestamp($timestamp - $windowDuration)->toDateTimeString();
-        $endTime = Carbon::createFromTimestamp($timestamp + $windowDuration)->toDateTimeString();
+        $startTime = DT::timestampToUtc($timestamp - $windowDuration);
+        $endTime = DT::timestampToUtc($timestamp + $windowDuration);
         $meanLikes = [];
         foreach (Analytic::date($startTime, $endTime)->get() as $analytic) {
             if (isset($analytic['media']['mean_likes']) && 0 !== $analytic['media']['mean_likes']) {
