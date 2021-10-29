@@ -26,6 +26,7 @@ class DashboardController extends Controller
     public function indexAjax(Request $request)
     {
         $data_analytics = $this->analyticService->getAnalytics($request->get('fromDate'), $request->get('toDate'));
+
         return $data_analytics;
     }
 }
