@@ -5,17 +5,18 @@ namespace Aparlay\Core\Commands;
 use Flow\FileOpenException;
 use Flow\Uploader;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class CleanupCommand extends Command
 {
-    public $signature = 'core:ws';
+    public $signature = 'core:cleanup';
 
     public $description = 'Aparlay Ws Client';
 
     public function handle()
     {
         try {
-            Uploader::pruneChunks(config('app.avatar.upload_directory'));
+            Uploader::pruneChunks(Storage::disk('local')->path('chunk'));
         } catch (FileOpenException $e) {
             return ExitCode::TEMPFAIL;
         }

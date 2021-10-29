@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class UserStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,18 +28,7 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required',
-                'email',
-                Rule::unique('users', 'email')->ignore($this->user->_id, '_id'),
-                'max:255',
-            ],
-            'username' => ['required',
-                Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
-                'max:255',
-            ],
-            'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
-            'gender' => [Rule::in(array_keys(User::getGenders()))],
-            'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
+            'status' => ['required', Rule::in(array_keys(User::getStatuses()))],
         ];
     }
 

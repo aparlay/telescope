@@ -63,7 +63,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-trottle'])-
     });
 
     /* Authentication Group with me prefix */
-    Route::middleware(['auth:api', 'cookies-auth'])->name('profie.')->group(function () {
+    Route::middleware(['auth:api', 'cookies-auth'])->name('profile.')->group(function () {
         Route::delete('/logout', [AuthController::class, 'logout'])->name('user.logout');
         Route::prefix('me')->group(function () {
             Route::get('/', [UserController::class, 'me'])->name('user.me');

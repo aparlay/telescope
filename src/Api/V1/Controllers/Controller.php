@@ -32,7 +32,7 @@ use Illuminate\Routing\Controller as BaseController;
  * )
  * @OA\Server(
  *     description="SwaggerHUB API Mocking",
- *     url="https://api.waptap.dev/v1"
+ *     url="https://api.waptap.dev"
  * )
  * @OA\SecurityScheme(
  *     securityScheme="bearerAuth",
