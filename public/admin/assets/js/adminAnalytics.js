@@ -74,7 +74,10 @@ $(document).ready(function() {
                 animations: {
                     enabled: true,
                     easing: 'easeinout'
-                }
+                },
+                scales: {
+                    yAxes: [{ticks: {min: 0, max:8, stepSize: 1,}}],
+                  }
             }
         });
 
@@ -151,6 +154,9 @@ $(document).ready(function() {
                 animations: {
                     enabled: true,
                     easing: 'easeinout'
+                },
+                scales: {
+                    yAxes: [{ticks: {min: 0, max:25, stepSize: 5,}}],
                 }
             }
         });
@@ -177,6 +183,9 @@ $(document).ready(function() {
                 animations: {
                     enabled: true,
                     easing: 'easeinout'
+                },
+                scales: {
+                    yAxes: [{ticks: {min: 0, max:25, stepSize: 5,}}],
                 }
             }
         });
@@ -208,6 +217,9 @@ $(document).ready(function() {
                 animations: {
                     enabled: true,
                     easing: 'easeinout'
+                },
+                scales: {
+                    yAxes: [{ticks: {min: 0, max:12, stepSize: 2,}}],
                 }
             }
         });
