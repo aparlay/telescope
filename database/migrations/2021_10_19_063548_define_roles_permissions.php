@@ -25,6 +25,12 @@ class DefineRolesPermissions extends Migration
                 'list roles',
                 'show roles',
 
+                'create alerts',
+                'edit alerts',
+                'delete alerts',
+                'list alerts',
+                'show alerts',
+
                 'create permissions',
                 'edit permissions',
                 'delete permissions',
@@ -46,6 +52,12 @@ class DefineRolesPermissions extends Migration
             ],
             'administrator' => [
                 'dashboard',
+
+                'create alerts',
+                'edit alerts',
+                'delete alerts',
+                'list alerts',
+                'show alerts',
 
                 'create permissions',
                 'edit permissions',

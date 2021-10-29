@@ -124,8 +124,8 @@ class UserService extends AdminBaseService
         ];
 
         $data = array_merge($data, $dataBooleans);
-
-        if (auth()->user()->hasRole(User::ROLE_SUPER_ADMINISTRATOR)) {
+        $role = request()?->input('role');
+        if ($role && auth()->user()->hasRole(User::ROLE_SUPER_ADMINISTRATOR)) {
             $user->syncRoles(request()->input('role'));
         }
 
@@ -157,5 +157,10 @@ class UserService extends AdminBaseService
         }
 
         return false;
+    }
+
+    public function updateStatus($id): bool
+    {
+        return $this->userRepository->update(['status' => request()->input('status')], $id);
     }
 }

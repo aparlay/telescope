@@ -9,7 +9,7 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">User Profile
-                        <button class="ml-4 btn btn-sm btn-danger col-md-1">
+                        <button class="ml-4 btn btn-sm btn-danger col-md-1" data-toggle="modal" data-target="#alertModal">
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
@@ -26,6 +26,7 @@
         </div><!-- /.container-fluid -->
 @stop
 @section('content')
+    @include('default_view::admin.parts.messages')
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -64,16 +65,30 @@
                             </ul>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#suspendMmodal">
-                                        <i class="fas fa-minus-circle"></i>
-                                        <strong>Suspend</strong>
-                                    </button>
+                                    @if($user->status == \App\Models\User::STATUS_SUSPENDED)
+                                        <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#activateModal">
+                                            <i class="fas fa-check"></i>
+                                            <strong>Reactivate</strong>
+                                        </button>
+                                    @else
+                                        <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#suspendModal">
+                                            <i class="fas fa-minus-circle"></i>
+                                            <strong>Suspend</strong>
+                                        </button>
+                                    @endif
                                 </div>
                                 <div class="col-md-6">
-                                    <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#banModal">
-                                        <i class="fas fa-times-circle"></i>
-                                        <strong>Ban</strong>
-                                    </button>
+                                    @if($user->status == \App\Models\User::STATUS_BLOCKED)
+                                        <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#activateModal">
+                                            <i class="fas fa-check"></i>
+                                            <strong>Reactivate</strong>
+                                        </button>
+                                    @else
+                                        <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#banModal">
+                                            <i class="fas fa-times-circle"></i>
+                                            <strong>Ban</strong>
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -100,7 +115,6 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="user-info">
-                                    @include('default_view::admin.parts.messages')
                                     <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data">
                                         @csrf()
                                         @method('PUT')
@@ -126,7 +140,7 @@
                                             <label for="email_verified" class="col-sm-2 col-form-label">Email Verified</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" name="email_verified" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
+                                                    <input type="checkbox" value="1" name="email_verified" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="email_verified"></label>
                                                 </div>
                                             </div>
@@ -141,7 +155,7 @@
                                             <label for="feature_tips" class="col-sm-2 col-form-label">Feature Tips</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" name="features[tips]" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
+                                                    <input type="checkbox" value="1" class="custom-control-input" name="features[tips]" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="feature_tips"></label>
                                                 </div>
                                             </div>
@@ -150,7 +164,7 @@
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Feature Demo User</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" name="features[demo]" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
+                                                    <input type="checkbox" class="custom-control-input" value="1" name="features[demo]" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="feature_demo"></label>
                                                 </div>
                                             </div>
@@ -250,7 +264,55 @@
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="medias">
-                                    medias
+                                    <div class="content">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                @php
+                                                    $heads = [
+                                                        'Cover',
+                                                        'Created By',
+                                                        'Description',
+                                                        '',
+                                                        'Status',
+                                                        'Likes',
+                                                        'Visits',
+                                                        'Sort Score',
+                                                        'Created At',
+                                                        ''
+                                                    ];
+                                                $config = [
+                                                    'processing' => true,
+                                                    'serverSide' => true,
+                                                    'pageLength' => config('core.admin.lists.page_count'),
+                                                    'responsive' => true,
+                                                    'lengthChange' => false,
+                                                    'dom' => 'rtip',
+                                                    'orderMulti' => false,
+                                                    'autoWidth' => false,
+                                                    'ajax' => route('core.admin.ajax.media.index'),
+                                                    'order' => [[8, 'desc']],
+                                                    'searching' => true,
+                                                    'searchCols' => [null, ['search' => $user->username]],
+                                                    'bInfo' => false,
+                                                    'columns' => [
+                                                        ['data' => 'file', 'orderable' => false],
+                                                        ['data' => 'creator.username', 'orderable' => false],
+                                                        ['data' => 'description', 'orderable' => false],
+                                                        ['data' => 'status', 'visible' => false],
+                                                        ['data' => 'status_badge', 'orderData' => 3, 'target' => 3],
+                                                        ['data' => 'like_count', 'orderable' => false],
+                                                        ['data' => 'visit_count', 'orderable' => false],
+                                                        ['data' => 'sort_score', 'orderable' => false],
+                                                        ['data' => 'created_at'],
+                                                        ['data' => 'action', 'orderable' => false],
+                                                    ],
+                                                ];
+                                                @endphp
+                                                <x-adminlte-datatable id="datatables" :heads="$heads" :config="$config">
+                                                </x-adminlte-datatable>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="upload">
                                     upload
@@ -390,7 +452,7 @@
 
 
 
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -400,6 +462,115 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="alertModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <form action="{{ route('core.admin.alert.store') }}" method="post">
+                <input type="hidden" name="user_id" value="{{ $user->_id }}">
+                <input type="hidden" name="type" value="{{ \Aparlay\Core\Models\Alert::TYPE_USER}}">
+                <input type="hidden" name="status" value="{{ \Aparlay\Core\Admin\Models\Alert::STATUS_NOT_VISITED }}">
+                <!-- Modal content-->
+                <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLiveLabel">Alert User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Reason <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="reason" placeholder="Type your message." />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="banModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" value="{{ \App\Models\User::STATUS_BLOCKED }}" name="status">
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" id="exampleModalLiveLabel">Ban User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to ban this user?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                            <button type="submit" class="btn btn-danger">Ban</button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+    </div>
+    <div id="suspendModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="status" value="{{ \App\Models\User::STATUS_SUSPENDED }}">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="exampleModalLiveLabel">Suspend</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to suspend this user?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                            <button type="submit" class="btn btn-warning">Suspend</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="activateModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="status" value="{{ \App\Models\User::STATUS_ACTIVE }}">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="exampleModalLiveLabel">Reactivate</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to reactivate this user?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        <button type="submit" class="btn btn-warning">Reactivate</button>
+
+                    </div>
+                </form>
             </div>
         </div>
     </div>
