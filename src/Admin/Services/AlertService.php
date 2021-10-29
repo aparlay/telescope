@@ -8,7 +8,6 @@ use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\AlertRepository;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
-use MongoDB\BSON\ObjectId;
 
 class AlertService
 {
@@ -25,6 +24,6 @@ class AlertService
 
     public function store()
     {
-        return $this->alertRepository->store(request()->only(['user_id', 'media_id', 'status', 'type', 'reason']));
+        return $this->alertRepository->create(request()->only(['user_id', 'media_id', 'status', 'type', 'reason']));
     }
 }
