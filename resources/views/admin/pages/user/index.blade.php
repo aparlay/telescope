@@ -49,11 +49,12 @@
                             'ajax' => route('core.admin.ajax.user.index'),
                             'order' => [[8, 'asc']],
                             'columns' => [
-                                ['data' => 'username'],
+                                ['data' => 'username', 'visible' => false],
+                                ['data' => 'username_avatar', 'orderData' => 0, 'target' => 0],
                                 ['data' => 'email'],
                                 ['data' => 'full_name', 'orderable' => false],
                                 ['data' => 'status', 'visible' => false],
-                                ['data' => 'status_badge', 'orderData' => 3, 'target' => 3],
+                                ['data' => 'status_badge', 'orderData' => 4, 'target' => 4],
                                 ['data' => 'visibility'],
                                 ['data' => 'follower_count', 'orderable' => false],
                                 ['data' => 'like_count', 'orderable' => false],
@@ -85,13 +86,13 @@
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label for="email">Email</label>
-                                                        <input type="email" data-column="1" name="email" class="form-control" id="email" placeholder="Enter email">
+                                                        <input type="email" data-column="2" name="email" class="form-control" id="email" placeholder="Enter email">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label for="status">Status</label>
-                                                        <select name="status" data-column="3" id="status" class="form-control">
+                                                        <select name="status" data-column="6" id="status" class="form-control">
                                                             <option value="">-Select-</option>
                                                             @foreach($userStatuses as $key => $status)
                                                                 <option value="{{ $key }}">{{ $status }}</option>

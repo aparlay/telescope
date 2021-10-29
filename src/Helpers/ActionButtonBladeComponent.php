@@ -23,4 +23,13 @@ class ActionButtonBladeComponent
     {
         return '<a class="btn btn-primary btn-sm" href="/'.$resourceName.'/'.$id.'" title="View"><i class="fas fa-eye"></i> View</a>';
     }
+
+    /**
+     * @param $user
+     * @return string
+     */
+    public static function getUsernameWithAvatar($user): string
+    {
+        return '<img src="' . $user->avatar . '?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">' . $user->username;
+    }
 }

@@ -60,6 +60,7 @@ class UserService extends AdminBaseService
 
             $user->status_badge = implode('</br>', $userBadges);
             $user->action = ActionButtonBladeComponent::getViewActionButton($user->_id, 'user');
+            $user->username_avatar = ActionButtonBladeComponent::getUsernameWithAvatar($user);
         }
     }
 
