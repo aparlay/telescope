@@ -140,7 +140,7 @@
                                             <label for="email_verified" class="col-sm-2 col-form-label">Email Verified</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" name="email_verified" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
+                                                    <input type="checkbox" value="1" name="email_verified" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="email_verified"></label>
                                                 </div>
                                             </div>
@@ -155,7 +155,7 @@
                                             <label for="feature_tips" class="col-sm-2 col-form-label">Feature Tips</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" name="features[tips]" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
+                                                    <input type="checkbox" value="1" class="custom-control-input" name="features[tips]" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="feature_tips"></label>
                                                 </div>
                                             </div>
@@ -164,7 +164,7 @@
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Feature Demo User</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" name="features[demo]" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
+                                                    <input type="checkbox" class="custom-control-input" value="1" name="features[demo]" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="feature_demo"></label>
                                                 </div>
                                             </div>
@@ -400,7 +400,7 @@
 
 
 
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
