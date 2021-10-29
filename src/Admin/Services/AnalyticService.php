@@ -19,7 +19,7 @@ class AnalyticService
     {
         $fromDate = $fromDate ?? date('Y-m-d', strtotime('-7 days'));
         $toDate = $toDate ?? date('Y-m-d');
-        
+
         return $this->analyticRepository->getAnalytics($fromDate, $toDate);
     }
 }
