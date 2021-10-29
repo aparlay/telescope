@@ -45,6 +45,6 @@ class AnalyticRepository implements RepositoryInterface
 
     public function getAnalytics($fromDate, $toDate): Collection
     {
-        return $this->model->filterDate($fromDate, $toDate)->orderBy('date')->take(20)->get();
+        return $this->model->filterDate($fromDate, $toDate)->orderBy('date')->take(30)->get();
     }
 }
