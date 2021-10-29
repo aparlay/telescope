@@ -323,38 +323,42 @@
                                                 <div class="row">
                                                     <h4>Credit Cards</h4>
                                                     <div class="col-12 table-responsive">
-                                                        @php
+                                                    @php
                                                             $heads = [
+                                                                'Username',
                                                                 '',
-                                                                'Card Number',
+                                                                'Status',
+                                                                '',
                                                                 'Expiration Month',
                                                                 'Expiration Year',
                                                                 'Created at',
                                                                 '',
                                                             ];
 
-                                                        $config = [
-                                                            'processing' => true,
-                                                            'serverSide' => true,
-                                                            'pageLength' => config('core.admin.lists.page_count'),
-                                                            'responsive' => true,
-                                                            'lengthChange' => false,
-                                                            'bInfo' => false,
-                                                            'dom' => 'rtip',
-                                                            'searchCols' => [['search' => $user->username]],
-                                                            'orderMulti' => false,
-                                                            'autoWidth' => false,
-                                                            'ajax' => route('payment.admin.ajax.credit-card.index'),
-                                                            'order' => [[1, 'asc']],
-                                                            'columns' => [
-                                                                ['data' => 'creator.username','visible' => false],
-                                                                ['data' => 'card_number'],
-                                                                ['data' => 'expire_month', 'orderable' => false],
-                                                                ['data' => 'expire_year', 'orderable' => false],
-                                                                ['data' => 'created_at'],
-                                                                ['data' => 'view_button', 'orderable' => false],
-                                                            ],
-                                                        ]
+                                                            $config = [
+                                                                'processing' => true,
+                                                                'serverSide' => true,
+                                                                'pageLength' => config('core.admin.lists.page_count'),
+                                                                'responsive' => true,
+                                                                'lengthChange' => false,
+                                                                'dom' => 'rtip',
+                                                                'orderMulti' => false,
+                                                                'bInfo' => false,
+                                                                'searchCols' => [['search' => $user->username]],
+                                                                'autoWidth' => false,
+                                                                'ajax' => route('payment.admin.ajax.credit-card.index'),
+                                                                'order' => [[1, 'asc']],
+                                                                'columns' => [
+                                                                    ['data' => 'link_to_user', 'orderData' => 1, 'target' => 1],
+                                                                    ['data' => 'creator.username','visible' => false],
+                                                                    ['data' => 'status_button','orderData' => 3, 'target' => 3],
+                                                                    ['data' => 'status','visible' => false],
+                                                                    ['data' => 'expire_month', 'orderable' => false],
+                                                                    ['data' => 'expire_year', 'orderable' => false],
+                                                                    ['data' => 'created_at'],
+                                                                    ['data' => 'view_button', 'orderable' => false],
+                                                                ],
+                                                            ]
                                                         @endphp
                                                         <x-adminlte-datatable id="datatables" :heads="$heads" :config="$config">
                                                         </x-adminlte-datatable>
