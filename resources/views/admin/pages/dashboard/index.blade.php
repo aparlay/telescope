@@ -20,6 +20,50 @@
 @section('content')
     <div class="content">
         <div class="container-fluid">
+            <div id="accordion">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h4 class="card-title w-100">
+                            <a class="d-block w-100" data-toggle="collapse" href="#collapseOne" aria-expanded="true">
+                                Show/Hide Filter
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="collapse" data-parent="#accordion" style="">
+                        <div class="card-body">
+                            <form action="{{ route('core.admin.ajax.dashboard.index') }}" id="filters">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="username">From Date</label>
+                                            <input type="date" data-column="1" name="from_date" class="form-control from-date" id="fromDate" placeholder="Select Date">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="status">To Date</label>
+                                            <input type="date" data-column="1" name="to_date" class="form-control" id="toDate" placeholder="Select Date">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row d-flex justify-content-end">
+                                            <div class="col-2">
+                                                <label for="clearFilter"></label>
+                                                <button type="button" id="clearFilter" class="btn btn-block btn-danger"><i class="fas fa-trash"></i> Clear</button>
+                                            </div>
+                                            <div class="col-2">
+                                                <label for="submitFilter"></label>
+                                                <button type="button" id="submitDate" class="btn btn-block btn-primary"><i class="fas fa-filter"></i> Filter</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span id="alert"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="d-none" data-chart="{{ $data_analytics }}" id="chart_data"></div>
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6">

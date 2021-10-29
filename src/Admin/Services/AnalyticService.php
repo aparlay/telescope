@@ -15,8 +15,11 @@ class AnalyticService
         $this->analyticRepository = new AnalyticRepository(new Analytic());
     }
 
-    public function getAnalytics(): Collection
+    public function getAnalytics($fromDate = null, $toDate = null): Collection
     {
-        return $this->analyticRepository->getAnalytics();
+        $fromDate = $fromDate ?? date('Y-m-d', strtotime('-7 days'));
+        $toDate = $toDate ?? date('Y-m-d');
+        
+        return $this->analyticRepository->getAnalytics($fromDate, $toDate);
     }
 }
