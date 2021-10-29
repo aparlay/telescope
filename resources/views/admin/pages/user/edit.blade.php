@@ -308,7 +308,7 @@
                                                     ],
                                                 ];
                                                 @endphp
-                                                <x-adminlte-datatable id="datatables" :heads="$heads" :config="$config">
+                                                <x-adminlte-datatable id="mediaDatatable" :heads="$heads" :config="$config">
                                                 </x-adminlte-datatable>
                                             </div>
                                         </div>
@@ -356,7 +356,7 @@
                                                             ],
                                                         ]
                                                         @endphp
-                                                        <x-adminlte-datatable id="datatables" :heads="$heads" :config="$config">
+                                                        <x-adminlte-datatable id="creditCardsDatatable" :heads="$heads" :config="$config">
                                                         </x-adminlte-datatable>
                                                     </div>
 
@@ -400,7 +400,7 @@
                                                             ],
                                                         ]
                                                         @endphp
-                                                        <x-adminlte-datatable id="datatables1" :heads="$heads" :config="$config">
+                                                        <x-adminlte-datatable id="tipsDatatable" :heads="$heads" :config="$config">
                                                         </x-adminlte-datatable>
                                                     </div>
 
@@ -442,13 +442,9 @@
                                                             ],
                                                         ]
                                                         @endphp
-                                                        <x-adminlte-datatable id="datatables2" :heads="$heads" :config="$config">
+                                                        <x-adminlte-datatable id="subscriptionsDatatable" :heads="$heads" :config="$config">
                                                         </x-adminlte-datatable>
                                                     </div>
-
-
-
-
                                                 </div>
                                             </div>
                                         </div>
