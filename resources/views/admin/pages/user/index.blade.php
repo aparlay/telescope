@@ -24,6 +24,7 @@
                     <div class="col-12 table-responsive">
                         @php
                             $heads = [
+                                '',
                                 'Username',
                                 'Email',
                                 'Fullname',
@@ -92,7 +93,7 @@
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label for="status">Status</label>
-                                                        <select name="status" data-column="6" id="status" class="form-control">
+                                                        <select name="status" data-column="4" id="status" class="form-control">
                                                             <option value="">-Select-</option>
                                                             @foreach($userStatuses as $key => $status)
                                                                 <option value="{{ $key }}">{{ $status }}</option>
@@ -103,7 +104,7 @@
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label for="visibility">Visibility</label>
-                                                        <select name="visibility" data-column="5" id="visibility" class="form-control">
+                                                        <select name="visibility" data-column="6" id="visibility" class="form-control">
                                                             <option value="">-Select-</option>
                                                             @foreach($userVisibilities as $key => $visibility)
                                                                 <option value="{{ $key }}">{{ $visibility }}</option>
