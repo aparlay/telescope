@@ -6,8 +6,7 @@ use Aparlay\Core\Models\Email as EmailBase;
 use Aparlay\Core\Models\Scopes\EmailScope;
 
 /**
- * Class Email
- * @package Aparlay\Core\Admin\Models
+ * Class Email.
  */
 class Email extends EmailBase
 {

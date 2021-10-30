@@ -10,8 +10,7 @@ use ErrorException;
 use Illuminate\Http\Request;
 
 /**
- * Class EmailController
- * @package Aparlay\Core\Admin\Controllers
+ * Class EmailController.
  */
 class EmailController extends Controller
 {
@@ -26,7 +25,6 @@ class EmailController extends Controller
     ) {
         $this->emailService = $emailService;
     }
-
 
     /**
      * @throws \ErrorException
@@ -46,5 +44,4 @@ class EmailController extends Controller
     {
         return new EmailResource($this->emailService->getFilteredEmail());
     }
-
 }
