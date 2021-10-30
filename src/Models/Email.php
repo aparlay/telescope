@@ -80,6 +80,9 @@ class Email extends BaseModel
         'updated_at' => 'datetime',
     ];
 
+    /**
+     * @return array
+     */
     public static function getStatuses(): array
     {
         return [
@@ -90,6 +93,9 @@ class Email extends BaseModel
         ];
     }
 
+    /**
+     * @return array
+     */
     public static function getTypes(): array
     {
         return [

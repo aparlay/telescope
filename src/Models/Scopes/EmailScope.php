@@ -5,38 +5,46 @@ namespace Aparlay\Core\Models\Scopes;
 use Aparlay\Core\Models\Email;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
+/**
+ * Trait EmailScope
+ * @package Aparlay\Core\Models\Scopes
+ */
 trait EmailScope
 {
     /**
      * @param $query
-     * @param $userId
+     * @param $sorts
+     *
+     * @return mixed
      */
-    public function scopeUser($query, $userId): mixed
+    public function scopeSortBy($query, $sorts): mixed
     {
-        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+        foreach ($sorts as $field => $direction) {
+            $query->orderBy($field, $direction);
+        }
 
-        return $query->where('user_id', $userId);
+        return $query;
     }
 
-    public function scopeOpened(Builder $query): Builder
+    /**
+     * @param $query
+     * @param $filters
+     * @return mixed
+     */
+    //TODO: scope too general, must refactor
+    public function scopeFilter($query, $filters)
     {
-        return $query->where('status', Email::STATUS_OPENED);
-    }
+        foreach ($filters as $key => $filter) {
+            if (is_numeric($filter)) {
+                $query->where($key, (int) $filter);
+            } else {
+                $query->where($key, 'regex', new Regex('^'.$filter));
+            }
+        }
 
-    public function scopeSent(Builder $query): Builder
-    {
-        return $query->where('status', Email::STATUS_SENT);
-    }
-
-    public function scopeFailed(Builder $query): Builder
-    {
-        return $query->where('status', Email::STATUS_FAILED);
-    }
-
-    public function scopeDate(Builder $query, UTCDateTime $start, UTCDateTime $end): Builder
-    {
-        return $query->whereBetween('created_at', [$start, $end]);
+        return $query;
     }
 }

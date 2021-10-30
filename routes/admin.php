@@ -4,6 +4,7 @@ use Aparlay\Core\Admin\Controllers\AuthController;
 use Aparlay\Core\Admin\Controllers\DashboardController;
 use Aparlay\Core\Admin\Controllers\MediaController;
 use Aparlay\Core\Admin\Controllers\UserController;
+use Aparlay\Core\Admin\Controllers\EmailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,6 +59,11 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('update');
         });
 
+        /* E-mail Route */
+        Route::get('email', [EmailController::class, 'index'])
+            ->middleware(['permission:list users'])
+            ->name('index');
+
         /* Ajax Routes */
         Route::name('ajax.')->prefix('ajax')->group(function () {
             Route::get('user', [UserController::class, 'indexAjax'])
@@ -66,6 +72,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('media', [MediaController::class, 'indexAjax'])
                 ->middleware(['permission:list medias'])
                 ->name('media.index');
+            Route::get('email', [EmailController::class, 'indexAjax'])
+                ->middleware(['permission:list users'])
+                ->name('email.index');
         });
     });
 
