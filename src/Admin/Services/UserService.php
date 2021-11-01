@@ -96,10 +96,8 @@ class UserService extends AdminBaseService
         return $this->userRepository->getVisibilities();
     }
 
-    public function update($id)
+    public function update($user)
     {
-        $user = $this->userRepository->find($id);
-
         if (request()->hasFile('avatar')) {
             $this->uploadAvatar($user);
         }
@@ -126,12 +124,12 @@ class UserService extends AdminBaseService
         ];
 
         $data = array_merge($data, $dataBooleans);
-
-        if (auth()->user()->hasRole(User::ROLE_SUPER_ADMINISTRATOR)) {
+        $role = request()?->input('role');
+        if ($role && auth()->user()->hasRole(User::ROLE_SUPER_ADMINISTRATOR)) {
             $user->syncRoles(request()->input('role'));
         }
 
-        $this->userRepository->update($data, $id);
+        $this->userRepository->update($data, $user->_id);
     }
 
     public function uploadAvatar($user): bool
@@ -159,5 +157,10 @@ class UserService extends AdminBaseService
         }
 
         return false;
+    }
+
+    public function updateStatus($id): bool
+    {
+        return $this->userRepository->update(['status' => request()->input('status')], $id);
     }
 }

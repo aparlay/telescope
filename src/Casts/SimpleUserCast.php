@@ -3,9 +3,12 @@
 namespace Aparlay\Core\Casts;
 
 use Aparlay\Core\Helpers\Cdn;
+use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Eloquent\Model;
 use MongoDB\BSON\ObjectId;
 
@@ -27,22 +30,23 @@ class SimpleUserCast implements CastsAttributes
      * @param  array  $attributes
      * @return array
      * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        $user = User::user($value['_id'])->first();
-        $userArray = [
-            '_id' => (string) $user->_id,
-            'username' => $user->username,
-            'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
-        ];
+        $userArray = self::cacheByUserId($value['_id']);
 
         if (in_array('is_followed', $this->fields, true)) {
-            $userArray['is_followed'] = $user->is_followed;
-        }
+            $isFollowed = false;
+            if (! auth()->guest()) {
+                $loggedInUserId = auth()->user()->_id;
+                $cacheKey = (new Follow())->getCollection().':creator:'.$loggedInUserId;
+                Follow::cacheByUserId($loggedInUserId);
 
-        if (in_array('is_liked', $this->fields, true)) {
-            $userArray['is_liked'] = ($model instanceof Media) ? $model->is_liked : false;
+                $isFollowed = Redis::sismember($cacheKey, $userArray['_id']);
+            }
+
+            $userArray['is_followed'] = $isFollowed;
         }
 
         return $userArray;
@@ -66,5 +70,27 @@ class SimpleUserCast implements CastsAttributes
             'username' => $user->username,
             'avatar' => $user->avatar,
         ]];
+    }
+
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public static function cacheByUserId(ObjectId | string $userId): array
+    {
+        $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
+        $cacheKey = 'SimpleUserCast:'.$userId;
+
+        if (empty($userArray = Cache::store('redis')->get($cacheKey, []))) {
+            $user = User::user($userId)->first();
+            $userArray = [
+                '_id' => (string) $user->_id,
+                'username' => $user->username,
+                'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
+            ];
+
+            Cache::store('redis')->set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
+        }
+
+        return $userArray;
     }
 }
