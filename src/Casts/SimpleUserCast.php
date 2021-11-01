@@ -38,7 +38,7 @@ class SimpleUserCast implements CastsAttributes
 
         if (in_array('is_followed', $this->fields, true)) {
             $isFollowed = false;
-            if (!auth()->guest()) {
+            if (! auth()->guest()) {
                 $loggedInUserId = auth()->user()->_id;
                 $cacheKey = (new Follow())->getCollection().':creator:'.$loggedInUserId;
                 Follow::cacheByUserId($loggedInUserId);
@@ -71,7 +71,6 @@ class SimpleUserCast implements CastsAttributes
             'avatar' => $user->avatar,
         ]];
     }
-
 
     /**
      * @throws \Psr\SimpleCache\InvalidArgumentException
