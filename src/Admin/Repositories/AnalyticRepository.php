@@ -43,8 +43,8 @@ class AnalyticRepository implements RepositoryInterface
         // TODO: Implement find() method.
     }
 
-    public function getAnalytics(): Collection
+    public function getAnalytics($fromDate, $toDate): Collection
     {
-        return $this->model->orderBy('date')->take(20)->get();
+        return $this->model->filterDate($fromDate, $toDate)->orderBy('date')->take(30)->get();
     }
 }

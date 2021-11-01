@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Services\AnalyticService;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -20,5 +21,12 @@ class DashboardController extends Controller
         $breadcrumbs = ['title' => 'Dashboard'];
 
         return view('default_view::admin.pages.dashboard.index')->with(['data_analytics' => $data_analytics, 'breadcrumbs'=>$breadcrumbs]);
+    }
+
+    public function indexAjax(Request $request)
+    {
+        $data_analytics = $this->analyticService->getAnalytics($request->get('fromDate'), $request->get('toDate'));
+
+        return $data_analytics;
     }
 }

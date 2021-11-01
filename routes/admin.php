@@ -82,6 +82,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('media', [MediaController::class, 'indexAjax'])
                 ->middleware(['permission:list medias'])
                 ->name('media.index');
+            Route::get('dashboard', [DashboardController::class, 'indexAjax'])
+                ->middleware(['permission:dashboard'])
+                ->name('dashboard.index');
         });
     });
 
