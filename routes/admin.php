@@ -33,7 +33,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
         Route::middleware(['admin-auth:admin'])->name('alert.')->group(function () {
             Route::post('/alert/create', [AlertController::class, 'create'])
             ->middleware(['permission:create alerts'])
-            ->name('create');
+            ->name('alert.create');
         });
 
         /* Media routes */
@@ -63,6 +63,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::put('user/{user}', [UserController::class, 'update'])
                 ->middleware(['permission:edit users'])
                 ->name('update');
+            Route::match(['get', 'post'], 'user/upload-media', [UserController::class, 'uploadMedia'])
+                    ->middleware(['permission:upload medias'])
+                    ->name('media.upload');
             Route::patch('user/{user}', [UserController::class, 'updateStatus'])
                 ->middleware(['permission:edit users'])
                 ->name('update.status');

@@ -7,9 +7,12 @@ use Aparlay\Core\Admin\Requests\UserRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
 use Aparlay\Core\Admin\Requests\UserUpdateRequest;
 use Aparlay\Core\Admin\Resources\UserResource;
+use Aparlay\Core\Admin\Services\UploadService;
 use Aparlay\Core\Admin\Services\UserService;
 use ErrorException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Maklad\Permission\Models\Role;
 
 class UserController extends Controller
@@ -78,5 +81,12 @@ class UserController extends Controller
         }
 
         return back()->with('error', 'Update status failed.');
+    }
+
+    public function uploadMedia(Request $request): Response
+    {
+        $result = UploadService::chunkUpload($request);
+
+        return response($result['data'], $result['code'], []);
     }
 }
