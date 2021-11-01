@@ -12,18 +12,21 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 class AlertService
 {
     protected AlertRepository $alertRepository;
-    protected MediaRepository $mediaRepository;
     protected UserRepository $userRepository;
+    protected MediaRepository $mediaRepository;
 
     public function __construct()
     {
         $this->alertRepository = new AlertRepository(new Alert());
-        $this->mediaRepository = new MediaRepository(new Media());
         $this->userRepository = new UserRepository(new User());
+        $this->mediaRepository = new MediaRepository(new Media());
     }
 
-    public function store()
+    public function create($request)
     {
-        return $this->alertRepository->create(request()->only(['user_id', 'media_id', 'status', 'type', 'reason']));
+        $this->mediaRepository->find($request->media_id);
+        $this->userRepository->find($request->user_id);
+
+        return $this->alertRepository->store($request);
     }
 }

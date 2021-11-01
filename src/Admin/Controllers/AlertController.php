@@ -2,25 +2,53 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
-use Aparlay\Core\Admin\Requests\AlertRequest;
 use Aparlay\Core\Admin\Services\AlertService;
+use Illuminate\Http\Request;
 
-class AlertController
+class AlertController extends Controller
 {
     protected $alertService;
 
-    public function __construct(
-        AlertService $alertService
-    ) {
+    public function __construct(AlertService $alertService)
+    {
         $this->alertService = $alertService;
     }
 
-    public function store(AlertRequest $request)
+    /**
+     * @throws \ErrorException
+     */
+    public function index()
     {
-        if ($this->alertService->store()) {
-            return back()->with('success', 'Alert added successfully.');
+    }
+
+    public function view($id)
+    {
+    }
+
+    /**
+     * Creates a new Alert model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function create(Request $request)
+    {
+        $msg = [];
+        if ($this->alertService->create($request)) {
+            $msg = [
+                'type' => 'success',
+                'text' => 'Alert saved successfully.',
+            ];
+        } else {
+            $msg = [
+                'type' => 'danger',
+                'text' => 'There are some issues.',
+            ];
         }
 
-        return back()->with('error', 'Add alert failed.');
+        if (($post = $request->get('post-action', false)) !== false) {
+            return redirect($post)->with($msg['type'], $msg['text']);
+        }
+
+        return redirect('/media/'.$request->media_id)->with($msg['type'], $msg['text']);
     }
 }

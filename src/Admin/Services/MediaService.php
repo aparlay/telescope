@@ -64,7 +64,13 @@ class MediaService extends AdminBaseService
     public function find($id)
     {
         $media = $this->mediaRepository->find($id);
-        $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
+
+        $statusBadge = [
+            'status' => $media->status_name,
+            'color' => $media->status_color,
+        ];
+
+        $media->status_badge = $statusBadge;
 
         return $media;
     }
@@ -88,14 +94,34 @@ class MediaService extends AdminBaseService
     /**
      * @param $id
      */
-    public function updateMedia(Request $request, $id)
+    public function update($id)
     {
-        $request->request->add([
-            'visibility' => ($request->visibility == 'on') ? 1 : 0,
-            'is_music_licensed' => ($request->is_music_licensed == 'on') ? true : false,
+        $data = request()->only([
+            'description',
+            'status',
+            'skin_score',
+            'visibility',
+            'is_music_licensed',
         ]);
 
-        return $this->mediaRepository->update($request->all(), $id);
+        $dataModified = [
+            'visibility' => request()->boolean('visibility'),
+            'is_music_licensed' => request()->boolean('is_music_licensed'),
+            'scores' => [
+                [
+                    'type' => 'skin',
+                    'score' => request()->skin_score,
+                ],
+                [
+                    'type' => 'awesomeness',
+                    'score' => request()->awesomeness_score,
+                ],
+            ],
+        ];
+
+        $data = array_merge($data, $dataModified);
+
+        return $this->mediaRepository->update($data, $id);
     }
 
     public function skinScore()

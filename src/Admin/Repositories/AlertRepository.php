@@ -3,6 +3,11 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Alert;
+use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class AlertRepository implements RepositoryInterface
 {
@@ -19,17 +24,32 @@ class AlertRepository implements RepositoryInterface
 
     public function all()
     {
-        // TODO: Implement all() method.
+    }
+
+    /**
+     * Create alert.
+     *
+     * @param array $data
+     * @return Alert|null
+     */
+    public function store(Request $request)
+    {
+        try {
+            return Alert::create($request->all());
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return null;
+        }
     }
 
     public function create(array $data)
     {
-        return Alert::create($data);
+        // TODO: Implement create() method.
     }
 
     public function update(array $data, $id)
     {
-        // TODO: Implement update() method.
     }
 
     public function delete($id)
@@ -39,6 +59,6 @@ class AlertRepository implements RepositoryInterface
 
     public function find($id)
     {
-        // TODO: Implement find() method.
+        return $this->model->findOrFail($id);
     }
 }
