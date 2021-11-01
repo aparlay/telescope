@@ -132,27 +132,4 @@ class EmailRepository
         return $this->model->getTypes();
     }
 
-    /**
-     * @return mixed
-     */
-    public function countCollection()
-    {
-        return $this->model->count();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function skinScore()
-    {
-        return $this->model->getSkinScores();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function awesomenessScore()
-    {
-        return $this->model->getAwesomenessScores();
-    }
 }
