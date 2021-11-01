@@ -3,9 +3,7 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Resources\EmailResource;
-use Aparlay\Core\Admin\Resources\MediaResource;
 use Aparlay\Core\Admin\Services\EmailService;
-use Aparlay\Core\Admin\Services\MediaService;
 use ErrorException;
 use Illuminate\Http\Request;
 
