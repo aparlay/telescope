@@ -131,5 +131,4 @@ class EmailRepository
     {
         return $this->model->getTypes();
     }
-
 }
