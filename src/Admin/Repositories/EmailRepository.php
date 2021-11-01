@@ -5,8 +5,7 @@ namespace Aparlay\Core\Admin\Repositories;
 use Aparlay\Core\Admin\Models\Email;
 
 /**
- * Class EmailRepository
- * @package Aparlay\Core\Admin\Repositories
+ * Class EmailRepository.
  */
 class EmailRepository
 {

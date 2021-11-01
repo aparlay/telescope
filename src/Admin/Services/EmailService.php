@@ -16,8 +16,8 @@ class EmailService extends AdminBaseService
     {
         $this->emailRepository = new EmailRepository(new Email());
 
-        $this->filterableField = ['attributes.user.username','attributes.to', 'attributes.type', 'attributes.status'];
-        $this->sorterableField = ['attributes.user.username', 'attributes.to', 'attributes.type', 'attributes.status','created_at'];
+        $this->filterableField = ['attributes.user.username', 'attributes.to', 'attributes.type', 'attributes.status'];
+        $this->sorterableField = ['attributes.user.username', 'attributes.to', 'attributes.type', 'attributes.status', 'created_at'];
     }
 
     /**
@@ -76,5 +76,4 @@ class EmailService extends AdminBaseService
     {
         return $this->emailRepository->getEmailTypes();
     }
-
 }

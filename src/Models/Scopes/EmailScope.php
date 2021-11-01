@@ -9,8 +9,7 @@ use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * Trait EmailScope
- * @package Aparlay\Core\Models\Scopes
+ * Trait EmailScope.
  */
 trait EmailScope
 {
