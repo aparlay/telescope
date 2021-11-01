@@ -51,13 +51,11 @@ class FollowTest extends ApiTestCase
                     'data.creator.username' => 'string',
                     'data.creator.avatar' => 'string',
                     'data.creator.is_followed' => 'boolean',
-                    'data.creator.is_liked' => 'boolean',
                     'data.user' => 'array',
                     'data.user._id' => 'string',
                     'data.user.username' => 'string',
                     'data.user.avatar' => 'string',
                     'data.user.is_followed' => 'boolean',
-                    'data.user.is_liked' => 'boolean',
                 ])
             );
 
