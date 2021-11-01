@@ -593,7 +593,7 @@ class AuthController extends Controller
     protected function respondWithToken(string $token): array
     {
         return [
-            'access_token' => $token,
+            'token' => $token,
             'token_expired_at' => auth()->factory()->getTTL() * 60,
             'refresh_token' => $token,
             'refresh_token_expired_at' => auth()->factory()->getTTL() * 60,

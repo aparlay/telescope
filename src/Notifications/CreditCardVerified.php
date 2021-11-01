@@ -2,30 +2,31 @@
 
 namespace Aparlay\Core\Notifications;
 
+use Aparlay\Core\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class JobFailed extends Notification
+class CreditCardVerified extends Notification
 {
     use Queueable;
 
-    public string $job;
+    public string $userId;
+    public array $data;
+    public string $mid;
     public int $tried;
-    public string $exception;
-    public string $channel;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(string $job, int $tried, string $exception, string $channel = '#waptap-testing')
+    public function __construct(string $userId, string $data, string $mid, int $tried)
     {
-        $this->job = $job;
+        $this->userId = $userId;
+        $this->data = $data;
+        $this->mid = $mid;
         $this->tried = $tried;
-        $this->exception = $exception;
-        $this->channel = $channel;
     }
 
     /**
@@ -47,11 +48,15 @@ class JobFailed extends Notification
      */
     public function toSlack($notifiable)
     {
-        $message = $this->job.' failed after '.$this->tried.' attempts.';
-        $message .= PHP_EOL.'_*Exceptions:*_ '.! empty($this->exception) ? $this->exception : ' attempts done.';
+        $message = 'New credit card has been verified after '.$this->tried.' attempts.';
+        $message .= PHP_EOL.'_*User:*_ '.User::user($this->userId)->slack_admin_url;
+        $message .= PHP_EOL.'_*Processing Mid:*_ '.$this->mid;
+        foreach ($this->data as $key => $value) {
+            $message .= PHP_EOL.'_*'.$key.':*_ '.$value;
+        }
 
         return (new SlackMessage())
-            ->to($this->channel)
+            ->to(config('payment.slack_channels.credit_card.success'))
             ->content($message)
             ->success();
     }

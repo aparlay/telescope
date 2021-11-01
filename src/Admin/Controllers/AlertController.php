@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
-use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Services\AlertService;
 use Illuminate\Http\Request;
 
