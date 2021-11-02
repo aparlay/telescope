@@ -96,7 +96,6 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('email', [EmailController::class, 'indexAjax'])
                 ->middleware(['permission:list users'])
                 ->name('email.index');
-
         });
     });
 

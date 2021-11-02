@@ -131,7 +131,7 @@ class EmailRepository
     {
         return $this->model->getTypes();
     }
-    
+
     public function countCollection()
     {
         return $this->model->count();
