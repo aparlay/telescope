@@ -31,6 +31,16 @@ class ActionButtonBladeComponent
      */
     public static function getAvatarWithName($name, $imagePath): string
     {
-        return '<img class="table-avatar mr-1.5" src="'.$imagePath.'" alt="'.$name.'">'.$name;
+        return '<img class="table-avatar mr-1.5" src="' . $imagePath . '" alt="' . $name . '">' . $name;
+    }
+
+    /**
+     * @param $user
+     * @return string
+     */
+    public static function getUsernameWithAvatar($user): string
+    {
+        return '<img src="'.$user->avatar.'?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">'.$user->username;
+
     }
 }

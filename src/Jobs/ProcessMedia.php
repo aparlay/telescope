@@ -133,25 +133,25 @@ class ProcessMedia implements ShouldQueue
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
             Log::error(__CLASS__.PHP_EOL.'Cannot check video duration');
-            //throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
-        }
-
-        $media->length = (float) $response->GetSec();
-        $media->addToSet('processing_log', '3. Duration checked: '.$media->length.' Sec');
-        if ($media->length > 60.0) {
-            $toRemoveFiles[] = $src = config('app.media.path').'1-trimed-'.$this->file;
-            $optimizeReq->setDes($src);
-            [$response, $status] = $client->Trim($optimizeReq)->wait();
-            if ($status->code !== 0) {
-                $media->status = Media::STATUS_FAILED;
+        //throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
+        } else {
+            $media->length = (float) $response->GetSec();
+            $media->addToSet('processing_log', '3. Duration checked: '.$media->length.' Sec');
+            if ($media->length > 60.0) {
+                $toRemoveFiles[] = $src = config('app.media.path').'1-trimed-'.$this->file;
+                $optimizeReq->setDes($src);
+                [$response, $status] = $client->Trim($optimizeReq)->wait();
+                if ($status->code !== 0) {
+                    $media->status = Media::STATUS_FAILED;
+                    $media->save($withoutTouch);
+                    Log::error(__CLASS__.PHP_EOL.'Cannot do video trim');
+                    throw new Exception(__CLASS__.PHP_EOL.'Cannot do video trim');
+                }
+                $media->length = 60.0;
+                $media->addToSet('processing_log', '4. Video is trimmed to 60 Sec: Ok');
                 $media->save($withoutTouch);
-                Log::error(__CLASS__.PHP_EOL.'Cannot do video trim');
-                throw new Exception(__CLASS__.PHP_EOL.'Cannot do video trim');
+                $optimizeReq->setSrc($src);
             }
-            $media->length = 60.0;
-            $media->addToSet('processing_log', '4. Video is trimmed to 60 Sec: Ok');
-            $media->save($withoutTouch);
-            $optimizeReq->setSrc($src);
         }
 
         // normalize audio
