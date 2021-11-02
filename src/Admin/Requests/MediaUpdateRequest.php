@@ -31,17 +31,17 @@ class MediaUpdateRequest extends FormRequest
             'skin_score' => [
                 'nullable',
                 'integer',
-                Rule::in(array_keys(Media::getSkinScores()))
+                Rule::in(array_keys(Media::getSkinScores())),
             ],
             'awesomeness_score' => ['nullable',
                 'integer',
-                Rule::in(array_keys(Media::getAwesomenessScores()))
+                Rule::in(array_keys(Media::getAwesomenessScores())),
             ],
             'description' => ['nullable', 'string'],
             'status' => [
                 'required',
-                Rule::in(array_keys(Media::getStatuses()))
-            ]
+                Rule::in(array_keys(Media::getStatuses())),
+            ],
         ];
     }
 

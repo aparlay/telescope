@@ -23,9 +23,10 @@ class AlertService
 
     public function create()
     {
-        if(request()->input('mediaStatus')) {
+        if (request()->input('mediaStatus')) {
             $this->mediaRepository->update(['status' => request()->input('mediaStatus')], request()->input('media_id'));
         }
+
         return $this->alertRepository->create(request()->only(['user_id', 'media_id', 'status', 'type', 'reason']));
     }
 }

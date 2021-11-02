@@ -8,8 +8,8 @@ use Aparlay\Core\Admin\Resources\MediaResource;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Jobs\ReprocessMedia;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
@@ -44,7 +44,6 @@ class MediaController extends Controller
         ]);
     }
 
-
     public function indexAjax(Route $route)
     {
         return new MediaResource($this->mediaService->getFilteredMedia());
@@ -66,6 +65,7 @@ class MediaController extends Controller
     public function update(Media $media, MediaUpdateRequest $request): RedirectResponse
     {
         $this->mediaService->update($media->_id);
+
         return redirect()->back();
     }
 
