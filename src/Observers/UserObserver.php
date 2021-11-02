@@ -52,12 +52,14 @@ class UserObserver extends BaseModelObserver
             $model->promo_link = 'https://'.$model->promo_link;
         }
 
-        parent::saving($model);
-
         // Reset the Redis cache
-        $cacheKey = 'SimpleUserCast:'.$model->_id;
-        Redis::del($cacheKey);
-        SimpleUserCast::cacheByUserId($model->_id);
+        if ($model->_id) {
+            $cacheKey = 'SimpleUserCast:'.$model->_id;
+            Redis::del($cacheKey);
+            SimpleUserCast::cacheByUserId($model->_id);
+        }
+
+        parent::saving($model);
     }
 
     /**

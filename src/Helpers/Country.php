@@ -4,7 +4,7 @@ namespace Aparlay\Core\Helpers;
 
 class Country
 {
-    public const COUNTRIES = [
+    public const ISO3 = [
         'ABW' => 'Aruba',
         'AFG' => 'Afghanistan',
         'AGO' => 'Angola',
@@ -262,8 +262,8 @@ class Country
      */
     public static function convertISO3ToName(string $iso3): string
     {
-        if (isset(self::COUNTRIES[$iso3])) {
-            return self::COUNTRIES[$iso3];
+        if (isset(self::ISO3[$iso3])) {
+            return self::ISO3[$iso3];
         }
 
         throw new \InvalidArgumentException(__('Unknown ISO3 code: ":iso"', [':iso' => $iso3]));
@@ -275,7 +275,7 @@ class Country
      */
     public static function convertNameToISO3(string $country): string
     {
-        if (($iso3 = array_search($country, self::COUNTRIES, false)) !== false) {
+        if (($iso3 = array_search($country, self::ISO3, false)) !== false) {
             return $iso3;
         }
 
