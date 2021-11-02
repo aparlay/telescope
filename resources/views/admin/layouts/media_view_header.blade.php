@@ -8,7 +8,7 @@
                         <a class="btn btn-default btn-sm border-primary col-md-1.5 ml-1 text-primary" name="" value="" href="{{url('pending/' . $media->_id . '/' . SORT_ASC )}}"><strong>Next</strong> <i class="fas fa-chevron-right"></i></a>
                         <button class=" btn btn-sm btn-danger col-md-2" data-toggle="modal" data-target="#reprocessModel">
                             <i class="fas fa-exclamation-triangle"></i>
-                            Reprocessing
+                            Reprocess
                         </button>
                         <button class=" btn btn-sm btn-warning col-md-2" data-toggle="modal" data-target="#alert-modal" >
                             <i class="fas fa-minus-circle"></i>

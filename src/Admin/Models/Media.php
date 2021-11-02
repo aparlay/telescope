@@ -38,7 +38,7 @@ class Media extends MediaBase
         return $this->getStatuses()[$this->status];
     }
 
-    public function getSkinScores()
+    public static function getSkinScores()
     {
         return [
             0 => '0',
@@ -55,7 +55,7 @@ class Media extends MediaBase
         ];
     }
 
-    public function getAwesomenessScores()
+    public static function getAwesomenessScores()
     {
         return [
             0 => '0',

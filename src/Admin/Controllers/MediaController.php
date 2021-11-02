@@ -2,10 +2,12 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
+use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Requests\MediaUpdateRequest;
 use Aparlay\Core\Admin\Resources\MediaResource;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Jobs\ReprocessMedia;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 
@@ -47,57 +49,55 @@ class MediaController extends Controller
         return new MediaResource($this->mediaService->getFilteredMedia());
     }
 
-    public function view($id)
+    public function view(Media $media)
     {
-        $media = new MediaResource($this->mediaService->find($id));
-        $skinScore = $this->mediaService->skinScore();
-        $awesomenessScore = $this->mediaService->awesomenessScore();
+        $media = new MediaResource($this->mediaService->find($media->_id));
         $scoreTypes = $media->scores;
 
-        return view('default_view::admin.pages.media.view', compact('media', 'skinScore', 'awesomenessScore', 'scoreTypes'));
+        return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * @param MediaUpdateRequest $request
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function update(Media $media, MediaUpdateRequest $request): RedirectResponse
     {
-        $this->mediaService->update($id);
-        $media = $this->mediaService->find($id);
-        $skinScore = $this->mediaService->skinScore();
-        $awesomenessScore = $this->mediaService->awesomenessScore();
-        $scoreTypes = $media->scores;
-
-        return view('default_view::admin.pages.media.view', compact('media', 'skinScore', 'awesomenessScore', 'scoreTypes'));
+        $this->mediaService->update($media->_id);
+        return redirect()->back();
     }
 
-    public function reprocess($id)
+    public function reprocess(Media $media)
     {
-        $media = $this->mediaService->find($id);
+        $media = $this->mediaService->find($media->_id);
 
         ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('lowpriority');
 
-        return redirect()->route('core.admin.media.view', ['id' => (string) $media->_id])->with('success', 'Video is placed in queue for reprocessing.');
+        return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with('success', 'Video is placed in queue for reprocessing.');
     }
 
-    public function pending($id, $order)
+    public function pending(Media $media, $order)
     {
         $order = (int) $order;
-        $medias = [];
+        $models = [];
 
         if (in_array($order, [SORT_ASC, SORT_DESC], true)) {
-            $medias = $this->mediaService->pending($order);
+            $models = $this->mediaService->pending($order);
         }
 
-        foreach ($medias as $media) {
-            if ($id != (string) $media->_id) {
-                return redirect()->route('core.admin.media.view', ['id' => (string) $media->_id]);
+        foreach ($models as $model) {
+            if ($media->_id != (string) $model->_id) {
+                return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id]);
             }
         }
 
         return redirect()->route('core.admin.media.index');
     }
 
-    public function downloadOriginal($id, $hash = '')
+    public function downloadOriginal(Media $media, $hash = '')
     {
-        $media = $this->mediaService->find($id);
+        $media = $this->mediaService->find($media->_id);
         $matchedFile = $media->files_history[0] ?? [
             'hash' => $media->hash,
             'size' => $media->size,
@@ -121,11 +121,11 @@ class MediaController extends Controller
                 ]);
             }
 
-            return redirect()->route('core.admin.media.view', ['id' => $id])->with('danger', 'Video file not found.');
+            return redirect()->route('core.admin.media.view', ['id' => $media->_id])->with('danger', 'Video file not found.');
         } catch (\Exception $e) {
-            return redirect()->route('core.admin.media.view', ['id' => $id])->with('danger', 'Video file download failed.');
+            return redirect()->route('core.admin.media.view', ['id' => $media->_id])->with('danger', 'Video file download failed.');
         }
 
-        return redirect()->route('core.admin.media.view', ['id' => $id]);
+        return redirect()->route('core.admin.media.view', ['id' => $media->_id]);
     }
 }

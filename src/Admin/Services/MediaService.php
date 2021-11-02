@@ -64,7 +64,6 @@ class MediaService extends AdminBaseService
     public function find($id)
     {
         $media = $this->mediaRepository->find($id);
-
         $statusBadge = [
             'status' => $media->status_name,
             'color' => $media->status_color,
@@ -130,15 +129,5 @@ class MediaService extends AdminBaseService
         $data = array_merge($data, $dataModified);
 
         return $this->mediaRepository->update($data, $id);
-    }
-
-    public function skinScore()
-    {
-        return $this->mediaRepository->skinScore();
-    }
-
-    public function awesomenessScore()
-    {
-        return $this->mediaRepository->awesomenessScore();
     }
 }

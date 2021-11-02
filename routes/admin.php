@@ -44,19 +44,19 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('media/moderation', [MediaController::class, 'moderation'])
                 ->middleware(['permission:list medias'])
                 ->name('moderation');
-            Route::get('media/{id}', [MediaController::class, 'view'])
+            Route::get('media/{media}', [MediaController::class, 'view'])
                 ->middleware(['permission:show medias'])
                 ->name('view');
-            Route::post('media/{id}', [MediaController::class, 'update'])
+            Route::post('media/{media}', [MediaController::class, 'update'])
                 ->middleware(['permission:edit medias'])
                 ->name('update');
-            Route::post('reprocess/{id}', [MediaController::class, 'reprocess'])
+            Route::post('reprocess/{media}', [MediaController::class, 'reprocess'])
                 ->middleware(['permission:edit medias'])
                 ->name('reprocess');
-            Route::get('download-original/{id}/{hash}', [MediaController::class, 'downloadOriginal'])
+            Route::get('download-original/{media}/{hash}', [MediaController::class, 'downloadOriginal'])
                 ->middleware(['permission:edit medias'])
                 ->name('downloadOriginal');
-            Route::get('pending/{id}/{order}', [MediaController::class, 'pending'])
+            Route::get('pending/{media}/{order}', [MediaController::class, 'pending'])
                 ->middleware(['permission:show medias'])
                 ->name('pending');
         });
