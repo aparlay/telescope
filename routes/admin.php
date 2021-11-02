@@ -77,7 +77,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
 
         /* E-mail Route */
         Route::get('email', [EmailController::class, 'index'])
-            ->middleware(['permission:list users'])
+            ->middleware(['permission:list emails'])
             ->name('index');
 
         /* Ajax Routes */
@@ -94,7 +94,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('dashboard.index');
 
             Route::get('email', [EmailController::class, 'indexAjax'])
-                ->middleware(['permission:list users'])
+                ->middleware(['permission:list emails'])
                 ->name('email.index');
 
         });
