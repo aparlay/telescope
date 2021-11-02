@@ -404,7 +404,7 @@
                                                             ],
                                                         ]
                                                         @endphp
-                                                        <x-adminlte-datatable id="TipsDatatable" :heads="$heads" :config="$config">
+                                                        <x-adminlte-datatable id="tipsDatatable" :heads="$heads" :config="$config">
                                                         </x-adminlte-datatable>
                                                     </div>
 
@@ -449,10 +449,6 @@
                                                         <x-adminlte-datatable id="subscriptionsDatatable" :heads="$heads" :config="$config">
                                                         </x-adminlte-datatable>
                                                     </div>
-
-
-
-
                                                 </div>
                                             </div>
                                         </div>
