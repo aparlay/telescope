@@ -255,9 +255,29 @@
                                         </div>
                                     </form>
                                 </div>
+
+
                                 <div class="tab-pane" id="upload">
-                                    upload
+                                    <!-- The timeline -->
+                                    <form method="post" action="{{url('media/'.$media->_id)}}" >
+                                        <div class="flow-drop" data-upload-url="{{ route('core.admin.user.media.upload') }}" ondragenter="jQuery(this).addClass('flow-dragover');" ondragend="jQuery(this).removeClass('flow-dragover');" ondrop="jQuery(this).removeClass('flow-dragover');">
+                                            Drop files here to upload or <a class="flow-browse"><u>select from your computer</u></a>
+                                        </div>
+                                        @csrf
+                                        <div class="flow-list col-md-12 mt-3"></div>
+
+                                        <input type="hidden" id="media-file" name="file">
+                                        <input type="hidden" name="reupload_file" value="1" >
+
+                                        <div class="row">
+
+                                            <div class="col-4">
+                                                <button class="btn btn-block btn-primary upload-video-button" name="create-button"><i class="fa fa-upload"></i><strong>Upload</strong></button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -367,7 +387,12 @@
         </div>
     </div>
 @endsection
-
+@section('script')
 @section('js')
-    <script src="{{ asset('admin/assets/js/media.js') }}"></script>
-@endsection
+<script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
+<script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
+<script src="{{ asset('admin/assets/js/media.js') }}"></script>
+@section('css')
+<link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}" >
+@stop
