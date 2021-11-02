@@ -145,10 +145,7 @@ class Media extends BaseModel
         'people' => [],
         'likes' => [],
         'visits' => [],
-        'scores' => [
-            'skin' => 0,
-            'awesomeness' => 0,
-        ],
+        'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]],
         'status' => self::STATUS_QUEUED,
         'is_protected' => false,
         'like_count' => 0,

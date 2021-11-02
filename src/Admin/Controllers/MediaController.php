@@ -51,7 +51,7 @@ class MediaController extends Controller
         $media = new MediaResource($this->mediaService->find($id));
         $skinScore = $this->mediaService->skinScore();
         $awesomenessScore = $this->mediaService->awesomenessScore();
-        $scoreTypes = $media->scores ?? ['skin' => 0, 'awesomeness' => 0];
+        $scoreTypes = $media->scores ?? [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
 
         return view('default_view::admin.pages.media.view', compact('media', 'skinScore', 'awesomenessScore', 'scoreTypes'));
     }
