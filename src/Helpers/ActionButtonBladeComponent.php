@@ -25,6 +25,16 @@ class ActionButtonBladeComponent
     }
 
     /**
+     * @param $color
+     * @param $name
+     * @return string
+     */
+    public static function getAvatarWithName($name, $imagePath): string
+    {
+        return '<img class="table-avatar mr-1.5" src="'.$imagePath.'" alt="'.$name.'">'.$name;
+    }
+
+    /**
      * @param $user
      * @return string
      */

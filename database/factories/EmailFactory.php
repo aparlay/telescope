@@ -23,19 +23,17 @@ class EmailFactory extends Factory
      */
     public function definition()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['status' => 0, 'type' => 0]);
 
         return [
-            'attributes' => [
-                'user' => [
-                    '_id' => new ObjectId($user->_id),
-                    'username' => $user->username,
-                    'avatar' => $user->avatar,
-                ],
-                'to' => $user->email,
-                'status' => $user->status,
-                'type' => $user->type,
+            'user' => [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
             ],
+            'to' => $user->email,
+            'status' => $user->status,
+            'type' => $user->type,
         ];
     }
 }
