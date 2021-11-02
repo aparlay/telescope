@@ -133,7 +133,7 @@ class ProcessMedia implements ShouldQueue
             $media->status = Media::STATUS_FAILED;
             $media->save($withoutTouch);
             Log::error(__CLASS__.PHP_EOL.'Cannot check video duration');
-            //throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
+        //throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
         } else {
             $media->length = (float) $response->GetSec();
             $media->addToSet('processing_log', '3. Duration checked: '.$media->length.' Sec');
