@@ -2,13 +2,16 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UpdateMedia;
+use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Redis;
 
 class UserObserver extends BaseModelObserver
 {
@@ -50,6 +53,11 @@ class UserObserver extends BaseModelObserver
         }
 
         parent::saving($model);
+
+        // Reset the Redis cache
+        $cacheKey = 'SimpleUserCast:'.$model->_id;
+        Redis::del($cacheKey);
+        SimpleUserCast::cacheByUserId($model->_id);
     }
 
     /**

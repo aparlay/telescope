@@ -38,7 +38,6 @@ class BlockTest extends ApiTestCase
                         'username',
                         'avatar',
                         'is_followed',
-                        'is_liked',
                     ],
                 ],
             ])->assertJson(
@@ -57,7 +56,6 @@ class BlockTest extends ApiTestCase
                     'data.user.username' => 'string',
                     'data.user.avatar' => 'string',
                     'data.user.is_followed' => 'boolean',
-                    'data.user.is_liked' => 'boolean',
                 ])
             );
 

@@ -68,7 +68,6 @@ class MediaLikeTest extends ApiTestCase
                     'data.creator.username' => 'string',
                     'data.creator.avatar' => 'string',
                     'data.creator.is_followed' => 'boolean',
-                    'data.creator.is_liked' => 'boolean',
                 ])
             );
 

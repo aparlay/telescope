@@ -22,4 +22,9 @@ trait AnalyticScope
     {
         return $query->whereBetween('created_at', [$start, $end]);
     }
+
+    public function scopeFilterDate(Builder $query, string $start, string $end): Builder
+    {
+        return $query->whereBetween('date', [$start, $end]);
+    }
 }

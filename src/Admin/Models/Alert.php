@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Admin\Models;
 
-use Aparlay\Core\Models\Alert as AlertBase;
+use Aparlay\Core\Models\Alert as BaseAlert;
 
-class Alert extends AlertBase
+class Alert extends BaseAlert
 {
 }
