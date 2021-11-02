@@ -47,12 +47,12 @@
                         'ajax' => route('core.admin.ajax.email.index'),
                         'order' => [[0, 'desc']],
                         'columns' => [
-                            ['data' => 'attributes.user.username', 'visible' => false],
+                            ['data' => 'user.username', 'visible' => false],
                             ['data' => 'user_info', 'orderData' => 0, 'target' => 0],
-                            ['data' => 'attributes.to'],
-                            ['data' => 'attributes.type', 'visible' => false],
+                            ['data' => 'to'],
+                            ['data' => 'type', 'visible' => false],
                             ['data' => 'type_text', 'orderData' => 3, 'target' => 3],
-                            ['data' => 'attributes.status', 'visible' => false],
+                            ['data' => 'status', 'visible' => false],
                             ['data' => 'status_text', 'orderData' => 5, 'target' => 5],
                             ['data' => 'created_at'],
                         ],
@@ -73,14 +73,14 @@
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label for="attributes.user.username">User</label>
-                                                    <input type="text" data-column="0" name="attributes.user.username" class="form-control" id="attributes.user.username" placeholder="Enter username">
+                                                    <label for="user.username">User</label>
+                                                    <input type="text" data-column="0" name="user.username" class="form-control" id="user.username" placeholder="Enter username">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label for="attributes.to">Email</label>
-                                                    <input type="text" data-column="2" name="attributes.to" class="form-control" id="attributes.to" placeholder="Enter email">
+                                                    <label for="to">Email</label>
+                                                    <input type="text" data-column="2" name="to" class="form-control" id="to" placeholder="Enter email">
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">

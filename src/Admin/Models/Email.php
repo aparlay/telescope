@@ -17,9 +17,7 @@ class Email extends EmailBase
      */
     public function getStatusNameAttribute()
     {
-        return isset($this->getStatuses()[$this->attributes['attributes']['status']])
-            ? $this->getStatuses()[$this->attributes['attributes']['status']]
-            : '';
+        return $this->getStatuses()[$this->status];
     }
 
     /**
@@ -27,8 +25,6 @@ class Email extends EmailBase
      */
     public function getTypeNameAttribute()
     {
-        return $this->attributes['attributes']['type'] == 1
-            ? $this->getTypes()[0]
-            : '';
+        return $this->getTypes()[$this->type];
     }
 }

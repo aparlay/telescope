@@ -16,8 +16,8 @@ class EmailService extends AdminBaseService
     {
         $this->emailRepository = new EmailRepository(new Email());
 
-        $this->filterableField = ['attributes.user.username', 'attributes.to', 'attributes.type', 'attributes.status'];
-        $this->sorterableField = ['attributes.user.username', 'attributes.to', 'attributes.type', 'attributes.status', 'created_at'];
+        $this->filterableField = ['user.username', 'to', 'type', 'status'];
+        $this->sorterableField = ['user.username', 'to', 'attributes.type', 'status', 'created_at'];
     }
 
     /**
@@ -54,8 +54,8 @@ class EmailService extends AdminBaseService
             $email->status_text = $email->status_name;
             $email->type_text = $email->type_name;
             $userInfo = [
-                'name' => $email->attributes['user']['username'],
-                'avatar' => $email->attributes['user']['avatar'] ? $email->attributes['user']['avatar'] : '',
+                'name' => $email->user['username'],
+                'avatar' => $email->user['avatar'] ? $email->user['avatar'] : '',
             ];
             $email->user_info = ActionButtonBladeComponent::getAvatarWithName($userInfo['name'], $userInfo['avatar']);
         }
