@@ -44,6 +44,7 @@ class MediaController extends Controller
         ]);
     }
 
+
     public function indexAjax(Route $route)
     {
         return new MediaResource($this->mediaService->getFilteredMedia());
@@ -52,7 +53,7 @@ class MediaController extends Controller
     public function view(Media $media)
     {
         $media = new MediaResource($this->mediaService->find($media->_id));
-        $scoreTypes = $media->scores;
+        $scoreTypes = $media->scores ?? [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
 
         return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes'));
     }

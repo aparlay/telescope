@@ -29,7 +29,7 @@
                                         <div>
                                         <input type="hidden" name="visibility" value="{{ $media->visibility }}">
                                         <input type="hidden" name="is_music_licensed" value="{{ $media->is_music_licensed}}">
-                                            @forelse ($scoreTypes as $scoreType)
+                                            @foreach ($scoreTypes as $scoreType)
                                                 @foreach (\Aparlay\Core\Admin\Models\Media::getSkinScores() as $score)
                                                     @if($scoreType['type'] == 'skin')
                                                         <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
@@ -40,22 +40,13 @@
                                                         </div>
                                                     @endif
                                                 @endforeach
-                                            @empty
-                                                @foreach (\Aparlay\Core\Admin\Models\Media::getSkinScores() as $score)
-                                                    <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
-                                                        <label class="btn btn-outline-secondary skin_score_lable">
-                                                            <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($loop->first) checked @endif>
-                                                            {{ $score }}
-                                                        </label>
-                                                    </div>
-                                                @endforeach
-                                            @endforelse
+                                            @endforeach
                                         </div>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Awesomeness Score</b>
                                         <div>
-                                            @forelse($scoreTypes as $scoreType)
+                                            @foreach($scoreTypes as $scoreType)
                                                 @foreach (\Aparlay\Core\Admin\Models\Media::getAwesomenessScores() as $score)
                                                     @if($scoreType['type'] == 'awesomeness')
                                                         <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
@@ -66,16 +57,7 @@
                                                         </div>
                                                     @endif
                                                 @endforeach
-                                            @empty
-                                                @foreach (\Aparlay\Core\Admin\Models\Media::getAwesomenessScores() as $score)
-                                                    <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
-                                                        <label class="btn btn-outline-secondary awesomeness_score_label">
-                                                            <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($loop->first) checked @endif>
-                                                            {{ $score }}
-                                                        </label>
-                                                    </div>
-                                                @endforeach
-                                            @endforelse
+                                            @endforeach
                                         </div>
                                     </li>
                                 </ul>
@@ -216,7 +198,7 @@
                                             <label for="updated-at" class="col-sm-2 col-form-label">Skin Score</label>
                                             <div class="col-sm-10 mt-2">
                                                 <div>
-                                                    @forelse ($scoreTypes as $scoreType)
+                                                    @foreach ($scoreTypes as $scoreType)
                                                         @foreach (\Aparlay\Core\Admin\Models\Media::getSkinScores() as $score)
                                                             @if($scoreType['type'] == 'skin')
                                                                 <div id="skin_score_form_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
@@ -227,16 +209,7 @@
                                                                 </div>
                                                             @endif
                                                         @endforeach
-                                                    @empty
-                                                        @foreach (\Aparlay\Core\Admin\Models\Media::getSkinScores() as $score)
-                                                            <div id="skin_score_form_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
-                                                                <label class="btn btn-outline-secondary skin_score_lable_form">
-                                                                    <input type="radio" id="media_skin_score_form_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($loop->first) checked @endif>
-                                                                    {{ $score }}
-                                                                </label>
-                                                            </div>
-                                                        @endforeach
-                                                    @endforelse
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>
@@ -244,7 +217,7 @@
                                             <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
                                             <div class="col-sm-10 mt-2">
                                                 <div>
-                                                    @forelse($scoreTypes as $scoreType)
+                                                    @foreach($scoreTypes as $scoreType)
                                                         @foreach (\Aparlay\Core\Admin\Models\Media::getAwesomenessScores() as $score)
                                                             @if($scoreType['type'] == 'awesomeness')
                                                                 <div id="awesomeness_score_form_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
@@ -255,16 +228,7 @@
                                                                 </div>
                                                             @endif
                                                         @endforeach
-                                                    @empty
-                                                        @foreach (\Aparlay\Core\Admin\Models\Media::getAwesomenessScores() as $score)
-                                                            <div id="awesomeness_score_form_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
-                                                                <label class="btn btn-outline-secondary awesomeness_score_label_form">
-                                                                    <input type="radio" id="media_awesomeness_score_form_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($loop->first) checked @endif>
-                                                                    {{ $score }}
-                                                                </label>
-                                                            </div>
-                                                        @endforeach
-                                                    @endforelse
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>
