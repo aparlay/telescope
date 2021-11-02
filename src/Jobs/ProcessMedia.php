@@ -87,7 +87,7 @@ class ProcessMedia implements ShouldQueue
         [$response, $status] = $client->Quality($optimizeReq)->wait();
 
         if ($status->code !== 0) {
-            $media->status = Media::STATUS_FAILED;
+            $media->addToSet('processing_log', 'Error: Cannot check video quality');
             $media->save($withoutTouch);
         }
 
@@ -109,7 +109,7 @@ class ProcessMedia implements ShouldQueue
         // check audio
         [$response, $status] = $client->LowVolume($optimizeReq)->wait();
         if ($status->code !== 0) {
-            $media->status = Media::STATUS_FAILED;
+            $media->addToSet('processing_log', 'Error: Cannot check low audio');
             $media->save($withoutTouch);
         }
 
@@ -130,7 +130,7 @@ class ProcessMedia implements ShouldQueue
 
         [$response, $status] = $client->Duration($optimizeReq)->wait();
         if ($status->code !== 0) {
-            $media->status = Media::STATUS_FAILED;
+            $media->addToSet('processing_log', 'Error: Cannot check video duration');
             $media->save($withoutTouch);
             Log::error(__CLASS__.PHP_EOL.'Cannot check video duration');
         //throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
@@ -142,10 +142,9 @@ class ProcessMedia implements ShouldQueue
                 $optimizeReq->setDes($src);
                 [$response, $status] = $client->Trim($optimizeReq)->wait();
                 if ($status->code !== 0) {
-                    $media->status = Media::STATUS_FAILED;
+                    $media->addToSet('processing_log', 'Error: Cannot do video trimming');
                     $media->save($withoutTouch);
                     Log::error(__CLASS__.PHP_EOL.'Cannot do video trim');
-                    throw new Exception(__CLASS__.PHP_EOL.'Cannot do video trim');
                 }
                 $media->length = 60.0;
                 $media->addToSet('processing_log', '4. Video is trimmed to 60 Sec: Ok');
@@ -160,13 +159,13 @@ class ProcessMedia implements ShouldQueue
             $optimizeReq->setDes($src);
             [$response, $status] = $client->NormalizeAudio($optimizeReq)->wait();
             if ($status->code !== 0) {
-                $media->status = Media::STATUS_FAILED;
+                $media->addToSet('processing_log', 'Error: Cannot normalize audio');
                 $media->save($withoutTouch);
                 Log::error(__CLASS__.PHP_EOL.'Cannot do audio normalization');
-                throw new Exception(__CLASS__.PHP_EOL.'Cannot do audio normalization');
+            } else {
+                $media->addToSet('processing_log', '5. Audio normalization: Ok');
+                $media->save($withoutTouch);
             }
-            $media->addToSet('processing_log', '5. Audio normalization: Ok');
-            $media->save($withoutTouch);
         }
 
         // watermark
@@ -177,10 +176,9 @@ class ProcessMedia implements ShouldQueue
         $optimizeReq->setUsername('@'.$media->userObj->username);
         [$response, $status] = $client->Watermark($optimizeReq)->wait();
         if ($status->code !== 0) {
-            $media->status = Media::STATUS_FAILED;
+            $media->addToSet('processing_log', 'Error: Cannot do video watermarking');
             $media->save($withoutTouch);
             Log::error(__CLASS__.PHP_EOL.'Cannot do video watermarking');
-            throw new Exception(__CLASS__.PHP_EOL.'Cannot do video watermarking');
         }
         $media->addToSet('processing_log', '6. Video Watermarking: Ok');
         $media->save($withoutTouch);
@@ -191,10 +189,10 @@ class ProcessMedia implements ShouldQueue
         $uploadReq->setDes('videos/'.$mp4ConvertedFile);
         [$response, $status] = $client->UploadVideo($uploadReq)->wait();
         if ($status->code !== 0) {
-            $media->status = Media::STATUS_FAILED;
+            $media->addToSet('processing_log', 'Error: Cannot upload video');
             $media->save($withoutTouch);
-            Log::error(__CLASS__.PHP_EOL.'Cannot do video upload');
-            throw new Exception(__CLASS__.PHP_EOL.'Cannot do video upload');
+            Log::error(__CLASS__.PHP_EOL.'Cannot upload video');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot upload video');
         }
 
         $media->file = config('app.cdn,videos').$mp4ConvertedFile;
@@ -213,10 +211,10 @@ class ProcessMedia implements ShouldQueue
         $optimizeReq->setDes($cover);
         [$response, $status] = $client->CreateCover($optimizeReq)->wait();
         if ($status->code !== 0) {
-            $media->status = Media::STATUS_FAILED;
+            $media->addToSet('processing_log', 'Error: Cannot create video cover');
             $media->save($withoutTouch);
-            Log::error(__CLASS__.PHP_EOL.'Cannot do video cover');
-            throw new Exception(__CLASS__.PHP_EOL.'Cannot do video cover');
+            Log::error(__CLASS__.PHP_EOL.'Cannot create video cover');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot create video cover');
         }
         $media->addToSet('processing_log', '8. Video Cover generating: Ok');
         $media->save($withoutTouch);
@@ -225,11 +223,12 @@ class ProcessMedia implements ShouldQueue
         $uploadReq->setDes('covers/'.str_replace('.mp4', '.jpg', $mp4ConvertedFile));
         [$response, $status] = $client->UploadCover($uploadReq)->wait();
         if ($status->code !== 0) {
-            $media->status = Media::STATUS_FAILED;
+            $media->addToSet('processing_log', 'Error: Cannot upload cover');
             $media->save($withoutTouch);
-            Log::error(__CLASS__.PHP_EOL.'Cannot do cover upload');
-            throw new Exception(__CLASS__.PHP_EOL.'Cannot do cover upload');
+            Log::error(__CLASS__.PHP_EOL.'Cannot upload cover');
+            throw new Exception(__CLASS__.PHP_EOL.'Cannot upload cover');
         }
+        $media->status = Media::STATUS_COMPLETED;
         $media->addToSet('processing_log', '9. Video Cover uploading: Ok');
         $media->save($withoutTouch);
 
@@ -239,7 +238,7 @@ class ProcessMedia implements ShouldQueue
             $removeReq->setFile($toRemoveFile);
             [$response, $status] = $client->Remove($removeReq)->wait();
             if ($status->code !== 0) {
-                $media->status = Media::STATUS_FAILED;
+                $media->addToSet('processing_log', 'Error: Cannot remove '.$toRemoveFile);
                 $media->save($withoutTouch);
                 Log::error(__CLASS__.PHP_EOL.'Cannot remove '.$toRemoveFile);
                 throw new Exception(__CLASS__.PHP_EOL.'Cannot remove '.$toRemoveFile);
