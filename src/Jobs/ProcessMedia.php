@@ -258,17 +258,17 @@ class ProcessMedia implements ShouldQueue
         $media->save($touchWithTrue);
 
         $media->refresh();
-//        $media->notify(new VideoPending());
-//        WsChannel::Push((string) $media->creator['_id'], 'media.create', [
-//            'media' => [
-//                '_id' => (string) $media->_id,
-//                'file' => Cdn::video($media->is_completed ? $media->file : 'default.mp4'),
-//                'cover' => Cdn::cover($media->is_completed ? $media->filename.'.jpg' : 'default.jpg'),
-//                'status' => $media->status,
-//            ],
-//            'message' => 'All done',
-//            'progress' => 100,
-//        ]);
+        $media->notify(new VideoPending());
+        WsChannel::Push((string) $media->creator['_id'], 'media.create', [
+            'media' => [
+                '_id' => (string) $media->_id,
+                'file' => Cdn::video($media->is_completed ? $media->file : 'default.mp4'),
+                'cover' => Cdn::cover($media->is_completed ? $media->filename.'.jpg' : 'default.jpg'),
+                'status' => $media->status,
+            ],
+            'message' => 'All done',
+            'progress' => 100,
+        ]);
     }
 
     public function failed(Throwable $exception): void
