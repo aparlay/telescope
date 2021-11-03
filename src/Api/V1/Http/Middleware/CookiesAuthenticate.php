@@ -4,8 +4,6 @@ namespace Aparlay\Core\Api\V1\Http\Middleware;
 
 use Closure;
 use Cookie;
-use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Token;
 
 class CookiesAuthenticate

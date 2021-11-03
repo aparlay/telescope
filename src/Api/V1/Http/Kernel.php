@@ -16,7 +16,8 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'device-id' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceId::class,
         'cookies-auth' => \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
-        'device-id-trottle' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceIdTrottle::class,
+        'optional-auth' => \Aparlay\Core\Api\V1\Http\Middleware\OptionalAuthenticate::class,
+        'device-id-throttle' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceIdThrottle::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
     ];
 
@@ -29,6 +30,7 @@ class Kernel extends HttpKernel
      */
     protected $middlewarePriority = [
         \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
+        \Aparlay\Core\Api\V1\Http\Middleware\OptionalAuthenticate::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ];
 }

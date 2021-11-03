@@ -4,7 +4,7 @@ namespace Aparlay\Core\Api\V1\Http\Middleware;
 
 use Illuminate\Routing\Middleware\ThrottleRequests;
 
-class DeviceIdTrottle extends ThrottleRequests
+class DeviceIdThrottle extends ThrottleRequests
 {
     protected function resolveRequestSignature($request)
     {
