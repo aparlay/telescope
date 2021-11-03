@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use MongoDB\BSON\ObjectId;
 use Throwable;
 
 class DeleteUserMedia implements ShouldBeUnique
@@ -20,7 +21,7 @@ class DeleteUserMedia implements ShouldBeUnique
     use Queueable;
     use SerializesModels;
 
-    public User $user;
+    public string $userId;
 
     /**
      * The number of times the job may be attempted.
@@ -48,9 +49,8 @@ class DeleteUserMedia implements ShouldBeUnique
      */
     public function __construct(string $userId)
     {
-        if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'User not found!');
-        }
+        $this->userId = $userId;
+        User::findOrFail(new ObjectId($userId));
     }
 
     /**
@@ -58,12 +58,7 @@ class DeleteUserMedia implements ShouldBeUnique
      */
     public function handle(): void
     {
-        Media::creator($this->user->_id)->chunk(200, function ($models) {
-            foreach ($models as $model) {
-                $model->status = Media::STATUS_USER_DELETED;
-                $model->save();
-            }
-        });
+        Media::creator($this->userId)->update(['status' => Media::STATUS_USER_DELETED]);
     }
 
     public function failed(Throwable $exception): void

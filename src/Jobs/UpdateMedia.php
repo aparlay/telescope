@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use MongoDB\BSON\ObjectId;
 use Throwable;
 
 class UpdateMedia implements ShouldQueue
@@ -22,7 +23,7 @@ class UpdateMedia implements ShouldQueue
     use SerializesModels;
 
     public User $user;
-    public string $user_id;
+    public string $userId;
 
     public array $attributes;
 
@@ -53,10 +54,8 @@ class UpdateMedia implements ShouldQueue
     public function __construct(string $userId, array $attributes)
     {
         $this->attributes = $attributes;
-        $this->user_id = $userId;
-        if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'User not found!');
-        }
+        $this->userId = $userId;
+        User::findOrFail(new ObjectId($userId));
     }
 
     /**
@@ -64,7 +63,7 @@ class UpdateMedia implements ShouldQueue
      */
     public function handle(): void
     {
-        Media::creator($this->user_id)->update($this->attributes);
+        Media::creator($this->userId)->update($this->attributes);
     }
 
     public function failed(Throwable $exception): void

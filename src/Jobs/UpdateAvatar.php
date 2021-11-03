@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use MongoDB\BSON\ObjectId;
 use Throwable;
 
 class UpdateAvatar implements ShouldQueue
@@ -25,7 +26,7 @@ class UpdateAvatar implements ShouldQueue
 
     public User $user;
     public string $avatar;
-    public string $user_id;
+    public string $userId;
 
     /**
      * The number of times the job may be attempted.
@@ -53,10 +54,8 @@ class UpdateAvatar implements ShouldQueue
      */
     public function __construct(string $userId)
     {
-        $this->user_id = $userId;
-        if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'User not found!');
-        }
+        $this->userId = $userId;
+        User::findOrFail(new ObjectId($userId));
     }
 
     /**
@@ -66,13 +65,14 @@ class UpdateAvatar implements ShouldQueue
      */
     public function handle()
     {
-        $avatar = $this->user->avatar;
-        Media::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
-        Follow::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
-        Follow::user($this->user->_id)->update(['user.avatar' => $avatar]);
-        Block::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
-        Block::user($this->user->_id)->update(['user.avatar' => $avatar]);
-        MediaLike::creator($this->user->_id)->update(['creator.avatar' => $avatar]);
+        $user = User::findOrFail(new ObjectId($this->userId));
+        $avatar = $user->avatar;
+        Media::creator($user->_id)->update(['creator.avatar' => $avatar]);
+        Follow::creator($user->_id)->update(['creator.avatar' => $avatar]);
+        Follow::user($user->_id)->update(['user.avatar' => $avatar]);
+        Block::creator($user->_id)->update(['creator.avatar' => $avatar]);
+        Block::user($user->_id)->update(['user.avatar' => $avatar]);
+        MediaLike::creator($user->_id)->update(['creator.avatar' => $avatar]);
     }
 
     public function failed(Throwable $exception)
