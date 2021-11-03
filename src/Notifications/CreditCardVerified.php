@@ -6,6 +6,7 @@ use Aparlay\Core\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
+use MongoDB\BSON\ObjectId;
 
 class CreditCardVerified extends Notification
 {
@@ -21,7 +22,7 @@ class CreditCardVerified extends Notification
      *
      * @return void
      */
-    public function __construct(string $userId, string $data, string $mid, int $tried)
+    public function __construct(string $userId, array $data, string $mid, int $tried)
     {
         $this->userId = $userId;
         $this->data = $data;
@@ -48,8 +49,9 @@ class CreditCardVerified extends Notification
      */
     public function toSlack($notifiable)
     {
+        $user = User::findOrFail(new ObjectId($this->userId));
         $message = 'New credit card has been verified after '.$this->tried.' attempts.';
-        $message .= PHP_EOL.'_*User:*_ '.User::user($this->userId)->slack_admin_url;
+        $message .= PHP_EOL.'_*User:*_ '.$user->slack_admin_url;
         $message .= PHP_EOL.'_*Processing Mid:*_ '.$this->mid;
         foreach ($this->data as $key => $value) {
             $message .= PHP_EOL.'_*'.$key.':*_ '.$value;
