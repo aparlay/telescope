@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
+use Aparlay\Core\Api\V1\Models\Scopes\MediaScope;
 use Aparlay\Core\Models\Media as MediaBase;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notifiable;
@@ -81,6 +82,11 @@ class Media extends MediaBase
      */
     use Notifiable;
     use CreatorFieldTrait;
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new MediaScope());
+    }
 
     /**
      * Get the Slack representation of the notification.
