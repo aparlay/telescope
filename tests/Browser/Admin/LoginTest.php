@@ -15,7 +15,7 @@ class LoginTest extends DuskTestCase
      *
      * @test
      * @return void
-     * @throws \ThrowableN
+     * @throws \Throwable
      */
     public function visitAdmin()
     {
