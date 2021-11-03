@@ -31,7 +31,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
 
         /* Authentication Group */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
-            Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list')->withoutMiddleware(['auth:api']);
             Route::post('/', [MediaController::class, 'store'])->name('create');
             Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
             Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
@@ -39,9 +38,10 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
         });
 
-        /* Cache Group */
-        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
-            Route::get('/{media}', [MediaController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
+        /* Optional Auth Group */
+        Route::middleware(['cookies-auth', 'optional-auth'])->group(function () {
+            Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
+            Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
         });
     });
 
