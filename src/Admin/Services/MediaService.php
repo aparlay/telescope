@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\Cdn;
+use Aparlay\Core\Jobs\UploadMedia;
 use Illuminate\Http\Request;
 
 class MediaService extends AdminBaseService
@@ -129,5 +130,11 @@ class MediaService extends AdminBaseService
         $data = array_merge($data, $dataModified);
 
         return $this->mediaRepository->update($data, $id);
+    }
+
+    public function reupload($media)
+    {
+        $this->mediaRepository->update(['file' => request()->input('file')], $media->_id);
+        UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'))->onQueue('lowpriority');
     }
 }

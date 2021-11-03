@@ -59,6 +59,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('pending/{media}/{order}', [MediaController::class, 'pending'])
                 ->middleware(['permission:show medias'])
                 ->name('pending');
+            Route::post('media/{media}/reupload', [MediaController::class, 'reupload'])
+                ->middleware(['permission:upload medias'])
+                ->name('reupload');
         });
 
         /* User Routes */

@@ -2,13 +2,13 @@
 
 namespace Aparlay\Core\Admin\Requests;
 
-use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Rules\MediaExist;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class MediaUpdateRequest extends FormRequest
+class MediaReuploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,22 +27,8 @@ class MediaUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        dd(request()->all());
         return [
-            'skin_score' => [
-                'nullable',
-                'integer',
-                Rule::in(array_keys(Media::getSkinScores())),
-            ],
-            'awesomeness_score' => ['nullable',
-                'integer',
-                Rule::in(array_keys(Media::getAwesomenessScores())),
-            ],
-            'description' => ['nullable', 'string'],
-            'status' => [
-                'required',
-                Rule::in(array_keys(Media::getStatuses())),
-            ],
+            'file' => ['required', new MediaExist('upload')],
         ];
     }
 

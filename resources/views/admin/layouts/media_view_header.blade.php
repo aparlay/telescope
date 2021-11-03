@@ -23,7 +23,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 @if ($media->files_history)
                                     @foreach ($media->files_history as $file)
-                                        <a class="dropdown-item" href="{{url('download-original/' . $media->_id . '/' . $file['hash'] )}}">{{ $file['created_at'] }} - {{ $size->fileSize($file['size']) }}</a>
+                                        <a class="dropdown-item" href="{{ route('core.admin.media.downloadOriginal', ['media' => $media->_id, 'hash' => $file['hash']]) }}">{{ $file['created_at'] }} - {{ $size->fileSize($file['size']) }}</a>
                                     @endforeach
                                 @endif
                             </div>

@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Requests\MediaReuploadRequest;
 use Aparlay\Core\Admin\Requests\MediaUpdateRequest;
 use Aparlay\Core\Admin\Resources\MediaResource;
 use Aparlay\Core\Admin\Services\MediaService;
@@ -112,21 +113,26 @@ class MediaController extends Controller
             }
         }
 
-        $backblaze = Storage::disk('upload');
+        $backblaze = Storage::disk('b2-videos');
 
         try {
             $b2File = $matchedFile['file'];
             if ($backblaze->exists($b2File)) {
-                return response()->download($b2File, 'orig.'.$b2File, [
-                    'Content-Type'  => Storage::mimeType($b2File),
-                ]);
+                return $backblaze->download($b2File, 'orig.'.$b2File, ['Content-Type' => $backblaze->mimeType($b2File)]);
             }
 
-            return redirect()->route('core.admin.media.view', ['id' => $media->_id])->with('danger', 'Video file not found.');
+            return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with('danger', 'Video file not found.');
         } catch (\Exception $e) {
-            return redirect()->route('core.admin.media.view', ['id' => $media->_id])->with('danger', 'Video file download failed.');
+            return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with('danger', 'Video file download failed.');
         }
 
-        return redirect()->route('core.admin.media.view', ['id' => $media->_id]);
+        return redirect()->route('core.admin.media.view', ['media' => $media->_id]);
+    }
+
+    public function reupload(Media $media, MediaReuploadRequest $request)
+    {
+        $this->mediaService->reupload($media);
+
+        return redirect()->back()->with(['success' => 'Video uploaded successfully']);
     }
 }
