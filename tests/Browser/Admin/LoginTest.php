@@ -2,8 +2,9 @@
 
 namespace Aparlay\Core\Tests\Browser\Admin;
 
-use Aparlay\Core\Models\User;
+use Aparlay\Core\Admin\Models\User;
 use Laravel\Dusk\Browser;
+use MongoDB\BSON\ObjectId;
 use Tests\DuskTestCase;
 
 class LoginTest extends DuskTestCase
@@ -33,12 +34,7 @@ class LoginTest extends DuskTestCase
      */
     public function loginAdmin()
     {
-        $active_admin = User::factory()->create([
-            'email' => uniqid('alua_').'@aparly.com',
-            'status' => User::STATUS_ACTIVE,
-            'type' => 1,
-        ]);
-
+        $active_admin = User::role('super-administrator')->first();
         $this->browse(function ($browser) use ($active_admin) {
             $browser->visit('/login')
                     ->type('email', $active_admin->email)
