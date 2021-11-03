@@ -50,7 +50,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-trottle'])-
             ->where(['type' => '(likes|blocks|followers|followings|hashtags)'])->name('list');
 
         Route::post('/{user}/report', [ReportController::class, 'user'])->name('report');
-        Route::get('/{user}/media', [MediaController::class, 'listByUser'])->name('media.list');
+        Route::middleware(['cookies-auth', 'optional-auth'])->get('/{user}/media', [MediaController::class, 'listByUser'])->name('media.list');
 
         /* Authentication Group with user prifix */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {

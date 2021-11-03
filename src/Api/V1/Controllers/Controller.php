@@ -7,7 +7,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @OA\Info(
@@ -287,11 +286,6 @@ class Controller extends BaseController
     use ValidatesRequests;
 
     public $repository;
-
-    public function __construct()
-    {
-        Auth::shouldUse('api');
-    }
 
     /**
      * success response method.
