@@ -8,7 +8,6 @@ use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UpdateMedia;
-use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Redis;
@@ -79,8 +78,8 @@ class UserObserver extends BaseModelObserver
             switch ($model->status) {
                 case User::STATUS_DEACTIVATED:
                 case User::STATUS_BLOCKED:
-                    dispatch((new DeleteUserMedia((string) $model->_id))->onQueue('low'));
-                    dispatch((new DeleteUserConnect((string) $model->_id))->onQueue('low'));
+                    dispatch((new DeleteUserMedia((string) $model->_id)));
+                    dispatch((new DeleteUserConnect((string) $model->_id)));
                     break;
             }
         }

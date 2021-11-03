@@ -21,8 +21,6 @@ class DeleteAvatar implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public User $user;
-
     public string $file;
 
     /**
@@ -47,12 +45,9 @@ class DeleteAvatar implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(string $userId, string $file, array $disks = [])
+    public function __construct(string $file)
     {
         $this->file = $file;
-        if (($this->user = User::user($userId)->first()) === null) {
-            throw new InvalidArgumentException(__CLASS__.PHP_EOL.'User not found!');
-        }
     }
 
     /**

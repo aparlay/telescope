@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
@@ -11,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use MongoDB\BSON\ObjectId;
 use Throwable;
 
 class DeleteMediaLike implements ShouldQueue
@@ -20,9 +22,7 @@ class DeleteMediaLike implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public User $user;
-
-    public string $media_id;
+    public string $mediaId;
 
     /**
      * The number of times the job may be attempted.
@@ -48,13 +48,11 @@ class DeleteMediaLike implements ShouldQueue
      *
      * @throws Exception
      */
-    public function __construct(string $mediaId, string $userId)
+    public function __construct(string $mediaId)
     {
-        if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'User not found!');
-        }
-
-        $this->media_id = $mediaId;
+        $this->onQueue('low');
+        $this->mediaId = $mediaId;
+        Media::findOrFail(new ObjectId($mediaId));
     }
 
     /**
@@ -62,11 +60,7 @@ class DeleteMediaLike implements ShouldQueue
      */
     public function handle(): void
     {
-        MediaLike::media($this->media_id)->chunk(200, function ($models) {
-            foreach ($models as $model) {
-                $model->delete();
-            }
-        });
+        MediaLike::media($this->mediaId)->delete();
     }
 
     public function failed(Throwable $exception): void

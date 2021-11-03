@@ -152,7 +152,7 @@ class UserService extends AdminBaseService
             }
 
             if (! str_contains($oldFileName, 'default_')) {
-                $deleteOldFiles = new DeleteAvatar((string) $user->_id, basename($oldFileName));
+                $deleteOldFiles = new DeleteAvatar(basename($oldFileName));
                 dispatch($deleteOldFiles->delay(100)->onQueue('low'));
             }
         }

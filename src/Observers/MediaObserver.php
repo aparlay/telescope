@@ -118,7 +118,7 @@ class MediaObserver extends BaseModelObserver
             );
             $media->userObj->save();
 
-            dispatch((new DeleteMediaLike((string) $media->_id, (string) $media->userObj->_id))->onQueue('low'));
+            dispatch((new DeleteMediaLike((string) $media->_id))->onQueue('low'));
         }
     }
 
@@ -143,6 +143,6 @@ class MediaObserver extends BaseModelObserver
         );
         $creatorUser->save();
 
-        dispatch((new DeleteMediaLike((string) $media->_id, (string) $creatorUser->_id))->onQueue('low'));
+        dispatch((new DeleteMediaLike((string) $media->_id))->onQueue('low'));
     }
 }

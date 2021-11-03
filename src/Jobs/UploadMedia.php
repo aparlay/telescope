@@ -51,6 +51,7 @@ class UploadMedia implements ShouldQueue
      */
     public function __construct(string|ObjectId $userId, string|ObjectId $mediaId, string $file)
     {
+        $this->onQueue('low');
         if (($this->user = User::user($userId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'User not found with id '.$userId);
         }
