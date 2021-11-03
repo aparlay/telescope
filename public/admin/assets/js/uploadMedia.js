@@ -6,7 +6,7 @@ $(document).ready(function() {
     if(!flow.support) location.href = '/user/index';
     flow.assignBrowse(document.getElementById('media-file'));
     $('.upload-video-button').prop("disabled",true);
-    
+
     $('.flow-drop').show();
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
     var r = new Flow({
@@ -67,7 +67,7 @@ $(document).ready(function() {
         $self.find('.flow-file-progress').text('(completed)');
         $self.find('.flow-file-pause, .flow-file-resume').remove();
         var response = JSON.parse(message);
-        $('#media-file').val(response.file);
+        $('#media_file').val(response.data.file);
     });
     r.on('fileError', function(file, message){
         // Reflect that the file upload has resulted in error
