@@ -43,7 +43,6 @@ class LoginTest extends DuskTestCase
             'email_verified' => true,
         ]);
         $super_admin = User::find($super_admin->_id);
-
         $super_admin->assignRole('super-administrator');
 
         $this->browse(function ($browser) use ($super_admin) {
