@@ -20,7 +20,7 @@ class OptionalAuthenticate extends Authenticate
     public function handle($request, Closure $next, ...$guards)
     {
         try {
-            $this->authenticate($guards);
+            $this->authenticate($request, $guards);
         } catch (AuthenticationException $e) {
             // dont do anything
         }
