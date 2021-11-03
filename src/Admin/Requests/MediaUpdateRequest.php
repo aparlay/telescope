@@ -28,6 +28,7 @@ class MediaUpdateRequest extends FormRequest
     public function rules()
     {
         dd(request()->all());
+
         return [
             'skin_score' => [
                 'nullable',
