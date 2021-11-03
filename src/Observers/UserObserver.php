@@ -78,7 +78,6 @@ class UserObserver extends BaseModelObserver
             switch ($model->status) {
                 case User::STATUS_DEACTIVATED:
                 case User::STATUS_BLOCKED:
-                case User::STATUS_SUSPENDED:
                     dispatch((new DeleteUserMedia((string) $model->_id)));
                     dispatch((new DeleteUserConnect((string) $model->_id)));
                     break;
