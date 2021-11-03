@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\User;
-use Aparlay\Core\Admin\Requests\UserRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
 use Aparlay\Core\Admin\Requests\UserUpdateRequest;
 use Aparlay\Core\Admin\Resources\UserResource;
@@ -54,7 +53,7 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @param UserRequest $request
+     * @param UserUpdateRequest $request
      * @return RedirectResponse
      */
     public function update(User $user, UserUpdateRequest $request): RedirectResponse
@@ -66,7 +65,7 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @param $status
+     * @param UserStatusRequest $request
      * @return RedirectResponse
      */
     public function updateStatus(User $user, UserStatusRequest $request): RedirectResponse
