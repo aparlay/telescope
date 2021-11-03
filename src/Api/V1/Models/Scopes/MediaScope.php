@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Scope;
 
 class MediaScope implements Scope
 {
-
     public function apply(Builder $builder, Model $model)
     {
         $builder->whereIn('status', [
