@@ -11,6 +11,7 @@ class MediaExist implements Rule
     {
         $this->disk = $disk;
     }
+
     /**
      * Determine if the validation rule passes.
      *
