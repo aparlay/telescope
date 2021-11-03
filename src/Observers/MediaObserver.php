@@ -104,7 +104,7 @@ class MediaObserver extends BaseModelObserver
     public function saved($media): void
     {
         if ($media->status === Media::STATUS_USER_DELETED && $media->isDirty('status')) {
-            $media->userObj->media_count--;
+            $media->userObj->media_count = Media::creator($media->creator['_id'])->availableForOwner()->count();
 
             $file = config('app.cdn.videos').$media->file;
             $cover = config('app.cdn.covers').$media->filename.'.jpg';
@@ -132,7 +132,7 @@ class MediaObserver extends BaseModelObserver
     public function deleted($media): void
     {
         $creatorUser = $media->userObj;
-        $creatorUser->media_count--;
+        $creatorUser->media_count = Media::creator($media->creator['_id'])->availableForOwner()->count();
 
         $file = config('app.cdn.videos').$media->file;
         $cover = config('app.cdn.covers').$media->filename.'.jpg';

@@ -63,10 +63,29 @@ class DeleteUserConnect implements ShouldQueue
      */
     public function handle()
     {
-        Follow::creator($this->userId)->update(['is_deleted' => true]);
-        Follow::user($this->userId)->update(['is_deleted' => true]);
-        Block::creator($this->userId)->update(['is_deleted' => true]);
-        Block::user($this->userId)->update(['is_deleted' => true]);
+        Follow::creator($this->userId)->chunk(200, function ($models) {
+            foreach ($models as $model) {
+                $model->delete();
+            }
+        });
+
+        Follow::user($this->userId)->chunk(200, function ($models) {
+            foreach ($models as $model) {
+                $model->delete();
+            }
+        });
+
+        Block::creator($this->userId)->chunk(200, function ($models) {
+            foreach ($models as $model) {
+                $model->delete();
+            }
+        });
+
+        Block::user($this->userId)->chunk(200, function ($models) {
+            foreach ($models as $model) {
+                $model->delete();
+            }
+        });
     }
 
     public function failed(Throwable $exception)

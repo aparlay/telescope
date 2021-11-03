@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
@@ -12,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
@@ -61,6 +63,26 @@ class DeleteMediaLike implements ShouldQueue
     public function handle(): void
     {
         MediaLike::media($this->mediaId)->delete();
+        $media = Media::findOrFail(new ObjectId($this->mediaId));
+        $user = $media->userObj;
+
+        $likeCount = MediaLike::user($media->creator['_id'])->count();
+        $user->like_count = $likeCount;
+        $user->removeFromSet('likes', [
+            '_id' => new ObjectId($media->creator['_id']),
+            'username' => $media->creator['username'],
+            'avatar' => $media->creator['avatar'],
+        ]);
+        $user->count_fields_updated_at = array_merge(
+            $user->count_fields_updated_at,
+            ['likes' => DT::utcNow()]
+        );
+        $user->save();
+
+        // Reset the Redis cache
+        $cacheKey = (new MediaLike())->getCollection().':creator:'.$media->creator['_id'];
+        Redis::del($cacheKey);
+        MediaLike::cacheByUserId($media->creator['_id']);
     }
 
     public function failed(Throwable $exception): void

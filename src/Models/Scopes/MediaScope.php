@@ -54,7 +54,7 @@ trait MediaScope
 
     public function scopeIsDeleted(Builder $query): Builder
     {
-        return $query->where('status', Media::STATUS_DENIED);
+        return $query->where('status', Media::STATUS_USER_DELETED);
     }
 
     public function scopeInReview(Builder $query): Builder
