@@ -3,15 +3,15 @@
 namespace Aparlay\Core\Tests\Browser\Admin;
 
 use Aparlay\Core\Admin\Models\User;
-use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Dusk\Browser;
+use Spatie\Permission\Models\Role;
+use Tests\DuskTestCase;
 
 class LoginTest extends DuskTestCase
 {
     /**
-     * A test if admin login page is working.NN
+     * A test if admin login page is working.NN.
      *
      * @test
      * @return void
@@ -52,7 +52,5 @@ class LoginTest extends DuskTestCase
                     ->press('Sign In')
                     ->assertPathIs('/dashboard');
         });
-
-
     }
 }
