@@ -11,7 +11,7 @@ use Tests\DuskTestCase;
 class LoginTest extends DuskTestCase
 {
     /**
-     * A test if admin login page is working.NN.
+     * A test if admin login page is working.
      *
      * @test
      * @return void
