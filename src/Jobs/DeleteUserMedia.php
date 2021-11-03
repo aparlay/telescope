@@ -59,7 +59,7 @@ class DeleteUserMedia implements ShouldBeUnique
      */
     public function handle(): void
     {
-        Media::creator($this->userId)->update(['status' => Media::STATUS_USER_DELETED]);
+        Media::creator($this->userId)->delete();
     }
 
     public function failed(Throwable $exception): void
