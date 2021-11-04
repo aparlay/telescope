@@ -48,7 +48,7 @@
                             'orderMulti' => false,
                             'autoWidth' => false,
                             'ajax' => route('core.admin.ajax.user.index'),
-                            'order' => [[8, 'asc']],
+                            'order' => [[10, 'desc']],
                             'columns' => [
                                 ['data' => 'username', 'visible' => false],
                                 ['data' => 'username_avatar', 'orderData' => 0, 'target' => 0],
