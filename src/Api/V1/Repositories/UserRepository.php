@@ -4,9 +4,9 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Models\User as BaseUser;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Http\Response;
 
 class UserRepository implements RepositoryInterface
 {
@@ -45,20 +45,18 @@ class UserRepository implements RepositoryInterface
         switch ($this->model->status) {
             case User::STATUS_SUSPENDED:
 
-                abort(Response::HTTP_UNPROCESSABLE_ENTITY, "The user is suspended.");
-                
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user is suspended.');
+
             case User::STATUS_BLOCKED:
 
-                abort(Response::HTTP_UNPROCESSABLE_ENTITY, "The user has been banned.");
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user has been banned.');
 
             case User::STATUS_DEACTIVATED:
 
-                abort(Response::HTTP_UNPROCESSABLE_ENTITY, "User account not found or does not match with password.");
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'User account not found or does not match with password.');
 
             default:
                 return true;
-
-                break;
         }
     }
 
