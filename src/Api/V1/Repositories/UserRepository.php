@@ -38,7 +38,6 @@ class UserRepository implements RepositoryInterface
      * Through exception if user is suspended/banned/not found.
      *
      * @return bool
-     * @throws ValidationException
      */
     public function isUserEligible(): bool
     {
