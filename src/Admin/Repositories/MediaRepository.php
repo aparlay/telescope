@@ -89,4 +89,9 @@ class MediaRepository
     {
         return $this->model->getAwesomenessScores();
     }
+
+    public function pendingMedia($order)
+    {
+        return $this->model->completed()->recentFirst()->limit(2)->get();
+    }
 }

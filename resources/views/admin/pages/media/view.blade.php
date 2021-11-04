@@ -1,6 +1,8 @@
 @extends('adminlte::page')
 @section('title', 'Media View')
 @section('content')
+@inject('dt', 'Aparlay\Core\Helpers\DT')
+@inject('size', 'Aparlay\Core\Helpers\BladeHelper')
 @inject('cdn', 'Aparlay\Core\Helpers\Cdn')
 @include('default_view::admin.layouts.media_view_header')
 @include('default_view::admin.parts.messages')
@@ -27,35 +29,35 @@
                                         <div>
                                         <input type="hidden" name="visibility" value="{{ $media->visibility }}">
                                         <input type="hidden" name="is_music_licensed" value="{{ $media->is_music_licensed}}">
-                                        @foreach ($scoreTypes as $scoreType)
-                                            @foreach ($skinScore as $score)
-                                                @if($scoreType['type'] == 'skin')
-                                                    <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
-                                                        <label class="btn btn-outline-secondary skin_score_lable">
-                                                            <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
-                                                            {{ $score }}
-                                                        </label>
-                                                    </div>
-                                                @endif
+                                            @foreach ($scoreTypes as $scoreType)
+                                                @foreach (\Aparlay\Core\Admin\Models\Media::getSkinScores() as $score)
+                                                    @if($scoreType['type'] == 'skin')
+                                                        <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
+                                                            <label class="btn btn-outline-secondary skin_score_lable">
+                                                                <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                {{ $score }}
+                                                            </label>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
                                             @endforeach
-                                        @endforeach
                                         </div>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Awesomeness Score</b>
                                         <div>
-                                        @foreach ($scoreTypes as $scoreType)
-                                            @foreach ($awesomenessScore as $score)
-                                                @if($scoreType['type'] == 'awesomeness')
-                                                    <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
-                                                        <label class="btn btn-outline-secondary awesomeness_score_label">
-                                                            <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
-                                                            {{ $score }}
-                                                        </label>
-                                                    </div>
-                                                @endif
+                                            @foreach($scoreTypes as $scoreType)
+                                                @foreach (\Aparlay\Core\Admin\Models\Media::getAwesomenessScores() as $score)
+                                                    @if($scoreType['type'] == 'awesomeness')
+                                                        <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
+                                                            <label class="btn btn-outline-secondary awesomeness_score_label">
+                                                                <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                {{ $score }}
+                                                            </label>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
                                             @endforeach
-                                        @endforeach
                                         </div>
                                     </li>
                                 </ul>
@@ -63,9 +65,9 @@
                                     @csrf()
                                     @if ($media->status !== 3 && $media->status !== 7)
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-success">
-                                            <i class="fas fa-minus-circle"></i>
-                                            <strong>Approve</strong>
+                                        <button type="submit" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
+                                            <i class="fas fa-check"></i>
+                                            <strong>Save</strong>
                                         </button>
                                     </div>
                                     <div class="col-md-4">
@@ -82,9 +84,9 @@
                                     </div>
                                     @else
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-success">
+                                        <button type="submit" class="btn btn-block btn-success" name="status" value="5">
                                             <i class="fas fa-minus-circle"></i>
-                                            <strong>Save</strong>
+                                            <strong>Approve</strong>
                                         </button>
                                     </div>
                                     <div class="col-md-4">
@@ -120,7 +122,7 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="media-info">
-                                    <form action="{{route('core.admin.media.update', ['id' => $media->_id])}}" class="form-horizontal" method="POST">
+                                    <form action="{{route('core.admin.media.update', ['media' => $media->_id])}}" class="form-horizontal" method="POST">
                                         @csrf()
                                         <div class="form-group row">
                                             <label for="id" class="col-sm-2 col-form-label">ID</label>
@@ -137,7 +139,7 @@
                                         <div class="form-group row">
                                             <label for="size" class="col-sm-2 col-form-label">Size</label>
                                             <div class="col-sm-10 mt-2">
-                                                <p>{{ $media->size }}</p>
+                                                <p>{{ $size->fileSize($media->size) }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -178,8 +180,7 @@
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Show In Public Feed</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="hidden" value="0" name="visibility" >
-                                                    <input type="checkbox" class="custom-control-input" name="visibility" id="visibility" {!! ($media->visibility == 1) ? 'checked' : '' !!}>
+                                                    <input type="checkbox" value="1" class="custom-control-input" name="visibility" id="visibility" {!! ($media->visibility == 1) ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="visibility"></label>
                                                 </div>
                                             </div>
@@ -188,7 +189,6 @@
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Music Licensed</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="hidden" value="0" name="is_music_licensed" >
                                                     <input type="checkbox" class="custom-control-input" name="is_music_licensed" id="is_music_licensed" {!! ($media->is_music_licensed == true) ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="is_music_licensed"></label>
                                                 </div>
@@ -199,7 +199,7 @@
                                             <div class="col-sm-10 mt-2">
                                                 <div>
                                                     @foreach ($scoreTypes as $scoreType)
-                                                        @foreach ($skinScore as $score)
+                                                        @foreach (\Aparlay\Core\Admin\Models\Media::getSkinScores() as $score)
                                                             @if($scoreType['type'] == 'skin')
                                                                 <div id="skin_score_form_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
                                                                     <label class="btn btn-outline-secondary skin_score_lable_form">
@@ -217,8 +217,8 @@
                                             <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
                                             <div class="col-sm-10 mt-2">
                                                 <div>
-                                                    @foreach ($scoreTypes as $scoreType)
-                                                        @foreach ($awesomenessScore as $score)
+                                                    @foreach($scoreTypes as $scoreType)
+                                                        @foreach (\Aparlay\Core\Admin\Models\Media::getAwesomenessScores() as $score)
                                                             @if($scoreType['type'] == 'awesomeness')
                                                                 <div id="awesomeness_score_form_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
                                                                     <label class="btn btn-outline-secondary awesomeness_score_label_form">
@@ -255,9 +255,29 @@
                                         </div>
                                     </form>
                                 </div>
+
+
                                 <div class="tab-pane" id="upload">
-                                    upload
+                                    <!-- The timeline -->
+                                    <form method="post" action="{{ route('core.admin.media.reupload', ['media' => $media->_id]) }}" >
+                                        <div class="flow-drop" data-upload-url="{{ route('core.admin.user.media.upload') }}" ondragenter="jQuery(this).addClass('flow-dragover');" ondragend="jQuery(this).removeClass('flow-dragover');" ondrop="jQuery(this).removeClass('flow-dragover');">
+                                            Drop files here to upload or <a class="flow-browse"><u>select from your computer</u></a>
+                                        </div>
+                                        @csrf
+                                        <div class="flow-list col-md-12 mt-3"></div>
+
+                                        <input type="hidden" id="media_file" name="file">
+                                        <input type="hidden" name="reupload_file" value="1" >
+
+                                        <div class="row">
+
+                                            <div class="col-4">
+                                                <button class="btn btn-block btn-primary upload-video-button" name="create-button"><i class="fa fa-upload"></i><strong>Upload</strong></button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -276,16 +296,18 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="{{url('/alert/create')}}" method="post" role="form">
+                    <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="{{route('core.admin.alert.store')}}" method="post" role="form">
                         @csrf()
+                        <input type="hidden" name="status" value="{{ \Aparlay\Core\Admin\Models\Alert::STATUS_NOT_VISITED }}">
+                        <input type="hidden" name="mediaStatus" value="{{ \Aparlay\Core\Admin\Models\Media::STATUS_ADMIN_DELETED }}">
                         <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
                             <label class="has-star" for="media-delete-alert-modal-form-reason">Reason</label>
                             <div>
-                                <input type="text" id="media-delete-alert-modal-form-reason" class="form-control" name="reason" placeholder="Type the message..." aria-required="true" data-krajee-typeahead="typeahead_7864e59a"></div>
+                                <input type="text" id="media-delete-alert-modal-form-reason" class="form-control" name="reason" placeholder="Type the message..." aria-required="true"></div>
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-type">
-                                <input type="hidden" id="alert-type" class="form-control" name="type" value="20">
+                                <input type="hidden" id="alert-type" class="form-control" name="type" value="{{ \Aparlay\Core\Admin\Models\Alert::TYPE_MEDIA_REMOVED }}">
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-media_id">
@@ -306,9 +328,71 @@
             </div>
         </div>
     </div>
-@endsection
 
+    <!-- Alert model -->
+    <div id="alert-modal" class="fade modal" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="alert-modal-label">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="delete-alert-modal-label" class="modal-title">Media Alert</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="alert-modal-form" class="form-vertical kv-form-bs4" action="{{route('core.admin.alert.store')}}" method="post" role="form">
+                        @csrf()
+                        <input type="hidden" name="status" value="{{ \Aparlay\Core\Admin\Models\Alert::STATUS_NOT_VISITED }}">
+                        <input type="hidden" name="type" value="{{ \Aparlay\Core\Admin\Models\Alert::TYPE_MEDIA_NOTICED }}">
+                        <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
+                            <label class="has-star" for="alert-modal-form-reason">Reason</label>
+                            <div>
+                                <input type="text" id="alert-modal-form-reason" class="form-control" name="reason" placeholder="Type the message..." aria-required="true"></div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <input type="hidden" id="alert-media_id" class="form-control" name="media_id" value="{{ $media->_id }}">
+                            <input type="hidden" id="alert-user_id" class="form-control" name="user_id" value="{{ $media->created_by }}">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" form="alert-modal-form">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reprocess media confirmation box -->
+    <div class="modal fade" id="reprocessModel" tabindex="-1" role="dialog" aria-labelledby="reprocessModel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="{{route('core.admin.media.reprocess', ['media' => $media->_id])}}" method="post" role="form">
+                @csrf()
+                <div class="modal-content">
+                <div class="modal-header bootstrap-dialog-header btn-warning">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to reprocess this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><span class="fa fa-ban"></span> Cancel</button>
+                    <button type="submit" class="btn btn-warning"><span class="fas fa-check"></span> Ok</button>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection
 @section('js')
-    <script src="{{ asset('admin/assets/js/media.js') }}"></script>
-@endsection
-
+<script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
+<script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
+<script src="{{ asset('admin/assets/js/media.js') }}"></script>
+@stop
+@section('css')
+<link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}" >
+@stop

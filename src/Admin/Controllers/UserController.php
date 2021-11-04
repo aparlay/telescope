@@ -3,13 +3,15 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\User;
-use Aparlay\Core\Admin\Requests\UserRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
 use Aparlay\Core\Admin\Requests\UserUpdateRequest;
 use Aparlay\Core\Admin\Resources\UserResource;
+use Aparlay\Core\Admin\Services\UploadService;
 use Aparlay\Core\Admin\Services\UserService;
 use ErrorException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Maklad\Permission\Models\Role;
 
 class UserController extends Controller
@@ -51,7 +53,7 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @param UserRequest $request
+     * @param UserUpdateRequest $request
      * @return RedirectResponse
      */
     public function update(User $user, UserUpdateRequest $request): RedirectResponse
@@ -63,7 +65,7 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @param $status
+     * @param UserStatusRequest $request
      * @return RedirectResponse
      */
     public function updateStatus(User $user, UserStatusRequest $request): RedirectResponse
@@ -78,5 +80,12 @@ class UserController extends Controller
         }
 
         return back()->with('error', 'Update status failed.');
+    }
+
+    public function uploadMedia(Request $request): Response
+    {
+        $result = UploadService::chunkUpload($request);
+
+        return response($result['data'], $result['code'], []);
     }
 }

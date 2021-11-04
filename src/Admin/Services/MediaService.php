@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\Cdn;
+use Aparlay\Core\Jobs\UploadMedia;
 use Illuminate\Http\Request;
 
 class MediaService extends AdminBaseService
@@ -64,7 +65,6 @@ class MediaService extends AdminBaseService
     public function find($id)
     {
         $media = $this->mediaRepository->find($id);
-
         $statusBadge = [
             'status' => $media->status_name,
             'color' => $media->status_color,
@@ -73,6 +73,14 @@ class MediaService extends AdminBaseService
         $media->status_badge = $statusBadge;
 
         return $media;
+    }
+
+    /**
+     * @param $order
+     */
+    public function pending($order)
+    {
+        return $this->mediaRepository->pendingMedia($order);
     }
 
     /**
@@ -124,13 +132,9 @@ class MediaService extends AdminBaseService
         return $this->mediaRepository->update($data, $id);
     }
 
-    public function skinScore()
+    public function reupload($media)
     {
-        return $this->mediaRepository->skinScore();
-    }
-
-    public function awesomenessScore()
-    {
-        return $this->mediaRepository->awesomenessScore();
+        $this->mediaRepository->update(['file' => request()->input('file')], $media->_id);
+        UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'))->onQueue('lowpriority');
     }
 }

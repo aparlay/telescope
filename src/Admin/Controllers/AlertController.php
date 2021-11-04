@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
+use Aparlay\Core\Admin\Requests\AlertRequest;
 use Aparlay\Core\Admin\Services\AlertService;
 use Illuminate\Http\Request;
 
@@ -30,25 +31,12 @@ class AlertController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function create(Request $request)
+    public function store(AlertRequest $request)
     {
-        $msg = [];
-        if ($this->alertService->create($request)) {
-            $msg = [
-                'type' => 'success',
-                'text' => 'Alert saved successfully.',
-            ];
-        } else {
-            $msg = [
-                'type' => 'danger',
-                'text' => 'There are some issues.',
-            ];
+        if ($this->alertService->create()) {
+            return back()->with('success', 'Alert added successfully.');
         }
 
-        if (($post = $request->get('post-action', false)) !== false) {
-            return redirect($post)->with($msg['type'], $msg['text']);
-        }
-
-        return redirect('/media/'.$request->media_id)->with($msg['type'], $msg['text']);
+        return back()->with('error', 'Add alert failed.');
     }
 }

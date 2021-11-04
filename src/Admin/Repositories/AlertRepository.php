@@ -26,26 +26,9 @@ class AlertRepository implements RepositoryInterface
     {
     }
 
-    /**
-     * Create alert.
-     *
-     * @param array $data
-     * @return Alert|null
-     */
-    public function store(Request $request)
-    {
-        try {
-            return Alert::create($request->all());
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
-            return null;
-        }
-    }
-
     public function create(array $data)
     {
-        // TODO: Implement create() method.
+        return Alert::create($data);
     }
 
     public function update(array $data, $id)

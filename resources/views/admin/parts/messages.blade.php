@@ -8,7 +8,7 @@
 @if (Session::get('success'))
 <div class="alert alert-success alert-block">
     <button type="button" class="close" data-dismiss="alert">×</button>	
-        <strong>{{ Session::get('success') }}</strong>
+        <i class="icon fas fa-check"></i><strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
 @if (Session::get('danger'))

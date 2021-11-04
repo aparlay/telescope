@@ -18,15 +18,15 @@ class AlertService
     public function __construct()
     {
         $this->alertRepository = new AlertRepository(new Alert());
-        $this->userRepository = new UserRepository(new User());
         $this->mediaRepository = new MediaRepository(new Media());
     }
 
-    public function create($request)
+    public function create()
     {
-        $this->mediaRepository->find($request->media_id);
-        $this->userRepository->find($request->user_id);
+        if (request()->input('mediaStatus')) {
+            $this->mediaRepository->update(['status' => request()->input('mediaStatus')], request()->input('media_id'));
+        }
 
-        return $this->alertRepository->store($request);
+        return $this->alertRepository->create(request()->only(['user_id', 'media_id', 'status', 'type', 'reason']));
     }
 }
