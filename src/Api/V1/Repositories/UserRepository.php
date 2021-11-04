@@ -46,14 +46,17 @@ class UserRepository implements RepositoryInterface
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user is suspended.');
 
+                // no break
             case User::STATUS_BLOCKED:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user has been banned.');
 
+                // no break
             case User::STATUS_DEACTIVATED:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'User account not found or does not match with password.');
 
+                // no break
             default:
                 return true;
         }
