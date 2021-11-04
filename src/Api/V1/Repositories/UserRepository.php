@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Models\User as BaseUser;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -37,27 +38,27 @@ class UserRepository implements RepositoryInterface
      * Through exception if user is suspended/banned/not found.
      *
      * @return bool
-     * @throws ValidationException
      */
     public function isUserEligible(): bool
     {
         switch ($this->model->status) {
             case User::STATUS_SUSPENDED:
-                throw ValidationException::withMessages([
-                    'Account' => ['This account has been suspended.'],
-                ]);
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user is suspended.');
+
+                // no break
             case User::STATUS_BLOCKED:
-                throw ValidationException::withMessages([
-                    'Account' => ['This account has been banned.'],
-                ]);
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user has been banned.');
+
+                // no break
             case User::STATUS_DEACTIVATED:
-                throw ValidationException::withMessages([
-                    'Account' => ['Your user account not found or does not match with password.'],
-                ]);
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'User account not found or does not match with password.');
+
+                // no break
             default:
                 return true;
-
-                break;
         }
     }
 
