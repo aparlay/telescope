@@ -17,8 +17,8 @@ class SettingSeeder extends Seeder
         Setting::factory()->create([
             'title' => 'subscription.plans',
             'values' => [
-                ''
-            ]
+                '',
+            ],
         ]);
     }
 }
