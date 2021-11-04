@@ -347,7 +347,7 @@
                                                                 'searchCols' => [['search' => $user->username]],
                                                                 'autoWidth' => false,
                                                                 'ajax' => route('payment.admin.ajax.credit-card.index'),
-                                                                'order' => [[1, 'asc']],
+                                                                'order' => [[6, 'asc']],
                                                                 'columns' => [
                                                                     ['data' => 'link_to_user', 'orderData' => 1, 'target' => 1],
                                                                     ['data' => 'creator.username','visible' => false],
@@ -391,7 +391,7 @@
                                                             'searchCols' => [['search' => $user->username]],
                                                             'autoWidth' => false,
                                                             'ajax' => route('payment.admin.ajax.tip.index'),
-                                                            'order' => [[1, 'asc']],
+                                                            'order' => [[6, 'asc']],
                                                             'columns' => [
                                                                 ['data' => 'user.username','visible' => false],
                                                                 ['data' => 'link_to_creator', 'orderData' => 3, 'target' => 3],
@@ -434,7 +434,7 @@
                                                             'searchCols' => [['search' => $user->username]],
                                                             'autoWidth' => false,
                                                             'ajax' => route('payment.admin.ajax.subscription.index'),
-                                                            'order' => [[1, 'asc']],
+                                                            'order' => [[5, 'asc']],
                                                             'columns' => [
                                                                 ['data' => 'creator.username','visible' => false],
                                                                 ['data' => 'link_to_user', 'orderData' => 2, 'target' => 2],
