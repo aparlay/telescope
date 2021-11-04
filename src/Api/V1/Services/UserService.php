@@ -96,8 +96,9 @@ class UserService
     /**
      * Responsible to check the user is Verified.
      *
-     * @param User|Authenticatable $user
+     * @param  User|Authenticatable  $user
      * @return bool
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function isVerified(User | Authenticatable $user): bool
     {
@@ -170,6 +171,7 @@ class UserService
      * Responsible for set user avatar.
      *
      * @return string
+     * @throws Exception
      */
     public function changeDefaultAvatar()
     {
