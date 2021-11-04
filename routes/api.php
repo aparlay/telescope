@@ -51,7 +51,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
 
         Route::post('/{user}/report', [ReportController::class, 'user'])->name('report');
         Route::middleware(['cookies-auth', 'optional-auth'])
-            ->match(['head', 'get'],'/{user}/media', [MediaController::class, 'listByUser'])
+            ->match(['head', 'get'], '/{user}/media', [MediaController::class, 'listByUser'])
             ->name('media.list');
 
         /* Authentication Group with user prifix */
