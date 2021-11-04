@@ -44,7 +44,7 @@ class MediaLikeRepository implements RepositoryInterface
                 'creator' => [
                     '_id' => new ObjectId($creator->_id),
                     'username' => $creator->username,
-                    'avatar' => $creator->avatar
+                    'avatar' => $creator->avatar,
                 ],
             ]);
         } catch (\Exception $e) {
