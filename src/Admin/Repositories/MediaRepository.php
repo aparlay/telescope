@@ -49,7 +49,7 @@ class MediaRepository
 
     public function create(array $data)
     {
-        // TODO: Implement create() method.
+        $this->model->create($data);
     }
 
     public function update(array $data, $id)

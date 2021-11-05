@@ -17,9 +17,3 @@ $('.awesomeness_score_label_form').click(function(){
     $('.awesomeness_score_label_form').removeClass('active');
     $(this).addClass('active');
 });
-
-$(window).load(function(){
-    setTimeout(function(){
-        $('.alert').hide();
-    }, 500);
-});

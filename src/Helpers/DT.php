@@ -83,4 +83,9 @@ class DT
     {
         return new UTCDatetime($millisec);
     }
+
+    public static function removeTZ($date): string
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->toDateTimeString();
+    }
 }

@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\Media;
-use Aparlay\Core\Admin\Requests\MediaReuploadRequest;
+use Aparlay\Core\Admin\Requests\MediaUploadRequest;
 use Aparlay\Core\Admin\Requests\MediaUpdateRequest;
 use Aparlay\Core\Admin\Resources\MediaResource;
 use Aparlay\Core\Admin\Services\MediaService;
@@ -129,7 +129,7 @@ class MediaController extends Controller
         return redirect()->route('core.admin.media.view', ['media' => $media->_id]);
     }
 
-    public function reupload(Media $media, MediaReuploadRequest $request)
+    public function reupload(Media $media, MediaUploadRequest $request)
     {
         $this->mediaService->reupload($media);
 

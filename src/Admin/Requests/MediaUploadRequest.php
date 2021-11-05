@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class MediaReuploadRequest extends FormRequest
+class MediaUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,6 +29,7 @@ class MediaReuploadRequest extends FormRequest
     {
         return [
             'file' => ['required', new MediaExist('upload')],
+            'user_id' => ['required', 'exists:\Aparlay\Core\Admin\Models\User,_id']
         ];
     }
 

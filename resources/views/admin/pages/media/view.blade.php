@@ -145,7 +145,7 @@
                                         <div class="form-group row">
                                             <label for="length" class="col-sm-2 col-form-label">Length</label>
                                             <div class="col-sm-10 mt-2">
-                                                <p>{{ $media->length }}</p>
+                                                <p>{{ round($media->length) }} Sec</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -195,44 +195,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="updated-at" class="col-sm-2 col-form-label">Skin Score</label>
-                                            <div class="col-sm-10 mt-2">
-                                                <div>
-                                                    @foreach ($scoreTypes as $scoreType)
-                                                        @foreach (\Aparlay\Core\Admin\Models\Media::getSkinScores() as $score)
-                                                            @if($scoreType['type'] == 'skin')
-                                                                <div id="skin_score_form_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
-                                                                    <label class="btn btn-outline-secondary skin_score_lable_form">
-                                                                        <input type="radio" id="media_skin_score_form_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
-                                                                        {{ $score }}
-                                                                    </label>
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="updated-at" class="col-sm-2 col-form-label">Awesomeness Score</label>
-                                            <div class="col-sm-10 mt-2">
-                                                <div>
-                                                    @foreach($scoreTypes as $scoreType)
-                                                        @foreach (\Aparlay\Core\Admin\Models\Media::getAwesomenessScores() as $score)
-                                                            @if($scoreType['type'] == 'awesomeness')
-                                                                <div id="awesomeness_score_form_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
-                                                                    <label class="btn btn-outline-secondary awesomeness_score_label_form">
-                                                                        <input type="radio" id="media_awesomeness_score_form_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
-                                                                        {{ $score }}
-                                                                    </label>
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Updated At</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $media->updated_at }}</p>
@@ -261,12 +223,17 @@
                                     <!-- The timeline -->
                                     <form method="post" action="{{ route('core.admin.media.reupload', ['media' => $media->_id]) }}" >
                                         <div class="flow-drop" data-upload-url="{{ route('core.admin.user.media.upload') }}" ondragenter="jQuery(this).addClass('flow-dragover');" ondragend="jQuery(this).removeClass('flow-dragover');" ondrop="jQuery(this).removeClass('flow-dragover');">
-                                            Drop files here to upload or <a class="flow-browse"><u>select from your computer</u></a>
+                                            Drop files here to upload
+                                            <span>or</span>
+                                            <a class="btn btn-md btn-outline-primary upload-btn flow-browse mt-3">
+                                                select from your computer
+                                            </a>
                                         </div>
                                         @csrf
                                         <div class="flow-list col-md-12 mt-3"></div>
 
                                         <input type="hidden" id="media_file" name="file">
+                                        <input type="hidden" name="user_id" value="{{ $media->creator['_id'] }}">
                                         <input type="hidden" name="reupload_file" value="1" >
 
                                         <div class="row">

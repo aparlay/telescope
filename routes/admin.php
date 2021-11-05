@@ -82,6 +82,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::patch('user/{user}', [UserController::class, 'updateStatus'])
                 ->middleware(['permission:edit users'])
                 ->name('update.status');
+            Route::post('user/media/upload', [UserController::class, 'upload'])
+                ->middleware(['permission:upload medias'])
+                ->name('media.save-upload');
         });
 
         Route::name('alert.')->group(function () {

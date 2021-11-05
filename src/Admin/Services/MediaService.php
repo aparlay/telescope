@@ -3,20 +3,26 @@
 namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
+use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\Cdn;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use MongoDB\BSON\ObjectId;
 
 class MediaService extends AdminBaseService
 {
     protected MediaRepository $mediaRepository;
+    protected UserRepository $userRepository;
 
     public function __construct()
     {
         $this->mediaRepository = new MediaRepository(new Media());
-
+        $this->userRepository = new UserRepository(new User());
         $this->filterableField = ['creator.username', 'status'];
         $this->sorterableField = ['creator.username', 'status', 'created_at'];
     }
@@ -53,9 +59,10 @@ class MediaService extends AdminBaseService
 
         foreach ($medias as $media) {
             $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
-            $media->sort_score = $media->sort_score ?? '';
+            $media->sort_score = round($media->sort_score) ?? '';
             $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
             $media->action = ActionButtonBladeComponent::getViewActionButton($media->_id, 'media');
+            $media->date_formatted = DT::removeTZ($media->created_at);
         }
     }
 
@@ -136,5 +143,32 @@ class MediaService extends AdminBaseService
     {
         $this->mediaRepository->update(['file' => request()->input('file')], $media->_id);
         UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'))->onQueue('lowpriority');
+    }
+
+    public function generateSlug($length)
+    {
+        $slug = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
+
+        return (null === Media::slug($slug)->first()) ? $slug : $this->generateSlug($length);
+    }
+
+    public function upload()
+    {
+        $user = $this->userRepository->find(request()->input('user_id'));
+        $data = [
+            'user_id' => new ObjectId(request()->input('user_id')),
+            'file' => request()->input('file'),
+            'description' => request()->input('description', ''),
+            'slug' => MediaService::generateSlug(6),
+            'count_fields_updated_at' => [],
+            'visibility' => $user->visibility,
+            'creator' => [
+                '_id'      => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar'   => $user->avatar,
+            ],
+        ];
+
+        $this->mediaRepository->create($data);
     }
 }

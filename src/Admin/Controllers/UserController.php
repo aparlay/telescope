@@ -3,9 +3,11 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Admin\Requests\MediaUploadRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
 use Aparlay\Core\Admin\Requests\UserUpdateRequest;
 use Aparlay\Core\Admin\Resources\UserResource;
+use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Admin\Services\UploadService;
 use Aparlay\Core\Admin\Services\UserService;
 use ErrorException;
@@ -18,10 +20,14 @@ class UserController extends Controller
 {
     protected $userService;
 
+    protected $mediaService;
+
     public function __construct(
-        UserService $userService
+        UserService $userService,
+        MediaService $mediaService
     ) {
         $this->userService = $userService;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -80,6 +86,12 @@ class UserController extends Controller
         }
 
         return back()->with('error', 'Update status failed.');
+    }
+
+    public function upload(MediaUploadRequest $request)
+    {
+        $this->mediaService->upload();
+        return back()->with(['success' => 'New media saved.']);
     }
 
     public function uploadMedia(Request $request): Response
