@@ -159,7 +159,7 @@ class MediaService extends AdminBaseService
             'user_id' => new ObjectId(request()->input('user_id')),
             'file' => request()->input('file'),
             'description' => request()->input('description', ''),
-            'slug' => MediaService::generateSlug(6),
+            'slug' => self::generateSlug(6),
             'count_fields_updated_at' => [],
             'visibility' => $user->visibility,
             'creator' => [
