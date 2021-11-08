@@ -35,6 +35,7 @@
                             'Visits',
                             'Sort Score',
                             'Created At',
+                            '',
                             ''
                         ];
                     $config = [
@@ -57,7 +58,8 @@
                             ['data' => 'like_count', 'orderable' => false],
                             ['data' => 'visit_count', 'orderable' => false],
                             ['data' => 'sort_score', 'orderable' => false],
-                            ['data' => 'created_at'],
+                            ['data' => 'created_at', 'visible' => false],
+                            ['data' => 'date_formatted', 'orderData' => 8, 'target' => 8, 'orderable' => true],
                             ['data' => 'action', 'orderable' => false],
                         ],
                     ];

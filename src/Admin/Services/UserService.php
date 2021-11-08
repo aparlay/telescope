@@ -5,6 +5,7 @@ namespace Aparlay\Core\Admin\Services;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Illuminate\Support\Facades\Storage;
@@ -61,6 +62,7 @@ class UserService extends AdminBaseService
             $user->status_badge = implode('</br>', $userBadges);
             $user->action = ActionButtonBladeComponent::getViewActionButton($user->_id, 'user');
             $user->username_avatar = ActionButtonBladeComponent::getUsernameWithAvatar($user);
+            $user->date_formatted = $user->created_at->toDateTimeString();
         }
     }
 

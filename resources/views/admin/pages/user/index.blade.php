@@ -35,6 +35,7 @@
                                 'Likes',
                                 'Medias',
                                 'Created at',
+                                '',
                                 ''
                             ];
 
@@ -60,7 +61,8 @@
                                 ['data' => 'follower_count', 'orderable' => false],
                                 ['data' => 'like_count', 'orderable' => false],
                                 ['data' => 'media_count', 'orderable' => false],
-                                ['data' => 'created_at'],
+                                ['data' => 'created_at', 'visible' => false],
+                                ['data' => 'date_formatted', 'orderData' => 10, 'target' => 10],
                                 ['data' => 'action', 'orderable' => false],
                             ],
                         ]

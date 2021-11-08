@@ -3,8 +3,10 @@
 namespace Aparlay\Core\Admin\Providers;
 
 use Aparlay\Core\Admin\Models\Alert;
+use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Observers\AlertObserver;
+use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\UserObserver;
 
 class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
@@ -18,6 +20,7 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
     {
         Alert::observe(new AlertObserver());
         User::observe(new UserObserver());
+        Media::observe(new MediaObserver());
         parent::boot();
     }
 }
