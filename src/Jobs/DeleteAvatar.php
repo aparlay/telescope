@@ -47,6 +47,7 @@ class DeleteAvatar implements ShouldQueue
      */
     public function __construct(string $file)
     {
+        $this->onQueue('low');
         $this->file = $file;
     }
 

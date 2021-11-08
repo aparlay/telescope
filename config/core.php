@@ -18,6 +18,7 @@ return [
         'url' => env('ADMIN_DOMAIN', 'https://ltoptop.waptap.dev'),
         'lists' => [
             'page_count' => 20,
+            'user_page_count' => 5,
         ],
     ],
 

@@ -45,16 +45,19 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property array       $features
  * @property mixed       $authLogs
  * @property mixed       $id
- * @property string      $passwordHashField
+ * @property string      $password_hash_field
  * @property string      $authKey
  * @property array       $links
  * @property bool        $require_otp
  * @property bool        $is_protected
- * @property array       $defaultSetting
+ * @property array       $default_setting
  * @property array       $count_fields_updated_at
+ * @property array       $subscriptions
+ * @property array       $subscription_plan
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
+ * @property-read bool $is_subscribable
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -169,6 +172,8 @@ class User extends Authenticatable implements JWTSubject
         'block_count' => 0,
         'followed_hashtag_count' => 0,
         'media_count' => 0,
+        'subscriptions' => [],
+        'subscription_plan' => [],
     ];
 
     /**
@@ -422,5 +427,13 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return parent::setAttribute($key, $value);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsSubscribableAttribute(): bool
+    {
+        return isset($this->subscription_plan['amount'], $this->subscription_plan['currency'], $this->subscription_plan['days']);
     }
 }
