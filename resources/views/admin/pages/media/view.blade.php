@@ -145,7 +145,7 @@
                                         <div class="form-group row">
                                             <label for="length" class="col-sm-2 col-form-label">Length</label>
                                             <div class="col-sm-10 mt-2">
-                                                <p>{{ round($media->length) }} Sec</p>
+                                                <p>{{ $media->round_length }} Sec</p>
                                             </div>
                                         </div>
                                         <div class="form-group row">

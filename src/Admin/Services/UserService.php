@@ -62,7 +62,7 @@ class UserService extends AdminBaseService
             $user->status_badge = implode('</br>', $userBadges);
             $user->action = ActionButtonBladeComponent::getViewActionButton($user->_id, 'user');
             $user->username_avatar = ActionButtonBladeComponent::getUsernameWithAvatar($user);
-            $user->date_formatted = DT::removeTZ($user->created_at);
+            $user->date_formatted = DT::formatDisplayDatetime($user->created_at);
         }
     }
 

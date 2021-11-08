@@ -84,7 +84,7 @@ class DT
         return new UTCDatetime($millisec);
     }
 
-    public static function removeTZ($date): string
+    public static function formatDisplayDatetime($date): string
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $date)->toDateTimeString();
     }
