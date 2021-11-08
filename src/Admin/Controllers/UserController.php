@@ -91,6 +91,7 @@ class UserController extends Controller
     public function upload(MediaUploadRequest $request)
     {
         $this->mediaService->upload();
+
         return back()->with(['success' => 'New media saved.']);
     }
 

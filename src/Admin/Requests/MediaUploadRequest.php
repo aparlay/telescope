@@ -29,7 +29,7 @@ class MediaUploadRequest extends FormRequest
     {
         return [
             'file' => ['required', new MediaExist('upload')],
-            'user_id' => ['required', 'exists:\Aparlay\Core\Admin\Models\User,_id']
+            'user_id' => ['required', 'exists:\Aparlay\Core\Admin\Models\User,_id'],
         ];
     }
 
