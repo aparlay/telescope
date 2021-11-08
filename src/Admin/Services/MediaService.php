@@ -62,7 +62,7 @@ class MediaService extends AdminBaseService
             $media->sort_score = round($media->sort_score) ?? '';
             $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
             $media->action = ActionButtonBladeComponent::getViewActionButton($media->_id, 'media');
-            $media->date_formatted = DT::formatDisplayDatetime($media->created_at);
+            $media->date_formatted = $media->created_at->toDateTimeString();
         }
     }
 
