@@ -86,6 +86,7 @@ class AdminBaseService
                 $filterFields[$column['data']] = $column['search']['value'];
             }
         }
+
         return $this->cleanFilterFields($filterFields);
     }
 
@@ -128,7 +129,7 @@ class AdminBaseService
 
         return  [
             'start' => new UTCDateTime(Carbon::parse($dateRangeArr[0])->startOfDay()),
-            'end'   => new UTCDateTime(Carbon::parse($dateRangeArr[1])->endOfDay())
+            'end'   => new UTCDateTime(Carbon::parse($dateRangeArr[1])->endOfDay()),
         ];
     }
 }

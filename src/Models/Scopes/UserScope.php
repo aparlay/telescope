@@ -150,7 +150,9 @@ trait UserScope
     public function scopeFilter($query, $filters)
     {
         foreach ($filters as $key => $filter) {
-            if($key == 'created_at') continue;
+            if ($key == 'created_at') {
+                continue;
+            }
 
             if (is_numeric($filter)) {
                 $query->where($key, (int) $filter);

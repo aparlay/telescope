@@ -27,7 +27,7 @@ class UserRepository
 
     public function countFilteredUser($filters, $dateRangeFilter = null)
     {
-        if($dateRangeFilter) {
+        if ($dateRangeFilter) {
             return $this->model->filter($filters)
                 ->date($dateRangeFilter['start'], $dateRangeFilter['end'])
                 ->count();
@@ -39,14 +39,13 @@ class UserRepository
 
     public function getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter = null)
     {
-        if($dateRangeFilter) {
+        if ($dateRangeFilter) {
             return $this->model->filter($filters)
                 ->date($dateRangeFilter['start'], $dateRangeFilter['end'])
                 ->sortBy($sort)
                 ->skip($offset)
                 ->take($limit)
                 ->get();
-
         } else {
             return $this->model->filter($filters)
                 ->sortBy($sort)

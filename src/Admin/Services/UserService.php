@@ -36,7 +36,7 @@ class UserService extends AdminBaseService
         $dateRangeFilter = null;
 
         if (! empty($filters)) {
-            if(isset($filters['created_at'])) {
+            if (isset($filters['created_at'])) {
                 $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
             }
             $users = $this->userRepository->getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter);
