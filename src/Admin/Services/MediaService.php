@@ -23,7 +23,7 @@ class MediaService extends AdminBaseService
     {
         $this->mediaRepository = new MediaRepository(new Media());
         $this->userRepository = new UserRepository(new User());
-        $this->filterableField = ['creator.username', 'status'];
+        $this->filterableField = ['creator.username', 'status', 'created_at'];
         $this->sorterableField = ['creator.username', 'status', 'created_at'];
     }
 
@@ -36,14 +36,20 @@ class MediaService extends AdminBaseService
         $limit = (int) request()->get('length');
         $filters = $this->getFilters();
         $sort = $this->tableSort();
+        $dateRangeFilter = null;
 
         if (! empty($filters)) {
-            $medias = $this->mediaRepository->getFilteredMedia($offset, $limit, $sort, $filters);
+
+            if(isset($filters['created_at'])) {
+                $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
+            }
+
+            $medias = $this->mediaRepository->getFilteredMedia($offset, $limit, $sort, $filters, $dateRangeFilter);
         } else {
             $medias = $this->mediaRepository->mediaAjax($offset, $limit, $sort);
         }
 
-        $this->appendAttributes($medias, $filters);
+        $this->appendAttributes($medias, $filters, $dateRangeFilter);
 
         return $medias;
     }
@@ -52,17 +58,19 @@ class MediaService extends AdminBaseService
      * @param $medias
      * @param $filters
      */
-    public function appendAttributes($medias, $filters)
+    public function appendAttributes($medias, $filters, $dateRangeFilter)
     {
         $medias->total_media = $this->mediaRepository->countCollection();
-        $medias->total_filtered_media = ! empty($filters) ? $this->mediaRepository->countFilteredMedia($filters) : $medias->total_media;
+        $medias->total_filtered_media = ! empty($filters) ? $this->mediaRepository->countFilteredMedia($filters, $dateRangeFilter) : $medias->total_media;
 
         foreach ($medias as $media) {
             $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
-            $media->sort_score = round($media->sort_score) ?? '';
+            $media->sort_score = $media->sort_score ?round($media->sort_score) : ActionButtonBladeComponent::defaultValueNotSet();
             $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
             $media->action = ActionButtonBladeComponent::getViewActionButton($media->_id, 'media');
             $media->date_formatted = $media->created_at->toDateTimeString();
+            $media->like_count = $media->like_count ?? ActionButtonBladeComponent::defaultValueNotSet();
+            $media->visit_count = $media->visit_count ?? ActionButtonBladeComponent::defaultValueNotSet();
         }
     }
 

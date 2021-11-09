@@ -8,6 +8,7 @@ use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
@@ -18,7 +19,7 @@ class UserService extends AdminBaseService
     {
         $this->userRepository = new UserRepository(new User());
 
-        $this->filterableField = ['username', 'email', 'status', 'visibility'];
+        $this->filterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
         $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
     }
 
@@ -32,13 +33,18 @@ class UserService extends AdminBaseService
 
         $filters = $this->getFilters();
         $sort = $this->tableSort();
+        $dateRangeFilter = null;
+
         if (! empty($filters)) {
-            $users = $this->userRepository->getFilteredUser($offset, $limit, $sort, $filters);
+            if(isset($filters['created_at'])) {
+                $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
+            }
+            $users = $this->userRepository->getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter);
         } else {
             $users = $this->userRepository->all($offset, $limit, $sort);
         }
 
-        $this->appendAttributes($users, $filters);
+        $this->appendAttributes($users, $filters, $dateRangeFilter);
 
         return $users;
     }
@@ -46,11 +52,12 @@ class UserService extends AdminBaseService
     /**
      * @param $users
      * @param $filters
+     * @param $dateRangeFilter
      */
-    public function appendAttributes($users, $filters)
+    public function appendAttributes($users, $filters, $dateRangeFilter)
     {
         $users->total_users = $this->userRepository->countCollection();
-        $users->total_filtered_users = ! empty($filters) ? $this->userRepository->countFilteredUser($filters) : $users->total_users;
+        $users->total_filtered_users = ! empty($filters) ? $this->userRepository->countFilteredUser($filters, $dateRangeFilter) : $users->total_users;
 
         foreach ($users as $user) {
             $userBadges = [
@@ -63,6 +70,10 @@ class UserService extends AdminBaseService
             $user->action = ActionButtonBladeComponent::getViewActionButton($user->_id, 'user');
             $user->username_avatar = ActionButtonBladeComponent::getUsernameWithAvatar($user);
             $user->date_formatted = $user->created_at->toDateTimeString();
+            $user->full_name = $user->full_name ?? ActionButtonBladeComponent::defaultValueNotSet();
+            $user->follower_count = $user->follower_count ?? ActionButtonBladeComponent::defaultValueNotSet();
+            $user->like_count = $user->like_count ?? ActionButtonBladeComponent::defaultValueNotSet();
+            $user->media_count = $user->media_count ?? ActionButtonBladeComponent::defaultValueNotSet();
         }
     }
 

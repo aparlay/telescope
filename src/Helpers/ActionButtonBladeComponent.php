@@ -42,4 +42,14 @@ class ActionButtonBladeComponent
     {
         return '<img src="'.$user->avatar.'?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">'.$user->username;
     }
+
+    /**
+     * @param $color
+     * @param $name
+     * @return string
+     */
+    public static function defaultValueNotSet(): string
+    {
+        return '<span class="text-danger">(not set)</span>';
+    }
 }

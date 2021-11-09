@@ -33,18 +33,33 @@ class MediaRepository
             ->get();
     }
 
-    public function countFilteredMedia($filters)
+    public function countFilteredMedia($filters, $dateRangeFilter = null)
     {
-        return $this->model->filter($filters)->count();
+        if($dateRangeFilter) {
+            return $this->model->filter($filters)
+                ->date($dateRangeFilter['start'], $dateRangeFilter['end'])
+                ->count();
+        } else {
+            return $this->model->filter($filters)->count();
+        }
     }
 
-    public function getFilteredMedia($offset, $limit, $sort, $filters)
+    public function getFilteredMedia($offset, $limit, $sort, $filters, $dateRangeFilter = null)
     {
-        return $this->model->filter($filters)
-            ->sortBy($sort)
-            ->skip($offset)
-            ->take($limit)
-            ->get();
+        if($dateRangeFilter) {
+            return $this->model->filter($filters)
+                ->date($dateRangeFilter['start'], $dateRangeFilter['end'])
+                ->sortBy($sort)
+                ->skip($offset)
+                ->take($limit)
+                ->get();
+        } else {
+            return $this->model->filter($filters)
+                ->sortBy($sort)
+                ->skip($offset)
+                ->take($limit)
+                ->get();
+        }
     }
 
     public function create(array $data)
