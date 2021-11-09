@@ -36,6 +36,7 @@ class UserService extends AdminBaseService
         if (! empty($filters)) {
             if (isset($filters['created_at'])) {
                 $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
+                unset($filters['created_at']);
             }
             $users = $this->userRepository->getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter);
         } else {
@@ -55,7 +56,7 @@ class UserService extends AdminBaseService
     public function appendAttributes($users, $filters, $dateRangeFilter)
     {
         $users->total_users = $this->userRepository->countCollection();
-        $users->total_filtered_users = ! empty($filters) ? $this->userRepository->countFilteredUser($filters, $dateRangeFilter) : $users->total_users;
+        $users->total_filtered_users = ! empty($filters) || $dateRangeFilter ? $this->userRepository->countFilteredUser($filters, $dateRangeFilter) : $users->total_users;
 
         foreach ($users as $user) {
             $userBadges = [

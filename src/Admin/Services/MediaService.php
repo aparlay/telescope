@@ -41,6 +41,7 @@ class MediaService extends AdminBaseService
         if (! empty($filters)) {
             if (isset($filters['created_at'])) {
                 $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
+                unset($filters['created_at']);
             }
 
             $medias = $this->mediaRepository->getFilteredMedia($offset, $limit, $sort, $filters, $dateRangeFilter);
@@ -60,7 +61,7 @@ class MediaService extends AdminBaseService
     public function appendAttributes($medias, $filters, $dateRangeFilter)
     {
         $medias->total_media = $this->mediaRepository->countCollection();
-        $medias->total_filtered_media = ! empty($filters) ? $this->mediaRepository->countFilteredMedia($filters, $dateRangeFilter) : $medias->total_media;
+        $medias->total_filtered_media = ! empty($filters) || $dateRangeFilter ? $this->mediaRepository->countFilteredMedia($filters, $dateRangeFilter) : $medias->total_media;
 
         foreach ($medias as $media) {
             $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
