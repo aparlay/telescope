@@ -5,10 +5,8 @@ namespace Aparlay\Core\Admin\Services;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService

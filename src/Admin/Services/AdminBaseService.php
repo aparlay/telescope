@@ -120,9 +120,9 @@ class AdminBaseService
 
     /**
      * @param $dates
-     * @return string|array
+     * @return array
      */
-    public function getDateRangeFilter($dates): string|array
+    public function getDateRangeFilter($dates): array
     {
         $dateRangeArr = explode(' - ', $dates);
 
