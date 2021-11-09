@@ -2,6 +2,9 @@
 
 namespace Aparlay\Core\Admin\Services;
 
+use Carbon\Carbon;
+use MongoDB\BSON\UTCDateTime;
+
 class AdminBaseService
 {
     public $filterableField = [];
@@ -11,27 +14,24 @@ class AdminBaseService
 
     /**
      * @param string $field
-     * @param $filterableField
      * @return bool
      */
     public function canFilterField(string $field): bool
     {
-        return in_array($field, $this->filterableField) ? true : false;
+        return in_array($field, $this->filterableField);
     }
 
     /**
      * @param string $field
-     * @param array $sorterableField
      * @return bool
      */
     public function canSortField(string $field): bool
     {
-        return in_array($field, $this->sorterableField) ? true : false;
+        return in_array($field, $this->sorterableField);
     }
 
     /**
      * @param array $filter
-     * @param array $filterableField
      * @return array
      */
     public function cleanFilterFields(array $filter): array
@@ -51,7 +51,6 @@ class AdminBaseService
 
     /**
      * @param array $sort
-     * @param array $sorterableField
      * @return array
      */
     public function cleanSortFields(array $sort): array
@@ -118,5 +117,19 @@ class AdminBaseService
         }
 
         return $this->cleanSortFields($sortTable);
+    }
+
+    /**
+     * @param $dates
+     * @return array
+     */
+    public function getDateRangeFilter($dates): array
+    {
+        $dateRangeArr = explode(' - ', $dates);
+
+        return  [
+            'start' => new UTCDateTime(Carbon::parse($dateRangeArr[0])->startOfDay()),
+            'end'   => new UTCDateTime(Carbon::parse($dateRangeArr[1])->endOfDay()),
+        ];
     }
 }
