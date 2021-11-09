@@ -281,6 +281,7 @@
                                                         'Visits',
                                                         'Sort Score',
                                                         'Created At',
+                                                        '',
                                                         ''
                                                     ];
                                                 $config = [
@@ -306,7 +307,8 @@
                                                         ['data' => 'like_count', 'orderable' => false],
                                                         ['data' => 'visit_count', 'orderable' => false],
                                                         ['data' => 'sort_score', 'orderable' => false],
-                                                        ['data' => 'created_at'],
+                                                        ['data' => 'formatted_created_at','orderData' => 9, 'target' => 9],
+                                                        ['data' => 'created_at','visible' => false],
                                                         ['data' => 'action', 'orderable' => false],
                                                     ],
                                                 ];
@@ -362,6 +364,7 @@
                                                                 'Expiration Year',
                                                                 'Created at',
                                                                 '',
+                                                                ''
                                                             ];
 
                                                             $config = [
@@ -383,7 +386,8 @@
                                                                     ['data' => 'status','visible' => false],
                                                                     ['data' => 'expire_month', 'orderable' => false],
                                                                     ['data' => 'expire_year', 'orderable' => false],
-                                                                    ['data' => 'created_at'],
+                                                                    ['data' => 'formatted_created_at','orderData' => 6, 'target' => 6],
+                                                                    ['data' => 'created_at','visible' => false],
                                                                     ['data' => 'view_button', 'orderable' => false],
                                                                 ],
                                                             ]
@@ -407,6 +411,7 @@
                                                                 '',
                                                                 'Created at',
                                                                 '',
+                                                                ''
                                                             ];
 
                                                         $config = [
@@ -431,7 +436,8 @@
                                                                 ['data' => 'amount'],
                                                                 ['data' => 'status_button','orderData' => 7, 'target' => 7],
                                                                 ['data' => 'status','visible' => false],
-                                                                ['data' => 'created_at'],
+                                                                ['data' => 'formatted_created_at','orderData' => 9, 'target' => 9],
+                                                                ['data' => 'created_at','visible' => false],
                                                                 ['data' => 'view_button', 'orderable' => false],
                                                             ],
                                                         ]
@@ -455,6 +461,7 @@
                                                                 '',
                                                                 'Created at',
                                                                 '',
+                                                                ''
                                                             ];
 
                                                         $config = [
@@ -479,7 +486,8 @@
                                                                 ['data' => 'amount'],
                                                                 ['data' => 'status_button','orderData' => 7, 'target' => 7],
                                                                 ['data' => 'status','visible' => false],
-                                                                ['data' => 'created_at'],
+                                                                ['data' => 'formatted_created_at','orderData' => 9, 'target' => 9],
+                                                                ['data' => 'created_at','visible' => false],
                                                                 ['data' => 'view_button', 'orderable' => false],
                                                             ],
                                                         ]
@@ -500,6 +508,7 @@
                                                                 '',
                                                                 'Created at',
                                                                 '',
+                                                                ''
                                                             ];
 
                                                         $config = [
@@ -519,14 +528,58 @@
                                                                 ['data' => 'creator.username','visible' => false],
                                                                 ['data' => 'link_to_user', 'orderData' => 2, 'target' => 2],
                                                                 ['data' => 'user.username','visible' => false],
-                                                                ['data' => 'status_button','orderData' => 5, 'target' => 5],
+                                                                ['data' => 'status_button','orderData' => 4, 'target' => 4],
                                                                 ['data' => 'status','visible' => false],
-                                                                ['data' => 'created_at'],
+                                                                ['data' => 'formatted_created_at','orderData' => 6, 'target' => 6],
+                                                                ['data' => 'created_at','visible' => false],
                                                                 ['data' => 'view_button', 'orderable' => false]
                                                             ],
                                                         ]
                                                         @endphp
                                                         <x-adminlte-datatable id="subscriptionsDatatable" :heads="$heads" :config="$config">
+                                                        </x-adminlte-datatable>
+                                                    </div>
+
+                                                    <h4>Subscribers</h4>
+                                                    <div class="col-12 table-responsive">
+                                                        @php
+                                                            $heads = [
+                                                                '',
+                                                                'Creator',
+                                                                '',
+                                                                'Status',
+                                                                '',
+                                                                'Created at',
+                                                                '',
+                                                                ''
+                                                            ];
+
+                                                        $config = [
+                                                            'processing' => true,
+                                                            'serverSide' => true,
+                                                            'pageLength' => config('core.admin.lists.user_page_count'),
+                                                            'responsive' => true,
+                                                            'lengthChange' => false,
+                                                            'bInfo' => false,
+                                                            'dom' => 'rtip',
+                                                            'orderMulti' => false,
+                                                            'searchCols' => ['','',['search' => $user->username]],
+                                                            'autoWidth' => false,
+                                                            'ajax' => route('payment.admin.ajax.subscription.index'),
+                                                            'order' => [[5, 'desc']],
+                                                            'columns' => [
+                                                                ['data' => 'creator.username','visible' => false],
+                                                                ['data' => 'link_to_creator', 'orderData' => 0, 'target' => 0],
+                                                                ['data' => 'user.username','visible' => false],
+                                                                ['data' => 'status_button','orderData' => 4, 'target' => 4],
+                                                                ['data' => 'status','visible' => false],
+                                                                ['data' => 'formatted_created_at','orderData' => 6, 'target' => 6],
+                                                                ['data' => 'created_at','visible' => false],
+                                                                ['data' => 'view_button', 'orderable' => false]
+                                                            ],
+                                                        ]
+                                                        @endphp
+                                                        <x-adminlte-datatable id="subscribersDatatable" :heads="$heads" :config="$config">
                                                         </x-adminlte-datatable>
                                                     </div>
                                                 </div>
