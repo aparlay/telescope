@@ -1,7 +1,8 @@
 @extends('adminlte::page')
 @section('title', 'Users')
 @section('css')
-    <link rel="stylesheet" href="{{ asset('admin/assets/css/user.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/daterangepicker/daterangepicker.css') }}" >
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/adminStyles.css') }}" >
 @stop
 @section('plugins.Datatables', true)
 @section('content_header')
@@ -34,8 +35,8 @@
                                 'Followers',
                                 'Likes',
                                 'Medias',
-                                'Created at',
                                 '',
+                                'Created at',
                                 ''
                             ];
 
@@ -49,7 +50,7 @@
                             'orderMulti' => false,
                             'autoWidth' => false,
                             'ajax' => route('core.admin.ajax.user.index'),
-                            'order' => [[10, 'desc']],
+                            'order' => [[11, 'desc']],
                             'columns' => [
                                 ['data' => 'username', 'visible' => false],
                                 ['data' => 'username_avatar', 'orderData' => 0, 'target' => 0],
@@ -115,6 +116,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            @include('default_view::admin.parts.date-range-filter', ['column' => 10])
                                             <div class="row d-flex justify-content-end">
                                                 <div class="col-1">
                                                     <button type="button" id="clearFilter" class="btn btn-block btn-danger"><i class="fas fa-trash"></i> Clear</button>
@@ -139,6 +141,9 @@
 @section('js')
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/datetime/1.1.1/js/dataTables.dateTime.min.js"></script>
+    <script src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
 @endsection
 

@@ -3,6 +3,8 @@
 @section('title', 'Media')
 @section('css')
     <link rel="stylesheet" href="{{ asset('admin/assets/css/media.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/daterangepicker/daterangepicker.css') }}" >
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/adminStyles.css') }}" >
 @endsection
 @section('content_header')
     <div class="row mb-2">
@@ -34,8 +36,8 @@
                             'Likes',
                             'Visits',
                             'Sort Score',
-                            'Created At',
                             '',
+                            'Created At',
                             ''
                         ];
                     $config = [
@@ -48,7 +50,7 @@
                         'orderMulti' => false,
                         'autoWidth' => false,
                         'ajax' => route('core.admin.ajax.media.index'),
-                        'order' => [[8, 'desc']],
+                        'order' => [[9, 'desc']],
                         'columns' => [
                             ['data' => 'file', 'orderable' => false],
                             ['data' => 'creator.username'],
@@ -65,10 +67,13 @@
                     ];
                     if($moderation){
                         $config['searching'] = true;
-                        $config['searchCols'] = [null,null,null,["search" => 3]];
+                        $config['searchCols'] = [null,null,null,["search" => \Aparlay\Core\Models\Media::STATUS_COMPLETED]];
                         $config['bInfo'] = false;
                     }
                     @endphp
+                    @if($moderation)
+                        <input type="hidden" id="default-search" data-searchCol="3" data-search="{{ \Aparlay\Core\Models\Media::STATUS_COMPLETED }}">
+                    @endif
                     <div id="accordion">
                         <div class="card card-primary">
                             <div class="card-header">
@@ -101,17 +106,16 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            <div class="col-sm-6">
-                                                <div class="row d-flex justify-content-end">
-                                                    <div class="col-2">
-                                                        <label for="clearFilter"></label>
-                                                        <button type="button" id="clearFilter" class="btn btn-block btn-danger"><i class="fas fa-trash"></i> Clear</button>
-                                                    </div>
-                                                    <div class="col-2">
-                                                        <label for="submitFilter"></label>
-                                                        <button type="button" id="submitFilter" class="btn btn-block btn-primary"><i class="fas fa-filter"></i> Filter</button>
-                                                    </div>
-                                                </div>
+                                        </div>
+                                        @include('default_view::admin.parts.date-range-filter', ['column' => 8])
+                                        <div class="row d-flex justify-content-end">
+                                            <div class="col-2">
+                                                <label for="clearFilter"></label>
+                                                <button type="button" id="clearFilter" class="btn btn-block btn-danger"><i class="fas fa-trash"></i> Clear</button>
+                                            </div>
+                                            <div class="col-2">
+                                                <label for="submitFilter"></label>
+                                                <button type="button" id="submitFilter" class="btn btn-block btn-primary"><i class="fas fa-filter"></i> Filter</button>
                                             </div>
                                         </div>
                                     </form>
@@ -131,5 +135,8 @@
 @section('js')
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/datetime/1.1.1/js/dataTables.dateTime.min.js"></script>
+    <script src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
 @endsection

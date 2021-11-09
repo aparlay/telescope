@@ -25,18 +25,29 @@ class UserRepository
             ->get();
     }
 
-    public function countFilteredUser($filters)
+    public function countFilteredUser($filters, $dateRangeFilter = null)
     {
-        return $this->model->filter($filters)->count();
+        $query = $this->model->filter($filters);
+
+        if ($dateRangeFilter) {
+            $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
+        }
+
+        return $query->count();
     }
 
-    public function getFilteredUser($offset, $limit, $sort, $filters)
+    public function getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter = null)
     {
-        return $this->model->filter($filters)
+        $query = $this->model->filter($filters)
             ->sortBy($sort)
             ->skip($offset)
-            ->take($limit)
-            ->get();
+            ->take($limit);
+
+        if ($dateRangeFilter) {
+            $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
+        }
+
+        return $query->get();
     }
 
     public function create(array $data)

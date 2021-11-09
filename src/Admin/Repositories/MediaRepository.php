@@ -33,18 +33,29 @@ class MediaRepository
             ->get();
     }
 
-    public function countFilteredMedia($filters)
+    public function countFilteredMedia($filters, $dateRangeFilter = null)
     {
-        return $this->model->filter($filters)->count();
+        $query = $this->model->filter($filters);
+
+        if ($dateRangeFilter) {
+            $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
+        }
+
+        return $query->count();
     }
 
-    public function getFilteredMedia($offset, $limit, $sort, $filters)
+    public function getFilteredMedia($offset, $limit, $sort, $filters, $dateRangeFilter = null)
     {
-        return $this->model->filter($filters)
+        $query = $this->model->filter($filters)
             ->sortBy($sort)
             ->skip($offset)
-            ->take($limit)
-            ->get();
+            ->take($limit);
+
+        if ($dateRangeFilter) {
+            $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
+        }
+
+        return $query->get();
     }
 
     public function create(array $data)
