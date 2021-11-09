@@ -39,8 +39,7 @@ class MediaService extends AdminBaseService
         $dateRangeFilter = null;
 
         if (! empty($filters)) {
-
-            if(isset($filters['created_at'])) {
+            if (isset($filters['created_at'])) {
                 $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
             }
 
@@ -65,7 +64,7 @@ class MediaService extends AdminBaseService
 
         foreach ($medias as $media) {
             $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
-            $media->sort_score = $media->sort_score ?round($media->sort_score) : ActionButtonBladeComponent::defaultValueNotSet();
+            $media->sort_score = $media->sort_score ? round($media->sort_score) : ActionButtonBladeComponent::defaultValueNotSet();
             $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
             $media->action = ActionButtonBladeComponent::getViewActionButton($media->_id, 'media');
             $media->date_formatted = $media->created_at->toDateTimeString();

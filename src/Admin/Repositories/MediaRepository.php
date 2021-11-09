@@ -35,7 +35,7 @@ class MediaRepository
 
     public function countFilteredMedia($filters, $dateRangeFilter = null)
     {
-        if($dateRangeFilter) {
+        if ($dateRangeFilter) {
             return $this->model->filter($filters)
                 ->date($dateRangeFilter['start'], $dateRangeFilter['end'])
                 ->count();
@@ -46,7 +46,7 @@ class MediaRepository
 
     public function getFilteredMedia($offset, $limit, $sort, $filters, $dateRangeFilter = null)
     {
-        if($dateRangeFilter) {
+        if ($dateRangeFilter) {
             return $this->model->filter($filters)
                 ->date($dateRangeFilter['start'], $dateRangeFilter['end'])
                 ->sortBy($sort)
