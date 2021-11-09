@@ -54,6 +54,7 @@ class MediaRepository
         if ($dateRangeFilter) {
             $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
         }
+
         return $query->get();
     }
 
