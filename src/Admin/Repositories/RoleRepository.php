@@ -10,7 +10,7 @@ class RoleRepository
 
     public function __construct($model)
     {
-        if (!($model instanceof Role)) {
+        if (! ($model instanceof Role)) {
             throw new \InvalidArgumentException('$model should be of Role type');
         }
 

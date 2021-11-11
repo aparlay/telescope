@@ -10,7 +10,7 @@ class PermissionRepository
 
     public function __construct($model)
     {
-        if (!($model instanceof Permission)) {
+        if (! ($model instanceof Permission)) {
             throw new \InvalidArgumentException('$model should be of Permission type');
         }
 

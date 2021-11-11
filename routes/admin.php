@@ -117,7 +117,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('email.index');
         });
 
-        Route::name('role.')->group(function() {
+        Route::name('role.')->group(function () {
             Route::get('role', [RoleController::class, 'index'])
                 ->middleware(['permission:list roles'])
                 ->name('index');
