@@ -2,7 +2,8 @@
 
 namespace Aparlay\Core\Admin\Repositories;
 
-use Maklad\Permission\Models\Permission;
+
+use Aparlay\Core\Admin\Models\Permission;
 
 class PermissionRepository
 {
@@ -19,6 +20,6 @@ class PermissionRepository
 
     public function getAnassignedPermission($id)
     {
-        return $this->model->where('role_ids', '!=', $id)->get();
+        return $this->model->noPermission($id)->get();
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Admin\Services;
 
+use Aparlay\Core\Admin\Models\Permission;
 use Aparlay\Core\Admin\Repositories\PermissionRepository;
 use Aparlay\Core\Admin\Repositories\RoleRepository;
-use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
 
 class RoleService
