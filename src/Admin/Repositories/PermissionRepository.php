@@ -18,7 +18,7 @@ class PermissionRepository
         $this->model = $model;
     }
 
-    public function getAnassignedPermission($id)
+    public function getUnassignedPermission($id)
     {
         return $this->model->noPermission($id)->get();
     }

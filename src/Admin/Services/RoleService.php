@@ -23,7 +23,7 @@ class RoleService
         $roles = $this->roleRepository->all();
 
         foreach ($roles as $role) {
-            $role->unassigned_permission = $this->permissionRepository->getAnassignedPermission($role->_id);
+            $role->unassigned_permission = $this->permissionRepository->getUnassignedPermission($role->_id);
         }
 
         return $roles;
