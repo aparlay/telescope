@@ -20,7 +20,7 @@ class RoleService
 
     public function all()
     {
-        $roles =  $this->roleRepository->all();
+        $roles = $this->roleRepository->all();
 
         foreach ($roles as $role) {
             $role->unassigned_permission = $this->permissionRepository->getAnassignedPermission($role->_id);
@@ -34,6 +34,5 @@ class RoleService
         return request()->input('action') === 'attach' ?
             $role->givePermissionTo(request()->input('permissions')) :
             $role->revokePermissionTo(request()->input('permissions'));
-
     }
 }

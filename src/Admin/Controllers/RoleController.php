@@ -23,9 +23,9 @@ class RoleController
         return view('default_view::admin.pages.role.index', compact('roles'));
     }
 
-    public function updateRole(Role $role,UpdateRoleRequest $request)
+    public function updateRole(Role $role, UpdateRoleRequest $request)
     {
-        if($this->roleService->updateRole($role)) {
+        if ($this->roleService->updateRole($role)) {
             return back()->with(['success' => 'Successfully updated role.']);
         } else {
             return back()->with(['error' => 'Update role failed.']);

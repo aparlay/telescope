@@ -28,7 +28,7 @@ class UpdateRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'permissions' => ['required','array', Rule::in(Permission::all()->pluck('name'))],
+            'permissions' => ['required', 'array', Rule::in(Permission::all()->pluck('name'))],
         ];
     }
 
