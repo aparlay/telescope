@@ -121,7 +121,7 @@
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             @if(!$role->permissions->isEmpty())
-                                                                <label for="">Unassigned Permissions</label>
+                                                                <label for="">Assigned Permissions</label>
                                                                 <select name="permissions[]" class="form-control select2" multiple="multiple" style="width: 100%">
                                                                     @foreach($role->permissions as $permission)
                                                                         <option value="{{ $permission->name }}">{{ $permission->name }}</option>
