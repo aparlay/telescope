@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Admin\Repositories;
 
-
 use Aparlay\Core\Admin\Models\Permission;
 
 class PermissionRepository
