@@ -14,6 +14,7 @@ use MongoDB\BSON\UTCDateTime;
 trait MediaScope
 {
     use AdminBaseScope;
+
     /**
      * @param  Builder  $query
      * @param  ObjectId|string  $creatorId
