@@ -5,6 +5,7 @@ use Aparlay\Core\Admin\Controllers\AuthController;
 use Aparlay\Core\Admin\Controllers\DashboardController;
 use Aparlay\Core\Admin\Controllers\EmailController;
 use Aparlay\Core\Admin\Controllers\MediaController;
+use Aparlay\Core\Admin\Controllers\RoleController;
 use Aparlay\Core\Admin\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -114,6 +115,16 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('email', [EmailController::class, 'indexAjax'])
                 ->middleware(['permission:list emails'])
                 ->name('email.index');
+        });
+
+        Route::name('role.')->group(function () {
+            Route::get('role', [RoleController::class, 'index'])
+                ->middleware(['permission:list roles'])
+                ->name('index');
+
+            Route::post('role/{role}/', [RoleController::class, 'updateRole'])
+                ->middleware(['permission:edit roles'])
+                ->name('update');
         });
     });
 
