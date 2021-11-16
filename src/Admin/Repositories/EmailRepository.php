@@ -79,7 +79,7 @@ class EmailRepository
      * @param $filters
      * @return mixed
      */
-    public function getFilteredEmail($offset, $limit, $sort, $filters,$dateRangeFilter = null)
+    public function getFilteredEmail($offset, $limit, $sort, $filters, $dateRangeFilter = null)
     {
         $query = $this->model->filter($filters)
             ->sortBy($sort)

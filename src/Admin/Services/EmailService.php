@@ -16,7 +16,7 @@ class EmailService extends AdminBaseService
     {
         $this->emailRepository = new EmailRepository(new Email());
 
-        $this->filterableField = ['user.username', 'to', 'status','created_at'];
+        $this->filterableField = ['user.username', 'to', 'status', 'created_at'];
         $this->sorterableField = ['user.username', 'to', 'type', 'status', 'created_at'];
     }
 
@@ -39,7 +39,7 @@ class EmailService extends AdminBaseService
                 unset($filters['created_at']);
             }
 
-            $emails = $this->emailRepository->getFilteredEmail($offset, $limit, $sort, $filters,$dateRangeFilter);
+            $emails = $this->emailRepository->getFilteredEmail($offset, $limit, $sort, $filters, $dateRangeFilter);
         } else {
             $emails = $this->emailRepository->emailAjax($offset, $limit, $sort);
         }
@@ -56,7 +56,7 @@ class EmailService extends AdminBaseService
     public function appendAttributes($emails, $filters, $dateRangeFilter = null)
     {
         $emails->total_email = $this->emailRepository->countCollection();
-        $emails->total_filtered_email = ! empty($filters) || $dateRangeFilter ? $this->emailRepository->countFilteredEmail($filters,$dateRangeFilter) : $emails->total_email;
+        $emails->total_filtered_email = ! empty($filters) || $dateRangeFilter ? $this->emailRepository->countFilteredEmail($filters, $dateRangeFilter) : $emails->total_email;
 
         foreach ($emails as $email) {
             $email->status_text = $email->status_name;
