@@ -49,8 +49,6 @@ class DefineRolesPermissions extends Migration
                 'list medias',
                 'show medias',
                 'upload medias',
-
-                'list emails',
             ],
             'administrator' => [
                 'dashboard',

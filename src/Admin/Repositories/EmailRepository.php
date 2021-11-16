@@ -61,9 +61,15 @@ class EmailRepository
      * @param $filters
      * @return mixed
      */
-    public function countFilteredEmail($filters)
+    public function countFilteredEmail($filters, $dateRangeFilter = null)
     {
-        return $this->model->filter($filters)->count();
+        $query = $this->model->filter($filters);
+
+        if ($dateRangeFilter) {
+            $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
+        }
+
+        return $query->count();
     }
 
     /**
@@ -73,13 +79,18 @@ class EmailRepository
      * @param $filters
      * @return mixed
      */
-    public function getFilteredEmail($offset, $limit, $sort, $filters)
+    public function getFilteredEmail($offset, $limit, $sort, $filters,$dateRangeFilter = null)
     {
-        return $this->model->filter($filters)
+        $query = $this->model->filter($filters)
             ->sortBy($sort)
             ->skip($offset)
-            ->take($limit)
-            ->get();
+            ->take($limit);
+
+        if ($dateRangeFilter) {
+            $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
+        }
+
+        return $query->get();
     }
 
     /**
