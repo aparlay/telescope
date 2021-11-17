@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\EmailFactory;
-use Aparlay\Core\Models\Scopes\AdminBaseScope;
+use Aparlay\Core\Models\Scopes\BaseScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

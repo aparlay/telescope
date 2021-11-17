@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
-trait AdminBaseScope
+trait BaseScope
 {
     //TODO: scope too general, must refactor
     public function scopeFilter($query, $filters)
