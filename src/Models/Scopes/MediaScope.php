@@ -13,6 +13,8 @@ use MongoDB\BSON\UTCDateTime;
 
 trait MediaScope
 {
+    use BaseScope;
+
     /**
      * @param  Builder  $query
      * @param  ObjectId|string  $creatorId
@@ -201,32 +203,6 @@ trait MediaScope
         return $query->where('user_id', $userId);
     }
 
-    public function scopeDate(Builder $query, UTCDateTime $start = null, UTCDateTime $end = null): Builder
-    {
-        if (null !== $start && null !== $end) {
-            return $query->whereBetween('created_at', [$start, $end]);
-        }
-
-        if (null !== $start) {
-            return $query->where('created_at', '$gte', $start);
-        }
-
-        if (null !== $end) {
-            return $query->where('created_at', '$lte', $end);
-        }
-
-        return $query;
-    }
-
-    /**
-     * @param $query
-     * @return mixed
-     */
-    public function scopeRecentFirst($query): mixed
-    {
-        return $query->orderBy('created_at', 'desc');
-    }
-
     /**
      * @param $query
      * @return mixed
@@ -234,28 +210,5 @@ trait MediaScope
     public function scopeSort($query): mixed
     {
         return $query->orderBy('sort_score', 'desc');
-    }
-
-    public function scopeSortBy($query, $sorts): mixed
-    {
-        foreach ($sorts as $field => $direction) {
-            $query->orderBy($field, $direction);
-        }
-
-        return $query;
-    }
-
-    //TODO: scope too general, must refactor.
-    public function scopeFilter($query, $filters)
-    {
-        foreach ($filters as $key => $filter) {
-            if (is_numeric($filter)) {
-                $query->where($key, (int) $filter);
-            } else {
-                $query->where($key, 'regex', new Regex('^'.$filter));
-            }
-        }
-
-        return $query;
     }
 }

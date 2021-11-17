@@ -2,37 +2,12 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
-use Aparlay\Core\Models\Email;
 use Illuminate\Database\Eloquent\Builder;
-use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
-/**
- * Trait EmailScope.
- */
-trait EmailScope
+trait BaseScope
 {
-    /**
-     * @param $query
-     * @param $sorts
-     *
-     * @return mixed
-     */
-    public function scopeSortBy($query, $sorts): mixed
-    {
-        foreach ($sorts as $field => $direction) {
-            $query->orderBy($field, $direction);
-        }
-
-        return $query;
-    }
-
-    /**
-     * @param $query
-     * @param $filters
-     * @return mixed
-     */
     //TODO: scope too general, must refactor
     public function scopeFilter($query, $filters)
     {
@@ -45,6 +20,24 @@ trait EmailScope
         }
 
         return $query;
+    }
+
+    public function scopeSortBy($query, $sorts): mixed
+    {
+        foreach ($sorts as $field => $direction) {
+            $query->orderBy($field, $direction);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeRecentFirst($query): mixed
+    {
+        return $query->orderBy('created_at', 'desc');
     }
 
     public function scopeDate(Builder $query, UTCDateTime $start = null, UTCDateTime $end = null): Builder
