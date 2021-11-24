@@ -17,7 +17,7 @@ class MediaProcessingCompleted implements ShouldBroadcast
     use SerializesModels;
 
     /**
-     * The credit card instance
+     * The credit card instance.
      *
      * @var Media
      */
@@ -40,7 +40,7 @@ class MediaProcessingCompleted implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('users.' . $this->media->creator['_id']);
+        return new PrivateChannel('users.'.$this->media->creator['_id']);
     }
 
     /**
@@ -69,7 +69,7 @@ class MediaProcessingCompleted implements ShouldBroadcast
                 'status' => $this->media->status,
             ],
             'message' => 'All done',
-            'progress' => 100
+            'progress' => 100,
         ];
     }
 }
