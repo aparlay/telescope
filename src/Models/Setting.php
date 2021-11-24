@@ -28,6 +28,7 @@ class Setting extends BaseModel
      */
     protected $fillable = [
         '_id',
+        'group',
         'title',
         'value',
         'created_by',

@@ -111,7 +111,7 @@
                                             @csrf
                                             <input type="hidden" value="remove" name="action">
                                             <div class="modal-header bg-danger">
-                                                <h5 class="modal-title" id="exampleModalLiveLabel">Attach Permission to {{ ucwords(str_replace('-', ' ', $role->name)) }}</h5>
+                                                <h5 class="modal-title" id="exampleModalLiveLabel">Remove Permission to {{ ucwords(str_replace('-', ' ', $role->name)) }}</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">×</span>
                                                 </button>
