@@ -26,7 +26,7 @@ class UpdateSettingRequest extends FormRequest
         return [
             'group' => 'required',
             'title' => 'required',
-            'value' => $this->valueRule()
+            'value' => $this->valueRule(),
         ];
     }
 
@@ -34,7 +34,7 @@ class UpdateSettingRequest extends FormRequest
     {
         $rule = ['required'];
 
-        if($this->type === 'json') {
+        if ($this->type === 'json') {
             array_push($rule, 'json');
         }
 

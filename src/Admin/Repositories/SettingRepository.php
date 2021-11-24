@@ -52,7 +52,6 @@ class SettingRepository
         return $query->get();
     }
 
-
     public function getSettingGroup()
     {
         return $this->model->settingGroup();

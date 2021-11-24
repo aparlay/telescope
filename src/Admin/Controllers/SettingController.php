@@ -39,12 +39,13 @@ class SettingController
     {
         $setting = $this->settingService->find($setting->_id);
         $groups = $this->settingService->getSettingGroups();
+
         return view('default_view::admin.pages.setting.view', compact('setting', 'groups'));
     }
 
     public function update(UpdateSettingRequest $request, Setting $setting)
     {
-       $this->settingService->update($setting->_id);
+        $this->settingService->update($setting->_id);
 
         return back()->with('success', 'Setting updated successfully.');
     }
