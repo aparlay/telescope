@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Config;
 
 class ConfigHelper
 {
-    public static function initialize(): array
+    public static function overrideFromDB(): array
     {
         $dbSettings = Setting::all([
             'title', 'value', 'group',

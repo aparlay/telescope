@@ -16,6 +16,6 @@ class AdminServiceProvider extends ServiceProvider
         MediaResource::withoutWrapping();
         UserResource::withoutWrapping();
 
-        config(ConfigHelper::initialize());
+        ConfigHelper::overrideFromDB();
     }
 }
