@@ -91,7 +91,7 @@ class SettingService extends AdminBaseService
     {
         $setting = $this->settingRepository->findSettingByTitleByGroup(request()->input('title'), request()->input('group'));
 
-        if(!$setting) {
+        if (! $setting) {
             $data = request()->only(['group', 'title']);
 
             $data['value'] = request()->input('type') === 'json' ?

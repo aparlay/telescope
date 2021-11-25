@@ -61,11 +61,11 @@ class SettingController
     {
         $create = $this->settingService->create();
 
-        if(!$create) {
+        if (! $create) {
             return back()->withErrors(['error' => 'Setting already exist. Please update value for that specific setting.']);
         } else {
             return redirect()->route('core.admin.setting.view', ['setting' => $create->_id])->with([
-                'success' => 'Successfully added setting.'
+                'success' => 'Successfully added setting.',
             ]);
         }
     }

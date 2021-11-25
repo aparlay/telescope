@@ -28,14 +28,14 @@ class SettingRequest extends FormRequest
             'title' => 'required',
             'value' => [
                 'required',
-                function($attribute, $value, $fail) {
-                    if($this->type === 'json') {
-                        if(!json_decode($value)) {
+                function ($attribute, $value, $fail) {
+                    if ($this->type === 'json') {
+                        if (! json_decode($value)) {
                             $fail('Value is not a valid json.');
                         }
                     }
-                }
-            ]
+                },
+            ],
         ];
     }
 }
