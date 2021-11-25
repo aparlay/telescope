@@ -10,4 +10,10 @@ trait SettingScope
     {
         return $query->groupBy('group')->get(['group']);
     }
+
+    public function scopeByTitleByGroup($query, $title, $group)
+    {
+        return $query->where('title', $title)
+                ->where('group', $group);
+    }
 }

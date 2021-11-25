@@ -85,4 +85,21 @@ class SettingService extends AdminBaseService
                         request()->input('value');
         return $this->settingRepository->update($data, $id);
     }
+
+    public function create()
+    {
+        $setting = $this->settingRepository->findSettingByTitleByGroup(request()->input('title'), request()->input('group'));
+
+        if(!$setting) {
+            $data = request()->only(['group', 'title']);
+
+            $data['value'] = request()->input('type') === 'json' ?
+                json_decode(request()->input('value'), JSON_PRETTY_PRINT) :
+                request()->input('value');
+
+            return $this->settingRepository->store($data);
+        } else {
+            return false;
+        }
+    }
 }

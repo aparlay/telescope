@@ -141,6 +141,14 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:list settings'])
                 ->name('store');
 
+            Route::get('setting/create', [SettingController::class, 'create'])
+                ->middleware(['permission:create settings'])
+                ->name('create');
+
+            Route::post('setting/store', [SettingController::class, 'store'])
+                ->middleware(['permission:create settings'])
+                ->name('store');
+
             Route::get('setting/{setting}', [SettingController::class, 'view'])
                 ->middleware(['permission:show settings'])
                 ->name('view');

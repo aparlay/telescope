@@ -8,7 +8,12 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Settings</h1>
+            <h1 class="m-0">Settings
+                <a href="{{ route('core.admin.setting.create') }}" class="ml-4 btn btn-primary btn-md">
+                    Add Setting
+                </a>
+            </h1>
+
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">

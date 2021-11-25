@@ -76,4 +76,14 @@ class SettingRepository
     {
         return $this->find($id)->fill($data)->save();
     }
+
+    public function findSettingByTitleByGroup($title, $group)
+    {
+        return $this->model->byTitleByGroup($title, $group)->first();
+    }
+
+    public function store($data)
+    {
+        return $this->model->create($data);
+    }
 }
