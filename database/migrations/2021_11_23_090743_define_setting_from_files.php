@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Aparlay\Core\Models\Setting;
-use MongoDB\BSON\ObjectId;
 use Aparlay\Core\Models\User;
+use Illuminate\Database\Migrations\Migration;
+use MongoDB\BSON\ObjectId;
 
 class DefineSettingFromFiles extends Migration
 {
@@ -119,15 +119,14 @@ class DefineSettingFromFiles extends Migration
 
         ];
         $user = User::where('type', User::TYPE_ADMIN)->first();
-        foreach($settings as $key => $setting)
-        {
-            foreach($setting as $name => $value) {
+        foreach ($settings as $key => $setting) {
+            foreach ($setting as $name => $value) {
                 $array = [
                     'group' => $key,
                     'created_by' => new ObjectId($user->_id),
                     'updated_by' => new ObjectId($user->_id),
                     'title' => $name,
-                    'value' => $value
+                    'value' => $value,
                 ];
 
                 Setting::create($array);

@@ -38,15 +38,4 @@ class SettingRequest extends FormRequest
             ]
         ];
     }
-
-//    public function valueRule()
-//    {
-//        $rule = ['required'];
-//
-//        if($this->type === 'json') {
-//            array_push($rule, 'json');
-//        }
-//
-//        return $rule;
-//    }
 }

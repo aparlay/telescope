@@ -46,10 +46,10 @@ class SettingService extends AdminBaseService
     }
 
     /**
-    * @param $settings
-    * @param $filters
-    * @param $dateRangeFilter
-    */
+     * @param $settings
+     * @param $filters
+     * @param $dateRangeFilter
+     */
     public function appendAttributes($settings, $filters, $dateRangeFilter)
     {
         $settings->total_settings = $this->settingRepository->countCollection();
@@ -83,6 +83,7 @@ class SettingService extends AdminBaseService
         $data['value'] = request()->input('type') === 'json' ?
                         json_decode(request()->input('value'), JSON_PRETTY_PRINT) :
                         request()->input('value');
+
         return $this->settingRepository->update($data, $id);
     }
 

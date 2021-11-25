@@ -10,16 +10,15 @@ class ConfigHelper
     public static function initialize(): array
     {
         $dbSettings = Setting::all([
-            'title','value', 'group'
+            'title', 'value', 'group',
         ])
         ->groupBy('group')
         ->toArray();
 
         $configArray = [];
-        foreach($dbSettings as $key => $settings) {
-            foreach($settings as $setting)
-            {
-                Config::set($key . '.' . $setting['title'], $setting['value']);
+        foreach ($dbSettings as $key => $settings) {
+            foreach ($settings as $setting) {
+                Config::set($key.'.'.$setting['title'], $setting['value']);
             }
         }
 
