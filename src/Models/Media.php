@@ -483,7 +483,7 @@ class Media extends BaseModel
 
             $tipClass::cacheByCreatorId(auth()->user()->_id);
             $totalSentTips = Redis::hGet($mediaTipCacheKey, (string) $this->_id);
-            $totalSentTips = $totalSentTips !== false ? (int)$totalSentTips : 0;
+            $totalSentTips = $totalSentTips !== false ? (int) $totalSentTips : 0;
         }
 
         return $totalSentTips;
