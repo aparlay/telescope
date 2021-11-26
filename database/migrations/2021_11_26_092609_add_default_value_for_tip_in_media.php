@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\Media;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Media;
 
 class AddDefaultValueForTipInMedia extends Migration
 {
@@ -20,7 +20,6 @@ class AddDefaultValueForTipInMedia extends Migration
                 $media->save();
             }
         });
-
     }
 
     /**
@@ -30,6 +29,5 @@ class AddDefaultValueForTipInMedia extends Migration
      */
     public function down()
     {
-
     }
 }
