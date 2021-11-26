@@ -58,7 +58,7 @@ class MediaResource extends JsonResource
             'visit_count' => $this->visit_count,
             'visits' => $visits,
             'comment_count' => $this->comment_count,
-            'tips' => $this->tips,
+            'tips' => (int) $this->tips,
             'comments' => [],
             'slug' => $this->slug,
             'alerts' => AlertResource::collection($this->alerts),
