@@ -44,6 +44,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read string $slack_admin_url
  * @property-read int $skin_score
  * @property-read bool $is_liked
+ * @property-read int $sent_tips
  *
  * @OA\Schema()
  */
@@ -73,6 +74,7 @@ class Media extends MediaBase
      * @OA\Property(property="comment_count", type="number", example=5325)
      * @OA\Property(property="comments", type="array", @OA\Items ())
      * @OA\Property(property="is_adult", type="boolean", example=true)
+     * @OA\Property(property="sent_tips", type="integer", example=23000)
      * @OA\Property(property="slug", type="string", example="weER34")
      * @OA\Property(property="created_by", type="string", example="60237caf5e41025e1e3c80b1")
      * @OA\Property(property="updated_by", type="string", example=null)

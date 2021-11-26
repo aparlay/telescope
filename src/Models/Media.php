@@ -60,6 +60,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
  * @property-read int $skin_score
+ * @property-read int $sent_tips
  *
  *
  * @method static |self|Builder creator(ObjectId|string $userId) get creator user
@@ -135,6 +136,7 @@ class Media extends BaseModel
         'scores',
         'sort_score',
         'slug',
+        'tips',
         'created_by',
         'updated_by',
         'created_at',
@@ -463,6 +465,28 @@ class Media extends BaseModel
         MediaVisit::cacheByUserId(auth()->user()->_id);
 
         return Redis::sismember($mediaVisitCacheKey, (string) $this->_id);
+    }
+
+    /**
+     * Get the user's full name.
+     */
+    public function getSentTipsAttribute(): int
+    {
+        $totalSentTips = 0;
+        if (auth()->guest()) {
+            return $totalSentTips;
+        }
+
+        $tipClass = '\Aparlay\Payment\Models\Tip';
+        if (class_exists($tipClass)) {
+            $mediaTipCacheKey = (new $tipClass())->getCollection().':creator:'.auth()->user()->_id;
+
+            $tipClass::cacheByCreatorId(auth()->user()->_id);
+            $totalSentTips = Redis::hGet($mediaTipCacheKey, (string) $this->_id);
+            $totalSentTips = $totalSentTips !== false ? (int)$totalSentTips : 0;
+        }
+
+        return $totalSentTips;
     }
 
     /**
