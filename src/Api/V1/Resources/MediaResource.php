@@ -36,6 +36,11 @@ class MediaResource extends JsonResource
             $visits[] = $this->createSimpleUser($visit);
         }
 
+        $tips = 0;
+        if (isset(auth()->user()->_id) && (string)auth()->user()->_id === (string)$this->creator['_id']) {
+            $tips = $this->tips;
+        }
+
         return [
             '_id' => (string) $this->_id,
             'description' => $this->description,
@@ -58,7 +63,7 @@ class MediaResource extends JsonResource
             'visit_count' => $this->visit_count,
             'visits' => $visits,
             'comment_count' => $this->comment_count,
-            'tips' => $this->tips,
+            'tips' => $tips,
             'sent_tips' => $this->sent_tips,
             'comments' => [],
             'slug' => $this->slug,
