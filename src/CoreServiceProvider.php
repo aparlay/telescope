@@ -15,6 +15,7 @@ use Aparlay\Core\Commands\VideoScoreDailyCommand;
 use Aparlay\Core\Commands\VideoScoreHourlyCommand;
 use Aparlay\Core\Commands\VideoUpdateInfoCommand;
 use Aparlay\Core\Commands\WsCommand;
+use Aparlay\Core\Helpers\ConfigHelper;
 use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -53,6 +54,8 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        ConfigHelper::loadConfig();
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/core.php' => config_path('core.php'),
