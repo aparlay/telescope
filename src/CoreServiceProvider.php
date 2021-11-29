@@ -54,8 +54,6 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        ConfigHelper::loadConfig();
-
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/core.php' => config_path('core.php'),
@@ -97,6 +95,8 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'core');
         $this->publishConfig();
         $this->publishMigrations();
+
+        ConfigHelper::loadConfig();
     }
 
     /**
