@@ -29,24 +29,24 @@ class SettingRequest extends FormRequest
             'group' => 'required',
             'title' => 'required',
             'type' => [
-                Rule::in(array_keys(Setting::getValueTypes()))
+                Rule::in(array_keys(Setting::getValueTypes())),
             ],
             'value' => [
                 'required',
-                function($attribute, $value, $fail) {
+                function ($attribute, $value, $fail) {
                     if ($this->type === 'json') {
                         if (! json_decode($value)) {
                             $fail('Value is not a valid json.');
                         }
                     }
-                }
+                },
             ],
         ];
     }
 
     public function prepareForValidation()
     {
-        if((int) $this->type == Setting::VALUE_TYPE_BOOLEAN) {
+        if ((int) $this->type == Setting::VALUE_TYPE_BOOLEAN) {
             $this->merge(['value' => request()->has('value')]);
         }
     }
