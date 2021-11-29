@@ -11,9 +11,13 @@ trait SettingScope
         return $query->groupBy('group')->get(['group']);
     }
 
-    public function scopeByTitleByGroup($query, $title, $group)
+    public function scopeTitle($query, $title)
     {
-        return $query->where('title', $title)
-                ->where('group', $group);
+        return $query->where('title', $title);
+    }
+
+    public function scopeGroup($query, $group)
+    {
+        return $query->where('group', $group);
     }
 }

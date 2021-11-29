@@ -2,6 +2,9 @@
 
 namespace Aparlay\Core\Helpers;
 
+use Illuminate\Support\Arr;
+use MongoDB\BSON\UTCDateTime;
+
 class ActionButtonBladeComponent
 {
     /**
@@ -25,8 +28,8 @@ class ActionButtonBladeComponent
     }
 
     /**
-     * @param $color
      * @param $name
+     * @param $imagePath
      * @return string
      */
     public static function getAvatarWithName($name, $imagePath): string
@@ -44,12 +47,25 @@ class ActionButtonBladeComponent
     }
 
     /**
-     * @param $color
-     * @param $name
      * @return string
      */
     public static function defaultValueNotSet(): string
     {
         return '<span class="text-danger">(not set)</span>';
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public static function castDisplayValue($value): mixed
+    {
+        if(Arr::accessible($value)) {
+            return '<span class="text-success">(array)</span>';
+        } elseif($value instanceof UTCDateTime) {
+            return $value->toDateTime()->format('Y-m-d H:i:s');
+        } else {
+            return $value;
+        }
     }
 }

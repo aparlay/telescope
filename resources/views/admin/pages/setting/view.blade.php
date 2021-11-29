@@ -41,19 +41,39 @@
                                 <div class="form-group">
                                     <label for="type">Value Type</label>
                                     <select name="type" id="type" class="form-control">
-                                        <option value="string" {{ !\Arr::accessible($setting->value) ? 'selected' : '' }}>String</option>
-                                        <option value="json" {{ \Arr::accessible($setting->value) ? 'selected' : '' }}>Json</option>
+                                        @foreach(\Aparlay\Core\Admin\Models\Setting::getValueTypes() as $key => $valueTypes)
+                                            <option value="{{ $key }}" {{ $setting->type == $key ? 'selected' : '' }}>{{ $valueTypes }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="fieldContainer">
                                     <label for="value">Value</label>
-                                    <textarea name="value" id="value" rows="10" class="form-control"
-                                              placeholder="{'key': 'value'} | string"
-                                            {{ !\Arr::accessible($setting->value) ? 'style=display:none' : '' }}
-                                    >{{ \Arr::accessible($setting->value) ? json_encode($setting->value, JSON_PRETTY_PRINT) : null }}</textarea>
-                                    <input type="text" id="value" class="form-control"
-                                           value="{{ !\Arr::accessible($setting->value) ? $setting->value : null }}"
-                                        {{ \Arr::accessible($setting->value) ? 'style=display:none' : '' }}>
+                                    @switch($setting->type)
+                                        @case(\Aparlay\Core\Admin\Models\Setting::VALUE_TYPE_JSON)
+                                            <textarea name="value" id="value" rows="10" class="form-control valueType"
+                                                  placeholder="{'key': 'value'} | string">{{ json_encode($setting->value, JSON_PRETTY_PRINT) }}</textarea>
+                                            @break
+                                        @case(\Aparlay\Core\Admin\Models\Setting::VALUE_TYPE_STRING)
+                                            <input type="text" id="value" class="form-control valueType" value="{{ $setting->value }}">
+                                            @break
+                                        @case(\Aparlay\Core\Admin\Models\Setting::VALUE_TYPE_DATETIME)
+                                            <div class="input-group datetime valueType" id="valuedatetime" data-target-input="nearest">
+                                                <input type="text" name="value" value="{{ $setting->value }}" class="form-control valueType datetimepicker-input" data-target="#valuedatetime"/>
+                                                <div class="input-group-append" data-target="#valuedatetime" data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                            @break
+                                        @case(\Aparlay\Core\Admin\Models\Setting::VALUE_TYPE_BOOLEAN)
+                                            <div class="custom-control custom-switch bool valueType">
+                                                <input type="checkbox" value="1" name="value" class="name custom-control-input valueType" id="customSwitches" {{ $setting->value ? 'checked' : '' }}>
+                                                <label class="custom-control-label" for="customSwitches"></label>
+                                            </div>
+                                            @break
+                                        @case(\Aparlay\Core\Admin\Models\Setting::VALUE_TYPE_INTEGER)
+                                            <input type="number" value="{{ $setting->value }}" id="value" name="value" class="int valueType form-control valueType">
+                                            @break
+                                    @endswitch
                                 </div>
                             </div>
                             <div class="card-footer">

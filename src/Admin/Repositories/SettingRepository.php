@@ -78,7 +78,7 @@ class SettingRepository
 
     public function findSettingByTitleByGroup($title, $group)
     {
-        return $this->model->byTitleByGroup($title, $group)->first();
+        return $this->model->title($title)->group($group)->first();
     }
 
     public function store($data)

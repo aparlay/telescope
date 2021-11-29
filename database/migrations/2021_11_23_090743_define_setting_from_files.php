@@ -96,27 +96,6 @@ class DefineSettingFromFiles extends Migration
                     ],
                 ],
             ],
-            'auth' => [
-                'defaults' => [
-                    'guard' => 'api',
-                    'passwords' => 'users',
-                ],
-                'guards' => [
-                    'admin' => [
-                        'driver' => 'session',
-                        'provider' => 'users',
-                    ],
-                    'web' => [
-                        'driver' => 'session',
-                        'provider' => 'users',
-                    ],
-                    'api' => [
-                        'driver' => 'jwt',
-                        'provider' => 'users',
-                    ],
-                ],
-            ],
-
         ];
         $user = User::where('type', User::TYPE_ADMIN)->first();
         foreach ($settings as $key => $setting) {

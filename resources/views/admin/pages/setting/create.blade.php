@@ -1,5 +1,9 @@
 @extends('adminlte::page')
 @section('title', 'Add Setting')
+@section('css')
+    <link rel="stylesheet" href="{{ asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/adminStyles.css') }}" >
+@endsection
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -40,15 +44,14 @@
                                 <div class="form-group">
                                     <label for="type">Value Type</label>
                                     <select name="type" id="type" class="form-control">
-                                        <option value="string">String</option>
-                                        <option value="json">Json</option>
+                                        @foreach(\Aparlay\Core\Admin\Models\Setting::getValueTypes() as $key => $valueTypes)
+                                            <option value="{{ $key }}">{{ $valueTypes }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="fieldContainer">
                                     <label for="value">Value</label>
-                                    <textarea name="value" id="value" rows="10" class="form-control"
-                                              placeholder="{'key': 'value'} | string" style="display: none"></textarea>
-                                    <input type="text" id="value" name="value" class="form-control">
+                                    <input type="text" id="value" name="value" class="string valueType form-control">
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -64,5 +67,7 @@
 @endsection
 @section('plugins.Select2', true)
 @section('js')
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="{{ asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.js') }}"></script>
     <script src="{{ asset('admin/assets/js/adminSetting.js') }}"></script>
 @endsection

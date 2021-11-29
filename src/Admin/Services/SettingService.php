@@ -5,7 +5,9 @@ namespace Aparlay\Core\Admin\Services;
 use Aparlay\Core\Admin\Models\Setting;
 use Aparlay\Core\Admin\Repositories\SettingRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
+use Aparlay\Core\Helpers\DT;
 use Illuminate\Support\Arr;
+use MongoDB\BSON\UTCDateTime;
 
 class SettingService extends AdminBaseService
 {
@@ -56,7 +58,7 @@ class SettingService extends AdminBaseService
         $settings->total_filtered_settings = ! empty($filters) || $dateRangeFilter ? $this->settingRepository->countFilteredSettings($filters, $dateRangeFilter) : $settings->total_settings;
 
         foreach ($settings as $setting) {
-            $setting->value = Arr::accessible($setting->value) ? 'array' : $setting->value;
+            $setting->value = ActionButtonBladeComponent::castDisplayValue($setting->value);
             $setting->date_formatted = $setting->created_at->toDateTimeString();
             $setting->action = ActionButtonBladeComponent::getViewActionButton($setting->_id, 'setting');
         }
@@ -68,7 +70,10 @@ class SettingService extends AdminBaseService
      */
     public function find($id): mixed
     {
-        return $this->settingRepository->find($id);
+        $setting = $this->settingRepository->find($id);
+        $setting->type = $this->getValueDataType($setting->value);
+
+        return $setting;
     }
 
     public function getSettingGroups()
@@ -80,9 +85,7 @@ class SettingService extends AdminBaseService
     {
         $data = request()->only(['group', 'title']);
 
-        $data['value'] = request()->input('type') === 'json' ?
-                        json_decode(request()->input('value'), JSON_PRETTY_PRINT) :
-                        request()->input('value');
+        $data['value'] = $this->castValue(request()->input('value'));
 
         return $this->settingRepository->update($data, $id);
     }
@@ -94,13 +97,34 @@ class SettingService extends AdminBaseService
         if (! $setting) {
             $data = request()->only(['group', 'title']);
 
-            $data['value'] = request()->input('type') === 'json' ?
-                json_decode(request()->input('value'), JSON_PRETTY_PRINT) :
-                request()->input('value');
+            $data['value'] = $this->castValue(request()->input('value'));
 
             return $this->settingRepository->store($data);
         } else {
             return false;
+        }
+    }
+
+    public function castValue($value)
+    {
+        return match ((int)request()->input('type')) {
+            0 => (string)$value,
+            1 => (boolean) $value,
+            2 => (int)$value,
+            3 => DT::utcDateTime($value),
+            4 => json_decode($value, JSON_PRETTY_PRINT),
+            default => null,
+        };
+    }
+
+    public function getValueDataType($value)
+    {
+        if($value instanceof UTCDateTime) {
+            return Setting::VALUE_TYPE_DATETIME;
+        } elseif(gettype($value) == 'array') {
+            return Setting::VALUE_TYPE_JSON;
+        }else {
+            return array_search(ucfirst(gettype($value)), Setting::getValueTypes());
         }
     }
 }
