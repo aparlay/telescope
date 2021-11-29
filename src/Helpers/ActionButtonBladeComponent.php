@@ -60,9 +60,9 @@ class ActionButtonBladeComponent
      */
     public static function castDisplayValue($value): mixed
     {
-        if(Arr::accessible($value)) {
+        if (Arr::accessible($value)) {
             return '<span class="text-success">(array)</span>';
-        } elseif($value instanceof UTCDateTime) {
+        } elseif ($value instanceof UTCDateTime) {
             return $value->toDateTime()->format('Y-m-d H:i:s');
         } else {
             return $value;

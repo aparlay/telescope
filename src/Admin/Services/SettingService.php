@@ -107,10 +107,10 @@ class SettingService extends AdminBaseService
 
     public function castValue($value)
     {
-        return match ((int)request()->input('type')) {
-            0 => (string)$value,
-            1 => (boolean) $value,
-            2 => (int)$value,
+        return match ((int) request()->input('type')) {
+            0 => (string) $value,
+            1 => (bool) $value,
+            2 => (int) $value,
             3 => DT::utcDateTime($value),
             4 => json_decode($value, JSON_PRETTY_PRINT),
             default => null,
@@ -119,11 +119,11 @@ class SettingService extends AdminBaseService
 
     public function getValueDataType($value)
     {
-        if($value instanceof UTCDateTime) {
+        if ($value instanceof UTCDateTime) {
             return Setting::VALUE_TYPE_DATETIME;
-        } elseif(gettype($value) == 'array') {
+        } elseif (gettype($value) == 'array') {
             return Setting::VALUE_TYPE_JSON;
-        }else {
+        } else {
             return array_search(ucfirst(gettype($value)), Setting::getValueTypes());
         }
     }
