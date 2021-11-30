@@ -2,6 +2,9 @@
 
 namespace Aparlay\Core\Helpers;
 
+use Illuminate\Support\Arr;
+use MongoDB\BSON\UTCDateTime;
+
 class ActionButtonBladeComponent
 {
     /**
@@ -24,9 +27,20 @@ class ActionButtonBladeComponent
         return '<a class="btn btn-primary btn-sm" href="/'.$resourceName.'/'.$id.'" title="View"><i class="fas fa-eye"></i> View</a>';
     }
 
+    public static function getViewDeleteActionButton($id, $resourceName)
+    {
+        $buttons = '<div class="d-flex justify-content-center"><a class="btn btn-primary btn-sm" href="/'.$resourceName.'/'.$id.'" title="View"><i class="fas fa-eye"></i> View</a>';
+        $buttons .= '<form action="'.route('core.admin.setting.delete', ['setting' => $id]).'" method="POST">
+                '.csrf_field().method_field('DELETE').'
+                <a class="btn btn-danger btn-sm ml-3 delete" href="" title="Delete"><i class="fas fa-trash"></i> Delete</a>
+            </form></div>';
+
+        return $buttons;
+    }
+
     /**
-     * @param $color
      * @param $name
+     * @param $imagePath
      * @return string
      */
     public static function getAvatarWithName($name, $imagePath): string
@@ -44,12 +58,25 @@ class ActionButtonBladeComponent
     }
 
     /**
-     * @param $color
-     * @param $name
      * @return string
      */
     public static function defaultValueNotSet(): string
     {
         return '<span class="text-danger">(not set)</span>';
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public static function castDisplayValue($value): mixed
+    {
+        if (Arr::accessible($value)) {
+            return '<span class="text-success">(array)</span>';
+        } elseif ($value instanceof UTCDateTime) {
+            return $value->toDateTime()->format('Y-m-d H:i:s');
+        } else {
+            return $value;
+        }
     }
 }

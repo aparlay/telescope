@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Controllers\DashboardController;
 use Aparlay\Core\Admin\Controllers\EmailController;
 use Aparlay\Core\Admin\Controllers\MediaController;
 use Aparlay\Core\Admin\Controllers\RoleController;
+use Aparlay\Core\Admin\Controllers\SettingController;
 use Aparlay\Core\Admin\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -108,6 +109,10 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:list medias'])
                 ->name('media.index');
 
+            Route::get('setting', [SettingController::class, 'indexAjax'])
+                ->middleware(['permission:list settings'])
+                ->name('setting.index');
+
             Route::get('dashboard', [DashboardController::class, 'indexAjax'])
                 ->middleware(['permission:dashboard'])
                 ->name('dashboard.index');
@@ -125,6 +130,32 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('role/{role}/', [RoleController::class, 'updateRole'])
                 ->middleware(['permission:edit roles'])
                 ->name('update');
+        });
+
+        Route::name('setting.')->group(function () {
+            Route::get('setting', [SettingController::class, 'index'])
+                ->middleware(['permission:list settings'])
+                ->name('index');
+
+            Route::get('setting/create', [SettingController::class, 'create'])
+                ->middleware(['permission:create settings'])
+                ->name('create');
+
+            Route::post('setting/store', [SettingController::class, 'store'])
+                ->middleware(['permission:create settings'])
+                ->name('store');
+
+            Route::get('setting/{setting}', [SettingController::class, 'view'])
+                ->middleware(['permission:show settings'])
+                ->name('view');
+
+            Route::put('setting/{setting}', [SettingController::class, 'update'])
+                ->middleware(['permission:edit settings'])
+                ->name('update');
+
+            Route::delete('setting/{setting}', [SettingController::class, 'delete'])
+                ->middleware(['permission:delete settings'])
+                ->name('delete');
         });
     });
 

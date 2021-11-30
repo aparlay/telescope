@@ -16,6 +16,7 @@ use Aparlay\Core\Commands\VideoScoreDailyCommand;
 use Aparlay\Core\Commands\VideoScoreHourlyCommand;
 use Aparlay\Core\Commands\VideoUpdateInfoCommand;
 use Aparlay\Core\Commands\WsCommand;
+use Aparlay\Core\Helpers\ConfigHelper;
 use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -96,6 +97,8 @@ class CoreServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'core');
         $this->publishConfig();
         $this->publishMigrations();
+
+        ConfigHelper::loadDbConfig();
     }
 
     /**
