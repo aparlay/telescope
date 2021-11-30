@@ -84,7 +84,6 @@ class UpdateAvatar implements ShouldQueue
         ];
 
         Cache::store('redis')->set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
-
     }
 
     public function failed(Throwable $exception)
