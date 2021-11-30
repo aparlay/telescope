@@ -31,6 +31,7 @@ class MediaService
     {
         $data = $request->input();
         $data['tips'] = 0;
+
         return $this->mediaRepository->store($data);
     }
 
