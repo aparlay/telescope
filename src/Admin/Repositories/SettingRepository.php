@@ -71,7 +71,7 @@ class SettingRepository
         return $this->model->count();
     }
 
-    public function update($data, $id)
+    public function update($data, $id): bool
     {
         return $this->find($id)->fill($data)->save();
     }
@@ -81,8 +81,13 @@ class SettingRepository
         return $this->model->title($title)->group($group)->first();
     }
 
-    public function store($data)
+    public function store($data): Model|Setting
     {
         return $this->model->create($data);
+    }
+
+    public function delete($id): ?bool
+    {
+        return $this->model->findOrFail($id)->delete();
     }
 }

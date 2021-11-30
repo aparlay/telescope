@@ -137,10 +137,6 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:list settings'])
                 ->name('index');
 
-            Route::post('setting', [SettingController::class, 'store'])
-                ->middleware(['permission:list settings'])
-                ->name('store');
-
             Route::get('setting/create', [SettingController::class, 'create'])
                 ->middleware(['permission:create settings'])
                 ->name('create');
@@ -156,6 +152,10 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::put('setting/{setting}', [SettingController::class, 'update'])
                 ->middleware(['permission:edit settings'])
                 ->name('update');
+
+            Route::delete('setting/{setting}', [SettingController::class, 'delete'])
+                ->middleware(['permission:delete settings'])
+                ->name('delete');
         });
     });
 

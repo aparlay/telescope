@@ -60,7 +60,7 @@ class SettingService extends AdminBaseService
         foreach ($settings as $setting) {
             $setting->value = ActionButtonBladeComponent::castDisplayValue($setting->value);
             $setting->date_formatted = $setting->created_at->toDateTimeString();
-            $setting->action = ActionButtonBladeComponent::getViewActionButton($setting->_id, 'setting');
+            $setting->action = ActionButtonBladeComponent::getViewDeleteActionButton($setting->_id, 'setting');
         }
     }
 
@@ -126,5 +126,10 @@ class SettingService extends AdminBaseService
         } else {
             return array_search(ucfirst(gettype($value)), Setting::getValueTypes());
         }
+    }
+
+    public function delete($id)
+    {
+        return $this->settingRepository->delete($id);
     }
 }

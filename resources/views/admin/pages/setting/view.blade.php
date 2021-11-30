@@ -54,7 +54,7 @@
                                                   placeholder="{'key': 'value'} | string">{{ json_encode($setting->value, JSON_PRETTY_PRINT) }}</textarea>
                                             @break
                                         @case(\Aparlay\Core\Admin\Models\Setting::VALUE_TYPE_STRING)
-                                            <input type="text" id="value" class="form-control valueType" value="{{ $setting->value }}">
+                                            <input type="text" id="value" name="value" class="form-control valueType" value="{{ $setting->value }}">
                                             @break
                                         @case(\Aparlay\Core\Admin\Models\Setting::VALUE_TYPE_DATETIME)
                                             <div class="input-group datetime valueType" id="valuedatetime" data-target-input="nearest">

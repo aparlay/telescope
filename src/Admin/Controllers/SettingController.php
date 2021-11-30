@@ -69,4 +69,13 @@ class SettingController
             ]);
         }
     }
+
+    public function delete(Setting $setting)
+    {
+        if($this->settingService->delete($setting->_id)) {
+            return back()->with(['success' => 'Successfully deleted setting']);
+        } else {
+            return back()->with(['error' => 'Delete setting failed']);
+        }
+    }
 }

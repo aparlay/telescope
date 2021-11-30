@@ -96,7 +96,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->publishConfig();
         $this->publishMigrations();
 
-        ConfigHelper::loadConfig();
+        ConfigHelper::loadDbConfig();
     }
 
     /**
