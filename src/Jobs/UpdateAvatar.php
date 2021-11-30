@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
@@ -14,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
@@ -73,6 +75,16 @@ class UpdateAvatar implements ShouldQueue
         Block::creator($user->_id)->update(['creator.avatar' => $avatar]);
         Block::user($user->_id)->update(['user.avatar' => $avatar]);
         MediaLike::creator($user->_id)->update(['creator.avatar' => $avatar]);
+
+        $cacheKey = 'SimpleUserCast:'.$user->_id;
+        $userArray = [
+            '_id' => (string) $user->_id,
+            'username' => $user->username,
+            'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
+        ];
+
+        Cache::store('redis')->set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
+
     }
 
     public function failed(Throwable $exception)
