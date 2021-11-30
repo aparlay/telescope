@@ -8,6 +8,8 @@ use MongoDB\BSON\ObjectId;
 
 trait AlertScope
 {
+    use BaseScope;
+
     public function scopeVisited(Builder $query): Builder
     {
         return $query->where('status', Alert::STATUS_VISITED);

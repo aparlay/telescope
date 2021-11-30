@@ -7,6 +7,8 @@ use MongoDB\BSON\ObjectId;
 
 trait MediaVisitScope
 {
+    use BaseScope;
+
     /**
      * @param $query
      * @param $mediaId

@@ -6,6 +6,8 @@ use MongoDB\BSON\ObjectId;
 
 trait PermissionScope
 {
+    use BaseScope;
+
     /**
      * @param $query
      * @param $roleId

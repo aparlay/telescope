@@ -7,8 +7,12 @@ use MongoDB\BSON\ObjectId;
 
 trait BlockScope
 {
+    use BaseScope;
+
     /**
-     * @param ObjectId|string $creatorId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $creatorId
+     * @return Builder
      */
     public function scopeCreator(Builder $query, ObjectId | string $creatorId): Builder
     {
@@ -18,7 +22,9 @@ trait BlockScope
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @return Builder
      */
     public function scopeUser(Builder $query, ObjectId | string $userId): Builder
     {

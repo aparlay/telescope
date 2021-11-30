@@ -8,8 +8,12 @@ use MongoDB\BSON\UTCDateTime;
 
 trait MediaLikeScope
 {
+    use BaseScope;
+
     /**
-     * @param ObjectId|string $mediaId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $mediaId
+     * @return Builder
      */
     public function scopeMedia(Builder $query, ObjectId | string $mediaId): Builder
     {

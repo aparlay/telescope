@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait OtpScope
 {
+    use BaseScope;
+
     /**
      * @param  Builder  $query
      * @param  string  $identity

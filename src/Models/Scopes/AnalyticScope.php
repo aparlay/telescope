@@ -7,6 +7,8 @@ use MongoDB\BSON\UTCDateTime;
 
 trait AnalyticScope
 {
+    use BaseScope;
+
     public function scopeDays(Builder $query, int $days): Builder
     {
         $in = [];

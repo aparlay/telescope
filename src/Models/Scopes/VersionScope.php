@@ -4,9 +4,12 @@ namespace Aparlay\Core\Models\Scopes;
 
 trait VersionScope
 {
+    use BaseScope;
+
     /**
      * @param $query
      * @param $os
+     * @return mixed
      */
     public function scopeOs($query, $os): mixed
     {
@@ -16,6 +19,7 @@ trait VersionScope
     /**
      * @param $query
      * @param $app
+     * @return mixed
      */
     public function scopeApp($query, $app): mixed
     {
@@ -24,6 +28,7 @@ trait VersionScope
 
     /**
      * @param $query
+     * @return mixed
      */
     public function scopeRecentFirst($query): mixed
     {
