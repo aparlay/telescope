@@ -29,9 +29,7 @@ class MediaService
      */
     public function create(MediaRequest $request): Media
     {
-        $data = $request->input();
-        $data['tips'] = 0;
-        return $this->mediaRepository->store($data);
+        return $this->mediaRepository->store($request);
     }
 
     /**

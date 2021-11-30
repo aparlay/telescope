@@ -153,6 +153,7 @@ class Media extends BaseModel
         'like_count' => 0,
         'visit_count' => 0,
         'comment_count' => 0,
+        'tips' => 0,
     ];
 
     /**
