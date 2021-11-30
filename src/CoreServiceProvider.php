@@ -74,7 +74,7 @@ class CoreServiceProvider extends ServiceProvider
                 WsCommand::class,
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,
-                CleanupCommand::class
+                CleanupCommand::class,
             ]);
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
