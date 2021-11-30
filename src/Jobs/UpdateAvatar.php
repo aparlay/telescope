@@ -64,6 +64,7 @@ class UpdateAvatar implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function handle()
     {
