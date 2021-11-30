@@ -7,6 +7,7 @@ use Aparlay\Core\Admin\Providers\EventServiceProvider;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
 use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
+use Aparlay\Core\Commands\CleanupCommand;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\RoleCommand;
 use Aparlay\Core\Commands\VideoReprocessCommand;
@@ -73,6 +74,7 @@ class CoreServiceProvider extends ServiceProvider
                 WsCommand::class,
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,
+                CleanupCommand::class
             ]);
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
