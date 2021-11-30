@@ -26,13 +26,13 @@ class ConfigHelper
     {
         $setting = Setting::find($id);
 
-        Config::set($setting->group . '.' . $setting->title, $setting->value);
+        Config::set($setting->group.'.'.$setting->title, $setting->value);
     }
 
     public static function removeConfig($id)
     {
         $setting = Setting::find($id);
 
-        Config::offsetUnset($setting->group . '.' . $setting->title);
+        Config::offsetUnset($setting->group.'.'.$setting->title);
     }
 }

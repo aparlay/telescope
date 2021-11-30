@@ -30,8 +30,8 @@ class ActionButtonBladeComponent
     public static function getViewDeleteActionButton($id, $resourceName)
     {
         $buttons = '<div class="d-flex justify-content-center"><a class="btn btn-primary btn-sm" href="/'.$resourceName.'/'.$id.'" title="View"><i class="fas fa-eye"></i> View</a>';
-        $buttons .= '<form action="'. route('core.admin.setting.delete', ['setting' => $id]) .'" method="POST">
-                '. csrf_field() . method_field('DELETE') .'
+        $buttons .= '<form action="'.route('core.admin.setting.delete', ['setting' => $id]).'" method="POST">
+                '.csrf_field().method_field('DELETE').'
                 <a class="btn btn-danger btn-sm ml-3 delete" href="" title="Delete"><i class="fas fa-trash"></i> Delete</a>
             </form></div>';
 
