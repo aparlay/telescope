@@ -108,11 +108,11 @@ class SettingService extends AdminBaseService
     public function castValue($value)
     {
         return match ((int) request()->input('type')) {
-            0 => (string) $value,
-            1 => (bool) $value,
-            2 => (int) $value,
-            3 => DT::utcDateTime($value),
-            4 => json_decode($value, JSON_PRETTY_PRINT),
+            Setting::VALUE_TYPE_STRING => (string) $value,
+            Setting::VALUE_TYPE_BOOLEAN => (bool) $value,
+            Setting::VALUE_TYPE_INTEGER => (int) $value,
+            Setting::VALUE_TYPE_DATETIME => DT::utcDateTime($value),
+            Setting::VALUE_TYPE_JSON => json_decode($value, JSON_PRETTY_PRINT),
             default => null,
         };
     }
