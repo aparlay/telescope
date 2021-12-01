@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 
-
 class MediaService
 {
     protected MediaRepository $mediaRepository;
