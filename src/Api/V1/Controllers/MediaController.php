@@ -691,4 +691,12 @@ class MediaController extends Controller
 
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
+
+    public function streamUploadMedia(MediaRequest $request) {
+        return $this->response(
+            new MediaResource($this->mediaService->streamUploadMedia($request)),
+            '',
+            Response::HTTP_CREATED
+        );
+    }
 }

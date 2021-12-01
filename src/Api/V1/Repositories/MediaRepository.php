@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Services\MediaService;
+use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Media as BaseMedia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -73,9 +74,37 @@ class MediaRepository implements RepositoryInterface
         // TODO: Implement all() method.
     }
 
-    public function create(array $data)
+    public function create($data)
     {
-        // TODO: Implement create() method.
+        $user = auth()->user();
+        try {
+            $model = Media::create([
+                'user_id' => new ObjectId($user->_id),
+                'file' => $data['file'] ?? '',
+                'description' => $data['description'] ?? '',
+                'slug' => MediaService::generateSlug(6),
+                'count_fields_updated_at' => [],
+                'visibility' => $data['visibility'] ?? $user->visibility,
+                'creator' => [
+                    '_id'      => new ObjectId($user->_id),
+                    'username' => $user->username,
+                    'avatar'   => $user->avatar,
+                ],
+            ]);
+
+            if ($data['file']) {
+               UploadMedia::dispatch($user->_id,$model->_id,$model->file);
+            }
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return null;
+        }
+
+        $model->refresh();
+
+        return $model;
     }
 
     public function update(array $data, $id)

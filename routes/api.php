@@ -36,6 +36,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
             Route::put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
+            Route::post('/stream/upload', [MediaController::class, 'streamUploadMedia']);
         });
 
         /* Optional Auth Group */
