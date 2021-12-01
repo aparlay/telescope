@@ -14,7 +14,6 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class MediaService
 {
