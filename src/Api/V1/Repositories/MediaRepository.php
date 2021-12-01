@@ -93,9 +93,8 @@ class MediaRepository implements RepositoryInterface
             ]);
 
             if ($data['file']) {
-               UploadMedia::dispatch($user->_id,$model->_id,$model->file);
+                UploadMedia::dispatch($user->_id, $model->_id, $model->file);
             }
-
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 

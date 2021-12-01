@@ -12,8 +12,9 @@ use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
-use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Illuminate\Support\Facades\Storage;
+use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
+
 
 class MediaService
 {
@@ -204,17 +205,18 @@ class MediaService
         return $query->paginate(15);
     }
 
-    public function streamUploadMedia($request) {
+    public function streamUploadMedia($request)
+    {
         $fileName = '';
         $data = $request->input();
-        if($request->file('file')) {
+        if ($request->file('file')) {
             $file = $request->file('file');
             $fileName = uniqid('tmp_', true).'.'.$file->getClientOriginalExtension();
             $destinationPath = Storage::disk()->path('upload');
-            $file->move($destinationPath,$fileName);
+            $file->move($destinationPath, $fileName);
         }
         $data['file'] = $fileName;
-        return $this->mediaRepository->create($data);
 
+        return $this->mediaRepository->create($data);
     }
 }
