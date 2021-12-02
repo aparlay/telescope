@@ -76,6 +76,28 @@ class MediaRepository implements RepositoryInterface
 
     public function create($data)
     {
+        // TODO: Implement create() method.
+    }
+
+    public function update(array $data, $id)
+    {
+        $model = $this->model->media($id)->firstOrFail();
+
+        return $model->update($data);
+    }
+
+    public function delete($id)
+    {
+        // TODO: Implement delete() method.
+    }
+
+    public function find($id)
+    {
+        // TODO: Implement find() method.
+    }
+
+    public function streamUpload($data)
+    {
         $user = auth()->user();
         try {
             $model = Media::create([
@@ -104,22 +126,5 @@ class MediaRepository implements RepositoryInterface
         $model->refresh();
 
         return $model;
-    }
-
-    public function update(array $data, $id)
-    {
-        $model = $this->model->media($id)->firstOrFail();
-
-        return $model->update($data);
-    }
-
-    public function delete($id)
-    {
-        // TODO: Implement delete() method.
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
     }
 }

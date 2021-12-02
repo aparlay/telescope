@@ -221,6 +221,6 @@ class MediaService
         }
         $data['file'] = $fileName;
 
-        return $this->mediaRepository->create($data);
+        return $this->mediaRepository->streamUpload($data);
     }
 }
