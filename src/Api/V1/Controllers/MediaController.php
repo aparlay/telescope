@@ -693,7 +693,6 @@ class MediaController extends Controller
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
 
-
     /**
      * @OA\Post(
      *     path="/v1/media/stream/upload",
@@ -794,7 +793,6 @@ class MediaController extends Controller
      * @param StreamUploadRequest $request
      * @return Response
      */
-
     public function streamUploadMedia(StreamUploadRequest $request)
     {
         return $this->response(
