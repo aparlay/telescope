@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string password
  * @property string gender
  */
-class MediaRequest extends FormRequest
+class StreamUploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,7 +33,7 @@ class MediaRequest extends FormRequest
         return [
             'description' => ['required', 'string'],
             'visibility' => ['nullable', 'integer'],
-            'file' => ['required', 'string'],
+            'file' => ['required', 'file'],
         ];
     }
 }

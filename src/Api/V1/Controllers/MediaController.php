@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Requests\StreamUploadRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
@@ -315,7 +316,7 @@ class MediaController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/v1/media/upload",
+     *     path="/v1/media/upload/split",
      *     tags={"media"},
      *     summary="upload a new movie",
      *     description="To upload a new media file you need to call this endpoint.",
@@ -690,5 +691,118 @@ class MediaController extends Controller
         $this->mediaService->delete($media);
 
         return $this->response([], '', Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/v1/media/upload/stream",
+     *     tags={"media"},
+     *     summary="upload a new movie",
+     *     description="To upload a new media file you need to call this endpoint.",
+     *     operationId="uploadMediaFile",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="X-DEVICE-ID",
+     *         in="header",
+     *         description="unique id of the device user is going to send this request it can be segment.com anonymousId.",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="successful operation",
+     *         @OA\Header(
+     *             header="X-Rate-Limit-Limit",
+     *             description="the maximum number of allowed requests during a period",
+     *             @OA\Schema(
+     *                 type="integer",
+     *                 format="int32"
+     *             )
+     *         ),
+     *         @OA\Header(
+     *             header="X-Rate-Limit-Remaining",
+     *             description="the remaining number of allowed requests within the current period",
+     *             @OA\Schema(
+     *                 type="integer",
+     *                 format="int32"
+     *             )
+     *         ),
+     *         @OA\Header(
+     *             header="X-Rate-Limit-Reset",
+     *             description="the number of seconds to wait before having maximum number of allowed requests again",
+     *             @OA\Schema(
+     *                 type="integer",
+     *                 format="int32"
+     *             )
+     *         ),
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", ref="#/components/schemas/Media"),
+     *             @OA\Property(property="message", format="string", example="Entity has been created successfully!"),
+     *             @OA\Property(property="code", format="integer", example=201),
+     *             @OA\Property(property="status", format="string", example="OK")
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="successful operation",
+     *         @OA\Header(
+     *             header="X-Rate-Limit-Limit",
+     *             description="the maximum number of allowed requests during a period",
+     *             @OA\Schema(
+     *                 type="integer",
+     *                 format="int32"
+     *             )
+     *         ),
+     *         @OA\Header(
+     *             header="X-Rate-Limit-Remaining",
+     *             description="the remaining number of allowed requests within the current period",
+     *             @OA\Schema(
+     *                 type="integer",
+     *                 format="int32"
+     *             )
+     *         ),
+     *         @OA\Header(
+     *             header="X-Rate-Limit-Reset",
+     *             description="the number of seconds to wait before having maximum number of allowed requests again",
+     *             @OA\Schema(
+     *                 type="integer",
+     *                 format="int32"
+     *             )
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(ref="#/components/schemas/400"),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(ref="#/components/schemas/401"),
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="DATA VALIDATION FAILED",
+     *         @OA\JsonContent(ref="#/components/schemas/422"),
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="TOO MANY REQUESTS",
+     *         @OA\JsonContent(ref="#/components/schemas/429"),
+     *     ),
+     * )
+     *
+     * Upload media file
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function streamUpload(Request $request)
+    {
+        $result = UploadService::streamUpload($request);
+
+        return response($result['data'], $result['code'], []);
     }
 }

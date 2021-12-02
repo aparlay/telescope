@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Services\MediaService;
+use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Media as BaseMedia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -47,16 +48,6 @@ class MediaRepository implements RepositoryInterface
                     'avatar'   => $user->avatar,
                 ],
             ]);
-
-            if ($request->hasFile('file')) {
-                $file = $request->file;
-                $model->file = uniqid('tmp_', true).'.'.$file->extension();
-                if (! $file->storeAs('upload', $model->file, 'local')) {
-                    throw new UnprocessableEntityHttpException('Cannot upload the file.');
-                }
-            } elseif (empty($model->file) || ! Storage::disk('upload')->exists($model->file)) {
-                throw new UnprocessableEntityHttpException('Uploaded file does not exists.');
-            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 

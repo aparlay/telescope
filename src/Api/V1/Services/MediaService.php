@@ -12,7 +12,9 @@ use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class MediaService
 {
