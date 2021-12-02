@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Storage;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
-
 class MediaService
 {
     protected MediaRepository $mediaRepository;
