@@ -31,7 +31,7 @@ class MediaRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'visibility' => ['nullable', 'integer'],
             'file' => ['required', 'string'],
         ];
