@@ -10,7 +10,13 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class UploadService
 {
-    public static function chunkUpload(Request $request): array
+    /**
+     * @param  Request  $request
+     * @return array
+     * @throws \Flow\FileLockException
+     * @throws \Flow\FileOpenException
+     */
+    public static function split(Request $request): array
     {
         $config = new Config(['tempDir' => Storage::disk('upload')]);
         $chunkPath = Storage::disk('local')->path('chunk');
@@ -64,11 +70,13 @@ class UploadService
         return $result;
     }
 
-    public static function streamUpload(Request $request)
+    /**
+     * @param  Request  $request
+     * @return array
+     */
+    public static function stream(Request $request): array
     {
-        $fileName = '';
         $result = ['data' => [], 'code' => 200];
-        $data = $request->input();
         if ($request->file('file')) {
             $file = $request->file('file');
             $fileName = uniqid('tmp_', true).'.'.$file->getClientOriginalExtension();
