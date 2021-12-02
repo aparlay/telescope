@@ -581,7 +581,7 @@ class MediaController extends Controller
     }
 
     /**
-     * @OA\Get(
+     * @OA\Post(
      *     path="/v1/media/upload/stream",
      *     tags={"media"},
      *     summary="upload a new movie",
