@@ -215,7 +215,7 @@ class MediaService
             $destinationPath = Storage::disk()->path('upload');
             $file->move($destinationPath, $fileName);
 
-            if(!Storage::disk('upload')->exists($fileName)) {
+            if (! Storage::disk('upload')->exists($fileName)) {
                 throw new UnprocessableEntityHttpException('Cannot upload the file.');
             }
         }
