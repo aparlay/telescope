@@ -48,16 +48,6 @@ class MediaRepository implements RepositoryInterface
                     'avatar'   => $user->avatar,
                 ],
             ]);
-
-            if ($request->hasFile('file')) {
-                $file = $request->file;
-                $model->file = uniqid('tmp_', true).'.'.$file->extension();
-                if (! $file->storeAs('upload', $model->file, 'local')) {
-                    throw new UnprocessableEntityHttpException('Cannot upload the file.');
-                }
-            } elseif (empty($model->file) || ! Storage::disk('upload')->exists($model->file)) {
-                throw new UnprocessableEntityHttpException('Uploaded file does not exists.');
-            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
@@ -96,35 +86,4 @@ class MediaRepository implements RepositoryInterface
         // TODO: Implement find() method.
     }
 
-    public function streamUpload($data)
-    {
-        $user = auth()->user();
-        try {
-            $model = Media::create([
-                'user_id' => new ObjectId($user->_id),
-                'file' => $data['file'] ?? '',
-                'description' => $data['description'] ?? '',
-                'slug' => MediaService::generateSlug(6),
-                'count_fields_updated_at' => [],
-                'visibility' => $data['visibility'] ?? $user->visibility,
-                'creator' => [
-                    '_id'      => new ObjectId($user->_id),
-                    'username' => $user->username,
-                    'avatar'   => $user->avatar,
-                ],
-            ]);
-
-            if ($data['file']) {
-                UploadMedia::dispatch($user->_id, $model->_id, $model->file);
-            }
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
-            return null;
-        }
-
-        $model->refresh();
-
-        return $model;
-    }
 }

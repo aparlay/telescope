@@ -204,23 +204,4 @@ class MediaService
 
         return $query->paginate(15);
     }
-
-    public function streamUploadMedia($request)
-    {
-        $fileName = '';
-        $data = $request->input();
-        if ($request->file('file')) {
-            $file = $request->file('file');
-            $fileName = uniqid('tmp_', true).'.'.$file->getClientOriginalExtension();
-            $destinationPath = Storage::disk()->path('upload');
-            $file->move($destinationPath, $fileName);
-
-            if (! Storage::disk('upload')->exists($fileName)) {
-                throw new UnprocessableEntityHttpException('Cannot upload the file.');
-            }
-        }
-        $data['file'] = $fileName;
-
-        return $this->mediaRepository->streamUpload($data);
-    }
 }

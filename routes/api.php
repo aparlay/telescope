@@ -32,11 +32,11 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         /* Authentication Group */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::post('/', [MediaController::class, 'store'])->name('create');
-            Route::match(['get', 'post'], '/upload', [MediaController::class, 'upload'])->name('upload');
+            Route::match(['get', 'post'], '/upload/split', [MediaController::class, 'upload'])->name('upload');
             Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');
             Route::put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
-            Route::post('/stream/upload', [MediaController::class, 'streamUploadMedia']);
+            Route::post('/upload/stream', [MediaController::class, 'streamUploadMedia']);
         });
 
         /* Optional Auth Group */

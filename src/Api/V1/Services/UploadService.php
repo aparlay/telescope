@@ -6,6 +6,7 @@ use Flow\Config;
 use Flow\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class UploadService
 {
@@ -61,5 +62,33 @@ class UploadService
         }
 
         return $result;
+    }
+
+    public static function streamUpload(Request $request)
+    {
+        $fileName = '';
+        $result = ['data' => [], 'code' => 200];
+        $data = $request->input();
+        if ($request->file('file')) {
+            $file = $request->file('file');
+            $fileName = uniqid('tmp_', true).'.'.$file->getClientOriginalExtension();
+            $destinationPath = Storage::disk()->path('upload');
+            $file->move($destinationPath, $fileName);
+
+            if (! Storage::disk('upload')->exists($fileName)) {
+                throw new UnprocessableEntityHttpException('Cannot upload the file.');
+            } else {
+                $result['data'] = [
+                    'code' => 201,
+                    'status' => 'OK',
+                    'data' => ['file' => $fileName],
+                ];
+                $result['code'] = 201;
+                return $result;
+            }
+        }
+
+        return $result;
+
     }
 }
