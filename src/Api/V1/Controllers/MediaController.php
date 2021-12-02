@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Requests\StreamUploadRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
@@ -692,7 +693,7 @@ class MediaController extends Controller
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
 
-    public function streamUploadMedia(MediaRequest $request)
+    public function streamUploadMedia(StreamUploadRequest $request)
     {
         return $this->response(
             new MediaResource($this->mediaService->streamUploadMedia($request)),
