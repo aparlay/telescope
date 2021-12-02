@@ -74,7 +74,7 @@ class MediaRepository implements RepositoryInterface
         // TODO: Implement all() method.
     }
 
-    public function create($data)
+    public function create(array $data)
     {
         // TODO: Implement create() method.
     }
