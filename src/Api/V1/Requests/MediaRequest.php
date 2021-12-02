@@ -31,9 +31,9 @@ class MediaRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['nullable', 'string'],
+            'description' => ['required', 'string'],
             'visibility' => ['nullable', 'integer'],
-            //'file' => ['required', 'file', 'mimes:mp4,m4v,mov,avi,webem', 'max:'. 1024 * 1024 * 300],
+            'file' => ['required', 'string'],
         ];
     }
 }

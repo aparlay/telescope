@@ -800,7 +800,7 @@ class MediaController extends Controller
      * @return Response
      */
 
-    public function streamUploadMedia(Request $request)
+    public function streamUpload(Request $request)
 
     {
         $result = UploadService::streamUpload($request);
