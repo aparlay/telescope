@@ -14,6 +14,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 
 class MediaService
@@ -214,6 +215,10 @@ class MediaService
             $fileName = uniqid('tmp_', true).'.'.$file->getClientOriginalExtension();
             $destinationPath = Storage::disk()->path('upload');
             $file->move($destinationPath, $fileName);
+
+            if(!Storage::disk('upload')->exists($fileName)) {
+                throw new UnprocessableEntityHttpException('Cannot upload the file.');
+            }
         }
         $data['file'] = $fileName;
 
