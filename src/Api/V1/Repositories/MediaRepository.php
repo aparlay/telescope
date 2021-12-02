@@ -85,5 +85,4 @@ class MediaRepository implements RepositoryInterface
     {
         // TODO: Implement find() method.
     }
-
 }

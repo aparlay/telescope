@@ -84,11 +84,11 @@ class UploadService
                     'data' => ['file' => $fileName],
                 ];
                 $result['code'] = 201;
+
                 return $result;
             }
         }
 
         return $result;
-
     }
 }
