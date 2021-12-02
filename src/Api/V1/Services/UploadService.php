@@ -80,7 +80,7 @@ class UploadService
         if ($request->file('file')) {
             $file = $request->file('file');
             $fileName = uniqid('tmp_', true).'.'.$file->getClientOriginalExtension();
-            $destinationPath = Storage::disk()->path('upload');
+            $destinationPath = Storage::disk('upload')->path('/');
             $file->move($destinationPath, $fileName);
 
             if (! Storage::disk('upload')->exists($fileName)) {
