@@ -316,7 +316,7 @@ class MediaController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/v1/media/upload",
+     *     path="/v1/media/upload/split",
      *     tags={"media"},
      *     summary="upload a new movie",
      *     description="To upload a new media file you need to call this endpoint.",
@@ -693,14 +693,13 @@ class MediaController extends Controller
         return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
 
-
     /**
-     * @OA\Post(
-     *     path="/v1/media/stream/upload",
+     * @OA\Get(
+     *     path="/v1/media/upload/stream",
      *     tags={"media"},
-     *     summary="create new media",
-     *     description="To upload and create new media you need to call this endpoint.",
-     *     operationId="createMedia",
+     *     summary="upload a new movie",
+     *     description="To upload a new media file you need to call this endpoint.",
+     *     operationId="uploadMediaFile",
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="X-DEVICE-ID",
@@ -709,33 +708,6 @@ class MediaController extends Controller
      *         required=true,
      *         @OA\Schema(
      *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="file",
-     *         in="query",
-     *         description="file can be form-data/multipart or it can send as string of filename which is generate via upload-token endpoint.",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="description",
-     *         in="query",
-     *         description="description of the file is a string that may contain #hashtags or @mention we capture first 20 items of each one in backend and put them into separate arrays in media object",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="string"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="visibility",
-     *         in="query",
-     *         description="the visibility of the media it can be 1 for public which is set by default or 0 for private",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="integer"
      *         )
      *     ),
      *     @OA\Response(
@@ -773,6 +745,39 @@ class MediaController extends Controller
      *         ),
      *     ),
      *     @OA\Response(
+     *         response=204,
+     *         description="successful operation",
+     *         @OA\Header(
+     *             header="X-Rate-Limit-Limit",
+     *             description="the maximum number of allowed requests during a period",
+     *             @OA\Schema(
+     *                 type="integer",
+     *                 format="int32"
+     *             )
+     *         ),
+     *         @OA\Header(
+     *             header="X-Rate-Limit-Remaining",
+     *             description="the remaining number of allowed requests within the current period",
+     *             @OA\Schema(
+     *                 type="integer",
+     *                 format="int32"
+     *             )
+     *         ),
+     *         @OA\Header(
+     *             header="X-Rate-Limit-Reset",
+     *             description="the number of seconds to wait before having maximum number of allowed requests again",
+     *             @OA\Schema(
+     *                 type="integer",
+     *                 format="int32"
+     *             )
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad Request",
+     *         @OA\JsonContent(ref="#/components/schemas/400"),
+     *     ),
+     *     @OA\Response(
      *         response=401,
      *         description="Unauthorized",
      *         @OA\JsonContent(ref="#/components/schemas/401"),
@@ -789,13 +794,14 @@ class MediaController extends Controller
      *     ),
      * )
      *
-     * Store a newly created resource in storage.
+     * Upload media file
      *
-     * @param StreamUploadRequest $request
+     * @param  Request  $request
      * @return Response
      */
 
     public function streamUploadMedia(Request $request)
+
     {
         $result = UploadService::streamUpload($request);
 
