@@ -922,4 +922,33 @@ class MediaTest extends ApiTestCase
                 'message' => 'You can only view media that you\'ve created.',
             ]);
     }
+
+    /**
+     * @test
+     */
+    public function testUploadStream()
+    {
+        $fileData = [
+            'file' => UploadedFile::fake()->create('fakefile.pdf', 100)
+        ];
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->json('POST', 'v1/media/upload/stream', $fileData)
+            ->assertStatus(201)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 201)
+            ->assertJsonStructure([
+                'data' => [
+                  'file'
+                ]])
+            ->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType([
+                    'code' => 'integer',
+                    'status' => 'string',
+                    'data.file' => 'string'])
+            );
+    }
+
 }
