@@ -3,10 +3,10 @@
 namespace Aparlay\Core\Tests\Browser\Admin;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Tests\DuskTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Dusk\Browser;
-use Aparlay\Core\Tests\DuskTestCase;
 use Throwable;
 
 class LoginTest extends DuskTestCase
@@ -55,7 +55,7 @@ class LoginTest extends DuskTestCase
             'email_verified' => true,
         ]);
 
-        if(($super_admin = User::find($super_admin->_id)) !== null) {
+        if (($super_admin = User::find($super_admin->_id)) !== null) {
             $super_admin->assignRole('super-administrator');
         }
 
