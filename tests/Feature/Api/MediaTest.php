@@ -929,7 +929,7 @@ class MediaTest extends ApiTestCase
     public function testUploadStream()
     {
         $fileData = [
-            'file' => UploadedFile::fake()->create('fakefile.pdf', 100)
+            'file' => UploadedFile::fake()->create('fakefile.pdf', 100),
         ];
 
         $user = User::factory()->create();
@@ -941,14 +941,13 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('code', 201)
             ->assertJsonStructure([
                 'data' => [
-                  'file'
-                ]])
+                  'file',
+                ], ])
             ->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
-                    'data.file' => 'string'])
+                    'data.file' => 'string', ])
             );
     }
-
 }
