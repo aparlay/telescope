@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Maklad\Permission\Models\Role;
-use Maklad\Permission\Models\Permission;
 use Aparlay\Core\Admin\Models\Setting;
+use Illuminate\Database\Migrations\Migration;
+use Maklad\Permission\Models\Permission;
+use Maklad\Permission\Models\Role;
 
 class SettingRolePermissions extends Migration
 {
@@ -32,7 +32,7 @@ class SettingRolePermissions extends Migration
             'support' => [
                 'list settings',
                 'show settings',
-            ]
+            ],
         ];
 
         foreach ($roles as $role => $permissionNames) {
