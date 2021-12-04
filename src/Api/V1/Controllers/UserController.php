@@ -107,7 +107,6 @@ class UserController extends Controller
     }
 
     /**
-     *
      * @param  User  $user
      * @return Response
      */

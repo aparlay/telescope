@@ -87,8 +87,7 @@ class MediaController extends Controller
     }
 
     /**
-     *
-     * Upload media file
+     * Upload media file.
      *
      * @param  Request  $request
      * @return Response
@@ -101,7 +100,7 @@ class MediaController extends Controller
     }
 
     /**
-     * Upload media file
+     * Upload media file.
      *
      * @param  Request  $request
      * @return Response
