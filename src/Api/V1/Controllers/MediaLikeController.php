@@ -19,7 +19,6 @@ class MediaLikeController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
      */
     public function store(Media $media): Response
     {
@@ -32,7 +31,6 @@ class MediaLikeController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
      */
     public function destroy(Media $media): Response
     {

@@ -17,8 +17,6 @@ class FollowController extends Controller
         $this->followService = $followService;
     }
 
-    /**
-     */
     public function store(User $user): Response
     {
         if (Gate::forUser(auth()->user())->denies('interact', $user->_id)) {
@@ -30,8 +28,6 @@ class FollowController extends Controller
         return $this->response(new FollowResource($response['data']), '', $response['statusCode']);
     }
 
-    /**
-     */
     public function destroy(User $user): Response
     {
         // Unfollow the user or throw exception if not followed

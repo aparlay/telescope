@@ -16,8 +16,6 @@ class BlockController extends Controller
         $this->blockService = $blockService;
     }
 
-    /**
-     */
     public function store(User $user): Response
     {
         $response = $this->blockService->create($user);
@@ -25,8 +23,6 @@ class BlockController extends Controller
         return $this->response(new BlockResource($response['data']), '', $response['statusCode']);
     }
 
-    /**
-     */
     public function destroy(User $user): Response
     {
         // Unblock the user or throw exception if not Blocked

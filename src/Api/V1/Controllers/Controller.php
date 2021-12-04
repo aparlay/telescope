@@ -8,8 +8,6 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 
-/**
- */
 class Controller extends BaseController
 {
     use AuthorizesRequests;
