@@ -35,30 +35,4 @@ class Media
      * @OA\Property(property="updated_at", type="number", example=1612850111566)
      * @OA\Property(property="_links", ref="#/components/schemas/ViewLinks")
      */
-    use Notifiable;
-    use CreatorFieldTrait;
-
-    protected static function booted()
-    {
-        static::addGlobalScope(new MediaScope());
-    }
-
-    /**
-     * Get the Slack representation of the notification.
-     *
-     * @param mixed $notifiable
-     *
-     * @return SlackMessage
-     */
-    public function toSlack($notifiable)
-    {
-        $message = $this->userObj->slack_admin_url ?? 'A Guest user';
-        $message .= ' reported '.$this->slack_subject_admin_url;
-        $message .= PHP_EOL.'_*Reason:*_ ';
-
-        return (new SlackMessage())
-            ->from('Reporter', ':radioactive_sign:')
-            ->to('#alua-report')
-            ->content($message);
-    }
 }
