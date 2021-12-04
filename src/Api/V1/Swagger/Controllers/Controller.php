@@ -1,6 +1,7 @@
 <?php
 
 namespace Aparlay\Core\Api\V1\Swagger\Controllers;
+
 class Controller
 {
     /**
