@@ -98,13 +98,12 @@ class DefineSettingFromFiles extends Migration
             ],
         ];
 
-        $user = User::first();
         foreach ($settings as $key => $setting) {
             foreach ($setting as $name => $value) {
                 $array = [
                     'group' => $key,
-                    'created_by' => new ObjectId($user->_id),
-                    'updated_by' => new ObjectId($user->_id),
+                    'created_by' => new ObjectId(),
+                    'updated_by' => new ObjectId(),
                     'title' => $name,
                     'value' => $value,
                 ];
