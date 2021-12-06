@@ -97,7 +97,8 @@ class DefineSettingFromFiles extends Migration
                 ],
             ],
         ];
-        $user = User::where('type', User::TYPE_ADMIN)->first();
+
+        $user = User::first();
         foreach ($settings as $key => $setting) {
             foreach ($setting as $name => $value) {
                 $array = [
