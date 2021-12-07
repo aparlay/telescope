@@ -32,6 +32,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         /* Authentication Group */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::post('/', [MediaController::class, 'store'])->name('create');
+            Route::match(['get', 'post'], '/upload', [MediaController::class, 'splitUpload'])->name('chunkUpload');
             Route::match(['get', 'post'], '/upload/split', [MediaController::class, 'splitUpload'])->name('splitUpload');
             Route::post('/upload/stream', [MediaController::class, 'streamUpload'])->name('streamUpload');
             Route::delete('/{media}', [MediaController::class, 'destroy'])->name('delete');

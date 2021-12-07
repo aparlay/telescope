@@ -51,12 +51,6 @@ class DefineRolesPermissions extends Migration
                 'upload medias',
 
                 'list emails',
-
-                'create settings',
-                'edit settings',
-                'delete settings',
-                'list settings',
-                'show settings',
             ],
             'administrator' => [
                 'dashboard',

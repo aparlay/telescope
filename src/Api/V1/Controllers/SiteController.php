@@ -9,46 +9,6 @@ class SiteController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @OA\Get(
-     *     path="/v1/cache",
-     *     tags={"site"},
-     *     summary="Get current user data",
-     *     description="To Login an alreadyregistered user you need to call this endpoint.",
-     *     operationId="cache",
-     *     security={{"bearerAuth": {}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="successful operation",
-     *         @OA\Header(
-     *             header="X-Rate-Limit-Limit",
-     *             description="the maximum number of allowed requests during a period",
-     *             @OA\Schema(
-     *                 type="integer",
-     *                 format="int32"
-     *             )
-     *         ),
-     *         @OA\Header(
-     *             header="X-Rate-Limit-Remaining",
-     *             description="the remaining number of allowed requests within the current period",
-     *             @OA\Schema(
-     *                 type="integer",
-     *                 format="int32"
-     *             )
-     *         ),
-     *         @OA\Header(
-     *             header="X-Rate-Limit-Reset",
-     *             description="the number of seconds to wait before having maximum number of allowed requests again",
-     *             @OA\Schema(
-     *                 type="integer",
-     *                 format="int32"
-     *             )
-     *         ),
-     *         @OA\JsonContent(ref="#/components/schemas/User"),
-     *     ),
-     * )
-     *
-     * @return JsonResponse
      */
     public function cache()
     {
@@ -79,46 +39,6 @@ class SiteController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @OA\Get(
-     *     path="/v1/health",
-     *     tags={"site"},
-     *     summary="Get current user data",
-     *     description="To Login an alreadyregistered user you need to call this endpoint.",
-     *     operationId="health",
-     *     security={{"bearerAuth": {}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="successful operation",
-     *         @OA\Header(
-     *             header="X-Rate-Limit-Limit",
-     *             description="the maximum number of allowed requests during a period",
-     *             @OA\Schema(
-     *                 type="integer",
-     *                 format="int32"
-     *             )
-     *         ),
-     *         @OA\Header(
-     *             header="X-Rate-Limit-Remaining",
-     *             description="the remaining number of allowed requests within the current period",
-     *             @OA\Schema(
-     *                 type="integer",
-     *                 format="int32"
-     *             )
-     *         ),
-     *         @OA\Header(
-     *             header="X-Rate-Limit-Reset",
-     *             description="the number of seconds to wait before having maximum number of allowed requests again",
-     *             @OA\Schema(
-     *                 type="integer",
-     *                 format="int32"
-     *             )
-     *         ),
-     *         @OA\JsonContent(ref="#/components/schemas/User"),
-     *     ),
-     * )
-     *
-     * @return JsonResponse
      */
     public function health(Request $request)
     {
