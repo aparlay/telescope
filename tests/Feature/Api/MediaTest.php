@@ -107,32 +107,21 @@ class MediaTest extends ApiTestCase
         $nonActiveUser = User::factory()->create(['status' => User::STATUS_PENDING]);
         $taggedUser = User::factory()->create();
 
-        $videoFilePath = __DIR__.'/assets/video.mp4';
-        $this->assertTrue(file_exists($videoFilePath));
-        $videoFile = UploadedFile::fake()->createWithContent('video.mp4', file_get_contents($videoFilePath));
+        $fileData = [
+            'file' => UploadedFile::fake()->create('fakefile.mp4', 100),
+        ];
 
         $this->actingAs($nonActiveUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/media', [
                 'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
-                'file' => $videoFile,
+                'file' => $fileData,
             ])
             ->assertStatus(403);
 
         $response = $this->actingAs($activeUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->post('/v1/media/upload', [
-                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
-                'flowChunkNumber' => 1,
-                'flowChunkSize' => 31457280,
-                'flowCurrentChunkSize' => $videoFile->getSize(),
-                'flowTotalSize' => $videoFile->getSize(),
-                'flowIdentifier' => $videoFile->getClientOriginalName().'-'.$videoFile->getSize(),
-                'flowFilename' => $videoFile->getClientOriginalName(),
-                'flowRelativePath' => $videoFile->getClientOriginalName(),
-                'flowTotalChunks' => 1,
-                'file' => $videoFile,
-            ])
+            ->json('POST', 'v1/media/upload/stream', $fileData)
             ->assertStatus(201)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 201)
@@ -929,7 +918,7 @@ class MediaTest extends ApiTestCase
     public function testUploadStream()
     {
         $fileData = [
-            'file' => UploadedFile::fake()->create('fakefile.pdf', 100),
+            'file' => UploadedFile::fake()->create('fakefile.mp4', 100),
         ];
 
         $user = User::factory()->create();
