@@ -1,4 +1,5 @@
 <?php
+
 namespace Aparlay\Core\Api\V1\Dto;
 
 class CreateTipDto
@@ -10,7 +11,6 @@ class CreateTipDto
     private $currency;
     private $mediaId;
     private $userIp;
-
 
     /**
      * @param $cardId
@@ -53,8 +53,6 @@ class CreateTipDto
     {
         return $this->mediaId;
     }
-
-
 
     /**
      * @return mixed

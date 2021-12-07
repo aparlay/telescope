@@ -6,9 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class BaseFormRequest extends FormRequest
 {
-
     /**
-     * This usually is true so it was moved to BaseFormRequest method
+     * This usually is true so it was moved to BaseFormRequest method.
      *
      * @return bool
      */
@@ -16,6 +15,4 @@ class BaseFormRequest extends FormRequest
     {
         return true;
     }
-
-
 }
