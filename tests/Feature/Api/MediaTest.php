@@ -250,7 +250,6 @@ class MediaTest extends ApiTestCase
         $this->assertDatabaseHas('medias', ['created_by' => new ObjectId($activeUser->_id)]);
     }
 
-
     /**
      * @test
      */
