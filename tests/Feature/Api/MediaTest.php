@@ -101,7 +101,7 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function createMedia()
+    public function createMediaBySplitUpload()
     {
         $activeUser = User::factory()->create(['status' => User::STATUS_ACTIVE]);
         $nonActiveUser = User::factory()->create(['status' => User::STATUS_PENDING]);
@@ -121,7 +121,7 @@ class MediaTest extends ApiTestCase
 
         $response = $this->actingAs($activeUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->post('/v1/media/upload', [
+            ->post('/v1/media/upload/split', [
                 'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
                 'flowChunkNumber' => 1,
                 'flowChunkSize' => 31457280,
@@ -141,6 +141,147 @@ class MediaTest extends ApiTestCase
                     'file',
                 ],
             ])->decodeResponseJson();
+
+        $this->actingAs($nonActiveUser)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->post('/v1/media', [
+                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
+                'file' => $videoFile,
+            ])
+            ->assertStatus(403);
+
+        $this->actingAs($activeUser)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->post('/v1/media', [
+                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
+                'file' => $response['data']['file'],
+            ])
+            ->assertStatus(201)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 201)
+            ->assertJsonStructure([
+                'data' => [
+                    '_id',
+                    'description',
+                    'hash',
+                    'size',
+                    'length',
+                    'mime_type',
+                    'visibility',
+                    'status',
+                    'hashtags' => [],
+                    'people' => [],
+                    'file',
+                    'cover',
+                    'creator' => [
+                        '_id',
+                        'username',
+                        'avatar',
+                        'is_followed',
+                        'avatar',
+                    ],
+                    'is_liked',
+                    'is_visited',
+                    'is_adult',
+                    'like_count',
+                    'likes',
+                    'visit_count',
+                    'visits',
+                    'comment_count',
+                    'comments',
+                    'slug',
+                    'alerts',
+                    'created_by',
+                    'updated_by',
+                    'created_at',
+                    'updated_at',
+                    '_links' => [
+                        'self' => [
+                            'href',
+                        ],
+                        'index' => [
+                            'href',
+                        ],
+                    ],
+                ],
+            ])->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType([
+                    'code' => 'integer',
+                    'status' => 'string',
+                    'data.alerts' => 'array',
+                    'data.comment_count' => 'integer',
+                    'data.comments' => 'array',
+                    'data.cover' => 'string',
+                    'data.created_at' => 'integer',
+                    'data.created_by' => 'string',
+                    'data.visibility' => 'integer',
+                    'data.creator' => 'array',
+                    'data.creator.avatar' => 'string',
+                    'data.creator.is_followed' => 'boolean',
+                    'data.creator.username' => 'string',
+                    'data.creator._id' => 'string',
+                    'data.description' => 'string',
+                    'data.file' => 'string',
+                    'data.hash' => 'null|string',
+                    'data.hashtags' => 'array',
+                    'data.is_adult' => 'boolean',
+                    'data.is_liked' => 'boolean',
+                    'data.is_visited' => 'boolean',
+                    'data.length' => 'null|integer',
+                    'data.like_count' => 'integer',
+                    'data.likes' => 'array',
+                    'data.mime_type' => 'null|string',
+                    'data.people' => 'array',
+                    'data.size' => 'null|integer',
+                    'data.slug' => 'string',
+                    'data.status' => 'integer',
+                    'data.updated_at' => 'integer',
+                    'data.updated_by' => 'string',
+                    'data.visit_count' => 'integer',
+                    'data.visits' => 'array',
+                    'data._links' => 'array',
+                    'data._links.self' => 'array',
+                    'data._links.self.href' => 'string',
+                    'data._links.index' => 'array',
+                    'data._links.index.href' => 'string',
+                ])
+            );
+
+        $this->assertDatabaseHas('medias', ['created_by' => new ObjectId($activeUser->_id)]);
+    }
+
+    /**
+     * @test
+     */
+    public function createMediaByStreamUpload()
+    {
+        $activeUser = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $nonActiveUser = User::factory()->create(['status' => User::STATUS_PENDING]);
+        $taggedUser = User::factory()->create();
+
+        $fileData = [
+            'file' => UploadedFile::fake()->create('fakefile.mp4', 100),
+        ];
+
+        $response = $this->actingAs($activeUser)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->post('/v1/media/upload/stream', $fileData)
+            ->assertStatus(201)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 201)
+            ->assertJsonStructure([
+                'data' => [
+                    'file',
+                ],
+            ])->decodeResponseJson();
+
+        $this->actingAs($nonActiveUser)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->post('/v1/media', [
+                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
+                'file' => $fileData,
+            ])
+            ->assertStatus(403);
 
         $this->actingAs($activeUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -929,7 +1070,7 @@ class MediaTest extends ApiTestCase
     public function testUploadStream()
     {
         $fileData = [
-            'file' => UploadedFile::fake()->create('fakefile.pdf', 100),
+            'file' => UploadedFile::fake()->create('fakefile.mp4', 100),
         ];
 
         $user = User::factory()->create();
