@@ -111,6 +111,14 @@ class MediaTest extends ApiTestCase
         $this->assertTrue(file_exists($videoFilePath));
         $videoFile = UploadedFile::fake()->createWithContent('video.mp4', file_get_contents($videoFilePath));
 
+        $this->actingAs($nonActiveUser)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->post('/v1/media', [
+                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
+                'file' => $videoFile,
+            ])
+            ->assertStatus(403);
+
         $response = $this->actingAs($activeUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/media/upload/split', [
