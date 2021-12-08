@@ -6,7 +6,7 @@ use Illuminate\Validation\ValidationException;
 
 trait ValidationErrorTrait
 {
-    /**Л
+    /**
      * @param string $field
      * @param string $error
      * @return mixed
