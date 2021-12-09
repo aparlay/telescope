@@ -432,7 +432,7 @@ class MediaTest extends ApiTestCase
     {
         $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
         $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PRIVATE]), 'userObj')
-                        ->create(['status'=>Media::STATUS_COMPLETED,'visibility' => Media::VISIBILITY_PRIVATE]);
+                        ->create(['status'=>Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PRIVATE]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/media/'.$media->_id, [])
             ->assertStatus(403)
