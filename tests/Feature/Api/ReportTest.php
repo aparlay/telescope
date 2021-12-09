@@ -40,7 +40,7 @@ class ReportTest extends ApiTestCase
      */
     public function userReportUser()
     {
-        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $user = User::factory()->create(['status' => User::STATUS_ACTIVE, 'visibility' => User::VISIBILITY_PUBLIC]);
         $modal = User::factory()->create(['status' => User::STATUS_ACTIVE]);
         $this->actingAs($modal)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -83,7 +83,8 @@ class ReportTest extends ApiTestCase
      */
     public function guestReportMedia()
     {
-        $media = \Aparlay\Core\Models\Media::factory()->for(\Aparlay\Core\Models\User::factory()->create(), 'userObj')->create();
+        $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]), 'userObj')
+            ->create(['status'=> Media::STATUS_UPLOADED,'visibility' => Media::VISIBILITY_PUBLIC]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('POST', '/v1/media/'.$media->_id.'/report', [
                 'reason' => 'bad image for guest',
@@ -127,7 +128,8 @@ class ReportTest extends ApiTestCase
     public function userReportMedia()
     {
         $user = User::factory()->create();
-        $media = Media::factory()->for(User::factory()->create(), 'userObj')->create();
+        $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]), 'userObj')
+                        ->create(['status'=> Media::STATUS_UPLOADED,'visibility' => Media::VISIBILITY_PUBLIC]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('POST', '/v1/media/'.$media->_id.'/report', [
                 'reason' => 'bad image',
@@ -169,7 +171,7 @@ class ReportTest extends ApiTestCase
      */
     public function reportUserWithPermission()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]);
         $blockedUser = User::factory()->create();
         Block::factory()->create([
             'user' => [
@@ -200,7 +202,7 @@ class ReportTest extends ApiTestCase
      */
     public function reportMediaWithPermission()
     {
-        $mediaCreator = User::factory()->create();
+        $mediaCreator = User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]);
         $blockedUser = User::factory()->create();
         Block::factory()->create([
             'user' => [
@@ -216,6 +218,8 @@ class ReportTest extends ApiTestCase
         ]);
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
+            'status' => Media::STATUS_UPLOADED,
+            'visibility' => Media::VISIBILITY_PUBLIC,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,
@@ -241,9 +245,11 @@ class ReportTest extends ApiTestCase
     public function reportMedia()
     {
         $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
-        $mediaCreator = User::factory()->create();
+        $mediaCreator = User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]);
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
+            'status' => Media::STATUS_UPLOADED,
+            'visibility' => Media::VISIBILITY_PUBLIC,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,

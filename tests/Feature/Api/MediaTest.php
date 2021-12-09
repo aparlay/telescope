@@ -469,6 +469,7 @@ class MediaTest extends ApiTestCase
         $mediaCreator = User::factory()->create();
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
+            'status' => Media::STATUS_UPLOADED,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,
