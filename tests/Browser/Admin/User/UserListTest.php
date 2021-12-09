@@ -28,18 +28,6 @@ class UserListTest extends DuskTestCase
     }
 
     /**
-     * @throws Throwable
-     */
-    public function tearDown(): void
-    {
-        $this->browse(function(Browser $browser) {
-            $browser->logout('admin');
-        });
-
-        parent::tearDown();
-    }
-
-    /**
      * @test
      * @throws Throwable
      */
@@ -106,9 +94,62 @@ class UserListTest extends DuskTestCase
                 ->waitForText('Username')
                 ->type('email', $user->email)
                 ->pressAndWaitFor('Filter')
-                ->assertSeeIn('#datatables', $user->email)
-                ->screenshot('email');
+                ->assertSeeIn('#datatables', $user->email);
         });
     }
 
+    /**
+     * @test
+     * @throws Throwable
+     */
+    public function searchStatusTest()
+    {
+        $user = User::factory()->create();
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->visit(route('core.admin.user.index'))
+                ->clickLink('Show/Hide Filter')
+                ->waitForText('Status')
+                ->select('status', $user->status)
+                ->pressAndWaitFor('Filter')
+                ->assertSeeIn('#datatables', $user->email);
+        });
+    }
+
+    /**
+     * @test
+     * @throws Throwable
+     */
+    public function searchVisibilityTest()
+    {
+        $user = User::factory()->create();
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->visit(route('core.admin.user.index'))
+                ->clickLink('Show/Hide Filter')
+                ->waitForText('Visibility')
+                ->select('visibility', $user->visibility)
+                ->pressAndWaitFor('Filter')
+                ->assertSeeIn('#datatables', $user->email);
+        });
+    }
+
+    /**
+     * @test
+     * @throws Throwable
+     */
+    public function searchDateRangeTest()
+    {
+        $user = User::factory()->create();
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->visit(route('core.admin.user.index'))
+                ->clickLink('Show/Hide Filter')
+                ->waitForText('Date range button')
+                ->press('Date range picker')
+                ->clickAtXPath('/html/body/div[2]/div[1]/ul/li[1]')
+                ->pressAndWaitFor('Filter')
+                ->assertSeeIn('#datatables', $user->email);
+        });
+    }
 }

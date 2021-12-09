@@ -33,7 +33,6 @@ class LoginTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.login'))
-                    ->screenshot('login')
                     ->assertSee('Admin Dashboard');
         });
     }
@@ -65,7 +64,8 @@ class LoginTest extends DuskTestCase
                     ->type('password', 'password')
                     ->press('Sign In')
                     ->assertPathIs('/dashboard')
-                    ->logout();
+                    ->clickLink('Log Out')
+                    ->assertGuest();
         });
     }
 
@@ -81,30 +81,6 @@ class LoginTest extends DuskTestCase
                 ->type('password', $this->faker()->password)
                 ->press('Sign In')
                 ->assertSee('The provided credentials are incorrect.');
-        });
-    }
-
-    /**
-     * @test
-     * @throws Throwable
-     */
-    public function loginNonSuperAdminRole()
-    {
-        $super_admin = User::factory()->create([
-            'email' => uniqid('alua_').'@aparly.com',
-            'status' => User::STATUS_ACTIVE,
-            'type' => 1,
-            'password_hash' => Hash::make('password'),
-            'email_verified' => true,
-        ]);
-
-        $this->browse(function ($browser) use ($super_admin) {
-            $browser->visit(route('core.admin.login'))
-                ->type('email', $super_admin->email)
-                ->type('password', 'password')
-                ->press('Sign In')
-                ->assertSee('USER DOES NOT HAVE THE RIGHT ROLES.')
-                ->logout();
         });
     }
 }

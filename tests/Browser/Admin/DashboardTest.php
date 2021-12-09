@@ -21,23 +21,12 @@ class DashboardTest extends DuskTestCase
         parent::setUp();
 
         $this->superAdminUser = User::where('type', User::TYPE_ADMIN)->first();
+
         $this->superAdminUser->assignRole('super-administrator');
 
         $this->browse(function(Browser $browser) {
             $browser->loginAs($this->superAdminUser, 'admin');
         });
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function tearDown(): void
-    {
-        $this->browse(function(Browser $browser) {
-            $browser->logout('admin');
-        });
-
-        parent::tearDown();
     }
 
     /**

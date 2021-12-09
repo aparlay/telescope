@@ -5,11 +5,36 @@ namespace Aparlay\Core\Tests;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Laravel\Dusk\TestCase as BaseTestCase;
 
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    protected static bool $isSeedInitiated = false;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->app->make('config')->set('app.is_testing', true);
+        $this->app->make('config')->set('app.url', env('ADMIN_DOMAIN'));
+
+        Factory::guessFactoryNamesUsing(
+            fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
+        );
+
+        if(! static::$isSeedInitiated) {
+
+            $this->artisan('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
+
+            $this->artisan('migrate', ['--path' => 'packages/Aparlay/Core/database/migrations', '--database' => 'testing']);
+            $this->artisan('migrate', ['--path' => 'packages/Aparlay/Payment/database/migrations', '--database' => 'testing']);
+
+            static::$isSeedInitiated = true;
+        }
+    }
 
     /**
      * Prepare for Dusk test execution.
