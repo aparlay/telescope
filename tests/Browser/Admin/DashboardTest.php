@@ -10,7 +10,6 @@ use Throwable;
 
 class DashboardTest extends DuskTestCase
 {
-
     protected $superAdminUser;
 
     /**
@@ -24,7 +23,7 @@ class DashboardTest extends DuskTestCase
 
         $this->superAdminUser->assignRole('super-administrator');
 
-        $this->browse(function(Browser $browser) {
+        $this->browse(function (Browser $browser) {
             $browser->loginAs($this->superAdminUser, 'admin');
         });
     }
@@ -36,7 +35,7 @@ class DashboardTest extends DuskTestCase
     public function analyticsFilterTest()
     {
         $this->browse(function (Browser $browser) {
-           $browser->visit(route('core.admin.dashboard'))
+            $browser->visit(route('core.admin.dashboard'))
                 ->clickLink('Show/Hide Filter')
                 ->waitForText('From Date')
                 ->assertSee('From Date')

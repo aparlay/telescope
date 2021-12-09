@@ -9,7 +9,6 @@ use Throwable;
 
 class UserListTest extends DuskTestCase
 {
-
     protected $superAdminUser;
 
     /**
@@ -22,7 +21,7 @@ class UserListTest extends DuskTestCase
         $this->superAdminUser = User::where('type', User::TYPE_ADMIN)->first();
         $this->superAdminUser->assignRole('super-administrator');
 
-        $this->browse(function(Browser $browser) {
+        $this->browse(function (Browser $browser) {
             $browser->loginAs($this->superAdminUser, 'admin');
         });
     }
