@@ -18,7 +18,7 @@ class MediaTest extends ApiTestCase
      */
     public function getMediaId()
     {
-        $media = Media::public()->first();
+        $media = Media::factory()->create(['status'=> Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/media/'.$media->_id, [])
             ->assertStatus(200)
@@ -430,8 +430,9 @@ class MediaTest extends ApiTestCase
      */
     public function mediaViewPolicy()
     {
-        $user = User::factory()->create(['status' => 0]);
-        $media = Media::factory()->for(User::factory()->create(), 'userObj')->create(['visibility' => Media::VISIBILITY_PRIVATE]);
+        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PRIVATE]), 'userObj')
+                        ->create(['status'=>Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PRIVATE]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/media/'.$media->_id, [])
             ->assertStatus(403)
@@ -449,7 +450,8 @@ class MediaTest extends ApiTestCase
     public function mediaDeletePolicy()
     {
         $user = User::factory()->create();
-        $media = Media::factory()->for(User::factory()->create(), 'userObj')->create();
+        $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]), 'userObj')
+                        ->create(['status' => Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('delete', '/v1/media/'.$media->_id, [])
             ->assertStatus(403)
@@ -469,6 +471,8 @@ class MediaTest extends ApiTestCase
         $mediaCreator = User::factory()->create();
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
+            'status' => Media::STATUS_COMPLETED,
+            'visibility' => Media::VISIBILITY_PUBLIC,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,
