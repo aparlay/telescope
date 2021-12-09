@@ -2,10 +2,10 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
+use Aparlay\Core\Api\V1\Http\Middleware\DeviceIdThrottle;
 use Aparlay\Core\Tests\TestCase;
 use Artisan;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Aparlay\Core\Api\V1\Http\Middleware\DeviceIdThrottle;
 
 class ApiTestCase extends TestCase
 {
