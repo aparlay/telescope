@@ -84,7 +84,7 @@ class ReportTest extends ApiTestCase
     public function guestReportMedia()
     {
         $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]), 'userObj')
-            ->create(['status'=> Media::STATUS_UPLOADED, 'visibility' => Media::VISIBILITY_PUBLIC]);
+            ->create(['status'=> Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('POST', '/v1/media/'.$media->_id.'/report', [
                 'reason' => 'bad image for guest',
@@ -129,7 +129,7 @@ class ReportTest extends ApiTestCase
     {
         $user = User::factory()->create();
         $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]), 'userObj')
-                        ->create(['status'=> Media::STATUS_UPLOADED, 'visibility' => Media::VISIBILITY_PUBLIC]);
+                        ->create(['status'=> Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('POST', '/v1/media/'.$media->_id.'/report', [
                 'reason' => 'bad image',
@@ -218,7 +218,7 @@ class ReportTest extends ApiTestCase
         ]);
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
-            'status' => Media::STATUS_UPLOADED,
+            'status' => Media::STATUS_COMPLETED,
             'visibility' => Media::VISIBILITY_PUBLIC,
             'created_by' => $mediaCreator->_id,
             'creator' => [
@@ -248,7 +248,7 @@ class ReportTest extends ApiTestCase
         $mediaCreator = User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]);
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
-            'status' => Media::STATUS_UPLOADED,
+            'status' => Media::STATUS_COMPLETED,
             'visibility' => Media::VISIBILITY_PUBLIC,
             'created_by' => $mediaCreator->_id,
             'creator' => [

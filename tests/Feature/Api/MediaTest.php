@@ -18,7 +18,7 @@ class MediaTest extends ApiTestCase
      */
     public function getMediaId()
     {
-        $media = Media::public()->first();
+        $media = Media::factory()->create(['status'=> Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/media/'.$media->_id, [])
             ->assertStatus(200)
