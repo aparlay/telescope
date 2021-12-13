@@ -2,17 +2,21 @@
 
 namespace Aparlay\Core\Tests;
 
+use Aparlay\Core\Admin\Models\User;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
 
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected static bool $isSeedInitiated = false;
+    protected $superAdminUser;
+
+    protected static bool $isSeeded = false;
 
     public function setUp(): void
     {
@@ -25,14 +29,21 @@ abstract class DuskTestCase extends BaseTestCase
             fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
-        if(! static::$isSeedInitiated) {
+        if(! static::$isSeeded) {
 
             $this->artisan('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
 
             $this->artisan('migrate', ['--path' => 'packages/Aparlay/Core/database/migrations', '--database' => 'testing']);
             $this->artisan('migrate', ['--path' => 'packages/Aparlay/Payment/database/migrations', '--database' => 'testing']);
 
-            static::$isSeedInitiated = true;
+            static::$isSeeded = true;
+
+            $this->superAdminUser = User::where('type', User::TYPE_ADMIN)->first();
+            $this->superAdminUser->assignRole('super-administrator');
+
+            $this->browse(function (Browser $browser) {
+                $browser->loginAs($this->superAdminUser, 'admin');
+            });
         }
     }
 
