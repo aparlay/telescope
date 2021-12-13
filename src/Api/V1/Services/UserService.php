@@ -40,7 +40,7 @@ class UserService
         }
         $nextWindow = $nextHourWindow.str_pad($nextMinuteWindow, 2, '0', STR_PAD_LEFT);
 
-        return array($currentWindow, $nextWindow);
+        return [$currentWindow, $nextWindow];
     }
 
     /**
@@ -90,7 +90,7 @@ class UserService
      */
     public function uploadAvatar(Request $request, User|Authenticatable $user)
     {
-        if (!$request->hasFile('avatar') && !$request->file('avatar')->isValid()) {
+        if (! $request->hasFile('avatar') && ! $request->file('avatar')->isValid()) {
             return false;
         }
 
@@ -101,11 +101,11 @@ class UserService
             $oldFileName = $user->avatar;
             $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/'.$avatar)], $user->_id);
 
-            if (!config('app.is_testing')) {
+            if (! config('app.is_testing')) {
                 UploadAvatar::dispatch((string) $user->_id, 'avatars/'.$avatar)->delay(10);
             }
 
-            if (!str_contains($oldFileName, 'default_')) {
+            if (! str_contains($oldFileName, 'default_')) {
                 DeleteAvatar::dispatch(basename($oldFileName))->delay(100);
             }
         }
@@ -227,7 +227,7 @@ class UserService
      * three category will be created
      * - all for the content creators who choose show online status to all
      * - follower for the content creators who choose show online status for followers only
-     * - none for admin panel online users
+     * - none for admin panel online users.
      *
      * this patter will create two sets for each 5 minutes and 10 minutes 10:00-10:05 and 10:05-10:10
      * each authenticated request check and add user to both if user
