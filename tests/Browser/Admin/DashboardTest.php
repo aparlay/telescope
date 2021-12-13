@@ -10,24 +10,6 @@ use Throwable;
 
 class DashboardTest extends DuskTestCase
 {
-    protected $superAdminUser;
-
-    /**
-     * @throws Throwable
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->superAdminUser = User::where('type', User::TYPE_ADMIN)->first();
-
-        $this->superAdminUser->assignRole('super-administrator');
-
-        $this->browse(function (Browser $browser) {
-            $browser->loginAs($this->superAdminUser, 'admin');
-        });
-    }
-
     /**
      * @test
      * @throws Throwable

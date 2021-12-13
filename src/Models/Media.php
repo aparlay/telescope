@@ -122,6 +122,7 @@ class Media extends BaseModel
         'visit_count',
         'visits',
         'comment_count',
+        'is_protected',
         'comments',
         'count_fields_updated_at',
         'visibility',

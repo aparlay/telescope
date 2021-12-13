@@ -2,12 +2,15 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
+use Aparlay\Core\Api\V1\Http\Middleware\DeviceIdThrottle;
 use Aparlay\Core\Tests\TestCase;
 use Artisan;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ApiTestCase extends TestCase
 {
+    protected static $isSeeded = false;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -19,6 +22,12 @@ class ApiTestCase extends TestCase
             fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
-        Artisan::call('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
+        $this->withoutMiddleware(
+            DeviceIdThrottle::class
+        );
+        if (! static::$isSeeded) {
+            Artisan::call('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
+            static::$isSeeded = true;
+        }
     }
 }
