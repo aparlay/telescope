@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\Listeners;
 
-use Aparlay\Core\Api\V1\Services\UserService;
-use Aparlay\Core\Models\User;
-use Illuminate\Support\Facades\Redis;
+use Aparlay\Core\Api\V1\Services\OnlineUserService;
 
 class OnlineUsers
 {
@@ -23,9 +21,11 @@ class OnlineUsers
      *
      * @param  object  $event
      * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function handle($event)
     {
-        UserService::online(auth()->user());
+        $onlineUserService = app()->make(OnlineUserService::class);
+        $onlineUserService->online(auth()->user());
     }
 }
