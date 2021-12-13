@@ -26,11 +26,11 @@ class UserService
     /**
      * @return array
      */
-    private static function onlineUserWindows(): array
+    public static function onlineUserWindows(): array
     {
         $currentMinute = date('i');
         $currentMinuteWindow = $currentMinute - ($currentMinute % 5);
-        $currentWindow = date('H').$currentMinuteWindow;
+        $currentWindow = date('H').str_pad($currentMinuteWindow, 2, '0', STR_PAD_LEFT);
 
         $nextMinuteWindow = $currentMinuteWindow + 5;
         $nextHourWindow = date('H');
@@ -38,7 +38,7 @@ class UserService
             $nextMinuteWindow = '00';
             $nextHourWindow = date('H', strtotime('+1 hour'));
         }
-        $nextWindow = $nextHourWindow.$nextMinuteWindow;
+        $nextWindow = $nextHourWindow.str_pad($nextMinuteWindow, 2, '0', STR_PAD_LEFT);
 
         return array($currentWindow, $nextWindow);
     }

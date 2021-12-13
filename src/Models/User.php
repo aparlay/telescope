@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Services\UserService;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Scopes\UserScope;
@@ -448,9 +449,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getIsOnlineAttribute(): bool
     {
-        $currentMinute = date('i');
-        $currentMinuteWindow = $currentMinute - ($currentMinute % 5);
-        $currentWindow = date('H').$currentMinuteWindow;
+        [$currentWindow, $nextWindow] = UserService::onlineUserWindows();
 
         $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
 
@@ -459,9 +458,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getIsOnlineForFollowersAttribute(): bool
     {
-        $currentMinute = date('i');
-        $currentMinuteWindow = $currentMinute - ($currentMinute % 5);
-        $currentWindow = date('H').$currentMinuteWindow;
+        [$currentWindow, $nextWindow] = UserService::onlineUserWindows();
 
         $cacheKey = config('app.cache.keys.online.followings').':'.$currentWindow;
 
