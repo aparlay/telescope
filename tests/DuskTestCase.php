@@ -37,14 +37,14 @@ abstract class DuskTestCase extends BaseTestCase
             $this->artisan('migrate', ['--path' => 'packages/Aparlay/Payment/database/migrations', '--database' => 'testing']);
 
             static::$isSeeded = true;
-
-            $this->superAdminUser = User::where('type', User::TYPE_ADMIN)->first();
-            $this->superAdminUser->assignRole('super-administrator');
-
-            $this->browse(function (Browser $browser) {
-                $browser->loginAs($this->superAdminUser, 'admin');
-            });
         }
+
+        $this->superAdminUser = User::where('type', User::TYPE_ADMIN)->first();
+        $this->superAdminUser->assignRole('super-administrator');
+
+        $this->browse(function (Browser $browser) {
+            $browser->loginAs($this->superAdminUser, 'admin');
+        });
     }
 
     /**
