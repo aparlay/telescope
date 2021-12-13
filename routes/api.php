@@ -3,6 +3,7 @@
 use Aparlay\Core\Api\V1\Controllers\AlertController;
 use Aparlay\Core\Api\V1\Controllers\AuthController;
 use Aparlay\Core\Api\V1\Controllers\BlockController;
+use Aparlay\Core\Api\V1\Controllers\ContactUsController;
 use Aparlay\Core\Api\V1\Controllers\FollowController;
 use Aparlay\Core\Api\V1\Controllers\MediaController;
 use Aparlay\Core\Api\V1\Controllers\MediaLikeController;
@@ -10,7 +11,6 @@ use Aparlay\Core\Api\V1\Controllers\ReportController;
 use Aparlay\Core\Api\V1\Controllers\SiteController;
 use Aparlay\Core\Api\V1\Controllers\UserController;
 use Aparlay\Core\Api\V1\Controllers\VersionController;
-use Aparlay\Core\Api\V1\Controllers\ContactUsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -110,4 +110,3 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         ->name('contact.us')
         ->withoutMiddleware(['device-id']);
 });
-

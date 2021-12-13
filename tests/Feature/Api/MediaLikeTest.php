@@ -96,7 +96,7 @@ class MediaLikeTest extends ApiTestCase
     {
         $user = User::factory()->create();
         $mediaCreator = User::factory()->create();
-        $media = Media::factory()->for($mediaCreator, 'userObj')->create([ 'status' => Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
+        $media = Media::factory()->for($mediaCreator, 'userObj')->create(['status' => Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
         $res = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('PUT', '/v1/media/'.$media->_id.'/like', [])
@@ -144,7 +144,7 @@ class MediaLikeTest extends ApiTestCase
      */
     public function mediaLikePermission()
     {
-        $mediaCreator = User::factory()->create([ 'status' => Media::STATUS_COMPLETED,'visibility' => Media::VISIBILITY_PUBLIC]);
+        $mediaCreator = User::factory()->create(['status' => Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
         $blockedUser = User::factory()->create();
         $block = Block::factory()->create([
                 'user' => [
