@@ -24,6 +24,26 @@ class UserService
     }
 
     /**
+     * @return array
+     */
+    private static function onlineUserWindows(): array
+    {
+        $currentMinute = date('i');
+        $currentMinuteWindow = $currentMinute - ($currentMinute % 5);
+        $currentWindow = date('H').$currentMinuteWindow;
+
+        $nextMinuteWindow = $currentMinuteWindow + 5;
+        $nextHourWindow = date('H');
+        if ($nextMinuteWindow == 60) {
+            $nextMinuteWindow = '00';
+            $nextHourWindow = date('H', strtotime('+1 hour'));
+        }
+        $nextWindow = $nextHourWindow.$nextMinuteWindow;
+
+        return array($currentWindow, $nextWindow);
+    }
+
+    /**
      * Responsible for returning Login Entity (email or phone_number or username) based on the input username.
      *
      * @param  string  $identity
@@ -68,9 +88,9 @@ class UserService
      * @return bool
      * @throws Exception
      */
-    public function uploadAvatar(Request $request, User | Authenticatable $user)
+    public function uploadAvatar(Request $request, User|Authenticatable $user)
     {
-        if (! $request->hasFile('avatar') && ! $request->file('avatar')->isValid()) {
+        if (!$request->hasFile('avatar') && !$request->file('avatar')->isValid()) {
             return false;
         }
 
@@ -81,11 +101,11 @@ class UserService
             $oldFileName = $user->avatar;
             $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/'.$avatar)], $user->_id);
 
-            if (! config('app.is_testing')) {
+            if (!config('app.is_testing')) {
                 UploadAvatar::dispatch((string) $user->_id, 'avatars/'.$avatar)->delay(10);
             }
 
-            if (! str_contains($oldFileName, 'default_')) {
+            if (!str_contains($oldFileName, 'default_')) {
                 DeleteAvatar::dispatch(basename($oldFileName))->delay(100);
             }
         }
@@ -100,7 +120,7 @@ class UserService
      * @return bool
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function isVerified(User | Authenticatable $user): bool
+    public function isVerified(User|Authenticatable $user): bool
     {
         $this->userRepository = new UserRepository($user);
 
@@ -110,7 +130,7 @@ class UserService
     /**
      * Responsible for change old password.
      *
-     * @param string $password
+     * @param  string  $password
      * @return bool
      */
     public function resetPassword(string $password): bool
@@ -121,10 +141,10 @@ class UserService
     /**
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
      *
-     * @param User|Authenticatable $user
+     * @param  User|Authenticatable  $user
      * @return bool
      */
-    public function isUnverified(User | Authenticatable $user): bool
+    public function isUnverified(User|Authenticatable $user): bool
     {
         $this->userRepository = new UserRepository($user);
 
@@ -144,10 +164,10 @@ class UserService
     /**
      * Through exception if user is suspended/banned/not found.
      *
-     * @param User|Authenticatable $user
+     * @param  User|Authenticatable  $user
      * @return bool
      */
-    public function isUserEligible(User | Authenticatable $user): bool
+    public function isUserEligible(User|Authenticatable $user): bool
     {
         $this->userRepository = new UserRepository($user);
 
@@ -157,10 +177,10 @@ class UserService
     /**
      * Responsible for delete user account.
      *
-     * @param User|Authenticatable $user
+     * @param  User|Authenticatable  $user
      * @return bool
      */
-    public function deleteAccount(User | Authenticatable $user)
+    public function deleteAccount(User|Authenticatable $user)
     {
         $this->userRepository = new UserRepository($user);
 
@@ -202,23 +222,25 @@ class UserService
         return $this->userRepository->requireOtp();
     }
 
-    public static function online(User | Authenticatable $user)
+    /**
+     * online user implementation with redis sets
+     * three category will be created
+     * - all for the content creators who choose show online status to all
+     * - follower for the content creators who choose show online status for followers only
+     * - none for admin panel online users
+     *
+     * this patter will create two sets for each 5 minutes and 10 minutes 10:00-10:05 and 10:05-10:10
+     * each authenticated request check and add user to both if user
+     * doesn't send any request for more than 5 minutes her account won't add to the next windows
+     * and considered as offline after at most 5 minutes of inactivity
+     *
+     * @param  User|Authenticatable  $user
+     * @return void
+     */
+    public static function online(User|Authenticatable $user)
     {
         Redis::pipeline(function ($pipe) use ($user) {
-            $currentMinute = date('i');
-            $currentMinuteWindow = $currentMinute - ($currentMinute % 5);
-            $currentWindow = date('H').$currentMinuteWindow;
-
-            $nextMinuteWindow = $currentMinuteWindow + 5;
-            $nextHourWindow = date('H');
-            if ($nextMinuteWindow == 60) {
-                $nextMinuteWindow = '00';
-                $nextHourWindow = date('H', strtotime('+1 hour'));
-            }
-            $nextWindow = $nextHourWindow.$nextMinuteWindow;
-            $now = time();
-            $currentWindowExpireAt = ceil($now / 300) * 300;
-            $nextWindowExpireAt = ceil($now / 600) * 600;
+            [$currentWindow, $nextWindow] = self::onlineUserWindows();
 
             $onlineAllCurrent = config('app.cache.keys.online.all').':'.$currentWindow;
             $onlineFollowingsCurrent = config('app.cache.keys.online.followings').':'.$currentWindow;
@@ -227,27 +249,30 @@ class UserService
             $onlineFollowingsNext = config('app.cache.keys.online.followings').':'.$nextWindow;
             $onlineNoneNext = config('app.cache.keys.online.none').':'.$nextWindow;
 
+            $now = time();
+            $currentWindowExpireAt = ceil($now / 300) * 300;
+            $nextWindowExpireAt = ceil($now / 600) * 600;
             if ($pipe->sCard($onlineNoneCurrent) == 0) {
-                $pipe->expire($onlineAllCurrent, $currentWindowExpireAt);
-                $pipe->expire($onlineFollowingsCurrent, $currentWindowExpireAt);
-                $pipe->expire($onlineNoneCurrent, $currentWindowExpireAt);
+                $pipe->expireAt($onlineAllCurrent, $currentWindowExpireAt);
+                $pipe->expireAt($onlineFollowingsCurrent, $currentWindowExpireAt);
+                $pipe->expireAt($onlineNoneCurrent, $currentWindowExpireAt);
             }
 
             if ($pipe->sCard($onlineNoneNext) == 0) {
                 $pipe->expireAt($onlineAllNext, $nextWindowExpireAt);
-                $pipe->expire($onlineFollowingsNext, $nextWindowExpireAt);
-                $pipe->expire($onlineNoneNext, $nextWindowExpireAt);
+                $pipe->expireAt($onlineFollowingsNext, $nextWindowExpireAt);
+                $pipe->expireAt($onlineNoneNext, $nextWindowExpireAt);
             }
 
             switch ($user->show_online_status) {
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_ALL:
                     $pipe->sAdd($onlineAllCurrent, (string) $user->_id);
                     $pipe->sAdd($onlineAllNext, (string) $user->_id);
-                    // no break
+                // no break
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_FOLLOWERS:
                     $pipe->sAdd($onlineFollowingsCurrent, (string) $user->_id);
                     $pipe->sAdd($onlineFollowingsNext, (string) $user->_id);
-                    // no break
+                // no break
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_NONE:
                     $pipe->sAdd($onlineNoneCurrent, (string) $user->_id);
                     $pipe->sAdd($onlineNoneNext, (string) $user->_id);
@@ -255,20 +280,10 @@ class UserService
         });
     }
 
-    public static function offline(User | Authenticatable $user)
+    public static function offline(User|Authenticatable $user)
     {
         Redis::pipeline(function ($pipe) use ($user) {
-            $currentMinute = date('i');
-            $currentMinuteWindow = $currentMinute - ($currentMinute % 5);
-            $currentWindow = date('H').$currentMinuteWindow;
-
-            $nextMinuteWindow = $currentMinuteWindow + 5;
-            $nextHourWindow = date('H');
-            if ($nextMinuteWindow == 60) {
-                $nextMinuteWindow = '00';
-                $nextHourWindow = date('H', strtotime('+1 hour'));
-            }
-            $nextWindow = $nextHourWindow.$nextMinuteWindow;
+            [$currentWindow, $nextWindow] = self::onlineUserWindows();
 
             $onlineAllCurrent = config('app.cache.keys.online.all').':'.$currentWindow;
             $onlineFollowingsCurrent = config('app.cache.keys.online.followings').':'.$currentWindow;
@@ -281,11 +296,11 @@ class UserService
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_ALL:
                     $pipe->sRem($onlineAllCurrent, (string) $user->_id);
                     $pipe->sRem($onlineAllNext, (string) $user->_id);
-                    // no break
+                // no break
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_FOLLOWERS:
                     $pipe->sRem($onlineFollowingsCurrent, (string) $user->_id);
                     $pipe->sRem($onlineFollowingsNext, (string) $user->_id);
-                    // no break
+                // no break
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_NONE:
                     $pipe->sRem($onlineNoneCurrent, (string) $user->_id);
                     $pipe->sRem($onlineNoneNext, (string) $user->_id);
