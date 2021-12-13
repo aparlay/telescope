@@ -29,8 +29,7 @@ abstract class DuskTestCase extends BaseTestCase
             fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
-        if(! static::$isSeeded) {
-
+        if (! static::$isSeeded) {
             $this->artisan('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
 
             $this->artisan('migrate', ['--path' => 'packages/Aparlay/Core/database/migrations', '--database' => 'testing']);
