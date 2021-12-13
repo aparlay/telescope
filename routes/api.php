@@ -10,6 +10,7 @@ use Aparlay\Core\Api\V1\Controllers\ReportController;
 use Aparlay\Core\Api\V1\Controllers\SiteController;
 use Aparlay\Core\Api\V1\Controllers\UserController;
 use Aparlay\Core\Api\V1\Controllers\VersionController;
+use Aparlay\Core\Api\V1\Controllers\ContactUsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -104,4 +105,9 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
     Route::get('/health', [SiteController::class, 'health'])
         ->name('site.health')
         ->withoutMiddleware(['device-id']);
+
+    Route::post('/contact-us', [ContactUsController::class, 'send'])
+        ->name('contact.us')
+        ->withoutMiddleware(['device-id']);
 });
+
