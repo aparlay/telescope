@@ -449,7 +449,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getIsOnlineAttribute(): bool
     {
-        [$currentWindow, $nextWindow] = OnlineUserService::onlineUserWindows();
+        [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
 
         $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
 
@@ -458,7 +458,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getIsOnlineForFollowersAttribute(): bool
     {
-        [$currentWindow, $nextWindow] = OnlineUserService::onlineUserWindows();
+        [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
 
         $cacheKey = config('app.cache.keys.online.followings').':'.$currentWindow;
 

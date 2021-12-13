@@ -31,7 +31,7 @@ class OnlineUserService
      *
      * @return array
      */
-    public static function onlineUserWindows(): array
+    public static function timeWindows(): array
     {
         $currentMinute = now()->minute;
         $currentMinuteWindow = $currentMinute - ($currentMinute % 5);
@@ -66,7 +66,7 @@ class OnlineUserService
     public function online(User|Authenticatable $user)
     {
         Redis::pipeline(function ($pipe) use ($user) {
-            [$currentWindow, $nextWindow] = self::onlineUserWindows();
+            [$currentWindow, $nextWindow] = self::timeWindows();
 
             $onlineAllCurrent = config('app.cache.keys.online.all').':'.$currentWindow;
             $onlineFollowingsCurrent = config('app.cache.keys.online.followings').':'.$currentWindow;
@@ -109,7 +109,7 @@ class OnlineUserService
     public function offline(User|Authenticatable $user)
     {
         Redis::pipeline(function ($pipe) use ($user) {
-            [$currentWindow, $nextWindow] = self::onlineUserWindows();
+            [$currentWindow, $nextWindow] = self::timeWindows();
 
             $onlineAllCurrent = config('app.cache.keys.online.all').':'.$currentWindow;
             $onlineFollowingsCurrent = config('app.cache.keys.online.followings').':'.$currentWindow;
