@@ -13,6 +13,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class UserService
 {
@@ -30,7 +31,7 @@ class UserService
     {
         $currentMinute = date('i');
         $currentMinuteWindow = $currentMinute - ($currentMinute % 5);
-        $currentWindow = date('H').str_pad($currentMinuteWindow, 2, '0', STR_PAD_LEFT);
+        $currentWindow = date('H').Str::padLeft($currentMinuteWindow, 2, '0');
 
         $nextMinuteWindow = $currentMinuteWindow + 5;
         $nextHourWindow = date('H');
@@ -38,7 +39,7 @@ class UserService
             $nextMinuteWindow = '00';
             $nextHourWindow = date('H', strtotime('+1 hour'));
         }
-        $nextWindow = $nextHourWindow.str_pad($nextMinuteWindow, 2, '0', STR_PAD_LEFT);
+        $nextWindow = $nextHourWindow.Str::padLeft($nextMinuteWindow, 2, '0');
 
         return [$currentWindow, $nextWindow];
     }
