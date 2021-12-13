@@ -217,8 +217,8 @@ class UserService
             }
             $nextWindow = $nextHourWindow.$nextMinuteWindow;
             $now = time();
-            $currentWindowExpireAt = ceil($now/300)*300;
-            $nextWindowExpireAt = ceil($now/600)*600;
+            $currentWindowExpireAt = ceil($now / 300) * 300;
+            $nextWindowExpireAt = ceil($now / 600) * 600;
 
             $onlineAllCurrent = config('app.cache.keys.online.all').':'.$currentWindow;
             $onlineFollowingsCurrent = config('app.cache.keys.online.followings').':'.$currentWindow;
@@ -241,14 +241,16 @@ class UserService
 
             switch ($user->show_online_status) {
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_ALL:
-                    $pipe->sAdd($onlineAllCurrent, (string)$user->_id);
-                    $pipe->sAdd($onlineAllNext, (string)$user->_id);
+                    $pipe->sAdd($onlineAllCurrent, (string) $user->_id);
+                    $pipe->sAdd($onlineAllNext, (string) $user->_id);
+                    // no break
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_FOLLOWERS:
-                    $pipe->sAdd($onlineFollowingsCurrent, (string)$user->_id);
-                    $pipe->sAdd($onlineFollowingsNext, (string)$user->_id);
+                    $pipe->sAdd($onlineFollowingsCurrent, (string) $user->_id);
+                    $pipe->sAdd($onlineFollowingsNext, (string) $user->_id);
+                    // no break
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_NONE:
-                    $pipe->sAdd($onlineNoneCurrent, (string)$user->_id);
-                    $pipe->sAdd($onlineNoneNext, (string)$user->_id);
+                    $pipe->sAdd($onlineNoneCurrent, (string) $user->_id);
+                    $pipe->sAdd($onlineNoneNext, (string) $user->_id);
             }
         });
     }
@@ -277,14 +279,16 @@ class UserService
 
             switch ($user->show_online_status) {
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_ALL:
-                    $pipe->sRem($onlineAllCurrent, (string)$user->_id);
-                    $pipe->sRem($onlineAllNext, (string)$user->_id);
+                    $pipe->sRem($onlineAllCurrent, (string) $user->_id);
+                    $pipe->sRem($onlineAllNext, (string) $user->_id);
+                    // no break
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_FOLLOWERS:
-                    $pipe->sRem($onlineFollowingsCurrent, (string)$user->_id);
-                    $pipe->sRem($onlineFollowingsNext, (string)$user->_id);
+                    $pipe->sRem($onlineFollowingsCurrent, (string) $user->_id);
+                    $pipe->sRem($onlineFollowingsNext, (string) $user->_id);
+                    // no break
                 case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_NONE:
-                    $pipe->sRem($onlineNoneCurrent, (string)$user->_id);
-                    $pipe->sRem($onlineNoneNext, (string)$user->_id);
+                    $pipe->sRem($onlineNoneCurrent, (string) $user->_id);
+                    $pipe->sRem($onlineNoneNext, (string) $user->_id);
             }
         });
     }

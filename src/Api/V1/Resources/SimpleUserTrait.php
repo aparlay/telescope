@@ -23,7 +23,7 @@ trait SimpleUserTrait
         $userArray['avatar'] = $userArray['avatar'] ?? Cdn::avatar('default.jpg');
         if ($user) {
             $userArray['is_followed'] = $this->is_followed ?? false;
-            $userArray['is_online'] = $userArray['is_followed'] ? $this->is_online_for_followers : $this->is_online;;
+            $userArray['is_online'] = $userArray['is_followed'] ? $this->is_online_for_followers : $this->is_online;
             $userArray['is_liked'] = $this->is_liked ?? false;
         }
 

@@ -453,6 +453,7 @@ class User extends Authenticatable implements JWTSubject
         $currentWindow = date('H').$currentMinuteWindow;
 
         $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
+
         return Redis::sismember($cacheKey, (string) $this->_id);
     }
 
@@ -463,6 +464,7 @@ class User extends Authenticatable implements JWTSubject
         $currentWindow = date('H').$currentMinuteWindow;
 
         $cacheKey = config('app.cache.keys.online.followings').':'.$currentWindow;
+
         return Redis::sismember($cacheKey, (string) $this->_id);
     }
 }
