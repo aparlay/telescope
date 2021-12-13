@@ -17,14 +17,15 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         $user = auth()->user() ?: false;
-        $isFollowed = false;
-        $isBlocked = false;
+        $isFollowed = $isBlocked = $isOnline = false;
         if ($user) {
             $followingIds = array_column($user->followings, '_id');
             $isFollowed = in_array((string) $this->_id, $followingIds);
 
             $blockedIds = array_column($user->blocks, '_id');
             $isBlocked = in_array((string) $this->_id, $blockedIds);
+
+            $isOnline = $isFollowed ? $this->is_online_for_followers : $this->is_online;
         }
 
         return [
@@ -36,6 +37,7 @@ class UserResource extends JsonResource
             'visibility' => $this->visibility,
             'is_followed' => $isFollowed,
             'is_blocked' => $isBlocked,
+            'is_online' => $isOnline,
             'promo_link' => $this->promo_link,
             'follower_count' => $this->follower_count,
             'following_count' => $this->following_count,

@@ -32,6 +32,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int         $status
  * @property int         $gender
  * @property int         $visibility
+ * @property int         $show_online_status
  * @property int         $interested_in
  * @property int         $block_count
  * @property int         $follower_count
@@ -58,6 +59,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
  * @property-read bool $is_subscribable
+ * @property-read bool $is_online
+ * @property-read bool $is_online_for_followers
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -88,6 +91,10 @@ class User extends Authenticatable implements JWTSubject
 
     public const VISIBILITY_PUBLIC = 1;
     public const VISIBILITY_PRIVATE = 0;
+
+    public const SHOW_ONLINE_STATUS_NONE = 0;
+    public const SHOW_ONLINE_STATUS_FOLLOWERS = 1;
+    public const SHOW_ONLINE_STATUS_ALL = 2;
 
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
@@ -124,6 +131,7 @@ class User extends Authenticatable implements JWTSubject
         'type',
         'status',
         'visibility',
+        'show_online_status',
         'follower_count',
         'following_count',
         'block_count',
@@ -167,6 +175,7 @@ class User extends Authenticatable implements JWTSubject
         'interested_in' => self::INTERESTED_IN_MALE,
         'visibility' => self::VISIBILITY_PUBLIC,
         'follower_count' => 0,
+        'show_online_status' => self::SHOW_ONLINE_STATUS_ALL,
         'following_count' => 0,
         'like_count' => 0,
         'block_count' => 0,
@@ -435,5 +444,25 @@ class User extends Authenticatable implements JWTSubject
     public function getIsSubscribableAttribute(): bool
     {
         return isset($this->subscription_plan['amount'], $this->subscription_plan['currency'], $this->subscription_plan['days']);
+    }
+
+    public function getIsOnlineAttribute(): bool
+    {
+        $currentMinute = date('i');
+        $currentMinuteWindow = $currentMinute - ($currentMinute % 5);
+        $currentWindow = date('H').$currentMinuteWindow;
+
+        $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
+        return Redis::sismember($cacheKey, (string) $this->_id);
+    }
+
+    public function getIsOnlineForFollowersAttribute(): bool
+    {
+        $currentMinute = date('i');
+        $currentMinuteWindow = $currentMinute - ($currentMinute % 5);
+        $currentWindow = date('H').$currentMinuteWindow;
+
+        $cacheKey = config('app.cache.keys.online.followings').':'.$currentWindow;
+        return Redis::sismember($cacheKey, (string) $this->_id);
     }
 }

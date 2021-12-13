@@ -83,6 +83,7 @@ class MeResource extends JsonResource
             'media_count' => $this->followed_hashtag_count,
             'is_followed' => false,
             'is_blocked' => false,
+            'is_online' => true,
             'blocks' => $blocks,
             'likes' => $likes,
             'followers' => $followers,
