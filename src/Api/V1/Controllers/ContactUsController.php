@@ -22,10 +22,6 @@ class ContactUsController extends Controller
         $data = $request->input();
         $data['msg'] = $data['message'];
 
-        $user = User::admin()->first();
-        $user->notify(
-            new ContactUs(config('mail.support_email'), $data['name'], 'Contact Us notification', $data['message'])
-        );
         dispatch((new Email(config('mail.support_email'), 'Contact Us notification', 'email_contactus', $data))->onQueue('medium'));
 
         return $this->response([], Response::HTTP_OK);
