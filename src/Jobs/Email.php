@@ -5,6 +5,7 @@ namespace Aparlay\Core\Jobs;
 use Aparlay\Core\Mail\EmailEnvelope;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
+use Aparlay\Core\Notifications\ContactUs;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Mail;
 use Throwable;
+use Aparlay\Core\Models\Email as EmailModel;
 
 class Email implements ShouldQueue
 {
@@ -67,6 +69,14 @@ class Email implements ShouldQueue
     {
         $send = new EmailEnvelope($this->subject, $this->type, $this->payload);
         Mail::to($this->email)->send($send);
+
+        if($this->type === EmailModel::TEMPLATE_EMAIL_CONTACTUS) {
+
+            $user = User::admin()->first();
+            $user->notify(
+                new ContactUs(config('mail.support_email'),$this->payload['name'],'Contact Us notification',$this->payload['message'])
+            );
+        }
     }
 
     /**
