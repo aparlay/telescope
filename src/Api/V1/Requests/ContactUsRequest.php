@@ -30,8 +30,6 @@ class ContactUsRequest extends BaseFormRequest
                     $fail('google reCaptcha failed.');
                 }
             }
-
-
         ];
     }
 }
