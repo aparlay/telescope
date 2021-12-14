@@ -25,7 +25,6 @@ abstract class BaseEnum
         return self::$constCacheArray[$calledClass];
     }
 
-
     /**
      * @param $name
      * @param  bool  $strict
