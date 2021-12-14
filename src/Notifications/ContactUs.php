@@ -48,7 +48,6 @@ class ContactUs extends Notification
      */
     public function toSlack($notifiable)
     {
-
         $message = 'Contact us notification!!!';
         $message .= PHP_EOL.'_*Email:*_ '.$this->email;
         $message .= PHP_EOL.'_*Name:*_ '.$this->name;
