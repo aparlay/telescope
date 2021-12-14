@@ -69,9 +69,7 @@ class Email implements ShouldQueue
     {
         $send = new EmailEnvelope($this->subject, $this->type, $this->payload);
         Mail::to($this->email)->send($send);
-
         if($this->type === EmailModel::TEMPLATE_EMAIL_CONTACTUS) {
-
             $user = User::admin()->first();
             $user->notify(
                 new ContactUs(config('mail.support_email'),$this->payload['name'],'Contact Us notification',$this->payload['message'])
