@@ -18,7 +18,7 @@ class ContactUsController extends Controller
      * @return Response
      */
     public function send(ContactUsRequest $request): Response
-    {   $user =
+    {
         $data = $request->input();
         $data['msg'] =  $data['message'];
 
