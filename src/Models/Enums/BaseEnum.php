@@ -9,25 +9,6 @@ abstract class BaseEnum
     private static $constCacheArray;
 
     /**
-     * @param $name
-     * @param  bool  $strict
-     * @return bool
-     * @throws \ReflectionException
-     */
-    public static function isValidName($name, bool $strict = false): bool
-    {
-        $constants = self::getConstants();
-
-        if ($strict) {
-            return array_key_exists($name, $constants);
-        }
-
-        $keys = array_map('strtolower', array_keys($constants));
-
-        return in_array(strtolower($name), $keys);
-    }
-
-    /**
      * @throws \ReflectionException
      */
     private static function getConstants()
@@ -42,6 +23,26 @@ abstract class BaseEnum
         }
 
         return self::$constCacheArray[$calledClass];
+    }
+
+
+    /**
+     * @param $name
+     * @param  bool  $strict
+     * @return bool
+     * @throws \ReflectionException
+     */
+    public static function isValidName($name, bool $strict = false): bool
+    {
+        $constants = self::getConstants();
+
+        if ($strict) {
+            return array_key_exists($name, $constants);
+        }
+
+        $keys = array_map('mb_strtolower', array_keys($constants));
+
+        return in_array(mb_strtolower($name), $keys);
     }
 
     /**
