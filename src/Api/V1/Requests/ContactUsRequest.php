@@ -29,7 +29,7 @@ class ContactUsRequest extends BaseFormRequest
                 if (! $response->success) {
                     $fail('google reCaptcha failed.');
                 }
-            }
+            },
         ];
     }
 }
