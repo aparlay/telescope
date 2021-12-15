@@ -1,6 +1,7 @@
 <?php
 
 namespace Aparlay\Core\Tests\Feature\Api;
+
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
 
@@ -16,7 +17,7 @@ class ContactUsTest extends ApiTestCase
                 'email' => 'test@gmail.com',
                 'name' => 'Dummy',
                 'topic' => 'Account Problem',
-                'message' => 'Having a problem with account'
+                'message' => 'Having a problem with account',
             ])
             ->assertStatus(200)
             ->assertJsonPath('status', 'OK')
