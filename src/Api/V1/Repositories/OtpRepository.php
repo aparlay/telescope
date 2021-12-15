@@ -8,7 +8,7 @@ use Aparlay\Core\Models\Otp as BaseOtp;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class OtpRepository implements RepositoryInterface
+class OtpRepository
 {
     protected Otp | BaseOtp $model;
 
@@ -81,23 +81,8 @@ class OtpRepository implements RepositoryInterface
         $this->model->update(['validated' => $validated]);
     }
 
-    public function all()
-    {
-        // TODO: Implement all() method.
-    }
-
-    public function update(array $data, $id)
-    {
-        // TODO: Implement update() method.
-    }
-
     public function delete($id)
     {
         return $this->model->destroy($id);
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
     }
 }
