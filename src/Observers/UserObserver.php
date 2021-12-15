@@ -71,21 +71,21 @@ class UserObserver extends BaseModelObserver
     public function updated($model): void
     {
         if ($model->wasChanged('avatar')) {
-            dispatch((new UpdateAvatar((string) $model->_id))->onQueue('low'));
+            UpdateAvatar::dispatch((string) $model->_id)->onQueue('low');
         }
 
         if ($model->wasChanged('status')) {
             switch ($model->status) {
                 case User::STATUS_DEACTIVATED:
                 case User::STATUS_BLOCKED:
-                    dispatch((new DeleteUserMedia((string) $model->_id)));
-                    dispatch((new DeleteUserConnect((string) $model->_id)));
+                    DeleteUserMedia::dispatch((string) $model->_id)->onQueue('low');
+                    DeleteUserConnect::dispatch((string) $model->_id)->onQueue('low');
                     break;
             }
         }
 
         if ($model->wasChanged('visibility')) {
-            dispatch((new UpdateMedia((string) $model->_id, ['visibility' => $model->visibility]))->onQueue('low'));
+            UpdateMedia::dispatch((string) $model->_id, ['visibility' => $model->visibility])->onQueue('low');
         }
     }
 }

@@ -50,7 +50,7 @@ class MediaObserver extends BaseModelObserver
         }
 
         if (! config('app.is_testing')) {
-            dispatch((new UploadMedia($media->userObj->_id, $media->_id, $media->file))->delay(10)->onQueue('low'));
+            UploadMedia::dispatch($media->userObj->_id, $media->_id, $media->file)->delay(10)->onQueue('low');
         }
     }
 
@@ -118,7 +118,7 @@ class MediaObserver extends BaseModelObserver
             );
             $media->userObj->save();
 
-            dispatch((new DeleteMediaLike((string) $media->_id))->onQueue('low'));
+            DeleteMediaLike::dispatch((string) $media->_id)->onQueue('low');
         }
     }
 
@@ -143,6 +143,6 @@ class MediaObserver extends BaseModelObserver
         );
         $creatorUser->save();
 
-        dispatch((new DeleteMediaLike((string) $media->_id)));
+        DeleteMediaLike::dispatch((string) $media->_id)->onQueue('low');
     }
 }
