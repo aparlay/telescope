@@ -26,7 +26,7 @@ class ContactUsRequest extends BaseFormRequest
                 $response = file_get_contents($url);
                 $response = json_decode($response);
 
-                if (! $response->success) {
+                if (! $response->success && ! config('app.is_testing')) {
                     $fail('google reCaptcha failed.');
                 }
             },
