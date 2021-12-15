@@ -3,10 +3,10 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Requests\ContactUsRequest;
-use Aparlay\Core\Notifications\ContactUs;
 use Aparlay\Core\Jobs\Email;
 use Aparlay\Core\Models\Email as EmailModel;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Notifications\ContactUs;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
