@@ -37,6 +37,8 @@ class Email extends BaseModel
 
     public const TEMPLATE_EMAIL_VERIFICATION = 'email_verification';
 
+    public const TEMPLATE_EMAIL_CONTACTUS = 'email_contactus';
+
     /**
      * The collection associated with the model.
      *
