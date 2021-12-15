@@ -9,7 +9,7 @@ use Aparlay\Core\Api\V1\Requests\ReportRequest;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
-class ReportRepository implements RepositoryInterface
+class ReportRepository
 {
     protected Report $model;
 
@@ -20,36 +20,6 @@ class ReportRepository implements RepositoryInterface
         }
 
         $this->model = $model;
-    }
-
-    public function all()
-    {
-        // TODO: Implement all() method.
-    }
-
-    /**
-     * Create MediaLike.
-     *
-     * @param array $data
-     */
-    public function create(array $data)
-    {
-        // TODO: Implement create() method.
-    }
-
-    public function update(array $data, $id)
-    {
-        // TODO: Implement update() method.
-    }
-
-    public function delete($id)
-    {
-        // TODO: Implement delete() method.
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
     }
 
     /**

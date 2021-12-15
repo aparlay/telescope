@@ -3,6 +3,7 @@
 use Aparlay\Core\Api\V1\Controllers\AlertController;
 use Aparlay\Core\Api\V1\Controllers\AuthController;
 use Aparlay\Core\Api\V1\Controllers\BlockController;
+use Aparlay\Core\Api\V1\Controllers\ContactUsController;
 use Aparlay\Core\Api\V1\Controllers\FollowController;
 use Aparlay\Core\Api\V1\Controllers\MediaController;
 use Aparlay\Core\Api\V1\Controllers\MediaLikeController;
@@ -103,5 +104,9 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         ->withoutMiddleware(['device-id']);
     Route::get('/health', [SiteController::class, 'health'])
         ->name('site.health')
+        ->withoutMiddleware(['device-id']);
+
+    Route::post('/contact-us', [ContactUsController::class, 'send'])
+        ->name('contactus')
         ->withoutMiddleware(['device-id']);
 });

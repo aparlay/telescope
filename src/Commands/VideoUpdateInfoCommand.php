@@ -17,7 +17,7 @@ class VideoUpdateInfoCommand extends Command
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]]);
 
         foreach ($mediaQuery->get() as $media) {
-            UpdateMediaInfo::dispatch($media->creator['_id'], $media->_id, $media->file)->onQueue('lowpriority');
+            UpdateMediaInfo::dispatch($media->creator['_id'], $media->_id, $media->file)->onQueue('low');
 
             $msg = '<fg=yellow;options=bold>';
             $msg .= 'Video '.$media->_id.' '.$media->file.' need to send for update info.'.'</>';

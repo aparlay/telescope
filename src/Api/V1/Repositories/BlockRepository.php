@@ -9,7 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
-class BlockRepository implements RepositoryInterface
+class BlockRepository
 {
     protected Block $model;
 
@@ -22,18 +22,13 @@ class BlockRepository implements RepositoryInterface
         $this->model = $model;
     }
 
-    public function all()
-    {
-        // TODO: Implement all() method.
-    }
-
     /**
      * Create block.
      *
      * @param array $data
      * @return Block
      */
-    public function create(array $data)
+    public function create($data)
     {
         $creator = auth()->user();
 
@@ -49,11 +44,6 @@ class BlockRepository implements RepositoryInterface
         }
     }
 
-    public function update(array $data, $id)
-    {
-        // TODO: Implement update() method.
-    }
-
     /**
      * Delete block.
      *
@@ -63,11 +53,6 @@ class BlockRepository implements RepositoryInterface
     public function delete($id)
     {
         $this->model->destroy($id);
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
     }
 
     /**

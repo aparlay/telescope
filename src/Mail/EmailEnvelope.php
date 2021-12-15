@@ -59,6 +59,15 @@ class EmailEnvelope extends Mailable
                     $template = 'email_verification';
                 }
                 break;
+
+            case Email::TEMPLATE_EMAIL_CONTACTUS:
+                $template = 'default_view::email_contactus';
+                $verificationTemplate = config('app.email.templates.email_contactus', 'default_view::email_contactus');
+                if (view()->exists($verificationTemplate)) {
+                    $template = 'default_view::email_contactus';
+                }
+                break;
+
             default:
                 $template = '';
                 break;

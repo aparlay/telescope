@@ -33,28 +33,4 @@ class EmailRepository
             return null;
         }
     }
-
-    public function __construct($model)
-    {
-    }
-
-    public function all()
-    {
-        // TODO: Implement all() method.
-    }
-
-    public function update(array $data, $id)
-    {
-        // TODO: Implement update() method.
-    }
-
-    public function delete($id)
-    {
-        // TODO: Implement delete() method.
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
-    }
 }
