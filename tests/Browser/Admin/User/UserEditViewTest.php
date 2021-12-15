@@ -109,7 +109,7 @@ class UserEditViewTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($file) {
             $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
-                ->attach('avatar', storage_path('app/' . $file))
+                ->attach('avatar', storage_path('app/'.$file))
                 ->type('username', $this->faker()->userName)
                 ->type('email', $this->faker()->email)
                 ->type('bio', $this->faker()->text)
@@ -134,7 +134,7 @@ class UserEditViewTest extends DuskTestCase
     public function UserMediaListTest()
     {
         $this->browse(function (Browser $browser) {
-           $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
+            $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
                ->clickLink('Medias')
                ->assertSee('Cover')
                ->assertSee('Created By')
@@ -157,7 +157,7 @@ class UserEditViewTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($file) {
             $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
                 ->clickLink('Upload')
-                ->attach('.flow-browse input', storage_path('app/' . $file))
+                ->attach('.flow-browse input', storage_path('app/'.$file))
                 ->assertSee('Uploading')
                 ->assertSee('completed')
                 ->type('description', $this->faker()->text)
