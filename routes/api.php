@@ -107,6 +107,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         ->withoutMiddleware(['device-id']);
 
     Route::post('/contact-us', [ContactUsController::class, 'send'])
-        ->name('contact.us')
+        ->name('contactus')
         ->withoutMiddleware(['device-id']);
 });
