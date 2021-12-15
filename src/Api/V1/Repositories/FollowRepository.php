@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
-class FollowRepository implements RepositoryInterface
+class FollowRepository
 {
     protected Follow $model;
 
@@ -21,18 +21,13 @@ class FollowRepository implements RepositoryInterface
         $this->model = $model;
     }
 
-    public function all()
-    {
-        // TODO: Implement all() method.
-    }
-
     /**
      * Create Follow.
      *
      * @param array $data
      * @return Follow
      */
-    public function create(array $data)
+    public function create($data)
     {
         $creator = auth()->user();
         try {
@@ -47,11 +42,6 @@ class FollowRepository implements RepositoryInterface
         }
     }
 
-    public function update(array $data, $id)
-    {
-        // TODO: Implement update() method.
-    }
-
     /**
      * Delete Follow.
      *
@@ -61,11 +51,6 @@ class FollowRepository implements RepositoryInterface
     public function delete($id)
     {
         $this->model->destroy($id);
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
     }
 
     /**

@@ -8,7 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class UserRepository implements RepositoryInterface
+class UserRepository
 {
     protected User | BaseUser $model;
 
@@ -91,29 +91,9 @@ class UserRepository implements RepositoryInterface
         return true;
     }
 
-    public function all()
-    {
-        // TODO: Implement all() method.
-    }
-
-    public function create(array $data)
-    {
-        // TODO: Implement create() method.
-    }
-
     public function update(array $data, $id)
     {
         return $this->model->user($id)->update($data);
-    }
-
-    public function delete($id)
-    {
-        // TODO: Implement delete() method.
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
     }
 
     /**
