@@ -4,12 +4,15 @@ namespace Aparlay\Core\Tests\Browser\Admin\User;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Tests\DuskTestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Dusk\Browser;
 use Throwable;
 
 class UserEditViewTest extends DuskTestCase
 {
-    protected $superAdminUser;
+    use WithFaker;
 
     protected $user;
 
@@ -19,13 +22,6 @@ class UserEditViewTest extends DuskTestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->superAdminUser = User::where('type', User::TYPE_ADMIN)->first();
-        $this->superAdminUser->assignRole('super-administrator');
-
-        $this->browse(function (Browser $browser) {
-            $browser->loginAs($this->superAdminUser, 'admin');
-        });
 
         $this->user = User::factory()->create();
     }
@@ -100,6 +96,90 @@ class UserEditViewTest extends DuskTestCase
                 ->waitForText('Are you sure you want to ban this user?')
                 ->clickAtXPath('//*[@id="banModal"]/div/div/form/div[3]/button[2]')
                 ->assertSee('User Banned successfully.');
+        });
+    }
+
+    /**
+     * @test
+     * @throws Throwable
+     */
+    public function EditUserTest()
+    {
+        $file = UploadedFile::fake()->create('random.jpg')->store('public/dusk/avatars');
+
+        $this->browse(function (Browser $browser) use ($file) {
+            $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
+                ->attach('avatar', storage_path('app/' . $file))
+                ->type('username', $this->faker()->userName)
+                ->type('email', $this->faker()->email)
+                ->type('bio', $this->faker()->text)
+                ->clickAtXPath('//*[@id="user-info"]/form/div[4]/label') //email verified
+                ->clickAtXPath('//*[@id="user-info"]/form/div[6]/label') //feature tips
+                ->clickAtXPath('//*[@id="user-info"]/form/div[7]/label') //feature demo user
+                ->select('gender')
+                ->select('interested_in')
+                ->select('type')
+                ->select('role')
+                ->select('status')
+                ->select('visibility')
+                ->clickAtXPath('//*[@id="user-info"]/form/div[18]/div/button')
+                ->assertSee('User updated successfully.');
+        });
+    }
+
+    /**
+     * @test
+     * @throws Throwable
+     */
+    public function UserMediaListTest()
+    {
+        $this->browse(function (Browser $browser) {
+           $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
+               ->clickLink('Medias')
+               ->assertSee('Cover')
+               ->assertSee('Created By')
+               ->assertSee('Description')
+               ->assertSee('Status')
+               ->assertSee('Likes')
+               ->assertSee('Sort Score')
+               ->assertSee('Created At');
+        });
+    }
+
+    /**
+     * @test
+     * @throws Throwable
+     */
+    public function UserReuploadMediaTest()
+    {
+        $file = UploadedFile::fake()->create('random.mp4')->store('public/dusk/medias');
+
+        $this->browse(function (Browser $browser) use ($file) {
+            $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
+                ->clickLink('Upload')
+                ->attach('.flow-browse input', storage_path('app/' . $file))
+                ->assertSee('Uploading')
+                ->assertSee('completed')
+                ->type('description', $this->faker()->text)
+                ->click('.upload-video-button')
+                ->assertSee('New media saved');
+        });
+    }
+
+    /**
+     * @test
+     * @throws Throwable
+     */
+    public function UserPaymentsTest()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
+                ->clickLink('Payments')
+                ->assertSee('Credit Cards')
+                ->assertSee('Earned Tips')
+                ->assertSee('Send Tips')
+                ->assertSee('Subscriptions')
+                ->assertSee('Subscribers');
         });
     }
 }

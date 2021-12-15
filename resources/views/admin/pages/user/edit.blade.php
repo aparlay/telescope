@@ -144,14 +144,14 @@
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
                                                     <input type="checkbox" value="1" name="email_verified" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
-                                                    <label class="custom-control-label" for="email_verified"></label>
+                                                    <label class="custom-control-label" id="email_verified" for="email_verified"></label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="bio" class="col-sm-2 col-form-label">Bio</label>
                                             <div class="col-sm-10">
-                                                <textarea name="bio" id="bio" cols="30" rows="3" class="form-control"></textarea>
+                                                <textarea name="bio" id="bio" cols="30" rows="3" class="form-control">{{ $user->bio }}</textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -307,7 +307,7 @@
                                                         ['data' => 'like_count', 'orderable' => false],
                                                         ['data' => 'visit_count', 'orderable' => false],
                                                         ['data' => 'sort_score', 'orderable' => false],
-                                                        ['data' => 'formatted_created_at','orderData' => 9, 'target' => 9],
+                                                        ['data' => 'date_formatted','orderData' => 9, 'target' => 9],
                                                         ['data' => 'created_at','visible' => false],
                                                         ['data' => 'action', 'orderable' => false],
                                                     ],
