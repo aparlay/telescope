@@ -158,6 +158,10 @@ class User extends Authenticatable implements JWTSubject
         ],
         'features' => [
             'tips' => false,
+            'exclusive_content' => false,
+            'wallet_bank' => false,
+            'wallet_paypal' => false,
+            'wallet_cryptocurrency' => false,
             'demo' => false,
         ],
         'status' => self::STATUS_PENDING,
