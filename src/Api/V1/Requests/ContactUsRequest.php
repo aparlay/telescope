@@ -18,7 +18,7 @@ class ContactUsRequest extends BaseFormRequest
             'name' => ['required', 'string'],
             'email' => ['required', 'string'],
             'message' => ['required', 'string'],
-            'g-recaptcha-response' => function ($attribute, $value, $fail) {
+            'g-recaptcha-response' =>['required', function ($attribute, $value, $fail) {
                 $userIP = Request::ip();
                 $secretKey = config('recaptcha.api_secret_key');
                 $recaptchaSiteVerifyURL = config('recaptcha.site_verify_url');
@@ -29,7 +29,7 @@ class ContactUsRequest extends BaseFormRequest
                 if (! $response->success && ! config('app.is_testing')) {
                     $fail('google reCaptcha failed.');
                 }
-            },
+            }],
         ];
     }
 }
