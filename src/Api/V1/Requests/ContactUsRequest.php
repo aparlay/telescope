@@ -21,4 +21,11 @@ class ContactUsRequest extends BaseFormRequest
             'g-recaptcha-response' => ['required', 'recaptcha'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'g-recaptcha-response.recaptcha' => 'reCaptcha validation failed',
+        ];
+    }
 }
