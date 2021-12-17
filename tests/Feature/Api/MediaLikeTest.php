@@ -11,7 +11,6 @@ use MongoDB\BSON\ObjectId;
 
 class MediaLikeTest extends ApiTestCase
 {
-
     /**
      * @test
      */
