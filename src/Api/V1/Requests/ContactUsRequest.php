@@ -13,12 +13,18 @@ class ContactUsRequest extends BaseFormRequest
      */
     public function rules()
     {
+        if(!config('app.is_testing')) {
+            $recaptChaRule = ['required', 'recaptcha'];
+        } else {
+            $recaptChaRule = ['nullable'];
+        }
+
         return [
             'topic' => ['required', 'string'],
             'name' => ['required', 'string'],
             'email' => ['required', 'string'],
             'message' => ['required', 'string'],
-            'g-recaptcha-response' => ['required', 'recaptcha'],
+            'g-recaptcha-response' => $recaptChaRule,
         ];
     }
 
