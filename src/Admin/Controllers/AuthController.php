@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use function redirect;
+use Aparlay\Core\Admin\Requests\AuthRequest;
 
 class AuthController extends Controller
 {
@@ -21,7 +22,7 @@ class AuthController extends Controller
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postLogin(Request $request)
+    public function postLogin(AuthRequest $request)
     {
         $credentials = $request->only(['email', 'password']);
         $remember = $request->get('remember');

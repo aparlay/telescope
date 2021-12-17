@@ -31,6 +31,9 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-md-6"> {!! htmlFormSnippet() !!} </div>
+                    </div>
                     <div class="row">
                         <div class="col-8 mb-0">
                             <div class="custom-control custom-checkbox">
