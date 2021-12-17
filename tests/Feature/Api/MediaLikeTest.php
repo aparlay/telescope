@@ -31,7 +31,6 @@ class MediaLikeTest extends ApiTestCase
                 'avatar' => $mediaCreator->avatar,
             ],
         ]);
-
         $this->assertEquals(0, $media->like_count);
 
         $this->assertDatabaseMissing((new MediaLike())->getCollection(), ['media_id' => new ObjectId($media->_id)]);
@@ -142,7 +141,7 @@ class MediaLikeTest extends ApiTestCase
      */
     public function mediaLikePermission()
     {
-        $mediaCreator = User::factory()->create(['status' => Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
+        $mediaCreator = User::factory()->create();
         $blockedUser = User::factory()->create();
         $block = Block::factory()->create([
                 'user' => [
@@ -158,6 +157,8 @@ class MediaLikeTest extends ApiTestCase
             ]);
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
+            'status' => Media::STATUS_COMPLETED,
+            'visibility' => Media::VISIBILITY_PUBLIC,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,
