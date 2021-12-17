@@ -83,7 +83,7 @@ class UserRepository
     public function isVerified(): bool
     {
         /* User is considered as verified when user status is active or verified */
-        if (!in_array($this->model->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value], true)) {
+        if (! in_array($this->model->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value], true)) {
             throw ValidationException::withMessages([
                 'Account' => ['Your account is not authenticated.'],
             ]);

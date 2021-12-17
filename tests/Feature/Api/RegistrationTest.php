@@ -140,7 +140,7 @@ class RegistrationTest extends ApiTestCase
      */
     public function usernameAsEmail()
     {
-        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value,]);
+        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $payload = [
             'username' => uniqid('alua_').'@apaly.com',
@@ -169,7 +169,7 @@ class RegistrationTest extends ApiTestCase
      */
     public function invalidPassword()
     {
-        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value,]);
+        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
@@ -198,7 +198,7 @@ class RegistrationTest extends ApiTestCase
      */
     public function passwordRequire()
     {
-        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value,]);
+        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
@@ -227,7 +227,7 @@ class RegistrationTest extends ApiTestCase
      */
     public function emailNotValid()
     {
-        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value,]);
+        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
@@ -256,7 +256,7 @@ class RegistrationTest extends ApiTestCase
      */
     public function genderNotValid()
     {
-        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value,]);
+        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [

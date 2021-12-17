@@ -17,8 +17,7 @@ enum MediaStatus: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::QUEUED => __('queued'),
             self::UPLOADED => __('uploaded'),
             self::IN_PROGRESS => __('in progress'),
@@ -34,8 +33,7 @@ enum MediaStatus: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::QUEUED, self::UPLOADED => 'info',
             self::IN_PROGRESS, self::IN_REVIEW => 'indigo',
             self::COMPLETED => 'default',

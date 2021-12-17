@@ -9,8 +9,7 @@ enum UserDocumentStatus: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::CREATED => __('created'),
             self::CONFIRMED => __('confirmed'),
         };
@@ -18,8 +17,7 @@ enum UserDocumentStatus: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::CREATED => 'warning',
             self::CONFIRMED => 'success',
         };

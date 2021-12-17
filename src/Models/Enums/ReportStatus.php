@@ -9,8 +9,7 @@ enum ReportStatus: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::REPORTED => __('reported'),
             self::REVISED => __('revised'),
         };
@@ -18,8 +17,7 @@ enum ReportStatus: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::REPORTED => 'danger',
             self::REVISED => 'warning',
         };

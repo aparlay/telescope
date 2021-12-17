@@ -13,8 +13,7 @@ enum UserStatus: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::PENDING => __('pending'),
             self::VERIFIED => __('verified'),
             self::ACTIVE => __('active'),
@@ -26,8 +25,7 @@ enum UserStatus: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::PENDING => 'warning',
             self::VERIFIED => 'info',
             self::ACTIVE => 'success',

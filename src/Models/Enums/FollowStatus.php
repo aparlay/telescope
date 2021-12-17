@@ -9,8 +9,7 @@ enum FollowStatus: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::PENDING => __('pending'),
             self::ACCEPTED => __('accepted'),
         };
@@ -18,8 +17,7 @@ enum FollowStatus: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::PENDING => 'warning',
             self::ACCEPTED => 'success',
         };

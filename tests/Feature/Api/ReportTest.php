@@ -124,7 +124,8 @@ class ReportTest extends ApiTestCase
                 ])
             );
 
-        $this->assertDatabaseHas('reports',
+        $this->assertDatabaseHas(
+            'reports',
             ['media_id' => new ObjectId($media->_id), 'type' => ReportType::MEDIA->value]
         );
     }
@@ -170,11 +171,12 @@ class ReportTest extends ApiTestCase
                     'data.updated_at' => 'integer',
                 ])
             );
-        $this->assertDatabaseHas('reports',
+        $this->assertDatabaseHas(
+            'reports',
             [
                 'media_id' => new ObjectId($media->_id),
                 'created_by' => new ObjectId($user->_id),
-                'type' => ReportType::MEDIA->value
+                'type' => ReportType::MEDIA->value,
             ]
         );
     }
@@ -303,11 +305,12 @@ class ReportTest extends ApiTestCase
                     'data.updated_at' => 'integer',
                 ])
             );
-        $this->assertDatabaseHas('reports',
+        $this->assertDatabaseHas(
+            'reports',
             [
                 'media_id' => new ObjectId($media->_id),
                 'type' => ReportType::MEDIA->value,
-                'created_by' => new ObjectId($user->_id)
+                'created_by' => new ObjectId($user->_id),
             ]
         );
     }

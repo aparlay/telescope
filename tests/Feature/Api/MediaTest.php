@@ -108,7 +108,7 @@ class MediaTest extends ApiTestCase
     public function createMediaBySplitUpload()
     {
         $activeUser = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
-        $nonActiveUser = User::factory()->create(['status' => UserStatus::PENDING->value,]);
+        $nonActiveUser = User::factory()->create(['status' => UserStatus::PENDING->value]);
         $taggedUser = User::factory()->create();
 
         $videoFilePath = __DIR__.'/assets/video.mp4';
@@ -259,8 +259,8 @@ class MediaTest extends ApiTestCase
      */
     public function createMediaByStreamUpload()
     {
-        $activeUser = User::factory()->create(['status' => UserStatus::ACTIVE->value,]);
-        $nonActiveUser = User::factory()->create(['status' => UserStatus::PENDING->value,]);
+        $activeUser = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $nonActiveUser = User::factory()->create(['status' => UserStatus::PENDING->value]);
         $taggedUser = User::factory()->create();
 
         $fileData = [
@@ -436,7 +436,7 @@ class MediaTest extends ApiTestCase
      */
     public function mediaViewPolicy()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value,]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $media = Media::factory()
             ->for(User::factory()->create(['visibility' => UserVisibility::PRIVATE->value]), 'userObj')
             ->create(['status'=>MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PRIVATE->value]);

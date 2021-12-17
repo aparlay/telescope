@@ -11,8 +11,7 @@ enum UserInterestedIn: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::FEMALE => __('female'),
             self::MALE => __('male'),
             self::TRANSGENDER => __('transgender'),
@@ -22,8 +21,7 @@ enum UserInterestedIn: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::FEMALE => 'info',
             self::MALE => 'success',
             self::TRANSGENDER => 'warning',

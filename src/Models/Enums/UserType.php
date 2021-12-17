@@ -9,8 +9,7 @@ enum UserType: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::USER => __('user'),
             self::ADMIN => __('admin'),
         };
@@ -18,8 +17,7 @@ enum UserType: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::USER => 'warning',
             self::ADMIN => 'success',
         };

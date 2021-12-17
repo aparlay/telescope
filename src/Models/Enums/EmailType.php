@@ -9,8 +9,7 @@ enum EmailType: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::OTP => __('otp'),
             self::CONTACT => __('contact'),
         };
@@ -18,8 +17,7 @@ enum EmailType: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::OTP => 'info',
             self::CONTACT => 'indigo',
         };
