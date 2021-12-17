@@ -415,7 +415,9 @@ class MediaTest extends ApiTestCase
     public function mediaUpdatePolicy()
     {
         $user = User::factory()->create(['status' => 0]);
-        $media = Media::factory()->for(User::factory()->create(['status' => 0]), 'userObj')->create();
+        $media = Media::factory()->for(User::factory()->create(['status' => 0]), 'userObj')->create([
+            'status' => Media::STATUS_COMPLETED,
+        ]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('PUT', '/v1/media/'.$media->_id, [
                 'description' => 'image 12',
@@ -1056,6 +1058,7 @@ class MediaTest extends ApiTestCase
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'visibility' => MediaVisibility::PRIVATE->value,
             'created_by' => $mediaCreator->_id,
+            'status' => Media::STATUS_COMPLETED,
             'creator' => [
                 '_id' => $mediaCreator->_id,
                 'username' => $mediaCreator->username,

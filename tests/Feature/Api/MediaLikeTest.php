@@ -8,14 +8,11 @@ use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
 
 class MediaLikeTest extends ApiTestCase
 {
-    use DatabaseMigrations;
-
     /**
      * @test
      */
@@ -35,7 +32,6 @@ class MediaLikeTest extends ApiTestCase
                 'avatar' => $mediaCreator->avatar,
             ],
         ]);
-
         $this->assertEquals(0, $media->like_count);
 
         $this->assertDatabaseMissing((new MediaLike())->getCollection(), ['media_id' => new ObjectId($media->_id)]);
@@ -147,7 +143,7 @@ class MediaLikeTest extends ApiTestCase
      */
     public function mediaLikePermission()
     {
-        $mediaCreator = User::factory()->create(['status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
+        $mediaCreator = User::factory()->create();
         $blockedUser = User::factory()->create();
         $block = Block::factory()->create([
                 'user' => [
@@ -163,6 +159,8 @@ class MediaLikeTest extends ApiTestCase
             ]);
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
+            'status' => MediaStatus::COMPLETED->value,
+            'visibility' => MediaVisibility::PUBLIC->value,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,
