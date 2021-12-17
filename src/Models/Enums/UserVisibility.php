@@ -9,8 +9,7 @@ enum UserVisibility: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::PRIVATE => __('private'),
             self::PUBLIC => __('public'),
         };
@@ -18,8 +17,7 @@ enum UserVisibility: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::PRIVATE => 'warning',
             self::PUBLIC => 'success',
         };

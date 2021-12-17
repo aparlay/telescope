@@ -11,8 +11,7 @@ enum EmailStatus: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::QUEUED => __('queued'),
             self::SENT => __('sent'),
             self::OPENED => __('opened'),
@@ -22,8 +21,7 @@ enum EmailStatus: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::QUEUED => 'warning',
             self::SENT => 'info',
             self::OPENED => 'success',

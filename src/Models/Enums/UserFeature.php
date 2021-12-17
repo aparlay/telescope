@@ -9,8 +9,7 @@ enum UserFeature: string implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::TIPS => __('tips'),
             self::DEMO => __('demo'),
         };
@@ -18,8 +17,7 @@ enum UserFeature: string implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::TIPS => 'warning',
             self::DEMO => 'info',
         };

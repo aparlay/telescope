@@ -9,8 +9,7 @@ enum AlertStatus: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::NOT_VISITED => __('queued'),
             self::VISITED => __('uploaded'),
         };
@@ -18,8 +17,7 @@ enum AlertStatus: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::NOT_VISITED => 'info',
             self::VISITED => 'warning',
         };

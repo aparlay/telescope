@@ -9,8 +9,7 @@ enum UserDocumentType: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::ID_CARD => __('id card'),
             self::SELFIE => __('selfie'),
         };
@@ -18,8 +17,7 @@ enum UserDocumentType: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::ID_CARD => 'info',
             self::SELFIE => 'success',
         };

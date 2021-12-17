@@ -11,8 +11,7 @@ enum VersionOs: string implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::ANDROID => __('android'),
             self::IOS => __('ios'),
             self::WINDOWS => __('windows'),
@@ -22,8 +21,7 @@ enum VersionOs: string implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::ANDROID => 'warning',
             self::IOS => 'info',
             self::WINDOWS => 'success',

@@ -10,8 +10,7 @@ enum ReportType: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::USER => __('user'),
             self::MEDIA => __('media'),
             self::COMMENT => __('comment'),
@@ -20,8 +19,7 @@ enum ReportType: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::USER => 'info',
             self::MEDIA => 'indigo',
             self::COMMENT => 'primary',

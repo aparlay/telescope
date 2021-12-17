@@ -10,8 +10,7 @@ enum AlertType: int implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::USER => __('user'),
             self::MEDIA_REMOVED => __('media removed'),
             self::MEDIA_NOTICED => __('media noticed'),
@@ -20,8 +19,7 @@ enum AlertType: int implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::USER => 'warning',
             self::MEDIA_REMOVED => 'danger',
             self::MEDIA_NOTICED => 'info',

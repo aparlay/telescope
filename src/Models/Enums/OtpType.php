@@ -9,8 +9,7 @@ enum OtpType: string implements Enum
 
     public function label(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::EMAIL => __('email'),
             self::SMS => __('sms'),
         };
@@ -18,8 +17,7 @@ enum OtpType: string implements Enum
 
     public function badgeColor(): string
     {
-        return match($this)
-        {
+        return match ($this) {
             self::EMAIL => 'info',
             self::SMS => 'indigo',
         };
