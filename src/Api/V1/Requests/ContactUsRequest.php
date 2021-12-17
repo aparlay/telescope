@@ -13,7 +13,7 @@ class ContactUsRequest extends BaseFormRequest
      */
     public function rules()
     {
-        if(!config('app.is_testing')) {
+        if (! config('app.is_testing')) {
             $recaptChaRule = ['required', 'recaptcha'];
         } else {
             $recaptChaRule = ['nullable'];

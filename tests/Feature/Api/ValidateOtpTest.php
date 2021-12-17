@@ -9,7 +9,6 @@ use Illuminate\Testing\Fluent\AssertableJson;
 
 class ValidateOtpTest extends ApiTestCase
 {
-
     /**
      * A test for valid otp.
      *
