@@ -133,7 +133,7 @@ class Report extends BaseModel
     /**
      * Get the user associated with the report.
      */
-    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }

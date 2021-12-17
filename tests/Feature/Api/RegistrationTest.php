@@ -183,7 +183,7 @@ class RegistrationTest extends ApiTestCase
                 'data' => [
                     [
                         'field' => 'password',
-                        'message' => 'The password must be at least 8 characters.',
+                        'message' => 'The password must be at least 8 characters. The password must contain at least one number.',
                     ],
                 ],
                 'message' => 'There are some errors in your provided data.',
