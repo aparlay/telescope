@@ -30,7 +30,7 @@ class AuthRequest extends FormRequest
         return [
             'email' => ['required'],
             'password' => ['required'],
-            'g-recaptcha-response' => ['required','recaptcha'],
+            'g-recaptcha-response' => ['required', 'recaptcha'],
         ];
     }
 

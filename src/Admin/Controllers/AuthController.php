@@ -3,10 +3,10 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Admin\Requests\AuthRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use function redirect;
-use Aparlay\Core\Admin\Requests\AuthRequest;
 
 class AuthController extends Controller
 {
