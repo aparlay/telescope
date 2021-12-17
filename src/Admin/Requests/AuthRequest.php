@@ -30,7 +30,7 @@ class AuthRequest extends FormRequest
         return [
             'email' => ['required'],
             'password' => ['required'],
-            'g-recaptcha-response' => ['required','recaptcha'],
+            'g-recaptcha-response' => ['recaptcha'],
         ];
     }
 
@@ -48,7 +48,6 @@ class AuthRequest extends FormRequest
     public function failedValidation(Validator $validator)
     {
         $errors = $validator->errors(); // Here is your array of errors
-
         throw new HttpResponseException(
             redirect()->back()->withErrors($errors)
         );

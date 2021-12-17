@@ -13,6 +13,11 @@
                         {{ $errors->first('error') }}
                     </div>
                 @endif
+
+                @error('g-recaptcha-response')
+                    <div class="alert alert-danger ">{{ $message }}</div>
+                @enderror
+
                 <form method="post" id="admin_form">
                     @csrf
                     <div class="input-group mb-3">
