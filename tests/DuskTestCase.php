@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Tests;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Models\Enums\UserType;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
@@ -38,7 +39,7 @@ abstract class DuskTestCase extends BaseTestCase
             static::$isSeeded = true;
         }
 
-        $this->superAdminUser = User::where('type', User::TYPE_ADMIN)->first();
+        $this->superAdminUser = User::where('type', UserType::ADMIN->value)->first();
         $this->superAdminUser->assignRole('super-administrator');
 
         $this->browse(function (Browser $browser) {

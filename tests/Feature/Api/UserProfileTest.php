@@ -4,6 +4,7 @@ namespace Aparlay\Core\Tests\Feature\Api;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
 
@@ -16,7 +17,7 @@ class UserProfileTest extends ApiTestCase
      */
     public function invalidUsername()
     {
-        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/me?_method=PATCH', ['username' => 'a'])
@@ -42,7 +43,7 @@ class UserProfileTest extends ApiTestCase
     public function usernameExist()
     {
         User::factory()->create(['username' => 'alua_user']);
-        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/me?_method=PATCH', ['username' => 'alua_user'])
@@ -67,7 +68,7 @@ class UserProfileTest extends ApiTestCase
      */
     public function invalideAvatarExtension()
     {
-        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/me?_method=PATCH', ['avatar' => 'demo_image.doc'])
@@ -92,9 +93,9 @@ class UserProfileTest extends ApiTestCase
      */
     public function userProfile()
     {
-        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
-        $userDeactivated = User::factory()->create(['status' => User::STATUS_DEACTIVATED]);
-        $userViewer = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $userDeactivated = User::factory()->create(['status' => UserStatus::DEACTIVATED->value]);
+        $userViewer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->get('/v1/user/'.$user->_id)
@@ -211,7 +212,7 @@ class UserProfileTest extends ApiTestCase
      */
     public function deleteAccount()
     {
-        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $oldEmail = $user->email;
         $oldPhoneNumber = $user->phone_number;
@@ -235,7 +236,7 @@ class UserProfileTest extends ApiTestCase
      */
     public function getUserDetails()
     {
-        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])

@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\EmailFactory;
+use Aparlay\Core\Models\Enums\EmailStatus;
+use Aparlay\Core\Models\Enums\EmailType;
 use Aparlay\Core\Models\Scopes\EmailScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -34,9 +36,9 @@ class Email extends BaseModel
     public const STATUS_FAILED = 3;
 
     public const TYPE_OTP = 0;
+    public const TYPE_CONTACT = 1;
 
     public const TEMPLATE_EMAIL_VERIFICATION = 'email_verification';
-
     public const TEMPLATE_EMAIL_CONTACTUS = 'email_contactus';
 
     /**
@@ -88,10 +90,10 @@ class Email extends BaseModel
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_QUEUED => __('Queued'),
-            self::STATUS_SENT => __('Sent'),
-            self::STATUS_OPENED => __('Opened'),
-            self::STATUS_FAILED => __('Failed'),
+            EmailStatus::QUEUED->value => EmailStatus::QUEUED->label(),
+            EmailStatus::SENT->value => EmailStatus::SENT->label(),
+            EmailStatus::OPENED->value => EmailStatus::OPENED->label(),
+            EmailStatus::FAILED->value => EmailStatus::FAILED->label(),
         ];
     }
 
@@ -101,7 +103,19 @@ class Email extends BaseModel
     public static function getTypes(): array
     {
         return [
-            self::TYPE_OTP => __('OTP'),
+            EmailType::OTP->value => EmailType::OTP->label(),
+            EmailType::CONTACT->value => EmailType::CONTACT->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTemplates(): array
+    {
+        return [
+            EmailType::OTP->value => self::TEMPLATE_EMAIL_VERIFICATION,
+            EmailType::CONTACT->value => self::TEMPLATE_EMAIL_CONTACTUS,
         ];
     }
 

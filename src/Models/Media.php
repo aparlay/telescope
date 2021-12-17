@@ -8,6 +8,9 @@ use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\MediaVisibility;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -191,24 +194,24 @@ class Media extends BaseModel
     public static function getVisibilities()
     {
         return [
-            self::VISIBILITY_PRIVATE => __('private'),
-            self::VISIBILITY_PUBLIC => __('public'),
+            MediaVisibility::PRIVATE->value => MediaVisibility::PRIVATE->label(),
+            MediaVisibility::PUBLIC->value => MediaVisibility::PUBLIC->label(),
         ];
     }
 
     public static function getStatuses()
     {
         return [
-            self::STATUS_QUEUED => __('queued'),
-            self::STATUS_UPLOADED => __('uploaded'),
-            self::STATUS_IN_PROGRESS => __('in-progress'),
-            self::STATUS_COMPLETED => __('waiting for review'),
-            self::STATUS_FAILED => __('failed'),
-            self::STATUS_CONFIRMED => __('confirmed'),
-            self::STATUS_DENIED => __('denied'),
-            self::STATUS_ADMIN_DELETED => __('deleted by admin'),
-            self::STATUS_USER_DELETED => __('deleted'),
-            self::STATUS_IN_REVIEW => __('under review'),
+            MediaStatus::QUEUED->value => MediaStatus::QUEUED->label(),
+            MediaStatus::UPLOADED->value => MediaStatus::UPLOADED->label(),
+            MediaStatus::IN_PROGRESS->value => MediaStatus::IN_PROGRESS->label(),
+            MediaStatus::IN_REVIEW->value => MediaStatus::IN_REVIEW->label(),
+            MediaStatus::COMPLETED->value => MediaStatus::COMPLETED->label(),
+            MediaStatus::FAILED->value => MediaStatus::FAILED->label(),
+            MediaStatus::CONFIRMED->value => MediaStatus::CONFIRMED->label(),
+            MediaStatus::ADMIN_DELETED->value => MediaStatus::ADMIN_DELETED->label(),
+            MediaStatus::USER_DELETED->value => MediaStatus::USER_DELETED->label(),
+            MediaStatus::USER_DELETED->value => MediaStatus::USER_DELETED->label(),
         ];
     }
 
@@ -404,7 +407,7 @@ class Media extends BaseModel
     {
         return in_array(
             $this->status,
-            [self::STATUS_COMPLETED, self::STATUS_CONFIRMED, self::STATUS_ADMIN_DELETED],
+            [MediaStatus::COMPLETED->value, MediaStatus::CONFIRMED->value, MediaStatus::ADMIN_DELETED->value],
             true
         );
     }

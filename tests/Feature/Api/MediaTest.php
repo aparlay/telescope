@@ -2,7 +2,11 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
-use Aparlay\Core\Api\V1\Models\Report;
+use Aparlay\Core\Models\Enums\FollowStatus;
+use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\MediaVisibility;
+use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
@@ -18,7 +22,7 @@ class MediaTest extends ApiTestCase
      */
     public function getMediaId()
     {
-        $media = Media::factory()->create(['status'=> Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
+        $media = Media::factory()->create(['status'=> MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/media/'.$media->_id, [])
             ->assertStatus(200)
@@ -103,8 +107,8 @@ class MediaTest extends ApiTestCase
      */
     public function createMediaBySplitUpload()
     {
-        $activeUser = User::factory()->create(['status' => User::STATUS_ACTIVE]);
-        $nonActiveUser = User::factory()->create(['status' => User::STATUS_PENDING]);
+        $activeUser = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $nonActiveUser = User::factory()->create(['status' => UserStatus::PENDING->value,]);
         $taggedUser = User::factory()->create();
 
         $videoFilePath = __DIR__.'/assets/video.mp4';
@@ -255,8 +259,8 @@ class MediaTest extends ApiTestCase
      */
     public function createMediaByStreamUpload()
     {
-        $activeUser = User::factory()->create(['status' => User::STATUS_ACTIVE]);
-        $nonActiveUser = User::factory()->create(['status' => User::STATUS_PENDING]);
+        $activeUser = User::factory()->create(['status' => UserStatus::ACTIVE->value,]);
+        $nonActiveUser = User::factory()->create(['status' => UserStatus::PENDING->value,]);
         $taggedUser = User::factory()->create();
 
         $fileData = [
@@ -430,9 +434,10 @@ class MediaTest extends ApiTestCase
      */
     public function mediaViewPolicy()
     {
-        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
-        $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PRIVATE]), 'userObj')
-                        ->create(['status'=>Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PRIVATE]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value,]);
+        $media = Media::factory()
+            ->for(User::factory()->create(['visibility' => UserVisibility::PRIVATE->value]), 'userObj')
+            ->create(['status'=>MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PRIVATE->value]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/media/'.$media->_id, [])
             ->assertStatus(403)
@@ -450,8 +455,9 @@ class MediaTest extends ApiTestCase
     public function mediaDeletePolicy()
     {
         $user = User::factory()->create();
-        $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]), 'userObj')
-                        ->create(['status' => Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
+        $media = Media::factory()
+            ->for(User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]), 'userObj')
+            ->create(['status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('delete', '/v1/media/'.$media->_id, [])
             ->assertStatus(403)
@@ -471,8 +477,8 @@ class MediaTest extends ApiTestCase
         $mediaCreator = User::factory()->create();
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
-            'status' => Media::STATUS_COMPLETED,
-            'visibility' => Media::VISIBILITY_PUBLIC,
+            'status' => MediaStatus::COMPLETED->value,
+            'visibility' => MediaVisibility::PUBLIC->value,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,
@@ -500,7 +506,7 @@ class MediaTest extends ApiTestCase
         $otherUser = User::factory()->create();
         $media = Media::factory()->create(
             [
-            'status' => Media::STATUS_COMPLETED,
+            'status' => MediaStatus::COMPLETED->value,
             'created_by' => new ObjectId($user->_id),
             'creator' => [
                     '_id' => new ObjectId($user->_id),
@@ -511,7 +517,7 @@ class MediaTest extends ApiTestCase
         );
         Media::factory()->create(
             [
-             'status' => Media::STATUS_COMPLETED,
+             'status' => MediaStatus::COMPLETED->value,
              'created_by' => new ObjectId($user->_id),
              'creator' => [
                     '_id' => new ObjectId($user->_id),
@@ -535,7 +541,7 @@ class MediaTest extends ApiTestCase
 
         $this->assertDatabaseHas((new Media())->getCollection(), [
             '_id' => new ObjectId($media->_id),
-            'status' => Media::STATUS_USER_DELETED,
+            'status' => MediaStatus::USER_DELETED->value,
             'created_by' => new ObjectId($user->_id),
             'creator._id' => new ObjectId($user->_id),
         ]);
@@ -555,8 +561,8 @@ class MediaTest extends ApiTestCase
 
         Media::factory()->count(2)->create(
             [
-               'status' => Media::STATUS_CONFIRMED,
-               'visibility' => Media::VISIBILITY_PUBLIC,
+               'status' => MediaStatus::CONFIRMED->value,
+               'visibility' => MediaVisibility::PUBLIC->value,
                'created_by' => new ObjectId($userMediaOwner->_id),
                'creator' => [
                    '_id' => new ObjectId($userMediaOwner->_id),
@@ -567,8 +573,8 @@ class MediaTest extends ApiTestCase
         );
         Media::factory()->create(
             [
-             'status' => Media::STATUS_COMPLETED,
-             'visibility' => Media::VISIBILITY_PRIVATE,
+             'status' => MediaStatus::COMPLETED->value,
+             'visibility' => MediaVisibility::PRIVATE->value,
              'created_by' => new ObjectId($userMediaOwner->_id),
              'creator' => [
                     '_id' => new ObjectId($userMediaOwner->_id),
@@ -730,8 +736,8 @@ class MediaTest extends ApiTestCase
         $followerUser = User::factory()->create();
         Media::factory()->count(3)->create(
             [
-                'visibility' => Media::VISIBILITY_PUBLIC,
-                'status'     => Media::STATUS_CONFIRMED,
+                'visibility' => MediaVisibility::PUBLIC->value,
+                'status'     => MediaStatus::CONFIRMED->value,
                 'created_by' => new ObjectId($user->_id),
                 'creator'    => [
                     '_id'      => new ObjectId($user->_id),
@@ -752,7 +758,7 @@ class MediaTest extends ApiTestCase
                     'username' => $followerUser->username,
                     'avatar'   => $followerUser->avatar,
                 ],
-                'status'  => Follow::STATUS_ACCEPTED,
+                'status'  => FollowStatus::ACCEPTED->value,
             ]
         );
 
@@ -1048,7 +1054,7 @@ class MediaTest extends ApiTestCase
     {
         $mediaCreator = User::factory()->create();
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
-            'visibility' => Media::VISIBILITY_PRIVATE,
+            'visibility' => MediaVisibility::PRIVATE->value,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,

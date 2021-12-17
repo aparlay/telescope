@@ -4,6 +4,12 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\UserFeature;
+use Aparlay\Core\Models\Enums\UserGender;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
+use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserType;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -226,56 +232,56 @@ class User extends Authenticatable implements JWTSubject
     public static function getFeatures(): array
     {
         return [
-            self::FEATURE_TIPS => __('tips'),
-            self::FEATURE_DEMO => __('demo'),
+            UserFeature::TIPS->value => UserFeature::TIPS->label(),
+            UserFeature::DEMO->value => UserFeature::DEMO->label(),
         ];
     }
 
     public static function getGenders(): array
     {
         return [
-            self::GENDER_FEMALE => __('female'),
-            self::GENDER_MALE => __('male'),
-            self::GENDER_TRANSGENDER => __('transgender'),
-            self::GENDER_NOT_MENTION => __('not mention'),
+            UserGender::FEMALE->value => UserGender::FEMALE->label(),
+            UserGender::MALE->value => UserGender::MALE->label(),
+            UserGender::TRANSGENDER->value => UserGender::TRANSGENDER->label(),
+            UserGender::NOT_MENTION->value => UserGender::NOT_MENTION->label(),
         ];
     }
 
     public static function getInterestedIns(): array
     {
         return [
-            self::INTERESTED_IN_FEMALE => __('female'),
-            self::INTERESTED_IN_MALE => __('male'),
-            self::INTERESTED_IN_TRANSGENDER => __('transgender'),
-            self::INTERESTED_IN_COUPLE => __('couple'),
+            UserInterestedIn::FEMALE->value => UserInterestedIn::FEMALE->label(),
+            UserInterestedIn::MALE->value => UserInterestedIn::MALE->label(),
+            UserInterestedIn::TRANSGENDER->value => UserInterestedIn::TRANSGENDER->label(),
+            UserInterestedIn::COUPLE->value => UserInterestedIn::COUPLE->label(),
         ];
     }
 
     public static function getTypes(): array
     {
         return [
-            self::TYPE_USER => __('user'),
-            self::TYPE_ADMIN => __('admin'),
+            UserType::USER->value => UserType::USER->label(),
+            UserType::ADMIN->value => UserType::ADMIN->label(),
         ];
     }
 
     public static function getVisibilities(): array
     {
         return [
-            self::VISIBILITY_PRIVATE => __('private'),
-            self::VISIBILITY_PUBLIC => __('public'),
+            UserVisibility::PRIVATE->value => UserVisibility::PRIVATE->label(),
+            UserVisibility::PUBLIC->value => UserVisibility::PUBLIC->label(),
         ];
     }
 
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_PENDING => __('pending'),
-            self::STATUS_VERIFIED => __('verified'),
-            self::STATUS_ACTIVE => __('active'),
-            self::STATUS_SUSPENDED => __('suspended'),
-            self::STATUS_BLOCKED => __('banned'),
-            self::STATUS_DEACTIVATED => __('deleted'),
+            UserStatus::PENDING->value => UserStatus::PENDING->label(),
+            UserStatus::VERIFIED->value => UserStatus::VERIFIED->label(),
+            UserStatus::ACTIVE->value => UserStatus::ACTIVE->label(),
+            UserStatus::SUSPENDED->value => UserStatus::SUSPENDED->label(),
+            UserStatus::BLOCKED->value => UserStatus::BLOCKED->label(),
+            UserStatus::DEACTIVATED->value => UserStatus::DEACTIVATED->label(),
         ];
     }
 

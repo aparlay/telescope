@@ -2,17 +2,17 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-enum UserVisibility: int implements Enum
+enum OtpType: string implements Enum
 {
-    case PRIVATE = 0;
-    case PUBLIC = 1;
+    case EMAIL = 'email';
+    case SMS = 'sms';
 
     public function label(): string
     {
         return match($this)
         {
-            self::PRIVATE => __('private'),
-            self::PUBLIC => __('public'),
+            self::EMAIL => __('email'),
+            self::SMS => __('sms'),
         };
     }
 
@@ -20,8 +20,8 @@ enum UserVisibility: int implements Enum
     {
         return match($this)
         {
-            self::PRIVATE => 'warning',
-            self::PUBLIC => 'success',
+            self::EMAIL => 'info',
+            self::SMS => 'indigo',
         };
     }
 }

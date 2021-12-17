@@ -2,10 +2,32 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-class UserGender extends BaseEnum
+enum UserGender: int implements Enum
 {
-    public const GENDER_FEMALE = 0;
-    public const GENDER_MALE = 1;
-    public const GENDER_TRANSGENDER = 2;
-    public const GENDER_NOT_MENTION = 3;
+    case FEMALE = 0;
+    case MALE = 1;
+    case TRANSGENDER = 2;
+    case NOT_MENTION = 3;
+
+    public function label(): string
+    {
+        return match($this)
+        {
+            self::FEMALE => __('female'),
+            self::MALE => __('male'),
+            self::TRANSGENDER => __('transgender'),
+            self::NOT_MENTION => __('not mention'),
+        };
+    }
+
+    public function badgeColor(): string
+    {
+        return match($this)
+        {
+            self::FEMALE => 'info',
+            self::MALE => 'success',
+            self::TRANSGENDER => 'warning',
+            self::NOT_MENTION => 'indigo',
+        };
+    }
 }

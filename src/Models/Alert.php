@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\AlertFactory;
+use Aparlay\Core\Models\Enums\AlertStatus;
+use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Scopes\AlertScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -97,17 +99,17 @@ class Alert extends BaseModel
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_NOT_VISITED => __('not visited'),
-            self::STATUS_VISITED => __('visited'),
+            AlertStatus::NOT_VISITED->value => AlertStatus::NOT_VISITED->label(),
+            AlertStatus::VISITED->value => AlertStatus::VISITED->label(),
         ];
     }
 
     public static function getTypes(): array
     {
         return [
-            self::TYPE_MEDIA_NOTICED => __('video notice'),
-            self::TYPE_MEDIA_REMOVED => __('video removed'),
-            self::TYPE_USER => __('user'),
+            AlertType::MEDIA_NOTICED->value => AlertType::MEDIA_NOTICED->label(),
+            AlertType::MEDIA_REMOVED->value => AlertType::MEDIA_REMOVED->label(),
+            AlertType::USER->value => AlertType::USER->label(),
         ];
     }
 

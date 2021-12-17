@@ -2,10 +2,12 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
+use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserType;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
 trait UserScope
@@ -51,7 +53,7 @@ trait UserScope
      */
     public function scopeAdmin(Builder $query): Builder
     {
-        return $query->where('type', User::TYPE_ADMIN);
+        return $query->where('type', UserType::ADMIN->value);
     }
 
     /**
@@ -59,46 +61,46 @@ trait UserScope
      */
     public function scopePendingSince(Builder $query, UTCDateTime $since): Builder
     {
-        return $query->where('status', User::STATUS_PENDING)
+        return $query->where('status', UserStatus::PENDING->value)
             ->where('hide_moderation_till', '$gte', $since);
     }
 
     public function scopeEnable(Builder $query): Builder
     {
         return $query->whereIn('status', [
-            User::STATUS_PENDING,
-            User::STATUS_VERIFIED,
-            User::STATUS_ACTIVE,
+            UserStatus::PENDING->value,
+            UserStatus::VERIFIED->value,
+            UserStatus::ACTIVE->value,
         ]);
     }
 
     public function scopeDisable(Builder $query): Builder
     {
         return $query->whereIn('status', [
-            User::STATUS_SUSPENDED,
-            User::STATUS_BLOCKED,
-            User::STATUS_DEACTIVATED,
+            UserStatus::SUSPENDED->value,
+            UserStatus::BLOCKED->value,
+            UserStatus::DEACTIVATED->value,
         ]);
     }
 
     public function scopePrivate(Builder $query): Builder
     {
-        return $query->where('visibility', User::VISIBILITY_PRIVATE);
+        return $query->where('visibility', UserVisibility::PRIVATE->value);
     }
 
     public function scopePublic(Builder $query): Builder
     {
-        return $query->where('visibility', User::VISIBILITY_PUBLIC);
+        return $query->where('visibility', UserVisibility::PUBLIC->value);
     }
 
     public function scopePending(Builder $query): Builder
     {
-        return $query->where('status', User::STATUS_PENDING);
+        return $query->where('status', UserStatus::PENDING->value);
     }
 
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', User::STATUS_ACTIVE);
+        return $query->where('status', UserStatus::ACTIVE->value);
     }
 
     /**

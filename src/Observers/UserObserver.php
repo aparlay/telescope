@@ -8,6 +8,8 @@ use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UpdateMedia;
+use Aparlay\Core\Models\Enums\UserGender;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Redis;
@@ -27,8 +29,8 @@ class UserObserver extends BaseModelObserver
             $maleAvatar = 'default_m_'.random_int(1, 120).'.png';
             $femaleAvatar = 'default_fm_'.random_int(1, 60).'.png';
             $filename = match ($model->gender) {
-                User::GENDER_FEMALE => $femaleAvatar,
-                User::GENDER_MALE => $maleAvatar,
+                UserGender::FEMALE->value => $femaleAvatar,
+                UserGender::MALE->value => $maleAvatar,
                 default => (random_int(0, 1)) ? $maleAvatar : $femaleAvatar,
             };
 
@@ -76,8 +78,8 @@ class UserObserver extends BaseModelObserver
 
         if ($model->wasChanged('status')) {
             switch ($model->status) {
-                case User::STATUS_DEACTIVATED:
-                case User::STATUS_BLOCKED:
+                case UserStatus::DEACTIVATED->value:
+                case UserStatus::BLOCKED->value:
                     DeleteUserMedia::dispatch((string) $model->_id)->onQueue('low');
                     DeleteUserConnect::dispatch((string) $model->_id)->onQueue('low');
                     break;

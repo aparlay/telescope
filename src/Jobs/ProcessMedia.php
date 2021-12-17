@@ -3,13 +3,12 @@
 namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Events\MediaProcessingCompleted;
-use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Microservices\ffmpeg\MediaClient;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeRequest;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeResponse;
 use Aparlay\Core\Microservices\ffmpeg\RemoveRequest;
 use Aparlay\Core\Microservices\ffmpeg\UploadRequest;
-use Aparlay\Core\Microservices\ws\WsChannel;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
@@ -81,7 +80,7 @@ class ProcessMedia implements ShouldQueue
         ];
 
         // check quality
-        $media->status = Media::STATUS_IN_PROGRESS;
+        $media->status = MediaStatus::IN_PROGRESS->value;
         $optimizeReq = new OptimizeRequest();
         $toRemoveFiles[] = $src = config('app.media.path').$this->file;
         $optimizeReq->setSrc($src);
@@ -229,7 +228,7 @@ class ProcessMedia implements ShouldQueue
             Log::error(__CLASS__.PHP_EOL.'Cannot upload cover');
             throw new Exception(__CLASS__.PHP_EOL.'Cannot upload cover');
         }
-        $media->status = Media::STATUS_COMPLETED;
+        $media->status = MediaStatus::COMPLETED->value;
         $media->addToSet('processing_log', '9. Video Cover uploading: Ok');
         $media->save($withoutTouch);
 
@@ -248,7 +247,7 @@ class ProcessMedia implements ShouldQueue
         }
 
         $media->file = $mp4ConvertedFile;
-        $media->status = $keepStatus ?? Media::STATUS_COMPLETED;
+        $media->status = $keepStatus ?? MediaStatus::COMPLETED->value;
         $touchWithTrue = [
             'status' => true,
             'length' => true,

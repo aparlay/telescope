@@ -2,17 +2,19 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-enum UserType: int implements Enum
+enum AlertType: int implements Enum
 {
     case USER = 0;
-    case ADMIN = 1;
+    case MEDIA_REMOVED = 20;
+    case MEDIA_NOTICED = 21;
 
     public function label(): string
     {
         return match($this)
         {
             self::USER => __('user'),
-            self::ADMIN => __('admin'),
+            self::MEDIA_REMOVED => __('media removed'),
+            self::MEDIA_NOTICED => __('media noticed'),
         };
     }
 
@@ -21,7 +23,8 @@ enum UserType: int implements Enum
         return match($this)
         {
             self::USER => 'warning',
-            self::ADMIN => 'success',
+            self::MEDIA_REMOVED => 'danger',
+            self::MEDIA_NOTICED => 'info',
         };
     }
 }

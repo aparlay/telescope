@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
+use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
@@ -41,52 +43,52 @@ trait MediaScope
 
     public function scopeCompleted(Builder $query): Builder
     {
-        return $query->where('status', Media::STATUS_COMPLETED);
+        return $query->where('status', MediaStatus::COMPLETED->value);
     }
 
     public function scopeConfirmed(Builder $query): Builder
     {
-        return $query->where('status', Media::STATUS_CONFIRMED);
+        return $query->where('status', MediaStatus::CONFIRMED->value);
     }
 
     public function scopeDenied(Builder $query): Builder
     {
-        return $query->where('status', Media::STATUS_DENIED);
+        return $query->where('status', MediaStatus::DENIED->value);
     }
 
     public function scopeIsDeleted(Builder $query): Builder
     {
-        return $query->where('status', Media::STATUS_USER_DELETED);
+        return $query->where('status', MediaStatus::USER_DELETED->value);
     }
 
     public function scopeInReview(Builder $query): Builder
     {
-        return $query->where('status', Media::STATUS_IN_REVIEW);
+        return $query->where('status', MediaStatus::IN_REVIEW->value);
     }
 
     public function scopeFailed(Builder $query): Builder
     {
-        return $query->where('status', Media::STATUS_FAILED);
+        return $query->where('status', MediaStatus::FAILED->value);
     }
 
     public function scopeAvailableForOwner(Builder $query): Builder
     {
         return $query->whereIn('status', [
-            Media::STATUS_QUEUED,
-            Media::STATUS_UPLOADED,
-            Media::STATUS_IN_PROGRESS,
-            Media::STATUS_COMPLETED,
-            Media::STATUS_CONFIRMED,
-            Media::STATUS_DENIED,
-            Media::STATUS_ADMIN_DELETED,
+            MediaStatus::QUEUED->value,
+            MediaStatus::UPLOADED->value,
+            MediaStatus::IN_PROGRESS->value,
+            MediaStatus::COMPLETED->value,
+            MediaStatus::CONFIRMED->value,
+            MediaStatus::DENIED->value,
+            MediaStatus::ADMIN_DELETED->value,
         ]);
     }
 
     public function scopeAvailableForFollower(Builder $query): Builder
     {
         return $query->whereIn('status', [
-            Media::STATUS_CONFIRMED,
-            Media::STATUS_DENIED,
+            MediaStatus::CONFIRMED->value,
+            MediaStatus::DENIED->value,
         ]);
     }
 
@@ -177,12 +179,12 @@ trait MediaScope
 
     public function scopePublic(Builder $query): Builder
     {
-        return $query->where('visibility', Media::VISIBILITY_PUBLIC);
+        return $query->where('visibility', MediaVisibility::PUBLIC->value);
     }
 
     public function scopePrivate(Builder $query): Builder
     {
-        return $query->where('visibility', Media::VISIBILITY_PRIVATE);
+        return $query->where('visibility', MediaVisibility::PRIVATE->value);
     }
 
     public function scopeLicensed(Builder $query): Builder

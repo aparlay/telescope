@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-enum UserVisibility: int implements Enum
+enum MediaVisibility: int implements Enum
 {
     case PRIVATE = 0;
     case PUBLIC = 1;

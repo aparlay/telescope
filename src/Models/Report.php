@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\ReportFactory;
+use Aparlay\Core\Models\Enums\ReportStatus;
+use Aparlay\Core\Models\Enums\ReportType;
 use Aparlay\Core\Models\Scopes\ReportScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -92,17 +94,17 @@ class Report extends BaseModel
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_REPORTED => __('reported'),
-            self::STATUS_REVISED => __('revised'),
+            ReportStatus::REPORTED->value => ReportStatus::REPORTED->label(),
+            ReportStatus::REVISED->value => ReportStatus::REVISED->label(),
         ];
     }
 
     public static function getTypes(): array
     {
         return [
-            self::TYPE_COMMENT => __('comment'),
-            self::TYPE_MEDIA => __('media'),
-            self::TYPE_USER => __('user'),
+            ReportType::USER->value => ReportType::USER->label(),
+            ReportType::MEDIA->value => ReportType::MEDIA->label(),
+            ReportType::COMMENT->value => ReportType::COMMENT->label(),
         ];
     }
 
@@ -141,8 +143,8 @@ class Report extends BaseModel
     public function getSlackSubjectAdminUrlAttribute()
     {
         return match ($this->type) {
-            self::TYPE_USER => $this->userObj->slack_admin_url,
-            self::TYPE_MEDIA => $this->mediaObj->slack_admin_url,
+            ReportType::USER->value => $this->userObj->slack_admin_url,
+            ReportType::MEDIA->value => $this->mediaObj->slack_admin_url,
             default => '',
         };
     }

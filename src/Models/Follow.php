@@ -4,6 +4,7 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\FollowFactory;
+use Aparlay\Core\Models\Enums\FollowStatus;
 use Aparlay\Core\Models\Scopes\FollowScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -83,8 +84,8 @@ class Follow extends BaseModel
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_PENDING => __('pending'),
-            self::STATUS_ACCEPTED => __('accepted'),
+            FollowStatus::PENDING->value => FollowStatus::PENDING->label(),
+            FollowStatus::ACCEPTED->value => FollowStatus::ACCEPTED->label(),
         ];
     }
 
