@@ -163,7 +163,7 @@ class MediaLikeTest extends ApiTestCase
                 '_id' => $mediaCreator->_id,
                 'username' => $mediaCreator->username,
                 'avatar' => $mediaCreator->avatar,
-            ]
+            ],
         ]);
         $this->actingAs($blockedUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])

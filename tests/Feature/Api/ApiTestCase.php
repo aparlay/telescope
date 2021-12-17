@@ -15,12 +15,7 @@ class ApiTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->app->make('config')->set('app.is_testing', true);
         $this->app->make('config')->set('app.url', env('TEST_DOMAIN'));
-
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
 
         $this->withoutMiddleware(
             DeviceIdThrottle::class
