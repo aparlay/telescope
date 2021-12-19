@@ -5,7 +5,6 @@ namespace Aparlay\Core\Tests\Feature\Api;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 
 class ValidateOtpTest extends ApiTestCase

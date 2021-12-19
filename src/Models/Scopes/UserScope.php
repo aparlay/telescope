@@ -5,7 +5,6 @@ namespace Aparlay\Core\Models\Scopes;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;
-use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;

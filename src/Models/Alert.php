@@ -43,13 +43,6 @@ class Alert extends BaseModel
     use Notifiable;
     use AlertScope;
 
-    public const TYPE_USER = 0;
-    public const TYPE_MEDIA_REMOVED = 20;
-    public const TYPE_MEDIA_NOTICED = 21;
-
-    public const STATUS_NOT_VISITED = 0;
-    public const STATUS_VISITED = 1;
-
     /**
      * The collection associated with the model.
      *
@@ -96,23 +89,6 @@ class Alert extends BaseModel
         'status' => 'integer',
     ];
 
-    public static function getStatuses(): array
-    {
-        return [
-            AlertStatus::NOT_VISITED->value => AlertStatus::NOT_VISITED->label(),
-            AlertStatus::VISITED->value => AlertStatus::VISITED->label(),
-        ];
-    }
-
-    public static function getTypes(): array
-    {
-        return [
-            AlertType::MEDIA_NOTICED->value => AlertType::MEDIA_NOTICED->label(),
-            AlertType::MEDIA_REMOVED->value => AlertType::MEDIA_REMOVED->label(),
-            AlertType::USER->value => AlertType::USER->label(),
-        ];
-    }
-
     /**
      * Create a new factory instance for the model.
      */
@@ -135,5 +111,28 @@ class Alert extends BaseModel
     public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            AlertStatus::NOT_VISITED->value => AlertStatus::NOT_VISITED->label(),
+            AlertStatus::VISITED->value => AlertStatus::VISITED->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypes(): array
+    {
+        return [
+            AlertType::MEDIA_NOTICED->value => AlertType::MEDIA_NOTICED->label(),
+            AlertType::MEDIA_REMOVED->value => AlertType::MEDIA_REMOVED->label(),
+            AlertType::USER->value => AlertType::USER->label(),
+        ];
     }
 }

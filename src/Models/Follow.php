@@ -37,9 +37,6 @@ class Follow extends BaseModel
     use Notifiable;
     use FollowScope;
 
-    public const STATUS_PENDING = 0;
-    public const STATUS_ACCEPTED = 1;
-
     /**
      * The collection associated with the model.
      *
@@ -80,14 +77,6 @@ class Follow extends BaseModel
         'is_deleted' => 'boolean',
         'status' => 'integer',
     ];
-
-    public static function getStatuses(): array
-    {
-        return [
-            FollowStatus::PENDING->value => FollowStatus::PENDING->label(),
-            FollowStatus::ACCEPTED->value => FollowStatus::ACCEPTED->label(),
-        ];
-    }
 
     /**
      * Create a new factory instance for the model.
@@ -136,5 +125,16 @@ class Follow extends BaseModel
             Redis::sAdd($cacheKey, ...$followerIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            FollowStatus::PENDING->value => FollowStatus::PENDING->label(),
+            FollowStatus::ACCEPTED->value => FollowStatus::ACCEPTED->label(),
+        ];
     }
 }

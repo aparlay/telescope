@@ -416,7 +416,7 @@ class MediaTest extends ApiTestCase
     {
         $user = User::factory()->create(['status' => 0]);
         $media = Media::factory()->for(User::factory()->create(['status' => 0]), 'userObj')->create([
-            'status' => Media::STATUS_COMPLETED,
+            'status' => MediaStatus::COMPLETED->value,
         ]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('PUT', '/v1/media/'.$media->_id, [
@@ -1058,15 +1058,15 @@ class MediaTest extends ApiTestCase
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'visibility' => MediaVisibility::PRIVATE->value,
             'created_by' => $mediaCreator->_id,
-            'status' => Media::STATUS_COMPLETED,
+            'status' => MediaStatus::COMPLETED->value,
             'creator' => [
                 '_id' => $mediaCreator->_id,
                 'username' => $mediaCreator->username,
                 'avatar' => $mediaCreator->avatar,
             ],
         ]);
-        $mediaViewver = User::factory()->create();
-        $this->actingAs($mediaViewver)->withHeaders(['X-DEVICE-ID' => 'random-string'])
+        $mediaViewer = User::factory()->create();
+        $this->actingAs($mediaViewer)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/media/'.$media->_id, [])
             ->assertStatus(403)
             ->assertJson([

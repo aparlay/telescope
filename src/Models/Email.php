@@ -30,14 +30,6 @@ class Email extends BaseModel
     use Notifiable;
     use EmailScope;
 
-    public const STATUS_QUEUED = 0;
-    public const STATUS_SENT = 1;
-    public const STATUS_OPENED = 2;
-    public const STATUS_FAILED = 3;
-
-    public const TYPE_OTP = 0;
-    public const TYPE_CONTACT = 1;
-
     public const TEMPLATE_EMAIL_VERIFICATION = 'email_verification';
     public const TEMPLATE_EMAIL_CONTACTUS = 'email_contactus';
 
@@ -85,6 +77,14 @@ class Email extends BaseModel
     ];
 
     /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return EmailFactory::new();
+    }
+
+    /**
      * @return array
      */
     public static function getStatuses(): array
@@ -119,11 +119,4 @@ class Email extends BaseModel
         ];
     }
 
-    /**
-     * Create a new factory instance for the model.
-     */
-    protected static function newFactory(): Factory
-    {
-        return EmailFactory::new();
-    }
 }

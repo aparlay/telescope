@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Models\Scopes;
 
-use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

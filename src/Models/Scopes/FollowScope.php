@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Models\Scopes;
 
 use Aparlay\Core\Models\Enums\FollowStatus;
-use Aparlay\Core\Models\Follow;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
 

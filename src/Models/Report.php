@@ -39,13 +39,6 @@ class Report extends BaseModel
     use Notifiable;
     use ReportScope;
 
-    public const TYPE_USER = 0;
-    public const TYPE_MEDIA = 1;
-    public const TYPE_COMMENT = 2;
-
-    public const STATUS_REPORTED = 0;
-    public const STATUS_REVISED = 1;
-
     /**
      * The collection associated with the model.
      *
@@ -91,23 +84,6 @@ class Report extends BaseModel
         'status' => 'integer',
     ];
 
-    public static function getStatuses(): array
-    {
-        return [
-            ReportStatus::REPORTED->value => ReportStatus::REPORTED->label(),
-            ReportStatus::REVISED->value => ReportStatus::REVISED->label(),
-        ];
-    }
-
-    public static function getTypes(): array
-    {
-        return [
-            ReportType::USER->value => ReportType::USER->label(),
-            ReportType::MEDIA->value => ReportType::MEDIA->label(),
-            ReportType::COMMENT->value => ReportType::COMMENT->label(),
-        ];
-    }
-
     /**
      * Create a new factory instance for the model.
      */
@@ -140,7 +116,10 @@ class Report extends BaseModel
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function getSlackSubjectAdminUrlAttribute()
+    /**
+     * @return string
+     */
+    public function getSlackSubjectAdminUrlAttribute(): string
     {
         return match ($this->type) {
             ReportType::USER->value => $this->userObj->slack_admin_url,
@@ -150,13 +129,36 @@ class Report extends BaseModel
     }
 
     /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            ReportStatus::REPORTED->value => ReportStatus::REPORTED->label(),
+            ReportStatus::REVISED->value => ReportStatus::REVISED->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypes(): array
+    {
+        return [
+            ReportType::USER->value => ReportType::USER->label(),
+            ReportType::MEDIA->value => ReportType::MEDIA->label(),
+            ReportType::COMMENT->value => ReportType::COMMENT->label(),
+        ];
+    }
+
+    /**
      * Route notifications for the Slack channel.
      *
      * @param Notification $notification
      *
      * @return string
      */
-    public function routeNotificationForSlack($notification)
+    public function routeNotificationForSlack($notification): string
     {
         return config('app.slack_webhook_url');
     }

@@ -9,7 +9,9 @@ use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UpdateMedia;
 use Aparlay\Core\Models\Enums\UserGender;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Redis;
@@ -25,6 +27,18 @@ class UserObserver extends BaseModelObserver
      */
     public function creating($model): void
     {
+        if (empty($model->status)) {
+            $model->status = UserStatus::PENDING->value;
+        }
+        if (empty($model->gender)) {
+            $model->gender = UserGender::MALE->value;
+        }
+        if (empty($model->interested_in)) {
+            $model->interested_in = UserInterestedIn::FEMALE->value;
+        }
+        if (empty($model->visibility)) {
+            $model->visibility = UserVisibility::PUBLIC->value;
+        }
         if (empty($model->avatar)) {
             $maleAvatar = 'default_m_'.random_int(1, 120).'.png';
             $femaleAvatar = 'default_fm_'.random_int(1, 60).'.png';

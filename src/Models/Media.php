@@ -10,14 +10,12 @@ use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
-use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redis;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -76,20 +74,6 @@ class Media extends BaseModel
     use Notifiable;
     use MediaScope;
     use SimpleUserTrait;
-
-    public const VISIBILITY_PUBLIC = 1;
-    public const VISIBILITY_PRIVATE = 0;
-
-    public const STATUS_QUEUED = 0;
-    public const STATUS_UPLOADED = 1;
-    public const STATUS_IN_PROGRESS = 2;
-    public const STATUS_COMPLETED = 3;
-    public const STATUS_FAILED = 4;
-    public const STATUS_CONFIRMED = 5;
-    public const STATUS_DENIED = 6;
-    public const STATUS_IN_REVIEW = 7;
-    public const STATUS_ADMIN_DELETED = 9;
-    public const STATUS_USER_DELETED = 10;
 
     /**
      * The collection associated with the model.
@@ -152,7 +136,6 @@ class Media extends BaseModel
         'likes' => [],
         'visits' => [],
         'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]],
-        'status' => self::STATUS_QUEUED,
         'is_protected' => false,
         'like_count' => 0,
         'visit_count' => 0,
@@ -191,56 +174,12 @@ class Media extends BaseModel
      */
     protected $appends = [];
 
-    public static function getVisibilities()
-    {
-        return [
-            MediaVisibility::PRIVATE->value => MediaVisibility::PRIVATE->label(),
-            MediaVisibility::PUBLIC->value => MediaVisibility::PUBLIC->label(),
-        ];
-    }
-
-    public static function getStatuses()
-    {
-        return [
-            MediaStatus::QUEUED->value => MediaStatus::QUEUED->label(),
-            MediaStatus::UPLOADED->value => MediaStatus::UPLOADED->label(),
-            MediaStatus::IN_PROGRESS->value => MediaStatus::IN_PROGRESS->label(),
-            MediaStatus::IN_REVIEW->value => MediaStatus::IN_REVIEW->label(),
-            MediaStatus::COMPLETED->value => MediaStatus::COMPLETED->label(),
-            MediaStatus::FAILED->value => MediaStatus::FAILED->label(),
-            MediaStatus::CONFIRMED->value => MediaStatus::CONFIRMED->label(),
-            MediaStatus::ADMIN_DELETED->value => MediaStatus::ADMIN_DELETED->label(),
-            MediaStatus::USER_DELETED->value => MediaStatus::USER_DELETED->label(),
-            MediaStatus::USER_DELETED->value => MediaStatus::USER_DELETED->label(),
-        ];
-    }
-
     /**
      * Create a new factory instance for the model.
      */
     protected static function newFactory(): Factory
     {
         return MediaFactory::new();
-    }
-
-    public function getCountFieldsUpdatedAtAttribute($attributeValue)
-    {
-        foreach ($attributeValue as $field => $value) {
-            /* MongoDB\BSON\UTCDateTime $value */
-            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value->toDateTime()->getTimestamp() : $value;
-        }
-
-        return $attributeValue;
-    }
-
-    public function setCountFieldsUpdatedAtAttribute($attributeValue)
-    {
-        foreach ($attributeValue as $field => $value) {
-            /* MongoDB\BSON\UTCDateTime $value */
-            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value : DT::timestampToUtc($value);
-        }
-
-        $this->attributes['count_fields_updated_at'] = $attributeValue;
     }
 
     /**
@@ -412,17 +351,26 @@ class Media extends BaseModel
         );
     }
 
-    public function getSlackAdminUrlAttribute()
+    /**
+     * @return string
+     */
+    public function getSlackAdminUrlAttribute(): string
     {
         return "<{$this->admin_url}|video> By {$this->userObj->slack_admin_url}";
     }
 
-    public function getAdminUrlAttribute()
+    /**
+     * @return string
+     */
+    public function getAdminUrlAttribute(): string
     {
         return config('app.admin_urls.media').$this->_id;
     }
 
-    public function getFilenameAttribute()
+    /**
+     * @return string
+     */
+    public function getFilenameAttribute(): string
     {
         return basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION));
     }
@@ -495,14 +443,72 @@ class Media extends BaseModel
     }
 
     /**
+     * @param $attributeValue
+     * @return mixed
+     */
+    public function getCountFieldsUpdatedAtAttribute($attributeValue): mixed
+    {
+        foreach ($attributeValue as $field => $value) {
+            /* MongoDB\BSON\UTCDateTime $value */
+            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value->toDateTime()->getTimestamp() : $value;
+        }
+
+        return $attributeValue;
+    }
+
+    /**
+     * @param $attributeValue
+     * @return void
+     */
+    public function setCountFieldsUpdatedAtAttribute($attributeValue)
+    {
+        foreach ($attributeValue as $field => $value) {
+            /* MongoDB\BSON\UTCDateTime $value */
+            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value : DT::timestampToUtc($value);
+        }
+
+        $this->attributes['count_fields_updated_at'] = $attributeValue;
+    }
+
+    /**
      * Route notifications for the Slack channel.
      *
      * @param Notification $notification
      *
      * @return string
      */
-    public function routeNotificationForSlack($notification)
+    public function routeNotificationForSlack($notification): string
     {
         return config('app.slack_webhook_url');
+    }
+
+    /**
+     * @return array
+     */
+    public static function getVisibilities(): array
+    {
+        return [
+            MediaVisibility::PRIVATE->value => MediaVisibility::PRIVATE->label(),
+            MediaVisibility::PUBLIC->value => MediaVisibility::PUBLIC->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            MediaStatus::QUEUED->value => MediaStatus::QUEUED->label(),
+            MediaStatus::UPLOADED->value => MediaStatus::UPLOADED->label(),
+            MediaStatus::IN_PROGRESS->value => MediaStatus::IN_PROGRESS->label(),
+            MediaStatus::IN_REVIEW->value => MediaStatus::IN_REVIEW->label(),
+            MediaStatus::COMPLETED->value => MediaStatus::COMPLETED->label(),
+            MediaStatus::FAILED->value => MediaStatus::FAILED->label(),
+            MediaStatus::CONFIRMED->value => MediaStatus::CONFIRMED->label(),
+            MediaStatus::ADMIN_DELETED->value => MediaStatus::ADMIN_DELETED->label(),
+            MediaStatus::USER_DELETED->value => MediaStatus::USER_DELETED->label(),
+            MediaStatus::USER_DELETED->value => MediaStatus::USER_DELETED->label(),
+        ];
     }
 }

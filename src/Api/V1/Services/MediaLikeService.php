@@ -5,7 +5,6 @@ namespace Aparlay\Core\Api\V1\Services;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Repositories\MediaLikeRepository;
-use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
 use MongoDB\BSON\ObjectId;
 

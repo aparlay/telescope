@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
-use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Enums\EmailStatus;
-use Aparlay\Core\Models\Media;
 use Illuminate\Database\Eloquent\Builder;
 
 trait EmailScope

@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
-use Aparlay\Core\Models\Alert;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
