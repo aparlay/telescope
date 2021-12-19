@@ -23,12 +23,7 @@ abstract class DuskTestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->app->make('config')->set('app.is_testing', true);
         $this->app->make('config')->set('app.url', env('ADMIN_DOMAIN'));
-
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
 
         if (! static::$isSeeded) {
             $this->artisan('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
