@@ -125,7 +125,7 @@ class UserProfileTest extends ApiTestCase
                     ],
                 ]
             )->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType([
+                fn(AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data._id' => 'string',
@@ -181,7 +181,7 @@ class UserProfileTest extends ApiTestCase
                     ],
                 ]
             )->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType([
+                fn(AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data._id' => 'string',
@@ -238,64 +238,65 @@ class UserProfileTest extends ApiTestCase
     {
         $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
-        $this->actingAs($user)
+        $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/me', [])
-            ->assertStatus(200)
+            ->get('/v1/me', []);
+
+        $r->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJsonStructure([
-                    'data' => [
-                        '_id',
-                        'username',
-                        'bio',
-                        'full_name',
-                        'email',
-                        'email_verified',
-                        'phone_number',
-                        'phone_number_verified',
-                        'avatar',
-                        'setting' => [
-                            'otp',
-                            'notifications' => [
-                                'unread_message_alerts',
-                                'new_followers',
-                                'news_and_updates',
-                                'tips',
-                                'new_subscribers',
-                            ],
-                        ],
-                        'features' => [
+                'data' => [
+                    '_id',
+                    'username',
+                    'bio',
+                    'full_name',
+                    'email',
+                    'email_verified',
+                    'phone_number',
+                    'phone_number_verified',
+                    'avatar',
+                    'setting' => [
+                        'otp',
+                        'notifications' => [
+                            'unread_message_alerts',
+                            'new_followers',
+                            'news_and_updates',
                             'tips',
-                            'demo',
-                        ],
-                        'gender',
-                        'interested_in',
-                        'status',
-                        'visibility',
-                        'promo_link',
-                        'follower_count',
-                        'following_count',
-                        'like_count',
-                        'block_count',
-                        'followed_hashtag_count',
-                        'media_count',
-                        'is_followed',
-                        'is_blocked',
-                        'blocks' => [],
-                        'likes' => [],
-                        'followers' => [],
-                        'followings' => [],
-                        'medias' => [],
-                        'alerts' => [],
-                        'created_at',
-                        'updated_at',
-                        '_links' => [
-                            'self' => ['href'],
+                            'new_subscribers',
                         ],
                     ],
-                ])->assertJson(
-                    fn (AssertableJson $json) => $json->whereAllType([
+                    'features' => [
+                        'tips',
+                        'demo',
+                    ],
+                    'gender',
+                    'interested_in',
+                    'status',
+                    'visibility',
+                    'promo_link',
+                    'follower_count',
+                    'following_count',
+                    'like_count',
+                    'block_count',
+                    'followed_hashtag_count',
+                    'media_count',
+                    'is_followed',
+                    'is_blocked',
+                    'blocks' => [],
+                    'likes' => [],
+                    'followers' => [],
+                    'followings' => [],
+                    'medias' => [],
+                    'alerts' => [],
+                    'created_at',
+                    'updated_at',
+                    '_links' => [
+                        'self' => ['href'],
+                    ],
+                ],
+            ])->assertJson(
+                fn(AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data._id' => 'string',
@@ -345,7 +346,7 @@ class UserProfileTest extends ApiTestCase
                     'data._links.self.href' => 'string',
                     'message' => 'string',
                 ])
-                );
+            );
     }
 
     /**
@@ -358,20 +359,23 @@ class UserProfileTest extends ApiTestCase
         $user = User::first();
         $visibility = $user->visibility === 0 ? 1 : 0;
 
-        $media = Media::factory()->for($user, 'userObj')
-                ->create(['visibility' => $user->visibility,
-                          'creator' => [
-                              '_id' => new ObjectId($user->_id),
-                              'username' => $user->username,
-                              'avatar' => $user->avatar, ],
-                        ]);
+        Media::factory()->for($user, 'userObj')
+            ->create([
+                'visibility' => $user->visibility,
+                'creator' => [
+                    '_id' => new ObjectId($user->_id),
+                    'username' => $user->username,
+                    'avatar' => $user->avatar,
+                ],
+            ]);
 
-        $this->actingAs($user)
+        $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/me?_method=PUT', [
                 'visibility' => $visibility,
-            ])
-            ->assertStatus(200)
+            ]);
+
+        $r->assertStatus(200)
             ->assertJsonStructure(
                 [
                     'data' => [
@@ -426,7 +430,7 @@ class UserProfileTest extends ApiTestCase
                 ]
             )
             ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType([
+                fn(AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data._id' => 'string',

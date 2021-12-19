@@ -22,7 +22,9 @@ class MediaTest extends ApiTestCase
      */
     public function getMediaId()
     {
-        $media = Media::factory()->create(['status'=> MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
+        $media = Media::factory()->create([
+            'status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value,
+        ]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/media/'.$media->_id, [])
             ->assertStatus(200)
@@ -64,7 +66,7 @@ class MediaTest extends ApiTestCase
                     '_links',
                 ],
             ])->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType([
+                fn(AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data._id' => 'string',
@@ -209,7 +211,7 @@ class MediaTest extends ApiTestCase
                     ],
                 ],
             ])->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType([
+                fn(AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data.alerts' => 'array',
@@ -287,13 +289,14 @@ class MediaTest extends ApiTestCase
             ])
             ->assertStatus(403);
 
-        $this->actingAs($activeUser)
+        $r = $this->actingAs($activeUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/media', [
                 'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
                 'file' => $response['data']['file'],
-            ])
-            ->assertStatus(201)
+            ]);
+        $r->dump();
+        $r->assertStatus(201)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 201)
             ->assertJsonStructure([
@@ -342,7 +345,7 @@ class MediaTest extends ApiTestCase
                     ],
                 ],
             ])->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType([
+                fn(AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data.alerts' => 'array',
@@ -439,7 +442,7 @@ class MediaTest extends ApiTestCase
         $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $media = Media::factory()
             ->for(User::factory()->create(['visibility' => UserVisibility::PRIVATE->value]), 'userObj')
-            ->create(['status'=>MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PRIVATE->value]);
+            ->create(['status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PRIVATE->value]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/media/'.$media->_id, [])
             ->assertStatus(403)
@@ -508,9 +511,9 @@ class MediaTest extends ApiTestCase
         $otherUser = User::factory()->create();
         $media = Media::factory()->create(
             [
-            'status' => MediaStatus::COMPLETED->value,
-            'created_by' => new ObjectId($user->_id),
-            'creator' => [
+                'status' => MediaStatus::COMPLETED->value,
+                'created_by' => new ObjectId($user->_id),
+                'creator' => [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
                     'avatar' => $user->avatar,
@@ -519,14 +522,14 @@ class MediaTest extends ApiTestCase
         );
         Media::factory()->create(
             [
-             'status' => MediaStatus::COMPLETED->value,
-             'created_by' => new ObjectId($user->_id),
-             'creator' => [
+                'status' => MediaStatus::COMPLETED->value,
+                'created_by' => new ObjectId($user->_id),
+                'creator' => [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
                     'avatar' => $user->avatar,
-                 ],
-             ]
+                ],
+            ]
         );
 
         $this->assertDatabaseHas((new User())->getCollection(), [
@@ -563,22 +566,22 @@ class MediaTest extends ApiTestCase
 
         Media::factory()->count(2)->create(
             [
-               'status' => MediaStatus::CONFIRMED->value,
-               'visibility' => MediaVisibility::PUBLIC->value,
-               'created_by' => new ObjectId($userMediaOwner->_id),
-               'creator' => [
-                   '_id' => new ObjectId($userMediaOwner->_id),
-                   'username' => $userMediaOwner->username,
-                   'avatar' => $userMediaOwner->avatar,
-               ],
+                'status' => MediaStatus::CONFIRMED->value,
+                'visibility' => MediaVisibility::PUBLIC->value,
+                'created_by' => new ObjectId($userMediaOwner->_id),
+                'creator' => [
+                    '_id' => new ObjectId($userMediaOwner->_id),
+                    'username' => $userMediaOwner->username,
+                    'avatar' => $userMediaOwner->avatar,
+                ],
             ],
         );
         Media::factory()->create(
             [
-             'status' => MediaStatus::COMPLETED->value,
-             'visibility' => MediaVisibility::PRIVATE->value,
-             'created_by' => new ObjectId($userMediaOwner->_id),
-             'creator' => [
+                'status' => MediaStatus::COMPLETED->value,
+                'visibility' => MediaVisibility::PRIVATE->value,
+                'created_by' => new ObjectId($userMediaOwner->_id),
+                'creator' => [
                     '_id' => new ObjectId($userMediaOwner->_id),
                     'username' => $userMediaOwner->username,
                     'avatar' => $userMediaOwner->avatar,
@@ -588,7 +591,7 @@ class MediaTest extends ApiTestCase
 
         $expectJsonStructure = [
             'data' => [
-                'items'  => [
+                'items' => [
                     [
                         '_id',
                         'description',
@@ -624,8 +627,8 @@ class MediaTest extends ApiTestCase
                         'updated_by',
                         'created_at',
                         'updated_at',
-                        '_links'  => [
-                            'self'  => [
+                        '_links' => [
+                            'self' => [
                                 'href',
                             ],
                             'index' => [
@@ -635,14 +638,14 @@ class MediaTest extends ApiTestCase
                     ],
                 ],
                 '_links' => [
-                    'first'  => [
+                    'first' => [
                         'href',
                     ],
-                    'last'  => [
+                    'last' => [
                         'href',
                     ],
                 ],
-                '_meta'  => [
+                '_meta' => [
                     'total_count',
                     'page_count',
                     'current_page',
@@ -700,7 +703,7 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('code', 200)
             ->assertJsonStructure($expectJsonStructure)
             ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
+                fn(AssertableJson $json) => $json->whereAllType($assertableJson)
             )
             ->assertJsonFragment(['total_count' => 2]);
 
@@ -712,19 +715,20 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('code', 200)
             ->assertJsonStructure($expectJsonStructure)
             ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
+                fn(AssertableJson $json) => $json->whereAllType($assertableJson)
             )
             ->assertJsonFragment(['total_count' => 2]);
 
-        $this->actingAs($userMediaOwner)
+        $r = $this->actingAs($userMediaOwner)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$userMediaOwner->_id.'/media')
-            ->assertStatus(200)
+            ->get('/v1/user/'.$userMediaOwner->_id.'/media');
+        $r->dump();
+        $r->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJsonStructure($expectJsonStructure)
             ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
+                fn(AssertableJson $json) => $json->whereAllType($assertableJson)
             )
             ->assertJsonFragment(['total_count' => 3]);
     }
@@ -739,34 +743,34 @@ class MediaTest extends ApiTestCase
         Media::factory()->count(3)->create(
             [
                 'visibility' => MediaVisibility::PUBLIC->value,
-                'status'     => MediaStatus::CONFIRMED->value,
+                'status' => MediaStatus::CONFIRMED->value,
                 'created_by' => new ObjectId($user->_id),
-                'creator'    => [
-                    '_id'      => new ObjectId($user->_id),
+                'creator' => [
+                    '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
-                    'avatar'   => $user->avatar,
+                    'avatar' => $user->avatar,
                 ],
             ]
         );
         Follow::factory()->create(
             [
-                'user'    => [
-                    '_id'      => new ObjectId($user->_id),
+                'user' => [
+                    '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
-                    'avatar'   => $user->avatar,
+                    'avatar' => $user->avatar,
                 ],
                 'creator' => [
-                    '_id'      => new ObjectId($followerUser->_id),
+                    '_id' => new ObjectId($followerUser->_id),
                     'username' => $followerUser->username,
-                    'avatar'   => $followerUser->avatar,
+                    'avatar' => $followerUser->avatar,
                 ],
-                'status'  => FollowStatus::ACCEPTED->value,
+                'status' => FollowStatus::ACCEPTED->value,
             ]
         );
 
         $expectedJsonStructure = [
             'data' => [
-                'items'  => [
+                'items' => [
                     [
                         '_id',
                         'description',
@@ -801,8 +805,8 @@ class MediaTest extends ApiTestCase
                         'updated_by',
                         'created_at',
                         'updated_at',
-                        '_links'  => [
-                            'self'  => [
+                        '_links' => [
+                            'self' => [
                                 'href',
                             ],
                             'index' => [
@@ -812,23 +816,23 @@ class MediaTest extends ApiTestCase
                     ],
                 ],
                 '_links' => [
-                    'prev'  => [
+                    'prev' => [
                         'href',
                     ],
-                    'first'  => [
+                    'first' => [
                         'href',
                     ],
-                    'last'  => [
+                    'last' => [
                         'href',
                     ],
-                    'self'  => [
+                    'self' => [
                         'href',
                     ],
-                    'next'  => [
+                    'next' => [
                         'href',
                     ],
                 ],
-                '_meta'  => [
+                '_meta' => [
                     'total_count',
                     'page_count',
                     'current_page',
@@ -839,7 +843,7 @@ class MediaTest extends ApiTestCase
 
         $expectedJsonStructureFollower = [
             'data' => [
-                'items'  => [
+                'items' => [
                     [
                         '_id',
                         'description',
@@ -874,8 +878,8 @@ class MediaTest extends ApiTestCase
                         'updated_by',
                         'created_at',
                         'updated_at',
-                        '_links'  => [
-                            'self'  => [
+                        '_links' => [
+                            'self' => [
                                 'href',
                             ],
                             'index' => [
@@ -885,17 +889,17 @@ class MediaTest extends ApiTestCase
                     ],
                 ],
                 '_links' => [
-                    'first'  => [
+                    'first' => [
                         'href',
                     ],
-                    'last'  => [
+                    'last' => [
                         'href',
                     ],
-                    'self'  => [
+                    'self' => [
                         'href',
                     ],
                 ],
-                '_meta'  => [
+                '_meta' => [
                     'total_count',
                     'page_count',
                     'current_page',
@@ -1022,7 +1026,7 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
+                fn(AssertableJson $json) => $json->whereAllType($assertableJson)
             )
             ->assertJsonStructure($expectedJsonStructure);
 
@@ -1033,7 +1037,7 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType($assertableJsonFollower)
+                fn(AssertableJson $json) => $json->whereAllType($assertableJsonFollower)
             )
             ->assertJsonStructure($expectedJsonStructureFollower);
 
@@ -1044,7 +1048,7 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
+                fn(AssertableJson $json) => $json->whereAllType($assertableJson)
             )
             ->assertJsonStructure($expectedJsonStructure);
     }
@@ -1095,13 +1099,15 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('code', 201)
             ->assertJsonStructure([
                 'data' => [
-                  'file',
-                ], ])
+                    'file',
+                ],
+            ])
             ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType([
+                fn(AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
-                    'data.file' => 'string', ])
+                    'data.file' => 'string',
+                ])
             );
     }
 }

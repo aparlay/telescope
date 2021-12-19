@@ -177,7 +177,7 @@ class MediaService
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
      */
-    public function getByUser(User $user)
+    public function getByUser(User $user): LengthAwarePaginator
     {
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();

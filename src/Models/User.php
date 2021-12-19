@@ -11,6 +11,7 @@ use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -239,9 +240,9 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get the media's skin score.
      *
-     * @return array
+     * @return array|Collection
      */
-    public function getAlertsAttribute(): array
+    public function getAlertsAttribute(): array|Collection
     {
         if (auth()->guest() || ((string) $this->_id !== (string) auth()->user()->_id)) {
             return [];

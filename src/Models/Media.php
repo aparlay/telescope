@@ -12,6 +12,7 @@ use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -241,9 +242,9 @@ class Media extends BaseModel
     /**
      * Get the media's skin score.
      *
-     * @return array
+     * @return array|Collection
      */
-    public function getAlertsAttribute()
+    public function getAlertsAttribute(): array|Collection
     {
         if (! auth()->guest() && (string) $this->created_by === (string) auth()->user()->_id) {
             return $this->alertObjs;
