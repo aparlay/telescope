@@ -273,7 +273,6 @@ class User extends Authenticatable implements JWTSubject
         return isset($this->subscription_plan['amount'], $this->subscription_plan['currency'], $this->subscription_plan['days']);
     }
 
-
     /**
      * @param $attributeValue
      * @return mixed
@@ -330,7 +329,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * @return null[]
      */
-    #[ArrayShape(['device_id' => "array|null|string"])]
+    #[ArrayShape(['device_id' => 'array|null|string'])]
     public function getJWTCustomClaims(): array
     {
         return [
@@ -475,5 +474,4 @@ class User extends Authenticatable implements JWTSubject
             UserStatus::DEACTIVATED->value => UserStatus::DEACTIVATED->label(),
         ];
     }
-
 }

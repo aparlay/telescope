@@ -118,5 +118,4 @@ class Email extends BaseModel
             EmailType::CONTACT->value => self::TEMPLATE_EMAIL_CONTACTUS,
         ];
     }
-
 }
