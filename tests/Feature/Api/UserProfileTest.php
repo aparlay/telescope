@@ -125,7 +125,7 @@ class UserProfileTest extends ApiTestCase
                     ],
                 ]
             )->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType([
+                fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data._id' => 'string',
@@ -181,7 +181,7 @@ class UserProfileTest extends ApiTestCase
                     ],
                 ]
             )->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType([
+                fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data._id' => 'string',
@@ -296,7 +296,7 @@ class UserProfileTest extends ApiTestCase
                     ],
                 ],
             ])->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType([
+                fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data._id' => 'string',
@@ -430,7 +430,7 @@ class UserProfileTest extends ApiTestCase
                 ]
             )
             ->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType([
+                fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data._id' => 'string',

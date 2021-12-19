@@ -66,7 +66,7 @@ class MediaTest extends ApiTestCase
                     '_links',
                 ],
             ])->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType([
+                fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data._id' => 'string',
@@ -211,7 +211,7 @@ class MediaTest extends ApiTestCase
                     ],
                 ],
             ])->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType([
+                fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data.alerts' => 'array',
@@ -345,7 +345,7 @@ class MediaTest extends ApiTestCase
                     ],
                 ],
             ])->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType([
+                fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data.alerts' => 'array',
@@ -703,7 +703,7 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('code', 200)
             ->assertJsonStructure($expectJsonStructure)
             ->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType($assertableJson)
+                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
             )
             ->assertJsonFragment(['total_count' => 2]);
 
@@ -715,7 +715,7 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('code', 200)
             ->assertJsonStructure($expectJsonStructure)
             ->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType($assertableJson)
+                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
             )
             ->assertJsonFragment(['total_count' => 2]);
 
@@ -728,7 +728,7 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('code', 200)
             ->assertJsonStructure($expectJsonStructure)
             ->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType($assertableJson)
+                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
             )
             ->assertJsonFragment(['total_count' => 3]);
     }
@@ -1026,7 +1026,7 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType($assertableJson)
+                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
             )
             ->assertJsonStructure($expectedJsonStructure);
 
@@ -1037,7 +1037,7 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType($assertableJsonFollower)
+                fn (AssertableJson $json) => $json->whereAllType($assertableJsonFollower)
             )
             ->assertJsonStructure($expectedJsonStructureFollower);
 
@@ -1048,7 +1048,7 @@ class MediaTest extends ApiTestCase
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType($assertableJson)
+                fn (AssertableJson $json) => $json->whereAllType($assertableJson)
             )
             ->assertJsonStructure($expectedJsonStructure);
     }
@@ -1103,7 +1103,7 @@ class MediaTest extends ApiTestCase
                 ],
             ])
             ->assertJson(
-                fn(AssertableJson $json) => $json->whereAllType([
+                fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
                     'data.file' => 'string',
