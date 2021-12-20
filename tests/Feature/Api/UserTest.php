@@ -22,8 +22,5 @@ class UserTest extends ApiTestCase
             ->json('DELETE', '/v1/me', []);
 
         $r->assertStatus(204);
-
     }
-
-
 }
