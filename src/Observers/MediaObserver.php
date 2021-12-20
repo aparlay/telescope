@@ -50,7 +50,7 @@ class MediaObserver extends BaseModelObserver
         }
 
         if (! config('app.is_testing')) {
-            UploadMedia::dispatch($media->userObj->_id, $media->_id, $media->file)->delay(10)->onQueue('low');
+            UploadMedia::dispatch($media->userObj->_id, $media->_id, $media->file)->delay(10);
         }
     }
 
