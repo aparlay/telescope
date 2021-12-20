@@ -5,12 +5,15 @@ namespace Aparlay\Core\Api\V1\Services;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Repositories\MediaLikeRepository;
+use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
 use MongoDB\BSON\ObjectId;
 
 class MediaLikeService
 {
+    use HasUserTrait;
+
     protected MediaLikeRepository $mediaLikeRepository;
 
     public function __construct()
@@ -27,7 +30,7 @@ class MediaLikeService
     public function create(Media $media)
     {
         $statusCode = Response::HTTP_OK;
-        $creator = auth()->user();
+        $creator = $this->getUser();
         if (($like = $this->mediaLikeRepository->isLiked($creator, $media)) === null) {
             $like = $this->mediaLikeRepository->create([
                 'media_id' => new ObjectId($media->_id),
@@ -48,7 +51,8 @@ class MediaLikeService
      */
     public function unlike(Media $media): array
     {
-        $creator = auth()->user();
+        $creator = $this->getUser();
+
         if (($like = $this->mediaLikeRepository->isLiked($creator, $media)) !== null) {
             $this->mediaLikeRepository->delete($like->_id);
         }
