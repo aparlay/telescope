@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
+use Aparlay\Core\Api\V1\Dto\ReportDTO;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
@@ -21,12 +22,12 @@ class ReportService
      * Responsible to create report for given user.
      *
      * @param User $user
-     * @param ReportRequest $request
+     * @param ReportDTO $reportDTO
      * @return array
      */
-    public function createUserReport(User $user, ReportRequest $request)
+    public function createUserReport(User $user, ReportDTO $reportDTO)
     {
-        return $this->reportRepository->createUserReport($user, $request);
+        return $this->reportRepository->createUserReport($user, $reportDTO);
     }
 
     /**

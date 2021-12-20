@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Repositories;
 
+use Aparlay\Core\Api\V1\Dto\ReportDTO;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
@@ -29,11 +30,11 @@ class ReportRepository
      * @param ReportRequest $request
      * @return \Illuminate\Database\Eloquent\Model|Report|null
      */
-    public function createUserReport(User $user, ReportRequest $request)
+    public function createUserReport(User $user, ReportDTO $reportDTO)
     {
         try {
             return Report::create([
-                'reason' => $request->post('reason'),
+                'reason' => $reportDTO->reason,
                 'type' => Report::TYPE_USER,
                 'status' => Report::STATUS_REPORTED,
                 'user_id' => new ObjectId($user->_id),
