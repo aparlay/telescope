@@ -44,6 +44,7 @@ class ProcessMedia implements ShouldQueue
      */
     public function __construct(string|ObjectId $mediaId, string|ObjectId $file)
     {
+        $this->onQueue(config('app.server_specific_queue'));
         if (($this->media = Media::media($mediaId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$mediaId);
         }

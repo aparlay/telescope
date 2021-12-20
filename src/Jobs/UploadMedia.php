@@ -51,7 +51,7 @@ class UploadMedia implements ShouldQueue
      */
     public function __construct(string|ObjectId $userId, string|ObjectId $mediaId, string $file)
     {
-        $this->onQueue('low');
+        $this->onQueue(config('app.server_specific_queue'));
         if (($this->user = User::user($userId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'User not found with id '.$userId);
         }
@@ -99,9 +99,9 @@ class UploadMedia implements ShouldQueue
         }
         $mediaServer->setVisibility($newFilename, Filesystem::VISIBILITY_PUBLIC);
 
-        ProcessMedia::dispatch($this->media_id, $newFilename)->onQueue('low');
+        ProcessMedia::dispatch($this->media_id, $newFilename);
 
-        BackblazeVideoUploader::dispatch($this->user_id, $this->media_id, $this->file)->onQueue('low');
+        BackblazeVideoUploader::dispatch($this->user_id, $this->media_id, $this->file);
 
         $media->save();
     }
