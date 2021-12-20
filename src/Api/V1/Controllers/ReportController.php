@@ -44,7 +44,7 @@ class ReportController extends Controller
             return $this->error('You cannot report this video at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
-        $report = $this->reportService->createMediaReport($media, $request);
+        $report = $this->reportService->createMediaReport($media, ReportDTO::fromRequest($request));
 
         return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
     }

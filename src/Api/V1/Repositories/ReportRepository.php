@@ -53,11 +53,11 @@ class ReportRepository
      * @param ReportRequest $request
      * @return \Illuminate\Database\Eloquent\Model|Report|null
      */
-    public function createMediaReport(Media $media, ReportRequest $request)
+    public function createMediaReport(Media $media, ReportDTO $reportDTO)
     {
         try {
             return Report::create([
-                'reason' => $request->post('reason'),
+                'reason' => $reportDTO->reason,
                 'type' => Report::TYPE_MEDIA,
                 'status' => Report::STATUS_REPORTED,
                 'media_id' => new ObjectId($media->_id),

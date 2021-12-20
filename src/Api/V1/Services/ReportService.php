@@ -37,8 +37,8 @@ class ReportService
      * @param ReportRequest $request
      * @return array
      */
-    public function createMediaReport(Media $media, ReportRequest $request)
+    public function createMediaReport(Media $media, ReportDTO $reportDTO)
     {
-        return $this->reportRepository->createMediaReport($media, $request);
+        return $this->reportRepository->createMediaReport($media, $reportDTO);
     }
 }
