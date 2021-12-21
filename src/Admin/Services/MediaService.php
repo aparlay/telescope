@@ -181,11 +181,13 @@ class MediaService extends AdminBaseService
         $this->mediaRepository->create($data);
     }
 
-    public function listMedia($page) {
+    public function listMedia($page)
+    {
         return $this->mediaRepository->listMedia($page);
     }
 
-    public function countCollection() {
+    public function countCollection()
+    {
         return $this->mediaRepository->countCollection();
     }
 }

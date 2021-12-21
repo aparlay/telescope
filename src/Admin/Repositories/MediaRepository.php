@@ -108,6 +108,6 @@ class MediaRepository
 
     public function listMedia($page)
     {
-        return $this->model->recentFirst()->paginate(1,['*'],'page',$page);
+        return $this->model->recentFirst()->paginate(1, ['*'], 'page', $page);
     }
 }

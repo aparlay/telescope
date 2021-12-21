@@ -144,7 +144,7 @@ class MediaController extends Controller
     {
         $models = $this->mediaService->listMedia($page);
 
-        if($models->currentPage() > $models->lastPage()) {
+        if ($models->currentPage() > $models->lastPage()) {
             return redirect()->route('core.admin.media.index');
         }
 
@@ -153,8 +153,7 @@ class MediaController extends Controller
         $prevPage = $currentPage === 1 ? $models->lastPage() : $currentPage - 1;
 
         foreach ($models as $model) {
-                return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(['prevPage' =>  $prevPage, 'nextPage' => $nextPage]);
+            return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(['prevPage' =>  $prevPage, 'nextPage' => $nextPage]);
         }
-
     }
 }
