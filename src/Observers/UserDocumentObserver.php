@@ -4,7 +4,6 @@ namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Models\UserDocument;
 
-
 class UserDocumentObserver extends BaseModelObserver
 {
     /**
@@ -26,7 +25,6 @@ class UserDocumentObserver extends BaseModelObserver
      */
     public function created($model): void
     {
-
     }
 
     /**
@@ -37,6 +35,5 @@ class UserDocumentObserver extends BaseModelObserver
      */
     public function deleted($model): void
     {
-
     }
 }

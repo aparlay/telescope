@@ -8,7 +8,6 @@ trait UserDocumentScope
 {
     use BaseScope;
 
-
     public function scopeType($query, $type)
     {
         return $query->where('type', $type);
@@ -37,5 +36,4 @@ trait UserDocumentScope
 
         return $query->where('user._id', $userId);
     }
-
 }

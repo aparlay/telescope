@@ -108,7 +108,6 @@ class UserDocument extends BaseModel
     protected $hidden = [
     ];
 
-
     /**
      * Get the phone associated with the user.
      */
@@ -116,8 +115,6 @@ class UserDocument extends BaseModel
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
-
 
     /**
      * Get the user associated with the alert.
