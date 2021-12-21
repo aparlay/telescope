@@ -5,7 +5,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Services\MediaService;
-use Aparlay\Core\Jobs\UploadMedia;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media as BaseMedia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -36,6 +36,7 @@ class MediaRepository
         $user = auth()->user();
         try {
             $model = Media::create([
+                'status' => MediaStatus::QUEUED->value,
                 'user_id' => new ObjectId($user->_id),
                 'file' => $request->input('file', ''),
                 'description' => $request->input('description', ''),

@@ -4,7 +4,6 @@ namespace Aparlay\Core\Admin\Models;
 
 use Aparlay\Core\Models\Email as EmailBase;
 use Aparlay\Core\Models\Scopes\BaseScope;
-use Aparlay\Core\Models\Scopes\EmailScope;
 
 /**
  * Class Email.

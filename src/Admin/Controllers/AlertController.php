@@ -4,7 +4,6 @@ namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Requests\AlertRequest;
 use Aparlay\Core\Admin\Services\AlertService;
-use Illuminate\Http\Request;
 
 class AlertController extends Controller
 {

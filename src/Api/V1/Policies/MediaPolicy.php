@@ -5,6 +5,8 @@ namespace Aparlay\Core\Api\V1\Policies;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Enums\MediaVisibility;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -29,7 +31,7 @@ class MediaPolicy
     {
         $userId = $user?->_id;
 
-        if ($media->visibility === Media::VISIBILITY_PUBLIC) {
+        if ($media->visibility === MediaVisibility::PUBLIC->value) {
             return Response::allow();
         }
 
@@ -54,7 +56,7 @@ class MediaPolicy
      */
     public function create()
     {
-        return auth()->user()->status !== User::STATUS_PENDING
+        return auth()->user()->status !== UserStatus::PENDING->value
             ? Response::allow()
             : Response::deny(__('You need to complete registration first!'));
     }

@@ -6,9 +6,7 @@
 namespace Aparlay\Core\Microservices\ffmpeg;
 
 use Aparlay\Core\Microservices\ffmpeg\GPBMetadata\Media;
-use Google\Protobuf\Internal\GPBType;
 use Google\Protobuf\Internal\GPBUtil;
-use Google\Protobuf\Internal\RepeatedField;
 
 /**
  * Generated from protobuf message <code>media.OptimizeResponse</code>.

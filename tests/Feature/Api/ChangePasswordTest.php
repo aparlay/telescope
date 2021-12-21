@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -37,7 +38,7 @@ class ChangePasswordTest extends ApiTestCase
     public function changePasswordWithUnverifiedUser()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_PENDING,
+            'status' => UserStatus::PENDING->value,
             'email' => uniqid('alua_').'@aparlay.com',
             'password_hash' => Hash::make('Demo@12345'),
         ]);
@@ -69,7 +70,7 @@ class ChangePasswordTest extends ApiTestCase
     public function changePasswordLoginUser()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'email' => uniqid('alua_').'@aparlay.com',
             'password_hash' => Hash::make('Demo@12345'),
         ]);
@@ -99,7 +100,7 @@ class ChangePasswordTest extends ApiTestCase
     public function changePasswordWithoutLoginUser()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'email' => uniqid('alua_').'@aparlay.com',
         ]);
         $otp = Otp::factory()->create([
@@ -269,7 +270,7 @@ class ChangePasswordTest extends ApiTestCase
     public function invalidOtpWhenNonLoginUser()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'email' => uniqid('alua_').'@aparlay.com',
         ]);
         Otp::factory()->create([

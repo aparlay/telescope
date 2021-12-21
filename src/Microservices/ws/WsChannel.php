@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Microservices\ws;
 
 use Illuminate\Support\Facades\Redis;
-use MongoDB\BSON\ObjectId;
 
 class WsChannel
 {
