@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;

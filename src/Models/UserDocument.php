@@ -9,10 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class UserDocument.
@@ -42,11 +40,6 @@ class UserDocument extends BaseModel
     use Notifiable;
     use MediaLikeScope;
 
-    const STATUS_CREATED = 0;
-    const STATUS_VERIFIED = 1;
-
-    const TYPE_ID_CARD = 0;
-    const TYPE_SELFIE = 1;
     /**
      * The collection associated with the model.
      *

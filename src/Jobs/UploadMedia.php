@@ -2,10 +2,10 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
-use App;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Filesystem\FileExistsException;
@@ -91,7 +91,7 @@ class UploadMedia implements ShouldQueue
         $media->size = $storage->size($this->file);
         $media->mime_type = $storage->mimeType($this->file);
         $media->file = $newFilename;
-        $media->status = Media::STATUS_UPLOADED;
+        $media->status = MediaStatus::UPLOADED->value;
 
         $mediaServer = Storage::disk('media-ftp');
         if (! $mediaServer->exists($newFilename)) {

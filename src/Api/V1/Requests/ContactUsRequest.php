@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
-use Illuminate\Support\Facades\Request;
-
 class ContactUsRequest extends BaseFormRequest
 {
     /**

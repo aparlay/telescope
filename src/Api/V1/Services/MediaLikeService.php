@@ -6,7 +6,6 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Repositories\MediaLikeRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
-use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
 use MongoDB\BSON\ObjectId;
 

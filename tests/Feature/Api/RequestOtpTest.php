@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -16,7 +17,7 @@ class RequestOtpTest extends ApiTestCase
     public function validRequestOtp()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'email' => uniqid('alua_').'@aparlay.com',
         ]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -47,7 +48,7 @@ class RequestOtpTest extends ApiTestCase
     public function requireEmailInRequestOtp()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'email' => uniqid('alua_').'@aparlay.com',
         ]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -73,7 +74,7 @@ class RequestOtpTest extends ApiTestCase
     public function exitOtpLimit()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'email' => uniqid('alua_').'@aparlay.com',
         ]);
 

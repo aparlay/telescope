@@ -5,8 +5,6 @@ namespace Aparlay\Core\Admin\Services;
 use Aparlay\Core\Admin\Models\Email;
 use Aparlay\Core\Admin\Repositories\EmailRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
-use Aparlay\Core\Helpers\Cdn;
-use Illuminate\Http\Request;
 
 class EmailService extends AdminBaseService
 {
