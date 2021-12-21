@@ -3,10 +3,10 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Illuminate\Http\Request;
-use Swoole\Http\Server;
 use Laravel\Octane\Octane;
 use Laravel\Octane\Swoole\ServerStateFile;
 use Laravel\Octane\Swoole\WorkerState;
+use Swoole\Http\Server;
 
 class SiteController extends Controller
 {
@@ -49,7 +49,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Return openswoole metrics
+     * Return openswoole metrics.
      */
     public function metrics()
     {
