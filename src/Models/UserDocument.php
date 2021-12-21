@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Casts\SimpleUserCast;
-use Aparlay\Core\Database\Factories\MediaLikeFactory;
+use Aparlay\Core\Database\Factories\UserDocumentFactory;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -68,6 +68,34 @@ class UserDocument extends BaseModel
         'updated_by',
     ];
 
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'status' => 'integer',
+        'type' => 'integer',
+        'creator' => SimpleUserCast::class.':_id,username,avatar',
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
+
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return UserDocumentFactory::new();
+    }
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -83,21 +111,22 @@ class UserDocument extends BaseModel
     protected $hidden = [
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'creator' => SimpleUserCast::class.':_id,username,avatar',
-    ];
+
 
     /**
-     * Create a new factory instance for the model.
+     * Get the phone associated with the user.
      */
-    protected static function newFactory(): Factory
+    public function userObj()
     {
-        return MediaLikeFactory::new();
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function mediaObj()
+    {
+        return $this->belongsTo(Media::class, 'media_id');
     }
 
     /**
