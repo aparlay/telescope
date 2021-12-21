@@ -68,7 +68,6 @@ class UserDocument extends BaseModel
         'updated_by',
     ];
 
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -85,8 +84,6 @@ class UserDocument extends BaseModel
         'updated_at',
         'deleted_at',
     ];
-
-
 
     /**
      * Create a new factory instance for the model.
