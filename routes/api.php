@@ -109,3 +109,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         ->name('contactus')
         ->withoutMiddleware(['device-id']);
 });
+
+Route::get('/metrics', [SiteController::class, 'metrics'])
+    ->name('site.metrics')
+    ->withoutMiddleware(['device-id']);

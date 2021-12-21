@@ -3,6 +3,10 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Illuminate\Http\Request;
+use Swoole\Http\Server;
+use Laravel\Octane\Octane;
+use Laravel\Octane\Swoole\ServerStateFile;
+use Laravel\Octane\Swoole\WorkerState;
 
 class SiteController extends Controller
 {
@@ -42,5 +46,13 @@ class SiteController extends Controller
     public function health(Request $request)
     {
         return $this->response([]);
+    }
+
+    /**
+     * Return openswoole metrics
+     */
+    public function metrics()
+    {
+        return app(Server::class)->stats(\OPENSWOOLE_STATS_OPENMETRICS);
     }
 }
