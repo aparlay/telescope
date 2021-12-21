@@ -10,15 +10,12 @@ use MongoDB\BSON\ObjectId;
 
 class UserDocumentFactory extends Factory
 {
-
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
     protected $model = UserDocument::class;
-
-
 
     /**
      * Define the model's default state.
@@ -30,12 +27,12 @@ class UserDocumentFactory extends Factory
         return [
             'type' => $this->faker->randomElement([
                 UserDocumentType::ID_CARD->value,
-                UserDocumentType::SELFIE->value
+                UserDocumentType::SELFIE->value,
             ]),
 
             'status' => $this->faker->randomElement([
                 UserDocumentStatus::CREATED->value,
-                UserDocumentStatus::CONFIRMED->value
+                UserDocumentStatus::CONFIRMED->value,
             ]),
             'md5' => $this->faker->md5(),
             'media_id' => function ($report) {

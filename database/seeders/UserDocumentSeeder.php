@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Database\Seeders;
 
 use Aparlay\Core\Models\Media;
-
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Database\Seeder;
@@ -23,7 +22,5 @@ class UserDocumentSeeder extends Seeder
             ->for(User::factory()->create(), 'userObj')
             ->for(Media::factory()->forUserObj()->create(), 'mediaObj')
             ->create();
-
     }
-
 }
