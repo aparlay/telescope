@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Repositories;
 
-
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
