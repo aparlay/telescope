@@ -3,11 +3,6 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Alert;
-use Aparlay\Core\Admin\Models\Media;
-use Aparlay\Core\Admin\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 
 class AlertRepository implements RepositoryInterface
 {

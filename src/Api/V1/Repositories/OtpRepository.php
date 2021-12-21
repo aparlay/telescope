@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Otp;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\OtpType;
 use Aparlay\Core\Models\Otp as BaseOtp;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -38,7 +39,7 @@ class OtpRepository
                     config('app.otp.length.max')
                 ),
                 'expired_at'    => DT::utcDateTime(['s' => config('app.otp.duration')]),
-                'type'          => Str::contains($otp['identity'], '@') ? Otp::TYPE_EMAIL : Otp::TYPE_SMS,
+                'type'          => Str::contains($otp['identity'], '@') ? OtpType::EMAIL->value : OtpType::SMS->value,
                 'device_id'     => $otp['device_id'],
                 'incorrect'     => 0,
                 'validated'     => false,

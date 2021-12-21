@@ -11,7 +11,6 @@ use Aparlay\Core\Api\V1\Controllers\ReportController;
 use Aparlay\Core\Api\V1\Controllers\SiteController;
 use Aparlay\Core\Api\V1\Controllers\UserController;
 use Aparlay\Core\Api\V1\Controllers\VersionController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*

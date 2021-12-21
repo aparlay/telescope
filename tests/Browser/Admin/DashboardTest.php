@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Tests\Browser\Admin;
 
-use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Tests\DuskTestCase;
 use Carbon\Carbon;
 use Laravel\Dusk\Browser;

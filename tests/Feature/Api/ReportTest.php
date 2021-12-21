@@ -4,8 +4,12 @@ namespace Aparlay\Core\Tests\Feature\Api;
 
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\MediaVisibility;
+use Aparlay\Core\Models\Enums\ReportType;
+use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
 
@@ -40,8 +44,8 @@ class ReportTest extends ApiTestCase
      */
     public function userReportUser()
     {
-        $user = User::factory()->create(['status' => User::STATUS_ACTIVE, 'visibility' => User::VISIBILITY_PUBLIC]);
-        $modal = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value, 'visibility' => UserVisibility::PUBLIC->value]);
+        $modal = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $this->actingAs($modal)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('POST', '/v1/user/'.$user->_id.'/report', ['reason' => 'Reason Test Case'])
@@ -83,8 +87,8 @@ class ReportTest extends ApiTestCase
      */
     public function guestReportMedia()
     {
-        $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]), 'userObj')
-            ->create(['status'=> Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
+        $media = Media::factory()->for(User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]), 'userObj')
+            ->create(['status'=> MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('POST', '/v1/media/'.$media->_id.'/report', [
                 'reason' => 'bad image for guest',
@@ -119,7 +123,10 @@ class ReportTest extends ApiTestCase
                 ])
             );
 
-        $this->assertDatabaseHas('reports', ['media_id' => new ObjectId($media->_id), 'type' => Report::TYPE_MEDIA]);
+        $this->assertDatabaseHas(
+            'reports',
+            ['media_id' => new ObjectId($media->_id), 'type' => ReportType::MEDIA->value]
+        );
     }
 
     /**
@@ -128,8 +135,8 @@ class ReportTest extends ApiTestCase
     public function userReportMedia()
     {
         $user = User::factory()->create();
-        $media = Media::factory()->for(User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]), 'userObj')
-                        ->create(['status'=> Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
+        $media = Media::factory()->for(User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]), 'userObj')
+                        ->create(['status'=> MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('POST', '/v1/media/'.$media->_id.'/report', [
                 'reason' => 'bad image',
@@ -163,7 +170,14 @@ class ReportTest extends ApiTestCase
                     'data.updated_at' => 'integer',
                 ])
             );
-        $this->assertDatabaseHas('reports', ['media_id' => new ObjectId($media->_id), 'created_by' => new ObjectId($user->_id), 'type' => Report::TYPE_MEDIA]);
+        $this->assertDatabaseHas(
+            'reports',
+            [
+                'media_id' => new ObjectId($media->_id),
+                'created_by' => new ObjectId($user->_id),
+                'type' => ReportType::MEDIA->value,
+            ]
+        );
     }
 
     /**
@@ -171,7 +185,7 @@ class ReportTest extends ApiTestCase
      */
     public function reportUserWithPermission()
     {
-        $user = User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]);
+        $user = User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]);
         $blockedUser = User::factory()->create();
         Block::factory()->create([
             'user' => [
@@ -202,7 +216,7 @@ class ReportTest extends ApiTestCase
      */
     public function reportMediaWithPermission()
     {
-        $mediaCreator = User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]);
+        $mediaCreator = User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]);
         $blockedUser = User::factory()->create();
         Block::factory()->create([
             'user' => [
@@ -218,8 +232,8 @@ class ReportTest extends ApiTestCase
         ]);
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
-            'status' => Media::STATUS_COMPLETED,
-            'visibility' => Media::VISIBILITY_PUBLIC,
+            'status' => MediaStatus::COMPLETED->value,
+            'visibility' => MediaVisibility::PUBLIC->value,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,
@@ -244,12 +258,12 @@ class ReportTest extends ApiTestCase
      */
     public function reportMedia()
     {
-        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
-        $mediaCreator = User::factory()->create(['visibility' => User::VISIBILITY_PUBLIC]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $mediaCreator = User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]);
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
-            'status' => Media::STATUS_COMPLETED,
-            'visibility' => Media::VISIBILITY_PUBLIC,
+            'status' => MediaStatus::COMPLETED->value,
+            'visibility' => MediaVisibility::PUBLIC->value,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,
@@ -290,6 +304,13 @@ class ReportTest extends ApiTestCase
                     'data.updated_at' => 'integer',
                 ])
             );
-        $this->assertDatabaseHas('reports', ['media_id' => new ObjectId($media->_id), 'type' => Report::TYPE_MEDIA, 'created_by' => new ObjectId($user->_id)]);
+        $this->assertDatabaseHas(
+            'reports',
+            [
+                'media_id' => new ObjectId($media->_id),
+                'type' => ReportType::MEDIA->value,
+                'created_by' => new ObjectId($user->_id),
+            ]
+        );
     }
 }
