@@ -14,9 +14,6 @@ class Otp extends BaseModel
     use Notifiable;
     use OtpScope;
 
-    public const TYPE_EMAIL = 'email';
-    public const TYPE_SMS = 'sms';
-
     /**
      * The collection associated with the model.
      *

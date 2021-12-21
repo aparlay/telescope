@@ -8,10 +8,7 @@ use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\Cdn;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use MongoDB\BSON\ObjectId;
 
 class MediaService extends AdminBaseService

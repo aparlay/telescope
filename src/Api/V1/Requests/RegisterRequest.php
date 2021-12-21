@@ -4,6 +4,11 @@ namespace Aparlay\Core\Api\V1\Requests;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
+use Aparlay\Core\Models\Enums\UserGender;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
+use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserType;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
@@ -79,15 +84,15 @@ class RegisterRequest extends FormRequest
         $this->username = uniqid('', false);
 
         /* Set gender by default value */
-        $this->gender = isset($this->gender) ? (int) $this->gender : User::GENDER_MALE;
+        $this->gender = isset($this->gender) ? (int) $this->gender : UserGender::MALE->value;
 
         /* Set avatar based on Gender */
         if (empty($this->avatar)) {
             $femaleFilename = 'default_fm_'.random_int(1, 60).'.png';
             $maleFilename = 'default_m_'.random_int(1, 120).'.png';
             $filename = match ($this->gender) {
-                User::GENDER_FEMALE => $femaleFilename,
-                User::GENDER_MALE => $maleFilename,
+                UserGender::FEMALE->value => $femaleFilename,
+                UserGender::MALE->value => $maleFilename,
             default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
             };
 
@@ -102,12 +107,12 @@ class RegisterRequest extends FormRequest
             'avatar' => $this->avatar,
             'gender' => $this->gender,
             'password_hash' => Hash::make($this->password),
-            'status' => User::STATUS_PENDING,
-            'visibility' => User::VISIBILITY_PUBLIC,
-            'interested_in' => User::INTERESTED_IN_FEMALE,
+            'status' => UserStatus::PENDING->value,
+            'visibility' => UserVisibility::PUBLIC->value,
+            'interested_in' => UserInterestedIn::FEMALE->value,
             'email_verified' => false,
             'phone_number_verified' => false,
-            'type' => User::TYPE_USER,
+            'type' => UserType::USER->value,
             'full_name' => null,
             'promo_link' => null,
             'followers' => [],

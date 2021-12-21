@@ -6,7 +6,6 @@ use Aparlay\Core\Admin\Rules\MediaExist;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
 
 class MediaUploadRequest extends FormRequest
 {

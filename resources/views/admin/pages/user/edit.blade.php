@@ -68,7 +68,7 @@
                             </ul>
                             <div class="row">
                                 <div class="col-md-6">
-                                    @if($user->status == \App\Models\User::STATUS_SUSPENDED)
+                                    @if($user->status == \Aparlay\Core\Models\Enums\UserStatus::SUSPENDED->value)
                                         <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#activateModal">
                                             <i class="fas fa-check"></i>
                                             <strong>Reactivate</strong>
@@ -81,7 +81,7 @@
                                     @endif
                                 </div>
                                 <div class="col-md-6">
-                                    @if($user->status == \App\Models\User::STATUS_BLOCKED)
+                                    @if($user->status == \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value)
                                         <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#activateModal">
                                             <i class="fas fa-check"></i>
                                             <strong>Reactivate</strong>
@@ -598,8 +598,8 @@
         <div class="modal-dialog">
             <form action="{{ route('core.admin.alert.store') }}" method="post">
                 <input type="hidden" name="user_id" value="{{ $user->_id }}">
-                <input type="hidden" name="type" value="{{ \Aparlay\Core\Models\Alert::TYPE_USER}}">
-                <input type="hidden" name="status" value="{{ \Aparlay\Core\Admin\Models\Alert::STATUS_NOT_VISITED }}">
+                <input type="hidden" name="type" value="{{ \Aparlay\Core\Models\Enums\AlertType::USER->value}}">
+                <input type="hidden" name="status" value="{{ \Aparlay\Core\Models\Enums\AlertStatus::NOT_VISITED->value }}">
                 <!-- Modal content-->
                 <div class="modal-content">
                         <div class="modal-header">
@@ -630,7 +630,7 @@
                     <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
                         @csrf
                         @method('PATCH')
-                        <input type="hidden" value="{{ \App\Models\User::STATUS_BLOCKED }}" name="status">
+                        <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value }}" name="status">
                         <div class="modal-header bg-danger">
                             <h5 class="modal-title" id="exampleModalLiveLabel">Ban User</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -656,7 +656,7 @@
                 <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
                     @csrf
                     @method('PATCH')
-                    <input type="hidden" name="status" value="{{ \App\Models\User::STATUS_SUSPENDED }}">
+                    <input type="hidden" name="status" value="{{ \Aparlay\Core\Models\Enums\UserStatus::SUSPENDED->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Suspend</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -683,7 +683,7 @@
                 <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
                     @csrf
                     @method('PATCH')
-                    <input type="hidden" name="status" value="{{ \App\Models\User::STATUS_ACTIVE }}">
+                    <input type="hidden" name="status" value="{{ \Aparlay\Core\Models\Enums\UserStatus::ACTIVE->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Reactivate</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

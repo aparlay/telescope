@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Repositories\UserRepository;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
+use Aparlay\Core\Models\Enums\UserGender;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
@@ -175,15 +176,15 @@ class UserService
     public function changeDefaultAvatar()
     {
         /* Set gender by default value */
-        $gender = auth()->user()->gender ?? User::GENDER_MALE;
+        $gender = auth()->user()->gender ?? UserGender::MALE->value;
 
         /* Set avatar based on Gender */
         $femaleFilename = 'default_fm_'.random_int(1, 60).'.png';
         $maleFilename = 'default_m_'.random_int(1, 120).'.png';
 
         $filename = match ($gender) {
-            User::GENDER_FEMALE => $femaleFilename,
-            User::GENDER_MALE => $maleFilename,
+            UserGender::FEMALE->value => $femaleFilename,
+            UserGender::MALE->value => $maleFilename,
             default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
         };
 

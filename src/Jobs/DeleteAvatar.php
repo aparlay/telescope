@@ -4,14 +4,12 @@ namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
-use InvalidArgumentException;
 use Throwable;
 
 class DeleteAvatar implements ShouldQueue

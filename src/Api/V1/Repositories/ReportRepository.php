@@ -6,6 +6,8 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\ReportRequest;
+use Aparlay\Core\Models\Enums\ReportStatus;
+use Aparlay\Core\Models\Enums\ReportType;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
@@ -34,8 +36,8 @@ class ReportRepository
         try {
             return Report::create([
                 'reason' => $request->post('reason'),
-                'type' => Report::TYPE_USER,
-                'status' => Report::STATUS_REPORTED,
+                'type' => ReportType::USER->value,
+                'status' => ReportStatus::REPORTED->value,
                 'user_id' => new ObjectId($user->_id),
             ]);
         } catch (\Exception $e) {
@@ -57,8 +59,8 @@ class ReportRepository
         try {
             return Report::create([
                 'reason' => $request->post('reason'),
-                'type' => Report::TYPE_MEDIA,
-                'status' => Report::STATUS_REPORTED,
+                'type' => ReportType::MEDIA->value,
+                'status' => ReportStatus::REPORTED->value,
                 'media_id' => new ObjectId($media->_id),
             ]);
         } catch (\Exception $e) {
