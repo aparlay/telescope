@@ -56,7 +56,7 @@ class MediaController extends Controller
         $media = new MediaResource($this->mediaService->find($media->_id));
         $scoreTypes = $media->scores ?? [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
 
-        $nextPage = Session::get('nextPage') ? Session::get('nextPage') : 1;
+        $nextPage = Session::get('nextPage') ? Session::get('nextPage') : 2;
         $prevPage = Session::get('prevPage') ? Session::get('prevPage') : $this->mediaService->countCollection();
 
         return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'nextPage', 'prevPage'));
@@ -142,7 +142,7 @@ class MediaController extends Controller
 
     public function mediaListing($page = 1)
     {
-        $models = $this->mediaService->listMedia($page);
+        $models = $this->mediaService->mediaListing($page);
 
         if ($models->currentPage() > $models->lastPage()) {
             return redirect()->route('core.admin.media.index');
