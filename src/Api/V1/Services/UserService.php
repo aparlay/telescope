@@ -162,6 +162,7 @@ class UserService
     public function deleteAccount(User | Authenticatable $user)
     {
         $this->userRepository = new UserRepository($user);
+
         return $this->userRepository->deleteAccount();
     }
 
