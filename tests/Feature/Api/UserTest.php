@@ -6,7 +6,6 @@ use Aparlay\Core\Api\V1\Controllers\UserController;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User;
 
-
 class UserTest extends ApiTestCase
 {
     /**
