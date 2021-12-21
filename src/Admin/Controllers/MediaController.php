@@ -11,6 +11,7 @@ use Aparlay\Core\Jobs\ReprocessMedia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Session;
 
 class MediaController extends Controller
 {
@@ -55,7 +56,10 @@ class MediaController extends Controller
         $media = new MediaResource($this->mediaService->find($media->_id));
         $scoreTypes = $media->scores ?? [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
 
-        return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes'));
+        $nextPage = Session::get('nextPage') ? Session::get('nextPage') : 1;
+        $prevPage = Session::get('prevPage') ? Session::get('prevPage') : $this->mediaService->countCollection();
+
+        return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'nextPage', 'prevPage'));
     }
 
     /**
@@ -134,5 +138,23 @@ class MediaController extends Controller
         $this->mediaService->reupload($media);
 
         return redirect()->back()->with(['success' => 'Video uploaded successfully']);
+    }
+
+    public function mediaList($page = 1)
+    {
+        $models = $this->mediaService->listMedia($page);
+
+        if($models->currentPage() > $models->lastPage()) {
+            return redirect()->route('core.admin.media.index');
+        }
+
+        $currentPage = $models->currentPage();
+        $nextPage = $currentPage === $models->lastPage() ? 1 : $currentPage + 1;
+        $prevPage = $currentPage === 1 ? $models->lastPage() : $currentPage - 1;
+
+        foreach ($models as $model) {
+                return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(['prevPage' =>  $prevPage, 'nextPage' => $nextPage]);
+        }
+
     }
 }
