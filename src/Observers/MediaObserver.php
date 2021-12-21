@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Api\V1\Notifications\UserDeleteMedia;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaLike;
@@ -144,5 +145,7 @@ class MediaObserver extends BaseModelObserver
         $creatorUser->save();
 
         DeleteMediaLike::dispatch((string) $media->_id)->onQueue('low');
+
+        $creatorUser->notify(new UserDeleteMedia());
     }
 }

@@ -10,6 +10,7 @@ use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UpdateMedia;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Redis;
@@ -77,14 +78,16 @@ class UserObserver extends BaseModelObserver
         }
 
         if ($model->wasChanged('status')) {
+
+            if ($model->status === UserStatus::STATUS_DEACTIVATED) {
+                $model->notify(new UserDeactivateAccount());
+            }
+
             switch ($model->status) {
                 case User::STATUS_DEACTIVATED:
                 case User::STATUS_BLOCKED:
                     DeleteUserMedia::dispatch((string) $model->_id)->onQueue('low');
                     DeleteUserConnect::dispatch((string) $model->_id)->onQueue('low');
-
-                    $model->notify(new UserDeactivateAccount());
-                    $model->notify(new UserDeleteMedia());
                     break;
             }
         }

@@ -41,7 +41,7 @@ class UserDeleteMedia extends Notification implements ShouldQueue
      */
     public function toSlack($notifiable)
     {
-        $message = 'Medias for this user were deleted';
+        $message = "{$notifiable->slack_admin_url} user was removed media";
         $message .= PHP_EOL.'_*Email:*_ '.$notifiable->email;
         $message .= PHP_EOL.'_*Name:*_ '.$notifiable->full_name;
 

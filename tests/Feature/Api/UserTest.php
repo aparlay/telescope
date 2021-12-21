@@ -14,7 +14,6 @@ class UserTest extends ApiTestCase
      */
     public function testDelete()
     {
-        $model = User::factory()->create();
         $user = User::factory()->create();
 
         $r = $this->actingAs($user)
