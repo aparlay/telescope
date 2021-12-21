@@ -140,7 +140,7 @@ class MediaController extends Controller
         return redirect()->back()->with(['success' => 'Video uploaded successfully']);
     }
 
-    public function mediaList($page = 1)
+    public function mediaListing($page = 1)
     {
         $models = $this->mediaService->listMedia($page);
 
