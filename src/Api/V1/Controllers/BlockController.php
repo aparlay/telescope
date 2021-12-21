@@ -14,6 +14,10 @@ class BlockController extends Controller
     public function __construct(BlockService $blockService)
     {
         $this->blockService = $blockService;
+
+        if (auth()->check()) {
+            $blockService->setUser(auth()->user());
+        }
     }
 
     public function store(User $user): Response

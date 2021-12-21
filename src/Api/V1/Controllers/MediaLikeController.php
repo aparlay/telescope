@@ -15,6 +15,10 @@ class MediaLikeController extends Controller
     public function __construct(MediaLikeService $mediaLikeService)
     {
         $this->mediaLikeService = $mediaLikeService;
+
+        if (auth()->check()) {
+            $mediaLikeService->setUser(auth()->user());
+        }
     }
 
     /**
