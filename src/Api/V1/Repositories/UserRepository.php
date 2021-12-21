@@ -146,8 +146,9 @@ class UserRepository
      * Responsible for delete user account.
      *
      * @return bool
+     * @throws \Exception
      */
-    public function deleteAccount()
+    public function deleteAccount(): bool
     {
         $randString = random_int(1, 100);
         $this->model->email = 'del_'.$randString.'_'.$this->model->email;
