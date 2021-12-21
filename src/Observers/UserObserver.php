@@ -78,7 +78,6 @@ class UserObserver extends BaseModelObserver
         }
 
         if ($model->wasChanged('status')) {
-
             if ($model->status === UserStatus::STATUS_DEACTIVATED) {
                 $model->notify(new UserDeactivateAccount());
             }
