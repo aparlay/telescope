@@ -4,7 +4,6 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Models\Login;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Api\V1\Notifications\UserDeleteAccount;
 use Aparlay\Core\Api\V1\Repositories\UserRepository;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\DeleteAvatar;
@@ -163,8 +162,6 @@ class UserService
     public function deleteAccount(User | Authenticatable $user)
     {
         $this->userRepository = new UserRepository($user);
-        $user->notify(new UserDeleteAccount());
-
         return $this->userRepository->deleteAccount();
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class UserDeleteAccount extends Notification implements ShouldQueue
+class UserDeleteMedia extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -41,7 +41,7 @@ class UserDeleteAccount extends Notification implements ShouldQueue
      */
     public function toSlack($notifiable)
     {
-        $message = 'This user was removed an account';
+        $message = 'Medias for this user were deleted';
         $message .= PHP_EOL.'_*Email:*_ '.$notifiable->email;
         $message .= PHP_EOL.'_*Name:*_ '.$notifiable->full_name;
 

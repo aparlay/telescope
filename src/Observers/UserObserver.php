@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Api\V1\Notifications\UserDeactivateAccount;
+use Aparlay\Core\Api\V1\Notifications\UserDeleteMedia;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\DeleteUserConnect;
@@ -80,6 +82,9 @@ class UserObserver extends BaseModelObserver
                 case User::STATUS_BLOCKED:
                     DeleteUserMedia::dispatch((string) $model->_id)->onQueue('low');
                     DeleteUserConnect::dispatch((string) $model->_id)->onQueue('low');
+
+                    $model->notify(new UserDeactivateAccount());
+                    $model->notify(new UserDeleteMedia());
                     break;
             }
         }
