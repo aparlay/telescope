@@ -41,7 +41,7 @@ class UserDeactivateAccount extends Notification implements ShouldQueue
      */
     public function toSlack($notifiable)
     {
-        $message =  "{$notifiable->slack_admin_url} this user deactivated his account";
+        $message = "{$notifiable->slack_admin_url} this user deactivated his account";
         $message .= PHP_EOL.'_*Email:*_ '.$notifiable->email;
         $message .= PHP_EOL.'_*Name:*_ '.$notifiable->full_name;
 
