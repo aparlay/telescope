@@ -21,7 +21,6 @@ class UserDocumentSeeder extends Seeder
     {
         UserDocument::factory()->count($this->units)
             ->for(User::factory()->create(), 'userObj')
-            ->for(Media::factory()->forUserObj()->create(), 'mediaObj')
             ->create();
 
     }

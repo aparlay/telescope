@@ -112,7 +112,6 @@ class UserDocument extends BaseModel
     ];
 
 
-
     /**
      * Get the phone associated with the user.
      */
@@ -121,13 +120,7 @@ class UserDocument extends BaseModel
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * Get the phone associated with the user.
-     */
-    public function mediaObj()
-    {
-        return $this->belongsTo(Media::class, 'media_id');
-    }
+
 
     /**
      * Get the user associated with the alert.

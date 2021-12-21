@@ -11,6 +11,7 @@ use Aparlay\Core\Api\V1\Controllers\ReportController;
 use Aparlay\Core\Api\V1\Controllers\SiteController;
 use Aparlay\Core\Api\V1\Controllers\UserController;
 use Aparlay\Core\Api\V1\Controllers\VersionController;
+use Aparlay\Core\Api\V1\Controllers\UserDocumentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,6 +64,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::put('/{user}/follow', [FollowController::class, 'store'])->name('follow');
             Route::delete('/{user}/follow', [FollowController::class, 'destroy'])->name('unfollow');
             Route::get('/{user}', [UserController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
+            Route::post('/{user}/document', [UserDocumentController::class, 'store'])->name('user-document.store');
         });
     });
 

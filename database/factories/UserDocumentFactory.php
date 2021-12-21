@@ -38,9 +38,9 @@ class UserDocumentFactory extends Factory
                 UserDocumentStatus::CONFIRMED->value
             ]),
             'md5' => $this->faker->md5(),
-            'media_id' => function ($report) {
-                return new ObjectId($report['media_id']);
-            },
+            'file' => 'waptap.mp4',
+            'files_history' => [],
+            'mime_type' => 'video/mp4',
             'user_id' => function ($report) {
                 return new ObjectId($report['user_id']);
             },
