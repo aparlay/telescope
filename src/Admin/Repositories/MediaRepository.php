@@ -101,9 +101,9 @@ class MediaRepository
         return $this->model->getAwesomenessScores();
     }
 
-    public function pendingMedia($order)
+    public function pending($page)
     {
-        return $this->model->completed()->recentFirst()->limit(2)->get();
+        return $this->model->completed()->recentFirst()->paginate(1, ['*'], 'page', $page);
     }
 
     public function mediaListing($page)
