@@ -39,6 +39,7 @@ class MediaController extends Controller
     public function moderation()
     {
         $mediaStatuses = $this->mediaService->getMediaStatuses();
+
         return view('default_view::admin.pages.moderation.index')->with([
             'moderation' => true,
             'mediaStatuses' => $mediaStatuses,
@@ -60,7 +61,6 @@ class MediaController extends Controller
 
         return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'nextPage', 'prevPage'));
     }
-
 
     public function viewModeration(Media $media)
     {
