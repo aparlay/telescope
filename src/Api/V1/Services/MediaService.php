@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\MediaRepository;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Exception;
@@ -17,6 +18,7 @@ use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 
 class MediaService
 {
+    use HasUserTrait;
     protected MediaRepository $mediaRepository;
 
     public function __construct()

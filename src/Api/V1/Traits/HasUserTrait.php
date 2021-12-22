@@ -10,7 +10,7 @@ trait HasUserTrait
     /**
      * @var Authenticatable|User
      */
-    public Authenticatable|User $user;
+    private Authenticatable|User $user;
 
     public function getUser(): Authenticatable|User
     {
