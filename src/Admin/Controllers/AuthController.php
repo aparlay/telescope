@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
-use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Requests\AuthRequest;
 use Aparlay\Core\Models\Enums\UserType;
 use Illuminate\Http\Request;
