@@ -68,7 +68,7 @@ class MediaService extends AdminBaseService
             $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
             $media->sort_score = $media->sort_score ? round($media->sort_score) : ActionButtonBladeComponent::defaultValueNotSet();
             $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
-            $resource = request()->get('moderation')  ? 'moderation' : 'media';
+            $resource = request()->get('moderation') ? 'moderation' : 'media';
             $media->action = ActionButtonBladeComponent::getViewActionButton($media->_id, $resource);
             $media->date_formatted = $media->created_at->toDateTimeString();
             $media->like_count = $media->like_count ?? ActionButtonBladeComponent::defaultValueNotSet();
