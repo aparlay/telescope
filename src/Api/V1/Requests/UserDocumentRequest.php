@@ -19,5 +19,4 @@ class UserDocumentRequest extends BaseFormRequest
             'type' => Rule::in([UserDocumentType::ID_CARD->value, UserDocumentType::SELFIE->value]),
         ];
     }
-
 }

@@ -12,7 +12,6 @@ class UserDocumentService
 {
     use HasUserTrait;
 
-
     /**
      * @param UserDocumentDto $documentDto
      */
@@ -26,5 +25,4 @@ class UserDocumentService
 
         return $userDocument;
     }
-
 }

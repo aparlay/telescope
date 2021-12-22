@@ -25,5 +25,4 @@ class UserDocumentDto extends DataTransferObject
             ]
         );
     }
-
 }

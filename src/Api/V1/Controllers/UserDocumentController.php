@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 class UserDocumentController extends Controller
 {
     /**
-     * @var $userDocumentService UserDocumentService
+     * @var UserDocumentService
      */
     private $userDocumentService;
 
@@ -26,10 +26,10 @@ class UserDocumentController extends Controller
         }
     }
 
-
     public function store(UserDocumentRequest $request)
     {
         $userDocument = $this->userDocumentService->store(UserDocumentDto::fromRequest($request));
+
         return new UserDocumentResource($userDocument);
     }
 }
