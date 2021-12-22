@@ -16,7 +16,7 @@ class BlockController extends Controller
         $this->blockService = $blockService;
 
         if (auth()->check()) {
-            $blockService->setUser(auth()->user());
+            $this->blockService->setUser(auth()->user());
         }
     }
 

@@ -17,7 +17,7 @@ class MediaLikeController extends Controller
         $this->mediaLikeService = $mediaLikeService;
 
         if (auth()->check()) {
-            $mediaLikeService->setUser(auth()->user());
+            $this->mediaLikeService->setUser(auth()->user());
         }
     }
 

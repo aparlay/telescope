@@ -23,12 +23,14 @@ class MediaLikeService
     /**
      * Responsible to create like for given media.
      *
-     * @param Media $media
+     * @param  Media  $media
      * @return array
+     * @throws \Exception
      */
     public function create(Media $media)
     {
         $statusCode = Response::HTTP_OK;
+
         $creator = $this->getUser();
         if (($like = $this->mediaLikeRepository->isLiked($creator, $media)) === null) {
             $like = $this->mediaLikeRepository->create([
