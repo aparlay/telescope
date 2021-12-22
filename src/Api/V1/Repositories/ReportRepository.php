@@ -6,8 +6,6 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\ReportRequest;
-use Aparlay\Core\Models\Enums\ReportStatus;
-use Aparlay\Core\Models\Enums\ReportType;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
@@ -31,11 +29,11 @@ class ReportRepository
      * @param ReportRequest $request
      * @return \Illuminate\Database\Eloquent\Model|Report|null
      */
-    public function createUserReport(User $user, ReportRequest $request)
+    public function createUserReport(User $user, ReportDTO $reportDTO)
     {
         try {
             return Report::create([
-                'reason' => $request->post('reason'),
+                'reason' => $reportDTO->reason,
                 'type' => ReportType::USER->value,
                 'status' => ReportStatus::REPORTED->value,
                 'user_id' => new ObjectId($user->_id),
@@ -54,11 +52,11 @@ class ReportRepository
      * @param ReportRequest $request
      * @return \Illuminate\Database\Eloquent\Model|Report|null
      */
-    public function createMediaReport(Media $media, ReportRequest $request)
+    public function createMediaReport(Media $media, ReportDTO $reportDTO)
     {
         try {
             return Report::create([
-                'reason' => $request->post('reason'),
+                'reason' => $reportDTO->reason,
                 'type' => ReportType::MEDIA->value,
                 'status' => ReportStatus::REPORTED->value,
                 'media_id' => new ObjectId($media->_id),
