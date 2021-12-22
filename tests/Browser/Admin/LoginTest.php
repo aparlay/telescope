@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Tests\Browser\Admin;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Tests\DuskTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
@@ -48,7 +49,7 @@ class LoginTest extends DuskTestCase
     {
         $super_admin = User::factory()->create([
             'email' => uniqid('alua_').'@aparly.com',
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'type' => 1,
             'password_hash' => Hash::make('password'),
             'email_verified' => true,

@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
-use MongoDB\BSON\ObjectId;
-
 trait PermissionScope
 {
     use BaseScope;

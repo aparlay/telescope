@@ -5,7 +5,6 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 

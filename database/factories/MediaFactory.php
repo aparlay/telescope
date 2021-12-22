@@ -6,8 +6,6 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 use Str;
 

@@ -2,10 +2,30 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-class UserInterestedIn extends BaseEnum
+enum UserInterestedIn: int implements Enum
 {
-    public const INTERESTED_IN_FEMALE = 0;
-    public const INTERESTED_IN_MALE = 1;
-    public const INTERESTED_IN_TRANSGENDER = 2;
-    public const INTERESTED_IN_COUPLE = 3;
+    case FEMALE = 0;
+    case MALE = 1;
+    case TRANSGENDER = 2;
+    case COUPLE = 3;
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::FEMALE => __('female'),
+            self::MALE => __('male'),
+            self::TRANSGENDER => __('transgender'),
+            self::COUPLE => __('couple'),
+        };
+    }
+
+    public function badgeColor(): string
+    {
+        return match ($this) {
+            self::FEMALE => 'info',
+            self::MALE => 'success',
+            self::TRANSGENDER => 'warning',
+            self::COUPLE => 'indigo',
+        };
+    }
 }

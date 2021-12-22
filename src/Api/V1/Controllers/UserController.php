@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Api\V1\Services\UserService;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -95,8 +96,8 @@ class UserController extends Controller
             }
             /* Update User Profile Information */
             $user->fill($request->all());
-            if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
-                $user->status = User::STATUS_ACTIVE;
+            if ($user->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
+                $user->status = UserStatus::ACTIVE->value;
             }
             $user->save();
         }

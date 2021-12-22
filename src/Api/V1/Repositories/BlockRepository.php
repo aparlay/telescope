@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Repositories;
 
-use Aparlay\Core\Admin\Http\Middleware\Authenticate;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;

@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
+use Aparlay\Core\Api\V1\Dto\ReportDTO;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\ReportRequest;
@@ -29,7 +30,7 @@ class ReportController extends Controller
             return $this->error('You cannot report this user at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
-        $report = $this->reportService->createUserReport($user, $request);
+        $report = $this->reportService->createUserReport($user, ReportDTO::fromRequest($request));
 
         return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
     }
@@ -43,7 +44,7 @@ class ReportController extends Controller
             return $this->error('You cannot report this video at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
-        $report = $this->reportService->createMediaReport($media, $request);
+        $report = $this->reportService->createMediaReport($media, ReportDTO::fromRequest($request));
 
         return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
     }

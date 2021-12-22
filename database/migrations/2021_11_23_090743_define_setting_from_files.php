@@ -1,7 +1,6 @@
 <?php
 
 use Aparlay\Core\Models\Setting;
-use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use MongoDB\BSON\ObjectId;
 

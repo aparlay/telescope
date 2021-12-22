@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Database\Factories\VersionFactory;
+use Aparlay\Core\Database\Factories\SettingFactory;
 use Aparlay\Core\Models\Scopes\VersionScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -61,6 +61,6 @@ class Setting extends BaseModel
      */
     protected static function newFactory(): Factory
     {
-        return SetVersionFactory::new();
+        return SettingFactory::new();
     }
 }
