@@ -104,6 +104,6 @@ class MediaRepository
 
     public function pending($page)
     {
-        return $this->model->Completed()->recentFirst()->paginate(1, ['*'], 'page', $page);
+        return $this->model->completed()->recentFirst()->paginate(1, ['*'], 'page', $page);
     }
 }
