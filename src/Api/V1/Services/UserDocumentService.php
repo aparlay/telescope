@@ -6,7 +6,7 @@ use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
 use Aparlay\Core\Api\V1\Repositories\UserDocumentRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Constants\StorageType;
-use Aparlay\Core\Jobs\DeleteTempFileAfterUpload;
+use Aparlay\Core\Jobs\DeleteFileJob;
 use Aparlay\Core\Jobs\UploadFileJob;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Http\UploadedFile;
@@ -76,7 +76,7 @@ class UserDocumentService
             function () use ($userDocument, $documentData) {
                 $userDocument->fill($documentData->all())->save();
             },
-            new DeleteTempFileAfterUpload($fileDisk, $path),
+            new DeleteFileJob($fileDisk, $path),
         ])->delay(10)->onQueue('low');
     }
 }
