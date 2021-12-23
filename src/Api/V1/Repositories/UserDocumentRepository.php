@@ -35,6 +35,4 @@ class UserDocumentRepository
             throw $e;
         }
     }
-
-
 }
