@@ -24,10 +24,10 @@ class UploadFileService
 
         $extension = $file->getClientOriginalExtension();
         $this->baseFileName = uniqid($this->filePrefix, false).'.'.$extension;
-        $filePath = 'temp/'. $this->baseFileName;
+        $filePath = 'temp/'.$this->baseFileName;
         $wasSaved = Storage::disk($this->disk)->put($filePath, $file->getContent());
 
-        if (!$wasSaved) {
+        if (! $wasSaved) {
             throw new \ErrorException('Could not upload file, please try again');
         }
 
@@ -42,7 +42,6 @@ class UploadFileService
         return $this->baseFileName;
     }
 
-
     /**
      * @return mixed|string
      */
@@ -50,7 +49,6 @@ class UploadFileService
     {
         return $this->disk;
     }
-
 
     /**
      * @param mixed $filePrefix
@@ -67,5 +65,4 @@ class UploadFileService
     {
         return $this->filePrefix ?? uniqid();
     }
-
 }

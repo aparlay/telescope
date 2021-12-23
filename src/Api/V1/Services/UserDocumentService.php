@@ -12,27 +12,24 @@ use Aparlay\Core\Models\UserDocument;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 
-
 class UserDocumentService
 {
     use HasUserTrait;
 
     /**
-     * @var $userDocumentRepository UserDocumentRepository
+     * @var UserDocumentRepository
      */
     private $userDocumentRepository;
 
     /**
-     * @var $uploadFileService UploadFileService
+     * @var UploadFileService
      */
     private $uploadFileService;
-
 
     public function construct(
         UserDocumentRepository $userDocumentRepository,
         UploadFileService $uploadFileService
-    )
-    {
+    ) {
         $this->userDocumentRepository = $userDocumentRepository;
         $this->uploadFileService = $uploadFileService;
     }
@@ -45,19 +42,18 @@ class UserDocumentService
         $documentDto->setUser($this->getUser());
         $userDocument = $this->userDocumentRepository->create($documentDto);
 
-        if (!\App::environment('testing')) {
+        if (! \App::environment('testing')) {
             return $userDocument;
         }
 
         $this->uploadDocument($documentDto->file, $userDocument);
-
 
         return $userDocument;
     }
 
     private function uploadDocument(UploadedFile $file, UserDocument $userDocument)
     {
-        $filePrefix = 'user_document_' . $this->getUser()->id;
+        $filePrefix = 'user_document_'.$this->getUser()->id;
 
         $this->uploadFileService->setFilePrefix($filePrefix);
         $path = $this->uploadFileService->upload($file, $filePrefix);
@@ -77,6 +73,5 @@ class UserDocumentService
             },
             new DeleteTempFileAfterUpload($fileDisk, $path),
         ])->delay(1);
-
     }
 }
