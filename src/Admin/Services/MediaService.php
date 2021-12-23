@@ -179,7 +179,8 @@ class MediaService extends AdminBaseService
         $this->mediaRepository->create($data);
     }
 
-    public function countCollection() {
+    public function countCollection()
+    {
         $this->mediaRepository->countCollection();
     }
 }
