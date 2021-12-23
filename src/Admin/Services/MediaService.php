@@ -65,8 +65,7 @@ class MediaService extends AdminBaseService
             $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
             $media->sort_score = $media->sort_score ? round($media->sort_score) : ActionButtonBladeComponent::defaultValueNotSet();
             $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
-            $resource = request()->get('moderation') ?? 'media';
-            $media->action = ActionButtonBladeComponent::getViewActionButton($media->_id, $resource);
+            $media->action = ActionButtonBladeComponent::getViewActionButton($media->_id, 'media');
             $media->date_formatted = $media->created_at->toDateTimeString();
             $media->like_count = $media->like_count ?? ActionButtonBladeComponent::defaultValueNotSet();
             $media->visit_count = $media->visit_count ?? ActionButtonBladeComponent::defaultValueNotSet();
@@ -178,5 +177,9 @@ class MediaService extends AdminBaseService
         ];
 
         $this->mediaRepository->create($data);
+    }
+
+    public function countCollection() {
+        $this->mediaRepository->countCollection();
     }
 }

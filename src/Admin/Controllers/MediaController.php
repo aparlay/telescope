@@ -62,17 +62,6 @@ class MediaController extends Controller
         return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'nextPage', 'prevPage'));
     }
 
-    public function viewModeration(Media $media)
-    {
-        $media = new MediaResource($this->mediaService->find($media->_id));
-        $scoreTypes = $media->scores ?? [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
-
-        $nextPage = Session::get('nextPage') ? Session::get('nextPage') : 2;
-        $prevPage = Session::get('prevPage') ? Session::get('prevPage') : $this->mediaService->countCollection();
-
-        return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'nextPage', 'prevPage'));
-    }
-
     /**
      * @param MediaUpdateRequest $request
      * @param $id
