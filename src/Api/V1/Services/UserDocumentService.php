@@ -54,7 +54,7 @@ class UserDocumentService
 
     private function uploadDocument(UploadedFile $file, UserDocument $userDocument)
     {
-        $filePrefix = 'user_document_' . $this->getUser()->id;
+        $filePrefix = 'user_document_'.$this->getUser()->id;
 
         $this->uploadFileService->setFilePrefix($filePrefix);
         $path = $this->uploadFileService->upload($file);
@@ -78,6 +78,5 @@ class UserDocumentService
             },
             new DeleteTempFileAfterUpload($fileDisk, $path),
         ])->delay(10)->onQueue('low');
-
     }
 }

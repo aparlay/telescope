@@ -17,7 +17,6 @@ class UploadFileService
     protected $size;
     protected $md5;
 
-
     /**
      * @param $disk
      */
@@ -33,7 +32,7 @@ class UploadFileService
         }
         $extension = $file->getClientOriginalExtension();
         $this->baseFileName = uniqid($this->filePrefix, false).'.'.$extension;
-        $filePath = $path . DIRECTORY_SEPARATOR . $this->baseFileName;
+        $filePath = $path.DIRECTORY_SEPARATOR.$this->baseFileName;
 
         $wasSaved = Storage::disk($this->disk)->put($filePath, $file->getContent());
         $this->md5 = File::hash(Storage::disk($this->disk)->path($filePath));
@@ -71,8 +70,6 @@ class UploadFileService
     {
         return $this->md5;
     }
-
-
 
     /**
      * @return mixed
