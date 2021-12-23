@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
@@ -61,7 +62,7 @@ class DeleteUserMedia implements ShouldBeUnique
     {
         Media::creator($this->userId)->chunk(200, function ($models) {
             foreach ($models as $model) {
-                $model->status = Media::STATUS_USER_DELETED;
+                $model->status = MediaStatus::USER_DELETED->value;
                 $model->save();
             }
         });

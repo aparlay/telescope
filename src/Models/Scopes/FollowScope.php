@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
-use Aparlay\Core\Models\Follow;
+use Aparlay\Core\Models\Enums\FollowStatus;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
 
@@ -51,6 +51,6 @@ trait FollowScope
 
     public function scopeAccepted(Builder $query): Builder
     {
-        return $query->where('status', Follow::STATUS_ACCEPTED);
+        return $query->where('status', FollowStatus::ACCEPTED->value);
     }
 }

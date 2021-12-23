@@ -2,12 +2,36 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-class UserStatus extends BaseEnum
+enum UserStatus: int implements Enum
 {
-    public const STATUS_PENDING = 0;
-    public const STATUS_VERIFIED = 1;
-    public const STATUS_ACTIVE = 2;
-    public const STATUS_SUSPENDED = 3;
-    public const STATUS_BLOCKED = 4;
-    public const STATUS_DEACTIVATED = 10;
+    case PENDING = 0;
+    case VERIFIED = 1;
+    case ACTIVE = 2;
+    case SUSPENDED = 3;
+    case BLOCKED = 4;
+    case DEACTIVATED = 10;
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::PENDING => __('pending'),
+            self::VERIFIED => __('verified'),
+            self::ACTIVE => __('active'),
+            self::SUSPENDED => __('suspended'),
+            self::BLOCKED => __('blocked'),
+            self::DEACTIVATED => __('deactivated'),
+        };
+    }
+
+    public function badgeColor(): string
+    {
+        return match ($this) {
+            self::PENDING => 'warning',
+            self::VERIFIED => 'info',
+            self::ACTIVE => 'success',
+            self::SUSPENDED => 'danger',
+            self::BLOCKED => 'indigo',
+            self::DEACTIVATED => 'indigo',
+        };
+    }
 }

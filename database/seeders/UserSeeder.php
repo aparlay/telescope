@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Database\Seeders;
 
+use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -15,6 +16,6 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::factory()->count(20)->create();
-        User::factory()->count(5)->create(['type' => User::TYPE_ADMIN]);
+        User::factory()->count(5)->create(['type' => UserType::ADMIN->value]);
     }
 }

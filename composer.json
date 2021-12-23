@@ -62,7 +62,6 @@
         "ext-json": "*",
         "ext-mongodb": "*",
         "ext-openssl": "*",
-        "ext-swoole": "*",
         "aparlay/telescope": "^4.6.1",
         "fideloper/proxy": "^4.4",
         "flowjs/flow-php-server": "^1.0",

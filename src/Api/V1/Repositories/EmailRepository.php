@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Email;
+use Aparlay\Core\Models\Enums\EmailStatus;
+use Aparlay\Core\Models\Enums\EmailType;
 use Illuminate\Support\Facades\Log;
 
 class EmailRepository
@@ -24,8 +26,8 @@ class EmailRepository
                     'username' => $email['user']['username'],
                     'avatar' => $email['user']['avatar'],
                 ],
-                'status' => Email::STATUS_QUEUED,
-                'type' => Email::TYPE_OTP,
+                'status' => EmailStatus::QUEUED->value,
+                'type' => EmailType::OTP->value,
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

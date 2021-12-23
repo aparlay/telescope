@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -17,7 +18,7 @@ class LoginTest extends ApiTestCase
     {
         $activeUser = User::factory()->create([
             'email' => uniqid('alua_').'@aparly.com',
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'password' => 'password',
             'settings' => ['otp' => false],
         ]);
@@ -129,7 +130,7 @@ class LoginTest extends ApiTestCase
     public function requestOtp()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_PENDING,
+            'status' => UserStatus::PENDING->value,
             'setting' => [
                 'otp' => true,
             ],
@@ -158,7 +159,7 @@ class LoginTest extends ApiTestCase
     public function validateOtpWithLogin()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_PENDING,
+            'status' => UserStatus::PENDING->value,
             'setting' => [
                 'otp' => true,
             ],
@@ -207,7 +208,7 @@ class LoginTest extends ApiTestCase
     public function inValidateOtpWithLogin()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_PENDING,
+            'status' => UserStatus::PENDING->value,
             'setting' => [
                 'otp' => true,
             ],

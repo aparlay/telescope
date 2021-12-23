@@ -24,6 +24,10 @@ class MediaLikeController extends Controller
     {
         $this->authorize('create', [MediaLike::class, $media]);
 
+        if (auth()->check()) {
+            $this->mediaLikeService->setUser(auth()->user());
+        }
+
         $response = $this->mediaLikeService->create($media);
 
         return $this->response(new MediaLikeResource($response['data']), '', $response['statusCode']);
@@ -35,6 +39,10 @@ class MediaLikeController extends Controller
     public function destroy(Media $media): Response
     {
         $this->authorize('delete', [MediaLike::class, $media]);
+
+        if (auth()->check()) {
+            $this->mediaLikeService->setUser(auth()->user());
+        }
 
         // Unlike the media or throw exception if not liked
         $response = $this->mediaLikeService->unLike($media);

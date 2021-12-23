@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Admin\Models;
 
+use Aparlay\Core\Models\Enums\UserGender;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\User as UserBase;
 
@@ -48,48 +50,32 @@ class User extends UserBase
     /**
      * @return string
      */
-    public function getStatusColorAttribute()
+    public function getStatusColorAttribute(): string
     {
-        $colors = [
-            self::STATUS_PENDING => 'secondary',
-            self::STATUS_VERIFIED => 'success',
-            self::STATUS_ACTIVE => 'primary',
-            self::STATUS_SUSPENDED => 'warning',
-            self::STATUS_BLOCKED => 'danger',
-            self::STATUS_DEACTIVATED => 'danger',
-        ];
-
-        return $colors[$this->status];
+        return UserStatus::from($this->status)->badgeColor();
     }
 
     /**
      * @return string
      */
-    public function getStatusNameAttribute()
+    public function getStatusNameAttribute(): string
     {
-        return $this->getStatuses()[$this->status];
+        return UserStatus::from($this->status)->label();
     }
 
     /**
      * @return string
      */
-    public function getGenderColorAttribute()
+    public function getGenderColorAttribute(): string
     {
-        $colors = [
-            self::GENDER_MALE => 'success',
-            self::GENDER_FEMALE => 'primary',
-            self::GENDER_NOT_MENTION => 'info',
-            self::GENDER_TRANSGENDER => 'indigo',
-        ];
-
-        return $colors[$this->gender];
+        return UserGender::from($this->gender)->badgeColor();
     }
 
     /**
      * @return string
      */
-    public function getGenderNameAttribute()
+    public function getGenderNameAttribute(): string
     {
-        return $this->getGenders()[$this->gender];
+        return UserGender::from($this->gender)->label();
     }
 }

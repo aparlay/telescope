@@ -1,6 +1,7 @@
 <?php
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Models\Enums\UserType;
 use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
@@ -102,7 +103,7 @@ class DefineRolesPermissions extends Migration
             }
         }
 
-        foreach (User::where('type', User::TYPE_ADMIN)->limit(5)->get() as $user) {
+        foreach (User::where('type', UserType::ADMIN->value)->limit(5)->get() as $user) {
             $user->assignRole('super-administrator');
         }
 

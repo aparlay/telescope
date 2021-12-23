@@ -4,6 +4,7 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\FollowFactory;
+use Aparlay\Core\Models\Enums\FollowStatus;
 use Aparlay\Core\Models\Scopes\FollowScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -35,9 +36,6 @@ class Follow extends BaseModel
     use HasFactory;
     use Notifiable;
     use FollowScope;
-
-    public const STATUS_PENDING = 0;
-    public const STATUS_ACCEPTED = 1;
 
     /**
      * The collection associated with the model.
@@ -79,14 +77,6 @@ class Follow extends BaseModel
         'is_deleted' => 'boolean',
         'status' => 'integer',
     ];
-
-    public static function getStatuses(): array
-    {
-        return [
-            self::STATUS_PENDING => __('pending'),
-            self::STATUS_ACCEPTED => __('accepted'),
-        ];
-    }
 
     /**
      * Create a new factory instance for the model.
@@ -135,5 +125,16 @@ class Follow extends BaseModel
             Redis::sAdd($cacheKey, ...$followerIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            FollowStatus::PENDING->value => FollowStatus::PENDING->label(),
+            FollowStatus::ACCEPTED->value => FollowStatus::ACCEPTED->label(),
+        ];
     }
 }

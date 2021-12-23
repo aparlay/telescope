@@ -2,10 +2,13 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Api\V1\Notifications\UserDeleteMedia;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaLike;
 use Aparlay\Core\Jobs\UploadMedia;
+use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Exception;
@@ -75,8 +78,8 @@ class MediaObserver extends BaseModelObserver
             $model->file = str_replace(config('app.cdn.videos'), '', $model->file);
         }
 
-        if ($model->status === Media::STATUS_DENIED) {
-            $model->visibility = Media::VISIBILITY_PRIVATE;
+        if ($model->status === MediaStatus::DENIED->value) {
+            $model->visibility = MediaVisibility::PRIVATE->value;
         }
     }
 
@@ -103,7 +106,7 @@ class MediaObserver extends BaseModelObserver
      */
     public function saved($media): void
     {
-        if ($media->status === Media::STATUS_USER_DELETED && $media->isDirty('status')) {
+        if ($media->status === MediaStatus::USER_DELETED->value && $media->isDirty('status')) {
             $media->userObj->media_count = Media::creator($media->creator['_id'])->availableForOwner()->count();
 
             $file = config('app.cdn.videos').$media->file;
@@ -144,5 +147,7 @@ class MediaObserver extends BaseModelObserver
         $creatorUser->save();
 
         DeleteMediaLike::dispatch((string) $media->_id)->onQueue('low');
+
+        $creatorUser->notify(new UserDeleteMedia());
     }
 }
