@@ -10,7 +10,6 @@ use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\UploadMedia;
 use MongoDB\BSON\ObjectId;
-use Session;
 
 class MediaService extends AdminBaseService
 {

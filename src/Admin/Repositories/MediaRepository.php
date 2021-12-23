@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Media;
-use Aparlay\Core\Models\Enums\MediaStatus;
 
 class MediaRepository
 {
