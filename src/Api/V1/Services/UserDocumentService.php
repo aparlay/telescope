@@ -11,6 +11,7 @@ use Aparlay\Core\Jobs\UploadFileJob;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Storage;
 
 
 class UserDocumentService
@@ -28,7 +29,7 @@ class UserDocumentService
     private $uploadFileService;
 
 
-    public function construct(
+    public function __construct(
         UserDocumentRepository $userDocumentRepository,
         UploadFileService $uploadFileService
     )
@@ -45,12 +46,11 @@ class UserDocumentService
         $documentDto->setUser($this->getUser());
         $userDocument = $this->userDocumentRepository->create($documentDto);
 
-        if (!\App::environment('testing')) {
+        if (\App::environment('testing')) {
             return $userDocument;
         }
 
         $this->uploadDocument($documentDto->file, $userDocument);
-
 
         return $userDocument;
     }
@@ -60,10 +60,15 @@ class UserDocumentService
         $filePrefix = 'user_document_' . $this->getUser()->id;
 
         $this->uploadFileService->setFilePrefix($filePrefix);
-        $path = $this->uploadFileService->upload($file, $filePrefix);
+        $path = $this->uploadFileService->upload($file);
 
         $fileDisk = $this->uploadFileService->getDisk();
-        $baseFileName = $this->uploadFileService->getBaseFileName();
+
+        $documentData = collect([
+            'file' => $this->uploadFileService->getBaseFileName(),
+            'md5' => $this->uploadFileService->getMd5(),
+            'size' => $this->uploadFileService->getSize(),
+        ]);
 
         Bus::chain([
             new UploadFileJob(
@@ -71,12 +76,11 @@ class UserDocumentService
                 $fileDisk,
                 collect([StorageType::B2_AVATARS]) //@todo change storages to B2_DOCUMENTS storage
             ),
-            function () use ($userDocument, $baseFileName) {
-                $userDocument->file = $baseFileName;
-                $userDocument->save();
+            function () use ($userDocument, $documentData) {
+                $userDocument->fill($documentData->all())->save();
             },
             new DeleteTempFileAfterUpload($fileDisk, $path),
-        ])->delay(1);
+        ])->dispatch();
 
     }
 }

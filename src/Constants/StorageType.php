@@ -4,6 +4,7 @@ namespace Aparlay\Core\Constants;
 
 final class StorageType
 {
+    const UPLOAD = 'upload';
     const GC_COVERS = 'gc-covers';
     const MEDIA_FTP = 'media-ftp';
     const GC_VIDEOS = 'gc-videos';

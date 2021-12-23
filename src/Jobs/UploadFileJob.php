@@ -81,6 +81,7 @@ class UploadFileJob implements ShouldQueue
                 }
             });
 
+
         } catch (Throwable $throwable) {
             Log::error('Unable to save file: ' . $throwable->getMessage());
         }
