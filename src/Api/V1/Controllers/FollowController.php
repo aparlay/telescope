@@ -23,6 +23,10 @@ class FollowController extends Controller
             return $this->error('You cannot follow this user at the moment.', [], Response::HTTP_FORBIDDEN);
         }
 
+        if (auth()->check()) {
+            $this->followService->setUser(auth()->user());
+        }
+
         $response = $this->followService->follow($user);
 
         return $this->response(new FollowResource($response['data']), '', $response['statusCode']);
@@ -31,6 +35,10 @@ class FollowController extends Controller
     public function destroy(User $user): Response
     {
         // Unfollow the user or throw exception if not followed
+
+        if (auth()->check()) {
+            $this->followService->setUser(auth()->user());
+        }
         $response = $this->followService->unfollow($user);
 
         return $this->response($response, '', Response::HTTP_NO_CONTENT);

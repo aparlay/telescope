@@ -83,16 +83,18 @@ class UserController extends Controller
      */
     public function update(MeRequest $request): object
     {
-        $user = auth()->user();
+        if (auth()->check()) {
+            $this->userService->setUser(auth()->user());
+        }
         /* Check the update permission */
         $this->authorize('update', User::class);
 
         /* Update User Avatar */
         if ($request->hasFile('avatar')) {
-            $this->userService->uploadAvatar($request, $user);
+            $this->userService->uploadAvatar($request);
         } else {
             if ($request->has('avatar') && empty($request->avatar)) {
-                $request->merge(['avatar' => $this->userService->changeDefaultAvatar($request)]);
+                $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
             /* Update User Profile Information */
             $user->fill($request->all());

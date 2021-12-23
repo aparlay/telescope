@@ -14,14 +14,13 @@ class BlockController extends Controller
     public function __construct(BlockService $blockService)
     {
         $this->blockService = $blockService;
-
-        if (auth()->check()) {
-            $blockService->setUser(auth()->user());
-        }
     }
 
     public function store(User $user): Response
     {
+        if (auth()->check()) {
+            $this->blockService->setUser(auth()->user());
+        }
         $response = $this->blockService->create($user);
 
         return $this->response(new BlockResource($response['data']), '', $response['statusCode']);
@@ -30,6 +29,10 @@ class BlockController extends Controller
     public function destroy(User $user): Response
     {
         // Unblock the user or throw exception if not Blocked
+
+        if (auth()->check()) {
+            $this->blockService->setUser(auth()->user());
+        }
         $response = $this->blockService->unBlock($user);
 
         return $this->response($response, '', Response::HTTP_NO_CONTENT);

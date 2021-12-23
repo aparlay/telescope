@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Services;
 use Aparlay\Core\Api\V1\Models\Login;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\UserRepository;
+use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UserService
 {
+    use HasUserTrait;
     protected UserRepository $userRepository;
 
     public function __construct()
@@ -68,8 +70,9 @@ class UserService
      * @return bool
      * @throws Exception
      */
-    public function uploadAvatar(Request $request, User | Authenticatable $user)
+    public function uploadAvatar(Request $request)
     {
+        $user = $this->getUser();
         if (! $request->hasFile('avatar') && ! $request->file('avatar')->isValid()) {
             return false;
         }
@@ -176,7 +179,7 @@ class UserService
     public function changeDefaultAvatar()
     {
         /* Set gender by default value */
-        $gender = auth()->user()->gender ?? UserGender::MALE->value;
+        $gender = $this->getUser()->gender ?? UserGender::MALE->value;
 
         /* Set avatar based on Gender */
         $femaleFilename = 'default_fm_'.random_int(1, 60).'.png';
