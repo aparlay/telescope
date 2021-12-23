@@ -179,5 +179,4 @@ class MediaService extends AdminBaseService
 
         $this->mediaRepository->create($data);
     }
-    
 }

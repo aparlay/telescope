@@ -149,5 +149,4 @@ class MediaController extends Controller
 
         return redirect()->back()->with(['success' => 'Video uploaded successfully']);
     }
-
 }
