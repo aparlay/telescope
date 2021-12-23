@@ -150,20 +150,4 @@ class MediaController extends Controller
         return redirect()->back()->with(['success' => 'Video uploaded successfully']);
     }
 
-    public function listing($page = 1)
-    {
-        $models = $this->mediaService->mediaListing($page);
-
-        if ($models->currentPage() > $models->lastPage()) {
-            return redirect()->route('core.admin.media.index');
-        }
-
-        $currentPage = $models->currentPage();
-        $nextPage = $currentPage === $models->lastPage() ? 1 : $currentPage + 1;
-        $prevPage = $currentPage === 1 ? $models->lastPage() : $currentPage - 1;
-
-        foreach ($models as $model) {
-            return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(['prevPage' =>  $prevPage, 'nextPage' => $nextPage]);
-        }
-    }
 }
