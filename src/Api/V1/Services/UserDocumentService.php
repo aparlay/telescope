@@ -21,6 +21,11 @@ class UserDocumentService
             'type' => $documentDto->type,
             'status' => UserDocumentStatus::CREATED->value,
             'user_id' => new ObjectId($this->getUser()->id),
+            'creator' => [
+                '_id' => new ObjectId($this->getUser()->_id),
+                'username' => $this->getUser()->username,
+                'avatar' => $this->getUser()->avatar,
+            ],
         ]);
 
         return $userDocument;

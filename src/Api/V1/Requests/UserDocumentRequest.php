@@ -16,7 +16,10 @@ class UserDocumentRequest extends BaseFormRequest
     {
         return [
             'file' => ['sometimes', 'file'],
-            'type' => Rule::in([UserDocumentType::ID_CARD->value, UserDocumentType::SELFIE->value]),
+            'type' => [
+                'required',
+                Rule::in([UserDocumentType::ID_CARD->value, UserDocumentType::SELFIE->value])
+            ],
         ];
     }
 }

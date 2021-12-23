@@ -4,11 +4,8 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
 use Aparlay\Core\Api\V1\Requests\UserDocumentRequest;
-use Aparlay\Core\Api\V1\Resources\MediaLikeResource;
 use Aparlay\Core\Api\V1\Resources\UserDocumentResource;
 use Aparlay\Core\Api\V1\Services\UserDocumentService;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class UserDocumentController extends Controller
 {
