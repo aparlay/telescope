@@ -13,27 +13,24 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 
-
 class UserDocumentService
 {
     use HasUserTrait;
 
     /**
-     * @var $userDocumentRepository UserDocumentRepository
+     * @var UserDocumentRepository
      */
     private $userDocumentRepository;
 
     /**
-     * @var $uploadFileService UploadFileService
+     * @var UploadFileService
      */
     private $uploadFileService;
 
-
-    public function __construct(
+    public function construct(
         UserDocumentRepository $userDocumentRepository,
         UploadFileService $uploadFileService
-    )
-    {
+    ) {
         $this->userDocumentRepository = $userDocumentRepository;
         $this->uploadFileService = $uploadFileService;
     }
@@ -80,7 +77,7 @@ class UserDocumentService
                 $userDocument->fill($documentData->all())->save();
             },
             new DeleteTempFileAfterUpload($fileDisk, $path),
-        ])->dispatch();
+        ])->delay(10)->onQueue('low');
 
     }
 }

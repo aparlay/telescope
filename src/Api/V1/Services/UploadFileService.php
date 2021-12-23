@@ -41,7 +41,7 @@ class UploadFileService
         $this->mime = $file->getClientMimeType();
         $this->size = $file->getSize();
 
-        if (!$wasSaved) {
+        if (! $wasSaved) {
             throw new \ErrorException('Could not upload file, please try again');
         }
 
@@ -82,7 +82,6 @@ class UploadFileService
         return $this->baseFileName;
     }
 
-
     /**
      * @return mixed|string
      */
@@ -90,7 +89,6 @@ class UploadFileService
     {
         return $this->disk;
     }
-
 
     /**
      * @param mixed $filePrefix
@@ -107,5 +105,4 @@ class UploadFileService
     {
         return $this->filePrefix ?? uniqid();
     }
-
 }

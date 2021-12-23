@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 /**
- * This job could be used to upload files to any storage
+ * This job could be used to upload files to any storage.
  */
 class UploadFileJob implements ShouldQueue
 {
@@ -25,13 +25,11 @@ class UploadFileJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-
     private string $fileName;
     private string $fileDisk;
     private Collection $storages;
 
     private $model;
-
 
     /**
      * The number of times the job may be attempted.
@@ -58,11 +56,10 @@ class UploadFileJob implements ShouldQueue
      * @throws Exception
      */
     public function __construct(
-        string     $fileName,
-        string     $fileDisk,
+        string $fileName,
+        string $fileDisk,
         Collection $storages
-    )
-    {
+    ) {
         $this->onQueue('low');
         $this->fileDisk = $fileDisk;
         $this->fileName = $fileName;
@@ -76,16 +73,13 @@ class UploadFileJob implements ShouldQueue
             $this->storages->each(function ($storageName) use ($filename) {
                 $storage = Storage::disk($storageName);
                 $storage->writeStream($filename, Storage::disk($this->fileDisk)->readStream($this->fileName));
-                if (!$storage->exists($filename)) {
+                if (! $storage->exists($filename)) {
                     throw new \Error("{$filename} was be uploaded to {$storageName}");
                 }
             });
-
-
         } catch (Throwable $throwable) {
-            Log::error('Unable to save file: ' . $throwable->getMessage());
+            Log::error('Unable to save file: '.$throwable->getMessage());
         }
-
     }
 
     /**
