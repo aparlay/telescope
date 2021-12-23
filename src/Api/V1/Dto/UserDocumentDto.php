@@ -42,6 +42,4 @@ class UserDocumentDto extends DataTransferObject
     {
         $this->user = $user;
     }
-
-
 }

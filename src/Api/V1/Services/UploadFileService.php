@@ -26,10 +26,10 @@ class UploadFileService
         }
         $extension = $file->getClientOriginalExtension();
         $fileName = uniqid($this->filePrefix, false).'.'.$extension;
-        $filePath = 'temp/'. $fileName;
+        $filePath = 'temp/'.$fileName;
         $wasSaved = Storage::disk($this->disk)->put($filePath, $file->getContent());
 
-        if (!$wasSaved) {
+        if (! $wasSaved) {
             throw new \ErrorException('Could not upload file, please try again');
         }
 
@@ -43,7 +43,4 @@ class UploadFileService
     {
         return $this->disk;
     }
-
-
-
 }

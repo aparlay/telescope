@@ -1,4 +1,5 @@
 <?php
+
 namespace Aparlay\Core\Constants;
 
 final class StorageType

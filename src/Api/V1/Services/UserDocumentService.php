@@ -25,7 +25,7 @@ class UserDocumentService
 
         if (! config('app.is_testing')) {
             $uploadFileService = app()->make(UploadFileService::class, [
-                'filePrefix' => 'user_document_' . $this->getUser()->id,
+                'filePrefix' => 'user_document_'.$this->getUser()->id,
             ]);
             $uploadFileService->setUser($this->getUser());
             $path = $uploadFileService->upload($documentDto->file);

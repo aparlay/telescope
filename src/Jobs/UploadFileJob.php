@@ -61,8 +61,7 @@ class UploadFileJob implements ShouldQueue
         string $file,
         $disk,
         $storages = []
-    )
-    {
+    ) {
         $this->onQueue('low');
         $this->file = $file;
         $this->user_id = $model->user_id;
