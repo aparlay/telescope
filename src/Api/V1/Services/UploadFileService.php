@@ -2,21 +2,18 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
-use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class UploadFileService
 {
-    use HasUserTrait;
-
     protected $disk;
     protected $filePrefix;
+    protected $baseFileName;
 
     public function __construct($disk = 'upload', $filePrefix = 'waptap_')
     {
         $this->disk = $disk;
-        $this->filePrefix = $filePrefix;
     }
 
     public function upload(UploadedFile $file)
@@ -24,9 +21,10 @@ class UploadFileService
         if (! $file->isValid()) {
             return false;
         }
+
         $extension = $file->getClientOriginalExtension();
-        $fileName = uniqid($this->filePrefix, false).'.'.$extension;
-        $filePath = 'temp/'. $fileName;
+        $this->baseFileName = uniqid($this->filePrefix, false).'.'.$extension;
+        $filePath = 'temp/'. $this->baseFileName;
         $wasSaved = Storage::disk($this->disk)->put($filePath, $file->getContent());
 
         if (!$wasSaved) {
@@ -37,6 +35,15 @@ class UploadFileService
     }
 
     /**
+     * @return mixed
+     */
+    public function getBaseFileName()
+    {
+        return $this->baseFileName;
+    }
+
+
+    /**
      * @return mixed|string
      */
     public function getDisk(): mixed
@@ -45,5 +52,20 @@ class UploadFileService
     }
 
 
+    /**
+     * @param mixed $filePrefix
+     */
+    public function setFilePrefix($filePrefix): void
+    {
+        $this->filePrefix = $filePrefix;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFilePrefix()
+    {
+        return $this->filePrefix ?? uniqid();
+    }
 
 }

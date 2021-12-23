@@ -2,21 +2,22 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Constants\StorageType;
-use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Filesystem\FileExistsException;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
+/**
+ * This job could be used to upload files to any storage
+ */
 class UploadFileJob implements ShouldQueue
 {
     use Dispatchable;
@@ -24,13 +25,13 @@ class UploadFileJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public User $user;
 
-    public string $file;
-    public string $user_id;
-    public $disk;
+    private string $fileName;
+    private string $fileDisk;
+    private Collection $storages;
 
     private $model;
+
 
     /**
      * The number of times the job may be attempted.
@@ -57,49 +58,37 @@ class UploadFileJob implements ShouldQueue
      * @throws Exception
      */
     public function __construct(
-        $model,
-        string $file,
-        $disk,
-        $storages = []
+        string     $fileName,
+        string     $fileDisk,
+        Collection $storages
     )
     {
         $this->onQueue('low');
-        $this->file = $file;
-        $this->user_id = $model->user_id;
-        $this->user = User::user($this->user_id)->firstOrFail();
-        $this->model = $model;
-        $this->disk = $disk;
+        $this->fileDisk = $fileDisk;
+        $this->fileName = $fileName;
         $this->storages = $storages;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     *
-     * @throws FileExistsException
-     * @throws FileNotFoundException
-     * @throws Exception
-     */
     public function handle()
     {
-        $filename = basename($this->file);
+        try {
+            $filename = basename($this->fileName);
+            $this->storages->each(function ($storageName) use ($filename) {
+                $storage = Storage::disk($storageName);
+                $storage->writeStream($filename, Storage::disk($this->fileDisk)->readStream($this->fileName));
+                if (!$storage->exists($filename)) {
+                    throw new \Error("{$filename} was be uploaded to {$storageName}");
+                }
+            });
 
-        foreach ($this->storages as $storageName) {
-            $storage = Storage::disk($storageName);
-            $storage->writeStream($filename, Storage::disk($this->disk)->readStream($this->file));
+        } catch (Throwable $throwable) {
+            Log::error('Unable to save file: ' . $throwable->getMessage());
         }
 
-//        $this->model->file = Cdn::document($filename);
-//
-//        if ($this->user->save() && $b2->exists($filename) && $gc->exists($filename)) {
-//            //$deleteUploaded = new DeleteAvatar($this->file);
-//            //dispatch($deleteUploaded->delay(300)->onQueue('low'));
-//        }
     }
 
     /**
-     * @param  Throwable  $exception
+     * @param Throwable $exception
      */
     public function failed(Throwable $exception): void
     {
