@@ -24,7 +24,6 @@ class UserDocumentResource extends JsonResource
     {
         return [
             '_id' => (string) $this->_id,
-            'user' => $this->user,
             'type' => $this->type,
             'status' => $this->status,
         ];

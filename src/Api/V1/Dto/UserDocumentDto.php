@@ -10,6 +10,7 @@ class UserDocumentDto extends DataTransferObject
 {
     public $file;
     public $type;
+    private $user;
 
     /**
      * @param UserDocumentRequest $userDocumentRequest
@@ -25,4 +26,22 @@ class UserDocumentDto extends DataTransferObject
             ]
         );
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user): void
+    {
+        $this->user = $user;
+    }
+
+
 }
