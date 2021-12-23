@@ -29,7 +29,6 @@ class UploadFileJob implements ShouldQueue
     private string $fileDisk;
     private Collection $storages;
 
-    private $model;
 
     /**
      * The number of times the job may be attempted.
