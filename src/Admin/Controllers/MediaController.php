@@ -40,7 +40,7 @@ class MediaController extends Controller
     {
         $mediaStatuses = $this->mediaService->getMediaStatuses();
 
-        return view('default_view::admin.pages.moderation.index')->with([
+        return view('default_view::admin.pages.media.index')->with([
             'moderation' => true,
             'mediaStatuses' => $mediaStatuses,
         ]);
@@ -70,7 +70,7 @@ class MediaController extends Controller
         $nextPage = Session::get('nextPage') ? Session::get('nextPage') : 2;
         $prevPage = Session::get('prevPage') ? Session::get('prevPage') : $this->mediaService->countCollection();
 
-        return view('default_view::admin.pages.moderation.view', compact('media', 'scoreTypes', 'nextPage', 'prevPage'));
+        return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'nextPage', 'prevPage'));
     }
 
     /**
@@ -99,7 +99,7 @@ class MediaController extends Controller
         $models = $this->mediaService->pending($page);
 
         if ($models->currentPage() > $models->lastPage()) {
-            return redirect()->route('core.admin.moderation.index');
+            return redirect()->route('core.admin.media.index');
         }
 
         $currentPage = $models->currentPage();
@@ -107,7 +107,7 @@ class MediaController extends Controller
         $prevPage = $currentPage === 1 ? $models->lastPage() : $currentPage - 1;
 
         foreach ($models as $model) {
-            return redirect()->route('core.admin.media.moderation-view', ['media' => (string) $model->_id])->with(['prevPage' =>  $prevPage, 'nextPage' => $nextPage]);
+            return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(['prevPage' =>  $prevPage, 'nextPage' => $nextPage]);
         }
     }
 

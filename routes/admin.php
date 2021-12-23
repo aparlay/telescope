@@ -65,13 +65,6 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('media/{media}/reupload', [MediaController::class, 'reupload'])
                 ->middleware(['permission:upload medias'])
                 ->name('reupload');
-            Route::get('listing/media/{page}', [MediaController::class, 'listing'])
-                ->middleware(['permission:show medias'])
-                ->name('media-list');
-
-            Route::get('moderation/{media}', [MediaController::class, 'viewModeration'])
-                ->middleware(['permission:show medias'])
-                ->name('moderation-view');
         });
 
         /* User Routes */

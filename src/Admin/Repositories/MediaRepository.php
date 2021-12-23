@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Models\Enums\MediaStatus;
 
 class MediaRepository
 {
@@ -103,11 +104,7 @@ class MediaRepository
 
     public function pending($page)
     {
-        return $this->model->completed()->recentFirst()->paginate(1, ['*'], 'page', $page);
+        return $this->model->Completed()->recentFirst()->paginate(1, ['*'], 'page', $page);
     }
 
-    public function mediaListing($page)
-    {
-        return $this->model->recentFirst()->paginate(1, ['*'], 'page', $page);
-    }
 }

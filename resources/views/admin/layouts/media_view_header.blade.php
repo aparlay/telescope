@@ -4,8 +4,8 @@
             <div class="row mb-2">
                 <div class="col-sm-8">
                     <h1 class="m-0">Media View
-                        <a class="btn btn-default btn-sm border-primary col-md-1.5 ml-1 text-primary" name="" value="" href="{{url('listing/media/'.$prevPage )}}"><i class="fas fa-chevron-left"></i> <strong>Previous</strong></a>
-                        <a class="btn btn-default btn-sm border-primary col-md-1.5 ml-1 text-primary" name="" value="" href="{{url('listing/media/'.$nextPage)}}"><strong>Next</strong> <i class="fas fa-chevron-right"></i></a>
+                        <a class="btn btn-default btn-sm border-primary col-md-1.5 ml-1 text-primary" name="" value="" href="{{url('pending/media/'.$prevPage )}}"><i class="fas fa-chevron-left"></i> <strong>Previous</strong></a>
+                        <a class="btn btn-default btn-sm border-primary col-md-1.5 ml-1 text-primary" name="" value="" href="{{url('pending/media/'.$nextPage)}}"><strong>Next</strong> <i class="fas fa-chevron-right"></i></a>
                         <button class=" btn btn-sm btn-danger col-md-2" data-toggle="modal" data-target="#reprocessModel">
                             <i class="fas fa-exclamation-triangle"></i>
                             Reprocess
