@@ -106,5 +106,4 @@ class MediaRepository
     {
         return $this->model->Completed()->recentFirst()->paginate(1, ['*'], 'page', $page);
     }
-
 }
