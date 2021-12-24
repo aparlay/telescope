@@ -58,7 +58,6 @@ class UploadFileJob implements ShouldQueue
         string $fileDisk,
         Collection $storages
     ) {
-        $this->onQueue('low');
         $this->fileDisk = $fileDisk;
         $this->fileName = $fileName;
         $this->storages = $storages;

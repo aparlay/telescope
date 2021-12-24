@@ -27,7 +27,7 @@ class UserDocumentService
      */
     private $uploadFileService;
 
-    public function construct(
+    public function __construct(
         UserDocumentRepository $userDocumentRepository,
         UploadFileService $uploadFileService
     ) {
@@ -46,7 +46,6 @@ class UserDocumentService
         if (\App::environment('testing')) {
             return $userDocument;
         }
-
         $this->uploadDocument($documentDto->file, $userDocument);
 
         return $userDocument;
@@ -77,6 +76,8 @@ class UserDocumentService
                 $userDocument->fill($documentData->all())->save();
             },
             new DeleteFileJob($fileDisk, $path),
-        ])->delay(10)->onQueue('low');
+        ])
+            ->onQueue('low')
+            ->dispatch();
     }
 }
