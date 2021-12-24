@@ -22,7 +22,6 @@ class UserDocumentTest extends ApiTestCase
         $documentTypes = [UserDocumentType::ID_CARD->value, UserDocumentType::SELFIE->value];
 
         foreach ($documentTypes as $documentType) {
-
             $r = $this->actingAs($user)
                 ->withHeaders(['X-DEVICE-ID' => 'random-string'])
                 ->post('/v1/user/document', [
@@ -50,6 +49,5 @@ class UserDocumentTest extends ApiTestCase
             $rDocumentType = Arr::get($dR, 'data.type');
             $this->assertSame($documentType, $rDocumentType);
         }
-
     }
 }
