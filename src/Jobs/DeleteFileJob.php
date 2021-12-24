@@ -26,10 +26,8 @@ class DeleteFileJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-
     private string $fileName;
     private string $fileDisk;
-
 
     /**
      * The number of times the job may be attempted.
@@ -58,8 +56,7 @@ class DeleteFileJob implements ShouldQueue
     public function __construct(
         string $fileDisk,
         string $fileName,
-    )
-    {
+    ) {
         $this->fileDisk = $fileDisk;
         $this->fileName = $fileName;
     }
@@ -72,8 +69,7 @@ class DeleteFileJob implements ShouldQueue
                 Storage::disk($this->fileDisk)->delete($this->fileName);
             }
         } catch (Throwable $throwable) {
-            Log::error('Unable to delete file: ' . $throwable->getMessage());
+            Log::error('Unable to delete file: '.$throwable->getMessage());
         }
     }
-
 }
