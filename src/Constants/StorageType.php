@@ -10,6 +10,7 @@ final class StorageType
     const GC_VIDEOS = 'gc-videos';
     const GC_AVATARS = 'gc-avatars';
     const LINODE = 'linode';
+    const B2_DOCUMENTS = 'b2-documents';
     const B2_VIDEOS = 'b2-videos';
     const B2_AVATARS = 'b2-avatars';
     const S3 = 's3';

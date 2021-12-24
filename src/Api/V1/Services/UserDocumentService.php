@@ -71,7 +71,7 @@ class UserDocumentService
             new UploadFileJob(
                 $path,
                 $fileDisk,
-                collect([StorageType::B2_AVATARS]) //@todo change storages to B2_DOCUMENTS storage
+                collect([StorageType::B2_DOCUMENTS])
             ),
             function () use ($userDocument, $documentData) {
                 $userDocument->fill($documentData->all())->save();
