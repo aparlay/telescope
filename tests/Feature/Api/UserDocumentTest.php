@@ -3,25 +3,44 @@
 namespace Aparlay\Core\Tests\Feature\Api;
 
 use Aparlay\Core\Api\V1\Controllers\UserController;
+use Aparlay\Core\Api\V1\Controllers\UserDocumentController;
+use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User;
+use Illuminate\Http\UploadedFile;
 
 class UserDocumentTest extends ApiTestCase
 {
     /**
-     * @see UserController::destroy()
+     * @see UserDocumentController::store()
      */
-    public function testDelete()
+    public function testCreate()
     {
         $user = User::factory()->create();
 
+        $uploadedFile = UploadedFile::fake()->create('fakefile.jpg', 100);
+
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('DELETE', '/v1/user', []);
+            ->post('/v1/user/document', [
+                'file' => $uploadedFile,
+                'type' => UserDocumentType::SELFIE->value
+            ]);
 
-        $r->assertStatus(204);
+        $r->assertStatus(201);
+        $r->assertJsonStructure([
+            'data' => [
+                '_id', 'type', 'status'
+            ]
+        ]);
 
-        $user->refresh();
-        $this->assertSame($user->status, UserStatus::STATUS_DEACTIVATED);
+        $r->assertJson(
+            fn($json) => $json->whereAllType([
+                'code' => 'integer',
+                'status' => 'string',
+                'data.type' => 'integer',
+                'data.status' => 'integer',
+            ])
+        );
     }
 }

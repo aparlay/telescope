@@ -64,7 +64,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::put('/{user}/follow', [FollowController::class, 'store'])->name('follow');
             Route::delete('/{user}/follow', [FollowController::class, 'destroy'])->name('unfollow');
             Route::get('/{user}', [UserController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
-            Route::post('/{user}/document', [UserDocumentController::class, 'store'])->name('user-document.store');
+            Route::post('document', [UserDocumentController::class, 'store'])->name('user-document.store');
         });
     });
 
