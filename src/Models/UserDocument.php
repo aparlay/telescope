@@ -5,6 +5,7 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\UserDocumentFactory;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
+use Aparlay\Core\Models\Scopes\UserDocumentScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,7 +39,7 @@ class UserDocument extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use MediaLikeScope;
+    use UserDocumentScope;
 
     /**
      * The collection associated with the model.
