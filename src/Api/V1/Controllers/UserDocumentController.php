@@ -32,6 +32,7 @@ class UserDocumentController extends Controller
     public function store(UserDocumentRequest $request)
     {
         $userDocument = $this->userDocumentService->store(UserDocumentDto::fromRequest($request));
+
         return $this->response(new UserDocumentResource($userDocument), '', 201);
     }
 }
