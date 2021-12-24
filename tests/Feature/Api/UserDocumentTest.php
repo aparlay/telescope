@@ -24,18 +24,18 @@ class UserDocumentTest extends ApiTestCase
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/user/document', [
                 'file' => $uploadedFile,
-                'type' => UserDocumentType::SELFIE->value
+                'type' => UserDocumentType::SELFIE->value,
             ]);
 
         $r->assertStatus(201);
         $r->assertJsonStructure([
             'data' => [
-                '_id', 'type', 'status'
-            ]
+                '_id', 'type', 'status',
+            ],
         ]);
 
         $r->assertJson(
-            fn($json) => $json->whereAllType([
+            fn ($json) => $json->whereAllType([
                 'code' => 'integer',
                 'status' => 'string',
                 'data.type' => 'integer',
