@@ -91,9 +91,9 @@ class MediaService extends AdminBaseService
     /**
      * @param $order
      */
-    public function pending($order)
+    public function pending($page)
     {
-        return $this->mediaRepository->pendingMedia($order);
+        return $this->mediaRepository->pending($page);
     }
 
     /**
@@ -176,5 +176,10 @@ class MediaService extends AdminBaseService
         ];
 
         $this->mediaRepository->create($data);
+    }
+
+    public function countCollection()
+    {
+        $this->mediaRepository->countCollection();
     }
 }

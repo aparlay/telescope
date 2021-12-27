@@ -295,7 +295,7 @@ class MediaTest extends ApiTestCase
                 'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
                 'file' => $response['data']['file'],
             ]);
-        $r->dump();
+
         $r->assertStatus(201)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 201)
@@ -722,7 +722,7 @@ class MediaTest extends ApiTestCase
         $r = $this->actingAs($userMediaOwner)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->get('/v1/user/'.$userMediaOwner->_id.'/media');
-        $r->dump();
+
         $r->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
