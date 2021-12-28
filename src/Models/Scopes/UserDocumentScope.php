@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
-use MongoDB\BSON\ObjectId;
 use Illuminate\Database\Eloquent\Builder;
+use MongoDB\BSON\ObjectId;
 
 trait UserDocumentScope
 {

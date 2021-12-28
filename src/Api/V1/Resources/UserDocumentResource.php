@@ -26,7 +26,7 @@ class UserDocumentResource extends JsonResource
             '_id' => (string) $this->_id,
             'type' => $this->type,
             'status' => $this->status,
-            'url' => $this->temporaryUrl()
+            'url' => $this->temporaryUrl(),
         ];
     }
 }
