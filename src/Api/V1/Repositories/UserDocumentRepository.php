@@ -4,14 +4,12 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Api\V1\Models\UserDocument;
-
+use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use MongoDB\BSON\ObjectId;
 
 class UserDocumentRepository
 {
-
     /**
      * @param User $user
      * @return mixed
@@ -20,7 +18,6 @@ class UserDocumentRepository
     {
         return UserDocument::user($user->id)->get();
     }
-
 
     public function view($id)
     {

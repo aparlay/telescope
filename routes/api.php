@@ -67,12 +67,12 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::get('/{user}', [UserController::class, 'show'])
                 ->name('show')
                 ->withoutMiddleware(['auth:api'])
-                ->where('user', '^[document]');;
+                ->where('user', '^[document]');
 
             Route::post('document', [UserDocumentController::class, 'store'])->name('user-document.store');
             Route::get('document', [UserDocumentController::class, 'index'])->name('user-document.index');
             Route::get('document/{document}', [UserDocumentController::class, 'view'])->name('user-document.view');
-         });
+        });
     });
 
     /* Authentication Group with me prefix */

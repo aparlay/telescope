@@ -35,13 +35,10 @@ class UserDocumentService
         $this->uploadFileService = $uploadFileService;
     }
 
-
     public function index()
     {
         return $this->userDocumentRepository->index($this->getUser());
     }
-
-
 
     public function view($id)
     {

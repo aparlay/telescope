@@ -7,21 +7,19 @@ use Illuminate\Support\Facades\Storage;
 
 trait HasFileTrait
 {
-
     public function temporaryUrl($duration = 10)
     {
-        if (!$this->file) {
+        if (! $this->file) {
             return '';
         }
+
         return Storage::disk($this->getStorageDisk())->temporaryUrl($this->getFilePath(), now()->addMinutes($duration));
     }
-
 
     public function getFilePath()
     {
         return $this->file;
     }
-
 
     /**
      * @return string

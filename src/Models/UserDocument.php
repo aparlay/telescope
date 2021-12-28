@@ -44,8 +44,6 @@ class UserDocument extends BaseModel
     use UserDocumentScope;
     use HasFileTrait;
 
-
-
     /**
      * The collection associated with the model.
      *
@@ -129,7 +127,6 @@ class UserDocument extends BaseModel
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
 
     public function getFilePath()
     {

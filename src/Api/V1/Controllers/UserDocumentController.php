@@ -32,9 +32,9 @@ class UserDocumentController extends Controller
     public function index()
     {
         $userDocuments = $this->userDocumentService->index();
+
         return new UserDocumentCollection($userDocuments);
     }
-
 
     /**
      * @param UserDocument $userDocument
@@ -43,9 +43,9 @@ class UserDocumentController extends Controller
     public function view($id)
     {
         $userDocument = $this->userDocumentService->view($id);
+
         return new UserDocumentResource($userDocument);
     }
-
 
     /**
      * @param UserDocumentRequest $request
