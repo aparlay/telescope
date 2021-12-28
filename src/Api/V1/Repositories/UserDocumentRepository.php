@@ -27,12 +27,16 @@ class UserDocumentRepository
     public function create(UserDocumentDto $documentDto)
     {
         $creator = $documentDto->getUser();
-
         try {
             return UserDocument::create([
                 'type' => $documentDto->type,
                 'status' => UserDocumentStatus::CREATED->value,
                 'user_id' => new ObjectId($creator->id),
+                'user' => [
+                    '_id' => new ObjectId($creator->_id),
+                    'username' => $creator->username,
+                    'avatar' => $creator->avatar,
+                ],
                 'creator' => [
                     '_id' => new ObjectId($creator->_id),
                     'username' => $creator->username,

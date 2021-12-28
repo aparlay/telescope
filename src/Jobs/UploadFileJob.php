@@ -28,6 +28,7 @@ class UploadFileJob implements ShouldQueue
     private string $fileName;
     private string $fileDisk;
     private Collection $storages;
+    private $storageFilePath;
 
     /**
      * The number of times the job may be attempted.
@@ -56,22 +57,27 @@ class UploadFileJob implements ShouldQueue
     public function __construct(
         string $fileName,
         string $fileDisk,
-        Collection $storages
+        Collection $storages,
+        $storageFilePath = null
     ) {
         $this->fileDisk = $fileDisk;
         $this->fileName = $fileName;
         $this->storages = $storages;
+        $this->storageFilePath = $storageFilePath;
     }
 
     public function handle()
     {
         try {
-            $filename = basename($this->fileName);
-            $this->storages->each(function ($storageName) use ($filename) {
+            $storageFilePath = $this->storageFilePath ?? basename($this->fileName);
+
+            $this->storages->each(function ($storageName) use ($storageFilePath) {
                 $storage = Storage::disk($storageName);
-                $storage->writeStream($filename, Storage::disk($this->fileDisk)->readStream($this->fileName));
-                if (! $storage->exists($filename)) {
-                    throw new \Error("{$filename} was be uploaded to {$storageName}");
+                Log::info('storage file path ' . $storageFilePath);
+
+                $storage->writeStream($storageFilePath, Storage::disk($this->fileDisk)->readStream($this->fileName));
+                if (! $storage->exists($storageFilePath)) {
+                    throw new \Error("{$storageFilePath} failed to upload to {$storageName}");
                 }
             });
         } catch (Throwable $throwable) {

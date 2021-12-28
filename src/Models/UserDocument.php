@@ -65,6 +65,7 @@ class UserDocument extends BaseModel
         'size',
         'mime',
         'user_id',
+        'user',
         'creator',
         'created_at',
         'updated_at',
@@ -81,6 +82,7 @@ class UserDocument extends BaseModel
         'status' => 'integer',
         'type' => 'integer',
         'creator' => SimpleUserCast::class.':_id,username,avatar',
+        'user' => SimpleUserCast::class.':_id,username,avatar',
     ];
 
     protected $dates = [
@@ -130,7 +132,10 @@ class UserDocument extends BaseModel
 
     public function getFilePath()
     {
-        return $this->file;
+        if ($this->userObj) {
+            return $this->userObj->_id . '/' . $this->file;
+        }
+        return null;
     }
 
     /**

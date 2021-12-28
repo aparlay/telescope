@@ -8,10 +8,10 @@ use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Constants\StorageType;
 use Aparlay\Core\Jobs\DeleteFileJob;
 use Aparlay\Core\Jobs\UploadFileJob;
+use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Storage;
 
 class UserDocumentService
 {
@@ -61,14 +61,35 @@ class UserDocumentService
         return $userDocument;
     }
 
+
+    /**
+     * @param UserDocument $userDocument
+     * @return string
+     * @throws \ErrorException
+     */
+    private function getFilePrefix(UserDocument $userDocument)
+    {
+        switch ($userDocument->type) {
+            case UserDocumentType::SELFIE->value:
+                $filePrefix = 'selfie_';
+                break;
+            case UserDocumentType::ID_CARD->value:
+                $filePrefix = 'id_card_';
+                break;
+            default:
+                throw new \ErrorException('Unknown document type');
+        }
+
+        return $filePrefix;
+    }
+
     private function uploadDocument(UploadedFile $file, UserDocument $userDocument)
     {
-        $filePrefix = 'user_document_'.$this->getUser()->id;
-
+        $filePrefix = $this->getFilePrefix($userDocument);
         $this->uploadFileService->setFilePrefix($filePrefix);
-        $path = $this->uploadFileService->upload($file);
 
-        $fileDisk = $this->uploadFileService->getDisk();
+        $tempFilePath = $this->uploadFileService->upload($file);
+        $storageDisk = $this->uploadFileService->getDisk();
 
         $documentData = collect([
             'file' => $this->uploadFileService->getBaseFileName(),
@@ -76,16 +97,19 @@ class UserDocumentService
             'size' => $this->uploadFileService->getSize(),
         ]);
 
+        $storageFilePath = $userDocument->userObj->_id . '/' . basename($tempFilePath);
+
         Bus::chain([
             new UploadFileJob(
-                $path,
-                $fileDisk,
-                collect([StorageType::B2_DOCUMENTS])
+                $tempFilePath,
+                $storageDisk,
+                collect([StorageType::B2_DOCUMENTS]),
+                $storageFilePath,
             ),
             function () use ($userDocument, $documentData) {
                 $userDocument->fill($documentData->all())->save();
             },
-            new DeleteFileJob($fileDisk, $path),
+            new DeleteFileJob($storageDisk, $tempFilePath),
         ])
             ->onQueue('low')
             ->dispatch();

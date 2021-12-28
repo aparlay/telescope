@@ -9,7 +9,7 @@ trait HasFileTrait
 {
     public function temporaryUrl($duration = 10)
     {
-        if (! $this->file) {
+        if (! $this->getFilePath()) {
             return '';
         }
 
