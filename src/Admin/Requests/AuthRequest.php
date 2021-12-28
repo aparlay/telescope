@@ -27,12 +27,12 @@ class AuthRequest extends FormRequest
      */
     public function rules()
     {
-        $rules =  [
+        $rules = [
             'email' => ['required'],
             'password' => ['required'],
         ];
 
-        if (!\App::environment('local')) {
+        if (! \App::environment('local')) {
             $rules['g-recaptcha-response'] = ['recaptcha'];
         }
 
