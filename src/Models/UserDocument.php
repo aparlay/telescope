@@ -133,8 +133,9 @@ class UserDocument extends BaseModel
     public function getFilePath()
     {
         if ($this->userObj) {
-            return $this->userObj->_id . '/' . $this->file;
+            return $this->userObj->_id.'/'.$this->file;
         }
+
         return null;
     }
 
