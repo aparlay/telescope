@@ -5,8 +5,10 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
 use Aparlay\Core\Api\V1\Requests\UserDocumentRequest;
 use Aparlay\Core\Api\V1\Resources\MediaLikeResource;
+use Aparlay\Core\Api\V1\Resources\UserDocumentCollection;
 use Aparlay\Core\Api\V1\Resources\UserDocumentResource;
 use Aparlay\Core\Api\V1\Services\UserDocumentService;
+use Aparlay\Core\Models\UserDocument;
 
 class UserDocumentController extends Controller
 {
@@ -25,15 +27,35 @@ class UserDocumentController extends Controller
     }
 
     /**
+     * @return UserDocumentCollection
+     */
+    public function index()
+    {
+        $userDocuments = $this->userDocumentService->index();
+        return new UserDocumentCollection($userDocuments);
+    }
+
+
+    /**
+     * @param UserDocument $userDocument
+     * @return \Illuminate\Http\Response
+     */
+    public function view($id)
+    {
+        $userDocument = $this->userDocumentService->view($id);
+        return new UserDocumentResource($userDocument);
+    }
+
+
+    /**
      * @param UserDocumentRequest $request
-     * @return UserDocumentResource
-     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     * @return \Illuminate\Http\Response
      */
     public function store(UserDocumentRequest $request)
     {
         $dto = UserDocumentDto::fromRequest($request);
         $userDocument = $this->userDocumentService->store($dto);
 
-        return $this->response(new UserDocumentResource($userDocument), '', 201);
+        return new UserDocumentResource($userDocument);
     }
 }

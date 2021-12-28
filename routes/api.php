@@ -63,9 +63,16 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::delete('/{user}/block', [BlockController::class, 'destroy'])->name('unblock');
             Route::put('/{user}/follow', [FollowController::class, 'store'])->name('follow');
             Route::delete('/{user}/follow', [FollowController::class, 'destroy'])->name('unfollow');
-            Route::get('/{user}', [UserController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
+
+            Route::get('/{user}', [UserController::class, 'show'])
+                ->name('show')
+                ->withoutMiddleware(['auth:api'])
+                ->where('user', '^[document]');;
+
             Route::post('document', [UserDocumentController::class, 'store'])->name('user-document.store');
-        });
+            Route::get('document', [UserDocumentController::class, 'index'])->name('user-document.index');
+            Route::get('document/{document}', [UserDocumentController::class, 'view'])->name('user-document.view');
+         });
     });
 
     /* Authentication Group with me prefix */

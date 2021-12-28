@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Traits\HasFileTrait;
 use Aparlay\Core\Casts\SimpleUserCast;
+use Aparlay\Core\Constants\StorageType;
 use Aparlay\Core\Database\Factories\UserDocumentFactory;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Aparlay\Core\Models\Scopes\UserDocumentScope;
@@ -40,6 +42,9 @@ class UserDocument extends BaseModel
     use HasFactory;
     use Notifiable;
     use UserDocumentScope;
+    use HasFileTrait;
+
+
 
     /**
      * The collection associated with the model.
@@ -123,5 +128,19 @@ class UserDocument extends BaseModel
     public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+
+    public function getFilePath()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStorageDisk()
+    {
+        return StorageType::B2_DOCUMENTS;
     }
 }

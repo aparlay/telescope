@@ -3,19 +3,30 @@
 namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
-use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Api\V1\Traits\HasUserTrait;
-use Aparlay\Core\Jobs\UploadAvatar;
-use Aparlay\Core\Jobs\UploadFileJob;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
-use Aparlay\Core\Models\UserDocument;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Log;
+use Aparlay\Core\Api\V1\Models\UserDocument;
+
 use MongoDB\BSON\ObjectId;
 
 class UserDocumentRepository
 {
+
+    /**
+     * @param User $user
+     * @return mixed
+     */
+    public function index(User $user)
+    {
+        return UserDocument::user($user->id)->get();
+    }
+
+
+    public function view($id)
+    {
+        return UserDocument::query()->findOrFail($id);
+    }
+
     public function create(UserDocumentDto $documentDto)
     {
         $creator = $documentDto->getUser();
