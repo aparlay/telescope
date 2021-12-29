@@ -74,7 +74,7 @@ class UploadFileJob implements ShouldQueue
             $this->storages->each(function ($storageName) use ($storageFilePath) {
                 $storage = Storage::disk($storageName);
 
-                Log::debug('storage file path ' . $storageFilePath);
+                Log::debug('storage file path '.$storageFilePath);
 
                 $storage->writeStream($storageFilePath, Storage::disk($this->fileDisk)->readStream($this->fileName));
                 if (! $storage->exists($storageFilePath)) {
