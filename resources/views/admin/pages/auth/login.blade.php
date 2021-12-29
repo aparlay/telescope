@@ -13,6 +13,11 @@
                         {{ $errors->first('error') }}
                     </div>
                 @endif
+
+                @error('g-recaptcha-response')
+                    <div class="alert alert-danger ">{{ $message }}</div>
+                @enderror
+
                 <form method="post" id="admin_form">
                     @csrf
                     <div class="input-group mb-3">
@@ -30,6 +35,9 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6"> {!! htmlFormSnippet() !!} </div>
                     </div>
                     <div class="row">
                         <div class="col-8 mb-0">

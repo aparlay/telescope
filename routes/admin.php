@@ -59,7 +59,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('download-original/{media}/{hash}', [MediaController::class, 'downloadOriginal'])
                 ->middleware(['permission:edit medias'])
                 ->name('downloadOriginal');
-            Route::get('pending/{media}/{order}', [MediaController::class, 'pending'])
+            Route::get('pending/media/{page}', [MediaController::class, 'pending'])
                 ->middleware(['permission:show medias'])
                 ->name('pending');
             Route::post('media/{media}/reupload', [MediaController::class, 'reupload'])

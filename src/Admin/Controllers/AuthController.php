@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
+use Aparlay\Core\Admin\Requests\AuthRequest;
 use Aparlay\Core\Models\Enums\UserType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,7 @@ class AuthController extends Controller
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postLogin(Request $request)
+    public function postLogin(AuthRequest $request)
     {
         $credentials = $request->only(['email', 'password']);
         $remember = $request->get('remember');
