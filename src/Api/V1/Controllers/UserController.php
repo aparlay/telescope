@@ -97,16 +97,16 @@ class UserController extends Controller
                 $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
             /* Update User Profile Information */
-            $user->fill($request->all());
-            if ($user->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
-                $user->status = UserStatus::ACTIVE->value;
+            $this->userService->getUser()->fill($request->all());
+            if ($this->userService->getUser()->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
+                $this->userService->getUser()->status = UserStatus::ACTIVE->value;
             }
-            $user->save();
+            $this->userService->getUser()->save();
         }
-        $user->refresh();
+        $this->userService->getUser()->refresh();
 
         /* Return the updated user data */
-        return $this->response(new MeResource($user), Response::HTTP_OK);
+        return $this->response(new MeResource($this->userService->getUser()), Response::HTTP_OK);
     }
 
     /**
