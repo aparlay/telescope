@@ -8,6 +8,7 @@ use Aparlay\Core\Admin\Controllers\MediaController;
 use Aparlay\Core\Admin\Controllers\RoleController;
 use Aparlay\Core\Admin\Controllers\SettingController;
 use Aparlay\Core\Admin\Controllers\UserController;
+use Aparlay\Core\Admin\Controllers\UserDocumentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -87,6 +88,12 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('user/media/upload', [UserController::class, 'upload'])
                 ->middleware(['permission:upload medias'])
                 ->name('media.save-upload');
+        });
+
+        Route::name('user.')->group(function () {
+            Route::patch('user/document/{documentId}', [UserDocumentController::class, 'update'])
+                ->middleware(['permission:edit users'])
+                ->name('document.edit');
         });
 
         Route::name('alert.')->group(function () {

@@ -10,6 +10,7 @@
                 $badgeColor = 'badge badge-' . \Aparlay\Core\Models\Enums\UserDocumentStatus::from($document->status)->badgeColor();
                 $documentType = $document->typeLabel;
             @endphp
+
             <div class="filtr-item col-sm-2" data-category="1">
 
                 <a href="{{$document->temporaryUrl() }}" data-toggle="lightbox" data-title="{{ $document->file }}">
@@ -18,7 +19,22 @@
                 <h6>{{$document->file}}</h6>
                 <span class="badge badge-secondary">{{$documentType}}</span>
                 <span class="{{$badgeColor}}">{{$label}}</span>
+
+                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="{{ '#approve_modal_' . $document->id }}">
+                    <i class="fas fa-check"></i>
+                    <strong>Approve</strong>
+                </button>
+
+                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="{{ '#reject_modal_' . $document->id }}">
+                    <i class="fas fa-check"></i>
+                    <strong>Reject</strong>
+                </button>
+
             </div>
+
+            @include('default_view::admin.pages.user.tabs._documents-approve_modal', compact('document'))
+            @include('default_view::admin.pages.user.tabs._documents-reject_modal',  compact('document'))
+
         @endforeach
     </div>
 </div>
