@@ -8,7 +8,6 @@ use Aparlay\Core\Admin\Services\UserDocumentService;
 use Aparlay\Core\Api\V1\Models\UserDocument;
 use Illuminate\Http\Request;
 
-
 class UserDocumentController extends Controller
 {
     protected $userDocumentService;
@@ -26,11 +25,6 @@ class UserDocumentController extends Controller
         $userDocument = UserDocument::findOrFail($documentId);
         $userDocument = $this->userDocumentService->update($userDocument, AdminUserDocumentDTO::fromRequest($request));
 
-
         return back()->with('success', `User document $documentId was updated successfully`);
-
     }
-
-
-
 }
