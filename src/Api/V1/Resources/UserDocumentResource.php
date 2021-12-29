@@ -29,8 +29,8 @@ class UserDocumentResource extends JsonResource
             'type' => $this->type,
             'status' => $this->status,
             'url' => $this->temporaryUrl(),
-            'status_label' => UserDocumentStatus::from($this->status)->name,
-            'type_label' => UserDocumentType::from($this->type)->name,
+            'status_label' => $this->statusLabel,
+            'type_label' => $this->typeLabel,
         ];
     }
 }

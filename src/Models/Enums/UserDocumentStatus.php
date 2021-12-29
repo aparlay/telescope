@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Models\Enums;
 
+use Aparlay\Core\Models\UserDocument;
+
 enum UserDocumentStatus: int implements Enum
 {
     case CREATED = 0;

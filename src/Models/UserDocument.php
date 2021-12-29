@@ -7,7 +7,7 @@ use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Constants\StorageType;
 use Aparlay\Core\Database\Factories\UserDocumentFactory;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
-use Aparlay\Core\Models\Scopes\MediaLikeScope;
+use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\Scopes\UserDocumentScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -151,5 +151,10 @@ class UserDocument extends BaseModel
     public function getStatusLabelAttribute()
     {
         return UserDocumentStatus::from($this->status)->name;
+    }
+
+    public function getTypeLabelAttribute()
+    {
+        return UserDocumentType::from($this->type)->name;
     }
 }
