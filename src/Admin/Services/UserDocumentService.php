@@ -9,8 +9,6 @@ use Aparlay\Core\Models\UserDocument;
 
 class UserDocumentService extends AdminBaseService
 {
-
-
     public function update(UserDocument $userDocument, AdminUserDocumentDTO $dto)
     {
         $userDocument->status = (int) $dto->status;

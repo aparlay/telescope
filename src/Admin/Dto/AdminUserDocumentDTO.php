@@ -1,6 +1,6 @@
 <?php
-namespace Aparlay\Core\Admin\Dto;
 
+namespace Aparlay\Core\Admin\Dto;
 
 use Spatie\DataTransferObject\DataTransferObject;
 
@@ -20,7 +20,5 @@ class AdminUserDocumentDTO extends DataTransferObject
             'status' => $request->input('status'),
             'reject_reason' => $request->input('reject_reason'),
         ]);
-
     }
-
 }
