@@ -7,7 +7,7 @@ use Spatie\DataTransferObject\DataTransferObject;
 class AdminUserDocumentDTO extends DataTransferObject
 {
     public $status;
-    public $reason;
+    public $reject_reason;
 
     /**
      * @param $request
@@ -18,7 +18,7 @@ class AdminUserDocumentDTO extends DataTransferObject
     {
         return new self([
             'status' => $request->input('status'),
-            'reason' => $request->input('reason'),
+            'reject_reason' => $request->input('reject_reason'),
         ]);
 
     }

@@ -1,4 +1,3 @@
-
 <div id="{{ 'reject_modal_' . $document->id }}" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -15,10 +14,14 @@
                 </div>
                 <div class="modal-body">
                     <p>Mark this user document as rejected?</p>
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Reject Reason:</label>
+                        <input type="text" class="form-control" value="{{$document->reject_reason}}" name="reject_reason">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-
                     <button type="submit" class="btn btn-danger">Reject</button>
                 </div>
             </form>
