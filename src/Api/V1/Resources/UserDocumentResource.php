@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Aparlay\Core\Models\Enums\UserDocumentStatus;
+use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -27,6 +29,8 @@ class UserDocumentResource extends JsonResource
             'type' => $this->type,
             'status' => $this->status,
             'url' => $this->temporaryUrl(),
+            'status_label' => UserDocumentStatus::from($this->status)->name,
+            'type_label' => UserDocumentType::from($this->type)->name,
         ];
     }
 }

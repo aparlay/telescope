@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Traits\HasFileTrait;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Constants\StorageType;
 use Aparlay\Core\Database\Factories\UserDocumentFactory;
+use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Scopes\MediaLikeScope;
 use Aparlay\Core\Models\Scopes\UserDocumentScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -144,5 +145,10 @@ class UserDocument extends BaseModel
     public function getStorageDisk()
     {
         return StorageType::B2_DOCUMENTS;
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return UserDocumentStatus::from($this->status)->name;
     }
 }

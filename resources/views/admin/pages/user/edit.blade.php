@@ -249,6 +249,15 @@
     <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
+
+    <script src="{{ URL::asset('admin/assets/js/ekko-lightbox.min.js') }}"></script>
+
+    <script>
+        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+    </script>
 @endsection
 
 
