@@ -43,6 +43,11 @@ $(document).ready(function() {
         }
     )
 
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
+
     $(document).on('click', '.delete', function(e) {
         e.preventDefault()
         if(confirm('Are you sure you want to delete?')) {
