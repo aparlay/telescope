@@ -33,6 +33,7 @@ class UserDocumentController extends Controller
     {
         $userDocuments = $this->userDocumentService->index();
         $collection = new UserDocumentCollection($userDocuments);
+
         return $this->response($collection, '', Response::HTTP_OK);
     }
 
@@ -43,10 +44,9 @@ class UserDocumentController extends Controller
     public function view($id)
     {
         $userDocument = $this->userDocumentService->fetchById($id);
-        $this->authorize('view',  $userDocument);
+        $this->authorize('view', $userDocument);
 
         return $this->response(new UserDocumentResource($userDocument), '', Response::HTTP_OK);
-
     }
 
     /**
@@ -58,6 +58,7 @@ class UserDocumentController extends Controller
         $dto = UserDocumentDto::fromRequest($request);
         $userDocument = $this->userDocumentService->store($dto);
         $resource = (new UserDocumentResource($userDocument))->except('url');
+
         return $this->response($resource, '', Response::HTTP_CREATED);
     }
 }

@@ -22,7 +22,7 @@ class UserDocumentSeeder extends Seeder
         $user = User::factory()->create();
 
         UserDocument::factory()->count($this->units)
-            ->state(function (array $attributes) use($user) {
+            ->state(function (array $attributes) use ($user) {
                 return [
                     'user' =>  [
                         '_id' => new ObjectId($user->_id),
