@@ -14,12 +14,12 @@ class UserDocumentRepository
      * @param User $user
      * @return mixed
      */
-    public function index(User $user)
+    public function index($user)
     {
-        return UserDocument::user($user->id)->get();
+        return UserDocument::user($user->_id)->get();
     }
 
-    public function view($id)
+    public function fetchById($id)
     {
         return UserDocument::query()->findOrFail($id);
     }

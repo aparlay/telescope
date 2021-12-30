@@ -65,7 +65,6 @@ class UserDocument extends BaseModel
         'file',
         'size',
         'mime',
-        'user_id',
         'user',
         'creator',
         'created_at',
@@ -116,19 +115,19 @@ class UserDocument extends BaseModel
     ];
 
     /**
-     * Get the phone associated with the user.
+     * Get the user associated with the follow.
      */
-    public function userObj()
+    public function userObj(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user._id');
     }
 
     /**
-     * Get the user associated with the alert.
+     * Get the creator associated with the follow.
      */
-    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function creatorObj(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'creator._id');
     }
 
     public function getFilePath()

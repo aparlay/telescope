@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Aparlay\Core\Api\V1\Traits\FilterableResourceTrait;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\UserDocument;
@@ -14,6 +15,8 @@ use MongoDB\BSON\ObjectId;
  */
 class UserDocumentResource extends JsonResource
 {
+    use FilterableResourceTrait;
+
     /**
      * Transform the resource into an array.
      *
@@ -24,7 +27,7 @@ class UserDocumentResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             '_id' => (string) $this->_id,
             'type' => $this->type,
             'status' => $this->status,
@@ -32,5 +35,7 @@ class UserDocumentResource extends JsonResource
             'status_label' => $this->statusLabel,
             'type_label' => $this->typeLabel,
         ];
+
+        return $this->filtrateFields($this->filter($data));
     }
 }

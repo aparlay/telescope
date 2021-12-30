@@ -3,13 +3,72 @@
 namespace Aparlay\Core\Tests\Feature\Api;
 
 use Aparlay\Core\Api\V1\Controllers\UserDocumentController;
+use Aparlay\Core\Api\V1\Models\UserDocument;
 use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class UserDocumentTest extends ApiTestCase
 {
+
+
+    /**
+     * @see UserDocumentController::index()
+     * @return void
+     */
+    public function testIndex()
+    {
+        $userDocument = UserDocument::first();
+
+        $r = $this->actingAs($userDocument->userObj)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get("/v1/user/document");
+
+        $r->assertStatus(200);
+        $r->assertJsonStructure([
+            'data' => [
+                ['_id', 'type', 'status', 'url', 'status_label', 'type_label']
+            ],
+        ]);
+    }
+
+
+    /**
+     * @see UserDocumentController::view()
+     * @return void
+     */
+    public function testView()
+    {
+        /** @var UserDocument $userDocument */
+        $userDocument = UserDocument::first();
+
+        $r = $this->actingAs($userDocument->userObj)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get("/v1/user/document/$userDocument->_id");
+
+        $r->assertStatus(200);
+        $r->assertJsonStructure([
+            'data' => [
+                '_id', 'type', 'status', 'url'
+            ],
+        ]);
+
+        $r->assertJson(
+            fn ($json) => $json->whereAllType([
+                'code' => 'integer',
+                'status' => 'string',
+                'data.type' => 'integer',
+                'data.status' => 'integer',
+                'data.status_label' => 'string',
+                'data.type_label' => 'string',
+                'data.url' => 'string'
+            ])
+        );
+    }
+
+
     /**
      * @see UserDocumentController::store()
      */
@@ -29,12 +88,12 @@ class UserDocumentTest extends ApiTestCase
                     'type' => $documentType,
                 ]);
 
-            $r->assertStatus(201);
             $r->assertJsonStructure([
                 'data' => [
                     '_id', 'type', 'status',
                 ],
             ]);
+
 
             $r->assertJson(
                 fn ($json) => $json->whereAllType([
@@ -42,6 +101,8 @@ class UserDocumentTest extends ApiTestCase
                     'status' => 'string',
                     'data.type' => 'integer',
                     'data.status' => 'integer',
+                    'data.status_label' => 'string',
+                    'data.type_label' => 'string',
                 ])
             );
 
@@ -50,4 +111,6 @@ class UserDocumentTest extends ApiTestCase
             $this->assertSame($documentType, $rDocumentType);
         }
     }
+
+
 }

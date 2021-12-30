@@ -4,11 +4,11 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
 use Aparlay\Core\Api\V1\Requests\UserDocumentRequest;
-use Aparlay\Core\Api\V1\Resources\MediaLikeResource;
 use Aparlay\Core\Api\V1\Resources\UserDocumentCollection;
 use Aparlay\Core\Api\V1\Resources\UserDocumentResource;
 use Aparlay\Core\Api\V1\Services\UserDocumentService;
 use Aparlay\Core\Models\UserDocument;
+use Illuminate\Http\Response;
 
 class UserDocumentController extends Controller
 {
@@ -32,8 +32,8 @@ class UserDocumentController extends Controller
     public function index()
     {
         $userDocuments = $this->userDocumentService->index();
-
-        return new UserDocumentCollection($userDocuments);
+        $collection = new UserDocumentCollection($userDocuments);
+        return $this->response($collection, '', Response::HTTP_OK);
     }
 
     /**
@@ -42,9 +42,11 @@ class UserDocumentController extends Controller
      */
     public function view($id)
     {
-        $userDocument = $this->userDocumentService->view($id);
+        $userDocument = $this->userDocumentService->fetchById($id);
+        $this->authorize('view',  $userDocument);
 
-        return new UserDocumentResource($userDocument);
+        return $this->response(new UserDocumentResource($userDocument), '', Response::HTTP_OK);
+
     }
 
     /**
@@ -55,7 +57,7 @@ class UserDocumentController extends Controller
     {
         $dto = UserDocumentDto::fromRequest($request);
         $userDocument = $this->userDocumentService->store($dto);
-
-        return new UserDocumentResource($userDocument);
+        $resource = (new UserDocumentResource($userDocument))->except('url');
+        return $this->response($resource, '', Response::HTTP_CREATED);
     }
 }

@@ -38,15 +38,6 @@ class UserDocumentFactory extends Factory
             'file' => 'waptap.mp4',
             'files_history' => [],
             'mime_type' => 'video/mp4',
-            'user_id' => function ($report) {
-                return new ObjectId($report['user_id']);
-            },
-            'created_by' => function ($report) {
-                return new ObjectId($report['user_id']);
-            },
-            'updated_by' => function ($report) {
-                return new ObjectId($report['user_id']);
-            },
         ];
     }
 }

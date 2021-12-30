@@ -40,9 +40,9 @@ class UserDocumentService
         return $this->userDocumentRepository->index($this->getUser());
     }
 
-    public function view($id)
+    public function fetchById($id)
     {
-        return $this->userDocumentRepository->view($id);
+        return $this->userDocumentRepository->fetchById($id);
     }
 
     /**
