@@ -4,7 +4,9 @@ namespace Aparlay\Core\Api\V1\Traits;
 
 trait FilterableResourceTrait
 {
-    /** @var Collection */
+    /**
+     * @var Collection
+     */
     public $collection;
 
     /**

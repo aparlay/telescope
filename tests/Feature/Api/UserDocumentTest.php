@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class UserDocumentTest extends ApiTestCase
 {
-
-
     /**
      * @see UserDocumentController::index()
      * @return void
@@ -24,16 +22,15 @@ class UserDocumentTest extends ApiTestCase
 
         $r = $this->actingAs($userDocument->userObj)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get("/v1/user/document");
+            ->get('/v1/user/document');
 
         $r->assertStatus(200);
         $r->assertJsonStructure([
             'data' => [
-                ['_id', 'type', 'status', 'url', 'status_label', 'type_label']
+                ['_id', 'type', 'status', 'url', 'status_label', 'type_label'],
             ],
         ]);
     }
-
 
     /**
      * @see UserDocumentController::view()
@@ -51,7 +48,7 @@ class UserDocumentTest extends ApiTestCase
         $r->assertStatus(200);
         $r->assertJsonStructure([
             'data' => [
-                '_id', 'type', 'status', 'url'
+                '_id', 'type', 'status', 'url',
             ],
         ]);
 
@@ -63,11 +60,10 @@ class UserDocumentTest extends ApiTestCase
                 'data.status' => 'integer',
                 'data.status_label' => 'string',
                 'data.type_label' => 'string',
-                'data.url' => 'string'
+                'data.url' => 'string',
             ])
         );
     }
-
 
     /**
      * @see UserDocumentController::store()
@@ -94,7 +90,6 @@ class UserDocumentTest extends ApiTestCase
                 ],
             ]);
 
-
             $r->assertJson(
                 fn ($json) => $json->whereAllType([
                     'code' => 'integer',
@@ -111,6 +106,4 @@ class UserDocumentTest extends ApiTestCase
             $this->assertSame($documentType, $rDocumentType);
         }
     }
-
-
 }

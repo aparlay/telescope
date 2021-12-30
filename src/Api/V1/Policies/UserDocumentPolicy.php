@@ -14,7 +14,6 @@ class UserDocumentPolicy
 {
     use HandlesAuthorization;
 
-
     public function view(User | Authenticatable $user, UserDocument $userDocument)
     {
         $userId = $user?->_id;
@@ -25,6 +24,4 @@ class UserDocumentPolicy
 
         return Response::deny(__('You cannot view this document'));
     }
-
-
 }
