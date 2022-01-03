@@ -221,7 +221,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Media::class, 'created_by');
     }
 
-
     /**
      * @return string
      */
