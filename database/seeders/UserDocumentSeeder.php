@@ -29,7 +29,7 @@ class UserDocumentSeeder extends Seeder
                         'username' => $user->username,
                         'avatar' => $user->avatar,
                     ],
-                    'crator' =>  [
+                    'creator' =>  [
                         '_id' => new ObjectId($user->_id),
                         'username' => $user->username,
                         'avatar' => $user->avatar,
