@@ -30,7 +30,6 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
     private Collection $storages;
     private $storageFilePath;
 
-
     /**
      * Create a new job instance.
      *

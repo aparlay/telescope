@@ -27,5 +27,4 @@ abstract class AbstractJob
         $this->maxExceptions = config('queue.settings.max_exceptions');
         $this->backoff = config('queue.settings.backoff');
     }
-
 }
