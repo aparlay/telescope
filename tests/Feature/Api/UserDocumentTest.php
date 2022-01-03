@@ -35,7 +35,7 @@ class UserDocumentTest extends ApiTestCase
             fn ($json) => $json->whereAllType([
                 'code' => 'integer',
                 'status' => 'string',
-                'data' => 'array'
+                'data' => 'array',
             ])
         );
     }
