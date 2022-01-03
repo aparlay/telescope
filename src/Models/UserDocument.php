@@ -149,11 +149,11 @@ class UserDocument extends BaseModel
 
     public function getStatusLabelAttribute()
     {
-        return UserDocumentStatus::from($this->status)->name;
+        return UserDocumentStatus::from($this->status)->label();
     }
 
     public function getTypeLabelAttribute()
     {
-        return UserDocumentType::from($this->type)->name;
+        return UserDocumentType::from($this->type)->label();
     }
 }
