@@ -28,6 +28,5 @@ class UserSeeder extends Seeder
         $user->password_hash = Hash::make('waptap');
         $user->email = 'user@waptap.com';
         $user->save();
-
     }
 }
