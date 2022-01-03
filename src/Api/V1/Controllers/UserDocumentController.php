@@ -27,7 +27,9 @@ class UserDocumentController extends Controller
      */
     public function index()
     {
-        $this->userDocumentService->setUser(auth()->user());
+        if (auth()->check()) {
+            $this->userDocumentService->setUser(auth()->user());
+        }
         $userDocuments = $this->userDocumentService->index();
         $collection = new UserDocumentCollection($userDocuments);
 
@@ -40,7 +42,9 @@ class UserDocumentController extends Controller
      */
     public function view($id)
     {
-        $this->userDocumentService->setUser(auth()->user());
+        if (auth()->check()) {
+            $this->userDocumentService->setUser(auth()->user());
+        }
         $userDocument = $this->userDocumentService->fetchById($id);
         $this->authorize('view', $userDocument);
 
@@ -54,7 +58,9 @@ class UserDocumentController extends Controller
     public function store(UserDocumentRequest $request)
     {
         $dto = UserDocumentDto::fromRequest($request);
-        $this->userDocumentService->setUser(auth()->user());
+        if (auth()->check()) {
+            $this->userDocumentService->setUser(auth()->user());
+        }
         $userDocument = $this->userDocumentService->store($dto);
         $resource = (new UserDocumentResource($userDocument))->except('url');
 
