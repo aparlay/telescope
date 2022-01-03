@@ -224,7 +224,6 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-
     /**
      * Create a new factory instance for the model.
      */
