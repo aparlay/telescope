@@ -94,9 +94,10 @@ class UserDocumentTest extends ApiTestCase
 
             $r->assertJsonStructure([
                 'data' => [
-                    '_id', 'type', 'status',
+                    '_id', 'type', 'status', 'status_label', 'type_label'
                 ],
             ]);
+
 
             $r->assertJson(
                 fn ($json) => $json->whereAllType([
