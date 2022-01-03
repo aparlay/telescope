@@ -65,7 +65,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::delete('/{user}/follow', [FollowController::class, 'destroy'])->name('unfollow');
             Route::get('/{user}', [UserController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
         });
-
     });
 
     Route::prefix('user-document')->name('user-document.')->group(function () {
@@ -76,7 +75,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::get('/{doc_id}', [UserDocumentController::class, 'view'])->name('view');
         });
     });
-
 
     /* Authentication Group with me prefix */
     Route::middleware(['auth:api', 'cookies-auth'])->name('profile.')->group(function () {

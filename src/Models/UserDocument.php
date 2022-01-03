@@ -79,7 +79,7 @@ class UserDocument extends BaseModel
      */
     protected $casts = [
         'status' => 'integer',
-        'type' => 'integer'
+        'type' => 'integer',
     ];
 
     protected $dates = [
@@ -96,7 +96,6 @@ class UserDocument extends BaseModel
         return UserDocumentFactory::new();
     }
 
-
     /**
      * Get the user associated with the follow.
      */
@@ -104,7 +103,6 @@ class UserDocument extends BaseModel
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
 
     public function getFilePath()
     {
