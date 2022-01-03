@@ -20,6 +20,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use JetBrains\PhpStorm\ArrayShape;
+use Laravel\Scout\Searchable;
 use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -30,6 +31,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *
  * @property ObjectId    $_id
  * @property string      $username
+ * @property string      $full_name
  * @property string      $password_hash
  * @property string      $password_reset_token
  * @property string      $email
@@ -74,6 +76,7 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
     use UserScope;
     use HasRoles;
+    use Searchable;
 
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
@@ -204,6 +207,23 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
     ];
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'poster' => $this->avatar,
+            'username' => $this->username,
+            'email' => $this->email,
+            'phone_number' => $this->phone_number,
+            'full_name' => $this->full_name,
+        ];
+    }
+
 
     /**
      * Create a new factory instance for the model.
