@@ -24,16 +24,7 @@ class UserDocumentSeeder extends Seeder
         UserDocument::factory()->count($this->units)
             ->state(function (array $attributes) use ($user) {
                 return [
-                    'user' =>  [
-                        '_id' => new ObjectId($user->_id),
-                        'username' => $user->username,
-                        'avatar' => $user->avatar,
-                    ],
-                    'creator' =>  [
-                        '_id' => new ObjectId($user->_id),
-                        'username' => $user->username,
-                        'avatar' => $user->avatar,
-                    ],
+                    'user_id' => new ObjectId($user->_id)
                 ];
             })
             ->create();

@@ -24,20 +24,26 @@ class UserDocumentFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'type' => $this->faker->randomElement([
-                UserDocumentType::ID_CARD->value,
-                UserDocumentType::SELFIE->value,
-            ]),
 
+        $type = $this->faker->randomElement([
+            UserDocumentType::ID_CARD->value,
+            UserDocumentType::SELFIE->value,
+        ]);
+
+        $docPrefix = match ($type) {
+            UserDocumentType::SELFIE->value => 'selfie_',
+            UserDocumentType::ID_CARD->value => 'id_card_',
+
+        };
+        return [
+            'type' => $type,
             'status' => $this->faker->randomElement([
                 UserDocumentStatus::CREATED->value,
                 UserDocumentStatus::CONFIRMED->value,
             ]),
             'md5' => $this->faker->md5(),
-            'file' => 'waptap.mp4',
-            'files_history' => [],
-            'mime_type' => 'video/mp4',
+            'file' => $docPrefix . uniqid().'.jpg',
+            'mime_type' => 'image/jpg',
         ];
     }
 }

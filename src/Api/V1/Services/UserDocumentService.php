@@ -61,30 +61,14 @@ class UserDocumentService
         return $userDocument;
     }
 
-    /**
-     * @param UserDocument $userDocument
-     * @return string
-     * @throws \ErrorException
-     */
-    private function getFilePrefix(UserDocument $userDocument)
-    {
-        switch ($userDocument->type) {
-            case UserDocumentType::SELFIE->value:
-                $filePrefix = 'selfie_';
-                break;
-            case UserDocumentType::ID_CARD->value:
-                $filePrefix = 'id_card_';
-                break;
-            default:
-                throw new \ErrorException('Unknown document type');
-        }
-
-        return $filePrefix;
-    }
 
     private function uploadDocument(UploadedFile $file, UserDocument $userDocument)
     {
-        $filePrefix = $this->getFilePrefix($userDocument);
+        $filePrefix = match ($userDocument->type) {
+            UserDocumentType::SELFIE->value => 'selfie_',
+            UserDocumentType::ID_CARD->value => 'id_card_',
+        };
+
         $this->uploadFileService->setFilePrefix($filePrefix);
 
         $tempFilePath = $this->uploadFileService->upload($file);
