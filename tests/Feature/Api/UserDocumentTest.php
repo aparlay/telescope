@@ -30,6 +30,14 @@ class UserDocumentTest extends ApiTestCase
                 ['_id', 'type', 'status', 'url', 'status_label', 'type_label'],
             ],
         ]);
+
+        $r->assertJson(
+            fn ($json) => $json->whereAllType([
+                'code' => 'integer',
+                'status' => 'string',
+                'data' => 'array'
+            ])
+        );
     }
 
     /**
