@@ -14,7 +14,6 @@ trait UserDocumentScope
         return $query->where('type', $type);
     }
 
-
     /**
      * @param  Builder  $query
      * @param  ObjectId|string  $userId
