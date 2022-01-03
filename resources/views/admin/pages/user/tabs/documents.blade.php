@@ -1,13 +1,15 @@
 @php
     use Aparlay\Core\Models\Enums\UserDocumentStatus;
     use Aparlay\Core\Models\Enums\UserDocumentType;
+    use Aparlay\Core\Models\UserDocument;
 
     /** @var User $user */
-    $documentsSelfies = $user->userDocumentObjs()->where('type', UserDocumentType::SELFIE->value)->get();
-    $documentsIdCards = $user->userDocumentObjs()->where('type', UserDocumentType::ID_CARD->value)->get();
+    $documentsSelfies = UserDocument::user($user->_id)->type(UserDocumentType::SELFIE->value)->get();
 
-    $countSelfies = $user->userDocumentObjs()->where('type', UserDocumentType::SELFIE->value)->count();
-    $countDocuments = $user->userDocumentObjs()->where('type', UserDocumentType::ID_CARD->value)->count();
+    $documentsIdCards = UserDocument::user($user->_id)->type(UserDocumentType::ID_CARD->value)->get();
+
+    $countSelfies = $documentsSelfies->count();
+    $countDocuments = $documentsIdCards->count();
 
 @endphp
 

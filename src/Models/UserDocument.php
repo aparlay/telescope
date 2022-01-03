@@ -51,6 +51,7 @@ class UserDocument extends BaseModel
      * @var string
      */
     protected $collection = 'user_documents';
+    protected $primaryKey = '_id';
 
     /**
      * The attributes that are mass assignable.
