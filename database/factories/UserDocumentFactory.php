@@ -24,7 +24,6 @@ class UserDocumentFactory extends Factory
      */
     public function definition()
     {
-
         $type = $this->faker->randomElement([
             UserDocumentType::ID_CARD->value,
             UserDocumentType::SELFIE->value,
@@ -33,8 +32,8 @@ class UserDocumentFactory extends Factory
         $docPrefix = match ($type) {
             UserDocumentType::SELFIE->value => 'selfie_',
             UserDocumentType::ID_CARD->value => 'id_card_',
-
         };
+
         return [
             'type' => $type,
             'status' => $this->faker->randomElement([
@@ -42,7 +41,7 @@ class UserDocumentFactory extends Factory
                 UserDocumentStatus::CONFIRMED->value,
             ]),
             'md5' => $this->faker->md5(),
-            'file' => $docPrefix . uniqid().'.jpg',
+            'file' => $docPrefix.uniqid().'.jpg',
             'mime_type' => 'image/jpg',
         ];
     }

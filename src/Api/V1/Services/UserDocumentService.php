@@ -61,7 +61,6 @@ class UserDocumentService
         return $userDocument;
     }
 
-
     private function uploadDocument(UploadedFile $file, UserDocument $userDocument)
     {
         $filePrefix = match ($userDocument->type) {
