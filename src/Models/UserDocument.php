@@ -65,7 +65,6 @@ class UserDocument extends BaseModel
         'file',
         'size',
         'mime',
-        'user',
         'creator',
         'created_at',
         'updated_at',
@@ -82,7 +81,6 @@ class UserDocument extends BaseModel
         'status' => 'integer',
         'type' => 'integer',
         'creator' => SimpleUserCast::class.':_id,username,avatar',
-        'user' => SimpleUserCast::class.':_id,username,avatar',
     ];
 
     protected $dates = [
@@ -97,29 +95,6 @@ class UserDocument extends BaseModel
     protected static function newFactory(): Factory
     {
         return UserDocumentFactory::new();
-    }
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-    ];
-
-    /**
-     * Get the user associated with the follow.
-     */
-    public function userObj(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user._id');
     }
 
     /**
