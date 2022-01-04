@@ -9,6 +9,7 @@ use Aparlay\Core\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use MongoDB\BSON\ObjectId;
 
 class UserDocumentTest extends ApiTestCase
 {
@@ -112,6 +113,9 @@ class UserDocumentTest extends ApiTestCase
             $dR = $r->decodeResponseJson();
             $rDocumentType = Arr::get($dR, 'data.type');
             $this->assertSame($documentType, $rDocumentType);
+
+            $modelId = Arr::get($dR, 'data._id');
+            $this->assertDatabaseHas('user_documents', ['_id' => new ObjectId($modelId), 'creator._id' => new ObjectId($user->_id)]);
         }
     }
 }
