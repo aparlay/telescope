@@ -31,13 +31,14 @@
                                 'Fullname',
                                 '',
                                 'Status',
+                                'Documents',
                                 'Visibility',
                                 'Followers',
                                 'Likes',
                                 'Medias',
                                 '',
                                 'Created at',
-                                ''
+                                '',
                             ];
 
                         $config = [
@@ -58,12 +59,13 @@
                                 ['data' => 'full_name', 'orderable' => false],
                                 ['data' => 'status', 'visible' => false],
                                 ['data' => 'status_badge', 'orderData' => 4, 'target' => 4],
+                                ['data' => 'documents', 'orderable' => false],
                                 ['data' => 'visibility'],
                                 ['data' => 'follower_count', 'orderable' => false],
                                 ['data' => 'like_count', 'orderable' => false],
                                 ['data' => 'media_count', 'orderable' => false],
                                 ['data' => 'created_at', 'visible' => false],
-                                ['data' => 'date_formatted', 'orderData' => 10, 'target' => 10],
+                                ['data' => 'date_formatted', 'orderData' => 11, 'target' => 11],
                                 ['data' => 'action', 'orderable' => false],
                             ],
                         ]
