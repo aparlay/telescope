@@ -221,6 +221,8 @@ class User extends Authenticatable implements JWTSubject
             'email' => $this->email,
             'phone_number' => $this->phone_number,
             'full_name' => $this->full_name,
+            'follower_count' => $this->follower_count,
+            'like_count' => $this->like_count,
         ];
     }
 
