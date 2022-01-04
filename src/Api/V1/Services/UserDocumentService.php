@@ -79,7 +79,7 @@ class UserDocumentService
             'size' => $this->uploadFileService->getSize(),
         ]);
 
-        $storageFilePath = $userDocument->userObj->_id.'/'.basename($tempFilePath);
+        $storageFilePath = $userDocument->creatorObj->_id.'/'.basename($tempFilePath);
 
         Bus::chain([
             new UploadFileJob(

@@ -20,7 +20,7 @@ class UserDocumentTest extends ApiTestCase
     {
         $userDocument = UserDocument::first();
 
-        $r = $this->actingAs($userDocument->userObj)
+        $r = $this->actingAs($userDocument->creatorObj)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->get('/v1/user-document');
 
@@ -49,7 +49,7 @@ class UserDocumentTest extends ApiTestCase
         /** @var UserDocument $userDocument */
         $userDocument = UserDocument::first();
 
-        $r = $this->actingAs($userDocument->userObj)
+        $r = $this->actingAs($userDocument->creatorObj)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->get("/v1/user-document/$userDocument->_id");
 
