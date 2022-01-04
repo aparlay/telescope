@@ -2,9 +2,13 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Traits\HasFileTrait;
 use Aparlay\Core\Casts\SimpleUserCast;
-use Aparlay\Core\Database\Factories\MediaLikeFactory;
-use Aparlay\Core\Models\Scopes\MediaLikeScope;
+use Aparlay\Core\Constants\StorageType;
+use Aparlay\Core\Database\Factories\UserDocumentFactory;
+use Aparlay\Core\Models\Enums\UserDocumentStatus;
+use Aparlay\Core\Models\Enums\UserDocumentType;
+use Aparlay\Core\Models\Scopes\UserDocumentScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,7 +42,8 @@ class UserDocument extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use MediaLikeScope;
+    use UserDocumentScope;
+    use HasFileTrait;
 
     /**
      * The collection associated with the model.
@@ -46,6 +51,7 @@ class UserDocument extends BaseModel
      * @var string
      */
     protected $collection = 'user_documents';
+    protected $primaryKey = '_id';
 
     /**
      * The attributes that are mass assignable.
@@ -61,26 +67,10 @@ class UserDocument extends BaseModel
         'size',
         'mime',
         'user_id',
-        'creator',
         'created_at',
         'updated_at',
         'created_by',
         'updated_by',
-    ];
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
     ];
 
     /**
@@ -89,7 +79,14 @@ class UserDocument extends BaseModel
      * @var array
      */
     protected $casts = [
-        'creator' => SimpleUserCast::class.':_id,username,avatar',
+        'status' => 'integer',
+        'type' => 'integer',
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     /**
@@ -97,14 +94,41 @@ class UserDocument extends BaseModel
      */
     protected static function newFactory(): Factory
     {
-        return MediaLikeFactory::new();
+        return UserDocumentFactory::new();
     }
 
     /**
-     * Get the user associated with the alert.
+     * Get the user associated with the follow.
      */
-    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    public function userObj(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getFilePath()
+    {
+        if ($this->userObj) {
+            return $this->userObj->_id.'/'.$this->file;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStorageDisk()
+    {
+        return StorageType::B2_DOCUMENTS;
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return UserDocumentStatus::from($this->status)->label();
+    }
+
+    public function getTypeLabelAttribute()
+    {
+        return UserDocumentType::from($this->type)->label();
     }
 }

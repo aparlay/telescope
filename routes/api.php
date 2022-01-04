@@ -10,6 +10,7 @@ use Aparlay\Core\Api\V1\Controllers\MediaLikeController;
 use Aparlay\Core\Api\V1\Controllers\ReportController;
 use Aparlay\Core\Api\V1\Controllers\SiteController;
 use Aparlay\Core\Api\V1\Controllers\UserController;
+use Aparlay\Core\Api\V1\Controllers\UserDocumentController;
 use Aparlay\Core\Api\V1\Controllers\VersionController;
 use Illuminate\Support\Facades\Route;
 
@@ -63,6 +64,15 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::put('/{user}/follow', [FollowController::class, 'store'])->name('follow');
             Route::delete('/{user}/follow', [FollowController::class, 'destroy'])->name('unfollow');
             Route::get('/{user}', [UserController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
+        });
+    });
+
+    Route::prefix('user-document')->name('user-document.')->group(function () {
+        /* Authentication Group with user prifix */
+        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
+            Route::post('/', [UserDocumentController::class, 'store'])->name('store');
+            Route::get('/', [UserDocumentController::class, 'index'])->name('index');
+            Route::get('/{doc_id}', [UserDocumentController::class, 'view'])->name('view');
         });
     });
 
