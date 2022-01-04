@@ -51,7 +51,6 @@ class UserDocument extends BaseModel
      * @var string
      */
     protected $collection = 'user_documents';
-    protected $primaryKey = '_id';
 
     /**
      * The attributes that are mass assignable.
@@ -66,7 +65,7 @@ class UserDocument extends BaseModel
         'file',
         'size',
         'mime',
-        'user_id',
+        'creator',
         'created_at',
         'updated_at',
         'created_by',
@@ -81,6 +80,7 @@ class UserDocument extends BaseModel
     protected $casts = [
         'status' => 'integer',
         'type' => 'integer',
+        'creator' => SimpleUserCast::class.':_id,username,avatar',
     ];
 
     protected $dates = [
@@ -98,17 +98,17 @@ class UserDocument extends BaseModel
     }
 
     /**
-     * Get the user associated with the follow.
+     * Get the creator associated with the follow.
      */
-    public function userObj(): BelongsTo
+    public function creatorObj(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'creator._id');
     }
 
     public function getFilePath()
     {
-        if ($this->userObj) {
-            return $this->userObj->_id.'/'.$this->file;
+        if ($this->creatorObj) {
+            return $this->creatorObj->_id.'/'.$this->file;
         }
 
         return null;

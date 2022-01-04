@@ -4,9 +4,8 @@
     use Aparlay\Core\Models\UserDocument;
 
     /** @var User $user */
-    $documentsSelfies = UserDocument::user($user->_id)->type(UserDocumentType::SELFIE->value)->get();
-
-    $documentsIdCards = UserDocument::user($user->_id)->type(UserDocumentType::ID_CARD->value)->get();
+    $documentsSelfies = $user->userDocumentObjs()->type(UserDocumentType::SELFIE->value)->get();
+    $documentsIdCards = $user->userDocumentObjs()->type(UserDocumentType::ID_CARD->value)->get();
 
     $countSelfies = $documentsSelfies->count();
     $countDocuments = $documentsIdCards->count();

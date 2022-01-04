@@ -16,13 +16,13 @@ trait UserDocumentScope
 
     /**
      * @param  Builder  $query
-     * @param  ObjectId|string  $userId
+     * @param  ObjectId|string  $creatorId
      * @return Builder
      */
-    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
+    public function scopeCreator(Builder $query, ObjectId | string $creatorId): Builder
     {
-        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+        $creatorId = $creatorId instanceof ObjectId ? $creatorId : new ObjectId($creatorId);
 
-        return $query->where('user_id', $userId);
+        return $query->where('creator._id', $creatorId);
     }
 }

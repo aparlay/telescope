@@ -16,7 +16,7 @@ class UserDocumentRepository
      */
     public function index($user)
     {
-        return UserDocument::user($user->_id)->get();
+        return UserDocument::creator($user->_id)->get();
     }
 
     public function fetchById($id)
@@ -31,12 +31,6 @@ class UserDocumentRepository
             return UserDocument::create([
                 'type' => $documentDto->type,
                 'status' => UserDocumentStatus::CREATED->value,
-                'user_id' => new ObjectId($creator->id),
-                'user' => [
-                    '_id' => new ObjectId($creator->_id),
-                    'username' => $creator->username,
-                    'avatar' => $creator->avatar,
-                ],
                 'creator' => [
                     '_id' => new ObjectId($creator->_id),
                     'username' => $creator->username,
