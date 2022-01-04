@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Api\V1\Notifications\UserDeactivateAccount;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\DeleteUserConnect;

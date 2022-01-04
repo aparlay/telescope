@@ -13,7 +13,7 @@ class ReportDTO extends DataTransferObject
     {
         return new self(
             [
-                'reason' => $reportRequest->input('post'),
+                'reason' => $reportRequest->input('reason'),
             ]
         );
     }

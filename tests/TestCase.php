@@ -15,6 +15,7 @@ abstract class TestCase extends Orchestra
 
         $this->app->make('config')->set('database.default', 'testing');
         $this->app->make('config')->set('app.is_testing', true);
+        $this->app->make('config')->set('app.debug', false);
 
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
