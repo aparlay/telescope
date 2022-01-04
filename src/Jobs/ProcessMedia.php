@@ -19,8 +19,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
@@ -34,6 +36,23 @@ class ProcessMedia implements ShouldQueue
     public Media|null $media;
     public string $file;
     public string $media_id;
+
+    /**
+     * The number of times the job may be attempted.
+     */
+    public int $tries = 30;
+
+    /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     */
+    public int $maxExceptions = 3;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int|array
+     */
+    public $backoff = 10;
 
     /**
      * Create a new job instance.
@@ -52,6 +71,11 @@ class ProcessMedia implements ShouldQueue
         $this->media_id = $mediaId;
     }
 
+    public function middleware()
+    {
+        return [new WithoutOverlapping($this->media_id)];
+    }
+
     /**
      * Execute the job.
      *
@@ -59,6 +83,23 @@ class ProcessMedia implements ShouldQueue
      * @throws Exception
      */
     public function handle()
+    {
+        Redis::funnel(__CLASS__)->releaseAfter(600)->limit(1)
+            ->then(function () {
+                $this->processVideo();
+            }, function () {
+                $this->release(60);
+            });
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
+        }
+    }
+
+    public function processVideo()
     {
         $client = new MediaClient(config('app.media.grpc'), [
             'credentials' => ChannelCredentials::createInsecure(),
@@ -260,12 +301,5 @@ class ProcessMedia implements ShouldQueue
         $media->refresh();
         $media->notify(new VideoPending());
         MediaProcessingCompleted::dispatch($media);
-    }
-
-    public function failed(Throwable $exception): void
-    {
-        if (($user = User::admin()->first()) !== null) {
-            $user->notify(new JobFailed(self::class, $this->attempts(), $exception->getMessage()));
-        }
     }
 }

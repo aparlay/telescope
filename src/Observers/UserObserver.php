@@ -98,7 +98,7 @@ class UserObserver extends BaseModelObserver
                     DeleteUserConnect::dispatch((string) $model->_id)->onQueue('low');
                     break;
             }
-            if ($model->status === UserStatus::STATUS_DEACTIVATED) {
+            if ($model->status === UserStatus::DEACTIVATED->value) {
                 $model->notify(new UserDeactivateAccount());
             }
         }

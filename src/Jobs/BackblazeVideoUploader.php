@@ -41,6 +41,13 @@ class BackblazeVideoUploader implements ShouldQueue
     public int $maxExceptions = 3;
 
     /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int|array
+     */
+    public $backoff = 10;
+
+    /**
      * Create a new job instance.
      *
      * @return void

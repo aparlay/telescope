@@ -42,7 +42,6 @@ $(document).ready(function() {
             $('#date-preview').val(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'))
         }
     )
-
     $(document).on('click', '.delete', function(e) {
         e.preventDefault()
         if(confirm('Are you sure you want to delete?')) {
