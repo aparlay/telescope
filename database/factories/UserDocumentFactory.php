@@ -37,8 +37,8 @@ class UserDocumentFactory extends Factory
         return [
             'type' => $type,
             'status' => $this->faker->randomElement([
-                UserDocumentStatus::CREATED->value,
-                UserDocumentStatus::CONFIRMED->value,
+                UserDocumentStatus::PENDING->value,
+                UserDocumentStatus::APPROVED->value,
             ]),
             'md5' => $this->faker->md5(),
             'file' => $docPrefix.uniqid().'.jpg',

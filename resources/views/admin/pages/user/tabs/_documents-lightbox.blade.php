@@ -22,7 +22,7 @@
 
                 <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="{{ '#approve_modal_' . $document->id }}">
                     <i class="fas fa-check"></i>
-                    <strong>Confirm</strong>
+                    <strong>Approve</strong>
                 </button>
 
                 <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="{{ '#reject_modal_' . $document->id }}">

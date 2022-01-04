@@ -7,6 +7,7 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
+use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
@@ -30,6 +31,7 @@ class UserService extends AdminBaseService
         $limit = (int) request()->get('length');
 
         $filters = $this->getFilters();
+
         $sort = $this->tableSort();
         $dateRangeFilter = null;
 
@@ -65,6 +67,21 @@ class UserService extends AdminBaseService
                 'gender' => ActionButtonBladeComponent::getBadge($user->gender_color, $user->gender_name),
             ];
 
+            $approvedDocsCount = $this->userRepository->countDocs($user, UserDocumentStatus::APPROVED->value);
+            $rejectedDocsCount = $this->userRepository->countDocs($user, UserDocumentStatus::REJECTED->value);
+            $pendingDocsCount = $this->userRepository->countDocs($user, UserDocumentStatus::PENDING->value);
+
+            $pendingDocs = UserDocumentStatus::PENDING->label() . ': ' . $approvedDocsCount;
+            $approvedDocs = UserDocumentStatus::APPROVED->label() . ': ' . $rejectedDocsCount;
+            $rejectedDocs = UserDocumentStatus::REJECTED->label() . ': ' . $pendingDocsCount;
+
+            $documentBadges = [
+                UserDocumentStatus::PENDING->name => ActionButtonBladeComponent::getBadge(UserDocumentStatus::PENDING->badgeColor(), $pendingDocs),
+                UserDocumentStatus::APPROVED->name => ActionButtonBladeComponent::getBadge(UserDocumentStatus::APPROVED->badgeColor(), $approvedDocs),
+                UserDocumentStatus::REJECTED->name => ActionButtonBladeComponent::getBadge(UserDocumentStatus::REJECTED->badgeColor(), $rejectedDocs),
+            ];
+
+            $user->documents = implode('</br>', $documentBadges);
             $user->status_badge = implode('</br>', $userBadges);
             $user->action = ActionButtonBladeComponent::getViewActionButton($user->_id, 'user');
             $user->username_avatar = ActionButtonBladeComponent::getUsernameWithAvatar($user);
