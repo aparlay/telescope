@@ -50,7 +50,6 @@ class UserRepository
         return $query->get();
     }
 
-
     public function countDocs(User $user, $status)
     {
         return $user->userDocumentObjs()->status($status)->count();
