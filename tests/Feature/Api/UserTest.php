@@ -22,6 +22,6 @@ class UserTest extends ApiTestCase
         $r->assertStatus(204);
 
         $user->refresh();
-        $this->assertSame($user->status, UserStatus::STATUS_DEACTIVATED);
+        $this->assertSame($user->status, UserStatus::DEACTIVATED->value);
     }
 }
