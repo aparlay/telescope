@@ -22,7 +22,7 @@ class UserDocumentTest extends ApiTestCase
 
         $r = $this->actingAs($userDocument->userObj)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/document');
+            ->get('/v1/user-document');
 
         $r->assertStatus(200);
         $r->assertJsonStructure([
@@ -30,6 +30,14 @@ class UserDocumentTest extends ApiTestCase
                 ['_id', 'type', 'status', 'url', 'status_label', 'type_label'],
             ],
         ]);
+
+        $r->assertJson(
+            fn ($json) => $json->whereAllType([
+                'code' => 'integer',
+                'status' => 'string',
+                'data' => 'array',
+            ])
+        );
     }
 
     /**
@@ -43,7 +51,7 @@ class UserDocumentTest extends ApiTestCase
 
         $r = $this->actingAs($userDocument->userObj)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get("/v1/user/document/$userDocument->_id");
+            ->get("/v1/user-document/$userDocument->_id");
 
         $r->assertStatus(200);
         $r->assertJsonStructure([
@@ -79,14 +87,14 @@ class UserDocumentTest extends ApiTestCase
         foreach ($documentTypes as $documentType) {
             $r = $this->actingAs($user)
                 ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-                ->post('/v1/user/document', [
+                ->post('/v1/user-document', [
                     'file' => $uploadedFile,
                     'type' => $documentType,
                 ]);
 
             $r->assertJsonStructure([
                 'data' => [
-                    '_id', 'type', 'status',
+                    '_id', 'type', 'status', 'status_label', 'type_label',
                 ],
             ]);
 

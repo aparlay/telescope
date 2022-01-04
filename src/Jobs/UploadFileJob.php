@@ -18,7 +18,7 @@ use Throwable;
 /**
  * This job could be used to upload files to any storage.
  */
-class UploadFileJob implements ShouldQueue
+class UploadFileJob extends AbstractJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -29,23 +29,6 @@ class UploadFileJob implements ShouldQueue
     private string $fileDisk;
     private Collection $storages;
     private $storageFilePath;
-
-    /**
-     * The number of times the job may be attempted.
-     */
-    public int $tries = 1;
-
-    /**
-     * The maximum number of unhandled exceptions to allow before failing.
-     */
-    public int $maxExceptions = 1;
-
-    /**
-     * The number of seconds to wait before retrying the job.
-     *
-     * @var int|array
-     */
-    public $backoff = 1;
 
     /**
      * Create a new job instance.
@@ -60,6 +43,8 @@ class UploadFileJob implements ShouldQueue
         Collection $storages,
         $storageFilePath = null
     ) {
+        parent::__construct();
+
         $this->fileDisk = $fileDisk;
         $this->fileName = $fileName;
         $this->storages = $storages;

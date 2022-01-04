@@ -16,18 +16,6 @@ trait UserDocumentScope
 
     /**
      * @param  Builder  $query
-     * @param  ObjectId|string  $creatorId
-     * @return Builder
-     */
-    public function scopeCreator(Builder $query, ObjectId | string $creatorId): Builder
-    {
-        $creatorId = $creatorId instanceof ObjectId ? $creatorId : new ObjectId($creatorId);
-
-        return $query->where('creator._id', $creatorId);
-    }
-
-    /**
-     * @param  Builder  $query
      * @param  ObjectId|string  $userId
      * @return Builder
      */
@@ -35,6 +23,6 @@ trait UserDocumentScope
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
-        return $query->where('user._id', $userId);
+        return $query->where('user_id', $userId);
     }
 }

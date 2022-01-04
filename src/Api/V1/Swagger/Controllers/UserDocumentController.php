@@ -6,7 +6,7 @@ class UserDocumentController
 {
     /**
      * @OA\Post(
-     *     path="/v1/user/document",
+     *     path="/v1/user-document",
      *     tags={"user-document"},
      *     summary="create new user document for verification: id card or selfie",
      *     description="To upload and create new user verication document you need to call this endpoint.",
@@ -93,7 +93,7 @@ class UserDocumentController
 
      *
      * @OA\GET(
-     *     path="/v1/user/{document_id}/document",
+     *     path="/v1/user-document/{document_id}",
      *     tags={"user-document"},
      *     summary="Fetch a signle user documents for current user",
      *     description="Fetch a single user documents for current user",
@@ -161,7 +161,7 @@ class UserDocumentController
      * )
      *
      * @OA\GET(
-     *     path="/v1/user/document",
+     *     path="/v1/user-document",
      *     tags={"user-document"},
      *     summary="Fetch all user documents for current user",
      *     description="Fetch all user documents for current user",

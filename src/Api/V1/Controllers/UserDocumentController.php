@@ -20,10 +20,6 @@ class UserDocumentController extends Controller
     public function __construct(UserDocumentService $documentService)
     {
         $this->userDocumentService = $documentService;
-
-        if (auth()->check()) {
-            $this->userDocumentService->setUser(auth()->user());
-        }
     }
 
     /**
@@ -31,6 +27,9 @@ class UserDocumentController extends Controller
      */
     public function index()
     {
+        if (auth()->check()) {
+            $this->userDocumentService->setUser(auth()->user());
+        }
         $userDocuments = $this->userDocumentService->index();
         $collection = new UserDocumentCollection($userDocuments);
 
@@ -43,6 +42,9 @@ class UserDocumentController extends Controller
      */
     public function view($id)
     {
+        if (auth()->check()) {
+            $this->userDocumentService->setUser(auth()->user());
+        }
         $userDocument = $this->userDocumentService->fetchById($id);
         $this->authorize('view', $userDocument);
 
@@ -56,6 +58,9 @@ class UserDocumentController extends Controller
     public function store(UserDocumentRequest $request)
     {
         $dto = UserDocumentDto::fromRequest($request);
+        if (auth()->check()) {
+            $this->userDocumentService->setUser(auth()->user());
+        }
         $userDocument = $this->userDocumentService->store($dto);
         $resource = (new UserDocumentResource($userDocument))->except('url');
 

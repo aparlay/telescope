@@ -63,15 +63,16 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::delete('/{user}/block', [BlockController::class, 'destroy'])->name('unblock');
             Route::put('/{user}/follow', [FollowController::class, 'store'])->name('follow');
             Route::delete('/{user}/follow', [FollowController::class, 'destroy'])->name('unfollow');
+            Route::get('/{user}', [UserController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
+        });
+    });
 
-            Route::get('/{user}', [UserController::class, 'show'])
-                ->name('show')
-                ->withoutMiddleware(['auth:api'])
-                ->where('user', '^[document]');
-
-            Route::post('document', [UserDocumentController::class, 'store'])->name('user-document.store');
-            Route::get('document', [UserDocumentController::class, 'index'])->name('user-document.index');
-            Route::get('document/{document}', [UserDocumentController::class, 'view'])->name('user-document.view');
+    Route::prefix('user-document')->name('user-document.')->group(function () {
+        /* Authentication Group with user prifix */
+        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
+            Route::post('/', [UserDocumentController::class, 'store'])->name('store');
+            Route::get('/', [UserDocumentController::class, 'index'])->name('index');
+            Route::get('/{doc_id}', [UserDocumentController::class, 'view'])->name('view');
         });
     });
 

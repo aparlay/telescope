@@ -35,7 +35,6 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
         MediaVisit::observe(MediaVisitObserver::class);
         User::observe(UserObserver::class);
         Report::observe(ReportObserver::class);
-        UserDocument::observe(UserDocumentObserver::class);
         parent::boot();
     }
 }
