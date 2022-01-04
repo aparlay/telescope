@@ -229,7 +229,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(UserDocument::class, 'creator._id');
     }
 
-
     /**
      * Get the phone associated with the user.
      */
