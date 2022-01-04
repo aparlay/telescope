@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Database\Seeders;
 
+use Aparlay\Core\Models\Media;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Aparlay\Core\Models\Media;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run()
-    {   
+    {
         Media::unsetEventDispatcher();
 
         DB::collection('alerts')->truncate();
@@ -38,7 +38,5 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             VersionSeeder::class,
         ]);
-
-        
     }
 }
