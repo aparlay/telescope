@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-
 enum UserDocumentStatus: int implements Enum
 {
     case PENDING = 1;

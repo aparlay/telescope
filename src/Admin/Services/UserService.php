@@ -71,7 +71,7 @@ class UserService extends AdminBaseService
 
             $pendingDocs = UserDocumentStatus::PENDING->label().': '.$user->pending_documents;
             $approvedDocs = UserDocumentStatus::APPROVED->label().': '.$user->approved_documents;
-            $rejectedDocs = UserDocumentStatus::REJECTED->label().': '. $user->rejected_documents;
+            $rejectedDocs = UserDocumentStatus::REJECTED->label().': '.$user->rejected_documents;
 
             $documentBadges = [
                 UserDocumentStatus::PENDING->name => ActionButtonBladeComponent::getBadge(UserDocumentStatus::PENDING->badgeColor(), $pendingDocs),

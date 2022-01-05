@@ -42,7 +42,6 @@ class UserDocumentRepository
         }
     }
 
-
     /**
      * @param $user
      * @return mixed
