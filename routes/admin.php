@@ -90,6 +90,13 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('media.save-upload');
         });
 
+        /* User Routes */
+        Route::name('user-document.')->group(function () {
+            Route::get('user-document', [UserDocumentController::class, 'index'])
+                ->middleware(['permission:list users'])
+                ->name('index');
+        });
+
         Route::name('user.')->group(function () {
             Route::patch('user/document/{documentId}', [UserDocumentController::class, 'update'])
                 ->middleware(['permission:edit users'])
@@ -112,6 +119,12 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('user', [UserController::class, 'indexAjax'])
                 ->middleware(['permission:list users'])
                 ->name('user.index');
+
+            Route::get('user-document', [UserDocumentController::class, 'indexAjax'])
+                ->middleware(['permission:list users'])
+                ->name('user-document.index');
+
+
             Route::get('media', [MediaController::class, 'indexAjax'])
                 ->middleware(['permission:list medias'])
                 ->name('media.index');

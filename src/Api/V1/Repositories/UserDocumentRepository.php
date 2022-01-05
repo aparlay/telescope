@@ -10,6 +10,7 @@ use MongoDB\BSON\ObjectId;
 
 class UserDocumentRepository
 {
+
     /**
      * @param User $user
      * @return mixed
@@ -40,23 +41,5 @@ class UserDocumentRepository
         } catch (\Exception $e) {
             throw $e;
         }
-    }
-
-    /**
-     * @param $user
-     * @return mixed
-     */
-    public function updateCounters($user)
-    {
-        $rejectedDocs = $user->userDocumentObjs()->status(UserDocumentStatus::REJECTED->value)->count();
-        $approvedDocs = $user->userDocumentObjs()->status(UserDocumentStatus::APPROVED->value)->count();
-        $pendingDocs = $user->userDocumentObjs()->status(UserDocumentStatus::PENDING->value)->count();
-
-        $user->rejected_documents = $rejectedDocs;
-        $user->approved_documents = $approvedDocs;
-        $user->pending_documents = $pendingDocs;
-        $user->save();
-
-        return $user;
     }
 }

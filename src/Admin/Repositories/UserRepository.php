@@ -39,8 +39,6 @@ class UserRepository
 
     public function getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter = null, $documentStatus = null)
     {
-        unset($filters['documents']);
-
         $query = $this->model->filter($filters)
             ->sortBy($sort)
             ->skip($offset)
@@ -48,16 +46,6 @@ class UserRepository
 
         if ($dateRangeFilter) {
             $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
-        }
-
-        if ($documentStatus) {
-            $field = match ((int) $documentStatus) {
-                UserDocumentStatus::PENDING->value => 'pending_documents',
-                UserDocumentStatus::REJECTED->value => 'rejected_documents',
-                UserDocumentStatus::APPROVED->value => 'approved_documents',
-            };
-
-            $query->where($field, '>', 0);
         }
 
         $result = $query->get();
