@@ -3,10 +3,10 @@
 namespace Aparlay\Core\Tests;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Models\Enums\UserType;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
 
@@ -22,12 +22,7 @@ abstract class DuskTestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->app->make('config')->set('app.is_testing', true);
         $this->app->make('config')->set('app.url', env('ADMIN_DOMAIN'));
-
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
 
         if (! static::$isSeeded) {
             $this->artisan('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
@@ -38,7 +33,7 @@ abstract class DuskTestCase extends BaseTestCase
             static::$isSeeded = true;
         }
 
-        $this->superAdminUser = User::where('type', User::TYPE_ADMIN)->first();
+        $this->superAdminUser = User::where('type', UserType::ADMIN->value)->first();
         $this->superAdminUser->assignRole('super-administrator');
 
         $this->browse(function (Browser $browser) {

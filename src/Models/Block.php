@@ -8,6 +8,7 @@ use Aparlay\Core\Models\Scopes\BlockScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 use MongoDB\BSON\ObjectId;
 
@@ -86,7 +87,7 @@ class Block extends BaseModel
     /**
      * Get the user associated with the follow.
      */
-    public function userObj()
+    public function userObj(): BelongsTo|\Jenssegers\Mongodb\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'user._id');
     }
@@ -94,7 +95,7 @@ class Block extends BaseModel
     /**
      * Get the creator associated with the follow.
      */
-    public function creatorObj()
+    public function creatorObj(): BelongsTo|\Jenssegers\Mongodb\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'creator._id');
     }

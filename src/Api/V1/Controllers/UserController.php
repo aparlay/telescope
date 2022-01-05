@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Api\V1\Services\UserService;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -82,28 +83,30 @@ class UserController extends Controller
      */
     public function update(MeRequest $request): object
     {
-        $user = auth()->user();
+        if (auth()->check()) {
+            $this->userService->setUser(auth()->user());
+        }
         /* Check the update permission */
         $this->authorize('update', User::class);
 
         /* Update User Avatar */
         if ($request->hasFile('avatar')) {
-            $this->userService->uploadAvatar($request, $user);
+            $this->userService->uploadAvatar($request);
         } else {
             if ($request->has('avatar') && empty($request->avatar)) {
-                $request->merge(['avatar' => $this->userService->changeDefaultAvatar($request)]);
+                $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
             /* Update User Profile Information */
-            $user->fill($request->all());
-            if ($user->status == User::STATUS_VERIFIED && ! empty($request->username)) {
-                $user->status = User::STATUS_ACTIVE;
+            $this->userService->getUser()->fill($request->all());
+            if ($this->userService->getUser()->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
+                $this->userService->getUser()->status = UserStatus::ACTIVE->value;
             }
-            $user->save();
+            $this->userService->getUser()->save();
         }
-        $user->refresh();
+        $this->userService->getUser()->refresh();
 
         /* Return the updated user data */
-        return $this->response(new MeResource($user), Response::HTTP_OK);
+        return $this->response(new MeResource($this->userService->getUser()), Response::HTTP_OK);
     }
 
     /**

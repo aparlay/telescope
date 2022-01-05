@@ -4,7 +4,6 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\Media;
-use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\AlertRepository;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;

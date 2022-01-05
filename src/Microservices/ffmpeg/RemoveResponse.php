@@ -5,9 +5,7 @@
 
 namespace Aparlay\Core\Microservices\ffmpeg;
 
-use Google\Protobuf\Internal\GPBType;
 use Google\Protobuf\Internal\GPBUtil;
-use Google\Protobuf\Internal\RepeatedField;
 
 /**
  * Generated from protobuf message <code>media.RemoveResponse</code>.

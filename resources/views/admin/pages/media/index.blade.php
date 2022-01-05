@@ -67,12 +67,12 @@
                     ];
                     if($moderation){
                         $config['searching'] = true;
-                        $config['searchCols'] = [null,null,null,["search" => \Aparlay\Core\Models\Media::STATUS_COMPLETED]];
+                        $config['searchCols'] = [null,null,null,["search" => \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value]];
                         $config['bInfo'] = false;
                     }
                     @endphp
                     @if($moderation)
-                        <input type="hidden" id="default-search" data-searchCol="3" data-search="{{ \Aparlay\Core\Models\Media::STATUS_COMPLETED }}">
+                        <input type="hidden" id="default-search" data-searchCol="3" data-search="{{ \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value }}">
                     @endif
                     <div id="accordion">
                         <div class="card card-primary">

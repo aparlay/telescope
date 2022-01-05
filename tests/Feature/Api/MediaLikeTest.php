@@ -4,16 +4,15 @@ namespace Aparlay\Core\Tests\Feature\Api;
 
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
 
 class MediaLikeTest extends ApiTestCase
 {
-    use DatabaseMigrations;
-
     /**
      * @test
      */
@@ -25,15 +24,14 @@ class MediaLikeTest extends ApiTestCase
             'is_protected' => false,
             'created_by' => $mediaCreator->_id,
             'like_count' => 0,
-            'status' => Media::STATUS_COMPLETED,
-            'visibility' => Media::VISIBILITY_PUBLIC,
+            'status' => MediaStatus::COMPLETED->value,
+            'visibility' => MediaVisibility::PUBLIC->value,
             'creator' => [
                 '_id' => $mediaCreator->_id,
                 'username' => $mediaCreator->username,
                 'avatar' => $mediaCreator->avatar,
             ],
         ]);
-
         $this->assertEquals(0, $media->like_count);
 
         $this->assertDatabaseMissing((new MediaLike())->getCollection(), ['media_id' => new ObjectId($media->_id)]);
@@ -96,7 +94,8 @@ class MediaLikeTest extends ApiTestCase
     {
         $user = User::factory()->create();
         $mediaCreator = User::factory()->create();
-        $media = Media::factory()->for($mediaCreator, 'userObj')->create(['status' => Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
+        $media = Media::factory()->for($mediaCreator, 'userObj')
+            ->create(['status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
         $res = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('PUT', '/v1/media/'.$media->_id.'/like', [])
@@ -144,7 +143,7 @@ class MediaLikeTest extends ApiTestCase
      */
     public function mediaLikePermission()
     {
-        $mediaCreator = User::factory()->create(['status' => Media::STATUS_COMPLETED, 'visibility' => Media::VISIBILITY_PUBLIC]);
+        $mediaCreator = User::factory()->create();
         $blockedUser = User::factory()->create();
         $block = Block::factory()->create([
                 'user' => [
@@ -160,6 +159,8 @@ class MediaLikeTest extends ApiTestCase
             ]);
         $media = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
+            'status' => MediaStatus::COMPLETED->value,
+            'visibility' => MediaVisibility::PUBLIC->value,
             'created_by' => $mediaCreator->_id,
             'creator' => [
                 '_id' => $mediaCreator->_id,

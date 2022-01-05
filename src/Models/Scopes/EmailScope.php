@@ -2,8 +2,7 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
-use Aparlay\Core\Models\Email;
-use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\Enums\EmailStatus;
 use Illuminate\Database\Eloquent\Builder;
 
 trait EmailScope
@@ -16,7 +15,7 @@ trait EmailScope
      */
     public function scopeOpened(Builder $query): Builder
     {
-        return $query->where('status', Email::STATUS_OPENED);
+        return $query->where('status', EmailStatus::OPENED->value);
     }
 
     /**
@@ -25,7 +24,7 @@ trait EmailScope
      */
     public function scopeSent(Builder $query): Builder
     {
-        return $query->where('status', Email::STATUS_SENT);
+        return $query->where('status', EmailStatus::SENT->value);
     }
 
     /**
@@ -34,6 +33,6 @@ trait EmailScope
      */
     public function scopeFailed(Builder $query): Builder
     {
-        return $query->where('status', Email::STATUS_FAILED);
+        return $query->where('status', EmailStatus::FAILED->value);
     }
 }
