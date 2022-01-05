@@ -20,4 +20,15 @@ class UserDocumentService extends AdminBaseService
 
         return $userDocument;
     }
+
+
+    public function getStatuses()
+    {
+        return [
+            UserDocumentStatus::REJECTED->value => UserDocumentStatus::REJECTED->label(),
+            UserDocumentStatus::PENDING->value => UserDocumentStatus::PENDING->label(),
+            UserDocumentStatus::APPROVED->value => UserDocumentStatus::APPROVED->label(),
+        ];
+
+    }
 }

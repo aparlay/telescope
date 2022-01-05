@@ -9,6 +9,7 @@ use Aparlay\Core\Admin\Requests\UserUpdateRequest;
 use Aparlay\Core\Admin\Resources\UserResource;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Admin\Services\UploadService;
+use Aparlay\Core\Admin\Services\UserDocumentService;
 use Aparlay\Core\Admin\Services\UserService;
 use Aparlay\Core\Models\Enums\UserStatus;
 use ErrorException;
@@ -25,9 +26,11 @@ class UserController extends Controller
 
     public function __construct(
         UserService $userService,
-        MediaService $mediaService
+        MediaService $mediaService,
+        UserDocumentService $userDocumentService,
     ) {
         $this->userService = $userService;
+        $this->userDocumentService = $userDocumentService;
         $this->mediaService = $mediaService;
     }
 
@@ -38,8 +41,8 @@ class UserController extends Controller
     {
         $userStatuses = $this->userService->getUserStatuses();
         $userVisibilities = $this->userService->getVisibilities();
-
-        return view('default_view::admin.pages.user.index', compact('userStatuses', 'userVisibilities'));
+        $userDocumentStatuses = $this->userDocumentService->getStatuses();
+        return view('default_view::admin.pages.user.index', compact('userStatuses', 'userVisibilities', 'userDocumentStatuses'));
     }
 
     /**

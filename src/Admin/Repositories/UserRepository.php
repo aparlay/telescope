@@ -36,18 +36,53 @@ class UserRepository
         return $query->count();
     }
 
-    public function getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter = null)
+    public function getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter = null, $documentStatus = null)
     {
+        unset($filters['documents']);
+
         $query = $this->model->filter($filters)
             ->sortBy($sort)
             ->skip($offset)
             ->take($limit);
 
+
         if ($dateRangeFilter) {
             $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
         }
 
-        return $query->get();
+        if ($documentStatus) {
+            return $this->filterByDocumentStatus($documentStatus);
+        }
+
+        $result = $query->get();
+
+        return $result;
+    }
+
+    private function filterByDocumentStatus($documentStatus)
+    {
+        $coll = $this->model::raw(function ($collection) use($documentStatus) {
+            return $collection->aggregate([
+                [
+                    '$lookup' => [
+                        'as' => 'ud',
+                        'from' => 'user_documents',
+                        'foreignField' => 'creator._id',
+                        'localField' => '_id'
+                    ]
+                ],
+                [
+                    '$unwind' => '$ud',
+                ],
+                [
+                    '$match' => [
+                        'ud.status' => ['$eq' => (int) $documentStatus],
+                        'ud' => ['$ne' => []]
+                    ]
+                ],
+            ]);
+        });
+        return $coll;
     }
 
 

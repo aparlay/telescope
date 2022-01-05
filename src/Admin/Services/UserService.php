@@ -18,7 +18,7 @@ class UserService extends AdminBaseService
     {
         $this->userRepository = new UserRepository(new User());
 
-        $this->filterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
+        $this->filterableField = ['username', 'email', 'status', 'visibility', 'created_at', 'documents'];
         $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
     }
 
@@ -40,7 +40,9 @@ class UserService extends AdminBaseService
                 $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
                 unset($filters['created_at']);
             }
-            $users = $this->userRepository->getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter);
+
+            $hasDocuments = \Arr::get($filters, 'documents');
+            $users = $this->userRepository->getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter, $hasDocuments);
         } else {
             $users = $this->userRepository->all($offset, $limit, $sort);
         }

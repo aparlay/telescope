@@ -109,10 +109,21 @@
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label for="visibility">Visibility</label>
-                                                        <select name="visibility" data-column="6" id="visibility" class="form-control">
+                                                        <select name="visibility" data-column="7" id="visibility" class="form-control">
                                                             <option value="">-Select-</option>
                                                             @foreach($userVisibilities as $key => $visibility)
                                                                 <option value="{{ $key }}">{{ $visibility }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label for="documents">Has documents</label>
+                                                        <select name="documents" data-column="6" id="documents" class="form-control">
+                                                            <option value="">-Select-</option>
+                                                            @foreach($userDocumentStatuses as $key => $value)
+                                                                <option value="{{ $key }}">{{ $value }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
