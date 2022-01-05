@@ -50,7 +50,7 @@ class UserRepository
             $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
         }
 
-        if (isset($documentStatus)) {
+        if ($documentStatus) {
             $field = match ((int) $documentStatus) {
                 UserDocumentStatus::PENDING->value => 'pending_documents',
                 UserDocumentStatus::REJECTED->value => 'rejected_documents',
