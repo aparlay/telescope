@@ -30,7 +30,6 @@ class UserDocumentService extends AdminBaseService
         return $userDocument;
     }
 
-
     public function getStatuses()
     {
         return [
@@ -38,6 +37,5 @@ class UserDocumentService extends AdminBaseService
             UserDocumentStatus::PENDING->value => UserDocumentStatus::PENDING->label(),
             UserDocumentStatus::APPROVED->value => UserDocumentStatus::APPROVED->label(),
         ];
-
     }
 }

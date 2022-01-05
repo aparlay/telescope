@@ -46,7 +46,6 @@ class UserRepository
             ->skip($offset)
             ->take($limit);
 
-
         if ($dateRangeFilter) {
             $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
         }
