@@ -98,5 +98,4 @@ class UserDocumentService
             ->onQueue('low')
             ->dispatch();
     }
-
 }

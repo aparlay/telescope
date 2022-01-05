@@ -17,7 +17,6 @@ class UserDocumentService extends AdminBaseService
 
         if ((int) $dto->status === UserDocumentStatus::REJECTED->value) {
             $userDocument->reject_reason = $dto->reject_reason;
-
         }
         $userDocument->save();
 
