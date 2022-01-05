@@ -50,7 +50,4 @@ class UserDocumentRepository
     {
         return static::$model::filter($filters)->count();
     }
-
-
-
 }

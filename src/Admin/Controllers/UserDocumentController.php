@@ -22,7 +22,6 @@ class UserDocumentController extends Controller
         return view('default_view::admin.pages.user-document.index');
     }
 
-
     public function __construct(UserDocumentService $userDocumentService)
     {
         $this->userDocumentService = $userDocumentService;
@@ -40,7 +39,6 @@ class UserDocumentController extends Controller
 
         return new UserDocumentResource($this->userDocumentService->fetchFiltered($offset, $limit));
     }
-
 
     /**
      * @param $documentId

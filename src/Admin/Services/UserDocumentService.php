@@ -10,18 +10,18 @@ use Aparlay\Core\Models\UserDocument;
 
 class UserDocumentService extends AdminBaseService
 {
-    /** @var UserDocumentRepository */
+    /**
+     * @var UserDocumentRepository
+     */
     private $repo;
 
-    public  $filterableField = ['status', 'type'];
-    public  $sorterableField = ['status', 'type'];
-
+    public $filterableField = ['status', 'type'];
+    public $sorterableField = ['status', 'type'];
 
     public function __construct(UserDocumentRepository $userDocumentRepository)
     {
         $this->repo = $userDocumentRepository;
     }
-
 
     public function update(UserDocument $userDocument, AdminUserDocumentDTO $dto)
     {
@@ -40,6 +40,7 @@ class UserDocumentService extends AdminBaseService
 
         return $userDocument;
     }
+
     public function getStatuses()
     {
         return [
@@ -76,7 +77,7 @@ class UserDocumentService extends AdminBaseService
      */
     public function appendAttributes($documents, $filters)
     {
-        $documents->total_records =  $this->repo->countAll();
+        $documents->total_records = $this->repo->countAll();
         $documents->total_filtered = $this->repo->countFiltered($filters);
 
         foreach ($documents as $document) {
@@ -84,7 +85,5 @@ class UserDocumentService extends AdminBaseService
             $document->type_label = $document->type_label;
             $document->url = $document->temporaryUrl();
         }
-
     }
-
 }
