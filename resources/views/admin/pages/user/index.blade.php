@@ -119,7 +119,7 @@
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
-                                                        <label for="documents">Has documents</label>
+                                                        <label for="documents">Has documents with status</label>
                                                         <select name="documents" data-column="6" id="documents" class="form-control">
                                                             <option value="">-Select-</option>
                                                             @foreach($userDocumentStatuses as $key => $value)

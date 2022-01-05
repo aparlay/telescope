@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Models\Enums\UserDocumentStatus;
 
 class UserRepository
 {
@@ -50,39 +51,19 @@ class UserRepository
             $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
         }
 
-        if ($documentStatus) {
-            return $this->filterByDocumentStatus($documentStatus);
+        if (isset($documentStatus)) {
+            $field = match ((int) $documentStatus) {
+                UserDocumentStatus::PENDING->value => 'pending_documents',
+                UserDocumentStatus::REJECTED->value => 'rejected_documents',
+                UserDocumentStatus::APPROVED->value => 'approved_documents',
+            };
+
+            $query->where($field, '>', 0);
         }
 
         $result = $query->get();
 
         return $result;
-    }
-
-    private function filterByDocumentStatus($documentStatus)
-    {
-        $coll = $this->model::raw(function ($collection) use($documentStatus) {
-            return $collection->aggregate([
-                [
-                    '$lookup' => [
-                        'as' => 'ud',
-                        'from' => 'user_documents',
-                        'foreignField' => 'creator._id',
-                        'localField' => '_id'
-                    ]
-                ],
-                [
-                    '$unwind' => '$ud',
-                ],
-                [
-                    '$match' => [
-                        'ud.status' => ['$eq' => (int) $documentStatus],
-                        'ud' => ['$ne' => []]
-                    ]
-                ],
-            ]);
-        });
-        return $coll;
     }
 
     public function countDocs(User $user, $status)

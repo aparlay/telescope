@@ -4,7 +4,9 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Dto\AdminUserDocumentDTO;
 use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
+use Aparlay\Core\Api\V1\Repositories\UserDocumentRepository;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
+use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\UserDocument;
 
 class UserDocumentService extends AdminBaseService
@@ -15,8 +17,15 @@ class UserDocumentService extends AdminBaseService
 
         if ((int) $dto->status === UserDocumentStatus::REJECTED->value) {
             $userDocument->reject_reason = $dto->reject_reason;
+
         }
         $userDocument->save();
+
+        $user = $userDocument->creatorObj;
+
+        /** @var UserDocumentRepository $userDocumentRepository */
+        $userDocumentRepository = app()->make(UserDocumentRepository::class);
+        $userDocumentRepository->updateCounters($user);
 
         return $userDocument;
     }

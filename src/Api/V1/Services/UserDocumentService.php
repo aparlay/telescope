@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Constants\StorageType;
 use Aparlay\Core\Jobs\DeleteFileJob;
 use Aparlay\Core\Jobs\UploadFileJob;
+use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Http\UploadedFile;
@@ -52,6 +53,7 @@ class UserDocumentService
     {
         $documentDto->setUser($this->getUser());
         $userDocument = $this->userDocumentRepository->create($documentDto);
+        $this->userDocumentRepository->updateCounters($this->getUser());
 
         if (\App::environment('testing')) {
             return $userDocument;
@@ -96,4 +98,5 @@ class UserDocumentService
             ->onQueue('low')
             ->dispatch();
     }
+
 }

@@ -2,13 +2,12 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-use Aparlay\Core\Models\UserDocument;
 
 enum UserDocumentStatus: int implements Enum
 {
-    case PENDING = 0;
+    case PENDING = 1;
     case REJECTED = -1;
-    case APPROVED = 1;
+    case APPROVED = 2;
 
     public function label(): string
     {
