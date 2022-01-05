@@ -39,7 +39,7 @@
                         ['data' => 'like_count', 'orderable' => false],
                         ['data' => 'visit_count', 'orderable' => false],
                         ['data' => 'sort_score', 'orderable' => false],
-                        ['data' => 'formatted_created_at','orderData' => 9, 'target' => 9],
+                        ['data' => 'date_formatted','orderData' => 9, 'target' => 9],
                         ['data' => 'created_at','visible' => false],
                         ['data' => 'action', 'orderable' => false],
                     ],
