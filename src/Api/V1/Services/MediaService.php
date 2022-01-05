@@ -2,22 +2,23 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
-use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\MediaRepository;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Traits\HasUserTrait;
+use Aparlay\Core\Models\Enums\AlertStatus;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class MediaService
 {
+    use HasUserTrait;
     protected MediaRepository $mediaRepository;
 
     public function __construct()
@@ -90,8 +91,8 @@ class MediaService
     {
         $model = Media::media($media->_id)->firstOrFail();
 
-        if ($model !== null && $model->status !== Media::STATUS_USER_DELETED) {
-            $this->mediaRepository->update(['status' => Media::STATUS_USER_DELETED], $model->_id);
+        if ($model !== null && $model->status !== MediaStatus::USER_DELETED->value) {
+            $this->mediaRepository->update(['status' => MediaStatus::USER_DELETED->value], $model->_id);
         }
     }
 
@@ -178,7 +179,7 @@ class MediaService
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
      */
-    public function getByUser(User $user)
+    public function getByUser(User $user): LengthAwarePaginator
     {
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();
@@ -187,7 +188,7 @@ class MediaService
             $query->confirmed()->public();
         } elseif ((string) $userId === (string) auth()->user()->_id) {
             $query->with(['alertObjs' => function ($query) {
-                $query->where('status', Alert::STATUS_NOT_VISITED);
+                $query->where('status', AlertStatus::NOT_VISITED->value);
             }])->availableForOwner();
         } else {
             $isFollowed = Follow::select(['user._id', '_id'])

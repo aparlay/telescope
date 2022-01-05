@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
-use Illuminate\Support\Facades\Request;
-
 class ContactUsRequest extends BaseFormRequest
 {
     /**
@@ -13,23 +11,25 @@ class ContactUsRequest extends BaseFormRequest
      */
     public function rules()
     {
+        if (! config('app.is_testing')) {
+            $recaptChaRule = ['required', 'recaptcha'];
+        } else {
+            $recaptChaRule = ['nullable'];
+        }
+
         return [
             'topic' => ['required', 'string'],
             'name' => ['required', 'string'],
             'email' => ['required', 'string'],
             'message' => ['required', 'string'],
-            'g-recaptcha-response' => function ($attribute, $value, $fail) {
-                $userIP = Request::ip();
-                $secretKey = config('recaptcha.api_secret_key');
-                $recaptchaSiteVerifyURL = config('recaptcha.site_verify_url');
-                $url = "$recaptchaSiteVerifyURL?secret=$secretKey&response=$value&remoteip=$userIP";
-                $response = file_get_contents($url);
-                $response = json_decode($response);
+            'g-recaptcha-response' => $recaptChaRule,
+        ];
+    }
 
-                if (! $response->success) {
-                    $fail('google reCaptcha failed.');
-                }
-            },
+    public function messages()
+    {
+        return [
+            'g-recaptcha-response.recaptcha' => 'reCaptcha validation failed',
         ];
     }
 }

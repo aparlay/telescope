@@ -4,7 +4,6 @@ namespace Aparlay\Core\Casts;
 
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Follow;
-use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Support\Facades\Cache;

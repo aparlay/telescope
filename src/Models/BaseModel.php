@@ -2,10 +2,6 @@
 
 namespace Aparlay\Core\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasEvents;
-use Illuminate\Support\Facades\Auth;
-use MongoDB\BSON\ObjectId;
-
 class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
 {
     protected $dates = [

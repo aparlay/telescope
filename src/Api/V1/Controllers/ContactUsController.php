@@ -26,7 +26,7 @@ class ContactUsController extends Controller
         Email::dispatch(config('mail.support_email'), 'Contact Us notification', EmailModel::TEMPLATE_EMAIL_CONTACTUS, $data);
         $user = User::admin()->first();
         $user->notify(
-            new ContactUs(config('mail.support_email'), $data['name'], 'Contact Us notification', $data['message'])
+            new ContactUs($data['email'], $data['name'], 'Contact Us notification', $data['message'])
         );
 
         return $this->response([], Response::HTTP_OK);

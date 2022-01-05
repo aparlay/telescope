@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Models\Block;
-use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use MongoDB\BSON\ObjectId;

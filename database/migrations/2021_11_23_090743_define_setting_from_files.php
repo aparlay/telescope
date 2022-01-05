@@ -1,7 +1,6 @@
 <?php
 
 use Aparlay\Core\Models\Setting;
-use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use MongoDB\BSON\ObjectId;
 
@@ -17,7 +16,6 @@ class DefineSettingFromFiles extends Migration
         $settings = [
             'core' => [
                 'admin' => [
-                    'domain' => env('ADMIN_DOMAIN', 'ltoptop.waptap.dev'),
                     'lists' => [
                         'page_count' => 20,
                         'user_page_count' => 5,
@@ -25,24 +23,13 @@ class DefineSettingFromFiles extends Migration
                 ],
             ],
             'app' => [
-                'name' => env('APP_NAME', 'Laravel'),
-                'env' => env('APP_ENV', 'production'),
-                'debug' => (bool) env('APP_DEBUG', false),
-                'url' => env('APP_URL', 'http://localhost'),
-                'asset_url' => env('ASSET_URL', null),
+                'name' => env('APP_NAME', 'Waptap'),
                 'timezone' => 'UTC',
                 'locale' => 'en',
-                'is_testing' => false,
                 'adminEmail' => 'admin@waptap.com',
                 'supportEmail' => 'support@waptap.com',
                 'senderEmail' => 'noreply@waptap.com',
                 'senderName' => 'Waptap.com mailer',
-                'cache' => [
-                    'veryLongDuration' => 432000,
-                    'longDuration' => 86400,
-                    'mediumDuration' => 3600,
-                    'shortDuration' => 180,
-                ],
                 'user' => [
                     'passwordResetTokenExpire' => 3600,
                     'passwordMinLength' => 8,
@@ -57,19 +44,6 @@ class DefineSettingFromFiles extends Migration
                         ],
                     ],
                 ],
-                'domain' => 'waptap.test',
-                'main_domain' => env('MAIN_DOMAIN', 'www.waptap.test'),
-                'frontend_url' => env('WEB_APP_URL', 'https://app.waptap.test'),
-                'admin_url' => env('ADMIN_URL', 'https://admin.waptap.test'),
-                'admin_urls' => [
-                    'profile' => env('ADMIN_URL', 'https://admin.waptap.test').'/user/view?id=',
-                    'media' => env('ADMIN_URL', 'https://admin.waptap.test').'/media/view?id=',
-                ],
-                'web_app_urls' => [
-                    'profile' => 'https://'.env('APP_DOMAIN', 'https://app.waptap.test').'/profile/',
-                    'share' => 'https://'.env('APP_DOMAIN', 'https://app.waptap.test').'/s/',
-                    'home' => 'https://'.env('APP_DOMAIN', 'https://app.waptap.test'),
-                ],
                 'otp' => [
                     'enabled' => false,
                     'length' => [
@@ -79,8 +53,6 @@ class DefineSettingFromFiles extends Migration
                     'duration' => 600,
                     'invalid_attempt_limit' => 5,
                 ],
-                'dbQueryCacheDuration' => 3600,
-                'uploadUrl' => 'https://upload.waptap.dev',
                 'sms' => [
                     'numbers' => ['+110008284', '+120000110220'],
                     'messages' => [

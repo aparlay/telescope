@@ -8,10 +8,7 @@ use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\Cdn;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use MongoDB\BSON\ObjectId;
 
 class MediaService extends AdminBaseService
@@ -94,9 +91,9 @@ class MediaService extends AdminBaseService
     /**
      * @param $order
      */
-    public function pending($order)
+    public function pending($page)
     {
-        return $this->mediaRepository->pendingMedia($order);
+        return $this->mediaRepository->pending($page);
     }
 
     /**
@@ -179,5 +176,10 @@ class MediaService extends AdminBaseService
         ];
 
         $this->mediaRepository->create($data);
+    }
+
+    public function countCollection()
+    {
+        $this->mediaRepository->countCollection();
     }
 }

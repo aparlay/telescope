@@ -4,6 +4,7 @@ namespace Aparlay\Core\Commands;
 
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\ReprocessMedia;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
 
@@ -17,11 +18,11 @@ class VideoReprocessCommand extends Command
     {
         $mediaQuery = Media::where(['is_fake' => ['$exists' => false]])
             ->date(null, DT::utcDateTime(['m' => -3]))
-            ->status(Media::STATUS_UPLOADED);
+            ->status(MediaStatus::UPLOADED->value);
         foreach ($mediaQuery->get() as $media) {
             ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('low');
 
-            $media->status = Media::STATUS_QUEUED;
+            $media->status = MediaStatus::QUEUED->value;
             $media->save();
 
             $msg = '<fg=yellow;options=bold>';
