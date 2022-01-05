@@ -45,7 +45,6 @@ class UserRepository
             ->skip($offset)
             ->take($limit);
 
-
         if ($dateRangeFilter) {
             $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
         }
@@ -61,15 +60,15 @@ class UserRepository
 
     private function filterByDocumentStatus($documentStatus)
     {
-        $coll = $this->model::raw(function ($collection) use($documentStatus) {
+        $coll = $this->model::raw(function ($collection) use ($documentStatus) {
             return $collection->aggregate([
                 [
                     '$lookup' => [
                         'as' => 'ud',
                         'from' => 'user_documents',
                         'foreignField' => 'creator._id',
-                        'localField' => '_id'
-                    ]
+                        'localField' => '_id',
+                    ],
                 ],
                 [
                     '$unwind' => '$ud',
@@ -77,11 +76,12 @@ class UserRepository
                 [
                     '$match' => [
                         'ud.status' => ['$eq' => (int) $documentStatus],
-                        'ud' => ['$ne' => []]
-                    ]
+                        'ud' => ['$ne' => []],
+                    ],
                 ],
             ]);
         });
+
         return $coll;
     }
 
