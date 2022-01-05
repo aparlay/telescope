@@ -65,7 +65,6 @@ class UserRepository
         return $result;
     }
 
-
     public function create(array $data)
     {
         // TODO: Implement create() method.
