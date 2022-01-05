@@ -73,9 +73,9 @@ class UserService extends AdminBaseService
             $rejectedDocsCount = $this->userRepository->countDocs($user, UserDocumentStatus::REJECTED->value);
             $pendingDocsCount = $this->userRepository->countDocs($user, UserDocumentStatus::PENDING->value);
 
-            $pendingDocs = UserDocumentStatus::PENDING->label() . ': ' . $approvedDocsCount;
-            $approvedDocs = UserDocumentStatus::APPROVED->label() . ': ' . $rejectedDocsCount;
-            $rejectedDocs = UserDocumentStatus::REJECTED->label() . ': ' . $pendingDocsCount;
+            $pendingDocs = UserDocumentStatus::PENDING->label().': '.$approvedDocsCount;
+            $approvedDocs = UserDocumentStatus::APPROVED->label().': '.$rejectedDocsCount;
+            $rejectedDocs = UserDocumentStatus::REJECTED->label().': '.$pendingDocsCount;
 
             $documentBadges = [
                 UserDocumentStatus::PENDING->name => ActionButtonBladeComponent::getBadge(UserDocumentStatus::PENDING->badgeColor(), $pendingDocs),

@@ -19,10 +19,6 @@ trait UserDocumentScope
         return $query->where('status', $status);
     }
 
-
-    /**
-     *
-     */
     /**
      * @param  Builder  $query
      * @param  ObjectId|string  $creatorId
