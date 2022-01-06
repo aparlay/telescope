@@ -37,7 +37,7 @@ class UserRepository
         return $query->count();
     }
 
-    public function getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter = null, $documentStatus = null)
+    public function getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter = null)
     {
         $query = $this->model->filter($filters)
             ->sortBy($sort)
@@ -48,9 +48,7 @@ class UserRepository
             $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
         }
 
-        $result = $query->get();
-
-        return $result;
+        return $query->get();
     }
 
     public function create(array $data)
