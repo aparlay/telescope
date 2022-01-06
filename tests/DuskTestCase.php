@@ -22,7 +22,7 @@ abstract class DuskTestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->app->make('config')->set('app.url', env('ADMIN_DOMAIN'));
+        $this->app->make('config')->set('app.url', env('ADMIN_URL'));
 
         if (! static::$isSeeded) {
             $this->artisan('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
@@ -72,7 +72,7 @@ abstract class DuskTestCase extends BaseTestCase
         })->all());
 
         return RemoteWebDriver::create(
-            $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
+            env('DUSK_DRIVER_URL', 'http://selenium:4444/wd/hub'),
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY,
                 $options
