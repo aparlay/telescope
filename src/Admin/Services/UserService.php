@@ -31,7 +31,6 @@ class UserService extends AdminBaseService
         $limit = (int) request()->get('length');
 
         $filters = $this->getFilters();
-
         $sort = $this->tableSort();
         $dateRangeFilter = null;
 
@@ -40,7 +39,6 @@ class UserService extends AdminBaseService
                 $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
                 unset($filters['created_at']);
             }
-
             $users = $this->userRepository->getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter);
         } else {
             $users = $this->userRepository->all($offset, $limit, $sort);
