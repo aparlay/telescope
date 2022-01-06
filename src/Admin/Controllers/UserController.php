@@ -41,6 +41,7 @@ class UserController extends Controller
     {
         $userStatuses = $this->userService->getUserStatuses();
         $userVisibilities = $this->userService->getVisibilities();
+
         return view('default_view::admin.pages.user.index', compact('userStatuses', 'userVisibilities'));
     }
 
