@@ -26,8 +26,11 @@
                         @php
                             $heads = [
                                 'Username',
+                                '',
                                 'Status',
                                 'Type',
+                                '',
+                                ''
                             ];
 
                         $config = [
@@ -41,9 +44,14 @@
                             'autoWidth' => false,
                             'ajax' => route('core.admin.ajax.user-document.index'),
                             'columns' => [
-                                ['data' => 'creator.username'],
-                                ['data' => 'status_label'],
-                                ['data' => 'type_label'],
+                                ['data' => 'username_avatar', 'orderable' => false],
+                                ['data' => 'status', 'visible' => false, 'orderable' => false],
+                                ['data' => 'status_badge', 'orderable' => false],
+                                ['data' => 'type_label', 'orderable' => false],
+                                ['data' => 'view_document', 'orderable' => false],
+                                ['data' => 'view_user', 'orderable' => false],
+                                ['data' => 'approve_action', 'orderable' => false],
+                                ['data' => 'reject_action', 'orderable' => false]
                             ],
                         ]
                         @endphp
@@ -60,16 +68,16 @@
                                     <div class="card-body">
                                         <form action="" id="filters">
                                             <div class="row">
+
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
-                                                        <label for="username">Username</label>
-                                                        <input type="text" data-column="0" name="username" class="form-control" id="username" placeholder="Enter username">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <label for="email">Email</label>
-                                                        <input type="email" data-column="2" name="email" class="form-control" id="email" placeholder="Enter email">
+                                                        <label for="status">Status</label>
+                                                        <select name="status" data-column="1" id="status" class="form-control">
+                                                            <option value="">-Select-</option>
+                                                            @foreach($documentStatuses as $key => $status)
+                                                                <option value="{{ $key }}">{{ $status }}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -94,6 +102,67 @@
             </div>
         </div>
     </div>
+
+
+        <div id="approveModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form action="{{ route('core.admin.user.document.edit', ['documentId' => 0])  }}" method="POST" name="approveForm">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserDocumentStatus::APPROVED->value }}" name="status">
+                        <div class="modal-header bg-success">
+                            <h5 class="modal-title" id="exampleModalLiveLabel">Approve Document</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Mark this user document as approved?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="rejectModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <form action="{{ route('core.admin.user.document.edit', ['documentId' => 0])  }}" method="POST" name="rejectForm">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserDocumentStatus::REJECTED->value }}" name="status">
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title" id="exampleModalLiveLabel">Reject Document</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Mark this user document as rejected?</p>
+
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Reject Reason:</label>
+                                <input type="text" class="form-control" value="" name="reject_reason">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
 @endsection
 @section('js')
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
@@ -102,5 +171,15 @@
     <script type="text/javascript" src="//cdn.datatables.net/datetime/1.1.1/js/dataTables.dateTime.min.js"></script>
     <script src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
+
+
+    <script>
+        $(function () {
+         $('#approveModal').on("show.bs.modal", function (e) {
+            document.approveForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
+            return e;
+         });
+        });
+    </script>
 @endsection
 

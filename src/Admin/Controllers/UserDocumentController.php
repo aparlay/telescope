@@ -14,19 +14,24 @@ class UserDocumentController extends Controller
 {
     protected $userDocumentService;
 
-    /**
-     * @throws ErrorException
-     */
-    public function index()
-    {
-        return view('default_view::admin.pages.user-document.index');
-    }
-
 
     public function __construct(UserDocumentService $userDocumentService)
     {
         $this->userDocumentService = $userDocumentService;
     }
+
+
+    /**
+     * @throws ErrorException
+     */
+    public function index()
+    {
+        $documentStatuses = $this->userDocumentService->getStatuses();
+        return view('default_view::admin.pages.user-document.index', [
+            'documentStatuses' => $documentStatuses
+        ]);
+    }
+
 
     /**
      * @return UserDocumentResource
@@ -52,10 +57,10 @@ class UserDocumentController extends Controller
         $userDocument = UserDocument::findOrFail($documentId);
 
         if (auth()->check()) {
-            $this->userDocumentService->setUser($userDocument);
+            $this->userDocumentService->setUser(auth()->user());
         }
 
-        $userDocument = $this->userDocumentService->update($userDocument, AdminUserDocumentDTO::fromRequest($request));
+        $this->userDocumentService->update($userDocument, AdminUserDocumentDTO::fromRequest($request));
 
         return back()->with('success', `User document $documentId was updated successfully`);
     }
