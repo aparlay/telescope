@@ -65,7 +65,7 @@
                                     @csrf()
                                     @if ($media->status !== 3 && $media->status !== 7)
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
+                                        <button type="submit" id="mediaSave" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
                                             <i class="fas fa-check"></i>
                                             <strong>Save</strong>
                                         </button>

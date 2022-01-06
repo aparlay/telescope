@@ -4,6 +4,7 @@ namespace Aparlay\Core\Tests\Browser\Admin\Media;
 
 use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Tests\DuskTestCase;
+use Facebook\WebDriver\WebDriverBy;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Laravel\Dusk\Browser;
@@ -104,9 +105,14 @@ class MediaEditTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($randomScore) {
             $browser->visit(route('core.admin.media.view', ['media' => $this->media]))
                 ->clickAtXPath('//*[@id="skin_score_1"]/label')
-                ->clickAtXPath('//*[@id="awesomeness_score_1"]/label')
-                ->press('Save')
-                ->assertSee('Media updated successfully');
+                ->clickAtXPath('//*[@id="awesomeness_score_1"]/label');
+            if($browser->driver->findElement(WebDriverBy::cssSelector('#mediaSave'))->isDisplayed()) {
+                $browser->press('Save')
+                    ->assertSee('Media updated successfully');
+            } else {
+                $browser->press('Approve')
+                    ->assertSee('Media updated successfully');
+            }
         });
     }
 
