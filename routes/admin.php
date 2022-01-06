@@ -105,7 +105,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
         /* E-mail Route */
         Route::get('email', [EmailController::class, 'index'])
             ->middleware(['permission:list emails'])
-            ->name('index');
+            ->name('email.index');
 
         /* Ajax Routes */
         Route::name('ajax.')->prefix('ajax')->group(function () {
