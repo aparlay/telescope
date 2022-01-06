@@ -103,65 +103,8 @@
         </div>
     </div>
 
-
-        <div id="approveModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <form action="{{ route('core.admin.user.document.edit', ['documentId' => 0])  }}" method="POST" name="approveForm">
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserDocumentStatus::APPROVED->value }}" name="status">
-                        <div class="modal-header bg-success">
-                            <h5 class="modal-title" id="exampleModalLiveLabel">Approve Document</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Mark this user document as approved?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-
-                            <button type="submit" class="btn btn-success">Approve</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div id="rejectModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <form action="{{ route('core.admin.user.document.edit', ['documentId' => 0])  }}" method="POST" name="rejectForm">
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserDocumentStatus::REJECTED->value }}" name="status">
-                        <div class="modal-header bg-danger">
-                            <h5 class="modal-title" id="exampleModalLiveLabel">Reject Document</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Mark this user document as rejected?</p>
-
-                            <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">Reject Reason:</label>
-                                <input type="text" class="form-control" value="" name="reject_reason">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-danger">Reject</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
+        @include('default_view::admin.pages.user.tabs.documents._documents-approve_modal')
+        @include('default_view::admin.pages.user.tabs.documents._documents-reject_modal')
 
 @endsection
 @section('js')
@@ -177,6 +120,11 @@
         $(function () {
          $('#approveModal').on("show.bs.modal", function (e) {
             document.approveForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
+            return e;
+         });
+
+         $('#rejectModal').on("show.bs.modal", function (e) {
+            document.rejectForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
             return e;
          });
         });

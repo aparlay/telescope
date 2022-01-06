@@ -27,6 +27,11 @@ class UserDocumentService extends AdminBaseService
     }
 
 
+    /**
+     * @param UserDocument $userDocument
+     * @param AdminUserDocumentDTO $dto
+     * @return UserDocument
+     */
     public function update(UserDocument $userDocument, AdminUserDocumentDTO $dto)
     {
         $userDocument->status = (int) $dto->status;
@@ -35,15 +40,11 @@ class UserDocumentService extends AdminBaseService
             $userDocument->reject_reason = $dto->reject_reason;
         }
         $userDocument->save();
-
-        $user = $userDocument->creatorObj;
-
-        /** @var UserDocumentRepository $userDocumentRepository */
-        $userDocumentRepository = app()->make(UserDocumentRepository::class);
-        $userDocumentRepository->updateCounters($user);
-
         return $userDocument;
     }
+
+
+
     public function getStatuses()
     {
         return [

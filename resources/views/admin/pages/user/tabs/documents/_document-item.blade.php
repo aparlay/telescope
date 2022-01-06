@@ -15,12 +15,12 @@
     <span class="badge badge-secondary">{{$documentType}}</span>
     <span class="{{$badgeColor}}">{{$label}}</span>
 
-    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="{{ '#approve_modal_' . $document->id }}">
+    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-id="{{$document->_id}}" data-target="#approveModal">
         <i class="fas fa-check"></i>
         <strong>Approve</strong>
     </button>
 
-    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="{{ '#reject_modal_' . $document->id }}">
+    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-id="{{$document->_id}}" data-target="#rejectModal">
         <i class="fas fa-times"></i>
         <strong>Reject</strong>
     </button>
@@ -30,5 +30,3 @@
     @endif
 </div>
 
-@include('default_view::admin.pages.user.tabs._documents-approve_modal', compact('document'))
-@include('default_view::admin.pages.user.tabs._documents-reject_modal',  compact('document'))

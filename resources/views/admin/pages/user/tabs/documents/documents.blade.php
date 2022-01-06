@@ -18,11 +18,11 @@
             <div class="row">
                 <h4>User Documents</h4>
                 @if ($countSelfies > 0)
-                    @include('default_view::admin.pages.user.tabs._documents-lightbox', ['documents' => $documentsSelfies, 'sectionTitle' => 'Selfies' ])
+                    @include('default_view::admin.pages.user.tabs.documents._documents-lightbox', ['documents' => $documentsSelfies, 'sectionTitle' => 'Selfies' ])
                 @endif
 
                 @if ($countDocuments > 0)
-                    @include('default_view::admin.pages.user.tabs._documents-lightbox', ['documents' => $documentsIdCards, 'sectionTitle' => 'Id cards' ])
+                    @include('default_view::admin.pages.user.tabs.documents._documents-lightbox', ['documents' => $documentsIdCards, 'sectionTitle' => 'Id cards' ])
                 @endif
             </div>
 
