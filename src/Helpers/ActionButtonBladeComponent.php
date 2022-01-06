@@ -17,10 +17,10 @@ class ActionButtonBladeComponent
         return '<span class="badge bg-'.$color.'">'.ucfirst($name).'</span>';
     }
 
-    public static function modalButton($btnText, $dataId, $target)
+    public static function modalButton($btnText, $dataId, $target, $color = 'primary')
     {
         return
-            '<button type="submit" class="btn btn-primary btn-xs"
+            '<button type="submit" class="btn btn-'. $color .' btn-xs"
                 data-toggle="modal" data-target="' . $target. '"
                 data-id="' . $dataId . '"
                 >

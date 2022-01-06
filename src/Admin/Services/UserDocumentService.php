@@ -94,7 +94,7 @@ class UserDocumentService extends AdminBaseService
             $document->view_document = ActionButtonBladeComponent::link('Document', $document->temporaryUrl());
             $document->view_user = ActionButtonBladeComponent::getViewActionButton($document->creatorObj->_id, 'user');
             $document->approve_action = ActionButtonBladeComponent::modalButton('Approve', $document->id, '#approveModal');
-            $document->reject_action = ActionButtonBladeComponent::modalButton('Reject', $document->id, '#rejectModal');
+            $document->reject_action = ActionButtonBladeComponent::modalButton('Reject', $document->id, '#rejectModal', 'danger');
         }
     }
 }
