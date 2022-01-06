@@ -9,6 +9,7 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\UploadMedia;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use MongoDB\BSON\ObjectId;
 
 class MediaService extends AdminBaseService
@@ -168,6 +169,7 @@ class MediaService extends AdminBaseService
             'slug' => self::generateSlug(6),
             'count_fields_updated_at' => [],
             'visibility' => $user->visibility,
+            'status' => MediaStatus::QUEUED->value,
             'creator' => [
                 '_id'      => new ObjectId($user->_id),
                 'username' => $user->username,

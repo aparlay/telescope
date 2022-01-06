@@ -89,7 +89,7 @@
                                     @else
                                         <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#banModal">
                                             <i class="fas fa-times-circle"></i>
-                                            <strong>Ban</strong>
+                                            <strong>Block</strong>
                                         </button>
                                     @endif
                                 </div>
@@ -171,18 +171,18 @@
                         @method('PATCH')
                         <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value }}" name="status">
                         <div class="modal-header bg-danger">
-                            <h5 class="modal-title" id="exampleModalLiveLabel">Ban User</h5>
+                            <h5 class="modal-title" id="exampleModalLiveLabel">Block User</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>Are you sure you want to ban this user?</p>
+                            <p>Are you sure you want to block this user?</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
-                            <button type="submit" class="btn btn-danger">Ban</button>
+                            <button type="submit" class="btn btn-danger">Block</button>
                         </div>
                     </form>
                 </div>

@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Tests\Browser\Admin\User;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Tests\DuskTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -49,7 +50,7 @@ class UserEditViewTest extends DuskTestCase
     public function userSuspendTest()
     {
         $super_admin = User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
         ]);
 
         $this->browse(function (Browser $browser) use ($super_admin) {
@@ -68,7 +69,7 @@ class UserEditViewTest extends DuskTestCase
     public function userReactivateTest()
     {
         $super_admin = User::factory()->create([
-            'status' => User::STATUS_SUSPENDED,
+            'status' => UserStatus::SUSPENDED->value,
         ]);
 
         $this->browse(function (Browser $browser) use ($super_admin) {
@@ -87,7 +88,7 @@ class UserEditViewTest extends DuskTestCase
     public function userBanTest()
     {
         $super_admin = User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
         ]);
 
         $this->browse(function (Browser $browser) use ($super_admin) {
