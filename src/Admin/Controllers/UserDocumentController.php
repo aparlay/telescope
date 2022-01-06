@@ -46,7 +46,6 @@ class UserDocumentController extends Controller
         return new UserDocumentResource($this->userDocumentService->fetchFiltered($offset, $limit));
     }
 
-
     /**
      * @param $documentId
      * @param Request $request

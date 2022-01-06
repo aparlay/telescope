@@ -15,11 +15,13 @@ class UserDocumentService extends AdminBaseService
     use HasUserTrait;
 
     /** @var UserDocumentRepository */
+    /**
+     * @var UserDocumentRepository
+     */
     private $repo;
 
-    public  $filterableField = ['status', 'type'];
-    public  $sorterableField = ['status', 'type'];
-
+    public $filterableField = ['status', 'type'];
+    public $sorterableField = ['status', 'type'];
 
     public function __construct(UserDocumentRepository $userDocumentRepository)
     {
@@ -42,6 +44,7 @@ class UserDocumentService extends AdminBaseService
         $userDocument->save();
         return $userDocument;
     }
+
 
 
 
@@ -81,7 +84,7 @@ class UserDocumentService extends AdminBaseService
      */
     public function appendAttributes($documents, $filters)
     {
-        $documents->total_records =  $this->repo->countAll();
+        $documents->total_records = $this->repo->countAll();
         $documents->total_filtered = $this->repo->countFiltered($filters);
 
         foreach ($documents as $document) {
@@ -93,7 +96,5 @@ class UserDocumentService extends AdminBaseService
             $document->approve_action = ActionButtonBladeComponent::modalButton('Approve', $document->id, '#approveModal');
             $document->reject_action = ActionButtonBladeComponent::modalButton('Reject', $document->id, '#rejectModal');
         }
-
     }
-
 }

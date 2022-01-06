@@ -124,7 +124,6 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:list users'])
                 ->name('user-document.index');
 
-
             Route::get('media', [MediaController::class, 'indexAjax'])
                 ->middleware(['permission:list medias'])
                 ->name('media.index');

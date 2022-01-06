@@ -10,7 +10,6 @@ use MongoDB\BSON\ObjectId;
 
 class UserDocumentRepository
 {
-
     /**
      * @param User $user
      * @return mixed
