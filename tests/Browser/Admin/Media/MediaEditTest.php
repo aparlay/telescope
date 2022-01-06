@@ -27,8 +27,8 @@ class MediaEditTest extends DuskTestCase
     }
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function mediaReprocessTest()
     {
         $this->browse(function (Browser $browser) {

@@ -54,7 +54,7 @@ class MediaController extends Controller
     public function view(Media $media)
     {
         $media = new MediaResource($this->mediaService->find($media->_id));
-        $scoreTypes = !empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
+        $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
 
         $nextPage = Session::get('nextPage') ? Session::get('nextPage') : 2;
         $prevPage = Session::get('prevPage') ? Session::get('prevPage') : $this->mediaService->countCollection();
