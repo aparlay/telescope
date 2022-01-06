@@ -21,11 +21,12 @@ class ActionButtonBladeComponent
     {
         return
             '<button type="submit" class="btn btn-primary btn-xs"
-                data-toggle="modal" data-target="' . $target. '"
-                data-id="' . $dataId . '"
+                data-toggle="modal" data-target="'.$target.'"
+                data-id="'.$dataId.'"
                 >
-                ' . $btnText . '</button>';
+                '.$btnText.'</button>';
     }
+
     /**
      * @param $id
      * @param $resourceName
@@ -33,9 +34,8 @@ class ActionButtonBladeComponent
      */
     public static function link($text, $url): string
     {
-        return '<a class="btn btn-success btn-sm" target="_blank" href="'.$url.'" title="' .$text .'"><i class=""></i>'. $text .'</a>';
+        return '<a class="btn btn-success btn-sm" target="_blank" href="'.$url.'" title="'.$text.'"><i class=""></i>'.$text.'</a>';
     }
-
 
     /**
      * @param $id
