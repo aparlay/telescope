@@ -20,11 +20,11 @@ class ActionButtonBladeComponent
     public static function modalButton($btnText, $dataId, $target, $color = 'primary')
     {
         return
-            '<button type="submit" class="btn btn-'. $color .' btn-xs"
-                data-toggle="modal" data-target="' . $target. '"
-                data-id="' . $dataId . '"
+            '<button type="submit" class="btn btn-'.$color.' btn-xs"
+                data-toggle="modal" data-target="'.$target.'"
+                data-id="'.$dataId.'"
                 >
-                ' . $btnText . '</button>';
+                '.$btnText.'</button>';
     }
 
     /**
@@ -34,7 +34,7 @@ class ActionButtonBladeComponent
      */
     public static function link($text, $url): string
     {
-        return '<a class="btn btn-success btn-sm" target="_blank" href="'.$url.'" title="' .$text .'"><i class=""></i>'. $text .'</a>';
+        return '<a class="btn btn-success btn-sm" target="_blank" href="'.$url.'" title="'.$text.'"><i class=""></i>'.$text.'</a>';
     }
 
     /**
