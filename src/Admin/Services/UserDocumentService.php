@@ -28,7 +28,6 @@ class UserDocumentService extends AdminBaseService
         $this->repo = $userDocumentRepository;
     }
 
-
     /**
      * @param UserDocument $userDocument
      * @param AdminUserDocumentDTO $dto
@@ -42,11 +41,9 @@ class UserDocumentService extends AdminBaseService
             $userDocument->reject_reason = $dto->reject_reason;
         }
         $userDocument->save();
+
         return $userDocument;
     }
-
-
-
 
     public function getStatuses()
     {
@@ -64,7 +61,6 @@ class UserDocumentService extends AdminBaseService
     {
         $filters = $this->getFilters();
         $sort = $this->tableSort();
-
 
         if (! empty($filters)) {
             $documents = $this->repo->getFiltered($offset, $limit, $sort, $filters);

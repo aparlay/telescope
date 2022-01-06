@@ -14,12 +14,10 @@ class UserDocumentController extends Controller
 {
     protected $userDocumentService;
 
-
     public function __construct(UserDocumentService $userDocumentService)
     {
         $this->userDocumentService = $userDocumentService;
     }
-
 
     /**
      * @throws ErrorException
@@ -27,11 +25,11 @@ class UserDocumentController extends Controller
     public function index()
     {
         $documentStatuses = $this->userDocumentService->getStatuses();
+
         return view('default_view::admin.pages.user-document.index', [
-            'documentStatuses' => $documentStatuses
+            'documentStatuses' => $documentStatuses,
         ]);
     }
-
 
     /**
      * @return UserDocumentResource

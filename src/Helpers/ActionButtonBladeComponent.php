@@ -26,6 +26,7 @@ class ActionButtonBladeComponent
                 >
                 ' . $btnText . '</button>';
     }
+
     /**
      * @param $id
      * @param $resourceName
@@ -35,7 +36,6 @@ class ActionButtonBladeComponent
     {
         return '<a class="btn btn-success btn-sm" target="_blank" href="'.$url.'" title="' .$text .'"><i class=""></i>'. $text .'</a>';
     }
-
 
     /**
      * @param $id
