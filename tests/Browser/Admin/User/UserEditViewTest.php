@@ -3,13 +3,13 @@
 namespace Aparlay\Core\Tests\Browser\Admin\User;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Tests\DuskTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Dusk\Browser;
 use Throwable;
-use Aparlay\Core\Models\Enums\UserStatus;
 
 class UserEditViewTest extends DuskTestCase
 {
