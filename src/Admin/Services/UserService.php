@@ -69,17 +69,6 @@ class UserService extends AdminBaseService
                 'gender' => ActionButtonBladeComponent::getBadge($user->gender_color, $user->gender_name),
             ];
 
-            $pendingDocs = UserDocumentStatus::PENDING->label().': '.$user->pending_documents;
-            $approvedDocs = UserDocumentStatus::APPROVED->label().': '.$user->approved_documents;
-            $rejectedDocs = UserDocumentStatus::REJECTED->label().': '.$user->rejected_documents;
-
-            $documentBadges = [
-                UserDocumentStatus::PENDING->name => ActionButtonBladeComponent::getBadge(UserDocumentStatus::PENDING->badgeColor(), $pendingDocs),
-                UserDocumentStatus::APPROVED->name => ActionButtonBladeComponent::getBadge(UserDocumentStatus::APPROVED->badgeColor(), $approvedDocs),
-                UserDocumentStatus::REJECTED->name => ActionButtonBladeComponent::getBadge(UserDocumentStatus::REJECTED->badgeColor(), $rejectedDocs),
-            ];
-
-            $user->documents = implode('</br>', $documentBadges);
             $user->status_badge = implode('</br>', $userBadges);
             $user->action = ActionButtonBladeComponent::getViewActionButton($user->_id, 'user');
             $user->username_avatar = ActionButtonBladeComponent::getUsernameWithAvatar($user);
