@@ -93,10 +93,10 @@ class UserEditViewTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($super_admin) {
             $browser->visit(route('core.admin.user.view', ['user' => $super_admin->_id]))
-                ->press('Ban')
-                ->waitForText('Are you sure you want to ban this user?')
+                ->press('Block')
+                ->waitForText('Are you sure you want to block this user?')
                 ->clickAtXPath('//*[@id="banModal"]/div/div/form/div[3]/button[2]')
-                ->assertSee('User Banned successfully.');
+                ->assertSee('User Blocked successfully.');
         });
     }
 
