@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Repositories;
 
 class AbstractBaseRepository
 {
-   protected static $model;
+    protected static $model;
 
     /**
      * @param $offset
