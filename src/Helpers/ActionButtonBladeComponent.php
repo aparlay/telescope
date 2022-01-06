@@ -42,7 +42,7 @@ class ActionButtonBladeComponent
      * @param $resourceName
      * @return string
      */
-    public static function getViewActionButton($id, $resourceName, $htmlOptions = []): string
+    public static function getViewActionButton($id, $resourceName): string
     {
         return '<a class="btn btn-primary btn-sm" href="/'.$resourceName.'/'.$id.'" title="View"><i class="fas fa-eye"></i> View</a>';
     }
