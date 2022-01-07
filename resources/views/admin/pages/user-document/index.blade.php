@@ -103,8 +103,8 @@
         </div>
     </div>
 
-        @include('default_view::admin.pages.user.tabs.documents._documents-approve_modal')
-        @include('default_view::admin.pages.user.tabs.documents._documents-reject_modal')
+        @include('default_view::admin.pages.user.tabs.documents-tab._documents-approve_modal')
+        @include('default_view::admin.pages.user.tabs.documents-tab._documents-reject_modal')
 
 @endsection
 @section('js')

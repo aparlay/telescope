@@ -95,8 +95,8 @@ class UserDocumentController
      * @OA\GET(
      *     path="/v1/user-document/{document_id}",
      *     tags={"user-document"},
-     *     summary="Fetch a signle user documents for current user",
-     *     description="Fetch a single user documents for current user",
+     *     summary="Fetch a signle user documents-tab for current user",
+     *     description="Fetch a single user documents-tab for current user",
      *     operationId="fetchUsserDocument",
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
@@ -163,8 +163,8 @@ class UserDocumentController
      * @OA\GET(
      *     path="/v1/user-document",
      *     tags={"user-document"},
-     *     summary="Fetch all user documents for current user",
-     *     description="Fetch all user documents for current user",
+     *     summary="Fetch all user documents-tab for current user",
+     *     description="Fetch all user documents-tab for current user",
      *     operationId="fetchUsserDocument",
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
