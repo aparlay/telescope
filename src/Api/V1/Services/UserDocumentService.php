@@ -17,7 +17,7 @@ class UserDocumentService
 {
     use HasUserTrait;
 
-    /**src/Admin/Services/UserDocumentService.php
+    /**
      * @var UserDocumentRepository
      */
     private $userDocumentRepository;
