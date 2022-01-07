@@ -106,7 +106,7 @@ class MediaEditTest extends DuskTestCase
             $browser->visit(route('core.admin.media.view', ['media' => $this->media]))
                 ->clickAtXPath('//*[@id="skin_score_1"]/label')
                 ->clickAtXPath('//*[@id="awesomeness_score_1"]/label');
-            if($browser->driver->findElement(WebDriverBy::cssSelector('#mediaSave'))->isDisplayed()) {
+            if ($browser->driver->findElement(WebDriverBy::cssSelector('#mediaSave'))->isDisplayed()) {
                 $browser->press('Save')
                     ->assertSee('Media updated successfully');
             } else {
