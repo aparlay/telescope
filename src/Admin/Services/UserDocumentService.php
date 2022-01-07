@@ -18,14 +18,14 @@ class UserDocumentService extends AdminBaseService
     /**
      * @var UserDocumentRepository
      */
-    private $repo;
+    private $userDocumentRepository;
 
     public $filterableField = ['status', 'type'];
     public $sorterableField = ['status', 'type'];
 
     public function __construct(UserDocumentRepository $userDocumentRepository)
     {
-        $this->repo = $userDocumentRepository;
+        $this->userDocumentRepository = $userDocumentRepository;
     }
 
     /**
@@ -63,9 +63,9 @@ class UserDocumentService extends AdminBaseService
         $sort = $this->tableSort();
 
         if (! empty($filters)) {
-            $documents = $this->repo->getFiltered($offset, $limit, $sort, $filters);
+            $documents = $this->userDocumentRepository->getFiltered($offset, $limit, $sort, $filters);
         } else {
-            $documents = $this->repo->all($offset, $limit, $sort);
+            $documents = $this->userDocumentRepository->all($offset, $limit, $sort);
         }
 
         $this->appendAttributes($documents, $filters);
@@ -80,8 +80,8 @@ class UserDocumentService extends AdminBaseService
      */
     public function appendAttributes($documents, $filters)
     {
-        $documents->total_records = $this->repo->countAll();
-        $documents->total_filtered = $this->repo->countFiltered($filters);
+        $documents->total_records = $this->userDocumentRepository->countAll();
+        $documents->total_filtered = $this->userDocumentRepository->countFiltered($filters);
 
         foreach ($documents as $document) {
             $document->username_avatar = ActionButtonBladeComponent::getUsernameWithAvatar($document->creatorObj);

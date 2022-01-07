@@ -125,7 +125,7 @@
                                 @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
                                 @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
                                 @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
-                                @include('default_view::admin.pages.user.tabs.documents.documents', ['user' => $user])
+                                @include('default_view::admin.pages.user.tabs.documents.documents-tab', ['user' => $user])
                             </div>
                         </div>
                     </div>
