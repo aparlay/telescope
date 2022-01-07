@@ -506,6 +506,7 @@ class Media extends BaseModel
             MediaStatus::IN_REVIEW->value => MediaStatus::IN_REVIEW->label(),
             MediaStatus::COMPLETED->value => MediaStatus::COMPLETED->label(),
             MediaStatus::FAILED->value => MediaStatus::FAILED->label(),
+            MediaStatus::DENIED->value => MediaStatus::DENIED->label(),
             MediaStatus::CONFIRMED->value => MediaStatus::CONFIRMED->label(),
             MediaStatus::ADMIN_DELETED->value => MediaStatus::ADMIN_DELETED->label(),
             MediaStatus::USER_DELETED->value => MediaStatus::USER_DELETED->label(),
