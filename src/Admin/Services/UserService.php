@@ -7,7 +7,6 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
-use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
