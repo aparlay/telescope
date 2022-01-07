@@ -131,4 +131,9 @@ class UserDocument extends BaseModel
     {
         return UserDocumentType::from($this->type)->label();
     }
+
+    public function getStatusBadgeColorAttribute()
+    {
+        return UserDocumentStatus::from($this->status)->badgeColor();
+    }
 }
