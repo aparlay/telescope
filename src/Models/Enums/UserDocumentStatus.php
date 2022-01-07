@@ -2,20 +2,18 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-use Aparlay\Core\Models\UserDocument;
-
 enum UserDocumentStatus: int implements Enum
 {
-    case CREATED = 0;
+    case PENDING = 1;
     case REJECTED = -1;
-    case CONFIRMED = 1;
+    case APPROVED = 2;
 
     public function label(): string
     {
         return match ($this) {
-            self::CREATED => __('created'),
+            self::PENDING => __('pending'),
             self::REJECTED => __('rejected'),
-            self::CONFIRMED => __('confirmed'),
+            self::APPROVED => __('approved'),
         };
     }
 
@@ -23,8 +21,8 @@ enum UserDocumentStatus: int implements Enum
     {
         return match ($this) {
             self::REJECTED => 'danger',
-            self::CREATED => 'warning',
-            self::CONFIRMED => 'success',
+            self::PENDING => 'warning',
+            self::APPROVED => 'success',
         };
     }
 }

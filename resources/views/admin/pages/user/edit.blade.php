@@ -125,7 +125,7 @@
                                 @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
                                 @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
                                 @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
-                                @include('default_view::admin.pages.user.tabs.documents', ['user' => $user])
+                                @include('default_view::admin.pages.user.tabs.documents-tab.documents', ['user' => $user])
                             </div>
                         </div>
                     </div>
@@ -254,6 +254,18 @@
         $(document).on('click', '[data-toggle="lightbox"]', function(event) {
             event.preventDefault();
             $(this).ekkoLightbox();
+        });
+
+        $(function () {
+         $('#approveModal').on("show.bs.modal", function (e) {
+            document.approveForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
+            return e;
+         });
+
+         $('#rejectModal').on("show.bs.modal", function (e) {
+            document.rejectForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
+            return e;
+         });
         });
     </script>
 @endsection

@@ -14,6 +14,11 @@ trait UserDocumentScope
         return $query->where('type', $type);
     }
 
+    public function scopeStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+
     /**
      * @param  Builder  $query
      * @param  ObjectId|string  $creatorId

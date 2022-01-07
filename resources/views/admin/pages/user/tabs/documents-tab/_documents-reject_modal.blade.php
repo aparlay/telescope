@@ -1,8 +1,8 @@
-<div id="{{ 'reject_modal_' . $document->id }}" class="modal fade" role="dialog">
+<div id="rejectModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <form action="{{ route('core.admin.user.document.edit', ['documentId' => $document->_id])  }}" method="POST">
+            <form action="{{ route('core.admin.user.document.edit', ['documentId' => 0])  }}" method="POST" name="rejectForm">
                 @csrf
                 @method('PATCH')
                 <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserDocumentStatus::REJECTED->value }}" name="status">
@@ -17,7 +17,7 @@
 
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Reject Reason:</label>
-                        <input type="text" class="form-control" value="{{$document->reject_reason}}" name="reject_reason">
+                        <input type="text" class="form-control" value="" name="reject_reason">
                     </div>
                 </div>
                 <div class="modal-footer">
