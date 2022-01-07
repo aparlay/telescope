@@ -14,7 +14,6 @@ class UserDocumentService extends AdminBaseService
 {
     use HasUserTrait;
 
-    /** @var UserDocumentRepository */
     /**
      * @var UserDocumentRepository
      */
