@@ -215,7 +215,7 @@ class Media extends BaseModel
         if (! empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ('skin' === $score['type']) {
-                    return (int)$score['score'];
+                    return (int) $score['score'];
                 }
             }
         }
@@ -231,7 +231,7 @@ class Media extends BaseModel
         if (! empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ('awesomeness' === $score['type']) {
-                    return (int)$score['score'];
+                    return (int) $score['score'];
                 }
             }
         }
