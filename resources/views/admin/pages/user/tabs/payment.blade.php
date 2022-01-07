@@ -50,8 +50,8 @@
                 <div class="col-12 table-responsive">
                     @php
                         $heads = [
-                            'User',
-                            'Creator',
+                            'Reciever',
+                            'Sender',
                             '',
                             'Media',
                             'Currency',
@@ -100,9 +100,9 @@
                 <div class="col-12 table-responsive">
                     @php
                         $heads = [
-                            'User',
+                            'Reciever',
                             '',
-                            'Creator',
+                            'Sender',
                             'Media',
                             'Currency',
                             'Amount',
