@@ -14,10 +14,10 @@ class AddCreatorIdToMedia extends Migration
     public function up()
     {
         Media::get()->transform(function ($item) {
-            $media =   $item->getRawOriginal();
+            $media = $item->getRawOriginal();
             $creator = $media['creator'];
-        
-            if(!isset($creator['_id'])) {
+
+            if (! isset($creator['_id'])) {
                 $creator['_id'] = new ObjectId($item->created_by);
                 $media['creator'] = $creator;
                 Media::where('_id', $item->_id)->update(['creator' => $creator]);
@@ -32,6 +32,5 @@ class AddCreatorIdToMedia extends Migration
      */
     public function down()
     {
-        
     }
 }
