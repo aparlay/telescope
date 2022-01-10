@@ -117,9 +117,11 @@ class SettingTest extends DuskTestCase
     */
     public function deleteSettingTest()
     {
+        Setting::factory()->create();
+
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.setting.index'))
-                ->clickAtXPath('//*[@id="datatables"]/tbody/tr[1]/td[5]/div/form/a')
+                ->click('#datatables tbody tr:first-child td:nth-child(5) div form a')
                 ->acceptDialog()
                 ->assertSee('Successfully deleted setting');
         });
