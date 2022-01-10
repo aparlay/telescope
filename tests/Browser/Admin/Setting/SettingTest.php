@@ -112,9 +112,9 @@ class SettingTest extends DuskTestCase
     }
 
     /**
-    * @test
-    *@throws Throwable
-    */
+     * @test
+     *@throws Throwable
+     */
     public function deleteSettingTest()
     {
         $this->browse(function (Browser $browser) {
