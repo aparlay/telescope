@@ -106,7 +106,8 @@ class MediaRepository
         return $this->model->completed()->recentFirst()->paginate(1, ['*'], 'page', $page);
     }
 
-    public function countPending(){
+    public function countPending()
+    {
         return $this->model->completed()->count();
     }
 }

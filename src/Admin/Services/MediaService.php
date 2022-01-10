@@ -185,7 +185,8 @@ class MediaService extends AdminBaseService
         return $this->mediaRepository->countCollection();
     }
 
-    public function countPending() {
+    public function countPending()
+    {
         return $this->mediaRepository->countPending();
     }
 }
