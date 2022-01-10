@@ -57,7 +57,7 @@ class MediaController extends Controller
         $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
 
         $nextPage = Session::get('nextPage') ? Session::get('nextPage') : 2;
-        $prevPage = Session::get('prevPage') ? Session::get('prevPage') : $this->mediaService->countCollection();
+        $prevPage = Session::get('prevPage') ? Session::get('prevPage') : $this->mediaService->countCompleted();
 
         return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'nextPage', 'prevPage'));
     }

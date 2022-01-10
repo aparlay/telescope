@@ -50,8 +50,7 @@
                 <div class="col-12 table-responsive">
                     @php
                         $heads = [
-                            'User',
-                            'Creator',
+                            'Sender',
                             '',
                             'Media',
                             'Currency',
@@ -77,7 +76,6 @@
                         'ajax' => route('payment.admin.ajax.tip.index'),
                         'order' => [[8, 'desc']],
                         'columns' => [
-                            ['data' => 'user.username'],
                             ['data' => 'link_to_creator', 'orderData' => 2, 'target' => 2],
                             ['data' => 'creator.username','visible' => false],
                             ['data' => 'link_to_media', 'orderable' => false],
@@ -100,9 +98,8 @@
                 <div class="col-12 table-responsive">
                     @php
                         $heads = [
-                            'User',
+                            'Reciever',
                             '',
-                            'Creator',
                             'Media',
                             'Currency',
                             'Amount',
@@ -129,7 +126,6 @@
                         'columns' => [
                             ['data' => 'link_to_user', 'orderData' => 1, 'target' => 1],
                             ['data' => 'user.username','visible' => false],
-                            ['data' => 'creator.username'],
                             ['data' => 'link_to_media', 'orderable' => false],
                             ['data' => 'currency'],
                             ['data' => 'amount'],
