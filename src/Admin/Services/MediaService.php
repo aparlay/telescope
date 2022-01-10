@@ -185,7 +185,8 @@ class MediaService extends AdminBaseService
         return $this->mediaRepository->countCollection();
     }
 
-    public function countCompleted() {
+    public function countCompleted()
+    {
         return $this->mediaRepository->countCompleted();
     }
 }
