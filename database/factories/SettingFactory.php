@@ -24,7 +24,8 @@ class SettingFactory extends Factory
     public function definition()
     {
         return [
-            'title' => 'web',
+            'group' => 'web',
+            'title' => 'name',
             'value' => 'waptap',
             'created_by' => function () {
                 return new ObjectId(User::factory()->create()->_id);
