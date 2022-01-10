@@ -1,6 +1,6 @@
 <?php
 
-use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Models\Media;
 use Illuminate\Database\Migrations\Migration;
 use MongoDB\BSON\ObjectId;
 
