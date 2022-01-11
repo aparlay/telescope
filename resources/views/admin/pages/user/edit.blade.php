@@ -98,6 +98,8 @@
                     </div>
                 </div>
                 <div class="col-md-9">
+                
+                    @include('default_view::admin.pages.user.tabs.statistics')
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
@@ -120,7 +122,6 @@
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
-
                                 @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
                                 @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
                                 @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
