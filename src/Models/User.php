@@ -24,7 +24,7 @@ use Laravel\Scout\Searchable;
 use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 /**
  * User model.
@@ -65,6 +65,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property array       $count_fields_updated_at
  * @property array       $subscriptions
  * @property array       $subscription_plan
+ * @property array       $user_agents
+ * @property array       $stats
+ * @property array       $last_location
+ * @property string      $country
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
@@ -128,6 +132,10 @@ class User extends Authenticatable implements JWTSubject
         'medias',
         'promo_link',
         'referral_id',
+        'country',
+        'user_agents',
+        'stats',
+        'last_location',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -163,6 +171,25 @@ class User extends Authenticatable implements JWTSubject
         'media_count' => 0,
         'subscriptions' => [],
         'subscription_plan' => [],
+        'user_agents' => [],
+        'stats' => [
+            'amounts' => [
+                'sent_tips' => 0,
+                'received_tips' => 0,
+                'active_subscriptions' => 0,
+                'active_subscribers' => 0,
+            ],
+            'counters' => [
+                'followers' => 0,
+                'followings' => 0,
+                'likes' => 0,
+                'blocks' => 0,
+                'followed_hashtags' => 0,
+                'medias' => 0,
+                'subscriptions' => 0,
+                'subscribers' => 0,
+            ]
+        ],
     ];
 
     /**
@@ -277,7 +304,7 @@ class User extends Authenticatable implements JWTSubject
             return [];
         }
 
-        return Alert::user(auth()->user()->_id)->notVisited()->get();
+        return Alert::user(auth()->user()->_id)->userOnly()->notVisited()->get();
     }
 
     /**

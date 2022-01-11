@@ -13,17 +13,17 @@ use JWTAuth;
 use Swoole\Coroutine\Http\Client;
 use Swoole\Runtime;
 use Swoole\WebSocket\Frame;
-use Tymon\JWTAuth\Claims\Audience;
-use Tymon\JWTAuth\Claims\Collection;
-use Tymon\JWTAuth\Claims\Custom;
-use Tymon\JWTAuth\Claims\Expiration;
-use Tymon\JWTAuth\Claims\IssuedAt;
-use Tymon\JWTAuth\Claims\Issuer;
-use Tymon\JWTAuth\Claims\JwtId;
-use Tymon\JWTAuth\Claims\NotBefore;
-use Tymon\JWTAuth\Claims\Subject;
-use Tymon\JWTAuth\Payload;
-use Tymon\JWTAuth\Validators\PayloadValidator;
+use PHPOpenSourceSaver\JWTAuth\Claims\Audience;
+use PHPOpenSourceSaver\JWTAuth\Claims\Collection;
+use PHPOpenSourceSaver\JWTAuth\Claims\Custom;
+use PHPOpenSourceSaver\JWTAuth\Claims\Expiration;
+use PHPOpenSourceSaver\JWTAuth\Claims\IssuedAt;
+use PHPOpenSourceSaver\JWTAuth\Claims\Issuer;
+use PHPOpenSourceSaver\JWTAuth\Claims\JwtId;
+use PHPOpenSourceSaver\JWTAuth\Claims\NotBefore;
+use PHPOpenSourceSaver\JWTAuth\Claims\Subject;
+use PHPOpenSourceSaver\JWTAuth\Payload;
+use PHPOpenSourceSaver\JWTAuth\Validators\PayloadValidator;
 
 class WsCommand extends Command
 {

@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Providers;
 
+use Aparlay\Core\Api\V1\Listeners\LogAuthenticated;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
@@ -16,7 +17,6 @@ use Aparlay\Core\Observers\MediaLikeObserver;
 use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\MediaVisitObserver;
 use Aparlay\Core\Observers\ReportObserver;
-use Aparlay\Core\Observers\UserDocumentObserver;
 use Aparlay\Core\Observers\UserObserver;
 
 class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider

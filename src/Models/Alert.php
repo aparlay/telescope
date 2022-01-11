@@ -34,8 +34,9 @@ use MongoDB\BSON\ObjectId;
  *
  * @method static |self|Builder visited()                       get visited alerts
  * @method static |self|Builder notVisited()                    get not visited alerts
+ * @method static |self|Builder userOnly() get user only alerts
  * @method static |self|Builder media(ObjectId|string $mediaId) get media alerts
- * @method static |self|Builder user(ObjectId|string $userId)   get user alerts
+ * @method static |self|Builder user(ObjectId|string $userId)   get user and medeia alerts
  */
 class Alert extends BaseModel
 {
