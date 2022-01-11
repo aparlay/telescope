@@ -217,17 +217,19 @@ class UserService
      * @param  $ip
      * @return void
      */
-    public function logUserDevice(User|Authenticatable $user, $userAgent, $deviceId, $ip): void
+    public function logUserDevice(User|Authenticatable|null $user, $userAgent, $deviceId, $ip): void
     {
-        $currentUserAgentKey = md5($userAgent);
+        if ($user !== null) {
+            $currentUserAgentKey = md5($userAgent);
 
-        $userAgents = $user->user_agents;
-        $userAgents[$currentUserAgentKey] = [
-            'device_id' => $deviceId,
-            'user_agent' => $userAgent,
-            'ip' => $ip,
-            'created_at' => DT::utcNow(),
-        ];
-        $this->userRepository->update(['user_agents' => $userAgents], $user->_id);
+            $userAgents = $user->user_agents;
+            $userAgents[$currentUserAgentKey] = [
+                'device_id' => $deviceId,
+                'user_agent' => $userAgent,
+                'ip' => $ip,
+                'created_at' => DT::utcNow(),
+            ];
+            $this->userRepository->update(['user_agents' => $userAgents], $user->_id);
+        }
     }
 }
