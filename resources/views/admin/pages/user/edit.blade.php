@@ -122,6 +122,7 @@
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
+                                
                                 @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
                                 @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
                                 @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
