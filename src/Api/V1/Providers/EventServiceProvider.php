@@ -18,9 +18,26 @@ use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\MediaVisitObserver;
 use Aparlay\Core\Observers\ReportObserver;
 use Aparlay\Core\Observers\UserObserver;
+use Illuminate\Auth\Events\Authenticated;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 
 class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
 {
+    /**
+     * The event listener mappings for the application.
+     *
+     * @var array
+     */
+    protected $listen = [
+        Registered::class => [
+            SendEmailVerificationNotification::class,
+        ],
+        Authenticated::class => [
+            \Aparlay\Core\Listeners\LogAuthenticated::class,
+        ],
+    ];
+
     /**
      * Register any events for your application.
      *
