@@ -1,5 +1,6 @@
 <?php
 
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\Media;
 use Illuminate\Database\Migrations\Migration;
 use MongoDB\BSON\ObjectId;
@@ -17,8 +18,11 @@ class AddCreatorIdToMedia extends Migration
             $media = $item->getRawOriginal();
             $creator = $media['creator'];
 
-            if (! isset($creator['_id'])) {
-                $creator['_id'] = new ObjectId($item->created_by);
+            if (!isset($creator['_id']) || User::user($creator['_id'])->first() === null) {
+                $user = User::limit(200)->get()->random()->first();
+                $creator['_id'] = new ObjectId($user->_id);
+                $creator['username'] = $user->username;
+                $creator['avatar'] = $user->avatar;
                 $media['creator'] = $creator;
                 Media::where('_id', $item->_id)->update(['creator' => $creator]);
             }
