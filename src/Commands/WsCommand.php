@@ -10,9 +10,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use JWTAuth;
-use Swoole\Coroutine\Http\Client;
-use Swoole\Runtime;
-use Swoole\WebSocket\Frame;
 use PHPOpenSourceSaver\JWTAuth\Claims\Audience;
 use PHPOpenSourceSaver\JWTAuth\Claims\Collection;
 use PHPOpenSourceSaver\JWTAuth\Claims\Custom;
@@ -24,6 +21,9 @@ use PHPOpenSourceSaver\JWTAuth\Claims\NotBefore;
 use PHPOpenSourceSaver\JWTAuth\Claims\Subject;
 use PHPOpenSourceSaver\JWTAuth\Payload;
 use PHPOpenSourceSaver\JWTAuth\Validators\PayloadValidator;
+use Swoole\Coroutine\Http\Client;
+use Swoole\Runtime;
+use Swoole\WebSocket\Frame;
 
 class WsCommand extends Command
 {
