@@ -212,12 +212,12 @@ class UserService
      * Verifying the user.
      *
      * @param  User|Authenticatable  $user
-     * @param  string  $userAgent
-     * @param  string  $deviceId
-     * @param  string  $ip
+     * @param  $userAgent
+     * @param  $deviceId
+     * @param  $ip
      * @return void
      */
-    public function logUserDevice(User|Authenticatable $user, string $userAgent, string $deviceId, string $ip): void
+    public function logUserDevice(User|Authenticatable $user, $userAgent, $deviceId, $ip): void
     {
         $currentUserAgentKey = md5($userAgent);
 
