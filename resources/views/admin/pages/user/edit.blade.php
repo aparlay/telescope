@@ -12,10 +12,12 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">User Profile
+                        <!--
                         <button class="ml-4 btn btn-sm btn-danger col-md-1" data-toggle="modal" data-target="#alertModal">
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
+                        -->
                     </h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
