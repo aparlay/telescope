@@ -82,8 +82,7 @@
         "markrogoyski/math-php": "2.*",
         "mostafamaklad/laravel-permission-mongodb": "^3.1",
         "pusher/pusher-php-server": "^7.0",
-        "spatie/laravel-fractal": "^5.8",
-        "tymon/jwt-auth": "dev-develop"
+        "spatie/laravel-fractal": "^5.8"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9.1",

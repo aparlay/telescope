@@ -43,4 +43,13 @@ trait AlertScope
 
         return $query->where('user_id', $userId);
     }
+
+    /**
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public function scopeUserOnly(Builder $query): Builder
+    {
+        return $query->where('media_id', null);
+    }
 }

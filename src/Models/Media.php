@@ -215,7 +215,7 @@ class Media extends BaseModel
         if (! empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ('skin' === $score['type']) {
-                    return $score['score'];
+                    return (int) $score['score'];
                 }
             }
         }
@@ -231,7 +231,7 @@ class Media extends BaseModel
         if (! empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ('awesomeness' === $score['type']) {
-                    return $score['score'];
+                    return (int) $score['score'];
                 }
             }
         }
@@ -258,7 +258,7 @@ class Media extends BaseModel
      */
     public function getTimeScoreAttribute(): int
     {
-        $oldness = time() - $this->created_at->timestamp;
+        $oldness = time() - $this->created_at->valueOf();
 
         return match (true) {
             $oldness <= 21600 => 10,
@@ -282,7 +282,7 @@ class Media extends BaseModel
      */
     public function getLikeScoreAttribute(): int
     {
-        $timestamp = $this->created_at->timestamp;
+        $timestamp = $this->created_at->valueOf();
         $windowDuration = 86400 * 10;
         $startTime = DT::timestampToUtc($timestamp - $windowDuration);
         $endTime = DT::timestampToUtc($timestamp + $windowDuration);
@@ -365,7 +365,7 @@ class Media extends BaseModel
      */
     public function getAdminUrlAttribute(): string
     {
-        return config('app.admin_urls.media').$this->_id;
+        return route('core.admin.media.view', ['media' => $this->_id]);
     }
 
     /**

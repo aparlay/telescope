@@ -7,13 +7,16 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\UserRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\Cdn;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\UserGender;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
+use Jenssegers\Agent\Agent;
 
 class UserService
 {
@@ -203,5 +206,30 @@ class UserService
     public function requireOtp(): bool
     {
         return $this->userRepository->requireOtp();
+    }
+
+    /**
+     * Verifying the user.
+     *
+     * @param  User|Authenticatable  $user
+     * @param  $userAgent
+     * @param  $deviceId
+     * @param  $ip
+     * @return void
+     */
+    public function logUserDevice(User|Authenticatable|null $user, $userAgent, $deviceId, $ip): void
+    {
+        if ($user !== null) {
+            $currentUserAgentKey = md5($userAgent);
+
+            $userAgents = $user->user_agents;
+            $userAgents[$currentUserAgentKey] = [
+                'device_id' => $deviceId,
+                'user_agent' => $userAgent,
+                'ip' => $ip,
+                'created_at' => DT::utcNow(),
+            ];
+            $this->userRepository->update(['user_agents' => $userAgents], $user->_id);
+        }
     }
 }
