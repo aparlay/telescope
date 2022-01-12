@@ -14,9 +14,9 @@ class AddStatsForUser extends Migration
      */
     public function up()
     {
-       $users = User::get();
+        $users = User::get();
 
-       $stats = [
+        $stats = [
                 'amounts' => [
                     'sent_tips' => 0,
                     'received_tips' => 0,
@@ -32,11 +32,11 @@ class AddStatsForUser extends Migration
                     'medias' => 0,
                     'subscriptions' => 0,
                     'subscribers' => 0,
-                ]
+                ],
             ];
 
-       foreach($users as $user) {
-            if(!isset($user->stats)) {
+        foreach ($users as $user) {
+            if (! isset($user->stats)) {
                 $user->fill(['stats' => $stats])->save();
                 $tip = Tip::first();
                 dd($tip);
@@ -52,7 +52,7 @@ class AddStatsForUser extends Migration
                 $senderStats['amount']['sent_tips'] = $totalReceiveTips;
                 $sender->fill(['stats' => $senderStats])->save();
             }
-       }
+        }
     }
 
     /**
