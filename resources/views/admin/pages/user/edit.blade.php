@@ -100,34 +100,77 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    <div class="card">
-                        <div class="card-header p-2">
-                            <ul class="nav nav-pills">
-                                <li class="nav-items">
-                                    <a href="#user-info" class="nav-link active" data-toggle="tab">User Information</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#medias" class="nav-link" data-toggle="tab">Medias</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#upload" class="nav-link" data-toggle="tab">Upload</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#payment" class="nav-link" data-toggle="tab">Payments</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#documents" class="nav-link" data-toggle="tab">Documents</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="card-body">
-                            <div class="tab-content">
 
-                                @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
-                                @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
-                                @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
-                                @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
-                                @include('default_view::admin.pages.user.tabs.documents-tab.documents', ['user' => $user])
+                    <div id="accordion">
+                        <div class="card card-danger card-outline">
+                            <div class="card-header" id="headingMainTwo">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainTwo" aria-expanded="false" aria-controls="collapseMainTwo">
+                                        User Information
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseMainTwo" class="collapse show" aria-labelledby="headingMainTwo" data-parent="#accordion">
+                                <div class="card-body">
+                                    @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-warning card-outline">
+                            <div class="card-header" id="headingMainThree">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainThree" aria-expanded="false" aria-controls="collapseMainThree">
+                                        Medias
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseMainThree" class="collapse" aria-labelledby="headingMainThree" data-parent="#accordion">
+                                <div class="card-body">
+                                    @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
+                                    @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-info card-outline">
+                            <div class="card-header" id="headingMainFive">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainFive" aria-expanded="false" aria-controls="collapseMainFive">
+                                        Documents
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseMainFive" class="collapse" aria-labelledby="headingMainFive" data-parent="#accordion">
+                                <div class="card-body">
+                                    @include('default_view::admin.pages.user.tabs.documents-tab.documents', ['user' => $user])
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-success card-outline">
+                            <div class="card-header" id="headingMainSix">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainSix" aria-expanded="false" aria-controls="collapseMainSix">
+                                        Payments
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseMainSix" class="collapse" aria-labelledby="headingMainSix" data-parent="#accordion">
+                                <div class="card-body">
+                                    @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-indigo card-outline">
+                            <div class="card-header" id="headingMainSeven">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainSeven" aria-expanded="false" aria-controls="collapseMainSeven">
+                                        Devices
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseMainSeven" class="collapse" aria-labelledby="headingMainSeven" data-parent="#accordion">
+                                <div class="card-body">
+                                    @include('default_view::admin.pages.user.tabs.device', ['user' => $user])
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -166,28 +209,28 @@
     </div>
     <div id="banModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value }}" name="status">
-                        <div class="modal-header bg-danger">
-                            <h5 class="modal-title" id="exampleModalLiveLabel">Block User</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Are you sure you want to block this user?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value }}" name="status">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title" id="exampleModalLiveLabel">Block User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to block this user?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
-                            <button type="submit" class="btn btn-danger">Block</button>
-                        </div>
-                    </form>
-                </div>
+                        <button type="submit" class="btn btn-danger">Block</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <div id="suspendModal" class="modal fade" role="dialog">
