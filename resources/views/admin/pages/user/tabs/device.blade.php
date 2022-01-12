@@ -1,6 +1,6 @@
-<div class="tab-pane active" id="user-info">
-    <table class="table table-hover">
-        <thead>
+<div class="tab-pane active table-responsive" id="user-info">
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
             <th scope="col">Device ID</th>
@@ -21,7 +21,7 @@
                 $agent = new \SimpleUserAgent\UserAgent($userDevice['user_agent']);
             @endphp
         <tr>
-            <th scope="row">1</th>
+            <th scope="row">{{ $index }}</th>
             <td>{{$userDevice['device_id']}}</td>
             <td>{{$userDevice['ip']}}</td>
             <td><img src="{{ \Aparlay\Core\Helpers\Country::flagFromAlpha2($ip2location['countryCode']) }}" alt="">
