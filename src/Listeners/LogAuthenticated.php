@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Listeners;
 
 use Aparlay\Core\Api\V1\Services\UserService;
+use Aparlay\Core\Helpers\IP;
 use Illuminate\Auth\Events\Authenticated;
 
 class LogAuthenticated
@@ -30,7 +31,7 @@ class LogAuthenticated
             auth()->user(),
             request()->userAgent(),
             request()->header('X-DEVICE-ID'),
-            request()->ip()
+            IP::trueAddress()
         );
     }
 }
