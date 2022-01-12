@@ -4,9 +4,8 @@ namespace Aparlay\Core\Api\V1\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-abstract class AbstractResourceCollection  extends ResourceCollection
+abstract class AbstractResourceCollection extends ResourceCollection
 {
-
     public function toArray($request): array | Arrayable | JsonSerializable
     {
         return $this->preparePagination();

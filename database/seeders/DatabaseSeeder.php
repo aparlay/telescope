@@ -30,7 +30,6 @@ class DatabaseSeeder extends Seeder
         DB::collection('user_documents')->truncate();
         DB::collection('payout_wallets')->truncate();
 
-
         $this->call([
             AlertSeeder::class,
             AnalyticSeeder::class,
