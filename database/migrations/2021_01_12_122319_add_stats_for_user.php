@@ -42,7 +42,7 @@ class AddStatsForUser extends Migration
                 dd($tip);
                 $receiver = User::findOrFail('61d422180549fd0413380b36');
                 $receiverStats = $receiver->stats;
-                $totalReceiveTips = isset($receiverStats['amount']) && isset($receiverStats['amount']['received_tips']) ? $receiverStats['amount']['received_tips'] + $tip->amount : $tip->amount; 
+                $totalReceiveTips = isset($receiverStats['amount']) && isset($receiverStats['amount']['received_tips']) ? $receiverStats['amount']['received_tips'] + $tip->amount : $tip->amount;
                 $receiverStats['amount']['received_tips'] = $totalReceiveTips;
                 $receiver->fill(['stats' => $receiverStats])->save();
 
