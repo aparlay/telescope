@@ -36,7 +36,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="card card-primary card-outline">
+                    <div class="card card-primary card-outline row">
                         <div class="ribbon-wrapper ribbon-xl">
                             <div class="ribbon bg-{{ $user->status_badge['color'] }}">
                                 {{ $user->status_badge['status'] }}
@@ -100,80 +100,82 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-
-                    <div id="accordion">
-                        <div class="card card-danger card-outline">
-                            <div class="card-header" id="headingMainTwo">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainTwo" aria-expanded="false" aria-controls="collapseMainTwo">
-                                        User Information
-                                    </button>
-                                </h5>
+                    @include('default_view::admin.pages.user.tabs.statistics')
+                    <div class="row">
+                        <div id="accordion" class="col-md-12">
+                            <div class="card card-danger card-outline">
+                                <div class="card-header" id="headingMainTwo">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainTwo" aria-expanded="false" aria-controls="collapseMainTwo">
+                                            User Information
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseMainTwo" class="collapse show" aria-labelledby="headingMainTwo" data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
+                                    </div>
+                                </div>
                             </div>
-                            <div id="collapseMainTwo" class="collapse show" aria-labelledby="headingMainTwo" data-parent="#accordion">
-                                <div class="card-body">
-                                    @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
+                            <div class="card card-warning card-outline">
+                                <div class="card-header" id="headingMainThree">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainThree" aria-expanded="false" aria-controls="collapseMainThree">
+                                            Medias
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseMainThree" class="collapse" aria-labelledby="headingMainThree" data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
+                                        @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-info card-outline">
+                                <div class="card-header" id="headingMainFive">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainFive" aria-expanded="false" aria-controls="collapseMainFive">
+                                            Documents
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseMainFive" class="collapse" aria-labelledby="headingMainFive" data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.documents-tab.documents', ['user' => $user])
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-success card-outline">
+                                <div class="card-header" id="headingMainSix">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainSix" aria-expanded="false" aria-controls="collapseMainSix">
+                                            Payments
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseMainSix" class="collapse" aria-labelledby="headingMainSix" data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-indigo card-outline">
+                                <div class="card-header" id="headingMainSeven">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainSeven" aria-expanded="false" aria-controls="collapseMainSeven">
+                                            Devices
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseMainSeven" class="collapse" aria-labelledby="headingMainSeven" data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.device', ['user' => $user])
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card card-warning card-outline">
-                            <div class="card-header" id="headingMainThree">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainThree" aria-expanded="false" aria-controls="collapseMainThree">
-                                        Medias
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseMainThree" class="collapse" aria-labelledby="headingMainThree" data-parent="#accordion">
-                                <div class="card-body">
-                                    @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
-                                    @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-info card-outline">
-                            <div class="card-header" id="headingMainFive">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainFive" aria-expanded="false" aria-controls="collapseMainFive">
-                                        Documents
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseMainFive" class="collapse" aria-labelledby="headingMainFive" data-parent="#accordion">
-                                <div class="card-body">
-                                    @include('default_view::admin.pages.user.tabs.documents-tab.documents', ['user' => $user])
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-success card-outline">
-                            <div class="card-header" id="headingMainSix">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainSix" aria-expanded="false" aria-controls="collapseMainSix">
-                                        Payments
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseMainSix" class="collapse" aria-labelledby="headingMainSix" data-parent="#accordion">
-                                <div class="card-body">
-                                    @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-indigo card-outline">
-                            <div class="card-header" id="headingMainSeven">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainSeven" aria-expanded="false" aria-controls="collapseMainSeven">
-                                        Devices
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseMainSeven" class="collapse" aria-labelledby="headingMainSeven" data-parent="#accordion">
-                                <div class="card-body">
-                                    @include('default_view::admin.pages.user.tabs.device', ['user' => $user])
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </div>    
                 </div>
             </div>
         </div>
