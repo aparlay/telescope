@@ -1240,12 +1240,12 @@ class CreateCountriesCollection extends Migration
         }
 
         $flags = [
-            '16' => json_decode(file_get_contents(resource_path().'/js/flags/16x16.json'), true),
-            '24' => json_decode(file_get_contents(resource_path().'/js/flags/24x24.json'), true),
-            '32' => json_decode(file_get_contents(resource_path().'/js/flags/32x32.json'), true),
-            '48' => json_decode(file_get_contents(resource_path().'/js/flags/48x48.json'), true),
-            '64' => json_decode(file_get_contents(resource_path().'/js/flags/64x64.json'), true),
-            '128' => json_decode(file_get_contents(resource_path().'/js/flags/128x128.json'), true),
+            '16' => json_decode(file_get_contents(database_path().'/json/flags/16x16.json'), true),
+            '24' => json_decode(file_get_contents(database_path().'/json/flags/24x24.json'), true),
+            '32' => json_decode(file_get_contents(database_path().'/json/flags/32x32.json'), true),
+            '48' => json_decode(file_get_contents(database_path().'/json/flags/48x48.json'), true),
+            '64' => json_decode(file_get_contents(database_path().'/json/flags/64x64.json'), true),
+            '128' => json_decode(file_get_contents(database_path().'/json/flags/128x128.json'), true),
         ];
 
         foreach ($countries as $index => $country) {
