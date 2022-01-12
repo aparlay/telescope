@@ -36,7 +36,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="card card-primary card-outline">
+                    <div class="card card-primary card-outline row">
                         <div class="ribbon-wrapper ribbon-xl">
                             <div class="ribbon bg-{{ $user->status_badge['color'] }}">
                                 {{ $user->status_badge['status'] }}
@@ -102,37 +102,40 @@
                 <div class="col-md-9">
                 
                     @include('default_view::admin.pages.user.tabs.statistics')
-                    <div class="card">
-                        <div class="card-header p-2">
-                            <ul class="nav nav-pills">
-                                <li class="nav-items">
-                                    <a href="#user-info" class="nav-link active" data-toggle="tab">User Information</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#medias" class="nav-link" data-toggle="tab">Medias</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#upload" class="nav-link" data-toggle="tab">Upload</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#payment" class="nav-link" data-toggle="tab">Payments</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#documents" class="nav-link" data-toggle="tab">Documents</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="card-body">
-                            <div class="tab-content">
-                                
-                                @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
-                                @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
-                                @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
-                                @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
-                                @include('default_view::admin.pages.user.tabs.documents-tab.documents', ['user' => $user])
+                    <div class="row col-md-12">
+                        <div class="card col-md-12">
+                            <div class="card-header p-2">
+                                <ul class="nav nav-pills">
+                                    <li class="nav-items">
+                                        <a href="#user-info" class="nav-link active" data-toggle="tab">User Information</a>
+                                    </li>
+                                    <li class="nav-items">
+                                        <a href="#medias" class="nav-link" data-toggle="tab">Medias</a>
+                                    </li>
+                                    <li class="nav-items">
+                                        <a href="#upload" class="nav-link" data-toggle="tab">Upload</a>
+                                    </li>
+                                    <li class="nav-items">
+                                        <a href="#payment" class="nav-link" data-toggle="tab">Payments</a>
+                                    </li>
+                                    <li class="nav-items">
+                                        <a href="#documents" class="nav-link" data-toggle="tab">Documents</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content">
+                                    
+                                    @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
+                                    @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
+                                    @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
+                                    @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
+                                    @include('default_view::admin.pages.user.tabs.documents-tab.documents', ['user' => $user])
+                                </div>
                             </div>
                         </div>
                     </div>
+                   
                 </div>
             </div>
         </div>
