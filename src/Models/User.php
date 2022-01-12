@@ -24,7 +24,7 @@ use Laravel\Scout\Searchable;
 use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+// use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 /**
  * User model.
@@ -74,7 +74,8 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property-read string $slack_admin_url
  * @property-read bool $is_subscribable
  */
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
+//  implements JWTSubject
 {
     use HasFactory;
     use Notifiable;
@@ -176,8 +177,8 @@ class User extends Authenticatable implements JWTSubject
             'amounts' => [
                 'sent_tips' => 0,
                 'received_tips' => 0,
-                'active_subscriptions' => 0,
-                'active_subscribers' => 0,
+                'subscriptions' => 0,
+                'subscribers' => 0,
             ],
             'counters' => [
                 'followers' => 0,
@@ -375,24 +376,24 @@ class User extends Authenticatable implements JWTSubject
         return parent::setAttribute($key, $value);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getJWTIdentifier(): mixed
-    {
-        return $this->getKey();
-    }
+    // /**
+    //  * @return mixed
+    //  */
+    // public function getJWTIdentifier(): mixed
+    // {
+    //     return $this->getKey();
+    // }
 
-    /**
-     * @return null[]
-     */
-    #[ArrayShape(['device_id' => 'array|null|string'])]
-    public function getJWTCustomClaims(): array
-    {
-        return [
-            'device_id' => request()?->header('x-device-id'),
-        ];
-    }
+    // /**
+    //  * @return null[]
+    //  */
+    // #[ArrayShape(['device_id' => 'array|null|string'])]
+    // public function getJWTCustomClaims(): array
+    // {
+    //     return [
+    //         'device_id' => request()?->header('x-device-id'),
+    //     ];
+    // }
 
     /**
      * @return string
