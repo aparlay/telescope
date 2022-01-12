@@ -176,8 +176,8 @@ class User extends Authenticatable implements JWTSubject
             'amounts' => [
                 'sent_tips' => 0,
                 'received_tips' => 0,
-                'active_subscriptions' => 0,
-                'active_subscribers' => 0,
+                'subscriptions' => 0,
+                'subscribers' => 0,
             ],
             'counters' => [
                 'followers' => 0,
