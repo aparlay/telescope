@@ -1,5 +1,6 @@
 <?php
 
+use Aparlay\Payment\Models\Tip;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,8 +18,8 @@ class AddUserColumns extends Migration
             foreach ($models as $user) {
                 $user->stats = [
                     'amounts' => [
-                        'sent_tips' => 0,
-                        'received_tips' => 0,
+                        'sent_tips' => Tip::creator($user->_id)->completed()->sum('amount'),
+                        'received_tips' => Tip::user($user->_id)->completed()->sum('amount'),
                         'subscriptions' => 0,
                         'subscribers' => 0,
                     ],
