@@ -78,7 +78,7 @@
                                     @else
                                         <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#suspendModal">
                                             <i class="fas fa-minus-circle"></i>
-                                            <strong>Suspend</strong>
+                                            <strong>Freez</strong>
                                         </button>
                                     @endif
                                 </div>
@@ -91,7 +91,7 @@
                                     @else
                                         <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#banModal">
                                             <i class="fas fa-times-circle"></i>
-                                            <strong>Block</strong>
+                                            <strong>Ban</strong>
                                         </button>
                                     @endif
                                 </div>
