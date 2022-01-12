@@ -1,6 +1,6 @@
 <div class="tab-pane active table-responsive" id="user-info">
-    <table class="table table-hover table-striped">
-        <thead class="thead-dark">
+    <table class="table table-sm table-hover table-striped">
+        <thead class="thead-light">
         <tr>
             <th scope="col">#</th>
             <th scope="col">Device ID</th>
