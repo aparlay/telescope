@@ -24,6 +24,7 @@ use Laravel\Scout\Searchable;
 use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
+
 // use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 /**
