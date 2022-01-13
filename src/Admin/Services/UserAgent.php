@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Admin\Services;
 
 /**
- * User Agent class
+ * User Agent class.
  */
 class UserAgent
 {
@@ -81,7 +81,7 @@ class UserAgent
 
     public function __construct($agent = null)
     {
-        if (!$agent && isset($_SERVER['HTTP_USER_AGENT'])) {
+        if (! $agent && isset($_SERVER['HTTP_USER_AGENT'])) {
             $agent = $_SERVER['HTTP_USER_AGENT'];
         }
 
@@ -134,13 +134,13 @@ class UserAgent
         }
 
         // Browser version
-        $pattern = '#(?<browser>' . join('|', ['Version', $this->prefix, 'other']) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
+        $pattern = '#(?<browser>'.implode('|', ['Version', $this->prefix, 'other']).')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
         preg_match_all($pattern, $this->agent, $matches);
 
         $this->version = $matches['version'][0];
 
         if (count($matches['browser']) != 1) {
-            $this->version = strripos($this->agent, "Version") < strripos($this->agent, $this->prefix) ? $matches['version'][0] : $matches['version'][1];
+            $this->version = strripos($this->agent, 'Version') < strripos($this->agent, $this->prefix) ? $matches['version'][0] : $matches['version'][1];
         }
 
         // Check if is a BOT
