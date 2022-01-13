@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\UserRepository;
+use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
@@ -90,7 +91,7 @@ class OnlineUserService
         }
 
         switch ($user->show_online_status) {
-            case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_ALL:
+            case UserShowOnlineStatus::All->value:
                 Redis::sAdd($onlineAllCurrent, (string) $user->_id);
                 Redis::sAdd($onlineAllNext, (string) $user->_id);
                 Redis::sAdd($onlineFollowingsCurrent, (string) $user->_id);
@@ -98,7 +99,7 @@ class OnlineUserService
                 Redis::sAdd($onlineNoneCurrent, (string) $user->_id);
                 Redis::sAdd($onlineNoneNext, (string) $user->_id);
                 break;
-            case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_FOLLOWERS:
+            case UserShowOnlineStatus::FOLLOWERS->value:
                 Redis::sAdd($onlineFollowingsCurrent, (string) $user->_id);
                 Redis::sAdd($onlineFollowingsNext, (string) $user->_id);
                 Redis::sAdd($onlineNoneCurrent, (string) $user->_id);
@@ -122,7 +123,7 @@ class OnlineUserService
         $onlineNoneNext = config('app.cache.keys.online.none').':'.$nextWindow;
 
         switch ($user->show_online_status) {
-            case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_ALL:
+            case UserShowOnlineStatus::All->value:
                 Redis::sRem($onlineAllCurrent, (string) $user->_id);
                 Redis::sRem($onlineAllNext, (string) $user->_id);
                 Redis::sRem($onlineFollowingsCurrent, (string) $user->_id);
@@ -130,7 +131,7 @@ class OnlineUserService
                 Redis::sRem($onlineNoneCurrent, (string) $user->_id);
                 Redis::sRem($onlineNoneNext, (string) $user->_id);
                 break;
-            case \Aparlay\Core\Models\User::SHOW_ONLINE_STATUS_FOLLOWERS:
+            case UserShowOnlineStatus::FOLLOWERS->value:
                 Redis::sRem($onlineFollowingsCurrent, (string) $user->_id);
                 Redis::sRem($onlineFollowingsNext, (string) $user->_id);
                 Redis::sRem($onlineNoneCurrent, (string) $user->_id);

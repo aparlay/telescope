@@ -86,10 +86,6 @@ class User extends Authenticatable implements JWTSubject
     use HasRoles;
     use Searchable;
 
-    public const SHOW_ONLINE_STATUS_NONE = 0;
-    public const SHOW_ONLINE_STATUS_FOLLOWERS = 1;
-    public const SHOW_ONLINE_STATUS_ALL = 2;
-
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
 
@@ -173,7 +169,6 @@ class User extends Authenticatable implements JWTSubject
         'email_verified' => false,
         'phone_number_verified' => false,
         'follower_count' => 0,
-        'show_online_status' => self::SHOW_ONLINE_STATUS_ALL,
         'following_count' => 0,
         'like_count' => 0,
         'block_count' => 0,
