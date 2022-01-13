@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Providers;
 
-use Aparlay\Payout\Api\V1\Models\Wallet;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
@@ -13,6 +12,7 @@ use Aparlay\Core\Api\V1\Policies\UserDocumentPolicy;
 use Aparlay\Core\Api\V1\Policies\UserPolicy;
 use Aparlay\Core\Api\V1\Policies\WalletPolicy;
 use Aparlay\Core\Models\User;
+use Aparlay\Payout\Api\V1\Models\Wallet;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 

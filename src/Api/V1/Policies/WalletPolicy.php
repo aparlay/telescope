@@ -23,7 +23,6 @@ class WalletPolicy
         return Response::deny(__('You cannot delete this wallet'));
     }
 
-
     public function view(User | Authenticatable $user, Wallet $wallet)
     {
         $userId = $user?->_id;
