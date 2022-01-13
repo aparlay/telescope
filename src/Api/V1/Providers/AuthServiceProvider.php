@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Providers;
 
+use Aparlay\Payout\Api\V1\Models\Wallet;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
@@ -28,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         MediaLike::class => MediaLikePolicy::class,
         UserDocument::class => UserDocumentPolicy::class,
-        \Wallet::class => WalletPolicy::class,
+        Wallet::class => WalletPolicy::class,
     ];
 
     /**
