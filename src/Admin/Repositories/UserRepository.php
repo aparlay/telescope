@@ -25,9 +25,9 @@ class UserRepository
             ->get();
     }
 
-    public function countFilteredUser($filters, $dateRangeFilter = null)
+    public function countFilteredUser($text, $filters, $dateRangeFilter = null)
     {
-        $query = $this->model->filter($filters);
+        $query = $this->model->textSearch($text)->filter($filters);
 
         if ($dateRangeFilter) {
             $query->date($dateRangeFilter['start'], $dateRangeFilter['end']);
