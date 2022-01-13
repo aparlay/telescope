@@ -22,7 +22,7 @@
                 $i++;
                 $ip2location = (new \IP2Location\Database(database_path().'/ip2location/IP2LOCATION-LITE-DB11.BIN', \IP2Location\Database::FILE_IO))
                 ->lookup($userDevice['ip'], \IP2Location\Database::ALL);
-                $agent = new \SimpleUserAgent\UserAgent($userDevice['user_agent']);
+                $agent = new \Aparlay\Core\Admin\Services\UserAgent($userDevice['user_agent']);
             @endphp
         <tr>
             <th scope="row">{{ $i }}</th>
