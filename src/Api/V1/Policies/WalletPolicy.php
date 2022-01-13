@@ -34,6 +34,4 @@ class WalletPolicy
 
         return Response::deny(__('You cannot view this wallet'));
     }
-
-
 }
