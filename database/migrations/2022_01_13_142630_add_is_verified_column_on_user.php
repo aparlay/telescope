@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Aparlay\Core\Models\User;
+use Illuminate\Database\Migrations\Migration;
 
 class AddIsVerifiedColumnOnUser extends Migration
 {
