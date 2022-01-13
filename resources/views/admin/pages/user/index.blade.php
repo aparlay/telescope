@@ -83,14 +83,8 @@
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
-                                                        <label for="username">Username</label>
-                                                        <input type="text" data-column="0" name="username" class="form-control" id="username" placeholder="Enter username">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <label for="email">Email</label>
-                                                        <input type="email" data-column="2" name="email" class="form-control" id="email" placeholder="Enter email">
+                                                        <label for="username">Search</label>
+                                                        <input type="text" data-column="0" name="text_search" class="form-control" id="username" placeholder="Enter name, username, email, phone">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">

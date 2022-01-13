@@ -7,11 +7,20 @@ use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
 trait UserScope
 {
     use BaseScope;
+
+    /**
+     * @return mixed
+     */
+    public function scopeTextSearch(Builder $query, string $text): Builder
+    {
+        return $query->where('text_search', 'regex', new Regex('.*'.$text.'.*', 'i'));
+    }
 
     /**
      * @return mixed
