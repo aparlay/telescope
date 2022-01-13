@@ -10,9 +10,7 @@ use Aparlay\Core\Api\V1\Policies\MediaLikePolicy;
 use Aparlay\Core\Api\V1\Policies\MediaPolicy;
 use Aparlay\Core\Api\V1\Policies\UserDocumentPolicy;
 use Aparlay\Core\Api\V1\Policies\UserPolicy;
-use Aparlay\Core\Api\V1\Policies\WalletPolicy;
 use Aparlay\Core\Models\User;
-use Aparlay\Payout\Api\V1\Models\Wallet;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -29,7 +27,6 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         MediaLike::class => MediaLikePolicy::class,
         UserDocument::class => UserDocumentPolicy::class,
-        Wallet::class => WalletPolicy::class,
     ];
 
     /**
