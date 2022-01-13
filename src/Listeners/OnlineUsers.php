@@ -26,6 +26,8 @@ class OnlineUsers
     public function handle($event)
     {
         $onlineUserService = app()->make(OnlineUserService::class);
-        $onlineUserService->online(auth()->user());
+        if (auth()->check()) {
+            $onlineUserService->online(auth()->user());
+        }
     }
 }

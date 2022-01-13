@@ -546,7 +546,7 @@ class User extends Authenticatable implements JWTSubject
     {
         [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
 
-        $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
+        $cacheKey = config('app.cache.keys.online.none').':'.$currentWindow;
 
         return Redis::sismember($cacheKey, (string) $this->_id);
     }
@@ -556,6 +556,15 @@ class User extends Authenticatable implements JWTSubject
         [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
 
         $cacheKey = config('app.cache.keys.online.followings').':'.$currentWindow;
+
+        return Redis::sismember($cacheKey, (string) $this->_id);
+    }
+
+    public function getIsOnlineForAllAttribute(): bool
+    {
+        [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
+
+        $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
 
         return Redis::sismember($cacheKey, (string) $this->_id);
     }

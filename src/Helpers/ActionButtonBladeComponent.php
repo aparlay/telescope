@@ -74,7 +74,9 @@ class ActionButtonBladeComponent
      */
     public static function getUsernameWithAvatar($user): string
     {
-        return '<img src="'.$user->avatar.'?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">'.$user->username;
+        return '<img src="'.$user->avatar.'?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">'.
+            $user->username.
+            ($user->is_online ? ' <span class="text-info text-sm fas fa-circle"></span>' : ' <span class="text-gray text-sm far fa-circle"></span>');
     }
 
     /**
