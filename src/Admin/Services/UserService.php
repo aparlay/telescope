@@ -61,7 +61,7 @@ class UserService extends AdminBaseService
     public function appendAttributes($textSearch, $users, $filters, $dateRangeFilter)
     {
         $users->total_users = $this->userRepository->countCollection();
-        $users->total_filtered_users = ! empty($filters) || $dateRangeFilter ? $this->userRepository->countFilteredUser($textSearch, $filters, $dateRangeFilter) : $users->total_users;
+        $users->total_filtered_users = ! empty($filters) || ! empty($textSearch) || $dateRangeFilter ? $this->userRepository->countFilteredUser($textSearch, $filters, $dateRangeFilter) : $users->total_users;
 
         foreach ($users as $user) {
             $userBadges = [
