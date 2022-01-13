@@ -138,7 +138,6 @@ class UserService extends AdminBaseService
         ];
 
         $data = array_merge($data, $dataBooleans);
-
         $role = request()?->input('role');
         if ($role && auth()->user()->hasRole(User::ROLE_SUPER_ADMINISTRATOR)) {
             $user->syncRoles(request()->input('role'));
