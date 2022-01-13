@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Aparlay\Core\Models\User;
 
 class AddIsVerifiedColumnOnUser extends Migration
 {
@@ -11,7 +12,7 @@ class AddIsVerifiedColumnOnUser extends Migration
      */
     public function up()
     {
-        \Aparlay\Core\Models\User::chunk(200, function ($models) {
+        User::chunk(200, function ($models) {
             foreach ($models as $user) {
                 $user->is_verified = false;
                 $user->save();
