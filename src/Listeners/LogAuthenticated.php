@@ -20,18 +20,20 @@ class LogAuthenticated
     /**
      * Handle the event.
      *
-     * @param  Authenticated  $event
+     * @param  $event
      * @return void
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function handle(Authenticated $event)
+    public function handle($event)
     {
         $userService = app()->make(UserService::class);
-        $userService->logUserDevice(
-            auth()->user(),
-            request()->userAgent(),
-            request()->header('X-DEVICE-ID'),
-            IP::trueAddress()
-        );
+        if (auth()->check()) {
+            $userService->logUserDevice(
+                auth()->user(),
+                request()->userAgent(),
+                request()->header('X-DEVICE-ID'),
+                IP::trueAddress()
+            );
+        }
     }
 }
