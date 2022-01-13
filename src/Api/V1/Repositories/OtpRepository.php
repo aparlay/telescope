@@ -4,11 +4,12 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Otp;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\OtpType;
 use Aparlay\Core\Models\Otp as BaseOtp;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class OtpRepository implements RepositoryInterface
+class OtpRepository
 {
     protected Otp | BaseOtp $model;
 
@@ -38,7 +39,7 @@ class OtpRepository implements RepositoryInterface
                     config('app.otp.length.max')
                 ),
                 'expired_at'    => DT::utcDateTime(['s' => config('app.otp.duration')]),
-                'type'          => Str::contains($otp['identity'], '@') ? Otp::TYPE_EMAIL : Otp::TYPE_SMS,
+                'type'          => Str::contains($otp['identity'], '@') ? OtpType::EMAIL->value : OtpType::SMS->value,
                 'device_id'     => $otp['device_id'],
                 'incorrect'     => 0,
                 'validated'     => false,
@@ -81,23 +82,8 @@ class OtpRepository implements RepositoryInterface
         $this->model->update(['validated' => $validated]);
     }
 
-    public function all()
-    {
-        // TODO: Implement all() method.
-    }
-
-    public function update(array $data, $id)
-    {
-        // TODO: Implement update() method.
-    }
-
     public function delete($id)
     {
         return $this->model->destroy($id);
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
     }
 }

@@ -12,10 +12,12 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">User Profile
+                        <!--
                         <button class="ml-4 btn btn-sm btn-danger col-md-1" data-toggle="modal" data-target="#alertModal">
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
+                        -->
                     </h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
@@ -34,7 +36,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="card card-primary card-outline">
+                    <div class="card card-primary card-outline row">
                         <div class="ribbon-wrapper ribbon-xl">
                             <div class="ribbon bg-{{ $user->status_badge['color'] }}">
                                 {{ $user->status_badge['status'] }}
@@ -68,7 +70,7 @@
                             </ul>
                             <div class="row">
                                 <div class="col-md-6">
-                                    @if($user->status == \App\Models\User::STATUS_SUSPENDED)
+                                    @if($user->status == \Aparlay\Core\Models\Enums\UserStatus::SUSPENDED->value)
                                         <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#activateModal">
                                             <i class="fas fa-check"></i>
                                             <strong>Reactivate</strong>
@@ -76,12 +78,12 @@
                                     @else
                                         <button type="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#suspendModal">
                                             <i class="fas fa-minus-circle"></i>
-                                            <strong>Suspend</strong>
+                                            <strong>Freez</strong>
                                         </button>
                                     @endif
                                 </div>
                                 <div class="col-md-6">
-                                    @if($user->status == \App\Models\User::STATUS_BLOCKED)
+                                    @if($user->status == \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value)
                                         <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#activateModal">
                                             <i class="fas fa-check"></i>
                                             <strong>Reactivate</strong>
@@ -98,498 +100,82 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    <div class="card">
-                        <div class="card-header p-2">
-                            <ul class="nav nav-pills">
-                                <li class="nav-items">
-                                    <a href="#user-info" class="nav-link active" data-toggle="tab">User Information</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#medias" class="nav-link" data-toggle="tab">Medias</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#upload" class="nav-link" data-toggle="tab">Upload</a>
-                                </li>
-                                <li class="nav-items">
-                                    <a href="#payment" class="nav-link" data-toggle="tab">Payments</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="card-body">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="user-info">
-                                    <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data">
-                                        @csrf()
-                                        @method('PUT')
-                                        <div class="form-group row">
-                                            <label for="avatar" class="col-sm-2 col-form-label">Avatar</label>
-                                            <div class="col-sm-10">
-                                                <input type="file" class="form-control-file" id="avatar" name="avatar" accept="image/*">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="username" class="col-sm-2 col-form-label">Username</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="username" name="username" value="{{ $user->username }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="email" class="col-sm-2 col-form-label">Email</label>
-                                            <div class="col-sm-10">
-                                                <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="email_verified" class="col-sm-2 col-form-label">Email Verified</label>
-                                            <div class="col-sm-10">
-                                                <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" value="1" name="email_verified" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
-                                                    <label class="custom-control-label" for="email_verified"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="bio" class="col-sm-2 col-form-label">Bio</label>
-                                            <div class="col-sm-10">
-                                                <textarea name="bio" id="bio" cols="30" rows="3" class="form-control"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="feature_tips" class="col-sm-2 col-form-label">Feature Tips</label>
-                                            <div class="col-sm-10">
-                                                <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" value="1" class="custom-control-input" name="features[tips]" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
-                                                    <label class="custom-control-label" for="feature_tips"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="feature_demo" class="col-sm-2 col-form-label">Feature Demo User</label>
-                                            <div class="col-sm-10">
-                                                <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" value="1" name="features[demo]" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
-                                                    <label class="custom-control-label" for="feature_demo"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="gender" class="col-sm-2 col-form-label">Gender</label>
-                                            <div class="col-sm-10">
-                                                <select name="gender" id="gender" class="form-control">
-                                                    @foreach($user->getGenders() as $key => $gender)
-                                                        <option value="{{ $key }}" {!! $user->gender == $key ? 'selected' : '' !!}>{{ $gender }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="interested_in" class="col-sm-2 col-form-label">Interested In</label>
-                                            <div class="col-sm-10">
-                                                <select name="interested_in" id="interested_in" class="form-control">
-                                                    @foreach($user->getInterestedIns() as $key => $interested_in)
-                                                        <option value="{{ $key }}" {!! $user->interested_in == $key ? 'selected' : '' !!}>{{ $interested_in }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="type" class="col-sm-2 col-form-label">Type</label>
-                                            <div class="col-sm-10">
-                                                <select name="type" id="type" class="form-control">
-                                                    @foreach($user->getTypes() as $key => $type)
-                                                        <option value="{{ $key }}" {!! $user->type == $key ? 'selected' : '' !!}>{{ $type }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        @role('super-administrator')
-                                            <div class="form-group row">
-                                                <label for="role" class="col-sm-2 col-form-control">Role</label>
-                                                <div class="col-sm-10">
-                                                    <select name="role" class="form-control" id="role">
-                                                        <option value=""></option>
-                                                        @foreach($roles as $role)
-                                                            <option value="{{ $role->name }}" {{ $user->role_ids && in_array($role->_id, $user->role_ids) ? 'selected' : '' }}>{{ $role->name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        @endrole
-                                        <div class="form-group row">
-                                            <label for="status" class="col-sm-2 col-form-label">Status</label>
-                                            <div class="col-sm-10">
-                                                <select name="status" id="status" class="form-control">
-                                                    @foreach($user->getStatuses() as $key => $status)
-                                                        <option value="{{ $key }}" {!! $user->status == $key ? 'selected' : '' !!}>{{ $status }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="visibility" class="col-sm-2 col-form-label">Visibility</label>
-                                            <div class="col-sm-10">
-                                                <select name="visibility" id="visibility" class="form-control">
-                                                    @foreach($user->getVisibilities() as $key => $visibility)
-                                                        <option value="{{ $key }}" {!! $user->visibility == $key ? 'selected' : '' !!}>{{ $visibility }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="referral_id" class="col-sm-2 col-form-label">Referral User ID</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="referral_id" name="referral_id" value="{{ $user->referral_id }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="promo_link" class="col-sm-2 col-form-label">Promo Link</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="promo_link" name="promo_link" value="{{ $user->promo_link }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label">Created At</label>
-                                            <div class="col-sm-10 mt-2">
-                                                <p>{{ $user->created_at }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label">Updated At</label>
-                                            <div class="col-sm-10 mt-2">
-                                                <p>{{ $user->updated_at }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12 mt-3">
-                                                <button type="submit" class="btn btn-md btn-primary col-md-1 float-right">Submit</button>
-                                            </div>
-                                        </div>
-                                    </form>
+                    @include('default_view::admin.pages.user.tabs.statistics')
+                    <div class="row">
+                        <div id="accordion" class="col-md-12">
+                            <div class="card card-danger card-outline">
+                                <div class="card-header" id="headingMainTwo">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainTwo" aria-expanded="false" aria-controls="collapseMainTwo">
+                                            User Information
+                                        </button>
+                                    </h5>
                                 </div>
-                                <div class="tab-pane" id="medias">
-                                    <div class="content">
-                                        <div class="container-fluid">
-                                            <div class="row">
-                                                @php
-                                                    $heads = [
-                                                        'Cover',
-                                                        'Created By',
-                                                        'Description',
-                                                        '',
-                                                        'Status',
-                                                        'Likes',
-                                                        'Visits',
-                                                        'Sort Score',
-                                                        'Created At',
-                                                        '',
-                                                        ''
-                                                    ];
-                                                $config = [
-                                                    'processing' => true,
-                                                    'serverSide' => true,
-                                                    'pageLength' => config('core.admin.lists.page_count'),
-                                                    'responsive' => true,
-                                                    'lengthChange' => false,
-                                                    'dom' => 'rtip',
-                                                    'orderMulti' => false,
-                                                    'autoWidth' => false,
-                                                    'ajax' => route('core.admin.ajax.media.index'),
-                                                    'order' => [[8, 'desc']],
-                                                    'searching' => true,
-                                                    'searchCols' => [null, ['search' => $user->username]],
-                                                    'bInfo' => false,
-                                                    'columns' => [
-                                                        ['data' => 'file', 'orderable' => false],
-                                                        ['data' => 'creator.username', 'orderable' => false],
-                                                        ['data' => 'description', 'orderable' => false],
-                                                        ['data' => 'status', 'visible' => false],
-                                                        ['data' => 'status_badge', 'orderData' => 3, 'target' => 3],
-                                                        ['data' => 'like_count', 'orderable' => false],
-                                                        ['data' => 'visit_count', 'orderable' => false],
-                                                        ['data' => 'sort_score', 'orderable' => false],
-                                                        ['data' => 'formatted_created_at','orderData' => 9, 'target' => 9],
-                                                        ['data' => 'created_at','visible' => false],
-                                                        ['data' => 'action', 'orderable' => false],
-                                                    ],
-                                                ];
-                                                @endphp
-                                                <x-adminlte-datatable id="mediaDatatable" :heads="$heads" :config="$config">
-                                                </x-adminlte-datatable>
-                                            </div>
-                                        </div>
+                                <div id="collapseMainTwo" class="collapse show" aria-labelledby="headingMainTwo" data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="upload">
-                                    <form method="post" action="{{ route('core.admin.user.media.save-upload') }}" >
-                                        <div class="flow-drop" data-upload-url="{{ route('core.admin.user.media.upload') }}" ondragenter="jQuery(this).addClass('flow-dragover');" ondragend="jQuery(this).removeClass('flow-dragover');" ondrop="jQuery(this).removeClass('flow-dragover');">
-                                            Drop files here to upload
-                                            <span>or</span>
-                                            <a class="btn btn-md btn-outline-primary upload-btn flow-browse mt-3">
-                                                select from your computer
-                                            </a>
-                                        </div>
-                                        @csrf
-                                        <div class="flow-list col-md-12 mt-3"></div>
-
-                                        <input type="hidden" id="media_file" name="file">
-                                        <input type="hidden" name="user_id" value="{{ $user->_id }}" >
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="description">Description</label>
-                                                    <textarea name="description" class="form-control" id="description" cols="30" rows="3"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-
-                                            <div class="col-4">
-                                                <button class="btn btn-block btn-primary upload-video-button" name="create-button"><i class="fa fa-upload"></i><strong>Upload</strong></button>
-                                            </div>
-                                        </div>
-                                    </form>
+                            </div>
+                            <div class="card card-warning card-outline">
+                                <div class="card-header" id="headingMainThree">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainThree" aria-expanded="false" aria-controls="collapseMainThree">
+                                            Medias
+                                        </button>
+                                    </h5>
                                 </div>
-                                <div class="tab-pane" id="payment">
-                                    <div class="content">
-                                            <div class="container-fluid">
-                                                <div class="row">
-                                                    <h4>Credit Cards</h4>
-                                                    <div class="col-12 table-responsive">
-                                                        @php
-                                                            $heads = [
-                                                                'Username',
-                                                                'Status',
-                                                                '',
-                                                                'Expiration Month',
-                                                                'Expiration Year',
-                                                                'Created at',
-                                                                '',
-                                                                ''
-                                                            ];
-
-                                                            $config = [
-                                                                'processing' => true,
-                                                                'serverSide' => true,
-                                                                'pageLength' => config('core.admin.lists.user_page_count'),
-                                                                'responsive' => true,
-                                                                'lengthChange' => false,
-                                                                'dom' => 'rtip',
-                                                                'orderMulti' => false,
-                                                                'bInfo' => false,
-                                                                'searchCols' => [['search' => $user->username]],
-                                                                'autoWidth' => false,
-                                                                'ajax' => route('payment.admin.ajax.credit-card.index'),
-                                                                'order' => [[5, 'desc']],
-                                                                'columns' => [
-                                                                    ['data' => 'creator.username'],
-                                                                    ['data' => 'status_button','orderData' => 2, 'target' => 2],
-                                                                    ['data' => 'status','visible' => false],
-                                                                    ['data' => 'expire_month', 'orderable' => false],
-                                                                    ['data' => 'expire_year', 'orderable' => false],
-                                                                    ['data' => 'formatted_created_at','orderData' => 6, 'target' => 6],
-                                                                    ['data' => 'created_at','visible' => false],
-                                                                    ['data' => 'view_button', 'orderable' => false],
-                                                                ],
-                                                            ]
-                                                        @endphp
-                                                        <x-adminlte-datatable id="creditCardsDatatable" :heads="$heads" :config="$config">
-                                                        </x-adminlte-datatable>
-                                                    </div>
-
-
-                                                    <h4>Earned Tips</h4>
-                                                    <div class="col-12 table-responsive">
-                                                        @php
-                                                            $heads = [
-                                                                'User',
-                                                                'Creator',
-                                                                '',
-                                                                'Media',
-                                                                'Currency',
-                                                                'Amount',
-                                                                'Status',
-                                                                '',
-                                                                'Created at',
-                                                                '',
-                                                                ''
-                                                            ];
-
-                                                        $config = [
-                                                            'processing' => true,
-                                                            'serverSide' => true,
-                                                            'pageLength' => config('core.admin.lists.user_page_count'),
-                                                            'responsive' => true,
-                                                            'lengthChange' => false,
-                                                            'dom' => 'rtip',
-                                                            'orderMulti' => false,
-                                                            'autoWidth' => false,
-                                                            'bInfo' => false,
-                                                            'searchCols' => [['search' => $user->username]],
-                                                            'ajax' => route('payment.admin.ajax.tip.index'),
-                                                            'order' => [[8, 'desc']],
-                                                            'columns' => [
-                                                                ['data' => 'user.username'],
-                                                                ['data' => 'link_to_creator', 'orderData' => 2, 'target' => 2],
-                                                                ['data' => 'creator.username','visible' => false],
-                                                                ['data' => 'link_to_media', 'orderable' => false],
-                                                                ['data' => 'currency'],
-                                                                ['data' => 'amount'],
-                                                                ['data' => 'status_button','orderData' => 7, 'target' => 7],
-                                                                ['data' => 'status','visible' => false],
-                                                                ['data' => 'formatted_created_at','orderData' => 9, 'target' => 9],
-                                                                ['data' => 'created_at','visible' => false],
-                                                                ['data' => 'view_button', 'orderable' => false],
-                                                            ],
-                                                        ]
-
-                                                        @endphp
-                                                        <x-adminlte-datatable id="earnedTipsDatatable" :heads="$heads" :config="$config">
-                                                        </x-adminlte-datatable>
-                                                    </div>
-
-                                                    <h4>Send Tips</h4>
-                                                    <div class="col-12 table-responsive">
-                                                        @php
-                                                            $heads = [
-                                                                'User',
-                                                                '',
-                                                                'Creator',
-                                                                'Media',
-                                                                'Currency',
-                                                                'Amount',
-                                                                'Status',
-                                                                '',
-                                                                'Created at',
-                                                                '',
-                                                                ''
-                                                            ];
-
-                                                        $config = [
-                                                            'processing' => true,
-                                                            'serverSide' => true,
-                                                            'pageLength' => config('core.admin.lists.user_page_count'),
-                                                            'responsive' => true,
-                                                            'lengthChange' => false,
-                                                            'dom' => 'rtip',
-                                                            'orderMulti' => false,
-                                                            'autoWidth' => false,
-                                                            'bInfo' => false,
-                                                            'searchCols' => ['','',['search' => $user->username]],
-                                                            'ajax' => route('payment.admin.ajax.tip.index'),
-                                                            'order' => [[8, 'desc']],
-                                                            'columns' => [
-                                                                ['data' => 'link_to_user', 'orderData' => 1, 'target' => 1],
-                                                                ['data' => 'user.username','visible' => false],
-                                                                ['data' => 'creator.username'],
-                                                                ['data' => 'link_to_media', 'orderable' => false],
-                                                                ['data' => 'currency'],
-                                                                ['data' => 'amount'],
-                                                                ['data' => 'status_button','orderData' => 7, 'target' => 7],
-                                                                ['data' => 'status','visible' => false],
-                                                                ['data' => 'formatted_created_at','orderData' => 9, 'target' => 9],
-                                                                ['data' => 'created_at','visible' => false],
-                                                                ['data' => 'view_button', 'orderable' => false],
-                                                            ],
-                                                        ]
-                                                        @endphp
-                                                        <x-adminlte-datatable id="sendTipsDatatable" :heads="$heads" :config="$config">
-                                                        </x-adminlte-datatable>
-                                                    </div>
-
-
-                                                    <h4>Subscriptions</h4>
-                                                    <div class="col-12 table-responsive">
-                                                        @php
-                                                            $heads = [
-                                                                '',
-                                                                'User',
-                                                                '',
-                                                                'Status',
-                                                                '',
-                                                                'Created at',
-                                                                '',
-                                                                ''
-                                                            ];
-
-                                                        $config = [
-                                                            'processing' => true,
-                                                            'serverSide' => true,
-                                                            'pageLength' => config('core.admin.lists.user_page_count'),
-                                                            'responsive' => true,
-                                                            'lengthChange' => false,
-                                                            'bInfo' => false,
-                                                            'dom' => 'rtip',
-                                                            'orderMulti' => false,
-                                                            'searchCols' => [['search' => $user->username]],
-                                                            'autoWidth' => false,
-                                                            'ajax' => route('payment.admin.ajax.subscription.index'),
-                                                            'order' => [[5, 'desc']],
-                                                            'columns' => [
-                                                                ['data' => 'creator.username','visible' => false],
-                                                                ['data' => 'link_to_user', 'orderData' => 2, 'target' => 2],
-                                                                ['data' => 'user.username','visible' => false],
-                                                                ['data' => 'status_button','orderData' => 4, 'target' => 4],
-                                                                ['data' => 'status','visible' => false],
-                                                                ['data' => 'formatted_created_at','orderData' => 6, 'target' => 6],
-                                                                ['data' => 'created_at','visible' => false],
-                                                                ['data' => 'view_button', 'orderable' => false]
-                                                            ],
-                                                        ]
-                                                        @endphp
-                                                        <x-adminlte-datatable id="subscriptionsDatatable" :heads="$heads" :config="$config">
-                                                        </x-adminlte-datatable>
-                                                    </div>
-
-                                                    <h4>Subscribers</h4>
-                                                    <div class="col-12 table-responsive">
-                                                        @php
-                                                            $heads = [
-                                                                '',
-                                                                'Creator',
-                                                                '',
-                                                                'Status',
-                                                                '',
-                                                                'Created at',
-                                                                '',
-                                                                ''
-                                                            ];
-
-                                                        $config = [
-                                                            'processing' => true,
-                                                            'serverSide' => true,
-                                                            'pageLength' => config('core.admin.lists.user_page_count'),
-                                                            'responsive' => true,
-                                                            'lengthChange' => false,
-                                                            'bInfo' => false,
-                                                            'dom' => 'rtip',
-                                                            'orderMulti' => false,
-                                                            'searchCols' => ['','',['search' => $user->username]],
-                                                            'autoWidth' => false,
-                                                            'ajax' => route('payment.admin.ajax.subscription.index'),
-                                                            'order' => [[5, 'desc']],
-                                                            'columns' => [
-                                                                ['data' => 'creator.username','visible' => false],
-                                                                ['data' => 'link_to_creator', 'orderData' => 0, 'target' => 0],
-                                                                ['data' => 'user.username','visible' => false],
-                                                                ['data' => 'status_button','orderData' => 4, 'target' => 4],
-                                                                ['data' => 'status','visible' => false],
-                                                                ['data' => 'formatted_created_at','orderData' => 6, 'target' => 6],
-                                                                ['data' => 'created_at','visible' => false],
-                                                                ['data' => 'view_button', 'orderable' => false]
-                                                            ],
-                                                        ]
-                                                        @endphp
-                                                        <x-adminlte-datatable id="subscribersDatatable" :heads="$heads" :config="$config">
-                                                        </x-adminlte-datatable>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <div id="collapseMainThree" class="collapse" aria-labelledby="headingMainThree" data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
+                                        @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-info card-outline">
+                                <div class="card-header" id="headingMainFive">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainFive" aria-expanded="false" aria-controls="collapseMainFive">
+                                            Documents
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseMainFive" class="collapse" aria-labelledby="headingMainFive" data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.documents-tab.documents', ['user' => $user])
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-success card-outline">
+                                <div class="card-header" id="headingMainSix">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainSix" aria-expanded="false" aria-controls="collapseMainSix">
+                                            Payments
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseMainSix" class="collapse" aria-labelledby="headingMainSix" data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-indigo card-outline">
+                                <div class="card-header" id="headingMainSeven">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainSeven" aria-expanded="false" aria-controls="collapseMainSeven">
+                                            Devices
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseMainSeven" class="collapse" aria-labelledby="headingMainSeven" data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.device', ['user' => $user])
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>    
                 </div>
             </div>
         </div>
@@ -598,8 +184,8 @@
         <div class="modal-dialog">
             <form action="{{ route('core.admin.alert.store') }}" method="post">
                 <input type="hidden" name="user_id" value="{{ $user->_id }}">
-                <input type="hidden" name="type" value="{{ \Aparlay\Core\Models\Alert::TYPE_USER}}">
-                <input type="hidden" name="status" value="{{ \Aparlay\Core\Admin\Models\Alert::STATUS_NOT_VISITED }}">
+                <input type="hidden" name="type" value="{{ \Aparlay\Core\Models\Enums\AlertType::USER->value}}">
+                <input type="hidden" name="status" value="{{ \Aparlay\Core\Models\Enums\AlertStatus::NOT_VISITED->value }}">
                 <!-- Modal content-->
                 <div class="modal-content">
                         <div class="modal-header">
@@ -625,28 +211,28 @@
     </div>
     <div id="banModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" value="{{ \App\Models\User::STATUS_BLOCKED }}" name="status">
-                        <div class="modal-header bg-danger">
-                            <h5 class="modal-title" id="exampleModalLiveLabel">Ban User</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Are you sure you want to ban this user?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value }}" name="status">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title" id="exampleModalLiveLabel">Block User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to block this user?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
-                            <button type="submit" class="btn btn-danger">Ban</button>
-                        </div>
-                    </form>
-                </div>
+                        <button type="submit" class="btn btn-danger">Block</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <div id="suspendModal" class="modal fade" role="dialog">
@@ -656,7 +242,7 @@
                 <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
                     @csrf
                     @method('PATCH')
-                    <input type="hidden" name="status" value="{{ \App\Models\User::STATUS_SUSPENDED }}">
+                    <input type="hidden" name="status" value="{{ \Aparlay\Core\Models\Enums\UserStatus::SUSPENDED->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Suspend</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -683,7 +269,7 @@
                 <form action="{{ route('core.admin.user.update.status', ['user' => $user->_id])  }}" method="POST">
                     @csrf
                     @method('PATCH')
-                    <input type="hidden" name="status" value="{{ \App\Models\User::STATUS_ACTIVE }}">
+                    <input type="hidden" name="status" value="{{ \Aparlay\Core\Models\Enums\UserStatus::ACTIVE->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Reactivate</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -705,11 +291,26 @@
     </div>
 @endsection
 @section('js')
+    <script src="{{ URL::asset('admin/assets/js/ekko-lightbox.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
+    <script>
+        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+            event.preventDefault();
+            $(this).ekkoLightbox();
+        });
+        $(function () {
+         $('#approveModal').on("show.bs.modal", function (e) {
+            document.approveForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
+            return e;
+         });
+         $('#rejectModal').on("show.bs.modal", function (e) {
+            document.rejectForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
+            return e;
+         });
+        });
+    </script>
 @endsection
-
-

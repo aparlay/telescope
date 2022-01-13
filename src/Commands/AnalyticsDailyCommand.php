@@ -10,7 +10,6 @@ use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\MediaVisit;
 use Illuminate\Console\Command;
-use Illuminate\Http\Response;
 
 class AnalyticsDailyCommand extends Command
 {

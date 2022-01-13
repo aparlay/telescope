@@ -3,12 +3,13 @@
 namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User as BaseUser;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class UserRepository implements RepositoryInterface
+class UserRepository
 {
     protected User | BaseUser $model;
 
@@ -28,7 +29,7 @@ class UserRepository implements RepositoryInterface
      */
     public function verify(): bool
     {
-        $this->model->status = User::STATUS_VERIFIED;
+        $this->model->status = UserStatus::VERIFIED->value;
         $this->model->email_verified = true;
 
         return $this->model->save(['status', 'email_verified']);
@@ -42,17 +43,17 @@ class UserRepository implements RepositoryInterface
     public function isUserEligible(): bool
     {
         switch ($this->model->status) {
-            case User::STATUS_SUSPENDED:
+            case UserStatus::SUSPENDED->value:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user is suspended.');
 
                 // no break
-            case User::STATUS_BLOCKED:
+            case UserStatus::BLOCKED->value:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user has been banned.');
 
                 // no break
-            case User::STATUS_DEACTIVATED:
+            case UserStatus::DEACTIVATED->value:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'User account not found or does not match with password.');
 
@@ -70,7 +71,7 @@ class UserRepository implements RepositoryInterface
     public function isUnverified(): bool
     {
         /* User is considered as unverified when "OTP Setting is enabled AND user status is pending" */
-        return $this->model->setting['otp'] && $this->model->status === User::STATUS_PENDING;
+        return $this->model->setting['otp'] && $this->model->status === UserStatus::PENDING->value;
     }
 
     /**
@@ -82,7 +83,7 @@ class UserRepository implements RepositoryInterface
     public function isVerified(): bool
     {
         /* User is considered as verified when user status is active or verified */
-        if ($this->model->status !== User::STATUS_VERIFIED && $this->model->status !== User::STATUS_ACTIVE) {
+        if (! in_array($this->model->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value], true)) {
             throw ValidationException::withMessages([
                 'Account' => ['Your account is not authenticated.'],
             ]);
@@ -91,29 +92,9 @@ class UserRepository implements RepositoryInterface
         return true;
     }
 
-    public function all()
-    {
-        // TODO: Implement all() method.
-    }
-
-    public function create(array $data)
-    {
-        // TODO: Implement create() method.
-    }
-
     public function update(array $data, $id)
     {
         return $this->model->user($id)->update($data);
-    }
-
-    public function delete($id)
-    {
-        // TODO: Implement delete() method.
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
     }
 
     /**
@@ -166,13 +147,14 @@ class UserRepository implements RepositoryInterface
      * Responsible for delete user account.
      *
      * @return bool
+     * @throws \Exception
      */
-    public function deleteAccount()
+    public function deleteAccount(): bool
     {
         $randString = random_int(1, 100);
         $this->model->email = 'del_'.$randString.'_'.$this->model->email;
         $this->model->phone_number = ! empty($this->model->phone_number) ? 'del_'.$randString.'_'.$this->model->phone_number : null;
-        $this->model->status = User::STATUS_DEACTIVATED;
+        $this->model->status = UserStatus::DEACTIVATED->value;
 
         return $this->model->save();
     }
@@ -184,7 +166,7 @@ class UserRepository implements RepositoryInterface
     public function requireOtp(): bool
     {
         if ($this->isUserEligible()) {
-            return $this->model->setting['otp'] || $this->model->status === User::STATUS_PENDING;
+            return $this->model->setting['otp'] || $this->model->status === UserStatus::PENDING->value;
         }
 
         return false;

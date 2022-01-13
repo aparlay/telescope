@@ -5,14 +5,14 @@ namespace Aparlay\Core\Api\V1\Repositories;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Services\MediaService;
-use Aparlay\Core\Jobs\UploadMedia;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media as BaseMedia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
-class MediaRepository implements RepositoryInterface
+class MediaRepository
 {
     protected Media | BaseMedia $model;
 
@@ -36,6 +36,7 @@ class MediaRepository implements RepositoryInterface
         $user = auth()->user();
         try {
             $model = Media::create([
+                'status' => MediaStatus::QUEUED->value,
                 'user_id' => new ObjectId($user->_id),
                 'file' => $request->input('file', ''),
                 'description' => $request->input('description', ''),
@@ -62,30 +63,10 @@ class MediaRepository implements RepositoryInterface
         return $model;
     }
 
-    public function all()
-    {
-        // TODO: Implement all() method.
-    }
-
-    public function create(array $data)
-    {
-        // TODO: Implement create() method.
-    }
-
     public function update(array $data, $id)
     {
         $model = $this->model->media($id)->firstOrFail();
 
         return $model->update($data);
-    }
-
-    public function delete($id)
-    {
-        // TODO: Implement delete() method.
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
     }
 }

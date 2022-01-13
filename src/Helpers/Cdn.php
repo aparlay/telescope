@@ -61,4 +61,22 @@ class Cdn
 
         return config('app.cdn.videos').$url;
     }
+
+    /**
+     * Responsible for returning the avatar URL based on filename if cdn is enabled.
+     *
+     * @throws Exception
+     */
+    public static function document(string $url): string
+    {
+        if (empty($url)) {
+            throw new Exception('document file is missing');
+        }
+
+        if (! config('app.cdn.enabled')) {
+            return $url;
+        }
+
+        return config('app.cdn.document').$url;
+    }
 }

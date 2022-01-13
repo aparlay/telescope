@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\ReportFactory;
+use Aparlay\Core\Models\Enums\ReportStatus;
+use Aparlay\Core\Models\Enums\ReportType;
 use Aparlay\Core\Models\Scopes\ReportScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,13 +38,6 @@ class Report extends BaseModel
     use HasFactory;
     use Notifiable;
     use ReportScope;
-
-    public const TYPE_USER = 0;
-    public const TYPE_MEDIA = 1;
-    public const TYPE_COMMENT = 2;
-
-    public const STATUS_REPORTED = 0;
-    public const STATUS_REVISED = 1;
 
     /**
      * The collection associated with the model.
@@ -89,23 +84,6 @@ class Report extends BaseModel
         'status' => 'integer',
     ];
 
-    public static function getStatuses(): array
-    {
-        return [
-            self::STATUS_REPORTED => __('reported'),
-            self::STATUS_REVISED => __('revised'),
-        ];
-    }
-
-    public static function getTypes(): array
-    {
-        return [
-            self::TYPE_COMMENT => __('comment'),
-            self::TYPE_MEDIA => __('media'),
-            self::TYPE_USER => __('user'),
-        ];
-    }
-
     /**
      * Create a new factory instance for the model.
      */
@@ -133,18 +111,44 @@ class Report extends BaseModel
     /**
      * Get the user associated with the report.
      */
-    public function creator(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function getSlackSubjectAdminUrlAttribute()
+    /**
+     * @return string
+     */
+    public function getSlackSubjectAdminUrlAttribute(): string
     {
         return match ($this->type) {
-            self::TYPE_USER => $this->userObj->slack_admin_url,
-            self::TYPE_MEDIA => $this->mediaObj->slack_admin_url,
+            ReportType::USER->value => $this->userObj->slack_admin_url,
+            ReportType::MEDIA->value => $this->mediaObj->slack_admin_url,
             default => '',
         };
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            ReportStatus::REPORTED->value => ReportStatus::REPORTED->label(),
+            ReportStatus::REVISED->value => ReportStatus::REVISED->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypes(): array
+    {
+        return [
+            ReportType::USER->value => ReportType::USER->label(),
+            ReportType::MEDIA->value => ReportType::MEDIA->label(),
+            ReportType::COMMENT->value => ReportType::COMMENT->label(),
+        ];
     }
 
     /**
@@ -154,7 +158,7 @@ class Report extends BaseModel
      *
      * @return string
      */
-    public function routeNotificationForSlack($notification)
+    public function routeNotificationForSlack($notification): string
     {
         return config('app.slack_webhook_url');
     }

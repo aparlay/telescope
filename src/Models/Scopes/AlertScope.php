@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
-use Aparlay\Core\Models\Alert;
+use Aparlay\Core\Models\Enums\AlertStatus;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
 
@@ -12,12 +12,12 @@ trait AlertScope
 
     public function scopeVisited(Builder $query): Builder
     {
-        return $query->where('status', Alert::STATUS_VISITED);
+        return $query->where('status', AlertStatus::VISITED->value);
     }
 
     public function scopeNotVisited(Builder $query): Builder
     {
-        return $query->where('status', Alert::STATUS_NOT_VISITED);
+        return $query->where('status', AlertStatus::NOT_VISITED->value);
     }
 
     /**
@@ -42,5 +42,14 @@ trait AlertScope
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
         return $query->where('user_id', $userId);
+    }
+
+    /**
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public function scopeUserOnly(Builder $query): Builder
+    {
+        return $query->where('media_id', null);
     }
 }

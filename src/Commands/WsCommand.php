@@ -9,21 +9,21 @@ use Co;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
-use JWTAuth;
+use PHPOpenSourceSaver\JWTAuth\Claims\Audience;
+use PHPOpenSourceSaver\JWTAuth\Claims\Collection;
+use PHPOpenSourceSaver\JWTAuth\Claims\Custom;
+use PHPOpenSourceSaver\JWTAuth\Claims\Expiration;
+use PHPOpenSourceSaver\JWTAuth\Claims\IssuedAt;
+use PHPOpenSourceSaver\JWTAuth\Claims\Issuer;
+use PHPOpenSourceSaver\JWTAuth\Claims\JwtId;
+use PHPOpenSourceSaver\JWTAuth\Claims\NotBefore;
+use PHPOpenSourceSaver\JWTAuth\Claims\Subject;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use PHPOpenSourceSaver\JWTAuth\Payload;
+use PHPOpenSourceSaver\JWTAuth\Validators\PayloadValidator;
 use Swoole\Coroutine\Http\Client;
 use Swoole\Runtime;
 use Swoole\WebSocket\Frame;
-use Tymon\JWTAuth\Claims\Audience;
-use Tymon\JWTAuth\Claims\Collection;
-use Tymon\JWTAuth\Claims\Custom;
-use Tymon\JWTAuth\Claims\Expiration;
-use Tymon\JWTAuth\Claims\IssuedAt;
-use Tymon\JWTAuth\Claims\Issuer;
-use Tymon\JWTAuth\Claims\JwtId;
-use Tymon\JWTAuth\Claims\NotBefore;
-use Tymon\JWTAuth\Claims\Subject;
-use Tymon\JWTAuth\Payload;
-use Tymon\JWTAuth\Validators\PayloadValidator;
 
 class WsCommand extends Command
 {
@@ -34,7 +34,7 @@ class WsCommand extends Command
     public function handle()
     {
         $requiredClaims = [
-            new Audience(config('app.jwt.sig.audience')),
+            new Audience('https://'.gethostname()),
             new Issuer(config('app.jwt.sig.issuer')),
             new IssuedAt(Carbon::now('UTC')),
             new Expiration(Carbon::now('UTC')->addYear(1)),

@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\User;
-use Aparlay\Payment\Api\V1\Models\CreditCard;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;

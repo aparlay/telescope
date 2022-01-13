@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\EmailFactory;
+use Aparlay\Core\Models\Enums\EmailStatus;
+use Aparlay\Core\Models\Enums\EmailType;
 use Aparlay\Core\Models\Scopes\EmailScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -28,14 +30,8 @@ class Email extends BaseModel
     use Notifiable;
     use EmailScope;
 
-    public const STATUS_QUEUED = 0;
-    public const STATUS_SENT = 1;
-    public const STATUS_OPENED = 2;
-    public const STATUS_FAILED = 3;
-
-    public const TYPE_OTP = 0;
-
     public const TEMPLATE_EMAIL_VERIFICATION = 'email_verification';
+    public const TEMPLATE_EMAIL_CONTACTUS = 'email_contactus';
 
     /**
      * The collection associated with the model.
@@ -81,15 +77,23 @@ class Email extends BaseModel
     ];
 
     /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return EmailFactory::new();
+    }
+
+    /**
      * @return array
      */
     public static function getStatuses(): array
     {
         return [
-            self::STATUS_QUEUED => __('Queued'),
-            self::STATUS_SENT => __('Sent'),
-            self::STATUS_OPENED => __('Opened'),
-            self::STATUS_FAILED => __('Failed'),
+            EmailStatus::QUEUED->value => EmailStatus::QUEUED->label(),
+            EmailStatus::SENT->value => EmailStatus::SENT->label(),
+            EmailStatus::OPENED->value => EmailStatus::OPENED->label(),
+            EmailStatus::FAILED->value => EmailStatus::FAILED->label(),
         ];
     }
 
@@ -99,15 +103,19 @@ class Email extends BaseModel
     public static function getTypes(): array
     {
         return [
-            self::TYPE_OTP => __('OTP'),
+            EmailType::OTP->value => EmailType::OTP->label(),
+            EmailType::CONTACT->value => EmailType::CONTACT->label(),
         ];
     }
 
     /**
-     * Create a new factory instance for the model.
+     * @return array
      */
-    protected static function newFactory(): Factory
+    public static function getTemplates(): array
     {
-        return EmailFactory::new();
+        return [
+            EmailType::OTP->value => self::TEMPLATE_EMAIL_VERIFICATION,
+            EmailType::CONTACT->value => self::TEMPLATE_EMAIL_CONTACTUS,
+        ];
     }
 }

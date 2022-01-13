@@ -17,6 +17,26 @@ class ActionButtonBladeComponent
         return '<span class="badge bg-'.$color.'">'.ucfirst($name).'</span>';
     }
 
+    public static function modalButton($btnText, $dataId, $target, $color = 'primary')
+    {
+        return
+            '<button type="submit" class="btn btn-'.$color.' btn-xs"
+                data-toggle="modal" data-target="'.$target.'"
+                data-id="'.$dataId.'"
+                >
+                '.$btnText.'</button>';
+    }
+
+    /**
+     * @param $id
+     * @param $resourceName
+     * @return string
+     */
+    public static function link($text, $url): string
+    {
+        return '<a class="btn btn-success btn-sm" target="_blank" href="'.$url.'" title="'.$text.'"><i class=""></i>'.$text.'</a>';
+    }
+
     /**
      * @param $id
      * @param $resourceName

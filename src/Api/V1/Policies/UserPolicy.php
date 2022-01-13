@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Policies;
 
+use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
@@ -46,7 +47,7 @@ class UserPolicy
     {
         return (
             ($user !== null && (string) auth()->user()->_id === (string) $user->_id) ||
-            auth()->user()->type === User::TYPE_ADMIN
+            auth()->user()->type === UserType::ADMIN->value
         )
         ? Response::allow()
         : Response::deny(__('You can only update your account.'));
@@ -62,7 +63,7 @@ class UserPolicy
     {
         return (
             ($user !== null && (string) auth()->user()->_id === (string) $user->_id) ||
-            auth()->user()->type === User::TYPE_ADMIN
+            auth()->user()->type === UserType::ADMIN->value
         )
             ? Response::allow()
             : Response::deny(__('You can only delete your account.'));

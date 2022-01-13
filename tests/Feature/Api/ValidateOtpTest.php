@@ -2,16 +2,13 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Otp;
 use Aparlay\Core\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 
 class ValidateOtpTest extends ApiTestCase
 {
-    use DatabaseMigrations;
-
     /**
      * A test for valid otp.
      *
@@ -23,7 +20,7 @@ class ValidateOtpTest extends ApiTestCase
         $otp = '123456';
 
         User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'email' => $email,
         ]);
         Otp::factory()->create(['identity' => $email, 'otp' => $otp, 'validated' => false]);
@@ -56,7 +53,7 @@ class ValidateOtpTest extends ApiTestCase
     public function invalidOtp()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'email' => uniqid('alua_').'@aparlay.com',
         ]);
         Otp::factory()->create(['identity' => $user->email, 'otp' => '123456']);
@@ -110,7 +107,7 @@ class ValidateOtpTest extends ApiTestCase
     public function otpRequire()
     {
         $user = User::factory()->create([
-            'status' => User::STATUS_ACTIVE,
+            'status' => UserStatus::ACTIVE->value,
             'email' => uniqid('alua_').'@aparlay.com',
         ]);
         $response = $this->withHeaders(['X-DEVICE-ID' => 'random-string'])

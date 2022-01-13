@@ -19,10 +19,14 @@ class UserResource extends JsonResource
         $user = auth()->user() ?: false;
         $isFollowed = $isBlocked = $isOnline = false;
         if ($user) {
+            // TODO: $followingIds = collect($user->followings)->pluck('_id')
             $followingIds = array_column($user->followings, '_id');
+            // TODO: $isFollowed = collect($user->followings)->where('_id', (string) $this->_id))->isEmpty()
             $isFollowed = in_array((string) $this->_id, $followingIds);
 
+            // TODO: $blockedIds = collect($user->blocks)->pluck('_id')
             $blockedIds = array_column($user->blocks, '_id');
+            // TODO: $isBlocked = collect($user->blocks)->pluck('_id')
             $isBlocked = in_array((string) $this->_id, $blockedIds);
 
             $isOnline = $isFollowed ? $this->is_online_for_followers : $this->is_online;

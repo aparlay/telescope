@@ -5,23 +5,34 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Api\V1\Services\OnlineUserService;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\UserFeature;
+use Aparlay\Core\Models\Enums\UserGender;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
+use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserType;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
+use JetBrains\PhpStorm\ArrayShape;
+use Laravel\Scout\Searchable;
 use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 /**
  * User model.
  *
  * @property ObjectId    $_id
  * @property string      $username
+ * @property string      $full_name
  * @property string      $password_hash
  * @property string      $password_reset_token
  * @property string      $email
@@ -56,6 +67,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property array       $count_fields_updated_at
  * @property array       $subscriptions
  * @property array       $subscription_plan
+ * @property array       $user_agents
+ * @property array       $stats
+ * @property array       $last_location
+ * @property string      $country
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
@@ -69,29 +84,7 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
     use UserScope;
     use HasRoles;
-
-    public const TYPE_USER = 0;
-    public const TYPE_ADMIN = 1;
-
-    public const STATUS_PENDING = 0;
-    public const STATUS_VERIFIED = 1;
-    public const STATUS_ACTIVE = 2;
-    public const STATUS_SUSPENDED = 3;
-    public const STATUS_BLOCKED = 4;
-    public const STATUS_DEACTIVATED = 10;
-
-    public const GENDER_FEMALE = 0;
-    public const GENDER_MALE = 1;
-    public const GENDER_TRANSGENDER = 2;
-    public const GENDER_NOT_MENTION = 3;
-
-    public const INTERESTED_IN_FEMALE = 0;
-    public const INTERESTED_IN_MALE = 1;
-    public const INTERESTED_IN_TRANSGENDER = 2;
-    public const INTERESTED_IN_COUPLE = 3;
-
-    public const VISIBILITY_PUBLIC = 1;
-    public const VISIBILITY_PRIVATE = 0;
+    use Searchable;
 
     public const SHOW_ONLINE_STATUS_NONE = 0;
     public const SHOW_ONLINE_STATUS_FOLLOWERS = 1;
@@ -148,6 +141,10 @@ class User extends Authenticatable implements JWTSubject
         'medias',
         'promo_link',
         'referral_id',
+        'country',
+        'user_agents',
+        'stats',
+        'last_location',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -167,14 +164,14 @@ class User extends Authenticatable implements JWTSubject
         ],
         'features' => [
             'tips' => false,
+            'exclusive_content' => false,
+            'wallet_bank' => false,
+            'wallet_paypal' => false,
+            'wallet_cryptocurrency' => false,
             'demo' => false,
         ],
-        'status' => self::STATUS_PENDING,
         'email_verified' => false,
         'phone_number_verified' => false,
-        'gender' => self::GENDER_MALE,
-        'interested_in' => self::INTERESTED_IN_MALE,
-        'visibility' => self::VISIBILITY_PUBLIC,
         'follower_count' => 0,
         'show_online_status' => self::SHOW_ONLINE_STATUS_ALL,
         'following_count' => 0,
@@ -184,6 +181,25 @@ class User extends Authenticatable implements JWTSubject
         'media_count' => 0,
         'subscriptions' => [],
         'subscription_plan' => [],
+        'user_agents' => [],
+        'stats' => [
+            'amounts' => [
+                'sent_tips' => 0,
+                'received_tips' => 0,
+                'subscriptions' => 0,
+                'subscribers' => 0,
+            ],
+            'counters' => [
+                'followers' => 0,
+                'followings' => 0,
+                'likes' => 0,
+                'blocks' => 0,
+                'followed_hashtags' => 0,
+                'medias' => 0,
+                'subscriptions' => 0,
+                'subscribers' => 0,
+            ],
+        ],
     ];
 
     /**
@@ -229,59 +245,21 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
-    public static function getFeatures(): array
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
     {
         return [
-            self::FEATURE_TIPS => __('tips'),
-            self::FEATURE_DEMO => __('demo'),
-        ];
-    }
-
-    public static function getGenders(): array
-    {
-        return [
-            self::GENDER_FEMALE => __('female'),
-            self::GENDER_MALE => __('male'),
-            self::GENDER_TRANSGENDER => __('transgender'),
-            self::GENDER_NOT_MENTION => __('not mention'),
-        ];
-    }
-
-    public static function getInterestedIns(): array
-    {
-        return [
-            self::INTERESTED_IN_FEMALE => __('female'),
-            self::INTERESTED_IN_MALE => __('male'),
-            self::INTERESTED_IN_TRANSGENDER => __('transgender'),
-            self::INTERESTED_IN_COUPLE => __('couple'),
-        ];
-    }
-
-    public static function getTypes(): array
-    {
-        return [
-            self::TYPE_USER => __('user'),
-            self::TYPE_ADMIN => __('admin'),
-        ];
-    }
-
-    public static function getVisibilities(): array
-    {
-        return [
-            self::VISIBILITY_PRIVATE => __('private'),
-            self::VISIBILITY_PUBLIC => __('public'),
-        ];
-    }
-
-    public static function getStatuses(): array
-    {
-        return [
-            self::STATUS_PENDING => __('pending'),
-            self::STATUS_VERIFIED => __('verified'),
-            self::STATUS_ACTIVE => __('active'),
-            self::STATUS_SUSPENDED => __('suspended'),
-            self::STATUS_BLOCKED => __('banned'),
-            self::STATUS_DEACTIVATED => __('deleted'),
+            'poster' => $this->avatar,
+            'username' => $this->username,
+            'email' => $this->email,
+            'phone_number' => $this->phone_number,
+            'full_name' => $this->full_name,
+            'follower_count' => $this->follower_count,
+            'like_count' => $this->like_count,
         ];
     }
 
@@ -293,118 +271,50 @@ class User extends Authenticatable implements JWTSubject
         return UserFactory::new();
     }
 
-    public function getSlackAdminUrlAttribute()
-    {
-        return "<{$this->admin_url}|@{$this->username}>";
-    }
-
-    public function getAdminUrlAttribute()
-    {
-        return route('core.admin.user.view', ['user' => $this->_id]);
-    }
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [
-            'device_id' => request()?->header('x-device-id'),
-        ];
-    }
-
-    public function getAuthPassword()
-    {
-        return $this->password_hash;
-    }
-
-    /**
-     * Route notifications for the Slack channel.
-     *
-     * @param Notification $notification
-     *
-     * @return string
-     */
-    public function routeNotificationForSlack($notification)
-    {
-        return config('app.slack_webhook_url');
-    }
-
-    public function addToSet(string $attribute, mixed $item, int $length = null): void
-    {
-        if (! is_array($this->$attribute)) {
-            $this->$attribute = [];
-        }
-        $values = $this->$attribute;
-        if (! in_array($item, $values, false)) {
-            array_unshift($values, $item);
-        }
-
-        if (null !== $length) {
-            $values = array_slice($values, 0, $length);
-        }
-
-        $this->$attribute = $values;
-    }
-
-    public function removeFromSet(string $attribute, mixed $item): void
-    {
-        if (! is_array($this->$attribute)) {
-            $this->$attribute = [];
-        }
-        $values = $this->$attribute;
-        if (($key = array_search($item, $values, false)) !== false) {
-            unset($values[$key]);
-            if (is_int($key)) {
-                $values = array_values($values);
-            }
-        }
-
-        $this->$attribute = $values;
-    }
-
-    public function getCountFieldsUpdatedAtAttribute($attributeValue)
-    {
-        foreach ($attributeValue as $field => $value) {
-            /* MongoDB\BSON\UTCDateTime $value */
-            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value->toDateTime()->getTimestamp() : $value;
-        }
-
-        return $attributeValue;
-    }
-
-    public function setCountFieldsUpdatedAtAttribute($attributeValue)
-    {
-        foreach ($attributeValue as $field => $value) {
-            /* MongoDB\BSON\UTCDateTime $value */
-            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value : DT::timestampToUtc($value);
-        }
-
-        $this->attributes['count_fields_updated_at'] = $attributeValue;
-    }
-
     /**
      * Get the phone associated with the user.
      */
-    public function mediaObjs()
+    public function mediaObjs(): HasMany|\Jenssegers\Mongodb\Relations\HasMany
     {
         return $this->hasMany(Media::class, 'created_by');
     }
 
     /**
+     * Get the phone associated with the user.
+     */
+    public function userDocumentObjs(): HasMany|\Jenssegers\Mongodb\Relations\HasMany
+    {
+        return $this->hasMany(UserDocument::class, 'creator._id');
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlackAdminUrlAttribute(): string
+    {
+        return "<{$this->admin_url}|@{$this->username}>";
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdminUrlAttribute(): string
+    {
+        return route('core.admin.user.view', ['user' => $this->_id]);
+    }
+
+    /**
      * Get the media's skin score.
      *
-     * @return array
+     * @return array|Collection
      */
-    public function getAlertsAttribute()
+    public function getAlertsAttribute(): array|Collection
     {
         if (auth()->guest() || ((string) $this->_id !== (string) auth()->user()->_id)) {
             return [];
         }
 
-        return Alert::user(auth()->user()->_id)->notVisited()->get();
+        return Alert::user(auth()->user()->_id)->userOnly()->notVisited()->get();
     }
 
     /**
@@ -420,6 +330,42 @@ class User extends Authenticatable implements JWTSubject
         Follow::cacheByUserId(auth()->user()->_id);
 
         return Redis::sismember($cacheKey, (string) $this->_id);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsSubscribableAttribute(): bool
+    {
+        return isset($this->subscription_plan['amount'], $this->subscription_plan['currency'], $this->subscription_plan['days']);
+    }
+
+    /**
+     * @param $attributeValue
+     * @return mixed
+     */
+    public function getCountFieldsUpdatedAtAttribute($attributeValue): mixed
+    {
+        foreach ($attributeValue as $field => $value) {
+            /* MongoDB\BSON\UTCDateTime $value */
+            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value->toDateTime()->getTimestamp() : $value;
+        }
+
+        return $attributeValue;
+    }
+
+    /**
+     * @param $attributeValue
+     * @return void
+     */
+    public function setCountFieldsUpdatedAtAttribute($attributeValue)
+    {
+        foreach ($attributeValue as $field => $value) {
+            /* MongoDB\BSON\UTCDateTime $value */
+            $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value : DT::timestampToUtc($value);
+        }
+
+        $this->attributes['count_fields_updated_at'] = $attributeValue;
     }
 
     /**
@@ -440,11 +386,160 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * @return bool
+     * @return mixed
      */
-    public function getIsSubscribableAttribute(): bool
+    public function getJWTIdentifier(): mixed
     {
-        return isset($this->subscription_plan['amount'], $this->subscription_plan['currency'], $this->subscription_plan['days']);
+        return $this->getKey();
+    }
+
+    /**
+     * @return null[]
+     */
+    #[ArrayShape(['device_id' => 'array|null|string'])]
+    public function getJWTCustomClaims(): array
+    {
+        return [
+            'device_id' => request()?->header('x-device-id'),
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthPassword(): string
+    {
+        return $this->password_hash;
+    }
+
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @param Notification $notification
+     *
+     * @return string
+     */
+    public function routeNotificationForSlack($notification): string
+    {
+        return config('app.slack_webhook_url');
+    }
+
+    /**
+     * @param  string  $attribute
+     * @param  mixed  $item
+     * @param  int|null  $length
+     * @return void
+     */
+    public function addToSet(string $attribute, mixed $item, int $length = null): void
+    {
+        if (! is_array($this->$attribute)) {
+            $this->$attribute = [];
+        }
+        $values = $this->$attribute;
+        if (! in_array($item, $values, false)) {
+            array_unshift($values, $item);
+        }
+
+        if (null !== $length) {
+            $values = array_slice($values, 0, $length);
+        }
+
+        $this->$attribute = $values;
+    }
+
+    /**
+     * @param  string  $attribute
+     * @param  mixed  $item
+     * @return void
+     */
+    public function removeFromSet(string $attribute, mixed $item): void
+    {
+        if (! is_array($this->$attribute)) {
+            $this->$attribute = [];
+        }
+        $values = $this->$attribute;
+        if (($key = array_search($item, $values, false)) !== false) {
+            unset($values[$key]);
+            if (is_int($key)) {
+                $values = array_values($values);
+            }
+        }
+
+        $this->$attribute = $values;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getFeatures(): array
+    {
+        return [
+            UserFeature::TIPS->value => UserFeature::TIPS->label(),
+            UserFeature::DEMO->value => UserFeature::DEMO->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getGenders(): array
+    {
+        return [
+            UserGender::FEMALE->value => UserGender::FEMALE->label(),
+            UserGender::MALE->value => UserGender::MALE->label(),
+            UserGender::TRANSGENDER->value => UserGender::TRANSGENDER->label(),
+            UserGender::NOT_MENTION->value => UserGender::NOT_MENTION->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getInterestedIns(): array
+    {
+        return [
+            UserInterestedIn::FEMALE->value => UserInterestedIn::FEMALE->label(),
+            UserInterestedIn::MALE->value => UserInterestedIn::MALE->label(),
+            UserInterestedIn::TRANSGENDER->value => UserInterestedIn::TRANSGENDER->label(),
+            UserInterestedIn::COUPLE->value => UserInterestedIn::COUPLE->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypes(): array
+    {
+        return [
+            UserType::USER->value => UserType::USER->label(),
+            UserType::ADMIN->value => UserType::ADMIN->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getVisibilities(): array
+    {
+        return [
+            UserVisibility::PRIVATE->value => UserVisibility::PRIVATE->label(),
+            UserVisibility::PUBLIC->value => UserVisibility::PUBLIC->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            UserStatus::PENDING->value => UserStatus::PENDING->label(),
+            UserStatus::VERIFIED->value => UserStatus::VERIFIED->label(),
+            UserStatus::ACTIVE->value => UserStatus::ACTIVE->label(),
+            UserStatus::SUSPENDED->value => UserStatus::SUSPENDED->label(),
+            UserStatus::BLOCKED->value => UserStatus::BLOCKED->label(),
+            UserStatus::DEACTIVATED->value => UserStatus::DEACTIVATED->label(),
+        ];
     }
 
     public function getIsOnlineAttribute(): bool

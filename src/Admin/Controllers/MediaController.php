@@ -11,6 +11,7 @@ use Aparlay\Core\Jobs\ReprocessMedia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Session;
 
 class MediaController extends Controller
 {
@@ -53,9 +54,12 @@ class MediaController extends Controller
     public function view(Media $media)
     {
         $media = new MediaResource($this->mediaService->find($media->_id));
-        $scoreTypes = $media->scores ?? [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
+        $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
 
-        return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes'));
+        $nextPage = Session::get('nextPage') ? Session::get('nextPage') : 2;
+        $prevPage = Session::get('prevPage') ? Session::get('prevPage') : $this->mediaService->countCompleted();
+
+        return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'nextPage', 'prevPage'));
     }
 
     /**
@@ -67,34 +71,33 @@ class MediaController extends Controller
     {
         $this->mediaService->update($media->_id);
 
-        return redirect()->back();
+        return redirect()->back()->with(['success' => 'Media updated successfully']);
     }
 
     public function reprocess(Media $media)
     {
         $media = $this->mediaService->find($media->_id);
 
-        ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('lowpriority');
+        ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('low');
 
         return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with('success', 'Video is placed in queue for reprocessing.');
     }
 
-    public function pending(Media $media, $order)
+    public function pending($page = 1)
     {
-        $order = (int) $order;
-        $models = [];
+        $models = $this->mediaService->pending($page);
 
-        if (in_array($order, [SORT_ASC, SORT_DESC], true)) {
-            $models = $this->mediaService->pending($order);
+        if ($models->currentPage() > $models->lastPage()) {
+            return redirect()->route('core.admin.media.index');
         }
+
+        $currentPage = $models->currentPage();
+        $nextPage = $currentPage === $models->lastPage() ? 1 : $currentPage + 1;
+        $prevPage = $currentPage === 1 ? $models->lastPage() : $currentPage - 1;
 
         foreach ($models as $model) {
-            if ($media->_id != (string) $model->_id) {
-                return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id]);
-            }
+            return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(['prevPage' =>  $prevPage, 'nextPage' => $nextPage]);
         }
-
-        return redirect()->route('core.admin.media.index');
     }
 
     public function downloadOriginal(Media $media, $hash = '')

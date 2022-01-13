@@ -4,7 +4,6 @@ namespace Aparlay\Core\Mail;
 
 use Aparlay\Core\Models\Email;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -14,21 +13,21 @@ class EmailEnvelope extends Mailable
     use SerializesModels;
 
     protected string $emailSubject;
-    protected string $type;
+    protected string $template;
     protected array $payload;
 
     /**
      * SendEmail Construct.
      *
      * @param string $emailSubject
-     * @param string $type
+     * @param string $template
      * @param array $payload
      * @return void
      */
-    public function __construct(string $emailSubject, string $type, array $payload)
+    public function __construct(string $emailSubject, string $template, array $payload)
     {
         $this->emailSubject = $emailSubject;
-        $this->type = $type;
+        $this->template = $template;
         $this->payload = $payload;
         $this->build();
     }
@@ -51,7 +50,7 @@ class EmailEnvelope extends Mailable
      */
     public function getTemplate()
     {
-        switch ($this->type) {
+        switch ($this->template) {
             case Email::TEMPLATE_EMAIL_VERIFICATION:
                 $template = 'default_view::email_verification';
                 $verificationTemplate = config('app.email.templates.email_verification', 'default_view::email_verification');
@@ -59,6 +58,15 @@ class EmailEnvelope extends Mailable
                     $template = 'email_verification';
                 }
                 break;
+
+            case Email::TEMPLATE_EMAIL_CONTACTUS:
+                $template = 'default_view::email_contactus';
+                $verificationTemplate = config('app.email.templates.email_contactus', 'default_view::email_contactus');
+                if (view()->exists($verificationTemplate)) {
+                    $template = 'default_view::email_contactus';
+                }
+                break;
+
             default:
                 $template = '';
                 break;

@@ -5,12 +5,15 @@ namespace Aparlay\Core\Api\V1\Services;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\BlockRepository;
+use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
 use MongoDB\BSON\ObjectId;
 
 class BlockService
 {
+    use HasUserTrait;
+
     protected BlockRepository $blockRepository;
 
     public function __construct()
@@ -27,7 +30,7 @@ class BlockService
     public function create(User $user)
     {
         $statusCode = Response::HTTP_OK;
-        $creator = auth()->user();
+        $creator = $this->getUser();
 
         if (($block = $this->blockRepository->isBlocked($creator, $user)) === null) {
             $block = $this->blockRepository->create(['user' => ['_id' => new ObjectId($user->_id)]]);
@@ -45,7 +48,7 @@ class BlockService
      */
     public function unblock(User $user): array
     {
-        $creator = auth()->user();
+        $creator = $this->getUser();
         if (($block = $this->blockRepository->isBlocked($creator, $user)) !== null) {
             $this->blockRepository->delete($block->_id);
         }

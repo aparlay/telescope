@@ -4,7 +4,7 @@ namespace Aparlay\Core\Api\V1\Http\Middleware;
 
 use Closure;
 use Cookie;
-use Tymon\JWTAuth\Token;
+use PHPOpenSourceSaver\JWTAuth\Token;
 
 class CookiesAuthenticate
 {
@@ -22,7 +22,7 @@ class CookiesAuthenticate
             try {
                 $rawToken = Cookie::get('__Secure_token');
                 $token = new Token($rawToken);
-            } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException $e) {
             }
             $request->headers->set('Authorization', 'Bearer '.$token);
         }

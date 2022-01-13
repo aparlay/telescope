@@ -281,4 +281,11 @@ class Country
 
         throw new \InvalidArgumentException(__('Unknown country name: ":country"', [':country' => $country]));
     }
+
+    public static function flagFromAlpha2($alpha2, $size = '32')
+    {
+        $county = \Aparlay\Core\Models\Country::alpha2($alpha2)->firstOrFail()->flags;
+
+        return $county[$size] ?? array_values($county)[0];
+    }
 }

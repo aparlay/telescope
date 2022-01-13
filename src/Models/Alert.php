@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\AlertFactory;
+use Aparlay\Core\Models\Enums\AlertStatus;
+use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Scopes\AlertScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -32,21 +34,15 @@ use MongoDB\BSON\ObjectId;
  *
  * @method static |self|Builder visited()                       get visited alerts
  * @method static |self|Builder notVisited()                    get not visited alerts
+ * @method static |self|Builder userOnly() get user only alerts
  * @method static |self|Builder media(ObjectId|string $mediaId) get media alerts
- * @method static |self|Builder user(ObjectId|string $userId)   get user alerts
+ * @method static |self|Builder user(ObjectId|string $userId)   get user and medeia alerts
  */
 class Alert extends BaseModel
 {
     use HasFactory;
     use Notifiable;
     use AlertScope;
-
-    public const TYPE_USER = 0;
-    public const TYPE_MEDIA_REMOVED = 20;
-    public const TYPE_MEDIA_NOTICED = 21;
-
-    public const STATUS_NOT_VISITED = 0;
-    public const STATUS_VISITED = 1;
 
     /**
      * The collection associated with the model.
@@ -94,23 +90,6 @@ class Alert extends BaseModel
         'status' => 'integer',
     ];
 
-    public static function getStatuses(): array
-    {
-        return [
-            self::STATUS_NOT_VISITED => __('not visited'),
-            self::STATUS_VISITED => __('visited'),
-        ];
-    }
-
-    public static function getTypes(): array
-    {
-        return [
-            self::TYPE_MEDIA_NOTICED => __('video notice'),
-            self::TYPE_MEDIA_REMOVED => __('video removed'),
-            self::TYPE_USER => __('user'),
-        ];
-    }
-
     /**
      * Create a new factory instance for the model.
      */
@@ -133,5 +112,28 @@ class Alert extends BaseModel
     public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatuses(): array
+    {
+        return [
+            AlertStatus::NOT_VISITED->value => AlertStatus::NOT_VISITED->label(),
+            AlertStatus::VISITED->value => AlertStatus::VISITED->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypes(): array
+    {
+        return [
+            AlertType::MEDIA_NOTICED->value => AlertType::MEDIA_NOTICED->label(),
+            AlertType::MEDIA_REMOVED->value => AlertType::MEDIA_REMOVED->label(),
+            AlertType::USER->value => AlertType::USER->label(),
+        ];
     }
 }

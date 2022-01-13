@@ -2,12 +2,17 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Api\V1\Notifications\UserDeactivateAccount;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UpdateMedia;
+use Aparlay\Core\Models\Enums\UserGender;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
+use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Redis;
@@ -23,12 +28,24 @@ class UserObserver extends BaseModelObserver
      */
     public function creating($model): void
     {
+        if (empty($model->status)) {
+            $model->status = UserStatus::PENDING->value;
+        }
+        if (empty($model->gender)) {
+            $model->gender = UserGender::MALE->value;
+        }
+        if (empty($model->interested_in)) {
+            $model->interested_in = UserInterestedIn::FEMALE->value;
+        }
+        if (empty($model->visibility)) {
+            $model->visibility = UserVisibility::PUBLIC->value;
+        }
         if (empty($model->avatar)) {
             $maleAvatar = 'default_m_'.random_int(1, 120).'.png';
             $femaleAvatar = 'default_fm_'.random_int(1, 60).'.png';
             $filename = match ($model->gender) {
-                User::GENDER_FEMALE => $femaleAvatar,
-                User::GENDER_MALE => $maleAvatar,
+                UserGender::FEMALE->value => $femaleAvatar,
+                UserGender::MALE->value => $maleAvatar,
                 default => (random_int(0, 1)) ? $maleAvatar : $femaleAvatar,
             };
 
@@ -71,21 +88,24 @@ class UserObserver extends BaseModelObserver
     public function updated($model): void
     {
         if ($model->wasChanged('avatar')) {
-            dispatch((new UpdateAvatar((string) $model->_id))->onQueue('low'));
+            UpdateAvatar::dispatch((string) $model->_id)->onQueue('low');
         }
 
         if ($model->wasChanged('status')) {
             switch ($model->status) {
-                case User::STATUS_DEACTIVATED:
-                case User::STATUS_BLOCKED:
-                    dispatch((new DeleteUserMedia((string) $model->_id)));
-                    dispatch((new DeleteUserConnect((string) $model->_id)));
+                case UserStatus::DEACTIVATED->value:
+                case UserStatus::BLOCKED->value:
+                    DeleteUserMedia::dispatch((string) $model->_id)->onQueue('low');
+                    DeleteUserConnect::dispatch((string) $model->_id)->onQueue('low');
                     break;
+            }
+            if ($model->status === UserStatus::DEACTIVATED->value) {
+                $model->notify(new UserDeactivateAccount());
             }
         }
 
         if ($model->wasChanged('visibility')) {
-            dispatch((new UpdateMedia((string) $model->_id, ['visibility' => $model->visibility]))->onQueue('low'));
+            UpdateMedia::dispatch((string) $model->_id, ['visibility' => $model->visibility])->onQueue('low');
         }
     }
 }

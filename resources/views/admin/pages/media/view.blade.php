@@ -65,7 +65,7 @@
                                     @csrf()
                                     @if ($media->status !== 3 && $media->status !== 7)
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
+                                        <button type="submit" id="mediaSave" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
                                             <i class="fas fa-check"></i>
                                             <strong>Save</strong>
                                         </button>
@@ -77,7 +77,7 @@
                                         </button>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#delete-alert-modal">
+                                        <button type="button" class="btn btn-block btn-danger" id="deleteAlert" data-toggle="modal" data-target="#delete-alert-modal">
                                             <i class="fas fa-times-circle"></i>
                                             <strong>Delete + Alert</strong>
                                         </button>
@@ -265,8 +265,8 @@
                 <div class="modal-body">
                     <form id="media-delete-alert-modal-form" class="form-vertical kv-form-bs4" action="{{route('core.admin.alert.store')}}" method="post" role="form">
                         @csrf()
-                        <input type="hidden" name="status" value="{{ \Aparlay\Core\Admin\Models\Alert::STATUS_NOT_VISITED }}">
-                        <input type="hidden" name="mediaStatus" value="{{ \Aparlay\Core\Admin\Models\Media::STATUS_ADMIN_DELETED }}">
+                        <input type="hidden" name="status" value="{{ \Aparlay\Core\Models\Enums\AlertStatus::NOT_VISITED->value }}">
+                        <input type="hidden" name="mediaStatus" value="{{ \Aparlay\Core\Models\Enums\MediaStatus::ADMIN_DELETED->value }}">
                         <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
                             <label class="has-star" for="media-delete-alert-modal-form-reason">Reason</label>
                             <div>
@@ -274,7 +274,7 @@
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-type">
-                                <input type="hidden" id="alert-type" class="form-control" name="type" value="{{ \Aparlay\Core\Admin\Models\Alert::TYPE_MEDIA_REMOVED }}">
+                                <input type="hidden" id="alert-type" class="form-control" name="type" value="{{ \Aparlay\Core\Models\Enums\AlertType::MEDIA_REMOVED->value }}">
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-media_id">
@@ -309,8 +309,8 @@
                 <div class="modal-body">
                     <form id="alert-modal-form" class="form-vertical kv-form-bs4" action="{{route('core.admin.alert.store')}}" method="post" role="form">
                         @csrf()
-                        <input type="hidden" name="status" value="{{ \Aparlay\Core\Admin\Models\Alert::STATUS_NOT_VISITED }}">
-                        <input type="hidden" name="type" value="{{ \Aparlay\Core\Admin\Models\Alert::TYPE_MEDIA_NOTICED }}">
+                        <input type="hidden" name="status" value="{{ \Aparlay\Core\Models\Enums\AlertStatus::NOT_VISITED->value }}">
+                        <input type="hidden" name="type" value="{{ \Aparlay\Core\Models\Enums\AlertType::MEDIA_NOTICED->value }}">
                         <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
                             <label class="has-star" for="alert-modal-form-reason">Reason</label>
                             <div>

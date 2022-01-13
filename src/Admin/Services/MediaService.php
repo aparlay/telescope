@@ -8,10 +8,8 @@ use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\Cdn;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use MongoDB\BSON\ObjectId;
 
 class MediaService extends AdminBaseService
@@ -94,9 +92,9 @@ class MediaService extends AdminBaseService
     /**
      * @param $order
      */
-    public function pending($order)
+    public function pending($page)
     {
-        return $this->mediaRepository->pendingMedia($order);
+        return $this->mediaRepository->pending($page);
     }
 
     /**
@@ -151,7 +149,7 @@ class MediaService extends AdminBaseService
     public function reupload($media)
     {
         $this->mediaRepository->update(['file' => request()->input('file')], $media->_id);
-        UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'))->onQueue('lowpriority');
+        UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'))->onQueue('low');
     }
 
     public function generateSlug($length)
@@ -171,6 +169,7 @@ class MediaService extends AdminBaseService
             'slug' => self::generateSlug(6),
             'count_fields_updated_at' => [],
             'visibility' => $user->visibility,
+            'status' => MediaStatus::QUEUED->value,
             'creator' => [
                 '_id'      => new ObjectId($user->_id),
                 'username' => $user->username,
@@ -179,5 +178,15 @@ class MediaService extends AdminBaseService
         ];
 
         $this->mediaRepository->create($data);
+    }
+
+    public function countCollection()
+    {
+        return $this->mediaRepository->countCollection();
+    }
+
+    public function countCompleted()
+    {
+        return $this->mediaRepository->countCompleted();
     }
 }

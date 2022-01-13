@@ -1,9 +1,6 @@
 <?php
 
-use Aparlay\Core\Models\Alert;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class SetSlug extends Migration
 {

@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Tests\Feature\Api;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Illuminate\Testing\Fluent\AssertableJson;
 
 class RegistrationTest extends ApiTestCase
@@ -139,7 +140,7 @@ class RegistrationTest extends ApiTestCase
      */
     public function usernameAsEmail()
     {
-        $referrer = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $payload = [
             'username' => uniqid('alua_').'@apaly.com',
@@ -168,7 +169,7 @@ class RegistrationTest extends ApiTestCase
      */
     public function invalidPassword()
     {
-        $referrer = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
@@ -183,7 +184,7 @@ class RegistrationTest extends ApiTestCase
                 'data' => [
                     [
                         'field' => 'password',
-                        'message' => 'The password must be at least 8 characters.',
+                        'message' => 'The password must be at least 8 characters. The password must contain at least one number.',
                     ],
                 ],
                 'message' => 'There are some errors in your provided data.',
@@ -197,7 +198,7 @@ class RegistrationTest extends ApiTestCase
      */
     public function passwordRequire()
     {
-        $referrer = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
@@ -226,7 +227,7 @@ class RegistrationTest extends ApiTestCase
      */
     public function emailNotValid()
     {
-        $referrer = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
@@ -255,7 +256,7 @@ class RegistrationTest extends ApiTestCase
      */
     public function genderNotValid()
     {
-        $referrer = User::factory()->create(['status' => User::STATUS_ACTIVE]);
+        $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [

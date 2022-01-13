@@ -41,6 +41,13 @@ class BackblazeVideoUploader implements ShouldQueue
     public int $maxExceptions = 3;
 
     /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int|array
+     */
+    public $backoff = 10;
+
+    /**
      * Create a new job instance.
      *
      * @return void
@@ -49,6 +56,7 @@ class BackblazeVideoUploader implements ShouldQueue
      */
     public function __construct(string $userId, string $mediaId, string $file)
     {
+        $this->onQueue(config('app.server_specific_queue'));
         if (($this->user = User::user($userId)->first()) === null) {
             throw new Exception(__CLASS__.PHP_EOL.'User not found with id '.$userId);
         }

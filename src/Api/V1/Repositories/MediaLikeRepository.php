@@ -9,7 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
-class MediaLikeRepository implements RepositoryInterface
+class MediaLikeRepository
 {
     protected MediaLike $model;
 
@@ -20,11 +20,6 @@ class MediaLikeRepository implements RepositoryInterface
         }
 
         $this->model = $model;
-    }
-
-    public function all()
-    {
-        // TODO: Implement all() method.
     }
 
     /**
@@ -54,11 +49,6 @@ class MediaLikeRepository implements RepositoryInterface
         }
     }
 
-    public function update(array $data, $id)
-    {
-        // TODO: Implement update() method.
-    }
-
     /**
      * Delete MediaLike.
      *
@@ -68,11 +58,6 @@ class MediaLikeRepository implements RepositoryInterface
     public function delete($id)
     {
         $this->model->destroy($id);
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
     }
 
     /**

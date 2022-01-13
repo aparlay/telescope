@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Setting;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,7 +24,8 @@ class SettingFactory extends Factory
     public function definition()
     {
         return [
-            'title' => 'web',
+            'group' => 'web',
+            'title' => 'name',
             'value' => 'waptap',
             'created_by' => function () {
                 return new ObjectId(User::factory()->create()->_id);
