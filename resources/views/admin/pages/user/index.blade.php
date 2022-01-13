@@ -26,6 +26,7 @@
                         @php
                             $heads = [
                                 '',
+                                '',
                                 'Username',
                                 'Email',
                                 'Fullname',
