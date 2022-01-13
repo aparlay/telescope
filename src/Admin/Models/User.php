@@ -32,7 +32,7 @@ class User extends UserBase
         'visibility',
         'referral_id',
         'promo_link',
-        'is_verified'
+        'is_verified',
     ];
 
     /**
