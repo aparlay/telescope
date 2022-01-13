@@ -94,6 +94,7 @@ class MeResource extends JsonResource
             '_links' => [
                 'self' => ['href' => url("/v1/user/view?id={$this->_id}")],
             ],
+            'is_verified' => $this->is_verified
         ];
     }
 }

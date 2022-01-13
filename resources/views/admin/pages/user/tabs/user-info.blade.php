@@ -30,6 +30,15 @@
             </div>
         </div>
         <div class="form-group row">
+            <label for="email_verified" class="col-sm-2 col-form-label">Is Verified</label>
+            <div class="col-sm-10">
+                <div class="custom-control custom-switch mt-2">
+                    <input type="checkbox" value="1" name="is_verified" class="custom-control-input" id="is_verified" {!! $user->is_verified ? 'checked' : '' !!}>
+                    <label class="custom-control-label" for="is_verified"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
             <label for="bio" class="col-sm-2 col-form-label">Bio</label>
             <div class="col-sm-10">
                 <textarea name="bio" id="bio" cols="30" rows="3" class="form-control"></textarea>

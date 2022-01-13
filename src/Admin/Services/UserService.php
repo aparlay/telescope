@@ -130,6 +130,7 @@ class UserService extends AdminBaseService
 
         $dataBooleans = [
             'email_verified' => request()->boolean('email_verified'),
+            'is_verified' => request()->boolean('is_verified'),
             'features' => [
                 'tips' => request()->boolean('features.tips'),
                 'demo' => request()->boolean('features.demo'),
@@ -137,6 +138,7 @@ class UserService extends AdminBaseService
         ];
 
         $data = array_merge($data, $dataBooleans);
+
         $role = request()?->input('role');
         if ($role && auth()->user()->hasRole(User::ROLE_SUPER_ADMINISTRATOR)) {
             $user->syncRoles(request()->input('role'));

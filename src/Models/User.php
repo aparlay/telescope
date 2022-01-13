@@ -73,6 +73,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
  * @property-read bool $is_subscribable
+ * @property bool       $is_verified
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -136,6 +137,7 @@ class User extends Authenticatable implements JWTSubject
         'user_agents',
         'stats',
         'last_location',
+        'is_verified',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -190,6 +192,7 @@ class User extends Authenticatable implements JWTSubject
                 'subscribers' => 0,
             ],
         ],
+        'is_verified' => false,
     ];
 
     /**
