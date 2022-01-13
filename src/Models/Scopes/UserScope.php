@@ -19,7 +19,8 @@ trait UserScope
      */
     public function scopeTextSearch(Builder $query, string $text): Builder
     {
-        return $query->where('text_search', 'regex', new Regex('.*'.$text.'.*', 'i'));
+        return empty($text) ? $query :
+            $query->where('text_search', 'regex', new Regex('.*'.$text.'.*', 'i'));
     }
 
     /**

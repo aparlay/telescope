@@ -36,9 +36,10 @@ class UserRepository
         return $query->count();
     }
 
-    public function getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter = null)
+    public function getFilteredUser($text, $filters, $offset, $limit, $sort, $dateRangeFilter = null)
     {
         $query = $this->model->filter($filters)
+            ->textSearch($text)
             ->sortBy($sort)
             ->skip($offset)
             ->take($limit);

@@ -52,6 +52,7 @@
                             'ajax' => route('core.admin.ajax.user.index'),
                             'order' => [[11, 'desc']],
                             'columns' => [
+                                ['data' => 'text_search', 'visible' => false],
                                 ['data' => 'username', 'visible' => false],
                                 ['data' => 'username_avatar', 'orderData' => 0, 'target' => 0],
                                 ['data' => 'email'],
@@ -83,8 +84,8 @@
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
-                                                        <label for="username">Search</label>
-                                                        <input type="text" data-column="0" name="text_search" class="form-control" id="username" placeholder="Enter name, username, email, phone">
+                                                        <label for="text_search">Search</label>
+                                                        <input type="text" data-column="0" name="text_search" class="form-control" id="text_search" placeholder="Enter name, username, email, phone">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
