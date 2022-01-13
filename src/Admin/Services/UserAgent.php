@@ -62,6 +62,7 @@ class UserAgent
         'Amazon Fire TV' => ['AFTS'],
         'Chromecast' => ['CrKey'],
         'HTC' => ['HTC'],
+        'OnePlus' => ['OnePlus'],
     ];
     protected $bots = [
         'Baidu' => ['Baidu', 'Baiduspider'],
