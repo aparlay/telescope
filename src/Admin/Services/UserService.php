@@ -32,9 +32,9 @@ class UserService extends AdminBaseService
         $filters = $this->getFilters();
         $sort = $this->tableSort();
         $dateRangeFilter = null;
+        $textSearch = '';
 
         if (! empty($filters)) {
-            $textSearch = '';
             if (isset($filters['created_at'])) {
                 $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
                 unset($filters['created_at']);
