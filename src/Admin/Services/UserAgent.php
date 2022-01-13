@@ -97,7 +97,7 @@ class UserAgent
             foreach ($patterns as $pattern) {
                 if (strpos($this->agent, $pattern) !== false) {
                     $this->os = $os;
-                    break;
+                    break 2;
                 }
             }
         }
@@ -108,7 +108,7 @@ class UserAgent
                 if (strpos($this->agent, $pattern) !== false) {
                     $this->browser = $browser;
                     $this->prefix = $pattern;
-                    break;
+                    break 2;
                 }
             }
         }
@@ -118,7 +118,7 @@ class UserAgent
             foreach ($patterns as $pattern) {
                 if (strpos($this->agent, $pattern) !== false) {
                     $this->engine = $engine;
-                    break;
+                    break 2;
                 }
             }
         }
@@ -128,7 +128,7 @@ class UserAgent
             foreach ($patterns as $pattern) {
                 if (strpos($this->agent, $pattern) !== false) {
                     $this->device = $device;
-                    break;
+                    break 2;
                 }
             }
         }
@@ -149,7 +149,7 @@ class UserAgent
                 if (strpos($this->agent, $pattern) !== false) {
                     $this->isBot = true;
                     $this->device = 'BOT';
-                    break;
+                    break 2;
                 }
             }
         }
