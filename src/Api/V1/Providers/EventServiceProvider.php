@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Providers;
 
-use Aparlay\Core\Api\V1\Listeners\LogAuthenticated;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
@@ -10,6 +9,8 @@ use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Listeners\LogAuthenticated;
+use Aparlay\Core\Listeners\OnlineUsers;
 use Aparlay\Core\Models\UserDocument;
 use Aparlay\Core\Observers\BlockObserver;
 use Aparlay\Core\Observers\FollowObserver;
@@ -34,7 +35,8 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
             SendEmailVerificationNotification::class,
         ],
         Authenticated::class => [
-            \Aparlay\Core\Listeners\LogAuthenticated::class,
+            LogAuthenticated::class,
+            OnlineUsers::class,
         ],
     ];
 

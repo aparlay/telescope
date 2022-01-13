@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Services\OnlineUserService;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserFeature;
@@ -43,6 +44,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property int         $status
  * @property int         $gender
  * @property int         $visibility
+ * @property int         $show_online_status
  * @property int         $interested_in
  * @property int         $block_count
  * @property int         $follower_count
@@ -73,6 +75,8 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
  * @property-read bool $is_subscribable
+ * @property-read bool $is_online
+ * @property-read bool $is_online_for_followers
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -81,6 +85,10 @@ class User extends Authenticatable implements JWTSubject
     use UserScope;
     use HasRoles;
     use Searchable;
+
+    public const SHOW_ONLINE_STATUS_NONE = 0;
+    public const SHOW_ONLINE_STATUS_FOLLOWERS = 1;
+    public const SHOW_ONLINE_STATUS_ALL = 2;
 
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
@@ -117,6 +125,7 @@ class User extends Authenticatable implements JWTSubject
         'type',
         'status',
         'visibility',
+        'show_online_status',
         'follower_count',
         'following_count',
         'block_count',
@@ -164,6 +173,7 @@ class User extends Authenticatable implements JWTSubject
         'email_verified' => false,
         'phone_number_verified' => false,
         'follower_count' => 0,
+        'show_online_status' => self::SHOW_ONLINE_STATUS_ALL,
         'following_count' => 0,
         'like_count' => 0,
         'block_count' => 0,
@@ -530,5 +540,32 @@ class User extends Authenticatable implements JWTSubject
             UserStatus::BLOCKED->value => UserStatus::BLOCKED->label(),
             UserStatus::DEACTIVATED->value => UserStatus::DEACTIVATED->label(),
         ];
+    }
+
+    public function getIsOnlineAttribute(): bool
+    {
+        [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
+
+        $cacheKey = config('app.cache.keys.online.none').':'.$currentWindow;
+
+        return Redis::sismember($cacheKey, (string) $this->_id);
+    }
+
+    public function getIsOnlineForFollowersAttribute(): bool
+    {
+        [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
+
+        $cacheKey = config('app.cache.keys.online.followings').':'.$currentWindow;
+
+        return Redis::sismember($cacheKey, (string) $this->_id);
+    }
+
+    public function getIsOnlineForAllAttribute(): bool
+    {
+        [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
+
+        $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
+
+        return Redis::sismember($cacheKey, (string) $this->_id);
     }
 }

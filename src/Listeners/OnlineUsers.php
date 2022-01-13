@@ -1,0 +1,33 @@
+<?php
+
+namespace Aparlay\Core\Listeners;
+
+use Aparlay\Core\Api\V1\Services\OnlineUserService;
+
+class OnlineUsers
+{
+    /**
+     * Create the event listener.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  object  $event
+     * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function handle($event)
+    {
+        $onlineUserService = app()->make(OnlineUserService::class);
+        if (auth()->check()) {
+            $onlineUserService->online(auth()->user());
+        }
+    }
+}
