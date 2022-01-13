@@ -25,7 +25,6 @@ class WalletPolicy
         return Response::deny(__('You cannot view this document'));
     }
 
-
     public function view(User | Authenticatable $user, UserDocument $userDocument)
     {
         $userId = $user?->_id;
@@ -36,6 +35,4 @@ class WalletPolicy
 
         return Response::deny(__('You cannot view this document'));
     }
-
-
 }
