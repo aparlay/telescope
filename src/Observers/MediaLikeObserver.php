@@ -64,6 +64,10 @@ class MediaLikeObserver extends BaseModelObserver
             ['likes' => DT::utcNow()]
         );
 
+        $stats = $user->stats;
+        $stats['counters']['likes'] = $likeCount;
+        $user->stats = $stats;
+
         $user->save();
 
         // Reset the Redis cache
@@ -106,6 +110,10 @@ class MediaLikeObserver extends BaseModelObserver
             $user->count_fields_updated_at,
             ['likes' => DT::utcNow()]
         );
+
+        $stats = $user->stats;
+        $stats['counters']['likes'] = $likeCount;
+        $user->stats = $stats;
         $user->save();
 
         // Reset the Redis cache

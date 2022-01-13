@@ -1,6 +1,6 @@
-<div class="tab-pane active" id="user-info">
-    <table class="table table-hover">
-        <thead>
+<div class="tab-pane active table-responsive" id="user-info">
+    <table class="table table-sm table-hover table-striped">
+        <thead class="thead-light">
         <tr>
             <th scope="col">#</th>
             <th scope="col">Device ID</th>
@@ -14,14 +14,18 @@
         </tr>
         </thead>
         <tbody>
+        @php
+            $i = 0;
+        @endphp
         @foreach($user->user_agents as $index => $userDevice)
             @php
+                $i++;
                 $ip2location = (new \IP2Location\Database(database_path().'/ip2location/IP2LOCATION-LITE-DB11.BIN', \IP2Location\Database::FILE_IO))
                 ->lookup($userDevice['ip'], \IP2Location\Database::ALL);
                 $agent = new \SimpleUserAgent\UserAgent($userDevice['user_agent']);
             @endphp
         <tr>
-            <th scope="row">1</th>
+            <th scope="row">{{ $i }}</th>
             <td>{{$userDevice['device_id']}}</td>
             <td>{{$userDevice['ip']}}</td>
             <td><img src="{{ \Aparlay\Core\Helpers\Country::flagFromAlpha2($ip2location['countryCode']) }}" alt="">

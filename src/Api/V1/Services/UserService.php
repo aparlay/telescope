@@ -106,7 +106,7 @@ class UserService
      * @return bool
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function isVerified(User | Authenticatable $user): bool
+    public function isVerified(User|Authenticatable $user): bool
     {
         $this->userRepository = new UserRepository($user);
 
@@ -116,7 +116,7 @@ class UserService
     /**
      * Responsible for change old password.
      *
-     * @param string $password
+     * @param  string  $password
      * @return bool
      */
     public function resetPassword(string $password): bool
@@ -127,10 +127,10 @@ class UserService
     /**
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
      *
-     * @param User|Authenticatable $user
+     * @param  User|Authenticatable  $user
      * @return bool
      */
-    public function isUnverified(User | Authenticatable $user): bool
+    public function isUnverified(User|Authenticatable $user): bool
     {
         $this->userRepository = new UserRepository($user);
 
@@ -150,10 +150,10 @@ class UserService
     /**
      * Through exception if user is suspended/banned/not found.
      *
-     * @param User|Authenticatable $user
+     * @param  User|Authenticatable  $user
      * @return bool
      */
-    public function isUserEligible(User | Authenticatable $user): bool
+    public function isUserEligible(User|Authenticatable $user): bool
     {
         $this->userRepository = new UserRepository($user);
 
@@ -163,10 +163,10 @@ class UserService
     /**
      * Responsible for delete user account.
      *
-     * @param User|Authenticatable $user
+     * @param  User|Authenticatable  $user
      * @return bool
      */
-    public function deleteAccount(User | Authenticatable $user)
+    public function deleteAccount(User|Authenticatable $user)
     {
         $this->userRepository = new UserRepository($user);
 

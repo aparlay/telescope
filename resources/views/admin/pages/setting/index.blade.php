@@ -24,6 +24,7 @@
     </div><!-- /.row -->
 @stop
 @section('content')
+    @include('default_view::admin.parts.messages')
     <div class="content">
         <div class="container-fluid">
             <div class="col-12 table-responsive">

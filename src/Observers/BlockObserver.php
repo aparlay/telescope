@@ -57,6 +57,9 @@ class BlockObserver extends BaseModelObserver
             $model->creatorObj->count_fields_updated_at,
             ['blocks' => DT::utcNow()]
         );
+        $stats = $model->creatorObj->stats;
+        $stats['counters']['blocks'] = $blockCount;
+        $model->creatorObj->stats = $stats;
         $model->creatorObj->save();
 
         if (($follow = Follow::creator($model->creator['_id'])->user($model->user['_id'])->first()) !== null) {
@@ -105,6 +108,9 @@ class BlockObserver extends BaseModelObserver
             $model->creatorObj->count_fields_updated_at,
             ['blocks' => DT::utcNow()]
         );
+        $stats = $model->creatorObj->stats;
+        $stats['counters']['blocks'] = $blockCount;
+        $model->creatorObj->stats = $stats;
         $model->creatorObj->save();
 
         foreach (Media::creator($model->user['_id'])->get() as $media) {

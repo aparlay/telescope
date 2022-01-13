@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Tests\Browser\Admin\Media;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Tests\DuskTestCase;
 use Facebook\WebDriver\WebDriverBy;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -101,12 +102,14 @@ class MediaEditTest extends DuskTestCase
      */
     public function mediaSkinAwesomenessTest()
     {
+        $media = Media::factory()->create(['status' => MediaStatus::COMPLETED->value]);
+
         $randomScore = rand(0, 10);
-        $this->browse(function (Browser $browser) use ($randomScore) {
-            $browser->visit(route('core.admin.media.view', ['media' => $this->media]))
+        $this->browse(function (Browser $browser) use ($media) {
+            $browser->visit(route('core.admin.media.view', ['media' => $media]))
                 ->clickAtXPath('//*[@id="skin_score_1"]/label')
                 ->clickAtXPath('//*[@id="awesomeness_score_1"]/label');
-            if ($browser->driver->findElement(WebDriverBy::cssSelector('#mediaSave'))->isDisplayed()) {
+            if ($browser->element('#mediaSave')) {
                 $browser->press('Save')
                     ->assertSee('Media updated successfully');
             } else {

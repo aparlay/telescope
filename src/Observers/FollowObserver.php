@@ -91,10 +91,16 @@ class FollowObserver extends BaseModelObserver
             'username' => $model->creator['username'],
             'avatar' => $model->creator['avatar'],
         ]);
+
         $model->userObj->count_fields_updated_at = array_merge(
             $model->userObj->count_fields_updated_at,
             ['followers' => DT::utcNow()]
         );
+
+        $stats = $model->userObj->stats;
+        $stats['counters']['followers'] = $followersCount;
+        $model->userObj->stats = $stats;
+
         $model->userObj->save();
 
         $followingCount = Follow::creator($model->creator['_id'])->count();
@@ -108,6 +114,10 @@ class FollowObserver extends BaseModelObserver
             $model->creatorObj->count_fields_updated_at,
             ['followings' => DT::utcNow()]
         );
+        $stats = $model->creatorObj->stats;
+        $stats['counters']['followings'] = $followingCount;
+        $model->creatorObj->stats = $stats;
+
         $model->creatorObj->save();
 
         // Reset the Redis cache
