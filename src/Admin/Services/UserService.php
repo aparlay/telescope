@@ -34,6 +34,7 @@ class UserService extends AdminBaseService
         $dateRangeFilter = null;
 
         if (! empty($filters)) {
+            $textSearch = '';
             if (isset($filters['created_at'])) {
                 $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
                 unset($filters['created_at']);
