@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Database\Seeders;
 
 use Aparlay\Core\Models\Media;
-use Aparlay\Payout\Database\Seeders\WalletSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -28,7 +27,6 @@ class DatabaseSeeder extends Seeder
         DB::collection('users')->truncate();
         DB::collection('versions')->truncate();
         DB::collection('user_documents')->truncate();
-        DB::collection('payout_wallets')->truncate();
 
         $this->call([
             AlertSeeder::class,
@@ -42,7 +40,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             UserDocumentSeeder::class,
             VersionSeeder::class,
-            WalletSeeder::class,
         ]);
     }
 }
