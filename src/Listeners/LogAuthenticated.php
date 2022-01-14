@@ -26,8 +26,8 @@ class LogAuthenticated
      */
     public function handle($event)
     {
-        $userService = app()->make(UserService::class);
         if (auth()->check()) {
+            $userService = app()->make(UserService::class);
             $userService->logUserDevice(
                 auth()->user(),
                 request()->userAgent(),

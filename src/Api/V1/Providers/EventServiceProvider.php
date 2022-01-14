@@ -9,9 +9,9 @@ use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Events\DispatchAuthenticatedEndpoints;
 use Aparlay\Core\Listeners\LogAuthenticated;
 use Aparlay\Core\Listeners\OnlineUsers;
-use Aparlay\Core\Models\UserDocument;
 use Aparlay\Core\Observers\BlockObserver;
 use Aparlay\Core\Observers\FollowObserver;
 use Aparlay\Core\Observers\MediaLikeObserver;
@@ -19,7 +19,6 @@ use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\MediaVisitObserver;
 use Aparlay\Core\Observers\ReportObserver;
 use Aparlay\Core\Observers\UserObserver;
-use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 
@@ -34,7 +33,7 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        Authenticated::class => [
+        DispatchAuthenticatedEndpoints::class => [
             LogAuthenticated::class,
             OnlineUsers::class,
         ],

@@ -14,7 +14,7 @@ use Aparlay\Core\Models\Enums\UserGender;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Jenssegers\Agent\Agent;
 
@@ -221,15 +221,25 @@ class UserService
     {
         if ($user !== null) {
             $currentUserAgentKey = md5($userAgent);
-
             $userAgents = $user->user_agents;
-            $userAgents[$currentUserAgentKey] = [
-                'device_id' => $deviceId,
-                'user_agent' => $userAgent,
-                'ip' => $ip,
-                'created_at' => DT::utcNow(),
-            ];
-            $this->userRepository->update(['user_agents' => $userAgents], $user->_id);
+            $needUpdate = true;
+
+            if (isset($userAgents[$currentUserAgentKey])) {
+                $needUpdate = $userAgents[$currentUserAgentKey]['device_id'] !== $deviceId;
+                $needUpdate = $needUpdate || $userAgents[$currentUserAgentKey]['ip'] !== $ip;
+                $needUpdate = $needUpdate || now()->subMinutes(5)->isAfter(Carbon::createFromTimestampMsUTC($userAgents[$currentUserAgentKey]['created_at']));
+            }
+
+            if ($needUpdate) {
+                $userAgents[$currentUserAgentKey] = [
+                    'device_id' => $deviceId,
+                    'user_agent' => $userAgent,
+                    'ip' => $ip,
+                    'created_at' => DT::utcNow(),
+                ];
+                $this->userRepository->update(['user_agents' => $userAgents], $user->_id);
+            }
+
         }
     }
 }
