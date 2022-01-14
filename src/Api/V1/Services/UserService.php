@@ -239,7 +239,6 @@ class UserService
                 ];
                 $this->userRepository->update(['user_agents' => $userAgents], $user->_id);
             }
-
         }
     }
 }
