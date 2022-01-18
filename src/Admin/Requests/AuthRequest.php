@@ -32,7 +32,7 @@ class AuthRequest extends FormRequest
             'password' => ['required'],
         ];
 
-        if (! \App::environment('testing')) {
+        if (! \App::environment('testing', 'local')) {
             $rules['g-recaptcha-response'] = ['recaptcha'];
         }
 

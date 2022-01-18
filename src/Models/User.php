@@ -10,6 +10,7 @@ use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Collection;
@@ -146,6 +147,7 @@ class User extends Authenticatable implements JWTSubject
         'created_at',
         'updated_at',
         'deleted_at',
+        'verification_status'
     ];
 
     protected $attributes = [
@@ -209,6 +211,7 @@ class User extends Authenticatable implements JWTSubject
         'username' => 'string',
         'full_name' => 'string',
         'email' => 'string',
+        'verification_status' => 'integer',
         'status' => 'integer',
         'email_verified' => 'boolean',
         'phone_number_verified' => 'boolean',
@@ -513,6 +516,19 @@ class User extends Authenticatable implements JWTSubject
             UserType::ADMIN->value => UserType::ADMIN->label(),
         ];
     }
+
+    /**
+     * @return array
+     */
+    public static function getVerificationStatuses(): array
+    {
+        return [
+            UserVerificationStatus::VERIFIED->value => UserVerificationStatus::VERIFIED->label(),
+            UserVerificationStatus::PENDING->value => UserVerificationStatus::PENDING->label(),
+            UserVerificationStatus::REJECTED->value => UserVerificationStatus::REJECTED->label(),
+        ];
+    }
+
 
     /**
      * @return array
