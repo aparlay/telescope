@@ -76,8 +76,8 @@ class MediaService extends AdminBaseService
 
     public function getScore($media, $type)
     {
-        foreach($media->scores as $score) {
-            if(isset($score['type']) && ($score['type'] == $type)) {
+        foreach ($media->scores as $score) {
+            if (isset($score['type']) && ($score['type'] == $type)) {
                 return $score['score'];
             }
         }
