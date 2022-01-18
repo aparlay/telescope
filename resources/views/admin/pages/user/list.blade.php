@@ -1,9 +1,7 @@
 @extends('adminlte::page')
 @section('title', 'Users')
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/daterangepicker/daterangepicker.css') }}" >
     <link rel="stylesheet" href="{{ asset('admin/assets/css/adminStyles.css') }}" >
-
     @livewireStyles
 @stop
 @section('plugins.Datatables', true)
