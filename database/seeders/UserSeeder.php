@@ -2,13 +2,13 @@
 
 namespace Aparlay\Core\Database\Seeders;
 
+use Aparlay\Core\Admin\Models\User as AdminUser;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
-use Aparlay\Core\Admin\Models\User as AdminUser;
 
 class UserSeeder extends Seeder
 {
@@ -37,6 +37,5 @@ class UserSeeder extends Seeder
         $user->save();
 
         $user->assignRole('super-administrator');
-
     }
 }

@@ -147,7 +147,7 @@ class User extends Authenticatable implements JWTSubject
         'created_at',
         'updated_at',
         'deleted_at',
-        'verification_status'
+        'verification_status',
     ];
 
     protected $attributes = [
@@ -528,7 +528,6 @@ class User extends Authenticatable implements JWTSubject
             UserVerificationStatus::REJECTED->value => UserVerificationStatus::REJECTED->label(),
         ];
     }
-
 
     /**
      * @return array
