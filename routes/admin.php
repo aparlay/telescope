@@ -70,6 +70,10 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
 
         /* User Routes */
         Route::name('user.')->group(function () {
+            Route::get('user', [UserController::class, 'index'])
+                ->middleware(['permission:list users'])
+                ->name('index');
+
             Route::get('user-list', [UserController::class, 'list'])
                 ->middleware(['permission:list users'])
                 ->name('list');
