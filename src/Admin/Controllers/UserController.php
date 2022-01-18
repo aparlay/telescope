@@ -31,6 +31,11 @@ class UserController extends Controller
         $this->mediaService = $mediaService;
     }
 
+    public function list()
+    {
+        return view('default_view::admin.pages.user.list');
+    }
+
     /**
      * @throws ErrorException
      */

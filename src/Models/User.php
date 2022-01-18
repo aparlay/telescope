@@ -540,6 +540,11 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    public function getStatusLabelAttribute()
+    {
+        return UserStatus::from($this->status)->label();
+    }
+
     public function getIsOnlineAttribute(): bool
     {
         [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();

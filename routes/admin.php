@@ -28,7 +28,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
     });
 
     /* Authenticated Routes */
-    Route::middleware(['admin-auth:admin', 'role:support|administrator|super-administrator'])->group(function () {
+    Route::middleware(['admin-auth:admin', 'role:support|с|super-administrator'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard'])
             ->middleware(['permission:dashboard'])
             ->name('dashboard');
@@ -70,9 +70,10 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
 
         /* User Routes */
         Route::name('user.')->group(function () {
-            Route::get('user', [UserController::class, 'index'])
+            Route::get('user-list', [UserController::class, 'list'])
                 ->middleware(['permission:list users'])
-                ->name('index');
+                ->name('list');
+
             Route::get('user/{user}', [UserController::class, 'view'])
                 ->middleware(['permission:show users'])
                 ->name('view');
