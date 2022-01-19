@@ -43,6 +43,7 @@ class UserRepository
         ]);
         $user->save();
     }
+
     public function markAsRejected($userId, $rejectReason = '')
     {
         $user = $this->model::query()->find($userId);

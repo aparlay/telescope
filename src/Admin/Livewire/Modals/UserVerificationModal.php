@@ -6,7 +6,6 @@ use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Livewire\Component;
 
-
 class UserVerificationModal extends Component
 {
     public $selectedUser;
@@ -15,7 +14,7 @@ class UserVerificationModal extends Component
     public $reject_reason = '';
 
     /**
-     * @var $userRepository UserRepository
+     * @var UserRepository
      */
     private $userRepository;
 
@@ -53,5 +52,4 @@ class UserVerificationModal extends Component
     {
         return view('default_view::livewire.modals.user-verification-modal');
     }
-
 }
