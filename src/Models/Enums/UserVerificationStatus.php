@@ -14,7 +14,7 @@ enum UserVerificationStatus: int implements Enum
             self::PENDING => __('pending'),
             self::VERIFIED => __('verified'),
             self::REJECTED => __('rejected'),
-            self::UNVERIFIED => __('un-verified'),
+            self::UNVERIFIED => __('unverified'),
         };
     }
     public function badgeColor(): string
