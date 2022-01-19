@@ -144,7 +144,6 @@ class User extends Authenticatable implements JWTSubject
         'user_agents',
         'stats',
         'last_location',
-        'verification_status',
         'text_search',
         'created_at',
         'updated_at',
