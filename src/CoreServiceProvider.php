@@ -78,7 +78,7 @@ class CoreServiceProvider extends ServiceProvider
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,
                 CleanupCommand::class,
-                AdminSyncLiveWireComponents::class
+                AdminSyncLiveWireComponents::class,
             ]);
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
