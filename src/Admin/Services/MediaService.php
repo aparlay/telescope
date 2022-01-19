@@ -22,7 +22,7 @@ class MediaService extends AdminBaseService
         $this->mediaRepository = new MediaRepository(new Media());
         $this->userRepository = new UserRepository(new User());
         $this->filterableField = ['creator.username', 'status', 'created_at'];
-        $this->sorterableField = ['creator.username', 'description', 'status', 'like_count', 'sort_score', 'visit_count', 'skin', 'awesomeness', 'created_at'];
+        $this->sorterableField = ['creator.username', 'description', 'status', 'like_count', 'sort_score', 'visit_count', 'created_at'];
     }
 
     /**
@@ -69,20 +69,7 @@ class MediaService extends AdminBaseService
             $media->date_formatted = $media->created_at->toDateTimeString();
             $media->like_count = $media->like_count ?? ActionButtonBladeComponent::defaultValueNotSet();
             $media->visit_count = $media->visit_count ?? ActionButtonBladeComponent::defaultValueNotSet();
-            $media->skin = $this->getScore($media, 'skin') ?? ActionButtonBladeComponent::defaultValueNotSet();
-            $media->awesomeness = $this->getScore($media, 'awesomeness') ?? ActionButtonBladeComponent::defaultValueNotSet();
         }
-    }
-
-    public function getScore($media, $type)
-    {
-        foreach ($media->scores as $score) {
-            if (isset($score['type']) && ($score['type'] == $type)) {
-                return $score['score'];
-            }
-        }
-
-        return null;
     }
 
     /**

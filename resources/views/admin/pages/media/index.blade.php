@@ -36,8 +36,6 @@
                             'Likes',
                             'Visits',
                             'Sort Score',
-                            'Skin Score',
-                            'Awesomeness Score',
                             '',
                             'Created At',
                             ''
@@ -62,10 +60,8 @@
                             ['data' => 'like_count'],
                             ['data' => 'visit_count'],
                             ['data' => 'sort_score'],
-                            ['data' => 'skin', 'orderable' => false],
-                            ['data' => 'awesomeness', 'orderable' => false],
                             ['data' => 'created_at', 'visible' => false],
-                            ['data' => 'date_formatted', 'orderData' => 10, 'target' => 10, 'orderable' => true],
+                            ['data' => 'date_formatted', 'orderData' => 8, 'target' => 8, 'orderable' => true],
                             ['data' => 'action', 'orderable' => false],
                         ],
                     ];
