@@ -55,7 +55,6 @@ class UserController extends Controller
         $user = $this->userService->find($user->_id);
         $roles = Role::where('guard_name', 'admin')->get();
 
-
         return view('default_view::admin.pages.user.edit', compact('user', 'roles'));
     }
 
