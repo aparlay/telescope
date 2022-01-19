@@ -72,11 +72,11 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $last_location
  * @property string      $country
  * @property array       $text_search
+ * @property bool       $is_verified
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
  * @property-read bool $is_subscribable
- * @property bool       $is_verified
  * @property-read bool $is_online
  * @property-read bool $is_online_for_followers
  */
@@ -226,6 +226,7 @@ class User extends Authenticatable implements JWTSubject
         'followed_hashtag_count' => 'integer',
         'media_count' => 'integer',
         'type' => 'integer',
+        'is_verified' => 'boolean'
     ];
 
     protected $dates = [

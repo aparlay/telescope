@@ -12,12 +12,7 @@ class AddIsVerifiedColumnOnUser extends Migration
      */
     public function up()
     {
-        User::chunk(200, function ($models) {
-            foreach ($models as $user) {
-                $user->is_verified = false;
-                $user->save();
-            }
-        });
+        User::update(['is_verified' => false]);
     }
 
     /**
