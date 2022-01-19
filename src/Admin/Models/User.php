@@ -4,8 +4,8 @@ namespace Aparlay\Core\Admin\Models;
 
 use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserStatus;
-use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
+use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\User as UserBase;
 
 class User extends UserBase
@@ -47,7 +47,7 @@ class User extends UserBase
         'gender' => 'integer',
         'interested_in' => 'integer',
         'visibility' => 'integer',
-        'verification_status' => 'integer'
+        'verification_status' => 'integer',
     ];
 
     /**
@@ -81,11 +81,12 @@ class User extends UserBase
     {
         return UserGender::from($this->gender)->label();
     }
-     /**
+
+    /**
      * @return string
      */
     public function getVerificationStatusNameAttribute(): string
-    {  
+    {
         return UserVerificationStatus::from($this->verification_status)->label();
     }
 }

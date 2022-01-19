@@ -10,8 +10,8 @@ use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
-use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -227,7 +227,7 @@ class User extends Authenticatable implements JWTSubject
         'followed_hashtag_count' => 'integer',
         'media_count' => 'integer',
         'type' => 'integer',
-        'verification_status' => 'integer'
+        'verification_status' => 'integer',
     ];
 
     protected $dates = [
@@ -545,8 +545,7 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-
-      /**
+    /**
      * @return array
      */
     public static function getVerificationStatus(): array
