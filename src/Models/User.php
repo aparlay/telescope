@@ -200,8 +200,7 @@ class User extends Authenticatable implements JWTSubject
                 'subscriptions' => 0,
                 'subscribers' => 0,
             ],
-        ],
-        'verification_status' => 1,
+        ]
     ];
 
     /**
@@ -548,7 +547,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * @return array
      */
-    public static function getVerificationStatus(): array
+    public static function getVerificationStatuses(): array
     {
         return [
             UserVerificationStatus::PENDING->value => UserVerificationStatus::PENDING->label(),
