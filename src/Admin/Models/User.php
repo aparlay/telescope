@@ -46,7 +46,7 @@ class User extends UserBase
         'gender' => 'integer',
         'interested_in' => 'integer',
         'visibility' => 'integer',
-        'is_verified' => 'boolean'
+        'is_verified' => 'boolean',
     ];
 
     /**
