@@ -33,5 +33,22 @@
 
 @section('js')
     @livewireScripts
+
+    <livewire:modals/>
+
+    <script>
+        let modalsElement = document.getElementById('laravel-livewire-modals');
+
+        modalsElement.addEventListener('hidden.bs.modal', () => {
+            Livewire.emit('resetModal');
+            $("#laravel-livewire-modals").modal('hide');
+        });
+        Livewire.on('showBootstrapModal', () => {
+            $("#laravel-livewire-modals").modal('show');
+        });
+        Livewire.on('hideModal', () => {
+            $("#laravel-livewire-modals").modal('hide');
+        });
+    </script>
 @endsection
 
