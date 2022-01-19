@@ -554,6 +554,7 @@ class User extends Authenticatable implements JWTSubject
             UserVerificationStatus::PENDING->value => UserVerificationStatus::PENDING->label(),
             UserVerificationStatus::VERIFIED->value => UserVerificationStatus::VERIFIED->label(),
             UserVerificationStatus::REJECTED->value => UserVerificationStatus::REJECTED->label(),
+            UserVerificationStatus::UNVERIFIED->value => UserVerificationStatus::UNVERIFIED->label(),
         ];
     }
 

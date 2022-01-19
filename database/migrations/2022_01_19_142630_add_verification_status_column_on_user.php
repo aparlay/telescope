@@ -2,6 +2,7 @@
 
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 
 class AddVerificationStatusColumnOnUser extends Migration
 {
@@ -12,13 +13,13 @@ class AddVerificationStatusColumnOnUser extends Migration
      */
     public function up()
     {
-        User::where('verification_status', null)->update(['verification_status' => 1]);
+        User::where('verification_status', null)->update(['verification_status' => UserVerificationStatus::UNVERIFIED->value]);
     }
 
     /**
      * Reverse the migrations.
      *
-     * @return void
+     * @return voida
      */
     public function down()
     {
