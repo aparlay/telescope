@@ -2,10 +2,8 @@
 
 namespace Aparlay\Core\Admin\Livewire\Modals;
 
-
-use Aparlay\Core\Models\Enums\UserDocumentStatus;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
-use App\Models\User;
+use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Admin\Repositories\UserRepository;
 use Livewire\Component;
 
 
@@ -16,34 +14,28 @@ class UserVerificationModal extends Component
     public $modalTitle;
     public $reject_reason = '';
 
+    /**
+     * @var $userRepository UserRepository
+     */
+    private $userRepository;
 
     public function mount($userId, $action)
     {
         $this->selectedUser = $userId;
         $this->action = $action;
-
         $this->modalTitle = match ($action) {
             'markAsRejected' => 'Mark this user as rejected?',
             'markAsVerified' => 'Mark this user as verified?'
         };
     }
 
-
     public function markAsRejected()
     {
-        $user = User::query()->find($this->selectedUser);
-        $user->verification_status = UserVerificationStatus::REJECTED->value;
-        $user->save();
-
-        $user->userDocumentObjs()->update([
-            'status' => UserDocumentStatus::REJECTED->value,
-            'reject_reason' => $this->reject_reason,
-        ]);
-
+        $this->userRepository = new UserRepository(new User());
+        $this->userRepository->markAsRejected($this->selectedUser, $this->reject_reason);
         $this->dispatchBrowserEvent('hideModal');
         $this->emit('updateParent');
     }
-
 
     /**
      * @param $userId
@@ -51,15 +43,8 @@ class UserVerificationModal extends Component
      */
     public function markAsVerified()
     {
-        /** @var User $user */
-        $user = User::query()->find($this->selectedUser);
-        $user->verification_status = UserVerificationStatus::VERIFIED->value;
-        $user->userDocumentObjs()->update([
-            'status' => UserDocumentStatus::APPROVED->value,
-            'reject_reason' => null,
-        ]);
-        $user->save();
-
+        $this->userRepository = new UserRepository(new User());
+        $this->userRepository->markAsVerified($this->selectedUser);
         $this->dispatchBrowserEvent('hideModal');
         $this->emit('updateParent');
     }

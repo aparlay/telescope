@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Models\Enums\UserDocumentStatus;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 
 class UserRepository
 {
@@ -23,6 +25,35 @@ class UserRepository
             ->skip($offset)
             ->take($limit)
             ->get();
+    }
+
+    /**
+     * @param $userId
+     * @param $rejectReason
+     * @return void
+     */
+    public function markAsVerified($userId)
+    {
+        /** @var \App\Models\User $user */
+        $user = User::query()->find($userId);
+        $user->verification_status = UserVerificationStatus::VERIFIED->value;
+        $user->userDocumentObjs()->update([
+            'status' => UserDocumentStatus::APPROVED->value,
+            'reject_reason' => null,
+        ]);
+        $user->save();
+    }
+    public function markAsRejected($userId, $rejectReason = '')
+    {
+        $user = $this->model::query()->find($userId);
+
+        $user->verification_status = UserVerificationStatus::REJECTED->value;
+        $user->save();
+
+        $user->userDocumentObjs()->update([
+            'status' => UserDocumentStatus::REJECTED->value,
+            'reject_reason' => $rejectReason,
+        ]);
     }
 
     public function countFilteredUser($text, $filters, $dateRangeFilter = null)
