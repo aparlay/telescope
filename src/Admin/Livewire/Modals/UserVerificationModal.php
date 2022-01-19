@@ -14,17 +14,13 @@ class UserVerificationModal extends Component
     public $selectedUser;
     public $action;
     public $modalTitle;
-    public $reason = '';
+    public $reject_reason = '';
 
 
     public function mount($userId, $action)
     {
         $this->selectedUser = $userId;
         $this->action = $action;
-
-        \Log::info($action);
-
-
 
         $this->modalTitle = match ($action) {
             'markAsRejected' => 'Mark this user as rejected?',
@@ -40,7 +36,8 @@ class UserVerificationModal extends Component
         $user->save();
 
         $user->userDocumentObjs()->update([
-            'status' => UserDocumentStatus::REJECTED
+            'status' => UserDocumentStatus::REJECTED->value,
+            'reject_reason' => $this->reject_reason,
         ]);
 
         $this->dispatchBrowserEvent('hideModal');
@@ -58,7 +55,8 @@ class UserVerificationModal extends Component
         $user = User::query()->find($this->selectedUser);
         $user->verification_status = UserVerificationStatus::VERIFIED->value;
         $user->userDocumentObjs()->update([
-            'status' => UserDocumentStatus::APPROVED
+            'status' => UserDocumentStatus::APPROVED->value,
+            'reject_reason' => null,
         ]);
         $user->save();
 

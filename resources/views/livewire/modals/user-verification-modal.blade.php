@@ -15,7 +15,7 @@
 
             @if ($action === 'markAsRejected')
                 <div class="mt-2">
-                    <input class="form-control" type="text" wire:mode="reason" placeholder="Reject reason">
+                    <input class="form-control" type="text" wire:model="reject_reason" placeholder="Reject reason">
                 </div>
             @endif
         </div>
