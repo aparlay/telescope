@@ -19,7 +19,6 @@ class UsersTable extends BaseIndexComponent
         $this->render();
     }
 
-
     protected array $allowedFilters = [
         'email' => 'string',
         'gender' => 'int',
