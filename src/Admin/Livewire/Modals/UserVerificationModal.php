@@ -2,12 +2,10 @@
 
 namespace Aparlay\Core\Admin\Livewire\Modals;
 
-
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use App\Models\User;
 use Livewire\Component;
-
 
 class UserVerificationModal extends Component
 {
@@ -15,7 +13,6 @@ class UserVerificationModal extends Component
     public $action;
     public $modalTitle;
     public $reject_reason = '';
-
 
     public function mount($userId, $action)
     {
@@ -27,7 +24,6 @@ class UserVerificationModal extends Component
             'markAsVerified' => 'Mark this user as verified?'
         };
     }
-
 
     public function markAsRejected()
     {
@@ -43,7 +39,6 @@ class UserVerificationModal extends Component
         $this->dispatchBrowserEvent('hideModal');
         $this->emit('updateParent');
     }
-
 
     /**
      * @param $userId
@@ -68,5 +63,4 @@ class UserVerificationModal extends Component
     {
         return view('default_view::livewire.modals.user-verification-modal');
     }
-
 }
