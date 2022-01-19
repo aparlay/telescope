@@ -104,7 +104,7 @@
                     <button
                         class="btn btn-sm btn-success"
                         type="button"
-                        wire:key="reject_button_{{ $user->_id }}}"
+                        wire:key="verify_button_{{ $user->_id }}}"
                         wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsVerified')"
                     >
                         {{ __('Approve') }}
