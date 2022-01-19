@@ -6,7 +6,6 @@ use Illuminate\Support\Arr;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-
 abstract class BaseIndexComponent extends Component
 {
     use WithPagination;
@@ -44,6 +43,7 @@ abstract class BaseIndexComponent extends Component
     public function index()
     {
         $query = $this->buildQuery();
+
         return $query->paginate($this->perPage);
     }
 
@@ -55,6 +55,7 @@ abstract class BaseIndexComponent extends Component
         return collect($this->filter)
             ->filter(function ($value, $key) {
                 $filterAllowed = Arr::get($this->allowedFilters, $key);
+
                 return $value !== '' && $filterAllowed;
             })->map(function ($value, $key) {
                 $castType = $this->allowedFilters[$key];

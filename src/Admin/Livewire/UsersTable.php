@@ -26,13 +26,14 @@ class UsersTable extends BaseIndexComponent
         'phone_number' => 'string',
         'status' => 'int',
         'text_search' => 'string',
-        'verification_status' => 'int'
+        'verification_status' => 'int',
     ];
 
     public function buildQuery()
     {
         $query = parent::buildQuery();
         $query->with('userDocumentObjs');
+
         return $query;
     }
 
