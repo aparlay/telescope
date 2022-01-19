@@ -4,9 +4,8 @@ namespace Aparlay\Core\Commands;
 
 use Illuminate\Console\Command;
 
-class AdminSyncLiveWireComponents extends  Command
+class AdminSyncLiveWireComponents extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -42,6 +41,4 @@ class AdminSyncLiveWireComponents extends  Command
 
         return 0;
     }
-
-
 }
