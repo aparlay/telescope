@@ -71,6 +71,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $stats
  * @property array       $last_location
  * @property string      $country
+ * @property array       $text_search
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
@@ -143,6 +144,7 @@ class User extends Authenticatable implements JWTSubject
         'stats',
         'last_location',
         'is_verified',
+        'text_search',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -179,6 +181,7 @@ class User extends Authenticatable implements JWTSubject
         'subscriptions' => [],
         'subscription_plan' => [],
         'user_agents' => [],
+        'search' => [],
         'stats' => [
             'amounts' => [
                 'sent_tips' => 0,

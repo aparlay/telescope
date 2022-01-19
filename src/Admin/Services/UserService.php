@@ -17,7 +17,7 @@ class UserService extends AdminBaseService
     {
         $this->userRepository = new UserRepository(new User());
 
-        $this->filterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
+        $this->filterableField = ['text_search', 'username', 'email', 'status', 'visibility', 'created_at'];
         $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
     }
 
@@ -32,18 +32,23 @@ class UserService extends AdminBaseService
         $filters = $this->getFilters();
         $sort = $this->tableSort();
         $dateRangeFilter = null;
+        $textSearch = '';
 
         if (! empty($filters)) {
             if (isset($filters['created_at'])) {
                 $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
                 unset($filters['created_at']);
             }
-            $users = $this->userRepository->getFilteredUser($offset, $limit, $sort, $filters, $dateRangeFilter);
+            if (isset($filters['text_search'])) {
+                $textSearch = $filters['text_search'];
+                unset($filters['text_search']);
+            }
+            $users = $this->userRepository->getFilteredUser($textSearch, $filters, $offset, $limit, $sort, $dateRangeFilter);
         } else {
             $users = $this->userRepository->all($offset, $limit, $sort);
         }
 
-        $this->appendAttributes($users, $filters, $dateRangeFilter);
+        $this->appendAttributes($textSearch, $users, $filters, $dateRangeFilter);
 
         return $users;
     }
@@ -53,10 +58,10 @@ class UserService extends AdminBaseService
      * @param $filters
      * @param $dateRangeFilter
      */
-    public function appendAttributes($users, $filters, $dateRangeFilter)
+    public function appendAttributes($textSearch, $users, $filters, $dateRangeFilter)
     {
         $users->total_users = $this->userRepository->countCollection();
-        $users->total_filtered_users = ! empty($filters) || $dateRangeFilter ? $this->userRepository->countFilteredUser($filters, $dateRangeFilter) : $users->total_users;
+        $users->total_filtered_users = ! empty($filters) || ! empty($textSearch) || $dateRangeFilter ? $this->userRepository->countFilteredUser($textSearch, $filters, $dateRangeFilter) : $users->total_users;
 
         foreach ($users as $user) {
             $userBadges = [

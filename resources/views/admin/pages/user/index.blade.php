@@ -26,8 +26,10 @@
                         @php
                             $heads = [
                                 '',
+                                '',
                                 'Username',
                                 'Email',
+                                'Phone',
                                 'Fullname',
                                 '',
                                 'Status',
@@ -52,9 +54,11 @@
                             'ajax' => route('core.admin.ajax.user.index'),
                             'order' => [[11, 'desc']],
                             'columns' => [
+                                ['data' => 'text_search', 'visible' => false],
                                 ['data' => 'username', 'visible' => false],
                                 ['data' => 'username_avatar', 'orderData' => 0, 'target' => 0],
                                 ['data' => 'email'],
+                                ['data' => 'phone_number'],
                                 ['data' => 'full_name', 'orderable' => false],
                                 ['data' => 'status', 'visible' => false],
                                 ['data' => 'status_badge', 'orderData' => 4, 'target' => 4],
@@ -83,14 +87,8 @@
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
-                                                        <label for="username">Username</label>
-                                                        <input type="text" data-column="0" name="username" class="form-control" id="username" placeholder="Enter username">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="form-group">
-                                                        <label for="email">Email</label>
-                                                        <input type="email" data-column="2" name="email" class="form-control" id="email" placeholder="Enter email">
+                                                        <label for="text_search">Search</label>
+                                                        <input type="text" data-column="0" name="text_search" class="form-control" id="text_search" placeholder="Enter name, username, email, phone">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">

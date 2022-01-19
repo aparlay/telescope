@@ -78,17 +78,9 @@ class OnlineUserService
         $now = time();
         $currentWindowExpireAt = ceil($now / 300) * 300;
         $nextWindowExpireAt = ceil($now / 600) * 600;
-        if ((int) Redis::sCard($onlineNoneCurrent) === 0) {
-            Redis::expireAt($onlineAllCurrent, $currentWindowExpireAt);
-            Redis::expireAt($onlineFollowingsCurrent, $currentWindowExpireAt);
-            Redis::expireAt($onlineNoneCurrent, $currentWindowExpireAt);
-        }
 
-        if ((int) Redis::sCard($onlineNoneNext) === 0) {
-            Redis::expireAt($onlineAllNext, $nextWindowExpireAt);
-            Redis::expireAt($onlineFollowingsNext, $nextWindowExpireAt);
-            Redis::expireAt($onlineNoneNext, $nextWindowExpireAt);
-        }
+        $setExpireCurrent = Redis::exists($onlineNoneCurrent);
+        $setExpireNext = Redis::exists($onlineNoneNext);
 
         switch ($user->show_online_status) {
             case UserShowOnlineStatus::All->value:
@@ -108,6 +100,17 @@ class OnlineUserService
             default:
                 Redis::sAdd($onlineNoneCurrent, (string) $user->_id);
                 Redis::sAdd($onlineNoneNext, (string) $user->_id);
+        }
+
+        if ($setExpireCurrent) {
+            Redis::expireAt($onlineAllCurrent, $currentWindowExpireAt);
+            Redis::expireAt($onlineFollowingsCurrent, $currentWindowExpireAt);
+            Redis::expireAt($onlineNoneCurrent, $currentWindowExpireAt);
+        }
+        if ($setExpireNext) {
+            Redis::expireAt($onlineAllNext, $nextWindowExpireAt);
+            Redis::expireAt($onlineFollowingsNext, $nextWindowExpireAt);
+            Redis::expireAt($onlineNoneNext, $nextWindowExpireAt);
         }
     }
 

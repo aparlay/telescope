@@ -79,6 +79,14 @@ class UserObserver extends BaseModelObserver
             SimpleUserCast::cacheByUserId($model->_id);
         }
 
+        if ($model->isDirty(['username', 'email', 'phone_number', 'full_name'])) {
+            $text_search = explode(' ', $model->full_name);
+            $text_search[] = $model->username;
+            $text_search[] = $model->email;
+            $text_search[] = $model->phone_number;
+            $model->text_search = $text_search;
+        }
+
         parent::saving($model);
     }
 
