@@ -212,7 +212,6 @@ class User extends Authenticatable implements JWTSubject
         'username' => 'string',
         'full_name' => 'string',
         'email' => 'string',
-        'verification_status' => 'integer',
         'status' => 'integer',
         'email_verified' => 'boolean',
         'phone_number_verified' => 'boolean',
@@ -227,6 +226,7 @@ class User extends Authenticatable implements JWTSubject
         'followed_hashtag_count' => 'integer',
         'media_count' => 'integer',
         'type' => 'integer',
+        'verification_status' => 'integer',
     ];
 
     protected $dates = [
