@@ -200,7 +200,7 @@ class User extends Authenticatable implements JWTSubject
                 'subscriptions' => 0,
                 'subscribers' => 0,
             ],
-        ]
+        ],
     ];
 
     /**
