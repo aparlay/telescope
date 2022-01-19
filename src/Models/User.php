@@ -201,7 +201,7 @@ class User extends Authenticatable implements JWTSubject
                 'subscribers' => 0,
             ],
         ],
-        'verification_status' => 0,
+        'verification_status' => 1,
     ];
 
     /**
