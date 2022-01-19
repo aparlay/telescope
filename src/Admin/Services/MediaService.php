@@ -22,7 +22,7 @@ class MediaService extends AdminBaseService
         $this->mediaRepository = new MediaRepository(new Media());
         $this->userRepository = new UserRepository(new User());
         $this->filterableField = ['creator.username', 'status', 'created_at'];
-        $this->sorterableField = ['creator.username', 'status', 'created_at'];
+        $this->sorterableField = ['creator.username', 'description', 'status', 'like_count', 'sort_score', 'visit_count', 'created_at'];
     }
 
     /**

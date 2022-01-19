@@ -13,6 +13,7 @@ use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Exception;
@@ -54,6 +55,10 @@ class UserObserver extends BaseModelObserver
             };
 
             $model->avatar = Cdn::avatar($filename);
+        }
+
+        if (empty($model->verification_status)) {
+            $model->verification_status = UserVerificationStatus::UNVERIFIED->value;
         }
 
         parent::creating($model);

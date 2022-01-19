@@ -73,6 +73,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $last_location
  * @property string      $country
  * @property array       $text_search
+ * @property int         $verification_status
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
@@ -143,6 +144,7 @@ class User extends Authenticatable implements JWTSubject
         'user_agents',
         'stats',
         'last_location',
+        'verification_status',
         'text_search',
         'created_at',
         'updated_at',
@@ -520,18 +522,6 @@ class User extends Authenticatable implements JWTSubject
     /**
      * @return array
      */
-    public static function getVerificationStatuses(): array
-    {
-        return [
-            UserVerificationStatus::VERIFIED->value => UserVerificationStatus::VERIFIED->label(),
-            UserVerificationStatus::PENDING->value => UserVerificationStatus::PENDING->label(),
-            UserVerificationStatus::REJECTED->value => UserVerificationStatus::REJECTED->label(),
-        ];
-    }
-
-    /**
-     * @return array
-     */
     public static function getVisibilities(): array
     {
         return [
@@ -552,6 +542,19 @@ class User extends Authenticatable implements JWTSubject
             UserStatus::SUSPENDED->value => UserStatus::SUSPENDED->label(),
             UserStatus::BLOCKED->value => UserStatus::BLOCKED->label(),
             UserStatus::DEACTIVATED->value => UserStatus::DEACTIVATED->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getVerificationStatuses(): array
+    {
+        return [
+            UserVerificationStatus::PENDING->value => UserVerificationStatus::PENDING->label(),
+            UserVerificationStatus::VERIFIED->value => UserVerificationStatus::VERIFIED->label(),
+            UserVerificationStatus::REJECTED->value => UserVerificationStatus::REJECTED->label(),
+            UserVerificationStatus::UNVERIFIED->value => UserVerificationStatus::UNVERIFIED->label(),
         ];
     }
 
