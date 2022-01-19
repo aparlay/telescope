@@ -1,8 +1,8 @@
 <?php
 
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
 
 class AddVerificationStatusColumnOnUser extends Migration
 {
