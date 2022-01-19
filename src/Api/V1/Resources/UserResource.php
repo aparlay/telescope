@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -51,6 +52,7 @@ class UserResource extends JsonResource
             '_links' => [
                 'self' => ['href' => route('core.api.v1.user.show', ['user' => $this])],
             ],
+            'is_verified' => $this->verification_status === UserVerificationStatus::VERIFIED->value,
         ];
     }
 }

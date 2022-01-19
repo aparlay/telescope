@@ -54,6 +54,13 @@
             </div>
         </div>
         <div class="form-group row">
+            <label for="email_verified" class="col-sm-2 col-form-label">Verification Status</label>
+            <div class="col-sm-10">
+                {{ $user->verification_status_name }}   
+            </div>
+        </div>
+
+        <div class="form-group row">
             <label for="gender" class="col-sm-2 col-form-label">Gender</label>
             <div class="col-sm-10">
                 <select name="gender" id="gender" class="form-control">
