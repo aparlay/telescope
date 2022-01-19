@@ -2,11 +2,9 @@
 
 namespace Aparlay\Core\Admin\Livewire\Modals;
 
-
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use App\Models\User;
 use Livewire\Component;
-
 
 class UserVerificationModal extends Component
 {
@@ -32,7 +30,6 @@ class UserVerificationModal extends Component
         $this->dispatchBrowserEvent('hidden.bs.modal');
     }
 
-
     public function markAsVerified()
     {
         $user = User::query()->find($this->selectedUser);
@@ -43,10 +40,8 @@ class UserVerificationModal extends Component
         $this->dispatchBrowserEvent('hidden.bs.modal');
     }
 
-
     public function render()
     {
         return view('default_view::livewire.modals.user-verification-modal');
     }
-
 }
