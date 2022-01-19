@@ -51,7 +51,7 @@ class UserResource extends JsonResource
             '_links' => [
                 'self' => ['href' => route('core.api.v1.user.show', ['user' => $this])],
             ],
-            'is_verified' => $this->is_verified,
+            'verification_status' => $this->verification_status,
         ];
     }
 }

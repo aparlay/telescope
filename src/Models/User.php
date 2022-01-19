@@ -11,6 +11,7 @@ use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -72,7 +73,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $last_location
  * @property string      $country
  * @property array       $text_search
- * @property bool       $is_verified
+ * @property int         $verification_status
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
@@ -143,7 +144,7 @@ class User extends Authenticatable implements JWTSubject
         'user_agents',
         'stats',
         'last_location',
-        'is_verified',
+        'verification_status',
         'text_search',
         'created_at',
         'updated_at',
@@ -200,7 +201,7 @@ class User extends Authenticatable implements JWTSubject
                 'subscribers' => 0,
             ],
         ],
-        'is_verified' => false,
+        'verification_status' => 0,
     ];
 
     /**
@@ -226,7 +227,7 @@ class User extends Authenticatable implements JWTSubject
         'followed_hashtag_count' => 'integer',
         'media_count' => 'integer',
         'type' => 'integer',
-        'is_verified' => 'boolean'
+        'verification_status' => 'integer'
     ];
 
     protected $dates = [
@@ -541,6 +542,19 @@ class User extends Authenticatable implements JWTSubject
             UserStatus::SUSPENDED->value => UserStatus::SUSPENDED->label(),
             UserStatus::BLOCKED->value => UserStatus::BLOCKED->label(),
             UserStatus::DEACTIVATED->value => UserStatus::DEACTIVATED->label(),
+        ];
+    }
+
+
+      /**
+     * @return array
+     */
+    public static function getVerificationStatus(): array
+    {
+        return [
+            UserVerificationStatus::PENDING->value => UserVerificationStatus::PENDING->label(),
+            UserVerificationStatus::VERIFIED->value => UserVerificationStatus::VERIFIED->label(),
+            UserVerificationStatus::REJECTED->value => UserVerificationStatus::REJECTED->label(),
         ];
     }
 

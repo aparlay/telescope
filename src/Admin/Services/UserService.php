@@ -135,7 +135,6 @@ class UserService extends AdminBaseService
 
         $dataBooleans = [
             'email_verified' => request()->boolean('email_verified'),
-            'is_verified' => request()->boolean('is_verified'),
             'features' => [
                 'tips' => request()->boolean('features.tips'),
                 'demo' => request()->boolean('features.demo'),

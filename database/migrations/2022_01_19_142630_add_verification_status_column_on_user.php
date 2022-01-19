@@ -3,7 +3,7 @@
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
 
-class AddIsVerifiedColumnOnUser extends Migration
+class AddVerificationStatusColumnOnUser extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class AddIsVerifiedColumnOnUser extends Migration
      */
     public function up()
     {
-        User::update(['is_verified' => false]);
+        User::where('verification_status', null)->update(['verification_status' => 1]);
     }
 
     /**
