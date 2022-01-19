@@ -1,3 +1,7 @@
+@php
+    use Aparlay\Core\Models\Enums\UserVerificationStatus;
+@endphp
+
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -7,16 +11,18 @@
             </button>
         </div>
         <div class="modal-body">
-            {{ $modalTitle }}
+            <p>{{ $modalTitle }}</p>
+
+            @if ($action === 'markAsRejected')
+                <div class="mt-2">
+                    <input class="form-control" type="text" wire:mode="reason" placeholder="Reject reason">
+                </div>
+            @endif
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
 
-            @if ($action === 'approve')
-                <button type="button" wire:click="markAsVerified('{{ $selectedUser }}')" class="btn btn-primary close-modal">Save changes</button>
-            @else
-                <button type="button" wire:click="markAsRejected('{{ $selectedUser }}')" class="btn btn-primary close-modal">Reject</button>
-            @endif
+            <button type="button" wire:click="{{ $action }}" class="btn btn-primary close-modal">Save</button>
         </div>
     </div>
 </div>

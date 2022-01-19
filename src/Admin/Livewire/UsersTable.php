@@ -12,6 +12,13 @@ class UsersTable extends BaseIndexComponent
 
     public $selectedUser = null;
 
+    protected $listeners = ['updateParent'];
+
+    public function updateParent()
+    {
+        $this->render();
+    }
+
 
     protected array $allowedFilters = [
         'email' => 'string',

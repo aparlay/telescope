@@ -104,7 +104,8 @@
                     <button
                         class="btn btn-sm btn-success"
                         type="button"
-                        wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'approve')"
+                        wire:key="reject_button_{{ $user->_id }}}"
+                        wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsVerified')"
                     >
                         {{ __('Approve') }}
                     </button>
@@ -112,7 +113,8 @@
                     <button
                         class="btn btn-sm btn-danger"
                         type="button"
-                        wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'reject')"
+                        wire:key="reject_button_{{ $user->_id }}}"
+                        wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsRejected')"
                     >
                         {{ __('reject') }}
                     </button>

@@ -37,18 +37,31 @@
     <livewire:modals/>
 
     <script>
-        let modalsElement = document.getElementById('laravel-livewire-modals');
+        $(function () {
+            $('#laravel-livewire-modals').on('hidden.bs.modal', function () {
+                console.log('listener close modals fired');
+                Livewire.emit('resetModal');
+                $("#laravel-livewire-modals").modal('hide');
+            })
 
-        modalsElement.addEventListener('hidden.bs.modal', () => {
-            Livewire.emit('resetModal');
-            $("#laravel-livewire-modals").modal('hide');
-        });
-        Livewire.on('showBootstrapModal', () => {
-            $("#laravel-livewire-modals").modal('show');
-        });
-        Livewire.on('hideModal', () => {
-            $("#laravel-livewire-modals").modal('hide');
-        });
+            window.addEventListener('showBootstrapModal', event => {
+                $("#laravel-livewire-modals").modal('show');
+            })
+
+            window.addEventListener('hideModal', event => {
+                Livewire.emit('resetModal');
+                $("#laravel-livewire-modals").modal('hide');
+            })
+
+            Livewire.on('showBootstrapModal', () => {
+                $("#laravel-livewire-modals").modal('show');
+            });
+
+            Livewire.on('hideModal', () => {
+                Livewire.emit('resetModal');
+                $("#laravel-livewire-modals").modal('hide');
+            });
+        })
     </script>
 @endsection
 
