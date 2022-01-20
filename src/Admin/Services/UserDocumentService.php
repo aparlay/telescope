@@ -39,6 +39,10 @@ class UserDocumentService extends AdminBaseService
         $userDocument->reject_reason = $DTO->reject_reason;
         $userDocument->save();
 
+        $creator = $userDocument->creatorObj;
+        $creator->verification_status = UserVerificationStatus::REJECTED;
+        $creator->save();
+
         return $userDocument;
     }
 
