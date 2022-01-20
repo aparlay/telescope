@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Admin\Livewire;
 
-
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterScope;
 use App\Models\User;
@@ -37,11 +36,12 @@ class UsersTable extends BaseIndexComponent
         ];
     }
 
-    public function buildQuery() : Builder
+    public function buildQuery(): Builder
     {
         $query = parent::buildQuery();
         $query->with('userDocumentObjs');
         $query->sortBy(['created_at', 'desc']);
+
         return $query;
     }
 

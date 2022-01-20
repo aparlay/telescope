@@ -15,10 +15,8 @@ class FilterExact extends AbstractBaseFilter
         $this->fieldType = $fieldType;
     }
 
-
     public function __invoke($query)
     {
         $query->where($this->fieldName, $this->fieldValue);
     }
-
 }

@@ -8,7 +8,7 @@ abstract class AbstractBaseFilter
     protected $fieldType;
     protected $fieldValue;
 
-    abstract function __invoke($query);
+    abstract public function __invoke($query);
 
     /**
      * @return mixed
@@ -41,8 +41,4 @@ abstract class AbstractBaseFilter
     {
         $this->fieldValue = $fieldValue;
     }
-
-
-
-
 }

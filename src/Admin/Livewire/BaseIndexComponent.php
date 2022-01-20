@@ -16,7 +16,9 @@ abstract class BaseIndexComponent extends Component
     public array $filter = [];
     protected $model;
 
-    /** @var $query Builder */
+    /**
+     * @var Builder
+     */
     protected $query;
 
     /**
@@ -49,5 +51,4 @@ abstract class BaseIndexComponent extends Component
 
         return $query->paginate($this->perPage);
     }
-
 }

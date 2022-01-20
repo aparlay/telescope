@@ -38,9 +38,9 @@ class UserDocumentService extends AdminBaseService
         $userDocument->status = (int) $DTO->status;
         $userDocument->reject_reason = $DTO->reject_reason;
         $userDocument->save();
+
         return $userDocument;
     }
-
 
     /**
      * @param UserDocument $userDocument
@@ -66,9 +66,9 @@ class UserDocumentService extends AdminBaseService
             $userDocument->creatorObj->verification_status = UserVerificationStatus::VERIFIED;
             $userDocument->creatorObj->save();
         }
+
         return $userDocument;
     }
-
 
     public function getStatuses()
     {
