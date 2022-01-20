@@ -61,7 +61,7 @@ class UserDocumentService extends AdminBaseService
             ->userDocumentObjs()
             ->whereIn('status', [
                 UserDocumentStatus::PENDING->value,
-                UserDocumentStatus::REJECTED->value
+                UserDocumentStatus::REJECTED->value,
             ])
             ->count();
 
