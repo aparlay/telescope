@@ -14,7 +14,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <p>Update user verification status {{ $user->username }}</p>
+            <p>Update verification status  for <span class="badge badge-info">{{ $user->username }}</p></span>
 
             <div>
                 <label for="">Verification Status</label>
@@ -25,6 +25,7 @@
                 </select>
             </div>
 
+            @if (count($documents) > 0)
             <div class="documents-list mt-2">
                 <div class="row">
                     @foreach($documents as $document)
@@ -44,11 +45,11 @@
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" wire:model="documentsData.{{$document->_id}}.is_approved" class="custom-control-input" id="{{ 'switcher_' . $document->_id }}">
                                 <label class="custom-control-label" for="{{ 'switcher_' . $document->_id }}">
-                                    Reject/ Approve
+                                    Reject / Approve
                                 </label>
                             </div>
 
-                            @if (Arr::get($documentsData, "$document->_id.is_approved", false))
+                            @if (!Arr::get($documentsData, "$document->_id.is_approved", false))
                                 <div class="mt-2">
                                     <input type="text"
                                            wire:model="documentsData.{{$document->_id}}.reject_reason"
@@ -60,6 +61,14 @@
                     @endforeach
                 </div>
             </div>
+            @else
+                <div class="mt-2">
+                    <code>
+                        User haven't uploaded any selfies or credit cards documents yet.
+                    </code>
+                </div>
+            @endif
+
         </div>
 
         <div class="modal-footer">

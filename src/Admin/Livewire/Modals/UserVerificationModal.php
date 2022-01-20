@@ -47,7 +47,7 @@ class UserVerificationModal extends Component
 
         $user = $this->userRepository->find($this->selectedUser);
 
-        foreach ($this->documentsData as $documentId => $datum) {
+        foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
             $rejectReason = $datum['reject_reason'] ?? '';
             $isApproved = $datum['is_approved'] ?? false;
