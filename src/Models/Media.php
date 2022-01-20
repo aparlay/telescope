@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
-use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
@@ -25,7 +25,6 @@ use MathPHP\Statistics\Descriptive;
 use MathPHP\Statistics\Significance;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
-
 
 /**
  * Class Media.
