@@ -35,7 +35,7 @@
                             'Status',
                             'Likes',
                             'Visits',
-                            'Sort Score',
+                            'Quality Score',
                             '',
                             'Created At',
                             ''
