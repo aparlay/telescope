@@ -27,13 +27,8 @@
         <tr>
             <td>
                 <div>
-                    <label for="">Verification Status</label>
-                    <select class="form-control" wire:model="filter.verification_status">
-                        <option value="">Any</option>
-                        @foreach(User::getVerificationStatuses() as $value => $label)
-                            <option value="{{$value}}">{{$label}}</option>
-                        @endforeach
-                    </select>
+                    <label for="">Username</label>
+                    <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>
             </td>
 
@@ -71,6 +66,19 @@
                     </select>
                 </div>
             </td>
+
+            <td>
+                <div>
+                    <label for="">Verification Status</label>
+                    <select class="form-control" wire:model="filter.verification_status">
+                        <option value="">Any</option>
+                        @foreach(User::getVerificationStatuses() as $value => $label)
+                            <option value="{{$value}}">{{$label}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </td>
+
             <td>
                 <div>
                     <label for="">Created at</label>
@@ -81,6 +89,28 @@
 
         @foreach($users as $user)
             <tr>
+                <td>
+                    @if ($user->verification_status === UserVerificationStatus::VERIFIED->value)
+                        <i class="fa fa-check"></i>
+                    @endif
+                    {{ $user->username }}
+                </td>
+
+                <td>
+                    {{ $user->email }}
+                </td>
+                <td>{{ $user->phone_number }}</td>
+                <td>
+                    <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
+                        {{ UserGender::from($user->gender)->label() }}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge bg-{{ UserStatus::from($user->status)->badgeColor() }}">
+                        {{ UserStatus::from($user->status)->label() }}
+                    </span>
+                </td>
+
                 <td>
                     <div class="row">
                         <div class="col-md-6">
@@ -94,24 +124,6 @@
                             @endif
                         </div>
                     </div>
-                </td>
-                <td>
-                    @if ($user->verification_status === UserVerificationStatus::VERIFIED->value)
-                        <i class="fa fa-check"></i>
-                    @endif
-
-                    {{ $user->email }}
-                </td>
-                <td>{{ $user->phone_number }}</td>
-                <td>
-                    <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
-                        {{ UserGender::from($user->gender)->label() }}
-                    </span>
-                </td>
-                <td>
-                    <span class="badge bg-{{ UserStatus::from($user->status)->badgeColor() }}">
-                        {{ UserStatus::from($user->status)->label() }}
-                    </span>
                 </td>
 
                 <td>

@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Livewire;
 
 use Aparlay\Core\Admin\Filters\FilterExact;
+use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
 use App\Models\User;
 use Jenssegers\Mongodb\Eloquent\Builder;
@@ -27,6 +28,7 @@ class UsersTable extends BaseIndexComponent
     protected function getFilters()
     {
         return [
+            new FilterPartial('username', 'string'),
             new FilterExact('gender', 'int'),
             new FilterScope('email', 'string', 'email'),
             new FilterScope('phone_number', 'string', 'phoneNumber'),
