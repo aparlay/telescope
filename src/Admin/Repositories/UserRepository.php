@@ -45,7 +45,6 @@ class UserRepository
         $user = $this->model::query()->find($userId);
         $user->verification_status = UserVerificationStatus::REJECTED->value;
         $user->save();
-
     }
 
     public function countFilteredUser($text, $filters, $dateRangeFilter = null)
