@@ -73,6 +73,11 @@
                     </select>
                 </div>
             </td>
+            <td>
+                <div>
+                    <label for="">Created at</label>
+                </div>
+            </td>
             <td></td>
         </tr>
 
@@ -100,6 +105,10 @@
                         {{ UserStatus::from($user->status)->label() }}
                     </span>
                 </td>
+
+                <td>
+                    {{ $user->created_at }}
+                </td>
                 <td>
                     <button
                         class="btn btn-sm btn-success"
@@ -107,7 +116,7 @@
                         wire:key="verify_button_{{ $user->_id }}}"
                         wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsVerified')"
                     >
-                        {{ __('Approve') }}
+                        <i class="fa fa-check"></i>
                     </button>
 
                     <button
@@ -116,10 +125,10 @@
                         wire:key="reject_button_{{ $user->_id }}}"
                         wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsRejected')"
                     >
-                        {{ __('reject') }}
+                        <i class="fa fa-times"></i>
                     </button>
-
                 </td>
+
             </tr>
         @endforeach
         </tbody>

@@ -74,9 +74,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:list users'])
                 ->name('index');
 
-            Route::get('user-list', [UserController::class, 'list'])
+            Route::get('user-moderation', [UserController::class, 'moderation'])
                 ->middleware(['permission:list users'])
-                ->name('list');
+                ->name('moderation');
 
             Route::get('user/{user}', [UserController::class, 'view'])
                 ->middleware(['permission:show users'])
@@ -100,13 +100,16 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('user-document', [UserDocumentController::class, 'index'])
                 ->middleware(['permission:list users'])
                 ->name('index');
+
+            Route::patch('user/document/{documentId}/reject', [UserDocumentController::class, 'reject'])
+                ->middleware(['permission:edit users'])
+                ->name('reject');
+
+            Route::patch('user/document/{documentId}/approve', [UserDocumentController::class, 'approve'])
+                ->middleware(['permission:edit users'])
+                ->name('approve');
         });
 
-        Route::name('user.')->group(function () {
-            Route::patch('user/document/{documentId}', [UserDocumentController::class, 'update'])
-                ->middleware(['permission:edit users'])
-                ->name('document.edit');
-        });
 
         Route::name('alert.')->group(function () {
             Route::post('alert', [AlertController::class, 'store'])

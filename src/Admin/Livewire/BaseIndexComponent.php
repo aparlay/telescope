@@ -2,7 +2,8 @@
 
 namespace Aparlay\Core\Admin\Livewire;
 
-use Illuminate\Support\Arr;
+use Aparlay\Core\Admin\Filters\QueryBuilder;
+use Jenssegers\Mongodb\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,6 +16,7 @@ abstract class BaseIndexComponent extends Component
     public array $filter = [];
     protected $model;
 
+    /** @var $query Builder */
     protected $query;
 
     /**
@@ -29,15 +31,16 @@ abstract class BaseIndexComponent extends Component
         $this->resetPage();
     }
 
-    public function buildQuery()
+    protected function getFilters()
     {
-        $query = $this->model::query();
+        return [];
+    }
 
-        foreach ($this->prepareFilters()->all() as $fieldName => $fieldValue) {
-            $query->where($fieldName, $fieldValue);
-        }
-
-        return $query;
+    public function buildQuery(): Builder
+    {
+        return (new QueryBuilder())
+            ->for($this->model, $this->filter)
+            ->applyFilters($this->getFilters());
     }
 
     public function index()
@@ -47,21 +50,4 @@ abstract class BaseIndexComponent extends Component
         return $query->paginate($this->perPage);
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    private function prepareFilters()
-    {
-        return collect($this->filter)
-            ->filter(function ($value, $key) {
-                $filterAllowed = Arr::get($this->allowedFilters, $key);
-
-                return $value !== '' && $filterAllowed;
-            })->map(function ($value, $key) {
-                $castType = $this->allowedFilters[$key];
-                settype($value, $castType);
-
-                return $value;
-            });
-    }
 }

@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
 
 class UserDocumentService extends AdminBaseService
@@ -32,17 +33,42 @@ class UserDocumentService extends AdminBaseService
      * @param AdminUserDocumentDTO $dto
      * @return UserDocument
      */
-    public function update(UserDocument $userDocument, AdminUserDocumentDTO $dto)
+    public function reject(UserDocument $userDocument, AdminUserDocumentDTO $DTO)
     {
-        $userDocument->status = (int) $dto->status;
-
-        if ((int) $dto->status === UserDocumentStatus::REJECTED->value) {
-            $userDocument->reject_reason = $dto->reject_reason;
-        }
+        $userDocument->status = (int) $DTO->status;
+        $userDocument->reject_reason = $DTO->reject_reason;
         $userDocument->save();
-
         return $userDocument;
     }
+
+
+    /**
+     * @param UserDocument $userDocument
+     * @param AdminUserDocumentDTO $DTO
+     * @return UserDocument
+     */
+    public function approve(UserDocument $userDocument, AdminUserDocumentDTO $DTO)
+    {
+        $userDocument->status = (int) $DTO->status;
+        $userDocument->save();
+
+        $documentsToVerify = $userDocument
+            ->creatorObj
+            ->userDocumentObjs()
+            ->count();
+
+        if ($documentsToVerify > 0) {
+            $userDocument->creatorObj->verification_status = UserVerificationStatus::PENDING;
+            $userDocument->creatorObj->save();
+        }
+
+        if ($documentsToVerify === 0) {
+            $userDocument->creatorObj->verification_status = UserVerificationStatus::VERIFIED;
+            $userDocument->creatorObj->save();
+        }
+        return $userDocument;
+    }
+
 
     public function getStatuses()
     {

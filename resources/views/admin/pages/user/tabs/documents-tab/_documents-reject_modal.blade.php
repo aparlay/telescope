@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <form action="{{ route('core.admin.user.document.edit', ['documentId' => 0])  }}" method="POST" name="rejectForm">
+            <form action="{{ route('core.admin.user.document.reject', ['documentId' => 0])  }}" method="POST" name="rejectForm">
                 @csrf
                 @method('PATCH')
                 <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserDocumentStatus::REJECTED->value }}" name="status">

@@ -2,15 +2,18 @@
 
 namespace Aparlay\Core\Admin\Livewire;
 
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
+
+use Aparlay\Core\Admin\Filters\FilterExact;
+use Aparlay\Core\Admin\Filters\FilterScope;
 use App\Models\User;
+use Jenssegers\Mongodb\Eloquent\Builder;
 use function view;
 
 class UsersTable extends BaseIndexComponent
 {
     public $model = User::class;
 
-    public $selectedUser = null;
+    public $selectedUser;
 
     protected $listeners = ['updateParent'];
 
@@ -19,20 +22,26 @@ class UsersTable extends BaseIndexComponent
         $this->render();
     }
 
-    protected array $allowedFilters = [
-        'email' => 'string',
-        'gender' => 'int',
-        'phone_number' => 'string',
-        'status' => 'int',
-        'text_search' => 'string',
-        'verification_status' => 'int',
-    ];
+    /**
+     * @return array
+     */
+    protected function getFilters()
+    {
+        return [
+            new FilterExact('gender', 'int'),
+            new FilterScope('email', 'string', 'email'),
+            new FilterScope('phone_number', 'string', 'phoneNumber'),
+            new FilterExact('status', 'int'),
+            new FilterScope('text_search', 'string', 'textSearch'),
+            new FilterExact('verification_status', 'int'),
+        ];
+    }
 
-    public function buildQuery()
+    public function buildQuery() : Builder
     {
         $query = parent::buildQuery();
         $query->with('userDocumentObjs');
-
+        $query->sortBy(['created_at', 'desc']);
         return $query;
     }
 

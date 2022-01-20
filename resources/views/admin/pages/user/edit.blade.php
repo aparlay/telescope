@@ -179,7 +179,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>    
+                    </div>
                 </div>
             </div>
         </div>
@@ -308,11 +308,11 @@
         });
         $(function () {
          $('#approveModal').on("show.bs.modal", function (e) {
-            document.approveForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
+            document.approveForm.action = "{{ route('core.admin.user-document.approve', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
             return e;
          });
          $('#rejectModal').on("show.bs.modal", function (e) {
-            document.rejectForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
+            document.rejectForm.action = "{{ route('core.admin.user-document.reject', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
             return e;
          });
         });

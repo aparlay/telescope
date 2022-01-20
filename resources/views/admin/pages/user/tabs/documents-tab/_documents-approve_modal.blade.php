@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <form action="{{ route('core.admin.user.document.edit', ['documentId' => 0])  }}" method="POST" name="approveForm">
+            <form action="{{ route('core.admin.user.document.approve', ['documentId' => 0])  }}" method="POST" name="approveForm">
                 @csrf
                 @method('PATCH')
                 <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserDocumentStatus::APPROVED->value }}" name="status">

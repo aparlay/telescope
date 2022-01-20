@@ -31,7 +31,7 @@ class UserController extends Controller
         $this->mediaService = $mediaService;
     }
 
-    public function list()
+    public function moderation()
     {
         return view('default_view::admin.pages.user.list');
     }
