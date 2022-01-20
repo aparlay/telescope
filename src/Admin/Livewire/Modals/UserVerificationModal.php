@@ -38,7 +38,6 @@ class UserVerificationModal extends Component
         $this->emit('updateParent');
     }
 
-
     public function render()
     {
         return view('default_view::livewire.modals.user-verification-modal');
