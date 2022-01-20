@@ -46,6 +46,11 @@ class MeResource extends JsonResource
             $medias[] = $this->createSimpleMedia($media);
         }
 
+        $alerts = [];
+        if (auth()->guest() || ((string) $this->_id !== (string) auth()->user()->_id)) {
+            $alerts = $this->alerts;
+        }
+
         return [
             '_id' => (string) $this->_id,
             'referral_id' => (string) $this->referral_id,
@@ -90,7 +95,7 @@ class MeResource extends JsonResource
             'followers' => $followers,
             'followings' => $followings,
             'medias' => $medias,
-            'alerts' => AlertResource::collection($this->alerts),
+            'alerts' => AlertResource::collection($alerts),
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [

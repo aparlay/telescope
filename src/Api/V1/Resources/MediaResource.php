@@ -37,8 +37,10 @@ class MediaResource extends JsonResource
         }
 
         $tips = 0;
+        $alerts = [];
         if (isset(auth()->user()->_id) && (string) auth()->user()->_id === (string) $this->creator['_id']) {
             $tips = $this->tips;
+            $alerts = $this->alerts;
         }
 
         return [
@@ -67,7 +69,7 @@ class MediaResource extends JsonResource
             'sent_tips' => $this->sent_tips,
             'comments' => [],
             'slug' => $this->slug,
-            'alerts' => AlertResource::collection($this->alerts),
+            'alerts' => AlertResource::collection($alerts),
             'created_by' => (string) $this->created_by,
             'updated_by' => (string) $this->updated_by,
             'created_at' => $this->created_at->valueOf(),

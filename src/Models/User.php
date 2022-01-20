@@ -312,10 +312,6 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getAlertsAttribute(): array|Collection
     {
-        if (auth()->guest() || ((string) $this->_id !== (string) auth()->user()->_id)) {
-            return [];
-        }
-
         return Alert::user(auth()->user()->_id)->userOnly()->notVisited()->get();
     }
 

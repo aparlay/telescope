@@ -247,11 +247,7 @@ class Media extends BaseModel
      */
     public function getAlertsAttribute(): array|Collection
     {
-        if (! auth()->guest() && (string) $this->created_by === (string) auth()->user()->_id) {
-            return Alert::media($this->_id)->notVisited()->get();
-        }
-
-        return [];
+        return Alert::media($this->_id)->notVisited()->get();
     }
 
     /**

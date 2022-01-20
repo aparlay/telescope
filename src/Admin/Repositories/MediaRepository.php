@@ -22,6 +22,7 @@ class MediaRepository
         return $this->model->sortBy($sort)
             ->skip($offset)
             ->take($limit)
+            ->options(['allowDiskUse' => true])
             ->get();
     }
 
@@ -30,6 +31,7 @@ class MediaRepository
         return $this->model->sortBy($sort)
             ->skip($offset)
             ->take($limit)
+            ->options(['allowDiskUse' => true])
             ->get();
     }
 
