@@ -76,6 +76,7 @@
                     <label for="">Created at</label>
                 </div>
             </td>
+            <td></td>
         </tr>
 
         @foreach($users as $user)
@@ -91,18 +92,6 @@
                                 {{$user->omg}}
                                 <span class="badge bg-info">None</span>
                             @endif
-                        </div>
-                        <div class="col-md-6">
-                            <div>
-                                <button
-                                    class="btn btn-sm btn-success"
-                                    type="button"
-                                    wire:key="verify_button_{{ $user->_id }}}"
-                                    wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}')"
-                                >
-                                    Update
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </td>
@@ -127,6 +116,21 @@
 
                 <td>
                     {{ $user->created_at }}
+                </td>
+
+                <td>
+                    <div class="col-md-6">
+                        <div>
+                            <button
+                                class="btn btn-sm btn-success"
+                                type="button"
+                                wire:key="verify_button_{{ $user->_id }}}"
+                                wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}')"
+                            >
+                                Update
+                            </button>
+                        </div>
+                    </div>
                 </td>
             </tr>
         @endforeach
