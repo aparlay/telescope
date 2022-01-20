@@ -40,7 +40,7 @@ class UserRepository
         $user->save();
     }
 
-    public function markAsRejected($userId, $rejectReason = '')
+    public function markAsRejected($userId)
     {
         $user = $this->model::query()->find($userId);
         $user->verification_status = UserVerificationStatus::REJECTED->value;
