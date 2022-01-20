@@ -78,22 +78,52 @@
                     <label for="">Created at</label>
                 </div>
             </td>
-            <td></td>
         </tr>
 
         @foreach($users as $user)
             <tr>
                 <td>
-                    @if ($user->verification_status)
-                        <span class="badge bg-{{ UserVerificationStatus::from($user->verification_status)->badgeColor() }}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if ($user->verification_status)
+                                <span class="badge bg-{{ UserVerificationStatus::from($user->verification_status)->badgeColor() }}">
                             {{ UserVerificationStatus::from($user->verification_status)->label() }}
                         </span>
-                    @else
-                        {{$user->omg}}
-                        <span class="badge bg-info">None</span>
-                    @endif
+                            @else
+                                {{$user->omg}}
+                                <span class="badge bg-info">None</span>
+                            @endif
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <button
+                                    class="btn btn-sm btn-success"
+                                    type="button"
+                                    wire:key="verify_button_{{ $user->_id }}}"
+                                    wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsVerified')"
+                                >
+                                    <i class="fa fa-check"></i>
+                                </button>
+
+                                <button
+                                    class="btn btn-sm btn-danger"
+                                    type="button"
+                                    wire:key="reject_button_{{ $user->_id }}}"
+                                    wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsRejected')"
+                                >
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </td>
-                <td>{{ $user->email }}</td>
+                <td>
+                    @if ($user->verification_status === UserVerificationStatus::VERIFIED->value)
+                        <i class="fa fa-check"></i>
+                    @endif
+
+                    {{ $user->email }}
+                </td>
                 <td>{{ $user->phone_number }}</td>
                 <td>
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
@@ -109,26 +139,6 @@
                 <td>
                     {{ $user->created_at }}
                 </td>
-                <td>
-                    <button
-                        class="btn btn-sm btn-success"
-                        type="button"
-                        wire:key="verify_button_{{ $user->_id }}}"
-                        wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsVerified')"
-                    >
-                        <i class="fa fa-check"></i>
-                    </button>
-
-                    <button
-                        class="btn btn-sm btn-danger"
-                        type="button"
-                        wire:key="reject_button_{{ $user->_id }}}"
-                        wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsRejected')"
-                    >
-                        <i class="fa fa-times"></i>
-                    </button>
-                </td>
-
             </tr>
         @endforeach
         </tbody>
