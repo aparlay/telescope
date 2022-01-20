@@ -27,26 +27,17 @@ class UserRepository
             ->get();
     }
 
-    /**
-     * @param $userId
-     * @param $rejectReason
-     * @return void
-     */
-    public function markAsVerified($userId)
+
+    public function updateVerificationStatus($userId, $verificationStatus)
     {
         /** @var \App\Models\User $user */
         $user = User::query()->find($userId);
-        $user->verification_status = UserVerificationStatus::VERIFIED->value;
-        $user->save();
-    }
-
-    public function markAsRejected($userId)
-    {
-        $user = $this->model::query()->find($userId);
-        $user->verification_status = UserVerificationStatus::REJECTED->value;
+        $user->verification_status = $verificationStatus;
         $user->save();
 
+        return $user;
     }
+
 
     public function countFilteredUser($text, $filters, $dateRangeFilter = null)
     {

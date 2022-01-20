@@ -1,5 +1,6 @@
 @php
     use Aparlay\Core\Models\Enums\UserVerificationStatus;
+    use Aparlay\Core\Models\User;
 @endphp
 
 <div class="modal-dialog" role="document">
@@ -11,18 +12,26 @@
             </button>
         </div>
         <div class="modal-body">
-            <p>{{ $modalTitle }}</p>
+            <p>Verify user</p>
 
-            @if ($action === 'markAsRejected')
-                <div class="mt-2">
-                    <input class="form-control" type="text" wire:model="reject_reason" placeholder="Reject reason">
-                </div>
-            @endif
+            <div>
+                <label for="">Verification Status</label>
+                <select class="form-control" wire:model="verification_status">
+                    @foreach(User::getVerificationStatuses() as $value => $label)
+                        <option value="{{$value}}">{{$label}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div wire:model="documents"></div>
+
+
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
 
-            <button type="button" wire:click="{{ $action }}" class="btn btn-primary close-modal">Save</button>
+            <button type="button" wire:click="save()" class="btn btn-primary close-modal">Save</button>
         </div>
     </div>
 </div>

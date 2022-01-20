@@ -28,14 +28,12 @@
             <td>
                 <div>
                     <label for="">Verification Status</label>
-
                     <select class="form-control" wire:model="filter.verification_status">
                         <option value="">Any</option>
                         @foreach(User::getVerificationStatuses() as $value => $label)
                             <option value="{{$value}}">{{$label}}</option>
                         @endforeach
                     </select>
-
                 </div>
             </td>
 
@@ -100,18 +98,9 @@
                                     class="btn btn-sm btn-success"
                                     type="button"
                                     wire:key="verify_button_{{ $user->_id }}}"
-                                    wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsVerified')"
+                                    wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}')"
                                 >
-                                    <i class="fa fa-check"></i>
-                                </button>
-
-                                <button
-                                    class="btn btn-sm btn-danger"
-                                    type="button"
-                                    wire:key="reject_button_{{ $user->_id }}}"
-                                    wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}', 'markAsRejected')"
-                                >
-                                    <i class="fa fa-times"></i>
+                                    Update
                                 </button>
                             </div>
                         </div>
