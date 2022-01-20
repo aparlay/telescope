@@ -1,8 +1,9 @@
 <?php
 
 namespace Aparlay\Core\Admin\Filters;
+
 use Illuminate\Support\Arr;
-use \Jenssegers\Mongodb\Eloquent\Builder;
+use Jenssegers\Mongodb\Eloquent\Builder;
 
 class QueryBuilder
 {
@@ -43,7 +44,6 @@ class QueryBuilder
             });
     }
 
-
     /**
      * @param $filters
      * @return Builder
@@ -56,8 +56,8 @@ class QueryBuilder
         /** @var AbstractBaseFilter $filter */
         foreach ($preparedFilters as $fieldName => $value) {
             $filter = $this->allowedFilters[$fieldName];
-            if (!$filter) {
-                throw new \ErrorException('This filter not allowed: ' . $fieldName);
+            if (! $filter) {
+                throw new \ErrorException('This filter not allowed: '.$fieldName);
             }
             $filter($this->query);
         }

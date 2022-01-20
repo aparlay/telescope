@@ -18,5 +18,4 @@ class FilterPartial extends AbstractBaseFilter
     {
         return $query->where($this->fieldName, $this->fieldValue);
     }
-
 }

@@ -17,10 +17,10 @@ class FilterScope extends AbstractBaseFilter
         $this->scopeName = $scopeName;
     }
 
-
     public function __invoke($query)
     {
         $scopeName = $this->getScopeName();
+
         return $query->$scopeName($this->getFieldValue());
     }
 
@@ -31,5 +31,4 @@ class FilterScope extends AbstractBaseFilter
     {
         return $this->scopeName;
     }
-
 }
