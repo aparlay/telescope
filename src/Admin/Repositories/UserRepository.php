@@ -27,7 +27,6 @@ class UserRepository
             ->get();
     }
 
-
     public function updateVerificationStatus($userId, $verificationStatus)
     {
         /** @var \App\Models\User $user */
@@ -37,7 +36,6 @@ class UserRepository
 
         return $user;
     }
-
 
     public function countFilteredUser($text, $filters, $dateRangeFilter = null)
     {
