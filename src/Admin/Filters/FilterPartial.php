@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Admin\Filters;
 
+use MongoDB\BSON\Regex;
+
 class FilterPartial extends AbstractBaseFilter
 {
     /**
@@ -16,6 +18,6 @@ class FilterPartial extends AbstractBaseFilter
 
     public function __invoke($query)
     {
-        return $query->where($this->fieldName, $this->fieldValue);
+        $query->where($this->fieldName, 'regex', new Regex('^'.$this->fieldValue));
     }
 }

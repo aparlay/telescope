@@ -59,15 +59,19 @@ class UserDocumentService extends AdminBaseService
         $documentsToVerify = $userDocument
             ->creatorObj
             ->userDocumentObjs()
+            ->whereIn('status', [
+                UserDocumentStatus::PENDING->value,
+                UserDocumentStatus::REJECTED->value
+            ])
             ->count();
 
         if ($documentsToVerify > 0) {
-            $userDocument->creatorObj->verification_status = UserVerificationStatus::PENDING;
+            $userDocument->creatorObj->verification_status = UserVerificationStatus::PENDING->value;
             $userDocument->creatorObj->save();
         }
 
         if ($documentsToVerify === 0) {
-            $userDocument->creatorObj->verification_status = UserVerificationStatus::VERIFIED;
+            $userDocument->creatorObj->verification_status = UserVerificationStatus::VERIFIED->value;
             $userDocument->creatorObj->save();
         }
 

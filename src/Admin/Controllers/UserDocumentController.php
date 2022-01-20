@@ -3,9 +3,7 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Dto\AdminUserDocumentDTO;
-use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Resources\UserDocumentResource;
-use Aparlay\Core\Admin\Resources\UserResource;
 use Aparlay\Core\Admin\Services\UserDocumentService;
 use Aparlay\Core\Api\V1\Models\UserDocument;
 use Illuminate\Http\Request;
