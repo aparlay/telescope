@@ -33,7 +33,7 @@ class UserController extends Controller
 
     public function moderation()
     {
-        return view('default_view::admin.pages.user.list');
+        return view('default_view::admin.pages.user.moderation');
     }
 
     /**
