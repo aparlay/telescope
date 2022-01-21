@@ -31,7 +31,7 @@
                 <div class="documents-list mt-2">
                     <div class="row">
                         @foreach($documents as $document)
-                            <div class="col-md-4">
+                            <div class="col-md-4 pb-3">
                                 <div class="w-100">
                                     <a target="_blank" href="{{ $document->temporaryUrl() }}"
                                        title="{{$document->file}}">
