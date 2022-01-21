@@ -44,7 +44,7 @@
             </td>
             <td>
                 <div>
-                    <label for="">Phone number</label>
+                    <label for="">Phone</label>
                     <input class="form-control" type="text" wire:model="filter.phone_number"/>
                 </div>
             </td>
@@ -144,7 +144,7 @@
                                 wire:key="verify_button_{{ $user->_id }}}"
                                 wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}')"
                             >
-                                Update
+                                <i class="fa fa-edit"></i>
                             </button>
                         </div>
                     </div>
