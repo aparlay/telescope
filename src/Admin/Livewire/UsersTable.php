@@ -42,8 +42,7 @@ class UsersTable extends BaseIndexComponent
     {
         $query = parent::buildQuery();
 
-        $query->with('userDocumentObjs');
-        $query->sortBy(['created_at', 'desc']);
+        $query->orderByDesc('created_at');
         $query->options(['allowDiskUse' => true]);
 
         return $query;
@@ -56,8 +55,9 @@ class UsersTable extends BaseIndexComponent
 
     public function render()
     {
+        $users = $this->index();
         return view('default_view::livewire.users-table', [
-           'users' => $this->index(),
+           'users' => $users,
         ]);
     }
 }
