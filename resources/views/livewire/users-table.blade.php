@@ -44,7 +44,7 @@
             </td>
             <td>
                 <div>
-                    <label for="">Phone</label>
+                    <label for="">Phone number</label>
                     <input class="form-control" type="text" wire:model="filter.phone_number"/>
                 </div>
             </td>
@@ -92,9 +92,12 @@
         </tr>
 
         @foreach($users as $user)
-            <tr wire:key="user_row__{{ $user->_id }}">
+            <tr>
                 <td>
-                    <img src=" {{ $user->avatar }}'?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
+                    <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
+                    @if ($user->verification_status === UserVerificationStatus::VERIFIED->value)
+                        <i class="fa fa-check"></i>
+                    @endif
                      {{$user->username }}
                     <span class="ml-1 {{ $user->is_online ? 'text-info' : 'text-gray' }} text-sm far fa-circle"></span>
                 </td>
@@ -141,7 +144,7 @@
                                 wire:key="verify_button_{{ $user->_id }}}"
                                 wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}')"
                             >
-                                <i class="fa fa-edit"></i>
+                                Update
                             </button>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
@@ -246,11 +247,7 @@ class Media extends BaseModel
      */
     public function getAlertsAttribute(): array|Collection
     {
-        if (! auth()->guest() && (string) $this->created_by === (string) auth()->user()->_id) {
-            return $this->alertObjs;
-        }
-
-        return [];
+        return Alert::media($this->_id)->notVisited()->get();
     }
 
     /**
