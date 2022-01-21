@@ -6,19 +6,23 @@
 @endphp
 
 <div class="user-table">
-    <div class="row pb-3">
-        <div class="col-md-3">
-            <label for="">Per Page</label>
-            <select class="form-control" wire:model="perPage">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-            </select>
-        </div>
+    <div class="filters pb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="">Text Search</label>
+                <input class="form-control" type="text" wire:model="filter.text_search"/>
+            </div>
 
-        <div class="col-md-3">
-            <label for="">Text Search</label>
-            <input class="form-control" type="text" wire:model="filter.text_search"/>
+
+            <div class="col-md-1  ml-auto">
+                <label for="">Per Page</label>
+                <select class="form-control" wire:model="perPage">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
+            </div>
+
         </div>
     </div>
 
