@@ -67,7 +67,7 @@ class Alert extends BaseModel
         'updated_by',
         'created_at',
         'updated_at',
-        'user_document_id'
+        'user_document_id',
     ];
 
     /**
@@ -115,7 +115,6 @@ class Alert extends BaseModel
         return $this->belongsTo(Media::class, 'media_id');
     }
 
-
     /**
      * Get the media associated with the alert.
      */
@@ -123,7 +122,6 @@ class Alert extends BaseModel
     {
         return $this->belongsTo(UserDocument::class, 'media_id');
     }
-
 
     /**
      * @return array
