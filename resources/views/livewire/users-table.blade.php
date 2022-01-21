@@ -44,12 +44,6 @@
             </td>
             <td>
                 <div>
-                    <label for="">Phone number</label>
-                    <input class="form-control" type="text" wire:model="filter.phone_number"/>
-                </div>
-            </td>
-            <td>
-                <div>
                     <label for="">Gender</label>
                     <select class="form-control" wire:model="filter.gender">
                         <option value="">Any</option>
@@ -103,7 +97,6 @@
                 <td>
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
                 </td>
-                <td>{{ $user->phone_number }}</td>
                 <td>
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
                         {{ UserGender::from($user->gender)->label() }}
