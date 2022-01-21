@@ -95,21 +95,6 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('media.save-upload');
         });
 
-        /* User Routes */
-        Route::name('user-document.')->group(function () {
-            Route::get('user-document', [UserDocumentController::class, 'index'])
-                ->middleware(['permission:list users'])
-                ->name('index');
-
-            Route::patch('user/document/{documentId}/reject', [UserDocumentController::class, 'reject'])
-                ->middleware(['permission:edit users'])
-                ->name('reject');
-
-            Route::patch('user/document/{documentId}/approve', [UserDocumentController::class, 'approve'])
-                ->middleware(['permission:edit users'])
-                ->name('approve');
-        });
-
         Route::name('alert.')->group(function () {
             Route::post('alert', [AlertController::class, 'store'])
                ->middleware('permission:create alerts')
