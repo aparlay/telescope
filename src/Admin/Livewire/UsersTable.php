@@ -42,8 +42,7 @@ class UsersTable extends BaseIndexComponent
     {
         $query = parent::buildQuery();
 
-        $query->with('userDocumentObjs');
-        $query->sortBy(['created_at', 'desc']);
+        $query->orderByDesc('created_at');
         $query->options(['allowDiskUse' => true]);
 
         return $query;
