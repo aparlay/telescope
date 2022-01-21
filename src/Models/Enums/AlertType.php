@@ -8,12 +8,15 @@ enum AlertType: int implements Enum
     case MEDIA_REMOVED = 20;
     case MEDIA_NOTICED = 21;
 
+    case USER_DOCUMENT_REJECTED = 50;
+
     public function label(): string
     {
         return match ($this) {
             self::USER => __('user'),
             self::MEDIA_REMOVED => __('media removed'),
             self::MEDIA_NOTICED => __('media noticed'),
+            self::USER_DOCUMENT_REJECTED => __('user document rejected')
         };
     }
 
@@ -23,6 +26,7 @@ enum AlertType: int implements Enum
             self::USER => 'warning',
             self::MEDIA_REMOVED => 'danger',
             self::MEDIA_NOTICED => 'info',
+            self::USER_DOCUMENT_REJECTED => 'danger'
         };
     }
 }

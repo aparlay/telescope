@@ -144,11 +144,11 @@ class User extends Authenticatable implements JWTSubject
         'user_agents',
         'stats',
         'last_location',
-        'verification_status',
         'text_search',
         'created_at',
         'updated_at',
         'deleted_at',
+        'verification_status',
     ];
 
     protected $attributes = [
@@ -546,11 +546,16 @@ class User extends Authenticatable implements JWTSubject
     public static function getVerificationStatuses(): array
     {
         return [
-            UserVerificationStatus::PENDING->value => UserVerificationStatus::PENDING->label(),
             UserVerificationStatus::VERIFIED->value => UserVerificationStatus::VERIFIED->label(),
+            UserVerificationStatus::PENDING->value => UserVerificationStatus::PENDING->label(),
             UserVerificationStatus::REJECTED->value => UserVerificationStatus::REJECTED->label(),
             UserVerificationStatus::UNVERIFIED->value => UserVerificationStatus::UNVERIFIED->label(),
         ];
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return UserStatus::from($this->status)->label();
     }
 
     public function getIsOnlineAttribute(): bool

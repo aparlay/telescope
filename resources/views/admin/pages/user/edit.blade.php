@@ -136,20 +136,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card card-info card-outline">
-                                <div class="card-header" id="headingMainFive">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseMainFive" aria-expanded="false" aria-controls="collapseMainFive">
-                                            Documents
-                                        </button>
-                                    </h5>
-                                </div>
-                                <div id="collapseMainFive" class="collapse" aria-labelledby="headingMainFive" data-parent="#accordion">
-                                    <div class="card-body">
-                                        @include('default_view::admin.pages.user.tabs.documents-tab.documents', ['user' => $user])
-                                    </div>
-                                </div>
-                            </div>
                             <div class="card card-success card-outline">
                                 <div class="card-header" id="headingMainSix">
                                     <h5 class="mb-0">
@@ -179,7 +165,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>    
+                    </div>
                 </div>
             </div>
         </div>
@@ -301,20 +287,4 @@
     <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
-    <script>
-        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-            event.preventDefault();
-            $(this).ekkoLightbox();
-        });
-        $(function () {
-         $('#approveModal').on("show.bs.modal", function (e) {
-            document.approveForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
-            return e;
-         });
-         $('#rejectModal').on("show.bs.modal", function (e) {
-            document.rejectForm.action = "{{ route('core.admin.user.document.edit', ['documentId' => '/']) }}" + '/' + $(e.relatedTarget).data('id');
-            return e;
-         });
-        });
-    </script>
 @endsection

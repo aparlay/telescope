@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Models\Enums\UserDocumentStatus;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 
 class UserRepository
 {
@@ -23,6 +25,16 @@ class UserRepository
             ->skip($offset)
             ->take($limit)
             ->get();
+    }
+
+    public function updateVerificationStatus($userId, $verificationStatus)
+    {
+        /** @var \App\Models\User $user */
+        $user = User::query()->find($userId);
+        $user->verification_status = $verificationStatus;
+        $user->save();
+
+        return $user;
     }
 
     public function countFilteredUser($text, $filters, $dateRangeFilter = null)

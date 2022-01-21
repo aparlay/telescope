@@ -31,6 +31,11 @@ class UserController extends Controller
         $this->mediaService = $mediaService;
     }
 
+    public function moderation()
+    {
+        return view('default_view::admin.pages.user.moderation');
+    }
+
     /**
      * @throws ErrorException
      */

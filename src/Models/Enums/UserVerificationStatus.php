@@ -8,6 +8,7 @@ enum UserVerificationStatus: int implements Enum
     case VERIFIED = 2;
     case REJECTED = -1;
     case UNVERIFIED = 3;
+
     public function label(): string
     {
         return match ($this) {
@@ -17,6 +18,7 @@ enum UserVerificationStatus: int implements Enum
             self::UNVERIFIED => __('unverified'),
         };
     }
+
     public function badgeColor(): string
     {
         return match ($this) {

@@ -26,6 +26,11 @@ class AlertRepository implements RepositoryInterface
         return Alert::create($data);
     }
 
+    public function firstOrCreate(array $data)
+    {
+        return Alert::firstOrCreate($data);
+    }
+
     public function update(array $data, $id)
     {
     }

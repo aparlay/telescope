@@ -13,6 +13,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property string      $username
  * @property string      $password_hash
  * @property string      $password_reset_token
+ * @property string      $verification_status
  * @property string      $email
  * @property bool        $email_verified
  * @property string      $phone_number

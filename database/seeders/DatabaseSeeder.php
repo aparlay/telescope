@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Database\Seeders;
 
+use Aparlay\Core\Commands\AdminSyncLiveWireComponents;
 use Aparlay\Core\Models\Media;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -41,5 +42,7 @@ class DatabaseSeeder extends Seeder
             UserDocumentSeeder::class,
             VersionSeeder::class,
         ]);
+
+        \Artisan::call('core:sync-livewire-component');
     }
 }

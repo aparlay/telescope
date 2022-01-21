@@ -43,6 +43,7 @@ class UserFactory extends Factory
             'interested_in' => $this->faker->randomElement(array_keys(User::getInterestedIns())),
             'type' => $this->faker->randomElement(array_keys(User::getTypes())),
             'status' => $this->faker->randomElement(array_keys(User::getStatuses())),
+            'verification_status' => $this->faker->randomElement(array_keys(User::getVerificationStatuses())),
             'visibility' => $this->faker->randomElement(array_keys(User::getVisibilities())),
             'follower_count' => $this->faker->randomDigit(),
             'following_count' => $this->faker->randomDigit(),

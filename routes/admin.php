@@ -73,6 +73,11 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('user', [UserController::class, 'index'])
                 ->middleware(['permission:list users'])
                 ->name('index');
+
+            Route::get('user-moderation', [UserController::class, 'moderation'])
+                ->middleware(['permission:list users'])
+                ->name('moderation');
+
             Route::get('user/{user}', [UserController::class, 'view'])
                 ->middleware(['permission:show users'])
                 ->name('view');
@@ -88,19 +93,6 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('user/media/upload', [UserController::class, 'upload'])
                 ->middleware(['permission:upload medias'])
                 ->name('media.save-upload');
-        });
-
-        /* User Routes */
-        Route::name('user-document.')->group(function () {
-            Route::get('user-document', [UserDocumentController::class, 'index'])
-                ->middleware(['permission:list users'])
-                ->name('index');
-        });
-
-        Route::name('user.')->group(function () {
-            Route::patch('user/document/{documentId}', [UserDocumentController::class, 'update'])
-                ->middleware(['permission:edit users'])
-                ->name('document.edit');
         });
 
         Route::name('alert.')->group(function () {
