@@ -23,6 +23,7 @@
                         <option value="{{$value}}">{{$label}}</option>
                     @endforeach
                 </select>
+                @error('verification_status') <div class="text text-danger">{{ $message }}</div> @enderror
             </div>
 
             @if (count($documents) > 0)
@@ -43,7 +44,11 @@
                             </div>
 
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" wire:model="documentsData.{{$document->_id}}.is_approved" class="custom-control-input" id="{{ 'switcher_' . $document->_id }}">
+                                <input
+                                    type="checkbox" wire:model="documentsData.{{$document->_id}}.is_approved"
+                                    class="custom-control-input"
+                                    id="{{ 'switcher_' . $document->_id }}">
+
                                 <label class="custom-control-label" for="{{ 'switcher_' . $document->_id }}">
                                     Reject / Approve
                                 </label>
@@ -52,10 +57,14 @@
                             @if (!Arr::get($documentsData, "$document->_id.is_approved", false))
                                 <div class="mt-2">
                                     <input type="text"
-                                           wire:model="documentsData.{{$document->_id}}.reject_reason"
+                                           wire:model="documentsData.{{$document->_id}}.reason"
                                            class="form-control"
                                            placeholder="Reject reason">
                                 </div>
+
+                                @error('documentsData.' . $document->_id . '.reason')
+                                    <span class="text text-danger">{{ $message }}</span>
+                                @enderror
                             @endif
                         </div>
                     @endforeach
@@ -63,9 +72,9 @@
             </div>
             @else
                 <div class="mt-2">
-                    <code>
+                    <div class="alert alert-secondary">
                         User haven't uploaded any selfies or credit cards documents yet.
-                    </code>
+                    </div>
                 </div>
             @endif
 

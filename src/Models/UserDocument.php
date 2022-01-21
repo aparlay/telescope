@@ -136,4 +136,10 @@ class UserDocument extends BaseModel
     {
         return UserDocumentStatus::from($this->status)->badgeColor();
     }
+
+    public function alertObjs()
+    {
+        return $this->hasMany(Alert::class, 'user_document_id');
+    }
+
 }
