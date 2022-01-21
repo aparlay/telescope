@@ -4,8 +4,8 @@ namespace Aparlay\Core\Admin\Filters;
 
 abstract class AbstractBaseFilter
 {
-    protected $fieldName;
-    protected $fieldType;
+    protected string $fieldName;
+    protected string $fieldType;
     protected $fieldValue;
 
     abstract public function __invoke($query);
