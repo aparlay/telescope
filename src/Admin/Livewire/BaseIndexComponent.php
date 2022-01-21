@@ -21,13 +21,6 @@ abstract class BaseIndexComponent extends Component
      */
     protected $query;
 
-    /**
-     * @var array
-     * Allowed filters as key => type pairs for e.g
-     * 'email' => 'string'
-     */
-    protected array $allowedFilters = [];
-
     public function updatingSearch()
     {
         $this->resetPage();
