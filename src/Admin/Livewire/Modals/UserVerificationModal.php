@@ -46,9 +46,10 @@ class UserVerificationModal extends Component
     {
         return [
             'verification_status' => Rule::in(array_keys(User::getVerificationStatuses())),
-            'documentsData' => ['array'],
+            'documentsData.*.is_approved' => ['required', 'boolean'],
             'documentsData.*.reason' => [
-                'required', 'min:5'
+                'required_if:documentsData.*.is_approved,false',
+                'min:5'
             ],
         ];
     }
@@ -56,7 +57,8 @@ class UserVerificationModal extends Component
     public function messages()
     {
         return [
-            'documentsData.*.reason.required' => 'You must specify reject reason for this document',
+            'documentsData.*.reason.required_if' => 'You must specify reject reason for this document',
+            'documentsData.*.reason.min' => 'You must specify at least 5 characters',
         ];
     }
 
@@ -87,7 +89,7 @@ class UserVerificationModal extends Component
             $document->status = $status;
             $reason = $datum['reason'] ?? '';
 
-            if (!$isApproved && $reason) {
+            if (!$isApproved) {
                 $alertRepository->firstOrCreate([
                     'status' => AlertStatus::NOT_VISITED->value,
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
