@@ -56,6 +56,7 @@ class UsersTable extends BaseIndexComponent
     public function render()
     {
         $users = $this->index();
+
         return view('default_view::livewire.users-table', [
            'users' => $users,
         ]);
