@@ -141,5 +141,4 @@ class UserDocument extends BaseModel
     {
         return $this->hasMany(Alert::class, 'user_document_id');
     }
-
 }
