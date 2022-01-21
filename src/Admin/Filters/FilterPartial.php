@@ -9,8 +9,7 @@ class FilterPartial extends AbstractBaseFilter
     public function __construct(
         protected string $fieldName,
         protected string $fieldType
-    )
-    {
+    ) {
     }
 
     public function __invoke($query)
