@@ -2,10 +2,10 @@
 
 namespace Aparlay\Core\Admin\Livewire\Modals;
 
+use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\AlertRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
-use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
@@ -49,7 +49,7 @@ class UserVerificationModal extends Component
             'documentsData.*.is_approved' => ['required', 'boolean'],
             'documentsData.*.reason' => [
                 'required_if:documentsData.*.is_approved,false',
-                'min:5'
+                'min:5',
             ],
         ];
     }
@@ -76,7 +76,6 @@ class UserVerificationModal extends Component
 
         $user = $this->userRepository->find($this->selectedUser);
 
-
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
 
@@ -89,7 +88,7 @@ class UserVerificationModal extends Component
             $document->status = $status;
             $reason = $datum['reason'] ?? '';
 
-            if (!$isApproved) {
+            if (! $isApproved) {
                 $alertRepository->firstOrCreate([
                     'status' => AlertStatus::NOT_VISITED->value,
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
