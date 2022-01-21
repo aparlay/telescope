@@ -94,7 +94,7 @@
         @foreach($users as $user)
             <tr>
                 <td>
-                    <img src=" {{ $user->avatar }}'?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
+                    <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
                     @if ($user->verification_status === UserVerificationStatus::VERIFIED->value)
                         <i class="fa fa-check"></i>
                     @endif
