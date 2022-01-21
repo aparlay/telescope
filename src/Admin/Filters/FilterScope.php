@@ -8,8 +8,8 @@ class FilterScope extends AbstractBaseFilter
         protected string $fieldName,
         protected string $fieldType,
         protected string $scopeName
-    )
-    {}
+    ) {
+    }
 
     public function __invoke($query)
     {
