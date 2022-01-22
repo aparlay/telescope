@@ -8,14 +8,13 @@ class Country
 {
     public static function getAlpha2AndNames()
     {
-        if (!Redis::exists('countries')) {
+        if (! Redis::exists('countries')) {
             foreach (\Aparlay\Core\Models\Country::get() as $country) {
                 $countries[$country->alpha2] = $country->name;
             }
 
             Redis::hMSet('countries', $countries);
         }
-
 
         return Redis::hGetAll('countries');
     }
@@ -49,7 +48,7 @@ class Country
     {
         $key = 'countries:'.$alpha2;
 
-        if (!Redis::exists($key)) {
+        if (! Redis::exists($key)) {
             self::load();
         }
 
