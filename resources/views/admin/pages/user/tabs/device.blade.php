@@ -28,8 +28,12 @@
             <th scope="row">{{ $i }}</th>
             <td>{{$userDevice['device_id']}}</td>
             <td>{{$userDevice['ip']}}</td>
-            <td><img src="{{ \Aparlay\Core\Helpers\Country::getFlagByAlpha2($ip2location['countryCode']) }}" alt="">
-                 {{ $ip2location['countryName'] ?? '' }} {{ $ip2location['countryCode'] ?? '' }}</td>
+            <td>
+                @if ($ip2location['countryCode'])
+                <img src="{{ \Aparlay\Core\Helpers\Country::getFlagByAlpha2($ip2location['countryCode']) }}" alt="">
+                 {{ $ip2location['countryName'] ?? '' }} {{ $ip2location['countryCode'] ?? '' }}
+                @endif
+            </td>
             <td>{{ $agent->getDevice() }}</td>
             <td>{{ $agent->getOS() }}</td>
             <td>{{ $agent->getBrowser() }}</td>
