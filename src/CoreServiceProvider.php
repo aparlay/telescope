@@ -7,7 +7,6 @@ use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
 use Aparlay\Core\Admin\Providers\EventServiceProvider;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
-use Aparlay\Core\Commands\AdminSyncLiveWireComponents;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
 use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CleanupCommand;
@@ -81,7 +80,6 @@ class CoreServiceProvider extends ServiceProvider
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,
                 CleanupCommand::class,
-                AdminSyncLiveWireComponents::class,
             ]);
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
