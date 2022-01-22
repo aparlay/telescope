@@ -32,6 +32,8 @@
                 @if (!empty($ip2location['countryCode']))
                 <img src="{{ \Aparlay\Core\Helpers\Country::getFlagByAlpha2($ip2location['countryCode']) }}" alt="">
                  {{ $ip2location['countryName'] ?? '' }} {{ $ip2location['countryCode'] ?? '' }}
+                @else
+                    Unknown!
                 @endif
             </td>
             <td>{{ $agent->getDevice() }}</td>
