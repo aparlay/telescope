@@ -131,6 +131,7 @@ class UserService extends AdminBaseService
             'visibility',
             'referral_id',
             'promo_link',
+            'country_alpha2',
         ]);
 
         $dataBooleans = [

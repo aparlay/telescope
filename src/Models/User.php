@@ -71,7 +71,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $user_agents
  * @property array       $stats
  * @property array       $last_location
- * @property string      $country
+ * @property string      $country_alpha2
  * @property array       $text_search
  * @property int         $verification_status
  *
@@ -140,7 +140,7 @@ class User extends Authenticatable implements JWTSubject
         'medias',
         'promo_link',
         'referral_id',
-        'country',
+        'country_alpha2',
         'user_agents',
         'stats',
         'last_location',
@@ -583,5 +583,20 @@ class User extends Authenticatable implements JWTSubject
         $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
 
         return Redis::sismember($cacheKey, (string) $this->_id);
+    }
+
+    public function getCountryLabelAttribute()
+    {
+        return \Aparlay\Core\Helpers\Country::getNameByAlpha2($this->country_alpha2);
+    }
+
+    public function getCountryFlagAttribute()
+    {
+        return \Aparlay\Core\Helpers\Country::getFlagByAlpha2($this->country_alpha2);
+    }
+
+    public function getCountryFlag24Attribute()
+    {
+        return \Aparlay\Core\Helpers\Country::getFlagByAlpha2($this->country_alpha2, '24');
     }
 }

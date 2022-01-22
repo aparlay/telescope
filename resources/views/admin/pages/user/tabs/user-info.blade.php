@@ -15,6 +15,16 @@
             </div>
         </div>
         <div class="form-group row">
+            <label for="country_alpha2" class="col-sm-2 col-form-label">Country</label>
+            <div class="col-sm-10">
+                <select name="country_alpha2" id="country_alpha2" class="form-control">
+                    @foreach(\Aparlay\Core\Helpers\Country::getAlpha2AndNames() as $alpha2 => $country)
+                        <option value="{{$alpha2}}" {!! $user->country_alpha2 == $alpha2 ? 'selected' : '' !!}>{{$country}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
             <label for="email" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
                 <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}">

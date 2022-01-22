@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Helpers\Country;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -41,6 +42,7 @@ class UserUpdateRequest extends FormRequest
                 'max:255',
             ],
             'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
+            'country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
             'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
             'status' => [Rule::in(array_keys(User::getStatuses()))],
