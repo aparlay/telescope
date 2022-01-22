@@ -46,6 +46,7 @@ class Country
      */
     private static function getByAlpha2(string $alpha2): array
     {
+        $alpha2 = \Str::lower($alpha2);
         $key = 'countries:'.$alpha2;
 
         if (! Redis::exists($key)) {
