@@ -106,7 +106,7 @@
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
                 </td>
                 <td>
-                    <img src="{{ $user->country_flag_24 }}" alt="{{ $user->country_alpha3 }}" class="mr-1 align-bottom">{{ $user->country_label }}
+                    <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}" class="mr-1 align-bottom">{{ $user->country_label }}
                 </td>
                 <td>
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">

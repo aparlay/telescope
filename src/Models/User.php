@@ -4,6 +4,7 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Services\OnlineUserService;
 use Aparlay\Core\Database\Factories\UserFactory;
+use Aparlay\Core\Helpers\Country as CountryHelper;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserFeature;
 use Aparlay\Core\Models\Enums\UserGender;
@@ -72,6 +73,9 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $stats
  * @property array       $last_location
  * @property string      $country_alpha2
+ * @property string      $country_label
+ * @property string      $country_flag
+ * @property array       $country_flags
  * @property array       $text_search
  * @property int         $verification_status
  *
@@ -587,16 +591,23 @@ class User extends Authenticatable implements JWTSubject
 
     public function getCountryLabelAttribute()
     {
-        return \Aparlay\Core\Helpers\Country::getNameByAlpha2($this->country_alpha2);
+        return CountryHelper::getNameByAlpha2($this->country_alpha2);
     }
 
     public function getCountryFlagAttribute()
     {
-        return \Aparlay\Core\Helpers\Country::getFlagByAlpha2($this->country_alpha2);
+        return CountryHelper::getFlagByAlpha2($this->country_alpha2);
     }
 
-    public function getCountryFlag24Attribute()
+    public function getCountryFlagsAttribute()
     {
-        return \Aparlay\Core\Helpers\Country::getFlagByAlpha2($this->country_alpha2, '24');
+        return [
+            '16' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '16'),
+            '24' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '24'),
+            '32' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '32'),
+            '48' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '48'),
+            '64' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '64'),
+            '128' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '128'),
+        ];
     }
 }
