@@ -3,7 +3,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('admin/assets/css/adminStyles.css') }}" >
     <link rel="stylesheet" href="{{ asset('admin/assets/css/adminStyles.css') }}" >
-    <link rel="stylesheet" href="/css/app.css" >
+    <link rel="stylesheet" href="/css/admin.css" >
 
     @livewireStyles
 @stop
@@ -39,6 +39,6 @@
     @livewireScripts
     <livewire:modals/>
     <script src="{{ asset('vendor/livewire/bootstrap.modals.js') }}"></script>
-    <script src="/js/app.js"></script>
+    <script src="/js/admin.js"></script>
 @endsection
 
