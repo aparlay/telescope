@@ -28,7 +28,7 @@ abstract class BaseIndexComponent extends Component
         $this->resetPage();
     }
 
-    public abstract function getAllowedSorts();
+    abstract public function getAllowedSorts();
 
     protected function getFilters()
     {
@@ -42,10 +42,8 @@ abstract class BaseIndexComponent extends Component
             ->applyFilters($this->getFilters())
             ->applySorts($this->getAllowedSorts());
 
-
         return $queryBuilder->getQuery();
     }
-
 
     public function sort($field)
     {
@@ -54,7 +52,6 @@ abstract class BaseIndexComponent extends Component
         $this->sort = [];
         $this->sort[$field] = $newSort;
     }
-
 
     public function index()
     {

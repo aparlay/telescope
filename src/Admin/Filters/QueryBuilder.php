@@ -73,26 +73,23 @@ class QueryBuilder
         return $this;
     }
 
-
     public function getSort()
     {
         $sortField = array_key_first($this->sort);
 
         if ($sortField) {
-
             $orders = [
-                -1 => 'DESC', 1 => 'ASC'
+                -1 => 'DESC', 1 => 'ASC',
             ];
 
             return collect([
                 'column' => $sortField,
-                'direction' => $orders[$this->sort[$sortField]]
+                'direction' => $orders[$this->sort[$sortField]],
             ]);
         }
 
         return false;
     }
-
 
     public function applySorts($allowedSorts)
     {
@@ -106,7 +103,6 @@ class QueryBuilder
 
         $sort = $this->getSort();
 
-
         if ($sort) {
             $this->query->orderBy($sort->get('column'), $sort->get('direction'));
         }
@@ -118,8 +114,4 @@ class QueryBuilder
     {
         return $this->query;
     }
-
-
-
-
 }

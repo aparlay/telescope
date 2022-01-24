@@ -29,7 +29,7 @@ class UsersTable extends BaseIndexComponent
             'gender',
             'status',
             'verification_status',
-            'created_at'
+            'created_at',
         ];
     }
 
