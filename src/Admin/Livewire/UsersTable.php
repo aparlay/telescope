@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use App\Models\User;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
@@ -27,6 +28,9 @@ class UsersTable extends BaseIndexComponent
      */
     protected function getFilters()
     {
+        $verificationStatusFilter =  new FilterExact('verification_status', 'int');
+        $verificationStatusFilter->setDefaultValue(UserVerificationStatus::PENDING->value);
+
         return [
             new FilterPartial('username', 'string'),
             new FilterExact('gender', 'int'),
@@ -34,7 +38,7 @@ class UsersTable extends BaseIndexComponent
             new FilterScope('country', 'string', 'countryAlpha2'),
             new FilterExact('status', 'int'),
             new FilterScope('text_search', 'string', 'textSearch'),
-            new FilterExact('verification_status', 'int'),
+            $verificationStatusFilter,
             new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];
     }

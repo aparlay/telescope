@@ -10,6 +10,8 @@ abstract class AbstractBaseFilter
 
     abstract public function __invoke($query);
 
+
+
     /**
      * @return mixed
      */
@@ -40,5 +42,10 @@ abstract class AbstractBaseFilter
     public function setFieldValue($fieldValue): void
     {
         $this->fieldValue = $fieldValue;
+    }
+
+    public function setDefaultValue($fieldValue)
+    {
+        $this->setFieldValue($fieldValue);
     }
 }
