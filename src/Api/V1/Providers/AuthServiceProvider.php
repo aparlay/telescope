@@ -2,10 +2,12 @@
 
 namespace Aparlay\Core\Api\V1\Providers;
 
+use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Models\UserDocument;
+use Aparlay\Core\Api\V1\Policies\AlertPolicy;
 use Aparlay\Core\Api\V1\Policies\MediaLikePolicy;
 use Aparlay\Core\Api\V1\Policies\MediaPolicy;
 use Aparlay\Core\Api\V1\Policies\UserDocumentPolicy;
@@ -26,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         Media::class => MediaPolicy::class,
         User::class => UserPolicy::class,
         MediaLike::class => MediaLikePolicy::class,
+        Alert::class => AlertPolicy::class,
         UserDocument::class => UserDocumentPolicy::class,
     ];
 

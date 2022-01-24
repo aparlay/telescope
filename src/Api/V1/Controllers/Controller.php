@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
+use Aparlay\Core\Api\V1\Services\AbstractService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -62,5 +63,12 @@ class Controller extends BaseController
         }
 
         return response($response, $code, $headers);
+    }
+
+    protected function injectAuthUser(AbstractService $service)
+    {
+        if (auth()->check()) {
+            $service->setUser(auth()->user());
+        }
     }
 }
