@@ -25,8 +25,9 @@ class AlertRepository
      * @param ObjectId $alertId
      * @return Alert
      */
-    public function update(array $data, ObjectId $alertId): Alert
+    public function update(array $data, ObjectId|string $alertId): Alert
     {
+        $alertId = $alertId instanceof ObjectId ? $alertId : new ObjectId($alertId);
         $alert = $this->model::find($alertId);
         $alert->fill($data);
 
