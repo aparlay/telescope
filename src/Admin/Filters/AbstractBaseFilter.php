@@ -47,5 +47,7 @@ abstract class AbstractBaseFilter
     public function setDefaultValue($fieldValue)
     {
         $this->setFieldValue($fieldValue);
+
+        return $this;
     }
 }
