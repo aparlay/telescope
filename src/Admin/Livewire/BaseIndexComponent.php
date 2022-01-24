@@ -14,6 +14,8 @@ abstract class BaseIndexComponent extends Component
     public int $perPage = 10;
     protected $paginationTheme = 'bootstrap';
     public array $filter = [];
+    public array $sort = [];
+
     protected $model;
 
     /**
@@ -26,6 +28,8 @@ abstract class BaseIndexComponent extends Component
         $this->resetPage();
     }
 
+    public abstract function getAllowedSorts();
+
     protected function getFilters()
     {
         return [];
@@ -33,10 +37,24 @@ abstract class BaseIndexComponent extends Component
 
     public function buildQuery(): Builder
     {
-        return (new QueryBuilder())
-            ->for($this->model, $this->filter)
-            ->applyFilters($this->getFilters());
+        $queryBuilder = (new QueryBuilder())
+            ->for($this->model, $this->filter, $this->sort)
+            ->applyFilters($this->getFilters())
+            ->applySorts($this->getAllowedSorts());
+
+
+        return $queryBuilder->getQuery();
     }
+
+
+    public function sort($field)
+    {
+        $value = $this->sort[$field] ?? 1;
+        $newSort = $value * -1;
+        $this->sort = [];
+        $this->sort[$field] = $newSort;
+    }
+
 
     public function index()
     {

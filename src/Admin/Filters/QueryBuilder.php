@@ -9,6 +9,8 @@ class QueryBuilder
 {
     protected $query;
     protected $filter;
+    protected $sort;
+
     private $allowedFilters;
 
     /**
@@ -16,10 +18,11 @@ class QueryBuilder
      * @param $filter
      * @return $this
      */
-    public function for($subject, $filter): self
+    public function for($subject, $filter, $sort): self
     {
         $this->query = $subject::query();
         $this->filter = $filter;
+        $this->sort = $sort;
 
         return $this;
     }
@@ -67,6 +70,56 @@ class QueryBuilder
             $filter($this->query);
         }
 
+        return $this;
+    }
+
+
+    public function getSort()
+    {
+        $sortField = array_key_first($this->sort);
+
+        if ($sortField) {
+
+            $orders = [
+                -1 => 'DESC', 1 => 'ASC'
+            ];
+
+            return collect([
+                'column' => $sortField,
+                'direction' => $orders[$this->sort[$sortField]]
+            ]);
+        }
+
+        return false;
+    }
+
+
+    public function applySorts($allowedSorts)
+    {
+        foreach ($this->sort as $sortKey => $sortValue) {
+            $sort = collect($allowedSorts)->search($sortKey);
+
+            if ($sort === false) {
+                throw new \ErrorException('This sort is not allowed: '.$sortKey);
+            }
+        }
+
+        $sort = $this->getSort();
+
+
+        if ($sort) {
+            $this->query->orderBy($sort->get('column'), $sort->get('direction'));
+        }
+
+        return $this;
+    }
+
+    public function getQuery()
+    {
         return $this->query;
     }
+
+
+
+
 }

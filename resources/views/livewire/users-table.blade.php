@@ -29,19 +29,19 @@
     <table class="table table-striped">
         <tbody>
         <tr>
-            <td class="col-md-2">
+            <td class="col-md-2" wire:model="sort.username" wire:click="sort('username')">
                 <div>
                     <label for="">Username</label>
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>
             </td>
-            <td class="col-md-2">
+            <td class="col-md-2" wire:model="sort.email" wire:click="sort('email')">
                 <div>
                     <label for="">Email</label>
                     <input class="form-control" type="text" wire:model="filter.email"/>
                 </div>
             </td>
-            <td class="col-md-2">
+            <td class="col-md-2" wire:model="sort.country" wire:click="sort('country')">
                 <div>
                     <label for="">Country</label>
                     <select class="form-control" wire:model="filter.country">
@@ -85,7 +85,7 @@
                     </select>
                 </div>
             </td>
-            <td class="col-md-2">
+            <td class="col-md-2" wire:model="sort.created_at" wire:click="sort('created_at')">
                 <div>
                     <label for="">Created at</label>
 
@@ -113,7 +113,8 @@
         @foreach($users as $user)
             <tr>
                 <td>
-                    <a href="{{$user->admin_url}}" title="{{$user->username}} [{{$user->is_online ? 'online' : 'offline'}}] [{{User::getVerificationStatuses()[$user->verification_status]}}]">
+                    <a href="{{$user->admin_url}}"
+                       title="{{$user->username}} [{{$user->is_online ? 'online' : 'offline'}}] [{{User::getVerificationStatuses()[$user->verification_status] ?? false}}]">
                     <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
                      {{$user->username }}
                         <i title="{{$user->is_online ? 'online' : 'offline'}}" @class(['fa-user', 'ml-1', 'fas text-success' => $user->is_online, 'far text-gray' => !$user->is_online])></i>
@@ -149,7 +150,6 @@
                             {{ UserVerificationStatus::from($user->verification_status)->label() }}
                         </span>
                             @else
-                                {{$user->omg}}
                                 <span class="badge bg-info">None</span>
                             @endif
                         </div>

@@ -13,14 +13,24 @@ use Jenssegers\Mongodb\Eloquent\Builder;
 class UsersTable extends BaseIndexComponent
 {
     public $model = User::class;
-
-    public $selectedUser;
-
     protected $listeners = ['updateParent'];
 
     public function updateParent()
     {
         $this->render();
+    }
+
+    public function getAllowedSorts()
+    {
+        return [
+            'username',
+            'email',
+            'country',
+            'gender',
+            'status',
+            'verification_status',
+            'created_at'
+        ];
     }
 
     /**
@@ -47,7 +57,6 @@ class UsersTable extends BaseIndexComponent
     {
         $query = parent::buildQuery();
 
-        $query->orderByDesc('created_at');
         $query->options(['allowDiskUse' => true]);
 
         return $query;
