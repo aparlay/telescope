@@ -154,13 +154,12 @@ class CoreServiceProvider extends ServiceProvider
         $components = [
             'users-table' => UsersTable::class,
             'modals.user-verification-modal' => UserVerificationModal::class,
-            'date-picker' => DatePicker::class
+            'date-picker' => DatePicker::class,
         ];
 
         foreach ($components as $name => $class) {
             Livewire::component($name, $class);
         }
-
 
         Blade::component('date-picker', DatePicker::class);
     }

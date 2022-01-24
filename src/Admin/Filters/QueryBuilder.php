@@ -31,20 +31,20 @@ class QueryBuilder
             $this->allowedFilters[$filter->getFieldName()] = $filter;
         }
 
-
         $preparedFilters = collect($this->filter)
             // filter empty string values and filters which are not presented in getFilters() array
             ->filter(function ($value, $key) {
                 $filterAllowed = Arr::get($this->allowedFilters, $key);
+
                 return $value !== '' && $filterAllowed;
             })->map(function ($value, $key) {
                 /** @var AbstractBaseFilter $filter */
                 $filter = $this->allowedFilters[$key];
                 settype($value, $filter->getCastType());
                 $filter->setFieldValue($value);
+
                 return $value;
             });
-
 
         return $preparedFilters;
     }

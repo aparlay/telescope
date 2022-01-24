@@ -6,8 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use MongoDB\BSON\UTCDateTime;
 
-class FilterDateRange extends AbstractBaseFilter {
-
+class FilterDateRange extends AbstractBaseFilter
+{
     public function __construct(
         protected string $fieldName,
         protected string $fieldType,
