@@ -29,7 +29,7 @@ class AlertRepository
     {
         $alertId = $alertId instanceof ObjectId ? $alertId : new ObjectId($alertId);
         $alert = $this->model::find($alertId);
-        $alert->fill($data);
+        $alert->update($data);
 
         return $alert;
     }
