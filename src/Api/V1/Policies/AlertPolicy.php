@@ -35,7 +35,7 @@ class AlertPolicy
     {
         $userId = $user?->_id;
 
-        if ((string)$userId === (string)$alert->user_id) {
+        if ((string) $userId === (string) $alert->user_id) {
             return Response::allow();
         }
 
