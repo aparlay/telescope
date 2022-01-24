@@ -15,6 +15,7 @@ use ErrorException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
 use Maklad\Permission\Models\Role;
 
 class UserController extends Controller
@@ -106,5 +107,39 @@ class UserController extends Controller
         $result = UploadService::chunkUpload($request);
 
         return response($result['data'], $result['code'], []);
+    }
+
+    public function loginAsUser(User $user)
+    {
+        $token = auth('api')->login($user);
+
+        $result = $this->respondWithToken($token);
+        $cookie1 = Cookie::make(
+            '__Secure_token',
+            $result['token'],
+            $result['token_expired_at'] / 60
+        );
+        $cookie2 = Cookie::make(
+            '__Secure_refresh_token',
+            $result['refresh_token'],
+            $result['refresh_token_expired_at'] / 60
+        );
+        $cookie3 = Cookie::make(
+            '__Secure_username',
+            auth('api')->user()->username,
+            $result['refresh_token_expired_at'] / 60,
+        );
+
+        return redirect()->away(config('app.frontend_url'))->withCookies([$cookie1, $cookie2, $cookie3]);
+    }
+
+    protected function respondWithToken(string $token): array
+    {
+        return [
+            'token' => $token,
+            'token_expired_at' => auth('api')->factory()->getTTL() * 60,
+            'refresh_token' => $token,
+            'refresh_token_expired_at' => auth('api')->factory()->getTTL() * 60,
+        ];
     }
 }

@@ -93,6 +93,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('user/media/upload', [UserController::class, 'upload'])
                 ->middleware(['permission:upload medias'])
                 ->name('media.save-upload');
+            Route::get('user/login/{user}', [UserController::class, 'loginAsUser'])
+                ->middleware(['permission:edit users'])
+                ->name('login_as_user');
         });
 
         Route::name('alert.')->group(function () {
