@@ -10,8 +10,6 @@ abstract class AbstractBaseFilter
 
     abstract public function __invoke($query);
 
-
-
     /**
      * @return mixed
      */

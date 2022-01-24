@@ -28,7 +28,7 @@ class UsersTable extends BaseIndexComponent
      */
     protected function getFilters()
     {
-        $verificationStatusFilter =  new FilterExact('verification_status', 'int');
+        $verificationStatusFilter = new FilterExact('verification_status', 'int');
         $verificationStatusFilter->setDefaultValue(UserVerificationStatus::PENDING->value);
 
         return [
