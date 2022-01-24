@@ -113,12 +113,14 @@
         @foreach($users as $user)
             <tr>
                 <td>
-                    <a href="{{$user->admin_url}}">
-                        <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt=""
-                             class="img-circle img-size-50 mr-2">
-                        {{$user->username }}
+                    <a href="{{$user->admin_url}}" title="{{$user->username}} [{{$user->is_online ? 'online' : 'offline'}}] [{{User::getVerificationStatuses()[$user->verification_status]}}]">
+                    <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
+                     {{$user->username }}
+                        <i title="{{$user->is_online ? 'online' : 'offline'}}" @class(['fa-user', 'ml-1', 'fas text-success' => $user->is_online, 'far text-gray' => !$user->is_online])></i>
+                        @if ($user->is_verified)
+                            <img src="{{ asset('admin/assets/img/verify-16.png') }}" alt="Verified">
+                        @endif
                     </a>
-                    <span class="ml-1 {{ $user->is_online ? 'text-info' : 'text-gray' }} text-sm far fa-circle"></span>
                 </td>
                 <td>
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>

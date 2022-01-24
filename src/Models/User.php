@@ -617,4 +617,9 @@ class User extends Authenticatable implements JWTSubject
             '128' => '',
         ];
     }
+
+    public function getIsVerifiedAttribute()
+    {
+        return $this->verification_status === UserVerificationStatus::VERIFIED->value;
+    }
 }

@@ -18,8 +18,8 @@ class AlertResource extends JsonResource
     {
         return [
             '_id' => (string) $this->_id,
-            'title' => $this->title,
             'reason' => $this->reason,
+            'status' => $this->status,
             'created_at' => $this->created_at->valueOf(),
         ];
     }
