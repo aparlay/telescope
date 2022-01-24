@@ -3,6 +3,7 @@
     use Aparlay\Core\Models\Enums\UserGender;
     use Aparlay\Core\Models\Enums\UserStatus;
     use Aparlay\Core\Models\Enums\UserVerificationStatus;
+    use \Aparlay\Core\Models\Country;
 @endphp
 
 <div class="user-table">
@@ -29,30 +30,36 @@
     <table class="table table-striped">
         <tbody>
         <tr>
-            <td class="col-md-2" wire:model="sort.username" wire:click="sort('username')">
+            <th
+                @class(['col-md-2 sort-col', 'sort-asc' => Arr::get($sort, 'username') === 1, 'sort-desc' => Arr::get($sort, 'username') === -1])
+                wire:model="sort.username"
+                wire:click="sort('username')">
                 <div>
                     <label for="">Username</label>
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>
-            </td>
-            <td class="col-md-2" wire:model="sort.email" wire:click="sort('email')">
+            </th>
+            <th
+                @class(['col-md-2 sort-col', 'sort-asc' => Arr::get($sort, 'email') === 1, 'sort-desc' => Arr::get($sort, 'email') === -1])
+                wire:model="sort.email"
+                wire:click="sort('email')">
                 <div>
                     <label for="">Email</label>
                     <input class="form-control" type="text" wire:model="filter.email"/>
                 </div>
-            </td>
-            <td class="col-md-2" wire:model="sort.country" wire:click="sort('country')">
+            </th>
+            <th class="col-md-2" wire:model="sort.country" wire:click="sort('country')">
                 <div>
                     <label for="">Country</label>
                     <select class="form-control" wire:model="filter.country">
                         <option value="">Any</option>
-                        @foreach(\Aparlay\Core\Models\Country::get() as $country)
+                        @foreach(Country::get() as $country)
                             <option value="{{$country->alpha2}}">{{$country->name}}</option>
                         @endforeach
                     </select>
                 </div>
-            </td>
-            <td class="col-md-1">
+            </th>
+            <th class="col-md-1">
                 <div>
                     <label for="">Gender</label>
                     <select class="form-control" wire:model="filter.gender">
@@ -62,7 +69,7 @@
                         @endforeach
                     </select>
                 </div>
-            </td>
+            </th>
             <td class="col-md-1">
                 <div>
                     <label for="">Status</label>
@@ -74,7 +81,7 @@
                     </select>
                 </div>
             </td>
-            <td class="col-md-1">
+            <th class="col-md-1">
                 <div>
                     <label for="">Verification</label>
                     <select class="form-control" wire:model="filter.verification_status">
@@ -84,8 +91,11 @@
                         @endforeach
                     </select>
                 </div>
-            </td>
-            <td class="col-md-2" wire:model="sort.created_at" wire:click="sort('created_at')">
+            </th>
+            <th
+                @class(['col-md-2 sort-col', 'sort-asc' => Arr::get($sort, 'created_at') === 1, 'sort-desc' => Arr::get($sort, 'created_at') === -1])
+                wire:model="sort.created_at"
+                wire:click="sort('created_at')">
                 <div>
                     <label for="">Created at</label>
 
@@ -106,7 +116,7 @@
                         </div>
                     </div>
                 </div>
-            </td>
+            </th>
             <td></td>
         </tr>
 
