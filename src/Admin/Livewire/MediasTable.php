@@ -54,8 +54,9 @@ class MediasTable extends BaseIndexComponent
     }
 
     public function render()
-    {  
+    {
         dd($this->index());
+
         return view('default_view::livewire.medias-table', [
            'medias' => $this->index(),
         ]);
