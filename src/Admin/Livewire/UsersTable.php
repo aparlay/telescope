@@ -2,12 +2,13 @@
 
 namespace Aparlay\Core\Admin\Livewire;
 
+use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
 use App\Models\User;
 use Jenssegers\Mongodb\Eloquent\Builder;
-use function view;
+
 
 class UsersTable extends BaseIndexComponent
 {
@@ -16,6 +17,7 @@ class UsersTable extends BaseIndexComponent
     public $selectedUser;
 
     protected $listeners = ['updateParent'];
+
 
     public function updateParent()
     {
@@ -35,8 +37,10 @@ class UsersTable extends BaseIndexComponent
             new FilterExact('status', 'int'),
             new FilterScope('text_search', 'string', 'textSearch'),
             new FilterExact('verification_status', 'int'),
+            new FilterDateRange('created_at', 'array', ['start', 'end'])
         ];
     }
+
 
     public function buildQuery(): Builder
     {

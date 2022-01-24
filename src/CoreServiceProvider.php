@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core;
 
+use Aparlay\Core\Admin\Components\DatePicker;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
@@ -24,6 +25,7 @@ use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
@@ -152,10 +154,14 @@ class CoreServiceProvider extends ServiceProvider
         $components = [
             'users-table' => UsersTable::class,
             'modals.user-verification-modal' => UserVerificationModal::class,
+            'date-picker' => DatePicker::class
         ];
 
         foreach ($components as $name => $class) {
             Livewire::component($name, $class);
         }
+
+
+        Blade::component('date-picker', DatePicker::class);
     }
 }

@@ -88,6 +88,23 @@
             <td class="col-md-2">
                 <div>
                     <label for="">Created at</label>
+
+                    <div class="row">
+                        <div class="col">
+                            <x-date-picker
+                                wire:model.lazy="filter.created_at.start"
+                                autocomplete="off"
+                                placeholder="Start"
+                            />
+                        </div>
+                        <div class="col">
+                            <x-date-picker
+                                wire:model.lazy="filter.created_at.end"
+                                autocomplete="off"
+                                placeholder="End"
+                            />
+                        </div>
+                    </div>
                 </div>
             </td>
             <td></td>
@@ -97,8 +114,9 @@
             <tr>
                 <td>
                     <a href="{{$user->admin_url}}">
-                    <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
-                     {{$user->username }}
+                        <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt=""
+                             class="img-circle img-size-50 mr-2">
+                        {{$user->username }}
                     </a>
                     <span class="ml-1 {{ $user->is_online ? 'text-info' : 'text-gray' }} text-sm far fa-circle"></span>
                 </td>
@@ -106,7 +124,8 @@
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
                 </td>
                 <td>
-                    <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}" class="mr-1 align-bottom">{{ $user->country_label }}
+                    <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}"
+                         class="mr-1 align-bottom">{{ $user->country_label }}
                 </td>
                 <td>
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
@@ -123,7 +142,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             @if ($user->verification_status)
-                                <span class="badge bg-{{ UserVerificationStatus::from($user->verification_status)->badgeColor() }}">
+                                <span
+                                    class="badge bg-{{ UserVerificationStatus::from($user->verification_status)->badgeColor() }}">
                             {{ UserVerificationStatus::from($user->verification_status)->label() }}
                         </span>
                             @else

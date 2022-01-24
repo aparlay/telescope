@@ -6,7 +6,7 @@ abstract class AbstractBaseFilter
 {
     protected string $fieldName;
     protected string $fieldType;
-    protected $fieldValue;
+    protected string|int|array $fieldValue;
 
     abstract public function __invoke($query);
 
