@@ -34,6 +34,7 @@ class User extends UserBase
         'referral_id',
         'promo_link',
         'verification_status',
+        'country_alpha2',
     ];
 
     /**

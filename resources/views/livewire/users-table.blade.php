@@ -29,26 +29,30 @@
     <table class="table table-striped">
         <tbody>
         <tr>
-            <td>
+            <td class="col-md-2">
                 <div>
                     <label for="">Username</label>
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>
             </td>
-
-            <td>
+            <td class="col-md-2">
                 <div>
                     <label for="">Email</label>
                     <input class="form-control" type="text" wire:model="filter.email"/>
                 </div>
             </td>
-            <td>
+            <td class="col-md-2">
                 <div>
-                    <label for="">Phone number</label>
-                    <input class="form-control" type="text" wire:model="filter.phone_number"/>
+                    <label for="">Country</label>
+                    <select class="form-control" wire:model="filter.country">
+                        <option value="">Any</option>
+                        @foreach(\Aparlay\Core\Models\Country::get() as $country)
+                            <option value="{{$country->alpha2}}">{{$country->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </td>
-            <td>
+            <td class="col-md-1">
                 <div>
                     <label for="">Gender</label>
                     <select class="form-control" wire:model="filter.gender">
@@ -59,7 +63,7 @@
                     </select>
                 </div>
             </td>
-            <td>
+            <td class="col-md-1">
                 <div>
                     <label for="">Status</label>
                     <select class="form-control" wire:model="filter.status">
@@ -70,10 +74,9 @@
                     </select>
                 </div>
             </td>
-
-            <td>
+            <td class="col-md-1">
                 <div>
-                    <label for="">Verification Status</label>
+                    <label for="">Verification</label>
                     <select class="form-control" wire:model="filter.verification_status">
                         <option value="">Any</option>
                         @foreach(User::getVerificationStatuses() as $value => $label)
@@ -82,8 +85,7 @@
                     </select>
                 </div>
             </td>
-
-            <td>
+            <td class="col-md-2">
                 <div>
                     <label for="">Created at</label>
                 </div>
@@ -94,14 +96,18 @@
         @foreach($users as $user)
             <tr>
                 <td>
+                    <a href="{{$user->admin_url}}">
                     <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
                      {{$user->username }}
+                    </a>
                     <span class="ml-1 {{ $user->is_online ? 'text-info' : 'text-gray' }} text-sm far fa-circle"></span>
                 </td>
                 <td>
-                    {{ $user->email }}
+                    <a href="{{$user->admin_url}}">{{ $user->email }}</a>
                 </td>
-                <td>{{ $user->phone_number }}</td>
+                <td>
+                    <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}" class="mr-1 align-bottom">{{ $user->country_label }}
+                </td>
                 <td>
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
                         {{ UserGender::from($user->gender)->label() }}

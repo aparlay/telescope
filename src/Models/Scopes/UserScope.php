@@ -42,6 +42,14 @@ trait UserScope
     /**
      * @return mixed
      */
+    public function scopeCountryAlpha2(Builder $query, string $alpha2): Builder
+    {
+        return $query->where('country_alpha2', $alpha2);
+    }
+
+    /**
+     * @return mixed
+     */
     public function scopeUsername(Builder $query, string $username): Builder
     {
         return $query->where('username', $username);

@@ -5,6 +5,7 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Api\V1\Notifications\UserDeactivateAccount;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Helpers\Cdn;
+use Aparlay\Core\Helpers\IP;
 use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
@@ -18,6 +19,7 @@ use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Redis;
+use IP2Location\Database;
 
 class UserObserver extends BaseModelObserver
 {
@@ -59,6 +61,12 @@ class UserObserver extends BaseModelObserver
 
         if (empty($model->verification_status)) {
             $model->verification_status = UserVerificationStatus::UNVERIFIED->value;
+        }
+
+        if (empty($model->country_alpha2)) {
+            $ip2location = (new Database(database_path().'/ip2location/IP2LOCATION-LITE-DB11.BIN', Database::FILE_IO))
+                ->lookup(IP::trueAddress(), Database::ALL);
+            $model->country_alpha2 = $ip2location['countryCode'] ? \Str::lower($ip2location['countryCode']) : null;
         }
 
         parent::creating($model);
