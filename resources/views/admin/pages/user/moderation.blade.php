@@ -23,7 +23,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12 table-responsive">
-                        <livewire:users-table />
+                        <livewire:users-table :filter="['verification_status' => 1]"/>
                     </div>
                 </div>
             </div>
