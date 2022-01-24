@@ -8,7 +8,6 @@ use Aparlay\Core\Admin\Controllers\MediaController;
 use Aparlay\Core\Admin\Controllers\RoleController;
 use Aparlay\Core\Admin\Controllers\SettingController;
 use Aparlay\Core\Admin\Controllers\UserController;
-use Aparlay\Core\Admin\Controllers\UserDocumentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -74,7 +73,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:list users'])
                 ->name('index');
 
-            Route::get('user-moderation', [UserController::class, 'moderation'])
+            Route::get('user/moderation', [UserController::class, 'moderation'])
                 ->middleware(['permission:list users'])
                 ->name('moderation');
 
