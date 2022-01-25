@@ -20,19 +20,20 @@ class FilterDateRange extends AbstractBaseFilter
         $rangeNameStart = Arr::get($this->rangeNames, 0);
         $rangeNameEnd = Arr::get($this->rangeNames, 1);
 
-        $startDate = Arr::get($this->fieldValue, $rangeNameStart);
-        $endDate = Arr::get($this->fieldValue, $rangeNameEnd);
+        $startDate = Arr::get($this->fieldValue, $rangeNameStart, false);
+        $endDate = Arr::get($this->fieldValue, $rangeNameEnd, false);
 
-        if ($startDate && $endDate) {
-            $isValidaDateStart = Carbon::canBeCreatedFromFormat($startDate, 'd/m/Y');
-            $isValidaDateEnd = Carbon::canBeCreatedFromFormat($endDate, 'd/m/Y');
+        $isDateStartValid = Carbon::canBeCreatedFromFormat($startDate, 'Y-m-d');
+        $isDateEndValid = Carbon::canBeCreatedFromFormat($endDate, 'Y-m-d');
 
-            if ($isValidaDateStart && $isValidaDateEnd) {
-                $start = new UTCDateTime(Carbon::createFromFormat('d/m/Y', $startDate)->endOfDay());
-                $end = new UTCDateTime(Carbon::createFromFormat('d/m/Y', $endDate)->endOfDay());
+        if ($isDateStartValid) {
+            $start = new UTCDateTime(Carbon::createFromFormat('Y-m-d', $startDate)->endOfDay());
+            $query->where('created_at', '>=', $start);
+        }
 
-                $query->whereBetween('created_at', [$start, $end]);
-            }
+        if ($isDateEndValid) {
+            $start = new UTCDateTime(Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay());
+            $query->where('created_at', '<=', $start);
         }
     }
 }

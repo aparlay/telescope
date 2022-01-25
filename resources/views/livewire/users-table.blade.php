@@ -10,29 +10,34 @@
     <div class="filters pb-3">
         <div class="row">
             <div class="col-md-3">
-                <label for="">Text Search</label>
+                <label for="">Search</label>
                 <input class="form-control" type="text" wire:model="filter.text_search"/>
             </div>
 
-            <div class="col-md-3">
-                <label for="">Created At Start</label>
-                <x-date-picker
-                    wire:model.lazy="filter.created_at.start"
-                    autocomplete="off"
-                    placeholder="Start"
-                />
-            </div>
-            <div class="col-md-3">
-                <label for="">Created At End</label>
-                <x-date-picker
-                    wire:model.lazy="filter.created_at.end"
-                    autocomplete="off"
-                    placeholder="End"
-                />
+
+            <div class="col-md-2 offset-6">
+                <div class="row">
+                    <div class="col">
+                        <label for="">Start Date</label>
+                        <x-date-picker
+                                wire:model.lazy="filter.created_at.start"
+                                autocomplete="off"
+                                placeholder="Start"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="">End Date</label>
+                        <x-date-picker
+                                wire:model.lazy="filter.created_at.end"
+                                autocomplete="off"
+                                placeholder="End"
+                        />
+                    </div>
+                </div>
             </div>
 
 
-            <div class="col-md-1  ml-auto">
+            <div class="col-md-1 ml-auto">
                 <label for="">Per Page</label>
                 <select class="form-control" wire:model="perPage">
                     <option value="5">5</option>
@@ -40,6 +45,7 @@
                     <option value="15">15</option>
                 </select>
             </div>
+
         </div>
     </div>
 

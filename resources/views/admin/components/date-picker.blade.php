@@ -5,7 +5,7 @@
         x-ref="input"
         class="form-control"
 
-        x-init="new Pikaday({ field: $refs.input, format: 'DD/MM/YYYY' })"
+        x-init="new Pikaday({ field: $refs.input, format: 'YYYY-MM-DD' })"
         type="text"
         {{ $attributes }}
     >
