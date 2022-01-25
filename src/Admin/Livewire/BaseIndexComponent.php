@@ -26,6 +26,16 @@ abstract class BaseIndexComponent extends Component
         $this->resetPage();
     }
 
+    public function updatingFilter()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingPerpage()
+    {
+        $this->resetPage();
+    }
+
     protected function getFilters()
     {
         return [];

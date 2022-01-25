@@ -9,6 +9,7 @@ use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\Regex;
 
 trait MediaScope
 {
@@ -210,4 +211,13 @@ trait MediaScope
     {
         return $query->orderBy('sort_score', 'desc');
     }
+
+       /**
+     * @return mixed
+     */
+    public function scopeUsername(Builder $query, string $username): Builder
+    {   
+        return $query->where('creator.username' ,'regex', new Regex('^'.$username));
+    }
+
 }

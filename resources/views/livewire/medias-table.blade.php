@@ -36,7 +36,7 @@
             <td class="col-md-2">
                 <div> 
                     <label for="">Created By</label>
-                    <input class="form-control" type="text" wire:model="filter.creator.username"/>
+                    <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>
             </td>
 
