@@ -189,7 +189,15 @@ class Media extends BaseModel
      */
     public function userObj()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'creator._id');
+    }
+
+    /**
+     * Get the phone associated with the user.
+     */
+    public function creatorObj()
+    {
+        return $this->belongsTo(User::class, 'creator._id');
     }
 
     /**
