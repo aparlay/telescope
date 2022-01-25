@@ -22,7 +22,6 @@ enum NoteType: string implements Enum
             self::WARNING_MESSAGE => __('warning message'),
             self::BAN_ALL_CC_PAYMENT => __('ban all cc payments'),
             self::UNBAN_ALL_CC_PAYMENT => __('unban all cc payments'),
-
         };
     }
 
