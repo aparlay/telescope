@@ -19,7 +19,6 @@ abstract class BaseIndexComponent extends Component
     public $sortDirection = 'asc';
     public $sortClass = 'fas fa-angle-down';
 
-
     /**
      * @var Builder
      */

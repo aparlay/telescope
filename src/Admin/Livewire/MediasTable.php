@@ -42,14 +42,15 @@ class MediasTable extends BaseIndexComponent
     {
         $query = parent::buildQuery();
 
-        $query->orderBy($this->sortField,$this->sortDirection);
+        $query->orderBy($this->sortField, $this->sortDirection);
         $query->options(['allowDiskUse' => true]);
 
         return $query;
     }
 
-    public function sortBy($field) {
-        if($this->sortField === $field) {
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
             $this->sortClass = $this->sortDirection === 'asc' ? 'fas fa-angle-down' : 'fas fa-angle-up';
         } else {
