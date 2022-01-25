@@ -28,13 +28,12 @@ class MediasTable extends BaseIndexComponent
     protected function getFilters()
     {
         return [
-            new FilterPartial('username', 'string'),
-            new FilterExact('gender', 'int'),
-            new FilterScope('email', 'string', 'email'),
-            new FilterScope('country', 'string', 'countryAlpha2'),
+            new FilterPartial('creator.username', 'string'),
             new FilterExact('status', 'int'),
-            new FilterScope('text_search', 'string', 'textSearch'),
-            new FilterExact('verification_status', 'int'),
+            new FilterExact('like_count', 'int'),
+            new FilterExact('visit_count', 'int'),
+            new FilterExact('sort_score', 'int'),
+            
         ];
     }
 
@@ -55,7 +54,6 @@ class MediasTable extends BaseIndexComponent
 
     public function render()
     {  
-        dd($this->index());
         return view('default_view::livewire.medias-table', [
            'medias' => $this->index(),
         ]);
