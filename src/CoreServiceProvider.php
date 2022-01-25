@@ -3,6 +3,7 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Admin\Components\DatePicker;
+use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
@@ -155,6 +156,7 @@ class CoreServiceProvider extends ServiceProvider
             'users-table' => UsersTable::class,
             'modals.user-verification-modal' => UserVerificationModal::class,
             'date-picker' => DatePicker::class,
+            'user-moderation-button' => UserModerationButton::class,
         ];
 
         foreach ($components as $name => $class) {

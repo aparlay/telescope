@@ -3,6 +3,7 @@
 @section('plugins.Datatables', true)
 @section('plugins.Select2', true)
 @section('css')
+    @livewireStyles
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}">
 @stop
 @section('content_header')
@@ -103,14 +104,7 @@
                                     </div>
                                     <hr>
                                     <div class="row">
-                                        <button
-                                                class="btn btn-block btn-success"
-                                                type="button"
-                                                wire:key="verify_button_{{ $user->_id }}}"
-                                                wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}')"
-                                        >
-                                            <i class="fa fa-user-cog"></i> User Verification Moderation
-                                        </button>
+                                        <livewire:user-moderation-button :userId="$user->_id" />
                                     </div>
                                     <hr>
                                     <div class="row">
@@ -320,6 +314,7 @@
                 </div>
             </div>
         @endsection
+
         @section('js')
             <script src="{{ URL::asset('admin/assets/js/ekko-lightbox.min.js') }}"></script>
             <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
@@ -327,4 +322,9 @@
             <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
             <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
             <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
+
+            <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+            @livewireScripts
+            <livewire:modals/>
+            <script src="/js/admin.js"></script>
 @endsection
