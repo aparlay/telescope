@@ -31,13 +31,13 @@
             <td class="col-md-2">
                 <div> 
                     <label wire:click="sortBy('file')"  direction='asc'>Cover</label>
-                    <i class="{{$sortField=== 'file' ? $sortClass : null}} align-right"></i>
+                    <i class="{{$sortField === 'file' ? $sortClass : null}} align-right"></i>
                 </div>
             </td>
             <td class="col-md-2">
                 <div> 
-                    <label  wire:click="sortBy('created_by')" :direction="$sortField === 'created_by' ? $sortDirection : null">Created By</label>
-                    <i class="{{$sortField=== 'created_by' ? $sortClass : null}} align-right"></i>
+                    <label  wire:click="sortBy('created_by')" >Created By</label>
+                    <i class="{{$sortField === 'created_by' ? $sortClass : null}} align-right"></i>
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>  
             </td>
@@ -45,14 +45,14 @@
             <td class="col-md-2">
                 <div> 
                     <label wire:click="sortBy('description')">Description</label>
-                    <i class="{{$sortField=== 'description' ? $sortClass : null}} align-right"></i>
+                    <i class="{{$sortField === 'description' ? $sortClass : null}} align-right"></i>
                 </div>
             </td>
 
             <td class="col-md-2">
                 <div> 
                     <label  wire:click="sortBy('status')" >Status</label>
-                    <i class="{{$sortField=== 'status' ? $sortClass : null}} align-right"></i>
+                    <i class="{{$sortField === 'status' ? $sortClass : null}} align-right"></i>
                     <select class="form-control" wire:model="filter.status">
                         <option value="">Any</option>
                         @foreach(Media::getStatuses() as $value => $label)
@@ -64,28 +64,28 @@
             <td class="col-md-2">
                 <div> 
                     <label wire:click="sortBy('like_count')" >Likes</label>
-                    <i class="{{$sortField=== 'like_count' ? $sortClass : null}} align-right"></i>
+                    <i class="{{$sortField === 'like_count' ? $sortClass : null}} align-right"></i>
                     <input class="form-control" type="text" wire:model="filter.like_count"/>
                 </div>
             </td>
             <td class="col-md-2">
                 <div> 
                     <label wire:click="sortBy('visit_count')">Visits</label>
-                    <i class="{{$sortField=== 'visit_count' ? $sortClass : null}} align-right"></i>
+                    <i class="{{$sortField === 'visit_count' ? $sortClass : null}} align-right"></i>
                     <input class="form-control" type="text" wire:model="filter.visit_count"/>
                 </div>
             </td>
             <td class="col-md-2">
                 <div> 
                     <label wire:click="sortBy('sort_score')" >Sort Score</label>
-                    <i class="{{$sortField=== 'sort_score' ? $sortClass : null}} align-right"></i>
+                    <i class="{{$sortField === 'sort_score' ? $sortClass : null}} align-right"></i>
                     <input class="form-control" type="text" wire:model="filter.sort_score"/>
                 </div>
             </td>
             <td class="col-md-2">
                 <div> 
                     <label wire:click="sortBy('created_at')" >Created At</label>
-                    <i class="{{$sortField=== 'created_at' ? $sortClass : null}} align-right"></i>
+                    <i class="{{$sortField === 'created_at' ? $sortClass : null}} align-right"></i>
                 </div>
             </td>
             <td>
