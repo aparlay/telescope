@@ -2,6 +2,8 @@
 @section('title', 'Users')
 @section('css')
     <link rel="stylesheet" href="{{ asset('admin/assets/css/adminStyles.css') }}" >
+    <link rel="stylesheet" href="/css/admin.css" >
+
     @livewireStyles
 @stop
 @section('plugins.Datatables', true)
@@ -31,36 +33,9 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
     @livewireScripts
-
     <livewire:modals/>
-
-    <script>
-        $(function () {
-            $('#laravel-livewire-modals').on('hidden.bs.modal', function () {
-                console.log('listener close modals fired');
-                Livewire.emit('resetModal');
-                $("#laravel-livewire-modals").modal('hide');
-            })
-
-            window.addEventListener('showBootstrapModal', event => {
-                $("#laravel-livewire-modals").modal('show');
-            })
-
-            window.addEventListener('hideModal', event => {
-                Livewire.emit('resetModal');
-                $("#laravel-livewire-modals").modal('hide');
-            })
-
-            Livewire.on('showBootstrapModal', () => {
-                $("#laravel-livewire-modals").modal('show');
-            });
-
-            Livewire.on('hideModal', () => {
-                Livewire.emit('resetModal');
-                $("#laravel-livewire-modals").modal('hide');
-            });
-        })
-    </script>
+    <script src="/js/admin.js"></script>
 @endsection
 
