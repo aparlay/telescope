@@ -52,7 +52,7 @@
     <table class="table table-striped">
         <tbody>
         <tr>
-            <th>
+            <th class="col-md-3">
                 <div>
                     <label
                         @class([
@@ -68,7 +68,7 @@
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>
             </th>
-            <th>
+            <th class="col-md-2">
                 <div>
                     <label
                         @class([
@@ -106,7 +106,7 @@
                     </select>
                 </div>
             </th>
-            <td class="col-md-1">
+            <th class="col-md-1">
                 <div>
                     <label for="">Status</label>
                     <select class="form-control" wire:model="filter.status">
@@ -116,7 +116,7 @@
                         @endforeach
                     </select>
                 </div>
-            </td>
+            </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Verification</label>
@@ -128,7 +128,7 @@
                     </select>
                 </div>
             </th>
-            <th>
+            <th class="col-md-2">
                 <div>
 
                     <label
@@ -139,12 +139,17 @@
                         wire:model="sort.created_at"
                         wire:click="sort('created_at')">
 
-                        <a href="#" class="text-primary">Created At</a>
+                        <a href="#" class="text-primary">Registration Date</a>
 
                     </label>
                 </div>
             </th>
-            <th></th>
+            <th class="col-md-1">
+                <div>
+                    <label for="">Action</label>
+
+                </div>
+            </th>
         </tr>
 
         @foreach($users as $user)
