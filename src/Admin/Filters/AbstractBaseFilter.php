@@ -6,7 +6,7 @@ abstract class AbstractBaseFilter
 {
     protected string $fieldName;
     protected string $fieldType;
-    protected $fieldValue;
+    protected string|int|array $fieldValue;
 
     abstract public function __invoke($query);
 
@@ -40,5 +40,12 @@ abstract class AbstractBaseFilter
     public function setFieldValue($fieldValue): void
     {
         $this->fieldValue = $fieldValue;
+    }
+
+    public function setDefaultValue($fieldValue)
+    {
+        $this->setFieldValue($fieldValue);
+
+        return $this;
     }
 }

@@ -124,49 +124,49 @@
                                 <div class="tab-pane active" id="media-info">
                                     <form action="{{route('core.admin.media.update', ['media' => $media->_id])}}" class="form-horizontal" method="POST">
                                         @csrf()
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="id" class="col-sm-2 col-form-label">ID</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $media->_id }}</p>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="bio" class="col-sm-2 col-form-label">Description</label>
                                             <div class="col-sm-10">
                                                 <textarea name="description" id="description" cols="30" rows="3" class="form-control">{{ $media->description }}</textarea>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="size" class="col-sm-2 col-form-label">Size</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $size->fileSize($media->size) }}</p>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="length" class="col-sm-2 col-form-label">Length</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $media->round_length }} Sec</p>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="likes" class="col-sm-2 col-form-label">Likes</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $media->like_count }}</p>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="visits" class="col-sm-2 col-form-label">Visits</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $media->visit_count }}</p>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="created-by" class="col-sm-2 col-form-label">Created By</label>
                                             <div class="col-sm-10 mt-2">
                                                 <a href="/user/{{ $media->created_by }}">{{ $media->creator['username'] }}</a>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="status" class="col-sm-2 col-form-label">Status</label>
                                             <div class="col-sm-10">
                                                 <select name="status" id="status" class="form-control">
@@ -176,7 +176,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Show In Public Feed</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
@@ -185,7 +185,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="feature_demo" class="col-sm-2 col-form-label">Music Licensed</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
@@ -194,13 +194,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="updated-at" class="col-sm-2 col-form-label">Updated At</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ $media->updated_at }}</p>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <div class="form-group row m-0">
                                             <label for="processing-log" class="col-sm-2 col-form-label">Processing Log</label>
                                             <div class="col-sm-10 mt-2">
                                                 @isset($media->processing_log)
@@ -282,7 +282,7 @@
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-user_id required">
-                                <input type="hidden" id="alert-user_id" class="form-control" name="user_id" value="{{ $media->created_by }}">
+                                <input type="hidden" id="alert-user_id" class="form-control" name="user_id" value="{{ $media->creatorObj->_id }}">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -318,7 +318,7 @@
                                 <div class="invalid-feedback"></div>
                             </div>
                             <input type="hidden" id="alert-media_id" class="form-control" name="media_id" value="{{ $media->_id }}">
-                            <input type="hidden" id="alert-user_id" class="form-control" name="user_id" value="{{ $media->created_by }}">
+                            <input type="hidden" id="alert-user_id" class="form-control" name="user_id" value="{{ $media->creatorObj->_id }}">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

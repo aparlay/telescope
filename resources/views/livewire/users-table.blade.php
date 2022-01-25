@@ -3,18 +3,41 @@
     use Aparlay\Core\Models\Enums\UserGender;
     use Aparlay\Core\Models\Enums\UserStatus;
     use Aparlay\Core\Models\Enums\UserVerificationStatus;
+    use \Aparlay\Core\Models\Country;
 @endphp
 
 <div class="user-table">
     <div class="filters pb-3">
         <div class="row">
             <div class="col-md-3">
-                <label for="">Text Search</label>
+                <label for="">Search</label>
                 <input class="form-control" type="text" wire:model="filter.text_search"/>
             </div>
 
 
-            <div class="col-md-1  ml-auto">
+            <div class="col-md-2 offset-6">
+                <div class="row">
+                    <div class="col">
+                        <label for="">Start Date</label>
+                        <x-date-picker
+                                wire:model.lazy="filter.created_at.start"
+                                autocomplete="off"
+                                placeholder="Start"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="">End Date</label>
+                        <x-date-picker
+                                wire:model.lazy="filter.created_at.end"
+                                autocomplete="off"
+                                placeholder="End"
+                        />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-1 ml-auto">
                 <label for="">Per Page</label>
                 <select class="form-control" wire:model="perPage">
                     <option value="5">5</option>
@@ -29,30 +52,50 @@
     <table class="table table-striped">
         <tbody>
         <tr>
-            <td class="col-md-2">
+            <th class="col-md-3">
                 <div>
-                    <label for="">Username</label>
+                    <label
+                        @class([
+                            'col sort-col',
+                             'sort-asc' => Arr::get($sort, 'username') === 1,
+                              'sort-desc' => Arr::get($sort, 'username') === -1])
+                            wire:model="sort.username"
+                            wire:click="sort('username')">
+
+                            <a href="#" class="text-primary">Username</a>
+
+                        </label>
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>
-            </td>
-            <td class="col-md-2">
+            </th>
+            <th class="col-md-2">
                 <div>
-                    <label for="">Email</label>
+                    <label
+                        @class([
+                            'col sort-col',
+                             'sort-asc' => Arr::get($sort, 'email') === 1,
+                              'sort-desc' => Arr::get($sort, 'email') === -1])
+                        wire:model="sort.email"
+                        wire:click="sort('email')">
+
+                        <a href="#" class="text-primary">Email</a>
+                    </label>
+
                     <input class="form-control" type="text" wire:model="filter.email"/>
                 </div>
-            </td>
-            <td class="col-md-2">
+            </th>
+            <th class="col-md-2" wire:model="sort.country" wire:click="sort('country')">
                 <div>
                     <label for="">Country</label>
                     <select class="form-control" wire:model="filter.country">
                         <option value="">Any</option>
-                        @foreach(\Aparlay\Core\Models\Country::get() as $country)
+                        @foreach(Country::get() as $country)
                             <option value="{{$country->alpha2}}">{{$country->name}}</option>
                         @endforeach
                     </select>
                 </div>
-            </td>
-            <td class="col-md-1">
+            </th>
+            <th class="col-md-1">
                 <div>
                     <label for="">Gender</label>
                     <select class="form-control" wire:model="filter.gender">
@@ -62,8 +105,8 @@
                         @endforeach
                     </select>
                 </div>
-            </td>
-            <td class="col-md-1">
+            </th>
+            <th class="col-md-1">
                 <div>
                     <label for="">Status</label>
                     <select class="form-control" wire:model="filter.status">
@@ -73,8 +116,8 @@
                         @endforeach
                     </select>
                 </div>
-            </td>
-            <td class="col-md-1">
+            </th>
+            <th class="col-md-1">
                 <div>
                     <label for="">Verification</label>
                     <select class="form-control" wire:model="filter.verification_status">
@@ -84,29 +127,50 @@
                         @endforeach
                     </select>
                 </div>
-            </td>
-            <td class="col-md-2">
+            </th>
+            <th class="col-md-2">
                 <div>
-                    <label for="">Created at</label>
+
+                    <label
+                        @class([
+                            'col sort-col',
+                             'sort-asc' => Arr::get($sort, 'created_at') === 1,
+                              'sort-desc' => Arr::get($sort, 'created_at') === -1])
+                        wire:model="sort.created_at"
+                        wire:click="sort('created_at')">
+
+                        <a href="#" class="text-primary">Registration Date</a>
+
+                    </label>
                 </div>
-            </td>
-            <td></td>
+            </th>
+            <th class="col-md-1">
+                <div>
+                    <label for="">Action</label>
+
+                </div>
+            </th>
         </tr>
 
         @foreach($users as $user)
             <tr>
                 <td>
-                    <a href="{{$user->admin_url}}">
+                    <a href="{{$user->admin_url}}"
+                       title="{{$user->username}} [{{$user->is_online ? 'online' : 'offline'}}] [{{User::getVerificationStatuses()[$user->verification_status] ?? false}}]">
                     <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
                      {{$user->username }}
+                        <i title="{{$user->is_online ? 'online' : 'offline'}}" @class(['fa-user', 'ml-1', 'fas text-success' => $user->is_online, 'far text-gray' => !$user->is_online])></i>
+                        @if ($user->is_verified)
+                            <img src="{{ asset('admin/assets/img/verify-16.png') }}" alt="Verified">
+                        @endif
                     </a>
-                    <span class="ml-1 {{ $user->is_online ? 'text-info' : 'text-gray' }} text-sm far fa-circle"></span>
                 </td>
                 <td>
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
                 </td>
                 <td>
-                    <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}" class="mr-1 align-bottom">{{ $user->country_label }}
+                    <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}"
+                         class="mr-1 align-bottom">{{ $user->country_label }}
                 </td>
                 <td>
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
@@ -123,11 +187,11 @@
                     <div class="row">
                         <div class="col-md-6">
                             @if ($user->verification_status)
-                                <span class="badge bg-{{ UserVerificationStatus::from($user->verification_status)->badgeColor() }}">
+                                <span
+                                    class="badge bg-{{ UserVerificationStatus::from($user->verification_status)->badgeColor() }}">
                             {{ UserVerificationStatus::from($user->verification_status)->label() }}
                         </span>
                             @else
-                                {{$user->omg}}
                                 <span class="badge bg-info">None</span>
                             @endif
                         </div>

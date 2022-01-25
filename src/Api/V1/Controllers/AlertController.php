@@ -3,31 +3,35 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Alert;
+use Aparlay\Core\Api\V1\Resources\AlertResource;
+use Aparlay\Core\Api\V1\Services\AlertService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class AlertController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  Alert  $user
-     * @param  Request  $request
-     * @return Response
-     */
-    public function update(Alert $user, Request $request): Response
+    protected $alertService;
+
+    public function __construct(AlertService $alertService)
     {
-        return $this->response([], Response::HTTP_OK);
+        $this->alertService = $alertService;
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Store a newly created resource in storage.
      *
-     * @param  Alert  $media
+     * @param  Alert  $alert
+     * @param  Request  $request
      * @return Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(Alert $media): Response
+    public function update(Alert $alert, Request $request): Response
     {
-        return $this->response([], Response::HTTP_OK);
+        $this->authorize('update', [Alert::class, $alert]);
+        $this->injectAuthUser($this->alertService);
+
+        $response = $this->alertService->visited($alert);
+
+        return $this->response(new AlertResource($response), '', Response::HTTP_OK);
     }
 }

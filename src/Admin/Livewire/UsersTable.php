@@ -2,24 +2,35 @@
 
 namespace Aparlay\Core\Admin\Livewire;
 
+use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use App\Models\User;
 use Jenssegers\Mongodb\Eloquent\Builder;
-use function view;
 
 class UsersTable extends BaseIndexComponent
 {
     public $model = User::class;
-
-    public $selectedUser;
-
     protected $listeners = ['updateParent'];
 
     public function updateParent()
     {
         $this->render();
+    }
+
+    public function getAllowedSorts()
+    {
+        return [
+            'username',
+            'email',
+            'country',
+            'gender',
+            'status',
+            'verification_status',
+            'created_at',
+        ];
     }
 
     /**
@@ -34,7 +45,8 @@ class UsersTable extends BaseIndexComponent
             new FilterScope('country', 'string', 'countryAlpha2'),
             new FilterExact('status', 'int'),
             new FilterScope('text_search', 'string', 'textSearch'),
-            new FilterExact('verification_status', 'int'),
+            (new FilterExact('verification_status', 'int')),
+            new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];
     }
 
@@ -42,7 +54,6 @@ class UsersTable extends BaseIndexComponent
     {
         $query = parent::buildQuery();
 
-        $query->orderByDesc('created_at');
         $query->options(['allowDiskUse' => true]);
 
         return $query;
