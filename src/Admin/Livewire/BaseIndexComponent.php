@@ -52,11 +52,11 @@ abstract class BaseIndexComponent extends Component
     public function sort($field)
     {
         $value = \Arr::get($this->sort, $field);
-        if ($value === 1) {
+        if ($value === -1) {
             $this->sort = [];
             return;
         }
-        $newSort = ($value ?? 1) * -1;
+        $newSort = ($value ?? -1) * -1;
         $this->sort = [];
         $this->sort[$field] = $newSort;
     }
