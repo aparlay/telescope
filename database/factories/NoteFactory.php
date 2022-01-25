@@ -3,11 +3,10 @@
 namespace Aparlay\Payment\Database\Factories;
 
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\Note;
+use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use MongoDB\BSON\ObjectId;
-
 
 class NoteFactory extends Factory
 {
@@ -28,7 +27,6 @@ class NoteFactory extends Factory
         $creator = User::factory()->create();
         $user = User::factory()->create();
         $type = $this->faker->randomElement(array_keys(NoteType::getTypes()));
-
 
         return [
 
