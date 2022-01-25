@@ -60,7 +60,6 @@ class MediasTable extends BaseIndexComponent
         return $query;
     }
 
-
     public function updatingSearch()
     {
         $this->resetPage();
