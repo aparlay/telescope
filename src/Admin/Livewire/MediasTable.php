@@ -33,7 +33,7 @@ class MediasTable extends BaseIndexComponent
             new FilterExact('like_count', 'int'),
             new FilterExact('visit_count', 'int'),
             new FilterExact('sort_score', 'int'),
-            
+
         ];
     }
 
@@ -53,7 +53,7 @@ class MediasTable extends BaseIndexComponent
     }
 
     public function render()
-    {  
+    {
         return view('default_view::livewire.medias-table', [
            'medias' => $this->index(),
         ]);
