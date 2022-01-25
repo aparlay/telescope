@@ -82,9 +82,11 @@ class QueryBuilder
                 -1 => 'DESC', 1 => 'ASC',
             ];
 
+            $direction = $orders[$this->sort[$sortField]];
+
             return collect([
                 'column' => $sortField,
-                'direction' => $orders[$this->sort[$sortField]],
+                'direction' => $direction,
             ]);
         }
 
