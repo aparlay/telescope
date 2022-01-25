@@ -3,12 +3,12 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\NoteFactory;
-use Aparlay\Core\Models\Scopes\NoteScope;
 use Aparlay\Core\Models\Enums\NoteType;
+use Aparlay\Core\Models\Scopes\NoteScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 class Version extends BaseModel
 {
@@ -40,7 +40,7 @@ class Version extends BaseModel
         'updated_by',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
@@ -70,8 +70,7 @@ class Version extends BaseModel
         return NoteFactory::new();
     }
 
-
-      /**
+    /**
      * @return array
      */
     public static function getTypes(): array
