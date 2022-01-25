@@ -45,10 +45,18 @@ abstract class BaseIndexComponent extends Component
         return $queryBuilder->getQuery();
     }
 
+    /**
+     * @param $field
+     * @return void
+     */
     public function sort($field)
     {
-        $value = $this->sort[$field] ?? 1;
-        $newSort = $value * -1;
+        $value = \Arr::get($this->sort, $field);
+        if ($value === 1) {
+            $this->sort = [];
+            return;
+        }
+        $newSort = ($value ?? 1) * -1;
         $this->sort = [];
         $this->sort[$field] = $newSort;
     }
