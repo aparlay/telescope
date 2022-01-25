@@ -212,12 +212,11 @@ trait MediaScope
         return $query->orderBy('sort_score', 'desc');
     }
 
-       /**
+    /**
      * @return mixed
      */
     public function scopeUsername(Builder $query, string $username): Builder
-    {   
-        return $query->where('creator.username' ,'regex', new Regex('^'.$username));
+    {
+        return $query->where('creator.username', 'regex', new Regex('^'.$username));
     }
-
 }
