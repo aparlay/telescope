@@ -38,28 +38,28 @@ class MediasTable extends BaseIndexComponent
         ];
     }
 
+    public function getAllowedSorts()
+    {
+        return [
+            'file',
+            'created_by',
+            'description',
+            'status',
+            'like_count',
+            'visit_count',
+            'sort_score',
+            'created_at',
+        ];
+    }
+
     public function buildQuery(): Builder
     {
         $query = parent::buildQuery();
-
-        $query->orderBy($this->sortField, $this->sortDirection);
         $query->options(['allowDiskUse' => true]);
 
         return $query;
     }
 
-    public function sortBy($field)
-    {
-        if ($this->sortField === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-            $this->sortClass = $this->sortDirection === 'asc' ? 'fas fa-angle-down' : 'fas fa-angle-up';
-        } else {
-            $this->sortDirection = 'asc';
-            $this->sortClass = 'fas fa-angle-down';
-        }
-
-        $this->sortField = $field;
-    }
 
     public function updatingSearch()
     {

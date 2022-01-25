@@ -28,31 +28,67 @@
     <table class="table table-striped">
         <tbody>
         <tr>
-            <td class="col-md-2">
-                <div> 
-                    <label wire:click="sortBy('file')"  direction='asc'>Cover</label>
-                    <i class="{{$sortField === 'file' ? $sortClass : null}} align-right"></i>
+            <th class="col-md-2">
+            <div>
+                    <label
+                    @class([
+                        'col sort-col',
+                            'sort-asc' => Arr::get($sort, 'file') === 1,
+                            'sort-desc' => Arr::get($sort, 'file') === -1])
+                        wire:model="sort.file"
+                        wire:click="sort('file')">
+
+                        Cover
+
+                    </label>
                 </div>
-            </td>
+            </th>
             <td class="col-md-2">
                 <div> 
-                    <label  wire:click="sortBy('created_by')" >Created By</label>
-                    <i class="{{$sortField === 'created_by' ? $sortClass : null}} align-right"></i>
+                <label
+                    @class([
+                        'col sort-col',
+                            'sort-asc' => Arr::get($sort, 'created_by') === 1,
+                            'sort-desc' => Arr::get($sort, 'created_by') === -1])
+                        wire:model="sort.created_by"
+                        wire:click="sort('created_by')">
+
+                        Created By
+
+                    </label>
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>  
             </td>
 
             <td class="col-md-2">
                 <div> 
-                    <label wire:click="sortBy('description')">Description</label>
-                    <i class="{{$sortField === 'description' ? $sortClass : null}} align-right"></i>
+                <label
+                    @class([
+                        'col sort-col',
+                            'sort-asc' => Arr::get($sort, 'description') === 1,
+                            'sort-desc' => Arr::get($sort, 'description') === -1])
+                        wire:model="sort.description"
+                        wire:click="sort('description')">
+
+                        Description
+
+                    </label>
                 </div>
             </td>
 
             <td class="col-md-2">
                 <div> 
-                    <label  wire:click="sortBy('status')" >Status</label>
-                    <i class="{{$sortField === 'status' ? $sortClass : null}} align-right"></i>
+                <label
+                    @class([
+                        'col sort-col',
+                            'sort-asc' => Arr::get($sort, 'status') === 1,
+                            'sort-desc' => Arr::get($sort, 'status') === -1])
+                        wire:model="sort.status"
+                        wire:click="sort('status')">
+
+                        Status
+
+                    </label>
                     <select class="form-control" wire:model="filter.status">
                         <option value="">Any</option>
                         @foreach(Media::getStatuses() as $value => $label)
@@ -63,29 +99,65 @@
             </td>
             <td class="col-md-2">
                 <div> 
-                    <label wire:click="sortBy('like_count')" >Likes</label>
-                    <i class="{{$sortField === 'like_count' ? $sortClass : null}} align-right"></i>
+                <label
+                    @class([
+                        'col sort-col',
+                            'sort-asc' => Arr::get($sort, 'like_count') === 1,
+                            'sort-desc' => Arr::get($sort, 'like_count') === -1])
+                        wire:model="sort.like_count"
+                        wire:click="sort('like_count')">
+
+                        Likes
+
+                    </label>
                     <input class="form-control" type="text" wire:model="filter.like_count"/>
                 </div>
             </td>
             <td class="col-md-2">
                 <div> 
-                    <label wire:click="sortBy('visit_count')">Visits</label>
-                    <i class="{{$sortField === 'visit_count' ? $sortClass : null}} align-right"></i>
+                <label
+                    @class([
+                        'col sort-col',
+                            'sort-asc' => Arr::get($sort, 'visit_count') === 1,
+                            'sort-desc' => Arr::get($sort, 'visit_count') === -1])
+                        wire:model="sort.visit_count"
+                        wire:click="sort('visit_count')">
+
+                        Visits
+
+                    </label>
                     <input class="form-control" type="text" wire:model="filter.visit_count"/>
                 </div>
             </td>
             <td class="col-md-2">
                 <div> 
-                    <label wire:click="sortBy('sort_score')" >Sort Score</label>
-                    <i class="{{$sortField === 'sort_score' ? $sortClass : null}} align-right"></i>
+                <label
+                @class([
+                        'col sort-col',
+                            'sort-asc' => Arr::get($sort, 'sort_score') === 1,
+                            'sort-desc' => Arr::get($sort, 'sort_score') === -1])
+                        wire:model="sort.sort_score"
+                        wire:click="sort('sort_score')">
+
+                        Sort Scores
+
+                    </label>
                     <input class="form-control" type="text" wire:model="filter.sort_score"/>
                 </div>
             </td>
             <td class="col-md-2">
                 <div> 
-                    <label wire:click="sortBy('created_at')" >Created At</label>
-                    <i class="{{$sortField === 'created_at' ? $sortClass : null}} align-right"></i>
+                <label
+                @class([
+                        'col sort-col',
+                            'sort-asc' => Arr::get($sort, 'created_at') === 1,
+                            'sort-desc' => Arr::get($sort, 'created_at') === -1])
+                        wire:model="sort.created_at"
+                        wire:click="sort('created_at')">
+
+                        Created At
+
+                    </label>
                 </div>
             </td>
             <td>
