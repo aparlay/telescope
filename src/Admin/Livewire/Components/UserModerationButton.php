@@ -14,13 +14,10 @@ class UserModerationButton extends Component
         $this->render();
     }
 
-
     public function mount($userId)
     {
         $this->user = User::find($userId);
     }
-
-
 
     public function render()
     {
