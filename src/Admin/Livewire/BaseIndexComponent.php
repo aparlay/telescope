@@ -54,6 +54,7 @@ abstract class BaseIndexComponent extends Component
         $value = \Arr::get($this->sort, $field);
         if ($value === -1) {
             $this->sort = [];
+
             return;
         }
         $newSort = ($value ?? -1) * -1;
