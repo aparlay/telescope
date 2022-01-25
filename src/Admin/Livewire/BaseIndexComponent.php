@@ -15,6 +15,10 @@ abstract class BaseIndexComponent extends Component
     protected $paginationTheme = 'bootstrap';
     public array $filter = [];
     protected $model;
+    public $sortField = 'created_at';
+    public $sortDirection = 'asc';
+    public $sortClass = 'fas fa-angle-down';
+
 
     /**
      * @var Builder
