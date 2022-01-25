@@ -14,6 +14,23 @@
                 <input class="form-control" type="text" wire:model="filter.text_search"/>
             </div>
 
+            <div class="col-md-3">
+                <label for="">Created At Start</label>
+                <x-date-picker
+                    wire:model.lazy="filter.created_at.start"
+                    autocomplete="off"
+                    placeholder="Start"
+                />
+            </div>
+            <div class="col-md-3">
+                <label for="">Created At End</label>
+                <x-date-picker
+                    wire:model.lazy="filter.created_at.end"
+                    autocomplete="off"
+                    placeholder="End"
+                />
+            </div>
+
 
             <div class="col-md-1  ml-auto">
                 <label for="">Per Page</label>
@@ -23,28 +40,41 @@
                     <option value="15">15</option>
                 </select>
             </div>
-
         </div>
     </div>
 
     <table class="table table-striped">
         <tbody>
         <tr>
-            <th
-                @class(['col-md-2 sort-col', 'sort-asc' => Arr::get($sort, 'username') === 1, 'sort-desc' => Arr::get($sort, 'username') === -1])
-                wire:model="sort.username"
-                wire:click="sort('username')">
+            <th>
                 <div>
-                    <label for="">Username</label>
+                    <label
+                        @class([
+                            'col sort-col',
+                             'sort-asc' => Arr::get($sort, 'username') === 1,
+                              'sort-desc' => Arr::get($sort, 'username') === -1])
+                            wire:model="sort.username"
+                            wire:click="sort('username')">
+
+                            <a href="#" class="text-primary">Username</a>
+
+                        </label>
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>
             </th>
-            <th
-                @class(['col-md-2 sort-col', 'sort-asc' => Arr::get($sort, 'email') === 1, 'sort-desc' => Arr::get($sort, 'email') === -1])
-                wire:model="sort.email"
-                wire:click="sort('email')">
+            <th>
                 <div>
-                    <label for="">Email</label>
+                    <label
+                        @class([
+                            'col sort-col',
+                             'sort-asc' => Arr::get($sort, 'email') === 1,
+                              'sort-desc' => Arr::get($sort, 'email') === -1])
+                        wire:model="sort.email"
+                        wire:click="sort('email')">
+
+                        <a href="#" class="text-primary">Email</a>
+                    </label>
+
                     <input class="form-control" type="text" wire:model="filter.email"/>
                 </div>
             </th>
@@ -92,32 +122,23 @@
                     </select>
                 </div>
             </th>
-            <th
-                @class(['col-md-2 sort-col', 'sort-asc' => Arr::get($sort, 'created_at') === 1, 'sort-desc' => Arr::get($sort, 'created_at') === -1])
-                wire:model="sort.created_at"
-                wire:click="sort('created_at')">
+            <th>
                 <div>
-                    <label for="">Created at</label>
 
-                    <div class="row">
-                        <div class="col">
-                            <x-date-picker
-                                wire:model.lazy="filter.created_at.start"
-                                autocomplete="off"
-                                placeholder="Start"
-                            />
-                        </div>
-                        <div class="col">
-                            <x-date-picker
-                                wire:model.lazy="filter.created_at.end"
-                                autocomplete="off"
-                                placeholder="End"
-                            />
-                        </div>
-                    </div>
+                    <label
+                        @class([
+                            'col sort-col',
+                             'sort-asc' => Arr::get($sort, 'created_at') === 1,
+                              'sort-desc' => Arr::get($sort, 'created_at') === -1])
+                        wire:model="sort.created_at"
+                        wire:click="sort('created_at')">
+
+                        <a href="#" class="text-primary">Created At</a>
+
+                    </label>
                 </div>
             </th>
-            <td></td>
+            <th></th>
         </tr>
 
         @foreach($users as $user)
