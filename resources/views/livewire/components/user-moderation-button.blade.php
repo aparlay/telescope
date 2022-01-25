@@ -1,4 +1,4 @@
-<div>
+<div class="w-100">
     <button
         class="btn btn-block btn-success"
         type="button"
