@@ -282,7 +282,7 @@
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-group highlight-addon field-alert-user_id required">
-                                <input type="hidden" id="alert-user_id" class="form-control" name="user_id" value="{{ $media->created_by }}">
+                                <input type="hidden" id="alert-user_id" class="form-control" name="user_id" value="{{ $media->userObj->_id }}">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
