@@ -40,6 +40,7 @@ abstract class BaseIndexComponent extends Component
     {
         $this->resetPage();
     }
+
     abstract public function getAllowedSorts();
 
     protected function getFilters()
