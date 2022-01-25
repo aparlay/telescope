@@ -46,8 +46,7 @@ class UsersTable extends BaseIndexComponent
             new FilterExact('status', 'int'),
             new FilterScope('text_search', 'string', 'textSearch'),
 
-            (new FilterExact('verification_status', 'int'))
-                ->setDefaultValue(UserVerificationStatus::PENDING->value),
+            (new FilterExact('verification_status', 'int')),
 
             new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];
