@@ -84,8 +84,9 @@ class QueryBuilder
 
             $direction = $orders[$this->sort[$sortField]];
             \Log::info('direction', [
-                'direction'=> $direction
+                'direction'=> $direction,
             ]);
+
             return collect([
                 'column' => $sortField,
                 'direction' => $direction,
