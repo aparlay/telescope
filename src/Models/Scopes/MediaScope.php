@@ -211,6 +211,4 @@ trait MediaScope
     {
         return $query->orderBy('sort_score', 'desc');
     }
-
-
 }
