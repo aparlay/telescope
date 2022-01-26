@@ -163,7 +163,6 @@ class CoreServiceProvider extends ServiceProvider
             'modals.user-verification-modal' => UserVerificationModal::class,
             'date-picker' => DatePicker::class,
             'user-moderation-button' => UserModerationButton::class,
-            'credit-cards-table' => CreditCardsTable::class,
         ];
 
         foreach ($components as $name => $class) {
