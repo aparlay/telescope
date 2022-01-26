@@ -21,7 +21,7 @@ enum MediaStatus: int implements Enum
             self::QUEUED => __('queued'),
             self::UPLOADED => __('uploaded'),
             self::IN_PROGRESS => __('in progress'),
-            self::COMPLETED => __('completed'),
+            self::COMPLETED => __('ready for review'),
             self::FAILED => __('failed'),
             self::CONFIRMED => __('confirmed'),
             self::DENIED => __('denied'),
