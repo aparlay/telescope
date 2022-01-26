@@ -42,7 +42,10 @@ abstract class BaseIndexComponent extends Component
             ->applyFilters($this->getFilters())
             ->applySorts($this->getAllowedSorts());
 
-        return $queryBuilder->getQuery();
+        $query = $queryBuilder->getQuery();
+        $query->options(['allowDiskUse' => true]);
+
+        return $query;
     }
 
     /**
