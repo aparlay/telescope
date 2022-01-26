@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Components;
 
 use Illuminate\View\Component;
 
-class UserNameAvatar  extends Component
+class UserNameAvatar extends Component
 {
     public function __construct(
         public $user
@@ -20,5 +20,4 @@ class UserNameAvatar  extends Component
     {
         return view('default_view::admin.components.username-avatar');
     }
-
 }

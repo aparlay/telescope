@@ -6,13 +6,11 @@ use Illuminate\View\Component;
 
 class WireTableFilterDropdown extends Component
 {
-
     public function __construct(
         public string $wireModel,
         public array $options,
     ) {
     }
-
 
     /**
      * Get the view / contents that represent the component.
