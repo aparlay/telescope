@@ -9,7 +9,6 @@ use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\Regex;
 
 trait MediaScope
 {
