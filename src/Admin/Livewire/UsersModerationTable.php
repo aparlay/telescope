@@ -55,6 +55,7 @@ class UsersModerationTable extends BaseIndexComponent
     {
         $query = parent::buildQuery();
         $query->where('verification_status', UserVerificationStatus::PENDING->value);
+
         return $query;
     }
 
