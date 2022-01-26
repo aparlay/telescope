@@ -25,9 +25,9 @@ class MediasTable extends BaseIndexComponent
      * @return array
      */
     protected function getFilters()
-    {  
+    {
         return [
-            new FilterPartial('creator_username', 'string','creator.username'),
+            new FilterPartial('creator_username', 'string', 'creator.username'),
             new FilterPartial('text_search', 'string', 'creator.username'),
             new FilterExact('status', 'int'),
             new FilterExact('like_count', 'int'),

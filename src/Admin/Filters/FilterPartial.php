@@ -14,7 +14,7 @@ class FilterPartial extends AbstractBaseFilter
     }
 
     public function __invoke($query)
-    {   
+    {
         $query->where($this->getInternalFieldName(), 'regex', new Regex('^'.$this->fieldValue));
     }
 }
