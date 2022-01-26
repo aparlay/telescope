@@ -17,9 +17,6 @@ abstract class BaseIndexComponent extends Component
     public array $sort = [];
 
     protected $model;
-    public $sortField = 'created_at';
-    public $sortDirection = 'asc';
-    public $sortClass = 'fas fa-angle-down';
 
     /**
      * @var Builder
