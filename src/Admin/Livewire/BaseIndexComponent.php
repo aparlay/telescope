@@ -42,7 +42,6 @@ abstract class BaseIndexComponent extends Component
             ->applyFilters($this->getFilters())
             ->applySorts($this->getAllowedSorts());
 
-
         $query = $queryBuilder->getQuery();
         $query->options(['allowDiskUse' => true]);
 

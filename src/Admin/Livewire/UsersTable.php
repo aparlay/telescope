@@ -53,7 +53,6 @@ class UsersTable extends BaseIndexComponent
         ];
     }
 
-
     public function updatingSearch()
     {
         $this->resetPage();
