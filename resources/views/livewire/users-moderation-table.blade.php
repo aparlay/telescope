@@ -14,7 +14,6 @@
                 <input class="form-control" type="text" wire:model="filter.text_search"/>
             </div>
 
-
             <div class="col-md-2 offset-6">
                 <div class="row">
                     <div class="col">
@@ -36,7 +35,6 @@
                 </div>
             </div>
 
-
             <div class="col-md-1 ml-auto">
                 <label for="">Per Page</label>
                 <select class="form-control" wire:model="perPage">
@@ -45,7 +43,6 @@
                     <option value="15">15</option>
                 </select>
             </div>
-
         </div>
     </div>
 
@@ -64,10 +61,15 @@
                     <input class="form-control" type="text" wire:model="filter.email"/>
                 </div>
             </th>
-            <th class="col-md-2">
+            <th class="col-md-2" wire:model="sort.country" wire:click="sort('country')">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'full_name'" :fieldLabel="'Full name'" />
-                    <input class="form-control" type="text" wire:model="filter.full_name"/>
+                    <label for="">Country</label>
+                    <select class="form-control" wire:model="filter.country">
+                        <option value="">Any</option>
+                        @foreach(Country::get() as $country)
+                            <option value="{{$country->alpha2}}">{{$country->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </th>
             <th class="col-md-1">
@@ -79,11 +81,6 @@
                             <option value="{{$value}}">{{$label}}</option>
                         @endforeach
                     </select>
-                </div>
-            </th>
-            <th>
-                <div>
-                    <label for="">Email Verified?</label>
                 </div>
             </th>
             <th class="col-md-1">
@@ -108,18 +105,14 @@
                     </select>
                 </div>
             </th>
-            <th>Followers</th>
-            <th>Likes</th>
-            <th>Medias</th>
-
             <th class="col-md-2">
-                <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Registration Date'" />
+                <div>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Registration Date'" />
+                </div>
             </th>
-
             <th class="col-md-1">
                 <div>
                     <label for="">Action</label>
-
                 </div>
             </th>
         </tr>
@@ -128,7 +121,7 @@
             <tr>
                 <td>
                     <a href="{{$user->admin_url}}"
-                       title="{{$user->username}} [{{$user->is_online ? 'online' : 'offline'}}] [{{User::getVerificationStatuses()[$user->verification_status] ?? false}}]">
+                       title="{{$user->username}} [{{$user->is_online ? 'online' : 'offline'}}] [{{User::getVerificationStatuses()[$user->verification_status] ?? 'none'}}]">
                         <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
                         {{$user->username }}
                         <i title="{{$user->is_online ? 'online' : 'offline'}}" @class(['fa-user', 'ml-1', 'fas text-success' => $user->is_online, 'far text-gray' => !$user->is_online])></i>
@@ -141,17 +134,13 @@
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
                 </td>
                 <td>
-                    {{ $user->full_name }}
+                    <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}"
+                         class="mr-1 align-bottom">{{ $user->country_label }}
                 </td>
                 <td>
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
                         {{ UserGender::from($user->gender)->label() }}
                     </span>
-                </td>
-                <td>
-                    @if ($user->email_verified)
-                        <i class="fa fa-check-circle text-success"></i>
-                    @endif
                 </td>
                 <td>
                     <span class="badge bg-{{ UserStatus::from($user->status)->badgeColor() }}">
@@ -175,21 +164,8 @@
                 </td>
 
                 <td>
-                    {{ $user->follower_count }}
-                </td>
-
-                <td>
-                    {{ $user->media_count }}
-                </td>
-
-                <td>
-                    {{ $user->likes_count }}
-                </td>
-
-                <td>
                     {{ $user->created_at }}
                 </td>
-
 
                 <td>
                     <div class="col-md-6">
