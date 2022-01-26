@@ -14,8 +14,6 @@ class MediasTable extends BaseIndexComponent
 {
     public $model = Media::class;
 
-    public $selectedUser;
-
     protected $listeners = ['updateParent'];
 
     public function updateParent()
@@ -27,10 +25,10 @@ class MediasTable extends BaseIndexComponent
      * @return array
      */
     protected function getFilters()
-    {
+    {  
         return [
-            new FilterPartial('username', 'string', 'username'),
-            new FilterScope('text_search', 'string', 'username'),
+            new FilterPartial('creator_username', 'string','creator.username'),
+            new FilterPartial('text_search', 'string', 'creator.username'),
             new FilterExact('status', 'int'),
             new FilterExact('like_count', 'int'),
             new FilterExact('visit_count', 'int'),

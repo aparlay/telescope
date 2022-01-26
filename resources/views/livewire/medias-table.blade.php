@@ -53,7 +53,7 @@
             <td class="col-md-2">
                 <div> 
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'" />
-                    <input class="form-control" type="text" wire:model="filter.username"/>
+                    <input class="form-control" type="text" wire:model="filter.creator_username"/>
                 </div>  
             </td>
 
