@@ -8,12 +8,13 @@ class FilterPartial extends AbstractBaseFilter
 {
     public function __construct(
         protected string $fieldName,
-        protected string $fieldType
+        protected string $fieldType,
+        protected string|null $internalFieldName = null
     ) {
     }
 
     public function __invoke($query)
     {
-        $query->where($this->fieldName, 'regex', new Regex('^'.$this->fieldValue));
+        $query->where($this->getInternalFieldName(), 'regex', new Regex('^'.$this->fieldValue));
     }
 }

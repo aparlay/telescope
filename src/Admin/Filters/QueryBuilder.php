@@ -34,6 +34,7 @@ class QueryBuilder
             $this->allowedFilters[$filter->getFieldName()] = $filter;
         }
 
+
         $preparedFilters = collect($this->filter)
             // filter empty string values and filters which are not presented in getFilters() array
             ->filter(function ($value, $key) {
@@ -52,14 +53,19 @@ class QueryBuilder
         return $preparedFilters;
     }
 
+
     /**
      * @param $filters
-     * @return Builder
+     * @return $this
      * @throws \ErrorException
      */
     public function applyFilters($filters)
     {
         $preparedFilters = $this->prepareFilters($filters);
+
+        \Log::info('prepared filters', [
+            'ppp' => $preparedFilters
+        ]);
 
         /** @var AbstractBaseFilter $filter */
         foreach ($preparedFilters as $fieldName => $value) {
