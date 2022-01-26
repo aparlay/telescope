@@ -5,6 +5,7 @@ namespace Aparlay\Core\Admin\Livewire;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
+use Aparlay\Core\Admin\Filters\FilterDateRange;
 use App\Models\Media;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use function view;
@@ -34,6 +35,7 @@ class MediasTable extends BaseIndexComponent
             new FilterExact('like_count', 'int'),
             new FilterExact('visit_count', 'int'),
             new FilterExact('sort_score', 'int'),
+            new FilterDateRange('created_at', 'array', ['start', 'end']),
 
         ];
     }

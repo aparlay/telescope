@@ -12,14 +12,31 @@
                 <input class="form-control" type="text" wire:model="filter.text_search"/>
             </div>
 
+            <div class="col-md-2 offset-6">
+                <div class="row">
+                    <div class="col">
+                        <label for="">Start Date</label>
+                        <x-date-picker
+                            wire:model.lazy="filter.created_at.start"
+                            autocomplete="off"
+                            placeholder="Start"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="">End Date</label>
+                        <x-date-picker
+                            wire:model.lazy="filter.created_at.end"
+                            autocomplete="off"
+                            placeholder="End"
+                        />
+                    </div>
+                </div>
+            </div>
+
 
             <div class="col-md-1  ml-auto">
                 <label for="">Per Page</label>
-                <select class="form-control" wire:model="perPage">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                </select>
+                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
 
         </div>
@@ -30,57 +47,25 @@
         <tr>
             <th class="col-md-2">
                 <div>
-                    <label
-                        @class([
-                            'col sort-col',
-                            'sort-asc' => Arr::get($sort, 'file') === 1,
-                            'sort-desc' => Arr::get($sort, 'file') === -1])
-                        wire:model="sort.file"
-                        wire:click="sort('file')">
-                        <a href="#" class="text-primary">Cover</a>
-                    </label>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'file'" :fieldLabel="'Cover'" />
                 </div>
                 </th>
             <td class="col-md-2">
                 <div> 
-                    <label
-                        @class([
-                            'col sort-col',
-                            'sort-asc' => Arr::get($sort, 'created_by') === 1,
-                            'sort-desc' => Arr::get($sort, 'created_by') === -1])
-                        wire:model="sort.created_by"
-                        wire:click="sort('created_by')">
-                        <a href="#" class="text-primary">Created By</a>
-                    </label>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'" />
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>  
             </td>
 
             <td class="col-md-2">
                 <div> 
-                <label
-                    @class([
-                        'col sort-col',
-                            'sort-asc' => Arr::get($sort, 'description') === 1,
-                            'sort-desc' => Arr::get($sort, 'description') === -1])
-                        wire:model="sort.description"
-                        wire:click="sort('description')">
-                        <a href="#" class="text-primary">Description</a>
-                    </label>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'description'" :fieldLabel="'Description'" />
                 </div>
             </td>
 
             <td class="col-md-2">
                 <div> 
-                <label
-                    @class([
-                        'col sort-col',
-                            'sort-asc' => Arr::get($sort, 'status') === 1,
-                            'sort-desc' => Arr::get($sort, 'status') === -1])
-                        wire:model="sort.status"
-                        wire:click="sort('status')">
-                        <a href="#" class="text-primary">Status</a>    
-                    </label>
+                <x-sortable-column-header :sort="$sort" :fieldName="'status'" :fieldLabel="'Status'" />
                     <select class="form-control" wire:model="filter.status">
                         <option value="">Any</option>
                         @foreach(Media::getStatuses() as $value => $label)
@@ -91,57 +76,25 @@
             </td>
             <td class="col-md-2">
                 <div> 
-                <label
-                    @class([
-                        'col sort-col',
-                            'sort-asc' => Arr::get($sort, 'like_count') === 1,
-                            'sort-desc' => Arr::get($sort, 'like_count') === -1])
-                        wire:model="sort.like_count"
-                        wire:click="sort('like_count')">
-                        <a href="#" class="text-primary">Likes</a>    
-                    </label>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'like_count'" :fieldLabel="'Likes'" />
                     <input class="form-control" type="text" wire:model="filter.like_count"/>
                 </div>
             </td>
             <td class="col-md-2">
                 <div> 
-                <label
-                    @class([
-                        'col sort-col',
-                            'sort-asc' => Arr::get($sort, 'visit_count') === 1,
-                            'sort-desc' => Arr::get($sort, 'visit_count') === -1])
-                        wire:model="sort.visit_count"
-                        wire:click="sort('visit_count')">
-                        <a href="#" class="text-primary">Visits</a> 
-                    </label>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'visit_count'" :fieldLabel="'Visits'" />
                     <input class="form-control" type="text" wire:model="filter.visit_count"/>
                 </div>
             </td>
             <td class="col-md-2">
                 <div> 
-                <label
-                @class([
-                        'col sort-col',
-                            'sort-asc' => Arr::get($sort, 'sort_score') === 1,
-                            'sort-desc' => Arr::get($sort, 'sort_score') === -1])
-                        wire:model="sort.sort_score"
-                        wire:click="sort('sort_score')">
-                        <a href="#" class="text-primary">Sort Scores</a> 
-                    </label>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'sort_score'" :fieldLabel="'Scores'" />
                     <input class="form-control" type="text" wire:model="filter.sort_score"/>
                 </div>
             </td>
             <td class="col-md-2">
                 <div> 
-                <label
-                @class([
-                        'col sort-col',
-                            'sort-asc' => Arr::get($sort, 'created_at') === 1,
-                            'sort-desc' => Arr::get($sort, 'created_at') === -1])
-                        wire:model="sort.created_at"
-                        wire:click="sort('created_at')">
-                        <a href="#" class="text-primary">Created At</a> 
-                    </label>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
                 </div>
             </td>
             <td>
