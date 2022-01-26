@@ -3,8 +3,10 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Admin\Components\DatePicker;
+use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
+use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
 use Aparlay\Core\Admin\Providers\EventServiceProvider;
@@ -154,6 +156,7 @@ class CoreServiceProvider extends ServiceProvider
     {
         $components = [
             'users-table' => UsersTable::class,
+            'users-moderation-table' => UsersModerationTable::class,
             'modals.user-verification-modal' => UserVerificationModal::class,
             'date-picker' => DatePicker::class,
             'user-moderation-button' => UserModerationButton::class,
@@ -164,5 +167,6 @@ class CoreServiceProvider extends ServiceProvider
         }
 
         Blade::component('date-picker', DatePicker::class);
+        Blade::component('sortable-column-header', SortableColumnHeader::class);
     }
 }

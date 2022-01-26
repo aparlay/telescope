@@ -9,7 +9,7 @@ use Aparlay\Core\Admin\Filters\FilterScope;
 use App\Models\User;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
-class UsersTable extends BaseIndexComponent
+class UsersModerationTable extends BaseIndexComponent
 {
     public $model = User::class;
     protected $listeners = ['updateParent'];
@@ -40,6 +40,7 @@ class UsersTable extends BaseIndexComponent
         return [
             new FilterPartial('username', 'string'),
             new FilterExact('gender', 'int'),
+            new FilterExact('email_verified', 'int'),
             new FilterScope('email', 'string', 'email'),
             new FilterScope('country', 'string', 'countryAlpha2'),
             new FilterExact('status', 'int'),
@@ -65,7 +66,7 @@ class UsersTable extends BaseIndexComponent
 
     public function render()
     {
-        return view('default_view::livewire.users-table', [
+        return view('default_view::livewire.users-moderation-table', [
            'users' => $this->index(),
         ]);
     }
