@@ -190,6 +190,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="card card-info card-outline">
+                                        <div class="card-header" id="headingMainSeven">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                        data-target="#collapseMainEight" aria-expanded="false"
+                                                        aria-controls="collapseMainEight">
+                                                    Notes
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseMainEight" class="collapse" aria-labelledby="headingMainEight"
+                                             data-parent="#accordion">
+                                            <div class="card-body">
+                                                @include('default_view::admin.pages.user.tabs.notes', ['user' => $user])
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
                         </div>
