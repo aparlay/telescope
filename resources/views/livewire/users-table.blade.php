@@ -83,7 +83,7 @@
             </th>
             <th>
                 <div>
-                    <label for="">Email Verified?</label>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'email_verified'" :fieldLabel="'Email Verified?'" />
                 </div>
             </th>
             <th class="col-md-1">
@@ -119,7 +119,6 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Action</label>
-
                 </div>
             </th>
         </tr>
@@ -194,14 +193,9 @@
                 <td>
                     <div class="col-md-6">
                         <div>
-                            <button
-                                class="btn btn-sm btn-success"
-                                type="button"
-                                wire:key="verify_button_{{ $user->_id }}}"
-                                wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}')"
-                            >
-                                <i class="fa fa-edit"></i>
-                            </button>
+                            <a class="btn btn-success" href="{{$user->admin_url}}">
+                                <i title="Profile" class="fa fa-user-circle"></i>
+                            </a>
                         </div>
                     </div>
                 </td>
