@@ -3,8 +3,9 @@
 @section('plugins.Datatables', true)
 @section('plugins.Select2', true)
 @section('css')
-    @livewireStyles
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}">
+    <link rel="stylesheet" href="/css/admin.css" >
+    @livewireStyles
 @stop
 @section('content_header')
     <!-- Content Header (Page header) -->

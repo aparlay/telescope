@@ -2,47 +2,8 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <h4>Credit Cards</h4>
                 <div class="col-12 table-responsive">
-                    @php
-                        $heads = [
-                            'Username',
-                            'Status',
-                            '',
-                            'Expiration Month',
-                            'Expiration Year',
-                            'Created at',
-                            '',
-                            ''
-                        ];
-
-                        $config = [
-                            'processing' => true,
-                            'serverSide' => true,
-                            'pageLength' => config('core.admin.lists.user_page_count'),
-                            'responsive' => true,
-                            'lengthChange' => false,
-                            'dom' => 'rtip',
-                            'orderMulti' => false,
-                            'bInfo' => false,
-                            'searchCols' => [['search' => $user->username]],
-                            'autoWidth' => false,
-                            'ajax' => route('payment.admin.ajax.credit-card.index'),
-                            'order' => [[5, 'desc']],
-                            'columns' => [
-                                ['data' => 'creator.username'],
-                                ['data' => 'status_button','orderData' => 2, 'target' => 2],
-                                ['data' => 'status','visible' => false],
-                                ['data' => 'expire_month', 'orderable' => false],
-                                ['data' => 'expire_year', 'orderable' => false],
-                                ['data' => 'formatted_created_at','orderData' => 6, 'target' => 6],
-                                ['data' => 'created_at','visible' => false],
-                                ['data' => 'view_button', 'orderable' => false],
-                            ],
-                        ]
-                    @endphp
-                    <x-adminlte-datatable id="creditCardsDatatable" :heads="$heads" :config="$config">
-                    </x-adminlte-datatable>
+                    <livewire:credit-cards-table :userId="(string)$user->_id"/>
                 </div>
 
 

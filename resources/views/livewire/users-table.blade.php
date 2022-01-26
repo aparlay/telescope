@@ -48,10 +48,16 @@
     <table class="table table-striped">
         <tbody>
         <tr>
-            <th class="col-md-3">
+            <th class="col-md-2">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
                     <input class="form-control" type="text" wire:model="filter.username"/>
+                </div>
+            </th>
+            <th class="col-md-2">
+                <div>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'full_name'" :fieldLabel="'Full name'" />
+                    <input class="form-control" type="text" wire:model="filter.full_name"/>
                 </div>
             </th>
             <th class="col-md-2">
@@ -70,22 +76,10 @@
                     />
                 </div>
             </th>
-            <th class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'full_name'" :fieldLabel="'Full name'" />
-                    <input class="form-control" type="text" wire:model="filter.full_name"/>
-                </div>
-            </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Gender</label>
                     <x-wire-dropdown-list :wire-model="'filter.gender'" :options="User::getGenders()"/>
-                </div>
-            </th>
-            <th>
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'email_verified'" :fieldLabel="'Email?'" />
-                    <x-wire-dropdown-list :wire-model="'filter.email_verified'" :options="[true => 'Verified', false => 'Not verified']"/>
                 </div>
             </th>
             <th class="col-md-1">
@@ -96,22 +90,13 @@
             </th>
             <th class="col-md-1">
                 <div>
-                    <label for="">Verification</label>
+                    <label for="">Verif. Creator</label>
                     <x-wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
                 </div>
             </th>
-            <th>
-                <x-sortable-column-header :sort="$sort" :fieldName="'follower_count'" :fieldLabel="'Followers'" />
-            </th>
-            <th>
-                <x-sortable-column-header :sort="$sort" :fieldName="'likes_count'" :fieldLabel="'Likes'" />
-            </th>
-            <th>
-                <x-sortable-column-header :sort="$sort" :fieldName="'media_count'" :fieldLabel="'Media'" />
-            </th>
 
             <th class="col-md-2">
-                <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Registration Date'" />
+                <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Reg. Date'" />
             </th>
 
             <th class="col-md-1">
@@ -127,6 +112,9 @@
                     <x-username-avatar :user="$user"/>
                 </td>
                 <td>
+                    {{ $user->full_name }}
+                </td>
+                <td>
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
                 </td>
                 <td>
@@ -134,17 +122,9 @@
                          class="mr-1 align-bottom">{{ $user->country_label }}
                 </td>
                 <td>
-                    {{ $user->full_name }}
-                </td>
-                <td>
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
                         {{ UserGender::from($user->gender)->label() }}
                     </span>
-                </td>
-                <td>
-                    @if ($user->email_verified)
-                        <i class="fa fa-check-circle text-success"></i>
-                    @endif
                 </td>
                 <td>
                     <span class="badge bg-{{ UserStatus::from($user->status)->badgeColor() }}">
@@ -165,18 +145,6 @@
                             @endif
                         </div>
                     </div>
-                </td>
-
-                <td>
-                    {{ $user->follower_count }}
-                </td>
-
-                <td>
-                    {{ $user->media_count }}
-                </td>
-
-                <td>
-                    {{ $user->likes_count }}
                 </td>
 
                 <td>
