@@ -82,7 +82,6 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Verification</label>
-                    <x-wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
                 </div>
             </th>
             <th class="col-md-2">
