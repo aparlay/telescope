@@ -52,6 +52,7 @@ class UsersTable extends BaseIndexComponent
     public function buildQuery(): Builder
     {
         $query = parent::buildQuery();
+
         return $query;
     }
 
