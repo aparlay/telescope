@@ -1,5 +1,7 @@
 <select class="form-control" wire:model="{{ $wireModel }}">
-    <option value="">Any</option>
+    @if ($showAny)
+        <option value="">Any</option>
+    @endif
     @foreach($options as $value => $label)
         <option value="{{$value}}">{{$label}}</option>
     @endforeach

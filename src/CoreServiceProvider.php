@@ -5,6 +5,7 @@ namespace Aparlay\Core;
 use Aparlay\Core\Admin\Components\DatePicker;
 use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
+use Aparlay\Core\Admin\Components\WireDropDownList;
 use Aparlay\Core\Admin\Components\WireTableFilterDropdown;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
@@ -170,7 +171,7 @@ class CoreServiceProvider extends ServiceProvider
 
         Blade::component('date-picker', DatePicker::class);
         Blade::component('sortable-column-header', SortableColumnHeader::class);
-        Blade::component('wire-table-filter-dropdown', WireTableFilterDropdown::class);
+        Blade::component('wire-dropdown-list', WireDropDownList::class);
         Blade::component('username-avatar', UserNameAvatar::class);
 
     }

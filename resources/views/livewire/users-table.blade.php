@@ -39,11 +39,7 @@
 
             <div class="col-md-1 ml-auto">
                 <label for="">Per Page</label>
-                <select class="form-control" wire:model="perPage">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                </select>
+                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
 
         </div>
@@ -73,7 +69,7 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Gender</label>
-                    <x-wire-table-filter-dropdown :wire-model="'filter.gender'" :options="User::getGenders()"/>
+                    <wire-dropdown-list :wire-model="'filter.gender'" :options="User::getGenders()"/>
                 </div>
             </th>
             <th>
@@ -84,13 +80,13 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Status</label>
-                    <x-wire-table-filter-dropdown :wire-model="'filter.status'" :options="User::getStatuses()"/>
+                    <wire-dropdown-list :wire-model="'filter.status'" :options="User::getStatuses()"/>
                 </div>
             </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Verification</label>
-                    <x-wire-table-filter-dropdown :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
+                    <wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
                 </div>
             </th>
             <th>Followers</th>
