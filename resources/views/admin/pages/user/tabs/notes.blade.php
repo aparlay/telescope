@@ -4,6 +4,7 @@
             <div class="row">
                 <h4>Notes</h4>
                 <div class="col-12 table-responsive">
+                   
                 </div>
             </div>
         </div>
