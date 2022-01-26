@@ -49,7 +49,6 @@ class QueryBuilder
                 return $value;
             });
 
-
         return $preparedFilters;
     }
 
