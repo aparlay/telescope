@@ -57,7 +57,7 @@ class CreditCardsTable extends BaseIndexComponent
     {
         $query = parent::buildQuery();
 
-        if (!empty($this->userId)) {
+        if (! empty($this->userId)) {
             $query->where('creator._id', new ObjectId($this->userId));
         }
 
