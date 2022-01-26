@@ -61,48 +61,32 @@
                     <input class="form-control" type="text" wire:model="filter.email"/>
                 </div>
             </th>
-            <th class="col-md-2" wire:model="sort.country" wire:click="sort('country')">
+            <th class="col-md-2">
                 <div>
-                    <label for="">Country</label>
-                    <select class="form-control" wire:model="filter.country">
-                        <option value="">Any</option>
-                        @foreach(Country::get() as $country)
-                            <option value="{{$country->alpha2}}">{{$country->name}}</option>
-                        @endforeach
-                    </select>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'country'" :fieldLabel="'Country'" />
+
+                    <x-wire-table-filter-dropdown
+                        :wire-model="'filter.country'"
+                        :options="Country::get()->pluck('name', 'alpha2')->all()"
+                    />
                 </div>
             </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Gender</label>
-                    <select class="form-control" wire:model="filter.gender">
-                        <option value="">Any</option>
-                        @foreach(User::getGenders() as $value => $label)
-                            <option value="{{$value}}">{{$label}}</option>
-                        @endforeach
-                    </select>
+                    <x-wire-table-filter-dropdown :wire-model="'filter.gender'" :options="User::getGenders()"/>
                 </div>
             </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Status</label>
-                    <select class="form-control" wire:model="filter.status">
-                        <option value="">Any</option>
-                        @foreach(User::getStatuses() as $value => $label)
-                            <option value="{{$value}}">{{$label}}</option>
-                        @endforeach
-                    </select>
+                    <x-wire-table-filter-dropdown :wire-model="'filter.status'" :options="User::getStatuses()"/>
                 </div>
             </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Verification</label>
-                    <select class="form-control" wire:model="filter.verification_status">
-                        <option value="">Any</option>
-                        @foreach(User::getVerificationStatuses() as $value => $label)
-                            <option value="{{$value}}">{{$label}}</option>
-                        @endforeach
-                    </select>
+                    <x-wire-table-filter-dropdown :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
                 </div>
             </th>
             <th class="col-md-2">

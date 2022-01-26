@@ -73,12 +73,7 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Gender</label>
-                    <select class="form-control" wire:model="filter.gender">
-                        <option value="">Any</option>
-                        @foreach(User::getGenders() as $value => $label)
-                            <option value="{{$value}}">{{$label}}</option>
-                        @endforeach
-                    </select>
+                    <x-wire-table-filter-dropdown :wire-model="'filter.gender'" :options="User::getGenders()"/>
                 </div>
             </th>
             <th>
@@ -89,23 +84,13 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Status</label>
-                    <select class="form-control" wire:model="filter.status">
-                        <option value="">Any</option>
-                        @foreach(User::getStatuses() as $value => $label)
-                            <option value="{{$value}}">{{$label}}</option>
-                        @endforeach
-                    </select>
+                    <x-wire-table-filter-dropdown :wire-model="'filter.status'" :options="User::getStatuses()"/>
                 </div>
             </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Verification</label>
-                    <select class="form-control" wire:model="filter.verification_status">
-                        <option value="">Any</option>
-                        @foreach(User::getVerificationStatuses() as $value => $label)
-                            <option value="{{$value}}">{{$label}}</option>
-                        @endforeach
-                    </select>
+                    <x-wire-table-filter-dropdown :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
                 </div>
             </th>
             <th>Followers</th>
