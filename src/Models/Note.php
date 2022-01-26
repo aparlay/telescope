@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
-class Version extends BaseModel
+class Note extends BaseModel
 {
     use HasFactory;
     use Notifiable;

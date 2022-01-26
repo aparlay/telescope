@@ -2,15 +2,15 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-enum NoteType: string implements Enum
+enum NoteType: int implements Enum
 {
-    case SUSPEND = 'suspend';
-    case UNSUSPEND = 'unsuspend';
-    case BAN = 'ban';
-    case UNBAN = 'unban';
-    case WARNING_MESSAGE = 'warning message';
-    case BAN_ALL_CC_PAYMENT = 'ban all cc payments';
-    case UNBAN_ALL_CC_PAYMENT = 'unban all cc payments';
+    case SUSPEND = 0;
+    case UNSUSPEND = 1;
+    case BAN = 2;
+    case UNBAN = 3;
+    case WARNING_MESSAGE = 4;
+    case BAN_ALL_CC_PAYMENT = 5;
+    case UNBAN_ALL_CC_PAYMENT = 6;
 
     public function label(): string
     {
