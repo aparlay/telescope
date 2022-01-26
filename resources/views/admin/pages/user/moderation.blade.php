@@ -25,7 +25,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 table-responsive">
-                    <livewire:users-table :filter="['verification_status' => 1]"/>
+                    <livewire:users-moderation-table />
                 </div>
             </div>
         </div>

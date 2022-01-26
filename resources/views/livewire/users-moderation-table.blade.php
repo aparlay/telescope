@@ -14,7 +14,6 @@
                 <input class="form-control" type="text" wire:model="filter.text_search"/>
             </div>
 
-
             <div class="col-md-2 offset-6">
                 <div class="row">
                     <div class="col">
@@ -36,12 +35,10 @@
                 </div>
             </div>
 
-
             <div class="col-md-1 ml-auto">
                 <label for="">Per Page</label>
                 <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
-
         </div>
     </div>
 
@@ -70,22 +67,10 @@
                     />
                 </div>
             </th>
-            <th class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'full_name'" :fieldLabel="'Full name'" />
-                    <input class="form-control" type="text" wire:model="filter.full_name"/>
-                </div>
-            </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Gender</label>
                     <x-wire-dropdown-list :wire-model="'filter.gender'" :options="User::getGenders()"/>
-                </div>
-            </th>
-            <th>
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'email_verified'" :fieldLabel="'Email?'" />
-                    <x-wire-dropdown-list :wire-model="'filter.email_verified'" :options="[true => 'Verified', false => 'Not verified']"/>
                 </div>
             </th>
             <th class="col-md-1">
@@ -97,26 +82,16 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Verification</label>
-                    <x-wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
                 </div>
             </th>
-            <th>
-                <x-sortable-column-header :sort="$sort" :fieldName="'follower_count'" :fieldLabel="'Followers'" />
-            </th>
-            <th>
-                <x-sortable-column-header :sort="$sort" :fieldName="'likes_count'" :fieldLabel="'Likes'" />
-            </th>
-            <th>
-                <x-sortable-column-header :sort="$sort" :fieldName="'media_count'" :fieldLabel="'Media'" />
-            </th>
-
             <th class="col-md-2">
-                <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Registration Date'" />
+                <div>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Registration Date'" />
+                </div>
             </th>
-
             <th class="col-md-1">
                 <div>
-                    <label for="">Profile</label>
+                    <label for="">Action</label>
                 </div>
             </th>
         </tr>
@@ -134,17 +109,9 @@
                          class="mr-1 align-bottom">{{ $user->country_label }}
                 </td>
                 <td>
-                    {{ $user->full_name }}
-                </td>
-                <td>
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
                         {{ UserGender::from($user->gender)->label() }}
                     </span>
-                </td>
-                <td>
-                    @if ($user->email_verified)
-                        <i class="fa fa-check-circle text-success"></i>
-                    @endif
                 </td>
                 <td>
                     <span class="badge bg-{{ UserStatus::from($user->status)->badgeColor() }}">
@@ -168,28 +135,20 @@
                 </td>
 
                 <td>
-                    {{ $user->follower_count }}
-                </td>
-
-                <td>
-                    {{ $user->media_count }}
-                </td>
-
-                <td>
-                    {{ $user->likes_count }}
-                </td>
-
-                <td>
                     {{ $user->created_at }}
                 </td>
-
 
                 <td>
                     <div class="col-md-6">
                         <div>
-                            <a class="btn btn-success" href="{{$user->admin_url}}">
-                                <i title="Profile" class="fa fa-user-circle"></i>
-                            </a>
+                            <button
+                                class="btn btn-sm btn-success"
+                                type="button"
+                                wire:key="verify_button_{{ $user->_id }}}"
+                                wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}')"
+                            >
+                                <i class="fa fa-edit"></i>
+                            </button>
                         </div>
                     </div>
                 </td>
