@@ -75,6 +75,7 @@
             <th>
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'email_verified'" :fieldLabel="'Email Verified?'" />
+                    <x-wire-dropdown-list :wire-model="'filter.email_verified'" :options="[true => 'Yes', false => 'No']"/>
                 </div>
             </th>
             <th class="col-md-1">

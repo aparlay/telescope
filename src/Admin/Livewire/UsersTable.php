@@ -42,16 +42,19 @@ class UsersTable extends BaseIndexComponent
     protected function getFilters()
     {
         return [
-            new FilterPartial('full_name', 'string'),
+            new FilterExact('email_verified', 'boolean'),
             new FilterPartial('username', 'string'),
-            new FilterExact('gender', 'int'),
             new FilterPartial('email', 'string'),
+            new FilterPartial('full_name', 'string'),
+            new FilterExact('gender', 'int'),
             new FilterExact('status', 'int'),
             new FilterScope('text_search', 'string', 'textSearch'),
             (new FilterExact('verification_status', 'int')),
             new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];
     }
+
+
 
     public function updatingSearch()
     {
