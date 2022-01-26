@@ -11,6 +11,7 @@ use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
+use Aparlay\Core\Admin\Livewire\MediasTable;
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
 use Aparlay\Core\Admin\Providers\EventServiceProvider;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
@@ -163,6 +164,7 @@ class CoreServiceProvider extends ServiceProvider
             'modals.user-verification-modal' => UserVerificationModal::class,
             'date-picker' => DatePicker::class,
             'user-moderation-button' => UserModerationButton::class,
+            'medias-table' => MediasTable::class,
         ];
 
         foreach ($components as $name => $class) {
