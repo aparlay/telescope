@@ -50,7 +50,6 @@ abstract class AbstractBaseFilter
         return $this;
     }
 
-
     /**
      * @param $internalName
      * @return $this
@@ -58,6 +57,7 @@ abstract class AbstractBaseFilter
     public function setInternalFieldName($internalName)
     {
         $this->internalFieldName = $internalName;
+
         return $this;
     }
 
@@ -68,6 +68,4 @@ abstract class AbstractBaseFilter
     {
         return $this->internalFieldName ?? $this->fieldName;
     }
-
-
 }
