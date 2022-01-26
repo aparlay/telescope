@@ -55,8 +55,6 @@ class MediasTable extends BaseIndexComponent
     public function buildQuery(): Builder
     {
         $query = parent::buildQuery();
-        $query->options(['allowDiskUse' => true]);
-
         return $query;
     }
 

@@ -43,16 +43,14 @@
                 </th>
             <td class="col-md-2">
                 <div> 
-                <label
-                    @class([
-                        'col sort-col',
+                    <label
+                        @class([
+                            'col sort-col',
                             'sort-asc' => Arr::get($sort, 'created_by') === 1,
                             'sort-desc' => Arr::get($sort, 'created_by') === -1])
                         wire:model="sort.created_by"
                         wire:click="sort('created_by')">
-
-                        Created By
-
+                        <a href="#" class="text-primary">Created By</a>
                     </label>
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>  
@@ -67,9 +65,7 @@
                             'sort-desc' => Arr::get($sort, 'description') === -1])
                         wire:model="sort.description"
                         wire:click="sort('description')">
-
-                        Description
-
+                        <a href="#" class="text-primary">Description</a>
                     </label>
                 </div>
             </td>
@@ -83,9 +79,7 @@
                             'sort-desc' => Arr::get($sort, 'status') === -1])
                         wire:model="sort.status"
                         wire:click="sort('status')">
-
-                        Status
-
+                        <a href="#" class="text-primary">Status</a>    
                     </label>
                     <select class="form-control" wire:model="filter.status">
                         <option value="">Any</option>
@@ -104,9 +98,7 @@
                             'sort-desc' => Arr::get($sort, 'like_count') === -1])
                         wire:model="sort.like_count"
                         wire:click="sort('like_count')">
-
-                        Likes
-
+                        <a href="#" class="text-primary">Likes</a>    
                     </label>
                     <input class="form-control" type="text" wire:model="filter.like_count"/>
                 </div>
@@ -120,9 +112,7 @@
                             'sort-desc' => Arr::get($sort, 'visit_count') === -1])
                         wire:model="sort.visit_count"
                         wire:click="sort('visit_count')">
-
-                        Visits
-
+                        <a href="#" class="text-primary">Visits</a> 
                     </label>
                     <input class="form-control" type="text" wire:model="filter.visit_count"/>
                 </div>
@@ -136,9 +126,7 @@
                             'sort-desc' => Arr::get($sort, 'sort_score') === -1])
                         wire:model="sort.sort_score"
                         wire:click="sort('sort_score')">
-
-                        Sort Scores
-
+                        <a href="#" class="text-primary">Sort Scores</a> 
                     </label>
                     <input class="form-control" type="text" wire:model="filter.sort_score"/>
                 </div>
@@ -152,9 +140,7 @@
                             'sort-desc' => Arr::get($sort, 'created_at') === -1])
                         wire:model="sort.created_at"
                         wire:click="sort('created_at')">
-
-                        Created At
-
+                        <a href="#" class="text-primary">Created At</a> 
                     </label>
                 </div>
             </td>

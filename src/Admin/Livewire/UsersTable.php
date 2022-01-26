@@ -6,7 +6,6 @@ use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use App\Models\User;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
@@ -53,9 +52,6 @@ class UsersTable extends BaseIndexComponent
     public function buildQuery(): Builder
     {
         $query = parent::buildQuery();
-
-        $query->options(['allowDiskUse' => true]);
-
         return $query;
     }
 
