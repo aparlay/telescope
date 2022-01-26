@@ -45,7 +45,7 @@ class UsersTable extends BaseIndexComponent
             new FilterPartial('full_name', 'string'),
             new FilterPartial('username', 'string'),
             new FilterExact('gender', 'int'),
-            new FilterScope('email', 'string', 'email'),
+            new FilterPartial('email', 'string'),
             new FilterExact('status', 'int'),
             new FilterScope('text_search', 'string', 'textSearch'),
             (new FilterExact('verification_status', 'int')),

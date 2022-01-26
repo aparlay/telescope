@@ -89,9 +89,15 @@
                     <x-wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
                 </div>
             </th>
-            <th>Followers</th>
-            <th>Likes</th>
-            <th>Medias</th>
+            <th>
+                <x-sortable-column-header :sort="$sort" :fieldName="'follower_count'" :fieldLabel="'Followers'" />
+            </th>
+            <th>
+                <x-sortable-column-header :sort="$sort" :fieldName="'likes_count'" :fieldLabel="'Likes'" />
+            </th>
+            <th>
+                <x-sortable-column-header :sort="$sort" :fieldName="'media_count'" :fieldLabel="'Media'" />
+            </th>
 
             <th class="col-md-2">
                 <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Registration Date'" />
@@ -99,7 +105,7 @@
 
             <th class="col-md-1">
                 <div>
-                    <label for="">Action????ы</label>
+                    <label for="">Profile</label>
                 </div>
             </th>
         </tr>
