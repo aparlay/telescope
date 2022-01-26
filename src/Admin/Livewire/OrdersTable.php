@@ -26,7 +26,7 @@ class OrdersTable extends BaseIndexComponent
             'amount',
             'created_at',
             'status',
-            'creator.username'
+            'creator.username',
         ];
     }
 
@@ -35,8 +35,6 @@ class OrdersTable extends BaseIndexComponent
      */
     protected function getFilters()
     {
-
-
         return [
             new FilterPartial('creator_username', 'string', 'creator.username'),
             new FilterExact('entity', 'int'),
