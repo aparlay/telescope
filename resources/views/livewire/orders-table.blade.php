@@ -76,6 +76,9 @@
             <th class="col-md-2">
                 <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created at'" />
             </th>
+            <th>
+                Action
+            </th>
         </tr>
 
         @foreach($orders as $order)
@@ -106,6 +109,11 @@
                 </td>
                 <td>
                     {{ $order->created_at  }}
+                </td>
+                <td>
+                    <a class="btn btn-info" href="{{$order->getAdminUrlAttribute()}}">
+                        <i class="fa fa-eye"></i> View
+                    </a>
                 </td>
             </tr>
         @endforeach
