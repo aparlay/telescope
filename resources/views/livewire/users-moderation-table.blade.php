@@ -79,11 +79,6 @@
                     <x-wire-dropdown-list :wire-model="'filter.status'" :options="User::getStatuses()"/>
                 </div>
             </th>
-            <th class="col-md-1">
-                <div>
-                    <label for="">Verification</label>
-                </div>
-            </th>
             <th class="col-md-2">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Registration Date'" />
@@ -117,21 +112,6 @@
                     <span class="badge bg-{{ UserStatus::from($user->status)->badgeColor() }}">
                         {{ UserStatus::from($user->status)->label() }}
                     </span>
-                </td>
-
-                <td>
-                    <div class="row">
-                        <div class="col-md-6">
-                            @if ($user->verification_status)
-                                <span
-                                    class="badge bg-{{ UserVerificationStatus::from($user->verification_status)->badgeColor() }}">
-                            {{ UserVerificationStatus::from($user->verification_status)->label() }}
-                        </span>
-                            @else
-                                <span class="badge bg-info">None</span>
-                            @endif
-                        </div>
-                    </div>
                 </td>
 
                 <td>
