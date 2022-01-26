@@ -54,6 +54,7 @@ class OrdersTable extends BaseIndexComponent
         if (! empty($this->userId)) {
             $query->where('creator._id', new ObjectId($this->userId));
         }
+
         return $query;
     }
 
