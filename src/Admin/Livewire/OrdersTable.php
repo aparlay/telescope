@@ -6,12 +6,16 @@ use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Payment\Models\Order;
+use Jenssegers\Mongodb\Eloquent\Builder;
+use MongoDB\BSON\ObjectId;
 
 class OrdersTable extends BaseIndexComponent
 {
     public $model = Order::class;
 
     protected $listeners = ['updateParent'];
+
+    private $userId;
 
     public function updateParent()
     {
@@ -41,6 +45,16 @@ class OrdersTable extends BaseIndexComponent
             new FilterExact('status', 'int'),
             new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];
+    }
+
+    public function buildQuery(): Builder
+    {
+        $query = parent::buildQuery();
+
+        if (! empty($this->userId)) {
+            $query->where('creator._id', new ObjectId($this->userId));
+        }
+        return $query;
     }
 
     public function updatingSearch()
