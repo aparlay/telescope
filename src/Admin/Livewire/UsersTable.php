@@ -32,7 +32,7 @@ class UsersTable extends BaseIndexComponent
             'likes_count',
             'follower_count',
             'created_at',
-            'email_verified'
+            'email_verified',
         ];
     }
 

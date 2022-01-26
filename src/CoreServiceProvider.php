@@ -173,6 +173,5 @@ class CoreServiceProvider extends ServiceProvider
         Blade::component('sortable-column-header', SortableColumnHeader::class);
         Blade::component('wire-dropdown-list', WireDropDownList::class);
         Blade::component('username-avatar', UserNameAvatar::class);
-
     }
 }
