@@ -63,10 +63,6 @@ class QueryBuilder
     {
         $preparedFilters = $this->prepareFilters($filters);
 
-        \Log::info('prepared filters', [
-            'ppp' => $preparedFilters
-        ]);
-
         /** @var AbstractBaseFilter $filter */
         foreach ($preparedFilters as $fieldName => $value) {
             $filter = $this->allowedFilters[$fieldName];
