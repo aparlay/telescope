@@ -61,7 +61,7 @@
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'country'" :fieldLabel="'Country'" />
 
-                    <wire-dropdown-list
+                    <x-wire-dropdown-list
                         :wire-model="'filter.country'"
                         :options="Country::get()->pluck('name', 'alpha2')->all()"
                     />
@@ -70,19 +70,19 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Gender</label>
-                    <wire-dropdown-list :wire-model="'filter.gender'" :options="User::getGenders()"/>
+                    <x-wire-dropdown-list :wire-model="'filter.gender'" :options="User::getGenders()"/>
                 </div>
             </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Status</label>
-                    <wire-dropdown-list :wire-model="'filter.status'" :options="User::getStatuses()"/>
+                    <x-wire-dropdown-list :wire-model="'filter.status'" :options="User::getStatuses()"/>
                 </div>
             </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Verification</label>
-                    <wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
+                    <x-wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
                 </div>
             </th>
             <th class="col-md-2">

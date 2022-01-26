@@ -69,7 +69,7 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Gender</label>
-                    <wire-dropdown-list :wire-model="'filter.gender'" :options="User::getGenders()"/>
+                    <x-wire-dropdown-list :wire-model="'filter.gender'" :options="User::getGenders()"/>
                 </div>
             </th>
             <th>
@@ -80,13 +80,13 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Status</label>
-                    <wire-dropdown-list :wire-model="'filter.status'" :options="User::getStatuses()"/>
+                    <x-wire-dropdown-list :wire-model="'filter.status'" :options="User::getStatuses()"/>
                 </div>
             </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Verification</label>
-                    <wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
+                    <x-wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
                 </div>
             </th>
             <th>Followers</th>
