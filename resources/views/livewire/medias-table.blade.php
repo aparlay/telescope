@@ -29,20 +29,18 @@
         <tbody>
         <tr>
             <th class="col-md-2">
-            <div>
+                <div>
                     <label
-                    @class([
-                        'col sort-col',
+                        @class([
+                            'col sort-col',
                             'sort-asc' => Arr::get($sort, 'file') === 1,
                             'sort-desc' => Arr::get($sort, 'file') === -1])
                         wire:model="sort.file"
                         wire:click="sort('file')">
-
-                        Cover
-
+                        <a href="#" class="text-primary">Cover</a>
                     </label>
                 </div>
-            </th>
+                </th>
             <td class="col-md-2">
                 <div> 
                 <label

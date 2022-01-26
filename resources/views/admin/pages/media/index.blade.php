@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/css/media.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/daterangepicker/daterangepicker.css') }}" >
     <link rel="stylesheet" href="{{ asset('admin/assets/css/adminStyles.css') }}" >
-    @livewireStyles
 @endsection
 @section('content_header')
     <div class="row mb-2">
@@ -36,7 +35,6 @@
 
 @endsection
 @section('js')
-    @livewireScripts
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
