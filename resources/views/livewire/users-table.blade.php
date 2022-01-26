@@ -62,6 +62,16 @@
             </th>
             <th class="col-md-2">
                 <div>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'country'" :fieldLabel="'Country'" />
+
+                    <x-wire-dropdown-list
+                        :wire-model="'filter.country'"
+                        :options="Country::get()->pluck('name', 'alpha2')->all()"
+                    />
+                </div>
+            </th>
+            <th class="col-md-2">
+                <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'full_name'" :fieldLabel="'Full name'" />
                     <input class="form-control" type="text" wire:model="filter.full_name"/>
                 </div>
@@ -74,8 +84,8 @@
             </th>
             <th>
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'email_verified'" :fieldLabel="'Email Verified?'" />
-                    <x-wire-dropdown-list :wire-model="'filter.email_verified'" :options="[true => 'Yes', false => 'No']"/>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'email_verified'" :fieldLabel="'Email?'" />
+                    <x-wire-dropdown-list :wire-model="'filter.email_verified'" :options="[true => 'Verified', false => 'Not verified']"/>
                 </div>
             </th>
             <th class="col-md-1">
@@ -118,6 +128,10 @@
                 </td>
                 <td>
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
+                </td>
+                <td>
+                    <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}"
+                         class="mr-1 align-bottom">{{ $user->country_label }}
                 </td>
                 <td>
                     {{ $user->full_name }}
