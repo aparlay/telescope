@@ -7,9 +7,8 @@
 <div class="medias-table">
     <div class="filters pb-3">
         <div class="row">
-            <div class="col-md-3">
-                <label for="">Text Search</label>
-                <input class="form-control" type="text" wire:model="filter.text_search"/>
+            <div class="col-md-3 pt-4">
+                <h4>Medias Moderation</h4>
             </div>
 
             <div class="col-md-2 offset-6">
