@@ -1,4 +1,5 @@
 <?php
+
 namespace Aparlay\Core\Models\Traits;
 
 use Aparlay\Core\Helpers\Country as CountryHelper;
