@@ -3,7 +3,6 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Admin\Components\DatePicker;
-use Aparlay\Core\Admin\Components\MediaCover;
 use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
 use Aparlay\Core\Admin\Components\WireDropDownList;
@@ -12,8 +11,8 @@ use Aparlay\Core\Admin\Livewire\CreditCardsTable;
 use Aparlay\Core\Admin\Livewire\EmailsTable;
 use Aparlay\Core\Admin\Livewire\MediasModerationTable;
 use Aparlay\Core\Admin\Livewire\MediasTable;
-use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\SettingsTable;
+use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
@@ -170,11 +169,9 @@ class CoreServiceProvider extends ServiceProvider
             'user-moderation-button' => UserModerationButton::class,
             'medias-table' => MediasTable::class,
             'medias-moderation-table' => MediasModerationTable::class,
-<<<<<<< HEAD
             'settings-table' => SettingsTable::class,
-=======
             'emails-table' => EmailsTable::class,
->>>>>>> 9d1d850d2a838dbcfdb38e739763c67ff2710cb4
+
         ];
 
         foreach ($components as $name => $class) {
@@ -186,5 +183,6 @@ class CoreServiceProvider extends ServiceProvider
         Blade::component('wire-dropdown-list', WireDropDownList::class);
         Blade::component('username-avatar', UserNameAvatar::class);
         Blade::component('media-cover', MediaCover::class);
+
     }
 }
