@@ -11,7 +11,7 @@ use App\Models\Media;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use function view;
 
-class MediasTable extends BaseIndexComponent
+class MediasModerationTable extends BaseIndexComponent
 {
     public $model = Media::class;
 
@@ -41,7 +41,7 @@ class MediasTable extends BaseIndexComponent
     public function buildQuery(): Builder
     {
         $query = parent::buildQuery();
-        $query->with(['creatorObj']);
+        $query->completed()->with(['creatorObj']);
 
         return $query;
     }
@@ -67,7 +67,7 @@ class MediasTable extends BaseIndexComponent
 
     public function render()
     {
-        return view('default_view::livewire.medias-table', [
+        return view('default_view::livewire.medias-moderation-table', [
            'medias' => $this->index(),
         ]);
     }

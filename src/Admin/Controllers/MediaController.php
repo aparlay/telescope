@@ -40,7 +40,7 @@ class MediaController extends Controller
     {
         $mediaStatuses = $this->mediaService->getMediaStatuses();
 
-        return view('default_view::admin.pages.media.index')->with([
+        return view('default_view::admin.pages.media.moderation')->with([
             'moderation' => true,
             'mediaStatuses' => $mediaStatuses,
         ]);

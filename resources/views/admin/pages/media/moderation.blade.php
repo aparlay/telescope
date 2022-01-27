@@ -10,12 +10,12 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Media @if($moderation) moderation @endif</h1>
+            <h1 class="m-0">Media moderation</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ route('core.admin.dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Media @if($moderation) moderation @endif</a></li>
+                <li class="breadcrumb-item"><a href="#">Media moderation</a></li>
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -27,7 +27,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 table-responsive">
-                    <livewire:medias-table/>
+                    <livewire:medias-moderation-table/>
                 </div>
             </div>
         </div>

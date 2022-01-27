@@ -8,6 +8,7 @@ use Aparlay\Core\Admin\Components\UserNameAvatar;
 use Aparlay\Core\Admin\Components\WireDropDownList;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\CreditCardsTable;
+use Aparlay\Core\Admin\Livewire\MediasModerationTable;
 use Aparlay\Core\Admin\Livewire\MediasTable;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
@@ -165,6 +166,7 @@ class CoreServiceProvider extends ServiceProvider
             'date-picker' => DatePicker::class,
             'user-moderation-button' => UserModerationButton::class,
             'medias-table' => MediasTable::class,
+            'medias-moderation-table' => MediasModerationTable::class,
         ];
 
         foreach ($components as $name => $class) {
