@@ -168,7 +168,7 @@ class CoreServiceProvider extends ServiceProvider
             'user-moderation-button' => UserModerationButton::class,
             'medias-table' => MediasTable::class,
             'medias-moderation-table' => MediasModerationTable::class,
-            'emails-table' => EmailsTable::class
+            'emails-table' => EmailsTable::class,
         ];
 
         foreach ($components as $name => $class) {

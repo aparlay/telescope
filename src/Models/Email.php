@@ -77,7 +77,6 @@ class Email extends BaseModel
         'updated_at' => 'datetime',
     ];
 
-
     /**
      * Get the user associated with the tip.
      */
@@ -85,7 +84,6 @@ class Email extends BaseModel
     {
         return $this->belongsTo(User::class, 'user._id');
     }
-
 
     /**
      * Create a new factory instance for the model.

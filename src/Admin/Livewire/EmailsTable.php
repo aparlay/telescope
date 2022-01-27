@@ -9,7 +9,6 @@ use Aparlay\Core\Admin\Filters\FilterScope;
 use Aparlay\Core\Admin\Models\Email;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
-
 class EmailsTable extends BaseIndexComponent
 {
     public $model = Email::class;
@@ -27,7 +26,7 @@ class EmailsTable extends BaseIndexComponent
             'email',
             'type',
             'status',
-            'created_at'
+            'created_at',
         ];
     }
 
