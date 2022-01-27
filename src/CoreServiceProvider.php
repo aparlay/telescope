@@ -3,11 +3,12 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Admin\Components\DatePicker;
+use Aparlay\Core\Admin\Components\MediaCover;
 use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
 use Aparlay\Core\Admin\Components\WireDropDownList;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
-use Aparlay\Core\Admin\Livewire\CreditCardsTable;
+use Aparlay\Payment\Admin\Livewire\CreditCardsTable;
 use Aparlay\Core\Admin\Livewire\EmailsTable;
 use Aparlay\Core\Admin\Livewire\MediasModerationTable;
 use Aparlay\Core\Admin\Livewire\MediasTable;

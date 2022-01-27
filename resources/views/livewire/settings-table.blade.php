@@ -5,8 +5,6 @@
     <div class="filters pb-3">
         <div class="row">
             <div class="col-md-3">
-                <label for="">Text Search</label>
-                <input class="form-control" type="text" wire:model="filter.text_search"/>
             </div>
 
             <div class="col-md-2 offset-6">
