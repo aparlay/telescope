@@ -6,7 +6,8 @@ use Illuminate\View\Component;
 
 class MediaCover extends Component
 {
-    public function __construct(public $media) {
+    public function __construct(public $media)
+    {
     }
 
     /**
