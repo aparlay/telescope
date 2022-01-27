@@ -11,8 +11,8 @@ use Aparlay\Core\Admin\Livewire\CreditCardsTable;
 use Aparlay\Core\Admin\Livewire\EmailsTable;
 use Aparlay\Core\Admin\Livewire\MediasModerationTable;
 use Aparlay\Core\Admin\Livewire\MediasTable;
-use Aparlay\Core\Admin\Livewire\SettingsTable;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
+use Aparlay\Core\Admin\Livewire\SettingsTable;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
@@ -183,6 +183,5 @@ class CoreServiceProvider extends ServiceProvider
         Blade::component('wire-dropdown-list', WireDropDownList::class);
         Blade::component('username-avatar', UserNameAvatar::class);
         Blade::component('media-cover', MediaCover::class);
-
     }
 }
