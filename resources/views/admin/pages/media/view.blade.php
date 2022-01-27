@@ -23,57 +23,72 @@
 
                             <form action="" class="form-horizontal" method="POST">
                             <div class="card-body box-profile">
-                                <ul class="list-group list-group-unbordered mb-3">
-                                    <li class="list-group-item">
-                                        <b>Skin Score</b>
-                                        <div>
-                                        <input type="hidden" name="visibility" value="{{ $media->visibility }}">
-                                        <input type="hidden" name="is_music_licensed" value="{{ $media->is_music_licensed}}">
-                                            @foreach ($scoreTypes as $scoreType)
-                                                @foreach (\Aparlay\Core\Admin\Models\Media::getSkinScores() as $score)
-                                                    @if($scoreType['type'] == 'skin')
-                                                        <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
-                                                            <label class="btn btn-outline-secondary skin_score_lable">
-                                                                <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
-                                                                {{ $score }}
-                                                            </label>
-                                                        </div>
-                                                    @endif
-                                                @endforeach
-                                            @endforeach
+                                <div class="row">
+                                    <div class="col-12">
+                                        <ul class="list-group list-group-unbordered mb-3">
+                                            <li class="list-group-item">
+                                                <b>Skin Score</b>
+                                                <div>
+                                                    <input type="hidden" name="visibility" value="{{ $media->visibility }}">
+                                                    <input type="hidden" name="is_music_licensed" value="{{ $media->is_music_licensed}}">
+                                                    @foreach ($scoreTypes as $scoreType)
+                                                        @foreach (\Aparlay\Core\Admin\Models\Media::getSkinScores() as $score)
+                                                            @if($scoreType['type'] == 'skin')
+                                                                <div id="skin_score_{{$score}}" class="btn-group btn-group-toggle skin_score_div" data-toggle="buttons" role="radiogroup">
+                                                                    <label class="btn btn-outline-secondary skin_score_lable">
+                                                                        <input type="radio" id="media_skin_score_{{$score}}" name="skin_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                        {{ $score }}
+                                                                    </label>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Awesomeness Score</b>
+                                                <div>
+                                                    @foreach($scoreTypes as $scoreType)
+                                                        @foreach (\Aparlay\Core\Admin\Models\Media::getAwesomenessScores() as $score)
+                                                            @if($scoreType['type'] == 'awesomeness')
+                                                                <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
+                                                                    <label class="btn btn-outline-secondary awesomeness_score_label">
+                                                                        <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                        {{ $score }}
+                                                                    </label>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <div class="col-md-6 offset-3">
+                                            <button type="submit" id="mediaSave" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
+                                                <i class="fas fa-check"></i>
+                                                <strong>Save Score</strong>
+                                            </button>
                                         </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b>Awesomeness Score</b>
-                                        <div>
-                                            @foreach($scoreTypes as $scoreType)
-                                                @foreach (\Aparlay\Core\Admin\Models\Media::getAwesomenessScores() as $score)
-                                                    @if($scoreType['type'] == 'awesomeness')
-                                                        <div id="awesomeness_score_{{$score}}" class="btn-group btn-group-toggle awesomeness_score_div" data-toggle="buttons" role="radiogroup">
-                                                            <label class="btn btn-outline-secondary awesomeness_score_label">
-                                                                <input type="radio" id="media_awesomeness_score_{{$score}}" name="awesomeness_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
-                                                                {{ $score }}
-                                                            </label>
-                                                        </div>
-                                                    @endif
-                                                @endforeach
-                                            @endforeach
-                                        </div>
-                                    </li>
-                                </ul>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     @csrf()
-                                    @if ($media->status !== 3 && $media->status !== 7)
                                     <div class="col-md-4">
-                                        <button type="submit" id="mediaSave" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
-                                            <i class="fas fa-check"></i>
-                                            <strong>Save</strong>
+                                        <button type="submit" class="btn btn-block btn-success" name="status" value="5"
+                                            {{ $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::DENIED->value &&
+                                                $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value ?
+                                                 'disabled=disabled' : '' }} >
+                                            <i class="fas fa-minus-circle"></i>
+                                            <strong>Approve</strong>
                                         </button>
                                     </div>
                                     <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-warning" name="status" value="6">
+                                        <button type="submit" class="btn btn-block btn-warning" name="status" value="6"
+                                            {{ $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::CONFIRMED->value &&
+                                                    $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value ?
+                                                     'disabled=disabled' : '' }}>
                                             <i class="fas fa-times-circle"></i>
-                                            <strong>Denied</strong>
+                                            <strong>Deny</strong>
                                         </button>
                                     </div>
                                     <div class="col-md-4">
@@ -82,26 +97,6 @@
                                             <strong>Delete + Alert</strong>
                                         </button>
                                     </div>
-                                    @else
-                                    <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-success" name="status" value="5">
-                                            <i class="fas fa-minus-circle"></i>
-                                            <strong>Approve</strong>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button type="submit" class="btn btn-block btn-warning"  name="status" value="6">
-                                            <i class="fas fa-times-circle"></i>
-                                            <strong>Denied</strong>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button type="button" class="btn btn-block btn-danger"  data-toggle="modal" data-target="#delete-alert-modal">
-                                            <i class="fas fa-times-circle"></i>
-                                            <strong>Delete + Alert</strong>
-                                        </button>
-                                    </div>
-                                    @endif
                                 </div>
                             </div>
                         </form>
@@ -169,11 +164,7 @@
                                         <div class="form-group row m-0">
                                             <label for="status" class="col-sm-2 col-form-label">Status</label>
                                             <div class="col-sm-10">
-                                                <select name="status" id="status" class="form-control">
-                                                    @foreach($media->getStatuses() as $key => $status)
-                                                        <option value="{{ $key }}" {!! $media->status == $key ? 'selected' : '' !!}>{{ $status }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <p>{{ \App\Models\Media::getStatuses()[$media->status] }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
