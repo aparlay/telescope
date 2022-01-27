@@ -151,7 +151,6 @@
                     {{ $user->created_at }}
                 </td>
 
-
                 <td>
                     <div class="col-md-6">
                         <div>
