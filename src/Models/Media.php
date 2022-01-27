@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
@@ -62,6 +63,8 @@ use MongoDB\BSON\UTCDateTime;
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
+ * @property-read string $cover_url
+ * @property-read string $file_url
  * @property-read int $skin_score
  * @property-read int $sent_tips
  *
@@ -517,5 +520,15 @@ class Media extends BaseModel
             MediaStatus::USER_DELETED->value => MediaStatus::USER_DELETED->label(),
             MediaStatus::USER_DELETED->value => MediaStatus::USER_DELETED->label(),
         ];
+    }
+
+    public function getFileUrlAttribute()
+    {
+        return Cdn::video($this->is_completed ? $this->file : 'default.mp4');
+    }
+
+    public function getCoverUrlAttribute()
+    {
+        return Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg');
     }
 }
