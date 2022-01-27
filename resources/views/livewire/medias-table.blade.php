@@ -133,7 +133,7 @@
                 <td>
                     <div class="col-md-6">
                         <div>
-                            <a class="btn btn-primary btn-sm" href="{{$media->admin_url}}" title="View"><i class="fas fa-eye"></i> View</a>
+                            <a class="btn btn-primary btn-sm" href="{{$media->admin_url}}" title="View"><i class="fas fa-eye"></i></a>
                         </div>
                     </div>
                 </td>
