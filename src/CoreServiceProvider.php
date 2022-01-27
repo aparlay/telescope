@@ -3,6 +3,7 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Admin\Components\DatePicker;
+use Aparlay\Core\Admin\Components\MediaCover;
 use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
 use Aparlay\Core\Admin\Components\WireDropDownList;
@@ -177,5 +178,6 @@ class CoreServiceProvider extends ServiceProvider
         Blade::component('sortable-column-header', SortableColumnHeader::class);
         Blade::component('wire-dropdown-list', WireDropDownList::class);
         Blade::component('username-avatar', UserNameAvatar::class);
+        Blade::component('media-cover', MediaCover::class);
     }
 }

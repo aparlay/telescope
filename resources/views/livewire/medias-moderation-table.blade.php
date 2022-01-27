@@ -90,7 +90,7 @@
         @foreach($medias as $media)
             <tr>
                 <td>
-                    <img class="img-thumbnail" src="{{$media->cover_url}}"></img>
+                    <x-media-cover :media="$media"/>
                 </td>
                 <td>
                     <x-username-avatar :user="$media->creatorObj"/>
