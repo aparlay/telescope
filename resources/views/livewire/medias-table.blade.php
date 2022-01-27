@@ -52,7 +52,7 @@
                 </th>
             <td class="col-md-2">
                 <div> 
-                    <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'creator.username'" :fieldLabel="'Creator'" />
                     <input class="form-control" type="text" wire:model="filter.creator_username"/>
                 </div>  
             </td>
@@ -104,27 +104,20 @@
 
         @foreach($medias as $media)
             <tr>
-              
                 <td>
                     <img src="{{$media->file}}"></img>
                 </td>
-
                 <td>
-                    <a href="{{$media->admin_url}}">
-                     {{$media->creator['username'] }}
-                    </a>
+                    <x-username-avatar :user="$media->creatorObj"/>
                 </td>
-
                 <td>
                      {{$media->description }}
                 </td>
-                
                 <td>
-                <span class="badge bg-{{ MediaStatus::from($media->status)->badgeColor() }}">
+                    <span class="badge bg-{{ MediaStatus::from($media->status)->badgeColor() }}">
                         {{ MediaStatus::from($media->status)->label() }}
                     </span>
                 </td>
-
                 <td>
                      {{$media->like_count}}
                 </td>
@@ -144,8 +137,6 @@
                         </div>
                     </div>
                 </td>
-              
-               
             </tr>
         @endforeach
         </tbody>
