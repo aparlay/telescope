@@ -36,7 +36,6 @@ class UsersTable extends BaseIndexComponent
         ];
     }
 
-
     protected function getFilters()
     {
         return [
