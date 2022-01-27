@@ -8,11 +8,15 @@ use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
 use Aparlay\Core\Admin\Models\Email;
 use Jenssegers\Mongodb\Eloquent\Builder;
+use MongoDB\BSON\ObjectId;
 
 class EmailsTable extends BaseIndexComponent
 {
     public $model = Email::class;
+
     protected $listeners = ['updateParent'];
+
+    public $userId;
 
     public function updateParent()
     {
@@ -48,6 +52,10 @@ class EmailsTable extends BaseIndexComponent
         $query = parent::buildQuery();
         $query->with('userObj');
 
+        if (!empty($this->userId)) {
+            $query->user($this->userId);
+        }
+
         return $query;
     }
 
@@ -59,7 +67,8 @@ class EmailsTable extends BaseIndexComponent
     public function render()
     {
         return view('default_view::livewire.emails-table', [
-           'models' => $this->index(),
+            'models' => $this->index(),
+            'hiddenFields' => ['username' => !empty($this->userId)],
         ]);
     }
 }
