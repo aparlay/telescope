@@ -64,7 +64,6 @@ class Setting extends BaseModel
         return SettingFactory::new();
     }
 
-
     /**
      * @return string
      */
