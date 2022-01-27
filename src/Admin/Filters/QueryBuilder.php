@@ -120,7 +120,6 @@ class QueryBuilder
         return $this;
     }
 
-
     public function getQuery()
     {
         return $this->query;
