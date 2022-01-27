@@ -54,7 +54,7 @@ class QueryBuilder
 
     /**
      * @param $filters
-     * @return $this
+     * @return QueryBuilder
      * @throws \ErrorException
      */
     public function applyFilters($filters)
