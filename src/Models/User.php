@@ -14,6 +14,7 @@ use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
+use Aparlay\Core\Models\Traits\CountryFields;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -92,6 +93,7 @@ class User extends Authenticatable implements JWTSubject
     use UserScope;
     use HasRoles;
     use Searchable;
+    use CountryFields;
 
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
@@ -587,35 +589,6 @@ class User extends Authenticatable implements JWTSubject
         $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
 
         return Redis::sismember($cacheKey, (string) $this->_id);
-    }
-
-    public function getCountryLabelAttribute()
-    {
-        return $this->country_alpha2 ? CountryHelper::getNameByAlpha2($this->country_alpha2) : '';
-    }
-
-    public function getCountryFlagAttribute()
-    {
-        return $this->country_alpha2 ? CountryHelper::getFlagByAlpha2($this->country_alpha2) : '';
-    }
-
-    public function getCountryFlagsAttribute()
-    {
-        return $this->country_alpha2 ? [
-            '16' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '16'),
-            '24' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '24'),
-            '32' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '32'),
-            '48' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '48'),
-            '64' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '64'),
-            '128' => CountryHelper::getFlagByAlpha2($this->country_alpha2, '128'),
-        ] : [
-            '16' => '',
-            '24' => '',
-            '32' => '',
-            '48' => '',
-            '64' => '',
-            '128' => '',
-        ];
     }
 
     public function getIsVerifiedAttribute()
