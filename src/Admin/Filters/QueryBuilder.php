@@ -16,7 +16,7 @@ class QueryBuilder
     /**
      * @param $subject
      * @param $filter
-     * @return $this
+     * @return QueryBuilder
      */
     public function for($subject, $filter, $sort): self
     {
@@ -73,6 +73,9 @@ class QueryBuilder
         return $this;
     }
 
+    /**
+     * @return false|\Illuminate\Support\Collection
+     */
     public function getSort()
     {
         $sortField = array_key_first($this->sort);
@@ -93,6 +96,11 @@ class QueryBuilder
         return false;
     }
 
+    /**
+     * @param $allowedSorts
+     * @return QueryBuilder
+     * @throws \ErrorException
+     */
     public function applySorts($allowedSorts)
     {
         foreach ($this->sort as $sortKey => $sortValue) {
@@ -111,6 +119,7 @@ class QueryBuilder
 
         return $this;
     }
+
 
     public function getQuery()
     {
