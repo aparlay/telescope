@@ -40,10 +40,7 @@ abstract class BaseIndexComponent extends Component
 
     abstract public function getAllowedSorts();
 
-    protected function getFilters()
-    {
-        return [];
-    }
+    abstract protected function getFilters();
 
     public function buildQuery(): Builder
     {
