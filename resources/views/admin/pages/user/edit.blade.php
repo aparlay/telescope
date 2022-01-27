@@ -45,8 +45,10 @@
                                     </div>
                                     <h3 class="profile-username text-center">
                                         {{ $user->username }}
-
-                                        <span @class(['ml-1', 'badge', 'badge-info' => $user->is_online, 'badge-dark' => !$user->is_online]) >{{ $user->is_online ? 'Online' : 'Offline' }}</span>
+                                        <i title="{{$user->is_online ? 'online' : 'offline'}}" @class(['fa-user', 'ml-1', 'fas text-success' => $user->is_online, 'far text-gray' => !$user->is_online])></i>
+                                        @if ($user->is_verified)
+                                            <img src="{{ asset('admin/assets/img/verify-16.png') }}" alt="Verified">
+                                        @endif
                                     </h3>
                                     <p class="text-muted text-center">
                                         <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
