@@ -9,7 +9,6 @@ use Aparlay\Core\Admin\Filters\FilterScope;
 use Aparlay\Core\Models\Setting;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
-
 class SettingsTable extends BaseIndexComponent
 {
     public $model = Setting::class;
@@ -50,7 +49,7 @@ class SettingsTable extends BaseIndexComponent
     }
 
     public function render()
-    {  
+    {
         return view('default_view::livewire.settings-table', [
            'settings' => $this->index(),
         ]);
