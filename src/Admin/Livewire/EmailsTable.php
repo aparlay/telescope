@@ -52,7 +52,7 @@ class EmailsTable extends BaseIndexComponent
         $query = parent::buildQuery();
         $query->with('userObj');
 
-        if (!empty($this->userId)) {
+        if (! empty($this->userId)) {
             $query->user($this->userId);
         }
 
@@ -68,7 +68,7 @@ class EmailsTable extends BaseIndexComponent
     {
         return view('default_view::livewire.emails-table', [
             'models' => $this->index(),
-            'hiddenFields' => ['username' => !empty($this->userId)],
+            'hiddenFields' => ['username' => ! empty($this->userId)],
         ]);
     }
 }
