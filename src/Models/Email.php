@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -75,6 +76,16 @@ class Email extends BaseModel
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+
+    /**
+     * Get the user associated with the tip.
+     */
+    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user._id');
+    }
+
 
     /**
      * Create a new factory instance for the model.
