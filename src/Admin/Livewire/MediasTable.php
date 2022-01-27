@@ -46,6 +46,7 @@ class MediasTable extends BaseIndexComponent
         } else {
             $query->with(['creatorObj']);
         }
+
         return $query;
     }
 
