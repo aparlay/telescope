@@ -4,7 +4,13 @@
 <div class="settings-table">
     <div class="filters pb-3">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 pt-4">
+                <h4>
+                    Settings
+                    <a href="{{ route('core.admin.setting.create') }}" class="ml-4 btn btn-primary btn-md">
+                        Add Setting
+                    </a>
+                </h4>
             </div>
 
             <div class="col-md-2 offset-6">
