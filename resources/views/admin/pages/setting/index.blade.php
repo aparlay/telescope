@@ -4,6 +4,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/daterangepicker/daterangepicker.css') }}" >
     <link rel="stylesheet" href="{{ asset('admin/assets/css/adminStyles.css') }}" >
+    @livewireStyles
 @endsection
 @section('content_header')
     <div class="row mb-2">
@@ -27,80 +28,10 @@
     @include('default_view::admin.parts.messages')
     <div class="content">
         <div class="container-fluid">
-            <div class="col-12 table-responsive">
-                @php
-                    $heads = [
-                        'Group',
-                        'Title',
-                        'Value',
-                        '',
-                        'Created at',
-                        ''
-                    ];
-
-                $config = [
-                    'processing' => true,
-                    'serverSide' => true,
-                    'pageLength' => config('core.admin.lists.page_count'),
-                    'responsive' => true,
-                    'lengthChange' => false,
-                    'dom' => 'rtip',
-                    'orderMulti' => false,
-                    'autoWidth' => false,
-                    'ajax' => route('core.admin.ajax.setting.index'),
-                    'order' => [[4, 'desc']],
-                    'columns' => [
-                        ['data' => 'group'],
-                        ['data' => 'title'],
-                        ['data' => 'value', 'orderable' => false],
-                        ['data' => 'created_at', 'visible' => false],
-                        ['data' => 'date_formatted', 'orderData' => 3, 'target' => 3],
-                        ['data' => 'action', 'orderable' => false],
-                    ],
-                ]
-                @endphp
-                <div id="accordion">
-                    <div class="card card-primary">
-                        <div class="card-header">
-                            <h4 class="card-title w-100">
-                                <a class="d-block w-100" data-toggle="collapse" href="#collapseOne" aria-expanded="true">
-                                    Show/Hide Filter
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapseOne" class="collapse" data-parent="#accordion" style="">
-                            <div class="card-body">
-                                <form action="" id="filters">
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label for="group">Group</label>
-                                                <input type="text" data-column="0" name="group" class="form-control" id="group" placeholder="Enter group">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label for="title">Title</label>
-                                                <input type="text" data-column="1" name="title" class="form-control" id="title" placeholder="Enter title">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @include('default_view::admin.parts.date-range-filter', ['column' => 3])
-                                    <div class="row d-flex justify-content-end">
-                                        <div class="col-1">
-                                            <button type="button" id="clearFilter" class="btn btn-block btn-danger"><i class="fas fa-trash"></i> Clear</button>
-                                        </div>
-                                        <div class="col-1">
-                                            <button type="button" id="submitFilter" class="btn btn-block btn-primary"><i class="fas fa-filter"></i> Filter</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="col-12 table-responsive">
+                    <livewire:settings-table/>
                 </div>
-                <x-adminlte-datatable id="datatables" :heads="$heads" :config="$config">
-                </x-adminlte-datatable>
             </div>
         </div>
     </div>
@@ -112,4 +43,6 @@
     <script type="text/javascript" src="//cdn.datatables.net/datetime/1.1.1/js/dataTables.dateTime.min.js"></script>
     <script src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+    @livewireScripts
 @endsection
