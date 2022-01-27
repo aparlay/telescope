@@ -63,4 +63,12 @@ class Setting extends BaseModel
     {
         return SettingFactory::new();
     }
+
+    /**
+     * @return string
+     */
+    public function getAdminUrlAttribute(): string
+    {
+        return route('core.admin.setting.view', ['setting' => $this->_id]);
+    }
 }

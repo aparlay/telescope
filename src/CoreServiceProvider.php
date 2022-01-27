@@ -3,7 +3,6 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Admin\Components\DatePicker;
-use Aparlay\Core\Admin\Components\MediaCover;
 use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
 use Aparlay\Core\Admin\Components\WireDropDownList;
@@ -13,6 +12,7 @@ use Aparlay\Core\Admin\Livewire\EmailsTable;
 use Aparlay\Core\Admin\Livewire\MediasModerationTable;
 use Aparlay\Core\Admin\Livewire\MediasTable;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
+use Aparlay\Core\Admin\Livewire\SettingsTable;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
@@ -169,7 +169,9 @@ class CoreServiceProvider extends ServiceProvider
             'user-moderation-button' => UserModerationButton::class,
             'medias-table' => MediasTable::class,
             'medias-moderation-table' => MediasModerationTable::class,
+            'settings-table' => SettingsTable::class,
             'emails-table' => EmailsTable::class,
+
         ];
 
         foreach ($components as $name => $class) {
