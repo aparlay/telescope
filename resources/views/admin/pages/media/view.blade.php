@@ -67,23 +67,21 @@
                                             </li>
                                         </ul>
 
-                                        @if ($moderationQueueNotEmpty)
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <a href="{{ route('core.admin.media.moderation-queue') }}" class="btn btn-info d-block">
-                                                        <strong>Next Media For Moderation</strong>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                        @endif
-
-                                        <div class="col-md-6 offset-3">
+                                        <div @class(['col-md-6', 'offset-3' => !$moderationQueueNotEmpty])>
                                             <button type="submit" id="mediaSave" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
                                                 <i class="fas fa-check"></i>
                                                 <strong>Save Score</strong>
                                             </button>
                                         </div>
+
+
+                                        @if ($moderationQueueNotEmpty)
+                                            <div class="col-md-6">
+                                                <a href="{{ route('core.admin.media.moderation-queue') }}" class="btn btn-info d-block">
+                                                    <strong>Next Media For Moderation</strong>
+                                                </a>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row">
