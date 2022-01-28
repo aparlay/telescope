@@ -20,5 +20,4 @@ trait NoteScope
 
         return $query->where('user._id', $userId);
     }
-
 }
