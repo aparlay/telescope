@@ -126,7 +126,7 @@ class UserController extends Controller
         );
         $cookie3 = Cookie::make(
             '__Secure_username',
-            auth('api')->user()->username,
+            $user->username,
             $result['refresh_token_expired_at'] / 60,
         );
 
