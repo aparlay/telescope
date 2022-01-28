@@ -552,6 +552,7 @@ class User extends Authenticatable implements JWTSubject
     public static function getVerificationStatuses(): array
     {
         return [
+            UserVerificationStatus::UNDER_REVIEW->value => UserVerificationStatus::UNDER_REVIEW->label(),
             UserVerificationStatus::VERIFIED->value => UserVerificationStatus::VERIFIED->label(),
             UserVerificationStatus::PENDING->value => UserVerificationStatus::PENDING->label(),
             UserVerificationStatus::REJECTED->value => UserVerificationStatus::REJECTED->label(),

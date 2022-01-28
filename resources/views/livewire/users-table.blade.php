@@ -90,7 +90,7 @@
             </th>
             <th class="col-md-1">
                 <div>
-                    <label for="">Verif. Creator</label>
+                    <label for="">Verif. Status</label>
                     <x-wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
                 </div>
             </th>

@@ -19,6 +19,27 @@ class UserRepository
         $this->model = $model;
     }
 
+    /**
+     * @param $user
+     * @return mixed
+     */
+    public function firstUnderReview($user)
+    {
+        return User::query()
+            ->where('verification_status', UserVerificationStatus::UNDER_REVIEW->value)
+            ->updatedBy($user->_id)
+            ->latest()
+            ->first();
+    }
+
+    public function firstPending()
+    {
+        return User::query()
+            ->where('verification_status', UserVerificationStatus::PENDING->value)
+            ->latest()
+            ->first();
+    }
+
     public function all($offset, $limit, $sort)
     {
         return $this->model->sortBy($sort)

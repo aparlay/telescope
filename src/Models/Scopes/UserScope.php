@@ -100,6 +100,19 @@ trait UserScope
         ]);
     }
 
+    /**
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @return Builder
+     */
+    public function scopeUpdatedBy(Builder $query, ObjectId | string $userId): Builder
+    {
+        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
+        return $query->where('updated_by', $userId);
+    }
+
+
     public function scopePrivate(Builder $query): Builder
     {
         return $query->where('visibility', UserVisibility::PRIVATE->value);

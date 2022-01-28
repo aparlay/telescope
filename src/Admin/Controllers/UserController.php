@@ -32,6 +32,18 @@ class UserController extends Controller
         $this->mediaService = $mediaService;
     }
 
+    public function moderationQueue()
+    {
+        $user = $this->userService->firstPending();
+        if ($user) {
+            return redirect()->route('core.admin.user.view', ['user' => $user->_id])->with([]);
+        }
+
+        return redirect()->route('core.admin.user.index')->with([
+            'warning' => "Moderation queue is empty"
+        ]);
+    }
+
     public function moderation()
     {
         return view('default_view::admin.pages.user.moderation');
