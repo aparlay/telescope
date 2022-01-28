@@ -21,6 +21,4 @@ class NoteRepository implements RepositoryInterface
     {
         return Note::create($data);
     }
-
-
 }
