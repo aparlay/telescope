@@ -3,11 +3,22 @@
 use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
+use Aparlay\Core\Constants\Roles;
 
 class AddUserModerationQueuePermission extends Migration
 {
-    const PERMISSION_LIST_USER_MODERATION = 'queue users-moderation';
+    const PERMISSION_QUEUE_USER_MODERATION = 'queue users-moderation';
     const PERMISSION_QUEUE_MEDIA_MODERATION = 'queue medias-moderation';
+
+    const PERMISSION_LIST_MEDIA_MODERATION = 'list medias-moderation';
+    const PERMISSION_LIST_USER_MODERATION = 'list users-moderation';
+
+    const PERMISSIONS = [
+        self::PERMISSION_QUEUE_MEDIA_MODERATION,
+        self::PERMISSION_QUEUE_USER_MODERATION,
+        self::PERMISSION_LIST_MEDIA_MODERATION,
+        self::PERMISSION_LIST_USER_MODERATION
+    ];
 
     /**
      * Run the migrations.
@@ -16,22 +27,23 @@ class AddUserModerationQueuePermission extends Migration
      */
     public function up()
     {
-        $superAdminRole = Role::firstOrCreate(['name' => 'super-administrator', 'guard_name' => 'admin']);
-        $adminRole = Role::firstOrCreate(['name' => 'administrator', 'guard_name' => 'admin']);
-        $supportRole = Role::firstOrCreate(['name' => 'support', 'guard_name' => 'admin']);
+        $roleNames = [
+            Roles::ADMIN,
+            Roles::SUPER_ADMINISTRATOR,
+            Roles::SUPPORT
+        ];
 
-        $roles = [$superAdminRole, $adminRole, $supportRole];
+        $roles = Role::whereIn('name', $roleNames)
+            ->where('guard_name', 'admin')
+            ->get();
 
         foreach ($roles as $role) {
-            $role->givePermissionTo(Permission::firstOrCreate([
-                'name' => self::PERMISSION_LIST_USER_MODERATION,
-                'guard_name' => 'admin',
-            ]));
-
-            $role->givePermissionTo(Permission::firstOrCreate([
-                'name' => self::PERMISSION_QUEUE_MEDIA_MODERATION,
-                'guard_name' => 'admin',
-            ]));
+            foreach (self::PERMISSIONS as $permissionName) {
+                $role->givePermissionTo(Permission::firstOrCreate([
+                    'name' => $permissionName,
+                    'guard_name' => 'admin',
+                ]));
+            }
         }
     }
 

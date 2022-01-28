@@ -46,7 +46,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('index');
 
             Route::get('media/moderation', [MediaController::class, 'moderation'])
-                ->middleware(['permission:list medias'])
+                ->middleware(['permission:list medias-moderation'])
                 ->name('moderation');
 
             Route::get('media/moderation-queue', [MediaController::class, 'moderationQueue'])
@@ -80,7 +80,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('index');
 
             Route::get('user/moderation', [UserController::class, 'moderation'])
-                ->middleware(['permission:edit users'])
+                ->middleware(['permission:list users-moderation'])
                 ->name('moderation');
 
             Route::get('user/moderation-queue', [UserController::class, 'moderationQueue'])
