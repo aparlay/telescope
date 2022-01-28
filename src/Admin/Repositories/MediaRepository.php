@@ -22,7 +22,6 @@ class MediaRepository
         return Media::query()->completed()->latest()->first();
     }
 
-
     public function all($offset, $limit, $sort)
     {
         return $this->model->sortBy($sort)
