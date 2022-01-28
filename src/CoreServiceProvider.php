@@ -15,6 +15,7 @@ use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\SettingsTable;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
+use Aparlay\Core\Admin\Livewire\NotesTable;
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
 use Aparlay\Core\Admin\Providers\EventServiceProvider;
 use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
@@ -172,6 +173,7 @@ class CoreServiceProvider extends ServiceProvider
             'medias-moderation-table' => MediasModerationTable::class,
             'settings-table' => SettingsTable::class,
             'emails-table' => EmailsTable::class,
+            'notes-table' => NotesTable::class,
 
         ];
 

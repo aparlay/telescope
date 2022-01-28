@@ -6,7 +6,7 @@ use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
-use App\Models\Note;
+use Aparlay\Core\Models\Note;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
 class NotesTable extends BaseIndexComponent
@@ -57,7 +57,7 @@ class NotesTable extends BaseIndexComponent
     public function render()
     {
         return view('default_view::livewire.notes-table', [
-           'users' => $this->index(),
+           'notes' => $this->index(),
         ]);
     }
 }

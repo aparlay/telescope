@@ -41,54 +41,24 @@
         <tr>
             <th class="col-md-3">
                 <div>
-                    <label
-                        @class([
-                            'col sort-col',
-                             'sort-asc' => Arr::get($sort, 'created_by') === 1,
-                              'sort-desc' => Arr::get($sort, 'created_by') === -1])
-                            wire:model="sort.created_by"
-                            wire:click="sort('created_by')">
-
-                            <a href="#" class="text-primary">Created By</a>
-
-                        </label>
-                    <input class="form-control" type="text" wire:model="filter.created_by"/>
+                   
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'" />
+                    <input class="form-control" type="text" wire:model="filter.created_by"/>    
                 </div>
             </th>
-            <th class="col-md-2">
+            <th class="col-md-3">
                 <div>
-                    <label
-                        @class([
-                            'col sort-col',
-                             'sort-asc' => Arr::get($sort, 'created_at') === 1,
-                              'sort-desc' => Arr::get($sort, 'created_at') === -1])
-                        wire:model="sort.created_at"
-                        wire:click="sort('created_at')">
-
-                        <a href="#" class="text-primary">Created On</a>
-                    </label>
-
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
                     <input class="form-control" type="text" wire:model="filter.created_at"/>
                 </div>
             </th>
         
-            <th class="col-md-2">
+            <th class="col-md-3">
                 <div>
-
-                    <label
-                        @class([
-                            'col sort-col',
-                             'sort-asc' => Arr::get($sort, 'message') === 1,
-                              'sort-desc' => Arr::get($sort, 'message') === -1])
-                        wire:model="sort.message"
-                        wire:click="sort('message')">
-
-                        <a href="#" class="text-primary">Notes</a>
-
-                    </label>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'message'" :fieldLabel="'Notes'" />
                 </div>
             </th>
-            <th class="col-md-1">
+            <th class="col-md-3">
                 <div>
                     <label for="">Action</label>
 
