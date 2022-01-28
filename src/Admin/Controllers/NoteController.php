@@ -28,6 +28,5 @@ class NoteController extends Controller
 
     public function delete(Note $note)
     {
-        
     }
 }
