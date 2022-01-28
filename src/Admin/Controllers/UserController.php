@@ -112,7 +112,6 @@ class UserController extends Controller
     public function loginAsUser(User $user)
     {
         $token = auth('api')->tokenById($user->_id);
-
         $result = $this->respondWithToken($token);
         $cookie1 = Cookie::make(
             '__Secure_token',
@@ -127,7 +126,7 @@ class UserController extends Controller
         $cookie3 = Cookie::make(
             '__Secure_username',
             $user->username,
-            $result['refresh_token_expired_at'] / 60,
+            $result['refresh_token_expired_at'] / 60
         );
 
         return redirect()->away(config('app.frontend_url'))->withCookies([$cookie1, $cookie2, $cookie3]);

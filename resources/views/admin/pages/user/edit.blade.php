@@ -107,21 +107,27 @@
                                     </div>
                                     <hr>
                                     <div class="row">
-                                        <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" class="btn btn-bock btn-dark">
-                                            <i class="fas fa-user"></i>
-                                            <strong>Login as User</strong>
-                                        </a>
+                                        <div class="col-md-12">
+                                            <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" class="btn btn-bock btn-dark d-block">
+                                                <i class="fas fa-lock"></i>
+                                                <strong>Login as User</strong>
+                                            </a>
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="row">
-                                        <livewire:user-moderation-button :userId="$user->_id" />
+                                        <div class="col-md-12">
+                                            <livewire:user-moderation-button :userId="$user->_id" />
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="row">
-                                        <button class="btn btn-block btn-warning" data-toggle="modal" data-target="#alertModal">
-                                            <i class="fas fa-exclamation-triangle"></i>
-                                            Send warning message
-                                        </button>
+                                        <div class="col-md-12">
+                                            <button class="btn btn-block btn-warning" data-toggle="modal" data-target="#alertModal">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                Send warning message
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
