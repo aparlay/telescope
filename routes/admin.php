@@ -170,6 +170,12 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:delete settings'])
                 ->name('delete');
         });
+
+        Route::name('note.')->group(function () {
+            Route::delete('note/{note}', [NoteController::class, 'delete'])
+            ->middleware(['permission:delete notes'])
+            ->name('delete');
+        });
     });
 
     /* Login Routes */

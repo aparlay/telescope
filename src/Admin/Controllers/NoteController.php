@@ -2,10 +2,11 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
-use Aparlay\Core\Admin\Requests\AlertRequest;
-use Aparlay\Core\Admin\Services\AlertService;
+use Aparlay\Core\Models\Note;
+// use Aparlay\Core\Admin\Requests\NoteRequest;
 
-class AlertController extends Controller
+
+class NoteController extends Controller
 {
     protected $alertService;
 
@@ -27,6 +28,6 @@ class AlertController extends Controller
 
     public function delete(Note $note)
     {
-      
+       
     }
 }
