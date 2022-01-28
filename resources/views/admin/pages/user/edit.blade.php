@@ -108,7 +108,7 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" class="btn btn-bock btn-dark d-block">
+                                            <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" class="btn btn-bock btn-dark d-block" target="_blank">
                                                 <i class="fas fa-lock"></i>
                                                 <strong>Login as User</strong>
                                             </a>

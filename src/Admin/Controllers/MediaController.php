@@ -65,6 +65,7 @@ class MediaController extends Controller
         $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
 
         $moderationQueueNotEmpty = $this->mediaService->isModerationQueueNotEmpty();
+
         return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'moderationQueueNotEmpty'));
     }
 
