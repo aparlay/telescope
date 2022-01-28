@@ -6,7 +6,7 @@ use Maklad\Permission\Models\Role;
 
 class AddUserModerationQueuePermission extends Migration
 {
-    const ROLE_LIST_USER_MODERATION = 'list users-moderation';
+    const PERMISSION_LIST_USER_MODERATION = 'list users-moderation';
 
     /**
      * Run the migrations.
@@ -22,7 +22,7 @@ class AddUserModerationQueuePermission extends Migration
 
         foreach ($roles as $role) {
             $role->givePermissionTo(Permission::firstOrCreate([
-                'name' => self::ROLE_LIST_USER_MODERATION,
+                'name' => self::PERMISSION_LIST_USER_MODERATION,
                 'guard_name' => 'admin',
             ]));
         }
