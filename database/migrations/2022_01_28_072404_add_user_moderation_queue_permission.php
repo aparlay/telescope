@@ -1,9 +1,9 @@
 <?php
 
+use Aparlay\Core\Constants\Roles;
 use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
-use Aparlay\Core\Constants\Roles;
 
 class AddUserModerationQueuePermission extends Migration
 {
@@ -17,7 +17,7 @@ class AddUserModerationQueuePermission extends Migration
         self::PERMISSION_QUEUE_MEDIA_MODERATION,
         self::PERMISSION_QUEUE_USER_MODERATION,
         self::PERMISSION_LIST_MEDIA_MODERATION,
-        self::PERMISSION_LIST_USER_MODERATION
+        self::PERMISSION_LIST_USER_MODERATION,
     ];
 
     /**
@@ -30,7 +30,7 @@ class AddUserModerationQueuePermission extends Migration
         $roleNames = [
             Roles::ADMIN,
             Roles::SUPER_ADMINISTRATOR,
-            Roles::SUPPORT
+            Roles::SUPPORT,
         ];
 
         $roles = Role::whereIn('name', $roleNames)
