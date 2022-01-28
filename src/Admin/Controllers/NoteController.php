@@ -28,7 +28,7 @@ class NoteController extends Controller
 
     public function store(NoteRequest $request)
     {
-        dd(request()->input());
+        return back()->withErrors(['error' => 'Setting already exist. Please update value for that specific setting.']);
     }
 
     public function delete(Note $note)

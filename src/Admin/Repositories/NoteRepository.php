@@ -19,6 +19,7 @@ class NoteRepository
 
     public function create(array $data)
     {
-        return Note::create($data);
+        
+        return $this->model->create($data);
     }
 }

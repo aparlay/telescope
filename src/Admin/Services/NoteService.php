@@ -16,5 +16,6 @@ class NoteService
 
     public function create()
     {
+        return $this->noteRepository->create(request()->only(['user_id', 'type', 'message']));
     }
 }
