@@ -21,6 +21,7 @@
     </div><!-- /.row -->
 @stop
 @section('content')
+    @include('default_view::admin.parts.messages')
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
     <div class="content">

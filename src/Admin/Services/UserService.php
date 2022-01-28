@@ -30,10 +30,12 @@ class UserService extends AdminBaseService
     public function firstPending()
     {
         $pendingUser = $this->userRepository->firstPending();
-        $pendingUser->verification_status = UserVerificationStatus::UNDER_REVIEW->value;
-        $pendingUser->save();
-
-        return $pendingUser;
+        if ($pendingUser) {
+            $pendingUser->verification_status = UserVerificationStatus::UNDER_REVIEW->value;
+            $pendingUser->save();
+            return $pendingUser;
+        }
+        return null;
     }
 
     /**

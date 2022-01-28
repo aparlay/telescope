@@ -17,6 +17,12 @@ class MediaRepository
         $this->model = $model;
     }
 
+    public function firstCompleted()
+    {
+        return Media::query()->completed()->latest()->first();
+    }
+
+
     public function all($offset, $limit, $sort)
     {
         return $this->model->sortBy($sort)

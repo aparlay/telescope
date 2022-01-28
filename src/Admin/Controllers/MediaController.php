@@ -36,6 +36,20 @@ class MediaController extends Controller
         ]);
     }
 
+    public function moderationQueue()
+    {
+        $media = $this->mediaService->firstCompleted();
+
+        if ($media) {
+            return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with([]);
+        }
+
+        return redirect()->route('core.admin.media.index')->with([
+            'warning' => 'Moderation queue is empty',
+        ]);
+    }
+
+
     public function moderation()
     {
         $mediaStatuses = $this->mediaService->getMediaStatuses();
