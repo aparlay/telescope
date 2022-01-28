@@ -112,7 +112,6 @@ trait UserScope
         return $query->where('updated_by', $userId);
     }
 
-
     public function scopePrivate(Builder $query): Builder
     {
         return $query->where('visibility', UserVisibility::PRIVATE->value);
