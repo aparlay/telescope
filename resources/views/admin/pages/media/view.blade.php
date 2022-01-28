@@ -97,7 +97,7 @@
                                                 $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::IN_REVIEW->value ?
                                                  'disabled=disabled' : '' }} >
                                             <i class="fas fa-minus-circle"></i>
-                                            <strong>Approve</strong>
+                                            <strong>Confirm</strong>
                                         </button>
                                     </div>
                                     <div class="col-md-4">
