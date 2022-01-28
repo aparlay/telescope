@@ -93,7 +93,8 @@
                                     <div class="col-md-4">
                                         <button type="submit" class="btn btn-block btn-success" name="status" value="5"
                                             {{ $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::DENIED->value &&
-                                                $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value ?
+                                                $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value &&
+                                                $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::IN_REVIEW->value ?
                                                  'disabled=disabled' : '' }} >
                                             <i class="fas fa-minus-circle"></i>
                                             <strong>Approve</strong>
@@ -102,7 +103,8 @@
                                     <div class="col-md-4">
                                         <button type="submit" class="btn btn-block btn-warning" name="status" value="6"
                                             {{ $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::CONFIRMED->value &&
-                                                    $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value ?
+                                                    $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value &&
+                                                    $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::IN_REVIEW->value ?
                                                      'disabled=disabled' : '' }}>
                                             <i class="fas fa-times-circle"></i>
                                             <strong>Deny</strong>
