@@ -26,13 +26,13 @@ class NoteController extends Controller
     {
     }
 
+    public function create(NoteRequest $request)
+    {
+       
+    }
+
     public function delete(Note $note)
     {
 
-    }
-
-    public function create(NoteRequest $request)
-    {
-        dd(1212312);
     }
 }
