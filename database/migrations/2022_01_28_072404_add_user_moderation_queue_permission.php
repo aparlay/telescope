@@ -67,6 +67,7 @@ class AddUserModerationQueuePermission extends Migration
             ->where('guard_name', 'admin')
             ->get();
 
+
         foreach ($roles as $role) {
             foreach (self::PERMISSIONS_QUEUE as $permissionName) {
                 $role->givePermissionTo(Permission::firstOrCreate([
