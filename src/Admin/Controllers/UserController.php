@@ -40,7 +40,7 @@ class UserController extends Controller
         }
 
         return redirect()->route('core.admin.user.index')->with([
-            'warning' => "Moderation queue is empty"
+            'warning' => 'Moderation queue is empty',
         ]);
     }
 

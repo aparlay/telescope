@@ -22,8 +22,6 @@ class UserService extends AdminBaseService
         $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
     }
 
-
-
     public function firstPending()
     {
         $pendingUser = $this->userRepository->firstPending();
