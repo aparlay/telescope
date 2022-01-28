@@ -111,7 +111,7 @@ class UserController extends Controller
 
     public function loginAsUser(User $user)
     {
-        $token = auth('api')->login($user);
+        $token = auth('api')->tokenById($user->_id);
 
         $result = $this->respondWithToken($token);
         $cookie1 = Cookie::make(
