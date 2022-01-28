@@ -33,4 +33,17 @@ class SettingRequest extends FormRequest
 
         ];
     }
+
+     /**
+     * @param Validator $validator
+     * @return void
+     */
+    public function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors(); // Here is your array of errors
+
+        throw new HttpResponseException(
+            redirect()->back()->withErrors($errors)
+        );
+    }
 }

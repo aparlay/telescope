@@ -334,6 +334,45 @@
                     </div>
                 </div>
             </div>
+            <div id="noteModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <form action="{{ route('core.admin.note.store') }}" method="post">
+                        <input type="hidden" name="user_id" value="{{ $user->_id }}">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLiveLabel">Add Note</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            @csrf
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Message <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="message"
+                                           placeholder="Type your message."/>
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                <select class="form-control" wire:model="filter.status">
+                                    <option value="">Any</option>
+                                    @foreach(\Aparlay\Core\Models\Note::getTypes() as $value => $label)
+                                        <option value="{{$value}}">{{$label}}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <div id="activateModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                     <!-- Modal content-->
@@ -364,35 +403,7 @@
                 </div>
             </div>
 
-            <div id="noteModal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    <form action="{{ route('core.admin.note.store') }}" method="post">
-                        <input type="hidden" name="user_id" value="{{ $user->_id }}">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLiveLabel">Add Note</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-                            @csrf
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Message <span class="text-danger">*</span></label>
-                                    <textArea type="text" class="form-control" name="message"
-                                           placeholder="Type your message."/>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+           
         @endsection
 
         @section('js')

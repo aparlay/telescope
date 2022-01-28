@@ -4,14 +4,15 @@ namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Requests\NoteRequest;
 use Aparlay\Core\Admin\Models\Note;
+use Aparlay\Core\Admin\Services\NoteService;
 
 class NoteController extends Controller
 {
-    protected $alertService;
+    protected $noteService;
 
-    public function __construct(AlertService $alertService)
+    public function __construct(NoteService $noteService)
     {
-        $this->alertService = $alertService;
+        $this->noteService = $noteService;
     }
 
     /**
@@ -25,8 +26,9 @@ class NoteController extends Controller
     {
     }
 
-    public function create(NoteRequest $request)
+    public function store(NoteRequest $request)
     {
+        dd(request()->input());
     }
 
     public function delete(Note $note)

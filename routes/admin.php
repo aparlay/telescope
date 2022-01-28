@@ -8,6 +8,7 @@ use Aparlay\Core\Admin\Controllers\MediaController;
 use Aparlay\Core\Admin\Controllers\RoleController;
 use Aparlay\Core\Admin\Controllers\SettingController;
 use Aparlay\Core\Admin\Controllers\UserController;
+use Aparlay\Core\Admin\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -176,9 +177,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             ->middleware(['permission:delete notes'])
             ->name('delete');
 
-            Route::post('note/', [NoteController::class, 'create'])
-            ->middleware(['permission:create notes'])
-            ->name('create');
+            Route::post('note/store', [NoteController::class, 'store'])
+            ->middleware(['permission:create settings'])
+            ->name('store');
         });
     });
 
