@@ -5,10 +5,10 @@ use Aparlay\Core\Admin\Controllers\AuthController;
 use Aparlay\Core\Admin\Controllers\DashboardController;
 use Aparlay\Core\Admin\Controllers\EmailController;
 use Aparlay\Core\Admin\Controllers\MediaController;
+use Aparlay\Core\Admin\Controllers\NoteController;
 use Aparlay\Core\Admin\Controllers\RoleController;
 use Aparlay\Core\Admin\Controllers\SettingController;
 use Aparlay\Core\Admin\Controllers\UserController;
-use Aparlay\Core\Admin\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 
 /*

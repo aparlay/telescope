@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Note;
 
-class NoteRepository 
+class NoteRepository
 {
     protected Note $model;
 
