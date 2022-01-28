@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Models\Note;
 
-// use Aparlay\Core\Admin\Requests\NoteRequest;
+use Aparlay\Core\Admin\Requests\NoteRequest;
 
 class NoteController extends Controller
 {
@@ -28,6 +28,11 @@ class NoteController extends Controller
 
     public function delete(Note $note)
     {
-        
+
+    }
+
+    public function create(NoteRequest $request)
+    {
+        dd(1212312);
     }
 }

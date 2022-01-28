@@ -7,7 +7,7 @@
                 </div>
              
                 <div class="col-md-6">
-                    <button type="submit" class="btn btn-md btn-success col-md-3 float-right" data-dashlane-rid="40c186f98a7cbfd0" data-dashlane-label="true" data-form-type="action"><i class="fas fa-plus fa-xs"></i> Add note</button>
+                    <button type="submit" class="btn btn-md btn-success col-md-3 float-right" class="btn btn-block btn-warning" data-toggle="modal" data-target="#noteModal" data-form-type="action"><i class="fas fa-plus fa-xs"></i> Add note</button>
                 </div>
                
               
