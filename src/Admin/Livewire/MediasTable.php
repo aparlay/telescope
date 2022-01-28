@@ -41,8 +41,8 @@ class MediasTable extends BaseIndexComponent
     public function buildQuery(): Builder
     {
         $query = parent::buildQuery();
-        if (! empty($this->userId)) {
-            $query->where('creator._id', new ObjectId($this->userId));
+        if (! empty($this->creatorId)) {
+            $query->where('creator._id', new ObjectId($this->creatorId));
         } else {
             $query->with(['creatorObj']);
         }
