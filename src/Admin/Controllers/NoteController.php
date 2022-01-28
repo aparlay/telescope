@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
-use Aparlay\Core\Admin\Requests\NoteRequest;
 use Aparlay\Core\Admin\Models\Note;
 use Aparlay\Core\Admin\Services\NoteService;
+use Aparlay\Core\Admin\Requests\NoteRequest;
 
 class NoteController extends Controller
 {
