@@ -9,6 +9,7 @@ use Aparlay\Core\Admin\Filters\FilterScope;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use App\Models\Media;
 use Jenssegers\Mongodb\Eloquent\Builder;
+
 use function view;
 
 class MediasTable extends BaseIndexComponent
@@ -16,6 +17,8 @@ class MediasTable extends BaseIndexComponent
     public $model = Media::class;
 
     protected $listeners = ['updateParent'];
+
+    public $creatorId;
 
     public function updateParent()
     {
@@ -41,10 +44,9 @@ class MediasTable extends BaseIndexComponent
     public function buildQuery(): Builder
     {
         $query = parent::buildQuery();
-        if (! empty($this->creatorId)) {
-            $query->where('creator._id', new ObjectId($this->creatorId));
-        } else {
-            $query->with(['creatorObj']);
+        $query->with(['creatorObj']);
+        if (!empty($this->creatorId)) {
+            $query->creator($this->creatorId);
         }
 
         return $query;
@@ -72,7 +74,8 @@ class MediasTable extends BaseIndexComponent
     public function render()
     {
         return view('default_view::livewire.medias-table', [
-           'medias' => $this->index(),
+            'medias' => $this->index(),
+            'hiddenFields' => ['creator_username' => !empty($this->creatorId)],
         ]);
     }
 }
