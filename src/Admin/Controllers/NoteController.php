@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Requests\NoteRequest;
-use Aparlay\Core\Models\Note;
+use Aparlay\Core\Admin\Models\Note;
 
 class NoteController extends Controller
 {

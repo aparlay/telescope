@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Admin\Repositories;
 
-use Aparlay\Core\Models\Note;
+use Aparlay\Core\Admin\Models\Note;
 
 class NoteRepository implements RepositoryInterface
 {

@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Admin\Services;
 
-use Aparlay\Core\Models\Note;
+use Aparlay\Core\Admin\Models\Note;
 use Aparlay\Core\Admin\Repositories\NoteRepository;
 
 class AlertService

@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Admin\Requests;
 
-use Aparlay\Core\Models\Note;
+use Aparlay\Core\Admin\Models\Note;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
