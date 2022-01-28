@@ -27,6 +27,5 @@ class AlertController extends Controller
 
     public function delete(Note $note)
     {
-      
     }
 }
