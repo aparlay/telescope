@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Admin\Requests;
 
+use Aparlay\Core\Models\Note;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Aparlay\Core\Models\Note;
 
 class SettingRequest extends FormRequest
 {
@@ -33,5 +33,4 @@ class SettingRequest extends FormRequest
 
         ];
     }
-
 }
