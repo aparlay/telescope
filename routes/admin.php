@@ -74,11 +74,11 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('index');
 
             Route::get('user/moderation', [UserController::class, 'moderation'])
-                ->middleware(['permission:list users-moderation'])
+                ->middleware(['permission:edit users'])
                 ->name('moderation');
 
             Route::get('user/moderation-queue', [UserController::class, 'moderationQueue'])
-                ->middleware(['permission:list users-moderation'])
+                ->middleware(['permission:queue users-moderation'])
                 ->name('moderation-queue');
 
             Route::get('user/{user}', [UserController::class, 'view'])
