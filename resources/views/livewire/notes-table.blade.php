@@ -1,4 +1,6 @@
-
+@php
+    use Aparlay\Core\Helpers\ActionButtonBladeComponent;
+@endphp
 <div class="notes-table">
     <div class="filters pb-3">
         <div class="row">
@@ -81,6 +83,11 @@
                 </td>
                 <td>
                     {{ $note->message }}
+                </td>
+                <td>
+                    <div>
+                        {!! ActionButtonBladeComponent::deleteActionButton($note->_id,'note')!!}
+                    </div>
                 </td>
             </tr>
         @endforeach

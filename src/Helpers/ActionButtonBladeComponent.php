@@ -101,4 +101,14 @@ class ActionButtonBladeComponent
             return $value;
         }
     }
+
+    public static function deleteActionButton($id, $resourceName)
+    {
+        $buttons = '<form action="'.route('core.admin.setting.delete', ['setting' => $id]).'" method="POST">
+                '.csrf_field().method_field('DELETE').'
+                <a class="btn btn-danger btn-sm ml-3 delete" href="" title="Delete"><i class="fas fa-trash"></i> Delete</a>
+            </form></div>';
+
+        return $buttons;
+    }
 }

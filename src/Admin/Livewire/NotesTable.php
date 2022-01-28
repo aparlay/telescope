@@ -14,6 +14,8 @@ class NotesTable extends BaseIndexComponent
     public $model = Note::class;
     protected $listeners = ['updateParent'];
 
+    public $userId;
+
     public function updateParent()
     {
         $this->render();
@@ -43,8 +45,9 @@ class NotesTable extends BaseIndexComponent
     public function buildQuery(): Builder
     {
         $query = parent::buildQuery();
-
-        $query->options(['allowDiskUse' => true]);
+        if (! empty($this->userId)) {
+            $query->user($this->userId);
+        }
 
         return $query;
     }
@@ -58,6 +61,7 @@ class NotesTable extends BaseIndexComponent
     {
         return view('default_view::livewire.notes-table', [
            'notes' => $this->index(),
+           'hiddenFields' => ['user_username' => ! empty($this->userId)],
         ]);
     }
 }
