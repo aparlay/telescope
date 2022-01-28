@@ -107,12 +107,10 @@
                                     </div>
                                     <hr>
                                     <div class="row">
-                                        <div class="col-md-6 offset-3">
-                                            <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" class="btn btn-bock btn-dark">
-                                                <i class="fas fa-user"></i>
-                                                <strong>Login as User</strong>
-                                            </a>
-                                        </div>
+                                        <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" class="btn btn-bock btn-dark">
+                                            <i class="fas fa-user"></i>
+                                            <strong>Login as User</strong>
+                                        </a>
                                     </div>
                                     <hr>
                                     <div class="row">
@@ -120,7 +118,6 @@
                                     </div>
                                     <hr>
                                     <div class="row">
-
                                         <button class="btn btn-block btn-warning" data-toggle="modal" data-target="#alertModal">
                                             <i class="fas fa-exclamation-triangle"></i>
                                             Send warning message
