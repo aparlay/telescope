@@ -33,8 +33,10 @@ class UserService extends AdminBaseService
         if ($pendingUser) {
             $pendingUser->verification_status = UserVerificationStatus::UNDER_REVIEW->value;
             $pendingUser->save();
+
             return $pendingUser;
         }
+
         return null;
     }
 

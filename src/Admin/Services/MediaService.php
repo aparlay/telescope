@@ -25,8 +25,6 @@ class MediaService extends AdminBaseService
         $this->sorterableField = ['creator.username', 'description', 'status', 'like_count', 'sort_score', 'visit_count', 'created_at'];
     }
 
-
-
     public function firstCompleted()
     {
         $media = $this->mediaRepository->firstCompleted();
@@ -34,8 +32,10 @@ class MediaService extends AdminBaseService
         if ($media) {
             $media->status = MediaStatus::IN_REVIEW->value;
             $media->save();
+
             return $media;
         }
+
         return null;
     }
 
