@@ -28,7 +28,7 @@ enum UserVerificationStatus: int implements Enum
             self::VERIFIED => 'success',
             self::REJECTED => 'danger',
             self::UNVERIFIED => 'primary',
-            self::UNDER_REVIEW => 'warning'
+            self::UNDER_REVIEW => 'dark'
         };
     }
 }
