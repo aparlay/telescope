@@ -47,7 +47,6 @@ class MediaService extends AdminBaseService
         return null;
     }
 
-
     /**
      * @param $id
      */

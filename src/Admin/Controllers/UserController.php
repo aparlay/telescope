@@ -60,7 +60,6 @@ class UserController extends Controller
         return view('default_view::admin.pages.user.index', compact('userStatuses', 'userVisibilities'));
     }
 
-
     public function view(User $user)
     {
         $user = $this->userService->find($user->_id);
