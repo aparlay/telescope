@@ -22,7 +22,6 @@ class UserService extends AdminBaseService
         $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
     }
 
-
     public function isModerationQueueNotEmpty()
     {
         return $this->userRepository->countPending() > 0;
