@@ -34,7 +34,7 @@ class SettingRequest extends FormRequest
         ];
     }
 
-     /**
+    /**
      * @param Validator $validator
      * @return void
      */
