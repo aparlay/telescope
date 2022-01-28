@@ -1,6 +1,7 @@
 @php
     use Aparlay\Core\Models\User;
 @endphp
+
 @if ($user)
     <div class="x-username-avatar">
         <a href="{{$user->admin_url}}"
@@ -13,6 +14,4 @@
             @endif
         </a>
     </div>
-@else
-    <div class="x-username-avatar"></div>
 @endif
