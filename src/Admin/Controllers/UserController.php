@@ -60,13 +60,6 @@ class UserController extends Controller
         return view('default_view::admin.pages.user.index', compact('userStatuses', 'userVisibilities'));
     }
 
-    /**
-     * @return UserResource
-     */
-    public function indexAjax()
-    {
-        return new UserResource($this->userService->getFilteredUsers());
-    }
 
     public function view(User $user)
     {

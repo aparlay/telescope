@@ -120,25 +120,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
 
         /* Ajax Routes */
         Route::name('ajax.')->prefix('ajax')->group(function () {
-            Route::get('user', [UserController::class, 'indexAjax'])
-                ->middleware(['permission:list users'])
-                ->name('user.index');
-
-            Route::get('media', [MediaController::class, 'indexAjax'])
-                ->middleware(['permission:list medias'])
-                ->name('media.index');
-
-            Route::get('setting', [SettingController::class, 'indexAjax'])
-                ->middleware(['permission:list settings'])
-                ->name('setting.index');
-
             Route::get('dashboard', [DashboardController::class, 'indexAjax'])
                 ->middleware(['permission:dashboard'])
                 ->name('dashboard.index');
-
-            Route::get('email', [EmailController::class, 'indexAjax'])
-                ->middleware(['permission:list emails'])
-                ->name('email.index');
         });
 
         Route::name('role.')->group(function () {

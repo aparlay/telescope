@@ -20,49 +20,6 @@ class SettingService extends AdminBaseService
         $this->sorterableField = ['group', 'title', 'created_at'];
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFilteredSettings(): mixed
-    {
-        $offset = (int) request()->get('start');
-        $limit = (int) request()->get('length');
-
-        $filters = $this->getFilters();
-        $sort = $this->tableSort();
-        $dateRangeFilter = null;
-
-        if (! empty($filters)) {
-            if (isset($filters['created_at'])) {
-                $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
-                unset($filters['created_at']);
-            }
-            $settings = $this->settingRepository->getFilteredSettings($offset, $limit, $sort, $filters, $dateRangeFilter);
-        } else {
-            $settings = $this->settingRepository->all($offset, $limit, $sort);
-        }
-
-        $this->appendAttributes($settings, $filters, $dateRangeFilter);
-
-        return $settings;
-    }
-
-    /**
-     * @param $settings
-     * @param $filters
-     * @param $dateRangeFilter
-     */
-    public function appendAttributes($settings, $filters, $dateRangeFilter)
-    {
-        $settings->total_settings = $this->settingRepository->countCollection();
-        $settings->total_filtered_settings = ! empty($filters) || $dateRangeFilter ? $this->settingRepository->countFilteredSettings($filters, $dateRangeFilter) : $settings->total_settings;
-
-        foreach ($settings as $setting) {
-            $setting->value = ActionButtonBladeComponent::castDisplayValue($setting->value);
-            $setting->date_formatted = $setting->created_at->toDateTimeString();
-            $setting->action = ActionButtonBladeComponent::getViewDeleteActionButton($setting->_id, 'setting');
-        }
-    }
 
     /**
      * @param $id
