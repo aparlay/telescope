@@ -28,6 +28,7 @@ class UserRepository
             ->where('verification_status', UserVerificationStatus::PENDING->value)
             ->count();
     }
+
     /**
      * @param $user
      * @return mixed
