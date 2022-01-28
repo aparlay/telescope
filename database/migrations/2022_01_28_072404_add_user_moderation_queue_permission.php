@@ -23,7 +23,6 @@ class AddUserModerationQueuePermission extends Migration
         self::PERMISSION_LIST_USER_MODERATION,
     ];
 
-
     /**
      * Run the migrations.
      *
@@ -67,7 +66,6 @@ class AddUserModerationQueuePermission extends Migration
         $roles = Role::whereIn('name', $roleNames)
             ->where('guard_name', 'admin')
             ->get();
-
 
         foreach ($roles as $role) {
             foreach (self::PERMISSIONS_QUEUE as $permissionName) {
