@@ -105,9 +105,10 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <hr>
                                     <div class="row">
                                         <div class="col-md-6 offset-3">
-                                            <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" class="btn btn-bock btn-primary">
+                                            <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" class="btn btn-bock btn-dark">
                                                 <i class="fas fa-user"></i>
                                                 <strong>Login as User</strong>
                                             </a>
