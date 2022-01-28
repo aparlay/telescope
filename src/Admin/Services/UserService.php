@@ -7,6 +7,7 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
@@ -19,6 +20,24 @@ class UserService extends AdminBaseService
 
         $this->filterableField = ['text_search', 'username', 'email', 'status', 'visibility', 'created_at'];
         $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
+    }
+
+    public function isModerationQueueNotEmpty()
+    {
+        return $this->userRepository->countPending() > 0;
+    }
+
+    public function firstPending()
+    {
+        $pendingUser = $this->userRepository->firstPending();
+        if ($pendingUser) {
+            $pendingUser->verification_status = UserVerificationStatus::UNDER_REVIEW->value;
+            $pendingUser->save();
+
+            return $pendingUser;
+        }
+
+        return null;
     }
 
     /**
