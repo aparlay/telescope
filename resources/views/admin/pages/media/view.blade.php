@@ -78,7 +78,8 @@
                                         @if ($moderationQueueNotEmpty)
                                             <div class="col-md-6">
                                                 <a href="{{ route('core.admin.media.moderation-queue') }}" class="btn btn-info d-block">
-                                                    <strong>Next Media For Moderation</strong>
+                                                    <i class="fas fa-chevron-right"></i>
+                                                    <strong>Next Media</strong>
                                                 </a>
                                             </div>
                                         @endif
