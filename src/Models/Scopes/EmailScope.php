@@ -4,6 +4,7 @@ namespace Aparlay\Core\Models\Scopes;
 
 use Aparlay\Core\Models\Enums\EmailStatus;
 use Illuminate\Database\Eloquent\Builder;
+use MongoDB\BSON\ObjectId;
 
 trait EmailScope
 {
@@ -34,5 +35,17 @@ trait EmailScope
     public function scopeFailed(Builder $query): Builder
     {
         return $query->where('status', EmailStatus::FAILED->value);
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @return Builder
+     */
+    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
+    {
+        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
+        return $query->where('user._id', $userId);
     }
 }

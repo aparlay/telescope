@@ -30,7 +30,7 @@ class Country
     {
         $country = self::getByAlpha2($alpha2);
 
-        return $country['name'];
+        return $country['name'] ?? '`'.$alpha2.'` Not Found!';
     }
 
     public static function getAlpha3ByAlpha2($alpha2)

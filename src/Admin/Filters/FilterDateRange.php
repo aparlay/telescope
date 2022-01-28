@@ -11,7 +11,8 @@ class FilterDateRange extends AbstractBaseFilter
     public function __construct(
         protected string $fieldName,
         protected string $fieldType,
-        protected array $rangeNames = ['start', 'end']
+        protected array $rangeNames = ['start', 'end'],
+        protected string|null $internalFieldName = null
     ) {
     }
 
@@ -28,12 +29,11 @@ class FilterDateRange extends AbstractBaseFilter
 
         if ($isDateStartValid) {
             $start = new UTCDateTime(Carbon::createFromFormat('Y-m-d', $startDate)->endOfDay());
-            $query->where('created_at', '>=', $start);
+            $query->where($this->getInternalFieldName(), '>=', $start);
         }
-
         if ($isDateEndValid) {
-            $start = new UTCDateTime(Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay());
-            $query->where('created_at', '<=', $start);
+            $end = new UTCDateTime(Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay());
+            $query->where($this->getInternalFieldName(), '<=', $end);
         }
     }
 }

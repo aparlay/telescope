@@ -14,7 +14,6 @@
                 <input class="form-control" type="text" wire:model="filter.text_search"/>
             </div>
 
-
             <div class="col-md-2 offset-6">
                 <div class="row">
                     <div class="col">
@@ -36,28 +35,20 @@
                 </div>
             </div>
 
-
             <div class="col-md-1 ml-auto">
                 <label for="">Per Page</label>
                 <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
-
         </div>
     </div>
 
     <table class="table table-striped">
         <tbody>
         <tr>
-            <th class="col-md-2">
+            <th class="col-md-3">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
                     <input class="form-control" type="text" wire:model="filter.username"/>
-                </div>
-            </th>
-            <th class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'full_name'" :fieldLabel="'Full name'" />
-                    <input class="form-control" type="text" wire:model="filter.full_name"/>
                 </div>
             </th>
             <th class="col-md-2">
@@ -88,20 +79,14 @@
                     <x-wire-dropdown-list :wire-model="'filter.status'" :options="User::getStatuses()"/>
                 </div>
             </th>
-            <th class="col-md-1">
+            <th class="col-md-2">
                 <div>
-                    <label for="">Verif. Creator</label>
-                    <x-wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Registration Date'" />
                 </div>
             </th>
-
-            <th class="col-md-2">
-                <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Reg. Date'" />
-            </th>
-
             <th class="col-md-1">
                 <div>
-                    <label for="">Profile</label>
+                    <label for="">Action</label>
                 </div>
             </th>
         </tr>
@@ -110,9 +95,6 @@
             <tr>
                 <td>
                     <x-username-avatar :user="$user"/>
-                </td>
-                <td>
-                    {{ $user->full_name }}
                 </td>
                 <td>
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
@@ -133,30 +115,20 @@
                 </td>
 
                 <td>
-                    <div class="row">
-                        <div class="col-md-6">
-                            @if ($user->verification_status)
-                                <span
-                                    class="badge bg-{{ UserVerificationStatus::from($user->verification_status)->badgeColor() }}">
-                            {{ UserVerificationStatus::from($user->verification_status)->label() }}
-                        </span>
-                            @else
-                                <span class="badge bg-info">None</span>
-                            @endif
-                        </div>
-                    </div>
-                </td>
-
-                <td>
                     {{ $user->created_at }}
                 </td>
 
                 <td>
                     <div class="col-md-6">
                         <div>
-                            <a class="btn btn-success" href="{{$user->admin_url}}">
-                                <i title="Profile" class="fa fa-user-circle"></i>
-                            </a>
+                            <button
+                                class="btn btn-sm btn-success"
+                                type="button"
+                                wire:key="verify_button_{{ $user->_id }}}"
+                                wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}')"
+                            >
+                                <i class="fa fa-edit"></i>
+                            </button>
                         </div>
                     </div>
                 </td>

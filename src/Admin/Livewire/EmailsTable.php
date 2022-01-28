@@ -6,13 +6,17 @@ use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
-use App\Models\User;
+use Aparlay\Core\Admin\Models\Email;
 use Jenssegers\Mongodb\Eloquent\Builder;
+use MongoDB\BSON\ObjectId;
 
-class UsersTable extends BaseIndexComponent
+class EmailsTable extends BaseIndexComponent
 {
-    public $model = User::class;
+    public $model = Email::class;
+
     protected $listeners = ['updateParent'];
+
+    public $userId;
 
     public function updateParent()
     {
@@ -24,32 +28,35 @@ class UsersTable extends BaseIndexComponent
         return [
             'username',
             'email',
-            'full_name',
+            'type',
             'status',
-            'visibility',
-            'country',
-            'media_count',
-            'likes_count',
-            'follower_count',
             'created_at',
-            'email_verified',
         ];
     }
 
+    /**
+     * @return array
+     */
     protected function getFilters()
     {
         return [
-            new FilterExact('email_verified', 'boolean'),
-            new FilterPartial('username', 'string'),
-            new FilterPartial('email', 'string'),
-            new FilterPartial('full_name', 'string'),
-            new FilterScope('country', 'string', 'countryAlpha2'),
-            new FilterExact('gender', 'int'),
+            new FilterPartial('username', 'string', 'user.username'),
+            new FilterExact('type', 'int'),
             new FilterExact('status', 'int'),
-            new FilterScope('text_search', 'string', 'textSearch'),
-            new FilterExact('verification_status', 'int'),
             new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];
+    }
+
+    public function buildQuery(): Builder
+    {
+        $query = parent::buildQuery();
+        $query->with('userObj');
+
+        if (! empty($this->userId)) {
+            $query->user($this->userId);
+        }
+
+        return $query;
     }
 
     public function updatingSearch()
@@ -59,8 +66,9 @@ class UsersTable extends BaseIndexComponent
 
     public function render()
     {
-        return view('default_view::livewire.users-table', [
-           'users' => $this->index(),
+        return view('default_view::livewire.emails-table', [
+            'models' => $this->index(),
+            'hiddenFields' => ['username' => ! empty($this->userId)],
         ]);
     }
 }

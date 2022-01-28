@@ -3,8 +3,9 @@
 @section('plugins.Datatables', true)
 @section('plugins.Select2', true)
 @section('css')
-    @livewireStyles
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}">
+    <link rel="stylesheet" href="/css/admin.css" >
+    @livewireStyles
 @stop
 @section('content_header')
     <!-- Content Header (Page header) -->
@@ -44,8 +45,10 @@
                                     </div>
                                     <h3 class="profile-username text-center">
                                         {{ $user->username }}
-
-                                        <span @class(['ml-1', 'badge', 'badge-info' => $user->is_online, 'badge-gray' => !$user->is_online]) >{{ $user->is_online ? 'Online' : 'Offline' }}</span>
+                                        <i title="{{$user->is_online ? 'online' : 'offline'}}" @class(['fa-user', 'ml-1', 'fas text-success' => $user->is_online, 'far text-gray' => !$user->is_online])></i>
+                                        @if ($user->is_verified)
+                                            <img src="{{ asset('admin/assets/img/verify-16.png') }}" alt="Verified">
+                                        @endif
                                     </h3>
                                     <p class="text-muted text-center">
                                         <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
@@ -104,15 +107,27 @@
                                     </div>
                                     <hr>
                                     <div class="row">
-                                        <livewire:user-moderation-button :userId="$user->_id" />
+                                        <div class="col-md-12">
+                                            <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" class="btn btn-bock btn-dark d-block">
+                                                <i class="fas fa-lock"></i>
+                                                <strong>Login as User</strong>
+                                            </a>
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="row">
-
-                                        <button class="btn btn-block btn-warning" data-toggle="modal" data-target="#alertModal">
-                                            <i class="fas fa-exclamation-triangle"></i>
-                                            Send warning message
-                                        </button>
+                                        <div class="col-md-12">
+                                            <livewire:user-moderation-button :userId="$user->_id" />
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-block btn-warning" data-toggle="modal" data-target="#alertModal">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                Send warning message
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -190,24 +205,23 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card card-info card-outline">
-                                        <div class="card-header" id="headingMainSeven">
+                                    <div class="card card-indigo card-outline">
+                                        <div class="card-header" id="headingMainEight">
                                             <h5 class="mb-0">
                                                 <button class="btn btn-link collapsed" data-toggle="collapse"
                                                         data-target="#collapseMainEight" aria-expanded="false"
                                                         aria-controls="collapseMainEight">
-                                                    Notes
+                                                    Email
                                                 </button>
                                             </h5>
                                         </div>
                                         <div id="collapseMainEight" class="collapse" aria-labelledby="headingMainEight"
                                              data-parent="#accordion">
                                             <div class="card-body">
-                                                @include('default_view::admin.pages.user.tabs.notes', ['user' => $user])
+                                                @include('default_view::admin.pages.user.tabs.email', ['user' => $user])
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 </div>
                             </div>
                         </div>
@@ -296,7 +310,7 @@
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
                                 <button type="submit" class="btn btn-warning">Suspend</button>
-
+ 
                             </div>
                         </form>
                     </div>

@@ -6,7 +6,8 @@ abstract class AbstractBaseFilter
 {
     protected string $fieldName;
     protected string $fieldType;
-    protected string|int|array $fieldValue;
+    protected string|int|array|bool $fieldValue;
+    protected string|null $internalFieldName;
 
     abstract public function __invoke($query);
 
@@ -47,5 +48,24 @@ abstract class AbstractBaseFilter
         $this->setFieldValue($fieldValue);
 
         return $this;
+    }
+
+    /**
+     * @param $internalName
+     * @return $this
+     */
+    public function setInternalFieldName($internalName)
+    {
+        $this->internalFieldName = $internalName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInternalFieldName(): string
+    {
+        return $this->internalFieldName ?? $this->fieldName;
     }
 }

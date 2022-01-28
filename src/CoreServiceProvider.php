@@ -3,8 +3,17 @@
 namespace Aparlay\Core;
 
 use Aparlay\Core\Admin\Components\DatePicker;
+use Aparlay\Core\Admin\Components\MediaCover;
+use Aparlay\Core\Admin\Components\SortableColumnHeader;
+use Aparlay\Core\Admin\Components\UserNameAvatar;
+use Aparlay\Core\Admin\Components\WireDropDownList;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
+use Aparlay\Core\Admin\Livewire\EmailsTable;
+use Aparlay\Core\Admin\Livewire\MediasModerationTable;
+use Aparlay\Core\Admin\Livewire\MediasTable;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
+use Aparlay\Core\Admin\Livewire\SettingsTable;
+use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Admin\Providers\AdminServiceProvider;
 use Aparlay\Core\Admin\Providers\EventServiceProvider;
@@ -22,6 +31,7 @@ use Aparlay\Core\Commands\VideoUpdateInfoCommand;
 use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Helpers\ConfigHelper;
 use Aparlay\Core\Helpers\IP;
+use Aparlay\Payment\Admin\Livewire\CreditCardsTable;
 use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -154,9 +164,15 @@ class CoreServiceProvider extends ServiceProvider
     {
         $components = [
             'users-table' => UsersTable::class,
+            'users-moderation-table' => UsersModerationTable::class,
             'modals.user-verification-modal' => UserVerificationModal::class,
             'date-picker' => DatePicker::class,
             'user-moderation-button' => UserModerationButton::class,
+            'medias-table' => MediasTable::class,
+            'medias-moderation-table' => MediasModerationTable::class,
+            'settings-table' => SettingsTable::class,
+            'emails-table' => EmailsTable::class,
+
         ];
 
         foreach ($components as $name => $class) {
@@ -164,5 +180,9 @@ class CoreServiceProvider extends ServiceProvider
         }
 
         Blade::component('date-picker', DatePicker::class);
+        Blade::component('sortable-column-header', SortableColumnHeader::class);
+        Blade::component('wire-dropdown-list', WireDropDownList::class);
+        Blade::component('username-avatar', UserNameAvatar::class);
+        Blade::component('media-cover', MediaCover::class);
     }
 }

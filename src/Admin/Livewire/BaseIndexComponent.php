@@ -28,12 +28,19 @@ abstract class BaseIndexComponent extends Component
         $this->resetPage();
     }
 
+    public function updatingFilter()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingPerpage()
+    {
+        $this->resetPage();
+    }
+
     abstract public function getAllowedSorts();
 
-    protected function getFilters()
-    {
-        return [];
-    }
+    abstract protected function getFilters();
 
     public function buildQuery(): Builder
     {
@@ -42,7 +49,10 @@ abstract class BaseIndexComponent extends Component
             ->applyFilters($this->getFilters())
             ->applySorts($this->getAllowedSorts());
 
-        return $queryBuilder->getQuery();
+        $query = $queryBuilder->getQuery();
+        $query->options(['allowDiskUse' => true]);
+
+        return $query;
     }
 
     /**
