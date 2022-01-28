@@ -67,22 +67,25 @@
                                             </li>
                                         </ul>
 
-                                        <div @class(['col-md-6', 'offset-3' => !$moderationQueueNotEmpty])>
-                                            <button type="submit" id="mediaSave" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
-                                                <i class="fas fa-check"></i>
-                                                <strong>Save Score</strong>
-                                            </button>
-                                        </div>
-
-
-                                        @if ($moderationQueueNotEmpty)
-                                            <div class="col-md-6">
-                                                <a href="{{ route('core.admin.media.moderation-queue') }}" class="btn btn-info d-block">
-                                                    <i class="fas fa-chevron-right"></i>
-                                                    <strong>Next Media</strong>
-                                                </a>
+                                        <div class="row">
+                                            <div @class(['col-md-6', 'offset-3' => !$moderationQueueNotEmpty])>
+                                                <button type="submit" id="mediaSave" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
+                                                    <i class="fas fa-check"></i>
+                                                    <strong>Save Score</strong>
+                                                </button>
                                             </div>
-                                        @endif
+
+
+                                            @if ($moderationQueueNotEmpty)
+                                                <div class="col-md-6">
+                                                    <a href="{{ route('core.admin.media.moderation-queue') }}" class="btn btn-info d-block">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                        <strong>Next Media</strong>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <hr>
                                     </div>
                                 </div>
                                 <div class="row">
