@@ -16,8 +16,11 @@
                                 {{ $media->status_badge['status'] }}
                             </div>
                         </div>
-                            <video width="100%" controls poster="{{ $cdn->cover($media->filename).'.jpg' }}" style="max-height:400px">
-                                <source src="{{ $cdn->video($media->file) }}">
+
+                            <video width="100%" controls poster="{{ $media->cover_url }}" style="max-height:400px">
+                                @if ($media->file)
+                                    <source src="{{ $cdn->video($media->file) }}">
+                                @endif
                                 Your browser does not support the video tag.
                             </video>
 
@@ -63,6 +66,18 @@
                                                 </div>
                                             </li>
                                         </ul>
+
+                                        @if ($moderationQueueNotEmpty)
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <a href="{{ route('core.admin.media.moderation-queue') }}" class="btn btn-info d-block">
+                                                        <strong>Next Media For Moderation</strong>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        @endif
+
                                         <div class="col-md-6 offset-3">
                                             <button type="submit" id="mediaSave" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
                                                 <i class="fas fa-check"></i>

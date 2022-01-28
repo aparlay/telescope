@@ -119,7 +119,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <a href="{{ route('core.admin.user.moderation-queue') }}" class="btn btn-info d-block">
-                                                    <strong>Next User</strong>
+                                                    <strong>Next User For Moderation</strong>
                                                 </a>
                                             </div>
                                         </div>

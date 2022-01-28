@@ -25,6 +25,13 @@ class MediaService extends AdminBaseService
         $this->sorterableField = ['creator.username', 'description', 'status', 'like_count', 'sort_score', 'visit_count', 'created_at'];
     }
 
+    /**
+     * @return bool
+     */
+    public function isModerationQueueNotEmpty(): bool
+    {
+        return $this->mediaRepository->countCompleted() > 0;
+    }
 
 
     public function firstCompleted()
