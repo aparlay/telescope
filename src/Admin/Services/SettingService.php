@@ -20,7 +20,6 @@ class SettingService extends AdminBaseService
         $this->sorterableField = ['group', 'title', 'created_at'];
     }
 
-
     /**
      * @param $id
      * @return mixed

@@ -40,7 +40,6 @@ class UserService extends AdminBaseService
         return null;
     }
 
-
     /**
      * @param $id
      */

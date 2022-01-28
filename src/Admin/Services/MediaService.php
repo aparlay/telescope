@@ -33,7 +33,6 @@ class MediaService extends AdminBaseService
         return $this->mediaRepository->countCompleted() > 0;
     }
 
-
     public function firstCompleted()
     {
         $media = $this->mediaRepository->firstCompleted();
@@ -41,11 +40,12 @@ class MediaService extends AdminBaseService
         if ($media) {
             $media->status = MediaStatus::IN_REVIEW->value;
             $media->save();
+
             return $media;
         }
+
         return null;
     }
-
 
     /**
      * @param $id

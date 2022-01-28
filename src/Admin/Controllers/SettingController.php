@@ -27,7 +27,6 @@ class SettingController
         return view('default_view::admin.pages.setting.index');
     }
 
-
     public function view(Setting $setting)
     {
         $setting = $this->settingService->find($setting->_id);
