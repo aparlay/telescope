@@ -23,6 +23,10 @@ class UserService extends AdminBaseService
     }
 
 
+    public function isModerationQueueNotEmpty()
+    {
+        return $this->userRepository->countPending() > 0;
+    }
 
     public function firstPending()
     {

@@ -71,9 +71,10 @@ class UserController extends Controller
     public function view(User $user)
     {
         $user = $this->userService->find($user->_id);
+        $moderationQueueNotEmpty = $this->userService->isModerationQueueNotEmpty();
         $roles = Role::where('guard_name', 'admin')->get();
 
-        return view('default_view::admin.pages.user.edit', compact('user', 'roles'));
+        return view('default_view::admin.pages.user.edit', compact('user', 'roles', 'moderationQueueNotEmpty'));
     }
 
     /**

@@ -20,6 +20,15 @@ class UserRepository
     }
 
     /**
+     * @return int
+     */
+    public function countPending()
+    {
+        return User::query()
+            ->where('verification_status', UserVerificationStatus::PENDING->value)
+            ->count();
+    }
+    /**
      * @param $user
      * @return mixed
      */
