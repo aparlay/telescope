@@ -87,7 +87,7 @@ $(document).ready(function() {
         $('.flow-progress .progress-pause-link').show();
     });
     r.on('catchAll', function() {
-        
+
     });
     window.r = {
         upload: function() {
