@@ -20,4 +20,15 @@ trait NoteScope
 
         return $query->where('user._id', $userId);
     }
+
+     /**
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @return Builder
+     */
+    public function scopeIsNotDeleted(Builder $query): Builder
+    {
+
+        return $query->where('deleted_at', null);
+    }
 }

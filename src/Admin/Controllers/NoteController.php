@@ -36,5 +36,10 @@ class NoteController extends Controller
 
     public function delete(Note $note)
     {
+        if ($this->noteService->delete($note->_id)) {
+            return back()->with(['success' => 'Successfully deleted note']);
+        } else {
+            return back()->with(['error' => 'Delete note failed']);
+        }     
     }
 }

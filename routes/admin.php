@@ -174,7 +174,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
 
         Route::name('note.')->group(function () {
             Route::delete('note/{note}', [NoteController::class, 'delete'])
-            ->middleware(['permission:delete notes'])
+            ->middleware(['permission:delete settings'])
             ->name('delete');
 
             Route::post('note/store', [NoteController::class, 'store'])

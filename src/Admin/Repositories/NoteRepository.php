@@ -29,4 +29,9 @@ class NoteRepository
 
         return $this->model->create($data);
     }
+
+    public function delete($id): ?bool
+    {
+        return $this->model->findOrFail($id)->delete();
+    }
 }

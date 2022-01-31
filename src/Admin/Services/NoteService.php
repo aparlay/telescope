@@ -32,4 +32,8 @@ class NoteService
 
         return $this->noteRepository->store($createData);
     }
+
+    public function delete($id) {
+        return $this->noteRepository->delete($id);
+    }
 }

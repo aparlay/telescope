@@ -1,6 +1,4 @@
-@php
-    use Aparlay\Core\Helpers\ActionButtonBladeComponent;
-@endphp
+
 <div class="notes-table">
     <div class="filters pb-3">
         <div class="row">
@@ -86,10 +84,37 @@
                 </td>
                 <td>
                     <div>
-                        {!! ActionButtonBladeComponent::deleteActionButton($note->_id,'note')!!}
+                        <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#deleteNote-{{$note->_id}}">Delete</button>
                     </div>
                 </td>
             </tr>
+
+            <div id="deleteNote-{{$note->_id}}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <form action="{{ route('core.admin.note.delete', ['note' => $note->_id])  }}"
+                              method="POST">
+                            @csrf
+                            @method('delete')
+                            <div class="modal-header bg-danger">
+                                <h5 class="modal-title" id="exampleModalLiveLabel">Delete User Note</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete this note?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         @endforeach
         </tbody>
     </table>
