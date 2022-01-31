@@ -1,38 +1,30 @@
 
 <div class="notes-table">
-    <div class="filters pb-3">
+<div class="filters pb-3">
         <div class="row">
-            <div class="col-md-2 offset-6">
-                <div class="row">
-                    <div class="col">
-                        <label for="">Start Date</label>
-                        <x-date-picker
-                                wire:model.lazy="filter.created_at.start"
-                                autocomplete="off"
-                                placeholder="Start"
-                        />
-                    </div>
-                    <div class="col">
-                        <label for="">End Date</label>
-                        <x-date-picker
-                                wire:model.lazy="filter.created_at.end"
-                                autocomplete="off"
-                                placeholder="End"
-                        />
-                    </div>
-                </div>
+            <div class="col-md-9 pt-4">
+                <h4>Emails</h4>
             </div>
-
-
+            <div class="col-md-1">
+                <label for="">Start Date</label>
+                <x-date-picker
+                        wire:model.lazy="filter.created_at.start"
+                        autocomplete="off"
+                        placeholder="Start"
+                />
+            </div>
+            <div class="col-md-1">
+                <label for="">End Date</label>
+                <x-date-picker
+                        wire:model.lazy="filter.created_at.end"
+                        autocomplete="off"
+                        placeholder="End"
+                />
+            </div>
             <div class="col-md-1 ml-auto">
                 <label for="">Per Page</label>
-                <select class="form-control" wire:model="perPage">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                </select>
+                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
-
         </div>
     </div>
 
@@ -43,19 +35,18 @@
                 <div>
                    
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'" />
-                    <input class="form-control" type="text" wire:model="filter.created_by"/>    
+                    <input class="form-control" type="text" wire:model="filter.creator_username"/>    
+                </div>
+            </th>
+            <th class="col-md-3">
+                <div>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'message'" :fieldLabel="'Notes'" />
+                    <input class="form-control" type="text" wire:model="filter.message"/>    
                 </div>
             </th>
             <th class="col-md-3">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
-                    <input class="form-control" type="text" wire:model="filter.created_at"/>
-                </div>
-            </th>
-        
-            <th class="col-md-3">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'message'" :fieldLabel="'Notes'" />
                 </div>
             </th>
             <th class="col-md-3">
@@ -76,11 +67,12 @@
                        
                     </a>
                 </td>
-                <td>
-                    {{ $note->created_at }}
-                </td>
+              
                 <td>
                     {{ $note->message }}
+                </td>
+                <td>
+                    {{ $note->created_at }}
                 </td>
                 <td>
                     <div>

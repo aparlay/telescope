@@ -36,8 +36,8 @@ class NotesTable extends BaseIndexComponent
     protected function getFilters()
     {
         return [
-            new FilterPartial('created_by', 'string'),
-            (new FilterExact('message', 'int')),
+            new FilterPartial('creator_username', 'string', 'creator.username'),
+            new FilterPartial('message', 'string'),
             new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];
     }
