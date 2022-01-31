@@ -56,9 +56,8 @@ class UserService extends AdminBaseService
      */
     public function hasNextPending($userId): bool
     {
-       return !empty($this->userRepository->firstNextPending($userId));
+        return ! empty($this->userRepository->firstNextPending($userId));
     }
-
 
     /**
      * @param $userId
@@ -66,9 +65,8 @@ class UserService extends AdminBaseService
      */
     public function hasPrevPending($userId): bool
     {
-        return !empty($this->userRepository->firstPrevPending($userId));
+        return ! empty($this->userRepository->firstPrevPending($userId));
     }
-
 
     public function firstPending($user)
     {
