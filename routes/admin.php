@@ -44,9 +44,15 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('media', [MediaController::class, 'index'])
                 ->middleware(['permission:list medias'])
                 ->name('index');
+
             Route::get('media/moderation', [MediaController::class, 'moderation'])
-                ->middleware(['permission:list medias'])
+                ->middleware(['permission:list medias-moderation'])
                 ->name('moderation');
+
+            Route::get('media/moderation-queue', [MediaController::class, 'moderationQueue'])
+                ->middleware(['permission:queue medias-moderation'])
+                ->name('moderation-queue');
+
             Route::get('media/{media}', [MediaController::class, 'view'])
                 ->middleware(['permission:show medias'])
                 ->name('view');
@@ -74,8 +80,12 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('index');
 
             Route::get('user/moderation', [UserController::class, 'moderation'])
-                ->middleware(['permission:list users'])
+                ->middleware(['permission:list users-moderation'])
                 ->name('moderation');
+
+            Route::get('user/moderation-queue', [UserController::class, 'moderationQueue'])
+                ->middleware(['permission:queue users-moderation'])
+                ->name('moderation-queue');
 
             Route::get('user/{user}', [UserController::class, 'view'])
                 ->middleware(['permission:show users'])
@@ -113,10 +123,6 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('user', [UserController::class, 'indexAjax'])
                 ->middleware(['permission:list users'])
                 ->name('user.index');
-
-            Route::get('user-document', [UserDocumentController::class, 'indexAjax'])
-                ->middleware(['permission:list users'])
-                ->name('user-document.index');
 
             Route::get('media', [MediaController::class, 'indexAjax'])
                 ->middleware(['permission:list medias'])

@@ -16,8 +16,11 @@
                                 {{ $media->status_badge['status'] }}
                             </div>
                         </div>
-                            <video width="100%" controls poster="{{ $cdn->cover($media->filename).'.jpg' }}" style="max-height:400px">
-                                <source src="{{ $cdn->video($media->file) }}">
+
+                            <video width="100%" controls poster="{{ $media->cover_url }}" style="max-height:400px">
+                                @if ($media->file)
+                                    <source src="{{ $cdn->video($media->file) }}">
+                                @endif
                                 Your browser does not support the video tag.
                             </video>
 
@@ -63,12 +66,26 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                        <div class="col-md-6 offset-3">
-                                            <button type="submit" id="mediaSave" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
-                                                <i class="fas fa-check"></i>
-                                                <strong>Save Score</strong>
-                                            </button>
+
+                                        <div class="row">
+                                            <div @class(['col-md-6', 'offset-3' => !$moderationQueueNotEmpty])>
+                                                <button type="submit" id="mediaSave" class="btn btn-block btn-primary" name="status" value="{{ $media->status }}">
+                                                    <i class="fas fa-check"></i>
+                                                    <strong>Save Score</strong>
+                                                </button>
+                                            </div>
+
+
+                                            @if ($moderationQueueNotEmpty)
+                                                <div class="col-md-6">
+                                                    <a href="{{ route('core.admin.media.moderation-queue') }}" class="btn btn-info d-block">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                        <strong>Next Media</strong>
+                                                    </a>
+                                                </div>
+                                            @endif
                                         </div>
+                                        <hr>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -76,16 +93,18 @@
                                     <div class="col-md-4">
                                         <button type="submit" class="btn btn-block btn-success" name="status" value="5"
                                             {{ $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::DENIED->value &&
-                                                $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value ?
+                                                $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value &&
+                                                $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::IN_REVIEW->value ?
                                                  'disabled=disabled' : '' }} >
                                             <i class="fas fa-minus-circle"></i>
-                                            <strong>Approve</strong>
+                                            <strong>Confirm</strong>
                                         </button>
                                     </div>
                                     <div class="col-md-4">
                                         <button type="submit" class="btn btn-block btn-warning" name="status" value="6"
                                             {{ $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::CONFIRMED->value &&
-                                                    $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value ?
+                                                    $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::COMPLETED->value &&
+                                                    $media->status !== \Aparlay\Core\Models\Enums\MediaStatus::IN_REVIEW->value ?
                                                      'disabled=disabled' : '' }}>
                                             <i class="fas fa-times-circle"></i>
                                             <strong>Deny</strong>

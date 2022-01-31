@@ -26,6 +26,28 @@ class MediaService extends AdminBaseService
     }
 
     /**
+     * @return bool
+     */
+    public function isModerationQueueNotEmpty(): bool
+    {
+        return $this->mediaRepository->countCompleted() > 0;
+    }
+
+    public function firstCompleted()
+    {
+        $media = $this->mediaRepository->firstCompleted();
+
+        if ($media) {
+            $media->status = MediaStatus::IN_REVIEW->value;
+            $media->save();
+
+            return $media;
+        }
+
+        return null;
+    }
+
+    /**
      * @return mixed
      */
     public function getFilteredMedia(): mixed

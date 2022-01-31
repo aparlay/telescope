@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use App\Models\Media;
 use Jenssegers\Mongodb\Eloquent\Builder;
@@ -41,7 +42,7 @@ class MediasModerationTable extends BaseIndexComponent
     public function buildQuery(): Builder
     {
         $query = parent::buildQuery();
-        $query->completed()->with(['creatorObj']);
+        $query->whereIn('status', [MediaStatus::COMPLETED->value, MediaStatus::IN_REVIEW->value])->with(['creatorObj']);
 
         return $query;
     }

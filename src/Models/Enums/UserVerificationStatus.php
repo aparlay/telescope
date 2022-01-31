@@ -8,6 +8,7 @@ enum UserVerificationStatus: int implements Enum
     case VERIFIED = 2;
     case REJECTED = -1;
     case UNVERIFIED = 3;
+    case UNDER_REVIEW = 4;
 
     public function label(): string
     {
@@ -16,6 +17,7 @@ enum UserVerificationStatus: int implements Enum
             self::VERIFIED => __('verified'),
             self::REJECTED => __('rejected'),
             self::UNVERIFIED => __('unverified'),
+            self::UNDER_REVIEW => __('under review')
         };
     }
 
@@ -26,6 +28,7 @@ enum UserVerificationStatus: int implements Enum
             self::VERIFIED => 'success',
             self::REJECTED => 'danger',
             self::UNVERIFIED => 'primary',
+            self::UNDER_REVIEW => 'dark'
         };
     }
 }
