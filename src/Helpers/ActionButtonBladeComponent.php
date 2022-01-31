@@ -101,5 +101,4 @@ class ActionButtonBladeComponent
             return $value;
         }
     }
-
 }

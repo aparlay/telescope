@@ -41,6 +41,6 @@ class NoteController extends Controller
             return back()->with(['success' => 'Successfully deleted note']);
         } else {
             return back()->with(['error' => 'Delete note failed']);
-        }     
+        }
     }
 }
