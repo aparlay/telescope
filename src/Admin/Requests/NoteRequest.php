@@ -6,7 +6,7 @@ use Aparlay\Core\Admin\Models\Note;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class SettingRequest extends FormRequest
+class NoteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -34,16 +34,4 @@ class SettingRequest extends FormRequest
         ];
     }
 
-    /**
-     * @param Validator $validator
-     * @return void
-     */
-    public function failedValidation(Validator $validator)
-    {
-        $errors = $validator->errors(); // Here is your array of errors
-
-        throw new HttpResponseException(
-            redirect()->back()->withErrors($errors)
-        );
-    }
 }

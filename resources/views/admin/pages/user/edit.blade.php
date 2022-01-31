@@ -338,7 +338,6 @@
                 <div class="modal-dialog">
                     <form action="{{ route('core.admin.note.store') }}" method="post">
                         <input type="hidden" name="user_id" value="{{ $user->_id }}">
-
                         <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header">
@@ -357,7 +356,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                <select class="form-control" wire:model="filter.status">
+                                <select class="form-control" name="type">
                                     <option value="">Any</option>
                                     @foreach(\Aparlay\Core\Models\Note::getTypes() as $value => $label)
                                         <option value="{{$value}}">{{$label}}</option>

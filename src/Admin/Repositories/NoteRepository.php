@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Note;
+use MongoDB\BSON\ObjectId;
 
 class NoteRepository
 {
@@ -17,9 +18,15 @@ class NoteRepository
         $this->model = $model;
     }
 
-    public function create(array $data)
+    public function store(array $data)
     {
-        
+        $creator = auth()->user();
+        $data['creator'] = [
+            '_id' => new ObjectId($creator->_id),
+            'username' => $creator->username,
+            'avatar' => $creator->avatar
+        ];
+
         return $this->model->create($data);
     }
 }

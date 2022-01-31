@@ -27,8 +27,11 @@ class NoteController extends Controller
     }
 
     public function store(NoteRequest $request)
-    {
-        return back()->withErrors(['error' => 'Setting already exist. Please update value for that specific setting.']);
+    {   
+        $create = $this->noteService->create();
+        return redirect()->route('core.admin.user.view', ['user' => $create->user['_id']])->with([
+            'success' => 'Successfully added notes.',
+        ]);
     }
 
     public function delete(Note $note)

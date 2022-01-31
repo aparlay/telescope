@@ -3,7 +3,9 @@
 namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Note;
+use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\NoteRepository;
+use MongoDB\BSON\ObjectId;
 
 class NoteService
 {
@@ -15,7 +17,19 @@ class NoteService
     }
 
     public function create()
-    {
-        return $this->noteRepository->create(request()->only(['user_id', 'type', 'message']));
+    {   
+        $data = request()->only(['user_id','type', 'message']);
+        $user = User::findOrFail($data['user_id']);
+        $createData = [
+            'user' => [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ],
+            'type' => $data['type'],
+            'message' => $data['message']
+        ];
+
+        return $this->noteRepository->store($createData);
     }
 }
