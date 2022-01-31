@@ -36,7 +36,6 @@ class MediaController extends Controller
         ]);
     }
 
-
     /**
      * @param $mediaId
      * @param $direction
@@ -60,7 +59,6 @@ class MediaController extends Controller
             'warning' => 'Moderation queue is empty',
         ]);
     }
-
 
     public function moderationQueue()
     {
@@ -101,13 +99,15 @@ class MediaController extends Controller
         $hasPrev = $this->mediaService->hasPrevItemToReview($media->_id);
         $hasNext = $this->mediaService->hasNextItemToReview($media->_id);
 
-        return view('default_view::admin.pages.media.view', compact(
+        return view(
+            'default_view::admin.pages.media.view',
+            compact(
             'media',
             'scoreTypes',
             'moderationQueueNotEmpty',
             'hasPrev',
             'hasNext'
-            )
+        )
         );
     }
 

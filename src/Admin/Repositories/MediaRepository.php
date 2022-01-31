@@ -18,7 +18,6 @@ class MediaRepository
         $this->model = $model;
     }
 
-
     /**
      * @return int
      */
@@ -96,16 +95,14 @@ class MediaRepository
     {
         $media->status = MediaStatus::IN_REVIEW->value;
         $media->save();
+
         return $media;
     }
-
-
 
     public function firstPending()
     {
         return Media::query()->completed()->latest()->first();
     }
-
 
     public function all($offset, $limit, $sort)
     {

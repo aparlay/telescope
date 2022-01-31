@@ -33,7 +33,6 @@ class MediaService extends AdminBaseService
         return $this->mediaRepository->countCompleted() > 0;
     }
 
-
     public function nextItemToReview($currentUser, $mediaId)
     {
         $mediaItem = $this->mediaRepository->nextItemToReview($mediaId);
@@ -58,10 +57,9 @@ class MediaService extends AdminBaseService
         return $itemToReview;
     }
 
-
     public function hasNextItemToReview($mediaId): bool
     {
-        return !empty($this->mediaRepository->nextItemToReview($mediaId));
+        return ! empty($this->mediaRepository->nextItemToReview($mediaId));
     }
 
     /**
@@ -70,9 +68,8 @@ class MediaService extends AdminBaseService
      */
     public function hasPrevItemToReview($mediaId): bool
     {
-        return !empty($this->mediaRepository->prevItemToReview($mediaId));
+        return ! empty($this->mediaRepository->prevItemToReview($mediaId));
     }
-
 
     public function firstItemToReview($currentAdminUser)
     {
@@ -91,8 +88,6 @@ class MediaService extends AdminBaseService
 
         return $pendingMedia;
     }
-
-
 
     /**
      * @return mixed
