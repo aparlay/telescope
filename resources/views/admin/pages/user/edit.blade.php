@@ -115,16 +115,25 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    @if ($moderationQueueNotEmpty)
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <a href="{{ route('core.admin.user.moderation-queue') }}" class="btn btn-info d-block">
-                                                    <strong>Next User For Moderation</strong>
+
+                                    <div class="row">
+                                        @if ($hasPrev)
+                                            <div class="col-md-6">
+                                                <a href="{{ route('core.admin.user.moderation-queue.next', ['userId' => $user->_id, 'direction' => -1]) }}" class="btn btn-info d-block">
+                                                    <strong><i class="fa fa-arrow-left"></i> Previous </strong>
                                                 </a>
                                             </div>
+                                        @endif
+
+                                        @if($hasNext)
+                                        <div class="col-md-6">
+                                            <a href="{{ route('core.admin.user.moderation-queue.next', ['userId' => $user->_id, 'direction' => 1]) }}" class="btn btn-info d-block">
+                                                <strong>Next <i class="fa fa-arrow-right"></i> </strong>
+                                            </a>
                                         </div>
-                                        <hr>
-                                    @endif
+                                        @endif
+                                    </div>
+
                                     <div class="row">
                                         <div class="col-md-12">
                                             <livewire:user-moderation-button :userId="$user->_id" />

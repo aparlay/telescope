@@ -7,7 +7,6 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
@@ -27,17 +26,66 @@ class UserService extends AdminBaseService
         return $this->userRepository->countPending() > 0;
     }
 
-    public function firstPending()
+    public function firstNextPending($currentUser, $userId)
     {
-        $pendingUser = $this->userRepository->firstPending();
-        if ($pendingUser) {
-            $pendingUser->verification_status = UserVerificationStatus::UNDER_REVIEW->value;
-            $pendingUser->save();
+        $pendingUser = $this->userRepository->firstNextPending($userId);
 
-            return $pendingUser;
+        if ($pendingUser) {
+            $this->userRepository->revertAllToPending($currentUser, $pendingUser);
+            $pendingUser = $this->userRepository->setToUnderReview($pendingUser);
         }
 
-        return null;
+        return $pendingUser;
+    }
+
+    public function firstPrevPending($currentUser, $userId)
+    {
+        $pendingUser = $this->userRepository->firstPrevPending($userId);
+
+        if ($pendingUser) {
+            $this->userRepository->revertAllToPending($currentUser, $pendingUser);
+            $pendingUser = $this->userRepository->setToUnderReview($pendingUser);
+        }
+
+        return $pendingUser;
+    }
+
+    /**
+     * @param $userId
+     * @return bool
+     */
+    public function hasNextPending($userId): bool
+    {
+       return !empty($this->userRepository->firstNextPending($userId));
+    }
+
+
+    /**
+     * @param $userId
+     * @return bool
+     */
+    public function hasPrevPending($userId): bool
+    {
+        return !empty($this->userRepository->firstPrevPending($userId));
+    }
+
+
+    public function firstPending($user)
+    {
+        $underReviewExists = $this->userRepository->firstUnderReview($user);
+
+        if ($underReviewExists) {
+            return $underReviewExists;
+        }
+
+        $pendingUser = $this->userRepository->firstPending();
+
+        if ($pendingUser) {
+            $this->userRepository->revertAllToPending($user, $pendingUser);
+            $pendingUser = $this->userRepository->setToUnderReview($pendingUser);
+        }
+
+        return  $pendingUser;
     }
 
     /**
