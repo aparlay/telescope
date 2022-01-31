@@ -24,7 +24,7 @@ class NoteRepository
         $data['creator'] = [
             '_id' => new ObjectId($creator->_id),
             'username' => $creator->username,
-            'avatar' => $creator->avatar
+            'avatar' => $creator->avatar,
         ];
 
         return $this->model->create($data);
