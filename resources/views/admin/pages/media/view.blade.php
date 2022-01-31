@@ -193,12 +193,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="created-by" class="col-sm-2 col-form-label">Updated By</label>
-                                            <div class="col-sm-10 mt-2">
-                                                <a href="/user/{{ $media->updated_by }}">{{ $media->updatedByObj->username }}</a>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row m-0">
                                             <label for="status" class="col-sm-2 col-form-label">Status</label>
                                             <div class="col-sm-10">
                                                 <p>{{ \App\Models\Media::getStatuses()[$media->status] }}</p>
