@@ -53,6 +53,10 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:queue medias-moderation'])
                 ->name('moderation-queue');
 
+             Route::get('media/moderation-queue/next/{mediaId}&direction={direction}', [MediaController::class, 'moderationNextOrPrev'])
+                ->middleware(['permission:queue medias-moderation'])
+                ->name('moderation-queue.next');
+
             Route::get('media/{media}', [MediaController::class, 'view'])
                 ->middleware(['permission:show medias'])
                 ->name('view');

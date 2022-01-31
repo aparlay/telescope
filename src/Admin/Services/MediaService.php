@@ -33,19 +33,66 @@ class MediaService extends AdminBaseService
         return $this->mediaRepository->countCompleted() > 0;
     }
 
-    public function firstCompleted()
+
+    public function nextItemToReview($currentUser, $mediaId)
     {
-        $media = $this->mediaRepository->firstCompleted();
+        $mediaItem = $this->mediaRepository->nextItemToReview($mediaId);
 
-        if ($media) {
-            $media->status = MediaStatus::IN_REVIEW->value;
-            $media->save();
-
-            return $media;
+        if ($mediaItem) {
+            $this->mediaRepository->revertAllToCompleted($currentUser, $mediaItem);
+            $mediaItem = $this->mediaRepository->setToUnderReview($mediaItem);
         }
 
-        return null;
+        return $mediaItem;
     }
+
+    public function prevItemToReview($currentUser, $mediaId)
+    {
+        $itemToReview = $this->mediaRepository->prevItemToReview($mediaId);
+
+        if ($itemToReview) {
+            $this->mediaRepository->revertAllToCompleted($currentUser, $itemToReview);
+            $itemToReview = $this->mediaRepository->setToUnderReview($itemToReview);
+        }
+
+        return $itemToReview;
+    }
+
+
+    public function hasNextItemToReview($mediaId): bool
+    {
+        return !empty($this->mediaRepository->nextItemToReview($mediaId));
+    }
+
+    /**
+     * @param $userId
+     * @return bool
+     */
+    public function hasPrevItemToReview($mediaId): bool
+    {
+        return !empty($this->mediaRepository->prevItemToReview($mediaId));
+    }
+
+
+    public function firstItemToReview($currentAdminUser)
+    {
+        $underReviewExists = $this->mediaRepository->firstUnderReview($currentAdminUser);
+
+        if ($underReviewExists) {
+            return $underReviewExists;
+        }
+
+        $pendingMedia = $this->mediaRepository->firstToReview();
+
+        if ($pendingMedia) {
+            $this->mediaRepository->revertAllToCompleted($currentAdminUser, $pendingMedia);
+            $pendingMedia = $this->mediaRepository->setToUnderReview($pendingMedia);
+        }
+
+        return $pendingMedia;
+    }
+
+
 
     /**
      * @return mixed

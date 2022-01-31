@@ -36,9 +36,36 @@ class MediaController extends Controller
         ]);
     }
 
+
+    /**
+     * @param $mediaId
+     * @param $direction
+     * @return RedirectResponse
+     */
+    public function moderationNextOrPrev($mediaId, $direction)
+    {
+        $currentUser = auth()->user();
+
+        if ((int) $direction === 1) {
+            $media = $this->mediaService->nextItemToReview($currentUser, $mediaId);
+        } else {
+            $media = $this->mediaService->prevItemToReview($currentUser, $mediaId);
+        }
+
+        if ($media) {
+            return redirect()->route('core.admin.media.view', ['media' => $media->_id]);
+        }
+
+        return redirect()->route('core.admin.media.index')->with([
+            'warning' => 'Moderation queue is empty',
+        ]);
+    }
+
+
     public function moderationQueue()
     {
-        $media = $this->mediaService->firstCompleted();
+        $currentUser = auth()->user();
+        $media = $this->mediaService->firstItemToReview($currentUser);
 
         if ($media) {
             return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with([]);
@@ -71,7 +98,17 @@ class MediaController extends Controller
 
         $moderationQueueNotEmpty = $this->mediaService->isModerationQueueNotEmpty();
 
-        return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'moderationQueueNotEmpty'));
+        $hasPrev = $this->mediaService->hasPrevItemToReview($media->_id);
+        $hasNext = $this->mediaService->hasNextItemToReview($media->_id);
+
+        return view('default_view::admin.pages.media.view', compact(
+            'media',
+            'scoreTypes',
+            'moderationQueueNotEmpty',
+            'hasPrev',
+            'hasNext'
+            )
+        );
     }
 
     /**

@@ -1,7 +1,7 @@
 @php
     use App\Models\Media;
     use Aparlay\Core\Models\Enums\MediaStatus;
-  
+
 @endphp
 
 <div class="medias-table">
@@ -43,14 +43,14 @@
                 </div>
                 </th>
             <td @class(['col-md-2', 'd-none' => $hiddenFields['creator_username']])>
-                <div> 
+                <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'creator.username'" :fieldLabel="'Creator'" />
                     <input class="form-control" type="text" wire:model="filter.creator_username"/>
-                </div>  
+                </div>
             </td>
 
             <td class="col-md-1">
-                <div> 
+                <div>
                 <x-sortable-column-header :sort="$sort" :fieldName="'status'" :fieldLabel="'Status'" />
                     <select class="form-control" wire:model="filter.status">
                         <option value="">Any</option>
@@ -61,25 +61,25 @@
                 </div>
             </td>
             <td class="col-md-1">
-                <div> 
+                <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'like_count'" :fieldLabel="'Likes'" />
                     <input class="form-control" type="text" wire:model="filter.like_count"/>
                 </div>
             </td>
             <td class="col-md-1">
-                <div> 
+                <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'visit_count'" :fieldLabel="'Visits'" />
                     <input class="form-control" type="text" wire:model="filter.visit_count"/>
                 </div>
             </td>
             <td class="col-md-1">
-                <div> 
+                <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'sort_score'" :fieldLabel="'Scores'" />
                     <input class="form-control" type="text" wire:model="filter.sort_score"/>
                 </div>
             </td>
             <td class="col-md-2">
-                <div> 
+                <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
                 </div>
             </td>
@@ -88,7 +88,7 @@
                     <label for="">Details</label>
                 </div>
             </td>
-            
+
         </tr>
 
         @foreach($medias as $media)
