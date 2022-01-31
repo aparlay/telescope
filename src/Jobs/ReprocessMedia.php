@@ -52,13 +52,14 @@ class ReprocessMedia implements ShouldQueue
     public function handle()
     {
         $b2 = Storage::disk('b2-videos');
-        $storage = Storage::disk('public');
+        $mediaServer = Storage::disk('media-ftp');
+        $storage = Storage::disk('upload');
 
         try {
             $b2File = $this->file;
             if ($b2->exists($this->file)) {
-                if (! $storage->exists($b2File)) {
-                    $b2->writeStream($b2File, $storage->readStream('upload/'.$b2File));
+                if (! $mediaServer->exists($b2File)) {
+                    $mediaServer->writeStream($b2File, $b2->readStream($this->file));
                 }
 
                 ProcessMedia::dispatch($this->media_id, $b2File)->onQueue('low');
@@ -66,7 +67,7 @@ class ReprocessMedia implements ShouldQueue
                 return;
             }
 
-            if (($media = Media::find($this->media_id)) !== null && $storage->exists('upload/'.$media->file)) {
+            if (($media = Media::find($this->media_id)) !== null && $storage->exists($media->file)) {
                 UploadMedia::dispatch($media->created_by, $media->_id, $media->file)->onQueue('low');
 
                 return;

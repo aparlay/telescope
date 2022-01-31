@@ -59,19 +59,19 @@ $(document).ready(function() {
     r.on('complete', function(){
         // Hide pause/resume when the upload has completed
         $('.flow-progress .progress-resume-link, .flow-progress .progress-pause-link').hide();
-        $('.upload-video-button').prop("disabled", false);
     });
     r.on('fileSuccess', function(file,message){
         var $self = $('.flow-file-'+file.uniqueIdentifier);
         // Reflect that the file upload has completed
         $self.find('.flow-file-progress').text('(completed)');
         $self.find('.flow-file-pause, .flow-file-resume').remove();
+        $('.upload-video-button').prop("disabled", false);
         var response = JSON.parse(message);
         $('#media_file').val(response.data.file);
     });
     r.on('fileError', function(file, message){
         // Reflect that the file upload has resulted in error
-        $('.flow-file-'+file.uniqueIdentifier+' .flow-file-progress').html('(file could not be uploaded: '+message+')');
+        $('.flow-file-'+file.uniqueIdentifier+' .flow-file-progress').html('(file could not be uploaded)');
     });
     r.on('fileProgress', function(file){
         // Handle progress for both the file and the overall upload
@@ -87,7 +87,7 @@ $(document).ready(function() {
         $('.flow-progress .progress-pause-link').show();
     });
     r.on('catchAll', function() {
-        console.log.apply(console, arguments);
+
     });
     window.r = {
         upload: function() {
