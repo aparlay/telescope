@@ -24,7 +24,6 @@ class UserController extends Controller
 
     protected $mediaService;
 
-
     public function __construct(
         UserService $userService,
         MediaService $mediaService
@@ -61,10 +60,9 @@ class UserController extends Controller
     {
         $user = $this->userService->firstPending(auth()->user());
 
-
         if ($user) {
             return redirect()->route('core.admin.user.view', [
-                'user' => $user->_id
+                'user' => $user->_id,
             ])->with([]);
         }
 

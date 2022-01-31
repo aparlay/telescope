@@ -93,6 +93,7 @@ class UserRepository
     {
         $user->verification_status = UserVerificationStatus::UNDER_REVIEW->value;
         $user->save();
+
         return $user;
     }
 
