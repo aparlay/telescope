@@ -3,12 +3,11 @@
 namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Note;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
-use Aparlay\Core\Models\Enums\NoteType;
-
 
 class NoteObserver extends BaseModelObserver
 {
@@ -20,7 +19,6 @@ class NoteObserver extends BaseModelObserver
      */
     public function creating($model): void
     {
-        
         $model->message = NoteType::from($model->type)->message($model->user['username'], $model->creator['username']);
         parent::creating($model);
     }
