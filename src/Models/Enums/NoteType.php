@@ -4,13 +4,13 @@ namespace Aparlay\Core\Models\Enums;
 
 enum NoteType: int implements Enum
 {
-    case SUSPEND = 0;
-    case UNSUSPEND = 1;
-    case BAN = 2;
-    case UNBAN = 3;
-    case WARNING_MESSAGE = 4;
-    case BAN_ALL_CC_PAYMENT = 5;
-    case UNBAN_ALL_CC_PAYMENT = 6;
+    case SUSPEND = 1;
+    case UNSUSPEND = 2;
+    case BAN = 3;
+    case UNBAN = 4;
+    case WARNING_MESSAGE = 5;
+    case BAN_ALL_CC_PAYMENT = 6;
+    case UNBAN_ALL_CC_PAYMENT = 7;
 
     public function label(): string
     {
