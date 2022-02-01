@@ -45,7 +45,7 @@ class MediaController extends Controller
     {
         $currentUser = auth()->user();
 
-        if ((int) $direction === 1) {
+        if ((int)$direction === 1) {
             $media = $this->mediaService->nextItemToReview($currentUser, $mediaId);
         } else {
             $media = $this->mediaService->prevItemToReview($currentUser, $mediaId);
@@ -92,23 +92,22 @@ class MediaController extends Controller
     public function view(Media $media)
     {
         $media = new MediaResource($this->mediaService->find($media->_id));
-        $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
+        $scoreTypes = !empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
 
         $moderationQueueNotEmpty = $this->mediaService->isModerationQueueNotEmpty();
 
         $hasPrev = $this->mediaService->hasPrevItemToReview($media->_id);
         $hasNext = $this->mediaService->hasNextItemToReview($media->_id);
 
-        return view(
-            'default_view::admin.pages.media.view',
-            compact(
-                'media',
-                'scoreTypes',
-                'moderationQueueNotEmpty',
-                'hasPrev',
-                'hasNext'
-            )
-        );
+        $viewParams = [
+            'media',
+            'scoreTypes',
+            'moderationQueueNotEmpty',
+            'hasPrev',
+            'hasNext'
+        ];
+
+        return view('default_view::admin.pages.media.view', compact($viewParams));
     }
 
     /**
@@ -129,7 +128,7 @@ class MediaController extends Controller
 
         ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('low');
 
-        return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with('success', 'Video is placed in queue for reprocessing.');
+        return redirect()->route('core.admin.media.view', ['media' => (string)$media->_id])->with('success', 'Video is placed in queue for reprocessing.');
     }
 
     public function pending($page = 1)
@@ -145,7 +144,7 @@ class MediaController extends Controller
         $prevPage = $currentPage === 1 ? $models->lastPage() : $currentPage - 1;
 
         foreach ($models as $model) {
-            return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(['prevPage' =>  $prevPage, 'nextPage' => $nextPage]);
+            return redirect()->route('core.admin.media.view', ['media' => (string)$model->_id])->with(['prevPage' => $prevPage, 'nextPage' => $nextPage]);
         }
     }
 
@@ -153,11 +152,11 @@ class MediaController extends Controller
     {
         $media = $this->mediaService->find($media->_id);
         $matchedFile = $media->files_history[0] ?? [
-            'hash' => $media->hash,
-            'size' => $media->size,
-            'mime_type' => $media->mime_type,
-            'file' => $media->file,
-        ];
+                'hash' => $media->hash,
+                'size' => $media->size,
+                'mime_type' => $media->mime_type,
+                'file' => $media->file,
+            ];
         foreach ($media->files_history as $file) {
             if ($file['hash'] === $hash) {
                 $matchedFile = $file;
@@ -170,7 +169,7 @@ class MediaController extends Controller
         try {
             $b2File = $matchedFile['file'];
             if ($backblaze->exists($b2File)) {
-                return $backblaze->download($b2File, 'orig.'.$b2File, ['Content-Type' => $backblaze->mimeType($b2File)]);
+                return $backblaze->download($b2File, 'orig.' . $b2File, ['Content-Type' => $backblaze->mimeType($b2File)]);
             }
 
             return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with('danger', 'Video file not found.');
