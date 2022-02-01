@@ -24,17 +24,4 @@ class NoteObserver extends BaseModelObserver
         $model->message = NoteType::from($model->type)->message($model->user['username'], $model->creator['username']);
         parent::creating($model);
     }
-
-    /**
-     * Handle the Follow "created" event.
-     *
-     * @param  Follow  $model
-     * @return void
-     */
-    public function created($model): void
-    {
-       
-    }
-
-   
 }
