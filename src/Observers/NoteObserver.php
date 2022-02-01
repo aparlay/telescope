@@ -18,7 +18,6 @@ class NoteObserver extends BaseModelObserver
      */
     public function creating($model): void
     {
-        
         parent::creating($model);
     }
 
@@ -30,8 +29,5 @@ class NoteObserver extends BaseModelObserver
      */
     public function created($model): void
     {
-       
     }
-
-   
 }
