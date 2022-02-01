@@ -69,7 +69,7 @@
                 </td>
               
                 <td>
-                    {{ $note->message }}
+                    {!! $note->message !!}
                 </td>
                 <td>
                     {{ $note->created_at }}

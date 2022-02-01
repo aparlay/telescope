@@ -349,13 +349,6 @@
                             @csrf
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label>Message <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="message"
-                                           placeholder="Type your message."/>
-                                </div>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
                                 <select class="form-control" name="type">
                                     <option value="">Any</option>
                                     @foreach(\Aparlay\Core\Models\Note::getTypes() as $value => $label)

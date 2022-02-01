@@ -26,7 +26,6 @@ class NoteRequest extends FormRequest
     public function rules()
     {
         return [
-            'message' => 'required',
             'type' => ['required',
                 Rule::in(array_keys(Note::getTypes())),
             ],

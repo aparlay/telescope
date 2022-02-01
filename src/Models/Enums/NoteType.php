@@ -41,13 +41,13 @@ enum NoteType: int implements Enum
     public function message($user_username, $admin_username): string
     {
         return match ($this) {
-            self::SUSPEND => __("User {$user_username} is getting suspended by {$admin_username}"),
-            self::UNSUSPEND => __("User {$user_username} is remove from suspension by {$admin_username}"),
-            self::BAN => __("User {$user_username} is getting ban by {$admin_username}"),
-            self::UNBAN => __("User {$user_username} is remove from being ban by {$admin_username}"),
-            self::WARNING_MESSAGE => __("User {$user_username} is getting a warning message by {$admin_username}"),
-            self::BAN_ALL_CC_PAYMENT => __("User {$user_username} is getting ban for any creditcard transaction by {$admin_username}"),
-            self::UNBAN_ALL_CC_PAYMENT => __("User {$user_username} is getting remove from ban for any creditcard transaction by {$admin_username}"),
+            self::SUSPEND => __("User <b>{$user_username}</b> is getting suspended by <b>{$admin_username}</b>"),
+            self::UNSUSPEND => __("User <b>{$user_username}</b> is remove from suspension by <b>{$admin_username}</b>"),
+            self::BAN => __("User <b>{$user_username}</b> is getting ban by <b>{$admin_username}</b>"),
+            self::UNBAN => __("User <b>{$user_username}</b> is remove from being ban by <b>{$admin_username}</b>"),
+            self::WARNING_MESSAGE => __("User <b>{$user_username}</b> is getting a warning message by <b>{$admin_username}</b>"),
+            self::BAN_ALL_CC_PAYMENT => __("User <b>{$user_username}</b> is getting ban for any creditcard transaction by <b>{$admin_username}</b>"),
+            self::UNBAN_ALL_CC_PAYMENT => __("User <b>{$user_username}</b> is getting remove from ban for any creditcard transaction by <b>{$admin_username}</b>"),
         };
     }
 }

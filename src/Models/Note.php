@@ -85,4 +85,5 @@ class Note extends BaseModel
             NoteType::UNBAN_ALL_CC_PAYMENT->value => NoteType::UNBAN_ALL_CC_PAYMENT->label(),
         ];
     }
+
 }
