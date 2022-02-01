@@ -51,7 +51,7 @@ class MediaService extends AdminBaseService
         $itemToReview = $this->mediaRepository->prevItemToReview($mediaId);
 
         if ($itemToReview) {
-            $this->mediaRepository->revertAllToCompleted($currentUser, $itemToReview);
+            $this->mediaRepository->revertAllToCompleted($currentUser);
             $itemToReview = $this->mediaRepository->setToUnderReview($itemToReview);
         }
 
@@ -85,7 +85,7 @@ class MediaService extends AdminBaseService
         $pendingMedia = $this->mediaRepository->firstToReview();
 
         if ($pendingMedia) {
-            $this->mediaRepository->revertAllToCompleted($currentAdminUser, $pendingMedia);
+            $this->mediaRepository->revertAllToCompleted($currentAdminUser);
             $pendingMedia = $this->mediaRepository->setToUnderReview($pendingMedia);
         }
 

@@ -53,11 +53,10 @@ class MediaRepository
      * @param $exeptMedia
      * @return mixed
      */
-    public function revertAllToCompleted($currentUser, $exceptMedia)
+    public function revertAllToCompleted($currentUser)
     {
         return Media::query()
             ->inReview()
-            ->where('_id', '!=', $exceptMedia->_id)
             ->updatedBy($currentUser->_id)
             ->update(['status' => MediaStatus::COMPLETED->value]);
     }

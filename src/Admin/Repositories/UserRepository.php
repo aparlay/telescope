@@ -41,11 +41,10 @@ class UserRepository
             ->first();
     }
 
-    public function revertAllToPending($currentUser, $exceptUser)
+    public function revertAllToPending($currentUser)
     {
         User::query()
             ->updatedBy($currentUser->_id)
-            ->where('_id', '!=', $exceptUser->_id)
             ->where('verification_status', UserVerificationStatus::UNDER_REVIEW->value)
             ->update(['verification_status' => UserVerificationStatus::PENDING->value]);
     }
