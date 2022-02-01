@@ -2,11 +2,10 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
-
+use Aparlay\Core\Api\V1\Models\Note;
+use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\NoteRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Api\V1\Models\Note;
 use MongoDB\BSON\ObjectId;
 
 class NoteService
@@ -33,9 +32,9 @@ class NoteService
                 'user' => [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
-                    'avatar' => $user->avatar
+                    'avatar' => $user->avatar,
                 ],
-                'type' => $type
+                'type' => $type,
             ];
 
             $this->noteRepository->store($newNote);
