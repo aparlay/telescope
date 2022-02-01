@@ -59,11 +59,6 @@ class MediaController extends Controller
         ]);
     }
 
-    public function indexAjax(Route $route)
-    {
-        return new MediaResource($this->mediaService->getFilteredMedia());
-    }
-
     public function view(Media $media)
     {
         $media = new MediaResource($this->mediaService->find($media->_id));

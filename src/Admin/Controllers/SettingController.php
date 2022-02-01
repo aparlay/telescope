@@ -27,14 +27,6 @@ class SettingController
         return view('default_view::admin.pages.setting.index');
     }
 
-    /**
-     * @return SettingResource
-     */
-    public function indexAjax(): SettingResource
-    {
-        return new SettingResource($this->settingService->getFilteredSettings());
-    }
-
     public function view(Setting $setting)
     {
         $setting = $this->settingService->find($setting->_id);
