@@ -92,7 +92,7 @@
                                                         <a
                                                             href="{{ route('core.admin.media.moderation-queue.next', ['mediaId' => $media->_id, 'direction' => 1]) }}"
                                                             class="btn btn-info d-block">
-                                                            <strong><i class="fa fa-arrow-right"></i> Next </strong>
+                                                            <strong>Next </strong><i class="fa fa-arrow-right"></i>
                                                         </a>
                                                     </div>
                                             @endif
