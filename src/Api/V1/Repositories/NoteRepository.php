@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Repositories;
 
-use Aparlay\Core\Admin\Models\Note;
+use Aparlay\Core\Api\V1\Models\Note;
 use MongoDB\BSON\ObjectId;
 
 class NoteRepository
