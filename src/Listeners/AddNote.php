@@ -5,9 +5,7 @@ namespace Aparlay\Core\Listeners;
 use Aparlay\Core\Api\V1\Services\NoteService;
 
 class AddNote
-{   
-
-
+{
     /**
      * Create the event listener.
      *
