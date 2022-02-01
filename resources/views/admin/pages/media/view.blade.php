@@ -74,15 +74,27 @@
                                                     <strong>Save Score</strong>
                                                 </button>
                                             </div>
+                                        </div>
 
-
-                                            @if ($moderationQueueNotEmpty)
+                                        <div class="row">
+                                            @if ($hasPrev)
                                                 <div class="col-md-6">
-                                                    <a href="{{ route('core.admin.media.moderation-queue') }}" class="btn btn-info d-block">
-                                                        <i class="fas fa-chevron-right"></i>
-                                                        <strong>Next Media</strong>
+                                                    <a
+                                                        href="{{ route('core.admin.media.moderation-queue.next', ['mediaId' => $media->_id, 'direction' => -1]) }}"
+                                                        class="btn btn-info d-block">
+                                                        <strong><i class="fa fa-arrow-left"></i> Previous </strong>
                                                     </a>
                                                 </div>
+                                            @endif
+
+                                            @if($hasNext)
+                                                    <div class="col-md-6">
+                                                        <a
+                                                            href="{{ route('core.admin.media.moderation-queue.next', ['mediaId' => $media->_id, 'direction' => 1]) }}"
+                                                            class="btn btn-info d-block">
+                                                            <strong><i class="fa fa-arrow-right"></i> Next </strong>
+                                                        </a>
+                                                    </div>
                                             @endif
                                         </div>
                                         <hr>
