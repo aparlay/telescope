@@ -195,7 +195,6 @@ class Media extends BaseModel
         return $this->belongsTo(User::class, 'creator._id');
     }
 
-
     /**
      * Get the phone associated with the user.
      */
@@ -211,7 +210,6 @@ class Media extends BaseModel
     {
         return $this->hasMany(Alert::class, 'media_id');
     }
-
 
     /**
      * Get the user's full name.

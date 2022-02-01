@@ -124,7 +124,6 @@ trait MediaScope
         return $query->whereIn('creator._id', $userIds);
     }
 
-
     /**
      * @param  Builder  $query
      * @param  ObjectId|string  $userId
