@@ -5,8 +5,8 @@ namespace Aparlay\Core\Admin\Services;
 use Aparlay\Core\Admin\Models\Note;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\NoteRepository;
-use MongoDB\BSON\ObjectId;
 use Aparlay\Core\Models\Enums\NoteType;
+use MongoDB\BSON\ObjectId;
 
 class NoteService
 {
