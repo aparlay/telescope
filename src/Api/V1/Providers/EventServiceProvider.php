@@ -9,9 +9,11 @@ use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Events\GenerateNote;
 use Aparlay\Core\Events\DispatchAuthenticatedEndpoints;
 use Aparlay\Core\Listeners\LogAuthenticated;
 use Aparlay\Core\Listeners\OnlineUsers;
+use Aparlay\Core\Listeners\AddNote;
 use Aparlay\Core\Observers\BlockObserver;
 use Aparlay\Core\Observers\FollowObserver;
 use Aparlay\Core\Observers\MediaLikeObserver;
@@ -37,6 +39,9 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
             LogAuthenticated::class,
             OnlineUsers::class,
         ],
+        GenerateNote::class => [
+            AddNote::class,
+        ]
     ];
 
     /**
