@@ -24,6 +24,7 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
         User::observe(new UserObserver());
         Media::observe(new MediaObserver());
         Setting::observe(new SettingObserver());
+        Note::observe(new NoteObserver());
         parent::boot();
     }
 }
