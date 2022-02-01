@@ -27,7 +27,7 @@ class NoteService
                 'username' => $user->username,
                 'avatar' => $user->avatar,
             ],
-            'type' => $data['type']
+            'type' => $data['type'],
         ];
 
         return $this->noteRepository->store($createData);
