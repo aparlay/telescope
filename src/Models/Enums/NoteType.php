@@ -38,8 +38,8 @@ enum NoteType: int implements Enum
         };
     }
 
-    public function message($user_username, $admin_username): string {
-
+    public function message($user_username, $admin_username): string
+    {
         return match ($this) {
             self::SUSPEND => __("User {$user_username} is getting suspended by {$admin_username}"),
             self::UNSUSPEND => __("User {$user_username} is remove from suspension by {$admin_username}"),
