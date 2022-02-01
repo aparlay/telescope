@@ -3,11 +3,41 @@
 namespace Aparlay\Core\Models\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
+use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
 trait BaseScope
 {
+    /**
+     * @param $query
+     * @param $userId
+     * @return mixed
+     */
+    public function scopeCreator($query, $userId): mixed
+    {
+        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
+        return $query->where('creator._id', $userId);
+    }
+
+    /**
+     * @param $query
+     * @param $userId
+     * @return mixed
+     */
+    public function scopeUser($query, $userId): mixed
+    {
+        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
+        return $query->where('user._id', $userId);
+    }
+
+    /**
+     * @param $query
+     * @param $filters
+     * @return mixed
+     */
     //TODO: scope too general, must refactor
     public function scopeFilter($query, $filters)
     {
