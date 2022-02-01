@@ -4,14 +4,14 @@ namespace Aparlay\Core\Admin\Providers;
 
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Models\Note;
 use Aparlay\Core\Admin\Models\Setting;
 use Aparlay\Core\Admin\Models\User;
-use Aparlay\Core\Admin\Models\Note;
 use Aparlay\Core\Admin\Observers\AlertObserver;
 use Aparlay\Core\Admin\Observers\SettingObserver;
 use Aparlay\Core\Observers\MediaObserver;
-use Aparlay\Core\Observers\UserObserver;
 use Aparlay\Core\Observers\NoteObserver;
+use Aparlay\Core\Observers\UserObserver;
 
 class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
 {
