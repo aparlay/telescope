@@ -37,9 +37,8 @@ class NoteFactory extends Factory
             NoteType::UNBAN_ALL_CC_PAYMENT->value,
 
         ]);
-
+        
         return [
-
             'creator' => [
                 '_id' => new ObjectId($creator['_id']),
                 'username' => $creator['username'],
