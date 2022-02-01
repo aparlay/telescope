@@ -25,7 +25,17 @@ class AlertController extends Controller
     {
     }
 
-    public function delete(Note $note)
+    /**
+     * Creates a new Alert model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function store(AlertRequest $request)
     {
+        if ($this->alertService->create()) {
+            return back()->with('success', 'Alert added successfully.');
+        }
+
+        return back()->with('error', 'Add alert failed.');
     }
 }
