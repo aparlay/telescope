@@ -9,6 +9,7 @@ use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Models\Note;
 use Aparlay\Core\Events\DispatchAuthenticatedEndpoints;
 use Aparlay\Core\Events\GenerateNote;
 use Aparlay\Core\Listeners\AddNote;
@@ -21,6 +22,7 @@ use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\MediaVisitObserver;
 use Aparlay\Core\Observers\ReportObserver;
 use Aparlay\Core\Observers\UserObserver;
+use Aparlay\Core\Observers\NoteObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 
@@ -58,6 +60,7 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
         MediaVisit::observe(MediaVisitObserver::class);
         User::observe(UserObserver::class);
         Report::observe(ReportObserver::class);
+        Note::observe(NoteObserver::class);
         parent::boot();
     }
 }
