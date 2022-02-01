@@ -38,4 +38,5 @@ class AlertController extends Controller
 
         return back()->with('error', 'Add alert failed.');
     }
+    
 }
