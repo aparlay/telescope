@@ -102,12 +102,12 @@ class MediaController extends Controller
         return view(
             'default_view::admin.pages.media.view',
             compact(
-            'media',
-            'scoreTypes',
-            'moderationQueueNotEmpty',
-            'hasPrev',
-            'hasNext'
-        )
+                'media',
+                'scoreTypes',
+                'moderationQueueNotEmpty',
+                'hasPrev',
+                'hasNext'
+            )
         );
     }
 
