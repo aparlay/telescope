@@ -19,7 +19,7 @@ class NoteService
 
     public function create()
     {
-        $data = request()->only(['user_id', 'type', 'message']);
+        $data = request()->only(['user_id', 'type']);
         $user = User::findOrFail($data['user_id']);
         $createData = [
             'user' => [
@@ -27,8 +27,7 @@ class NoteService
                 'username' => $user->username,
                 'avatar' => $user->avatar,
             ],
-            'type' => $data['type'],
-            'message' => $data['message'],
+            'type' => $data['type']
         ];
 
         return $this->noteRepository->store($createData);
