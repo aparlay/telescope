@@ -31,5 +31,4 @@ trait NoteScope
     {
         return $query->where('deleted_at', null);
     }
-
 }
