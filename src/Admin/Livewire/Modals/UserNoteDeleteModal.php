@@ -19,14 +19,11 @@ class UserNoteDeleteModal extends Component
     public $selectedItem;
     public $note;
 
-
-
     public function mount($noteId)
     {
         $this->selectedItem = $noteId;
         $this->note = Note::find($noteId);
     }
-
 
     public function delete()
     {
@@ -37,7 +34,6 @@ class UserNoteDeleteModal extends Component
             $userNote = Note::find($this->selectedItem);
             $userNote->delete();
         }
-
 
         $this->dispatchBrowserEvent('hideModal');
         $this->emit('updateParent');

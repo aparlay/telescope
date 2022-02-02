@@ -175,7 +175,7 @@ class CoreServiceProvider extends ServiceProvider
             'settings-table' => SettingsTable::class,
             'emails-table' => EmailsTable::class,
             'notes-table' => NotesTable::class,
-            'modals.user-notes-delete-modal' => UserNoteDeleteModal::class
+            'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,
 
         ];
 
