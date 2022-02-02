@@ -29,6 +29,7 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
             SendEmailVerificationNotification::class,
         ],
     ];
+
     /**
      * Register any events for your application.
      *

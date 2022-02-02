@@ -119,7 +119,7 @@ class UserController extends Controller
     {
         $this->userService->setUser(auth()->user());
 
-        $status = (int)request()->input('status');
+        $status = (int) request()->input('status');
 
         if ($this->userService->updateStatus($user->_id, $status)) {
             if ($status == UserStatus::ACTIVE->value) {

@@ -60,7 +60,7 @@ class NoteService
                 'avatar' => $user->avatar,
             ],
             'type' => $type,
-            'message' => NoteType::from($type)->message($creator, $user)
+            'message' => NoteType::from($type)->message($creator, $user),
         ];
 
         $this->noteRepository->store($data);

@@ -7,9 +7,6 @@ use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-/**
- *
- */
 class GenerateNote
 {
     use Dispatchable;
@@ -24,7 +21,8 @@ class GenerateNote
      *
      * @return void
      */
-    public function __construct(Authenticated|User $creator, User $user, int $type) {
+    public function __construct(Authenticated|User $creator, User $user, int $type)
+    {
         $this->creator = $creator;
         $this->user = $user;
         $this->type = $type;
