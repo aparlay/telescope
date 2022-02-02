@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
 {
-    protected UserRepository $userRepository;
     use HasUserTrait;
+    protected UserRepository $userRepository;
 
     public function __construct()
     {
