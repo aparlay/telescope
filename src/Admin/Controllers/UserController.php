@@ -92,12 +92,6 @@ class UserController extends Controller
     public function view(User $user)
     {
         $user = $this->userService->find($user->_id);
-
-        $currentUser = auth()->user();
-
-        //@todo for test puspose I placed dispathing on view user
-        UserStatusChanged::dispatch(auth()->user(), $currentUser->status, $currentUser->_id);
-
         $moderationQueueNotEmpty = $this->userService->isModerationQueueNotEmpty();
         $roles = Role::where('guard_name', 'admin')->get();
 
@@ -126,11 +120,13 @@ class UserController extends Controller
      */
     public function updateStatus(User $user, UserStatusRequest $request): RedirectResponse
     {
-        $status = request()->input('status');
         $this->userService->setUser(auth()->user());
 
-        if ($this->userService->updateStatus($user->_id)) {
+        $status = request()->input('status');
+        $userStatus = request()->input('status');
 
+
+        if ($this->userService->updateStatus($user->_id, $userStatus)){
             if ($status == UserStatus::ACTIVE->value) {
                 return back()->with('success', 'User Reactivated successfully.');
             }
