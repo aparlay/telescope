@@ -45,9 +45,19 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('media', [MediaController::class, 'index'])
                 ->middleware(['permission:list medias'])
                 ->name('index');
+
             Route::get('media/moderation', [MediaController::class, 'moderation'])
-                ->middleware(['permission:list medias'])
+                ->middleware(['permission:list medias-moderation'])
                 ->name('moderation');
+
+            Route::get('media/moderation-queue', [MediaController::class, 'moderationQueue'])
+                ->middleware(['permission:queue medias-moderation'])
+                ->name('moderation-queue');
+
+            Route::get('media/moderation-queue/next/{mediaId}&direction={direction}', [MediaController::class, 'moderationNextOrPrev'])
+                ->middleware(['permission:queue medias-moderation'])
+                ->name('moderation-queue.next');
+
             Route::get('media/{media}', [MediaController::class, 'view'])
                 ->middleware(['permission:show medias'])
                 ->name('view');
@@ -75,8 +85,16 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->name('index');
 
             Route::get('user/moderation', [UserController::class, 'moderation'])
-                ->middleware(['permission:list users'])
+                ->middleware(['permission:list users-moderation'])
                 ->name('moderation');
+
+            Route::get('user/moderation-queue/next/{userId?}&direction={direction}', [UserController::class, 'moderationNextOrPrev'])
+                ->middleware(['permission:queue users-moderation'])
+                ->name('moderation-queue.next');
+
+            Route::get('user/moderation-queue', [UserController::class, 'moderationQueue'])
+                ->middleware(['permission:queue users-moderation'])
+                ->name('moderation-queue');
 
             Route::get('user/{user}', [UserController::class, 'view'])
                 ->middleware(['permission:show users'])
@@ -111,29 +129,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
 
         /* Ajax Routes */
         Route::name('ajax.')->prefix('ajax')->group(function () {
-            Route::get('user', [UserController::class, 'indexAjax'])
-                ->middleware(['permission:list users'])
-                ->name('user.index');
-
-            Route::get('user-document', [UserDocumentController::class, 'indexAjax'])
-                ->middleware(['permission:list users'])
-                ->name('user-document.index');
-
-            Route::get('media', [MediaController::class, 'indexAjax'])
-                ->middleware(['permission:list medias'])
-                ->name('media.index');
-
-            Route::get('setting', [SettingController::class, 'indexAjax'])
-                ->middleware(['permission:list settings'])
-                ->name('setting.index');
-
             Route::get('dashboard', [DashboardController::class, 'indexAjax'])
                 ->middleware(['permission:dashboard'])
                 ->name('dashboard.index');
-
-            Route::get('email', [EmailController::class, 'indexAjax'])
-                ->middleware(['permission:list emails'])
-                ->name('email.index');
         });
 
         Route::name('role.')->group(function () {

@@ -12,6 +12,14 @@
         <i class="icon fas fa-check"></i><strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
+
+@if (Session::get('warning'))
+    <div class="alert alert-warning alert-block">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>{{ Session::get('warning') }}</strong>
+    </div>
+@endif
+
 @if (Session::get('danger'))
 <div class="alert alert-danger alert-block">
     <button type="button" class="close" data-dismiss="alert">×</button>

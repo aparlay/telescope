@@ -18,6 +18,7 @@ class AlertResource extends JsonResource
     {
         return [
             '_id' => (string) $this->_id,
+            'type' => $this->type,
             'reason' => $this->reason,
             'status' => $this->status,
             'created_at' => $this->created_at->valueOf(),

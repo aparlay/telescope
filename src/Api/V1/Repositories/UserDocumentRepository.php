@@ -16,7 +16,9 @@ class UserDocumentRepository
      */
     public function index($user)
     {
-        return UserDocument::creator($user->_id)->get();
+        return UserDocument::creator($user->_id)
+            ->with('alertObjs')
+            ->get();
     }
 
     public function fetchById($id)

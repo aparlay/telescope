@@ -32,6 +32,45 @@ class UserController extends Controller
         $this->mediaService = $mediaService;
     }
 
+    /**
+     * @param $userId
+     * @param $direction
+     * @return RedirectResponse
+     */
+    public function moderationNextOrPrev($userId, $direction)
+    {
+        $currentUser = auth()->user();
+
+        if ((int) $direction === 1) {
+            $user = $this->userService->firstNextPending($currentUser, $userId);
+        } else {
+            $user = $this->userService->firstPrevPending($currentUser, $userId);
+        }
+
+        if ($user) {
+            return redirect()->route('core.admin.user.view', ['user' => $user->_id])->with([]);
+        }
+
+        return redirect()->route('core.admin.user.index')->with([
+            'warning' => 'Moderation queue is empty',
+        ]);
+    }
+
+    public function moderationQueue()
+    {
+        $user = $this->userService->firstPending(auth()->user());
+
+        if ($user) {
+            return redirect()->route('core.admin.user.view', [
+                'user' => $user->_id,
+            ])->with([]);
+        }
+
+        return redirect()->route('core.admin.user.index')->with([
+            'warning' => 'Moderation queue is empty',
+        ]);
+    }
+
     public function moderation()
     {
         return view('default_view::admin.pages.user.moderation');
@@ -48,20 +87,16 @@ class UserController extends Controller
         return view('default_view::admin.pages.user.index', compact('userStatuses', 'userVisibilities'));
     }
 
-    /**
-     * @return UserResource
-     */
-    public function indexAjax()
-    {
-        return new UserResource($this->userService->getFilteredUsers());
-    }
-
     public function view(User $user)
     {
         $user = $this->userService->find($user->_id);
+        $moderationQueueNotEmpty = $this->userService->isModerationQueueNotEmpty();
         $roles = Role::where('guard_name', 'admin')->get();
 
-        return view('default_view::admin.pages.user.edit', compact('user', 'roles'));
+        $hasPrev = $this->userService->hasPrevPending($user->_id);
+        $hasNext = $this->userService->hasNextPending($user->_id);
+
+        return view('default_view::admin.pages.user.edit', compact('user', 'roles', 'moderationQueueNotEmpty', 'hasNext', 'hasPrev'));
     }
 
     /**

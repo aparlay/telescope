@@ -36,6 +36,44 @@ class MediaController extends Controller
         ]);
     }
 
+    /**
+     * @param $mediaId
+     * @param $direction
+     * @return RedirectResponse
+     */
+    public function moderationNextOrPrev($mediaId, $direction)
+    {
+        $currentUser = auth()->user();
+
+        if ((int) $direction === 1) {
+            $media = $this->mediaService->nextItemToReview($currentUser, $mediaId);
+        } else {
+            $media = $this->mediaService->prevItemToReview($currentUser, $mediaId);
+        }
+
+        if ($media) {
+            return redirect()->route('core.admin.media.view', ['media' => $media->_id]);
+        }
+
+        return redirect()->route('core.admin.media.index')->with([
+            'warning' => 'Moderation queue is empty',
+        ]);
+    }
+
+    public function moderationQueue()
+    {
+        $currentUser = auth()->user();
+        $media = $this->mediaService->firstItemToReview($currentUser);
+
+        if ($media) {
+            return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with([]);
+        }
+
+        return redirect()->route('core.admin.media.index')->with([
+            'warning' => 'Moderation queue is empty',
+        ]);
+    }
+
     public function moderation()
     {
         $mediaStatuses = $this->mediaService->getMediaStatuses();
@@ -46,20 +84,25 @@ class MediaController extends Controller
         ]);
     }
 
-    public function indexAjax(Route $route)
-    {
-        return new MediaResource($this->mediaService->getFilteredMedia());
-    }
-
     public function view(Media $media)
     {
         $media = new MediaResource($this->mediaService->find($media->_id));
         $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
 
-        $nextPage = Session::get('nextPage') ? Session::get('nextPage') : 2;
-        $prevPage = Session::get('prevPage') ? Session::get('prevPage') : $this->mediaService->countCompleted();
+        $moderationQueueNotEmpty = $this->mediaService->isModerationQueueNotEmpty();
 
-        return view('default_view::admin.pages.media.view', compact('media', 'scoreTypes', 'nextPage', 'prevPage'));
+        $hasPrev = $this->mediaService->hasPrevItemToReview($media->_id);
+        $hasNext = $this->mediaService->hasNextItemToReview($media->_id);
+
+        $viewParams = [
+            'media',
+            'scoreTypes',
+            'moderationQueueNotEmpty',
+            'hasPrev',
+            'hasNext',
+        ];
+
+        return view('default_view::admin.pages.media.view', compact($viewParams));
     }
 
     /**
@@ -96,7 +139,7 @@ class MediaController extends Controller
         $prevPage = $currentPage === 1 ? $models->lastPage() : $currentPage - 1;
 
         foreach ($models as $model) {
-            return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(['prevPage' =>  $prevPage, 'nextPage' => $nextPage]);
+            return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(['prevPage' => $prevPage, 'nextPage' => $nextPage]);
         }
     }
 
@@ -104,11 +147,11 @@ class MediaController extends Controller
     {
         $media = $this->mediaService->find($media->_id);
         $matchedFile = $media->files_history[0] ?? [
-            'hash' => $media->hash,
-            'size' => $media->size,
-            'mime_type' => $media->mime_type,
-            'file' => $media->file,
-        ];
+                'hash' => $media->hash,
+                'size' => $media->size,
+                'mime_type' => $media->mime_type,
+                'file' => $media->file,
+            ];
         foreach ($media->files_history as $file) {
             if ($file['hash'] === $hash) {
                 $matchedFile = $file;

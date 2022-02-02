@@ -21,64 +21,69 @@ class UserService extends AdminBaseService
         $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFilteredUsers(): mixed
+    public function isModerationQueueNotEmpty()
     {
-        $offset = (int) request()->get('start');
-        $limit = (int) request()->get('length');
+        return $this->userRepository->countPending() > 0;
+    }
 
-        $filters = $this->getFilters();
-        $sort = $this->tableSort();
-        $dateRangeFilter = null;
-        $textSearch = '';
+    public function firstNextPending($currentUser, $userId)
+    {
+        $pendingUser = $this->userRepository->firstNextPending($userId);
 
-        if (! empty($filters)) {
-            if (isset($filters['created_at'])) {
-                $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
-                unset($filters['created_at']);
-            }
-            if (isset($filters['text_search'])) {
-                $textSearch = $filters['text_search'];
-                unset($filters['text_search']);
-            }
-            $users = $this->userRepository->getFilteredUser($textSearch, $filters, $offset, $limit, $sort, $dateRangeFilter);
-        } else {
-            $users = $this->userRepository->all($offset, $limit, $sort);
+        if ($pendingUser) {
+            $this->userRepository->revertAllToPending($currentUser, $pendingUser);
+            $pendingUser = $this->userRepository->setToUnderReview($pendingUser);
         }
 
-        $this->appendAttributes($textSearch, $users, $filters, $dateRangeFilter);
+        return $pendingUser;
+    }
 
-        return $users;
+    public function firstPrevPending($currentUser, $userId)
+    {
+        $pendingUser = $this->userRepository->firstPrevPending($userId);
+
+        if ($pendingUser) {
+            $this->userRepository->revertAllToPending($currentUser, $pendingUser);
+            $pendingUser = $this->userRepository->setToUnderReview($pendingUser);
+        }
+
+        return $pendingUser;
     }
 
     /**
-     * @param $users
-     * @param $filters
-     * @param $dateRangeFilter
+     * @param $userId
+     * @return bool
      */
-    public function appendAttributes($textSearch, $users, $filters, $dateRangeFilter)
+    public function hasNextPending($userId): bool
     {
-        $users->total_users = $this->userRepository->countCollection();
-        $users->total_filtered_users = ! empty($filters) || ! empty($textSearch) || $dateRangeFilter ? $this->userRepository->countFilteredUser($textSearch, $filters, $dateRangeFilter) : $users->total_users;
+        return ! empty($this->userRepository->firstNextPending($userId));
+    }
 
-        foreach ($users as $user) {
-            $userBadges = [
-                'status' => ActionButtonBladeComponent::getBadge($user->status_color, $user->status_name),
-                'is_verified' => ActionButtonBladeComponent::getBadge($user->email_verified ? 'success' : 'danger', $user->email_verified ? 'Email Verified' : 'Email Not-verified'),
-                'gender' => ActionButtonBladeComponent::getBadge($user->gender_color, $user->gender_name),
-            ];
+    /**
+     * @param $userId
+     * @return bool
+     */
+    public function hasPrevPending($userId): bool
+    {
+        return ! empty($this->userRepository->firstPrevPending($userId));
+    }
 
-            $user->status_badge = implode('</br>', $userBadges);
-            $user->action = ActionButtonBladeComponent::getViewActionButton($user->_id, 'user');
-            $user->username_avatar = ActionButtonBladeComponent::getUsernameWithAvatar($user);
-            $user->date_formatted = $user->created_at->toDateTimeString();
-            $user->full_name = $user->full_name ?? ActionButtonBladeComponent::defaultValueNotSet();
-            $user->follower_count = $user->follower_count ?? ActionButtonBladeComponent::defaultValueNotSet();
-            $user->like_count = $user->like_count ?? ActionButtonBladeComponent::defaultValueNotSet();
-            $user->media_count = $user->media_count ?? ActionButtonBladeComponent::defaultValueNotSet();
+    public function firstPending($user)
+    {
+        $underReviewExists = $this->userRepository->firstUnderReview($user);
+
+        if ($underReviewExists) {
+            return $underReviewExists;
         }
+
+        $pendingUser = $this->userRepository->firstPending();
+
+        if ($pendingUser) {
+            $this->userRepository->revertAllToPending($user, $pendingUser);
+            $pendingUser = $this->userRepository->setToUnderReview($pendingUser);
+        }
+
+        return  $pendingUser;
     }
 
     /**

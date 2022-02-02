@@ -3,11 +3,17 @@
 namespace Aparlay\Core\Models\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
+use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
 trait BaseScope
 {
+    /**
+     * @param $query
+     * @param $filters
+     * @return mixed
+     */
     //TODO: scope too general, must refactor
     public function scopeFilter($query, $filters)
     {
@@ -38,22 +44,5 @@ trait BaseScope
     public function scopeRecentFirst($query): mixed
     {
         return $query->orderBy('created_at', 'desc');
-    }
-
-    public function scopeDate(Builder $query, UTCDateTime $start = null, UTCDateTime $end = null): Builder
-    {
-        if (null !== $start && null !== $end) {
-            return $query->whereBetween('created_at', [$start, $end]);
-        }
-
-        if (null !== $start) {
-            return $query->where('created_at', '$gte', $start);
-        }
-
-        if (null !== $end) {
-            return $query->where('created_at', '$lte', $end);
-        }
-
-        return $query;
     }
 }

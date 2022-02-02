@@ -35,8 +35,8 @@ enum MediaStatus: int implements Enum
     {
         return match ($this) {
             self::QUEUED, self::UPLOADED => 'info',
-            self::IN_PROGRESS, self::IN_REVIEW => 'warning',
-            self::COMPLETED => 'dark',
+            self::IN_PROGRESS, self::COMPLETED => 'warning',
+            self::IN_REVIEW => 'dark',
             self::FAILED, self::ADMIN_DELETED, self::USER_DELETED, self::DENIED => 'danger',
             self::CONFIRMED => 'success',
         };

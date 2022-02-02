@@ -28,6 +28,18 @@ trait MediaScope
 
     /**
      * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @return Builder
+     */
+    public function scopeUpdatedBy(Builder $query, ObjectId | string $userId): Builder
+    {
+        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
+        return $query->where('updated_by', $userId);
+    }
+
+    /**
+     * @param  Builder  $query
      * @param  ObjectId|string  $mediaId
      * @return Builder
      */

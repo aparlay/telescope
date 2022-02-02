@@ -1,9 +1,7 @@
 @extends('adminlte::page')
 @section('title', 'Users')
 @section('css')
-    <link rel="stylesheet" href="{{ asset('admin/assets/css/adminStyles.css') }}" >
     <link rel="stylesheet" href="/css/admin.css" >
-
     @livewireStyles
 @stop
 
@@ -24,6 +22,7 @@
 @stop
 
 @section('content')
+@include('default_view::admin.parts.messages')
 <div class="content">
     <div class="container-fluid">
         <div class="row">

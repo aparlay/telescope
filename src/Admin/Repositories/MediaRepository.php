@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Models\Enums\MediaStatus;
 
 class MediaRepository
 {
@@ -15,6 +16,91 @@ class MediaRepository
         }
 
         $this->model = $model;
+    }
+
+    /**
+     * @return int
+     */
+    public function countToReview()
+    {
+        return Media::query()
+            ->whereIn('status', [MediaStatus::COMPLETED->value, MediaStatus::IN_REVIEW->value])
+            ->count();
+    }
+
+    public function firstToReview()
+    {
+        return Media::query()
+            ->completed()
+            ->first();
+    }
+
+    /**
+     * @param $user
+     * @return mixed
+     */
+    public function firstUnderReview($currentAdminUser)
+    {
+        return Media::query()
+            ->inReview()
+            ->updatedBy($currentAdminUser->_id)
+            ->first();
+    }
+
+    /**
+     * @param $currentUser
+     * @param $exeptMedia
+     * @return mixed
+     */
+    public function revertAllToCompleted($currentUser)
+    {
+        return Media::query()
+            ->inReview()
+            ->updatedBy($currentUser->_id)
+            ->update(['status' => MediaStatus::COMPLETED->value]);
+    }
+
+    /**
+     * @param $currentItemId
+     * @return mixed
+     */
+    public function prevItemToReview($currentItemId)
+    {
+        return Media::query()
+            ->completed()
+            ->where('_id', '<', $currentItemId)
+            ->orderBy('_id', 'DESC')
+            ->first();
+    }
+
+    /**
+     * @param $currentItemId
+     * @return mixed
+     */
+    public function nextItemToReview($currentItemId)
+    {
+        return Media::query()
+            ->completed()
+            ->where('_id', '>', $currentItemId)
+            ->orderBy('_id', 'ASC')
+            ->first();
+    }
+
+    /**
+     * @param $media
+     * @return mixed
+     */
+    public function setToUnderReview($media)
+    {
+        $media->status = MediaStatus::IN_REVIEW->value;
+        $media->save();
+
+        return $media;
+    }
+
+    public function firstPending()
+    {
+        return Media::query()->completed()->latest()->first();
     }
 
     public function all($offset, $limit, $sort)

@@ -24,9 +24,8 @@ enum AlertType: int implements Enum
     {
         return match ($this) {
             self::USER => 'warning',
-            self::MEDIA_REMOVED => 'danger',
-            self::MEDIA_NOTICED => 'info',
-            self::USER_DOCUMENT_REJECTED => 'danger'
+            self::MEDIA_REMOVED, self::USER_DOCUMENT_REJECTED => 'danger',
+            self::MEDIA_NOTICED => 'info'
         };
     }
 }

@@ -26,50 +26,67 @@ class MediaService extends AdminBaseService
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getFilteredMedia(): mixed
+    public function isModerationQueueNotEmpty(): bool
     {
-        $offset = (int) request()->get('start');
-        $limit = (int) request()->get('length');
-        $filters = $this->getFilters();
-        $sort = $this->tableSort();
-        $dateRangeFilter = null;
+        return $this->mediaRepository->countCompleted() > 0;
+    }
 
-        if (! empty($filters)) {
-            if (isset($filters['created_at'])) {
-                $dateRangeFilter = $this->getDateRangeFilter($filters['created_at']);
-                unset($filters['created_at']);
-            }
+    public function nextItemToReview($currentUser, $mediaId)
+    {
+        $mediaItem = $this->mediaRepository->nextItemToReview($mediaId);
 
-            $medias = $this->mediaRepository->getFilteredMedia($offset, $limit, $sort, $filters, $dateRangeFilter);
-        } else {
-            $medias = $this->mediaRepository->mediaAjax($offset, $limit, $sort);
+        if ($mediaItem) {
+            $this->mediaRepository->revertAllToCompleted($currentUser, $mediaItem);
+            $mediaItem = $this->mediaRepository->setToUnderReview($mediaItem);
         }
 
-        $this->appendAttributes($medias, $filters, $dateRangeFilter);
+        return $mediaItem;
+    }
 
-        return $medias;
+    public function prevItemToReview($currentUser, $mediaId)
+    {
+        $itemToReview = $this->mediaRepository->prevItemToReview($mediaId);
+
+        if ($itemToReview) {
+            $this->mediaRepository->revertAllToCompleted($currentUser);
+            $itemToReview = $this->mediaRepository->setToUnderReview($itemToReview);
+        }
+
+        return $itemToReview;
+    }
+
+    public function hasNextItemToReview($mediaId): bool
+    {
+        return ! empty($this->mediaRepository->nextItemToReview($mediaId));
     }
 
     /**
-     * @param $medias
-     * @param $filters
+     * @param $userId
+     * @return bool
      */
-    public function appendAttributes($medias, $filters, $dateRangeFilter)
+    public function hasPrevItemToReview($mediaId): bool
     {
-        $medias->total_media = $this->mediaRepository->countCollection();
-        $medias->total_filtered_media = ! empty($filters) || $dateRangeFilter ? $this->mediaRepository->countFilteredMedia($filters, $dateRangeFilter) : $medias->total_media;
+        return ! empty($this->mediaRepository->prevItemToReview($mediaId));
+    }
 
-        foreach ($medias as $media) {
-            $media->file = '<img src="'.Cdn::cover(! empty($media->file) ? str_replace('.mp4', '', $media->file).'.jpg?width=100' : 'default.jpg?width=100').'"/>';
-            $media->sort_score = $media->sort_score ? round($media->sort_score) : ActionButtonBladeComponent::defaultValueNotSet();
-            $media->status_badge = ActionButtonBladeComponent::getBadge($media->status_color, $media->status_name);
-            $media->action = ActionButtonBladeComponent::getViewActionButton($media->_id, 'media');
-            $media->date_formatted = $media->created_at->toDateTimeString();
-            $media->like_count = $media->like_count ?? ActionButtonBladeComponent::defaultValueNotSet();
-            $media->visit_count = $media->visit_count ?? ActionButtonBladeComponent::defaultValueNotSet();
+    public function firstItemToReview($currentAdminUser)
+    {
+        $underReviewExists = $this->mediaRepository->firstUnderReview($currentAdminUser);
+
+        if ($underReviewExists) {
+            return $underReviewExists;
         }
+
+        $pendingMedia = $this->mediaRepository->firstToReview();
+
+        if ($pendingMedia) {
+            $this->mediaRepository->revertAllToCompleted($currentAdminUser);
+            $pendingMedia = $this->mediaRepository->setToUnderReview($pendingMedia);
+        }
+
+        return $pendingMedia;
     }
 
     /**

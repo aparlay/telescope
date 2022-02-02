@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\User;
-use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 
 class UserRepository
@@ -19,12 +18,82 @@ class UserRepository
         $this->model = $model;
     }
 
+    /**
+     * @return int
+     */
+    public function countPending()
+    {
+        return User::query()
+            ->where('verification_status', UserVerificationStatus::PENDING->value)
+            ->count();
+    }
+
+    /**
+     * @param $user
+     * @return mixed
+     */
+    public function firstUnderReview($user)
+    {
+        return User::query()
+            ->where('verification_status', UserVerificationStatus::UNDER_REVIEW->value)
+            ->updatedBy($user->_id)
+            ->latest()
+            ->first();
+    }
+
+    public function revertAllToPending($currentUser)
+    {
+        User::query()
+            ->updatedBy($currentUser->_id)
+            ->where('verification_status', UserVerificationStatus::UNDER_REVIEW->value)
+            ->update(['verification_status' => UserVerificationStatus::PENDING->value]);
+    }
+
+    public function firstNextPending($nextUserId)
+    {
+        $query = User::query()
+            ->where('_id', '>', $nextUserId)
+            ->where('verification_status', UserVerificationStatus::PENDING->value)
+            ->orderBy('_id', 'ASC');
+
+        return $query->first();
+    }
+
+    public function firstPrevPending($nextUserId)
+    {
+        return User::query()
+            ->where('_id', '<', $nextUserId)
+            ->where('verification_status', UserVerificationStatus::PENDING->value)
+            ->orderBy('_id', 'DESC')
+            ->first();
+    }
+
+    public function firstPending()
+    {
+        return User::query()
+            ->where('verification_status', UserVerificationStatus::PENDING->value)
+            ->latest()
+            ->first();
+    }
+
     public function all($offset, $limit, $sort)
     {
         return $this->model->sortBy($sort)
             ->skip($offset)
             ->take($limit)
             ->get();
+    }
+
+    /**
+     * @param $user
+     * @return mixed
+     */
+    public function setToUnderReview($user)
+    {
+        $user->verification_status = UserVerificationStatus::UNDER_REVIEW->value;
+        $user->save();
+
+        return $user;
     }
 
     public function updateVerificationStatus($userId, $verificationStatus)
