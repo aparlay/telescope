@@ -20,7 +20,6 @@ class UserNoteDeleteModal extends Component
     public $note;
 
 
-
     public function mount($noteId)
     {
         $this->selectedItem = $noteId;

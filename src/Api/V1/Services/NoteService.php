@@ -25,7 +25,7 @@ class NoteService
      * @param  $type
      * @return void
      */
-    public function addNewNote(User|Authenticatable|null $creator, array $user, int $type): void
+    public function addNewNote(User|Authenticatable|null $creator, User $user, int $type): void
     {
         if ($creator !== null) {
             $newNote = [

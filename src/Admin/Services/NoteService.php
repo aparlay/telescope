@@ -17,17 +17,16 @@ class NoteService
         $this->noteRepository = new NoteRepository(new Note());
     }
 
-    public function create()
+    public function create($userId, $type)
     {
-        $data = request()->only(['user_id', 'type']);
-        $user = User::findOrFail($data['user_id']);
+        $user = User::findOrFail($userId);
         $createData = [
             'user' => [
                 '_id' => new ObjectId($user->_id),
                 'username' => $user->username,
                 'avatar' => $user->avatar,
             ],
-            'type' => $data['type'],
+            'type' => $type,
         ];
 
         return $this->noteRepository->store($createData);

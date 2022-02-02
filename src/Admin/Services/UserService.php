@@ -4,6 +4,8 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
+use Aparlay\Core\Api\V1\Traits\HasUserTrait;
+use Aparlay\Core\Events\UserStatusChanged;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
@@ -12,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class UserService extends AdminBaseService
 {
     protected UserRepository $userRepository;
+    use HasUserTrait;
 
     public function __construct()
     {
@@ -185,6 +188,8 @@ class UserService extends AdminBaseService
 
     public function updateStatus($id): bool
     {
+        $userStatus = request()->input('status');
+        UserStatusChanged::dispatch($this->getUser(), $userStatus, $id);
         return $this->userRepository->update(['status' => request()->input('status')], $id);
     }
 }

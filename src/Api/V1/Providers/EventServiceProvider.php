@@ -11,8 +11,8 @@ use Aparlay\Core\Api\V1\Models\Note;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Events\DispatchAuthenticatedEndpoints;
-use Aparlay\Core\Events\GenerateNote;
-use Aparlay\Core\Listeners\AddNote;
+use Aparlay\Core\Events\UserStatusChanged;
+use Aparlay\Core\Listeners\AddUserNoteEvent;
 use Aparlay\Core\Listeners\LogAuthenticated;
 use Aparlay\Core\Listeners\OnlineUsers;
 use Aparlay\Core\Observers\BlockObserver;
@@ -41,8 +41,8 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
             LogAuthenticated::class,
             OnlineUsers::class,
         ],
-        GenerateNote::class => [
-            AddNote::class,
+        UserStatusChanged::class => [
+            AddUserNoteEvent::class,
         ],
     ];
 

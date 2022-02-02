@@ -119,6 +119,8 @@ class UserController extends Controller
     public function updateStatus(User $user, UserStatusRequest $request): RedirectResponse
     {
         $status = request()->input('status');
+        $this->userService->setUser(auth()->user());
+
         if ($this->userService->updateStatus($user->_id)) {
             if ($status == UserStatus::ACTIVE->value) {
                 return back()->with('success', 'User Reactivated successfully.');

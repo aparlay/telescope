@@ -28,7 +28,10 @@ class NoteController extends Controller
 
     public function store(NoteRequest $request)
     {
-        $create = $this->noteService->create();
+        $userId = request()->input('user_id');
+        $type = request()->input('type');
+
+        $create = $this->noteService->create($userId, $type);
 
         return redirect()->route('core.admin.user.view', ['user' => $create->user['_id']])->with([
             'success' => 'Successfully added notes.',
