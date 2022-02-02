@@ -347,7 +347,7 @@
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
                                 <button type="submit" class="btn btn-warning">Suspend</button>
- 
+
                             </div>
                         </form>
                     </div>
@@ -417,9 +417,7 @@
 
         @section('js')
             <script src="{{ URL::asset('admin/assets/js/ekko-lightbox.min.js') }}"></script>
-            <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
-            <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
-            <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
+
             <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
             <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
 
