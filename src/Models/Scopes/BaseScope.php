@@ -9,29 +9,6 @@ use MongoDB\BSON\UTCDateTime;
 
 trait BaseScope
 {
-    /**
-     * @param $query
-     * @param $userId
-     * @return mixed
-     */
-    public function scopeCreator($query, $userId): mixed
-    {
-        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
-
-        return $query->where('creator._id', $userId);
-    }
-
-    /**
-     * @param $query
-     * @param $userId
-     * @return mixed
-     */
-    public function scopeUser($query, $userId): mixed
-    {
-        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
-
-        return $query->where('user._id', $userId);
-    }
 
     /**
      * @param $query
@@ -70,20 +47,4 @@ trait BaseScope
         return $query->orderBy('created_at', 'desc');
     }
 
-    public function scopeDate(Builder $query, UTCDateTime $start = null, UTCDateTime $end = null): Builder
-    {
-        if (null !== $start && null !== $end) {
-            return $query->whereBetween('created_at', [$start, $end]);
-        }
-
-        if (null !== $start) {
-            return $query->where('created_at', '$gte', $start);
-        }
-
-        if (null !== $end) {
-            return $query->where('created_at', '$lte', $end);
-        }
-
-        return $query;
-    }
 }
