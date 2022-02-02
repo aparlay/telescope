@@ -125,8 +125,7 @@ class UserController extends Controller
         $status = request()->input('status');
         $userStatus = request()->input('status');
 
-
-        if ($this->userService->updateStatus($user->_id, $userStatus)){
+        if ($this->userService->updateStatus($user->_id, $userStatus)) {
             if ($status == UserStatus::ACTIVE->value) {
                 return back()->with('success', 'User Reactivated successfully.');
             }

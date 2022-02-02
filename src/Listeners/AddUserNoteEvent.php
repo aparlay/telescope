@@ -10,7 +10,6 @@ use Aparlay\Core\Models\Enums\UserStatus;
 
 class AddUserNoteEvent
 {
-
     public function handle(UserStatusChanged $event)
     {
         $creatorUser = $event->getCreator();

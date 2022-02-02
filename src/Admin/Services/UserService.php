@@ -189,6 +189,7 @@ class UserService extends AdminBaseService
     public function updateStatus($id, $userStatus): bool
     {
         UserStatusChanged::dispatch($this->getUser(), $userStatus, $id);
+
         return $this->userRepository->update(['status' => $userStatus], $id);
     }
 }
