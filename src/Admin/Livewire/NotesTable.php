@@ -44,7 +44,7 @@ class NotesTable extends BaseIndexComponent
 
     public function buildQuery(): Builder
     {
-        $query = parent::buildQuery()->isNotDeleted();
+        $query = parent::buildQuery()->isNotDeleted()->recentFirst();
         if (! empty($this->userId)) {
             $query->user($this->userId);
         }

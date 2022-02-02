@@ -11,15 +11,4 @@ use MongoDB\BSON\ObjectId;
 
 class NoteObserver extends BaseModelObserver
 {
-    /**
-     * Handle the Follow "creating" event.
-     *
-     * @param  Follow  $model
-     * @return void
-     */
-    public function creating($model): void
-    {
-        $model->message = NoteType::from($model->type)->message($model->user['username'], $model->creator['username']);
-        parent::creating($model);
-    }
 }

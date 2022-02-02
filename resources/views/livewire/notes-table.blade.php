@@ -1,9 +1,9 @@
 
 <div class="notes-table">
-<div class="filters pb-3">
+    <div class="filters pb-3">
         <div class="row">
             <div class="col-md-9 pt-4">
-                <h4>Emails</h4>
+                <h4>Notes</h4>
             </div>
             <div class="col-md-1">
                 <label for="">Start Date</label>
@@ -31,14 +31,14 @@
     <table class="table table-striped">
         <tbody>
         <tr>
-            <th class="col-md-3">
+            <th class="col-md-2">
                 <div>
 
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'" />
                     <input class="form-control" type="text" wire:model="filter.creator_username"/>
                 </div>
             </th>
-            <th class="col-md-3">
+            <th class="col-md-6">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'message'" :fieldLabel="'Notes'" />
                     <input class="form-control" type="text" wire:model="filter.message"/>
@@ -49,7 +49,7 @@
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
                 </div>
             </th>
-            <th class="col-md-3">
+            <th class="col-md-1">
                 <div>
                     <label for="">Action</label>
 

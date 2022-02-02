@@ -30,8 +30,7 @@ enum UserStatus: int implements Enum
             self::VERIFIED => 'info',
             self::ACTIVE => 'success',
             self::SUSPENDED => 'danger',
-            self::BLOCKED => 'indigo',
-            self::DEACTIVATED => 'indigo',
+            self::BLOCKED, self::DEACTIVATED => 'indigo',
         };
     }
 }

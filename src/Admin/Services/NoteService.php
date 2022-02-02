@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Models\Note;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\NoteRepository;
 use Aparlay\Core\Models\Enums\NoteType;
+use Illuminate\Contracts\Auth\Authenticatable;
 use MongoDB\BSON\ObjectId;
 
 class NoteService
@@ -35,5 +36,33 @@ class NoteService
     public function delete($id)
     {
         return $this->noteRepository->delete($id);
+    }
+
+    /**
+     * Add new note.
+     *
+     * @param  User|Authenticatable  $creator
+     * @param  User  $user
+     * @param  int  $type
+     * @return void
+     */
+    public function addNewNote(User|Authenticatable $creator, User $user, int $type): void
+    {
+        $data = [
+            'creator' => [
+                '_id' => new ObjectId($creator->_id),
+                'username' => $creator->username,
+                'avatar' => $creator->avatar,
+            ],
+            'user' => [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ],
+            'type' => $type,
+            'message' => NoteType::from($type)->message($creator, $user)
+        ];
+
+        $this->noteRepository->store($data);
     }
 }

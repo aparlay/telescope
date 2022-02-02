@@ -306,6 +306,14 @@ class User extends Authenticatable implements JWTSubject
     /**
      * @return string
      */
+    public function getNoteAdminUrlAttribute(): string
+    {
+        return "<a href='{$this->admin_url}' title='{$this->username}'>{$this->username}</a>";
+    }
+
+    /**
+     * @return string
+     */
     public function getAdminUrlAttribute(): string
     {
         return route('core.admin.user.view', ['user' => $this->_id]);

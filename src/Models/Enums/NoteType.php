@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Models\Enums;
 
+use Aparlay\Core\Models\User;
+
 enum NoteType: int implements Enum
 {
     case SUSPEND = 1;
@@ -38,16 +40,21 @@ enum NoteType: int implements Enum
         };
     }
 
-    public function message($user_username, $admin_username): string
+    /**
+     * @param  User  $admin
+     * @param  User  $user
+     * @return string
+     */
+    public function message(User $admin, User $user): string
     {
         return match ($this) {
-            self::SUSPEND => __("User <b>{$user_username}</b> is getting suspended by <b>{$admin_username}</b>"),
-            self::UNSUSPEND => __("User <b>{$user_username}</b> is remove from suspension by <b>{$admin_username}</b>"),
-            self::BAN => __("User <b>{$user_username}</b> is getting ban by <b>{$admin_username}</b>"),
-            self::UNBAN => __("User <b>{$user_username}</b> is remove from being ban by <b>{$admin_username}</b>"),
-            self::WARNING_MESSAGE => __("User <b>{$user_username}</b> is getting a warning message by <b>{$admin_username}</b>"),
-            self::BAN_ALL_CC_PAYMENT => __("User <b>{$user_username}</b> is getting ban for any creditcard transaction by <b>{$admin_username}</b>"),
-            self::UNBAN_ALL_CC_PAYMENT => __("User <b>{$user_username}</b> is getting remove from ban for any creditcard transaction by <b>{$admin_username}</b>"),
+            self::UNSUSPEND => __("User <b>{$user->note_admin_url}</b> is remove from suspension by <b>{$admin->note_admin_url}</b>"),
+            self::BAN => __("User <b>{$user->note_admin_url}</b> is getting ban by <b>{$admin->note_admin_url}</b>"),
+            self::UNBAN => __("User <b>{$user->note_admin_url}</b> is remove from being banned by <b>{$admin->note_admin_url}</b>"),
+            self::WARNING_MESSAGE => __("User <b>{$user->note_admin_url}</b> is getting a warning message by <b>{$admin->note_admin_url}</b>"),
+            self::BAN_ALL_CC_PAYMENT => __("User <b>{$user->note_admin_url}</b> is getting ban for any creditcard transaction by <b>{$admin->note_admin_url}</b>"),
+            self::UNBAN_ALL_CC_PAYMENT => __("User <b>{$user->note_admin_url}</b> is getting remove from ban for any creditcard transaction by <b>{$admin->note_admin_url}</b>"),
+            default => __("User <b>{$user->note_admin_url}</b> is getting unknown notes by <b>{$admin->note_admin_url}</b>"),
         };
     }
 }
