@@ -8,14 +8,12 @@ use Aparlay\Core\Events\UserStatusChanged;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\UserStatus;
 
-
 class AddUserNoteEvent
 {
-
     public function handle(UserStatusChanged $event)
     {
         \Log::info('e', [
-            'event' => $event
+            'event' => $event,
         ]);
 
         $creatorUser = $event->getCreator();

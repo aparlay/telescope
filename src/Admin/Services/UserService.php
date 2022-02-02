@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
 {
-    protected UserRepository $userRepository;
     use HasUserTrait;
+    protected UserRepository $userRepository;
 
     public function __construct()
     {
@@ -189,6 +189,7 @@ class UserService extends AdminBaseService
     public function updateStatus($id): bool
     {
         $userStatus = request()->input('status');
+
         return $this->userRepository->update(['status' => request()->input('status')], $id);
     }
 }

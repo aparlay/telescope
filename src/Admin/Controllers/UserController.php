@@ -130,7 +130,6 @@ class UserController extends Controller
         $this->userService->setUser(auth()->user());
 
         if ($this->userService->updateStatus($user->_id)) {
-
             if ($status == UserStatus::ACTIVE->value) {
                 return back()->with('success', 'User Reactivated successfully.');
             }

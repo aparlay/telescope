@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Events;
 
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -25,7 +24,8 @@ class UserStatusChanged implements ShouldQueue
         private $creator,
         private $newUserStatus,
         private $userId,
-    ){}
+    ) {
+    }
 
     /**
      * @return mixed
@@ -50,6 +50,4 @@ class UserStatusChanged implements ShouldQueue
     {
         return $this->userId;
     }
-
-
 }
