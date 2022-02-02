@@ -7,6 +7,7 @@ use Aparlay\Core\Admin\Models\Note;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\AlertRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
+use Aparlay\Core\Constants\Roles;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
@@ -27,11 +28,16 @@ class UserNoteDeleteModal extends Component
     }
 
 
-
     public function delete()
     {
-        $userNote = Note::find($this->selectedItem);
-        $userNote->delete();
+        $currentUserId = auth()->guard('admin')->id();
+        $currentUser = User::find($currentUserId);
+
+        if ($currentUser->can('delete notes')) {
+            $userNote = Note::find($this->selectedItem);
+            $userNote->delete();
+        }
+
 
         $this->dispatchBrowserEvent('hideModal');
         $this->emit('updateParent');
