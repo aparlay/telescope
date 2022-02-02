@@ -10,6 +10,8 @@ use Aparlay\Core\Admin\Resources\UserResource;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Admin\Services\UploadService;
 use Aparlay\Core\Admin\Services\UserService;
+use Aparlay\Core\Events\UserStatusChanged;
+use Aparlay\Core\Jobs\ReprocessMedia;
 use Aparlay\Core\Models\Enums\UserStatus;
 use ErrorException;
 use Illuminate\Http\RedirectResponse;
@@ -90,6 +92,12 @@ class UserController extends Controller
     public function view(User $user)
     {
         $user = $this->userService->find($user->_id);
+
+        $currentUser = auth()->user();
+
+        //@todo for test puspose I placed dispathing on view user
+        UserStatusChanged::dispatch(auth()->user(), $currentUser->status, $currentUser->_id);
+
         $moderationQueueNotEmpty = $this->userService->isModerationQueueNotEmpty();
         $roles = Role::where('guard_name', 'admin')->get();
 
@@ -122,6 +130,7 @@ class UserController extends Controller
         $this->userService->setUser(auth()->user());
 
         if ($this->userService->updateStatus($user->_id)) {
+
             if ($status == UserStatus::ACTIVE->value) {
                 return back()->with('success', 'User Reactivated successfully.');
             }
