@@ -9,7 +9,6 @@ use MongoDB\BSON\UTCDateTime;
 
 trait BaseScope
 {
-
     /**
      * @param $query
      * @param $filters
@@ -46,5 +45,4 @@ trait BaseScope
     {
         return $query->orderBy('created_at', 'desc');
     }
-
 }

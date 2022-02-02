@@ -7,7 +7,6 @@ use MongoDB\BSON\UTCDateTime;
 
 trait DateScope
 {
-
     public function scopeDate(Builder $query, UTCDateTime $start = null, UTCDateTime $end = null): Builder
     {
         if (null !== $start && null !== $end) {

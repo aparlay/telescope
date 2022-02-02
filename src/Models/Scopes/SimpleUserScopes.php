@@ -1,4 +1,5 @@
 <?php
+
 namespace Aparlay\Core\Models\Scopes;
 
 use MongoDB\BSON\ObjectId;
@@ -28,5 +29,4 @@ trait SimpleUserScopes
 
         return $query->where('user._id', $userId);
     }
-
 }
