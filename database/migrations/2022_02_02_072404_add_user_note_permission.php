@@ -10,10 +10,9 @@ class AddUserNotePermission extends Migration
     const PERMISSION_CREATE_NOTES = 'create notes';
     const PERMISSION_DELETE_NOTES = 'delete notes';
 
-
     const PERMISSIONS_LIST = [
         self::PERMISSION_CREATE_NOTES,
-        self::PERMISSION_DELETE_NOTES
+        self::PERMISSION_DELETE_NOTES,
     ];
 
     /**
@@ -41,8 +40,6 @@ class AddUserNotePermission extends Migration
             }
         }
     }
-
-
 
     /**
      * Reverse the migrations.

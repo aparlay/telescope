@@ -26,7 +26,6 @@ class UserNoteDeleteModal extends Component
         $this->note = Note::find($noteId);
     }
 
-
     public function delete()
     {
         $currentUserId = auth()->guard('admin')->id();
@@ -36,7 +35,6 @@ class UserNoteDeleteModal extends Component
             $userNote = Note::find($this->selectedItem);
             $userNote->delete();
         }
-
 
         $this->dispatchBrowserEvent('hideModal');
         $this->emit('updateParent');
