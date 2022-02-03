@@ -47,7 +47,6 @@
         <tr>
             <th class="col-md-2">
                 <div>
-
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'"/>
                     <input class="form-control" type="text" wire:model="filter.creator_username"/>
                 </div>
@@ -66,7 +65,6 @@
             <th class="col-md-1">
                 <div>
                     <label for="">Action</label>
-
                 </div>
             </th>
             <th></th>
@@ -75,10 +73,8 @@
         @foreach($notes as $note)
             <tr>
                 <td>
-                    <a href="">
-
+                    <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
                         {{ $note->creator['username'] }}
-
                     </a>
                 </td>
 

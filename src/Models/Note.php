@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Relations\BelongsTo;
 
 class Note extends BaseModel
 {
@@ -51,6 +52,13 @@ class Note extends BaseModel
     protected $hidden = [
     ];
 
+    /**
+     * Get the creator associated with the follow.
+     */
+    public function creatorObj(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'creator._id');
+    }
     /**
      * The attributes that should be cast to native types.
      *
