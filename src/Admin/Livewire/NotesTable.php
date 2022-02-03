@@ -14,7 +14,6 @@ class NotesTable extends BaseIndexComponent
     public $model = Note::class;
     public $userId;
 
-
     public function getAllowedSorts()
     {
         return [

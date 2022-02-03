@@ -17,8 +17,6 @@ class UserNoteCreateModal extends Component
     public $userId;
     public $message;
 
-
-
     public function mount($userId)
     {
         $this->userId = $userId;
@@ -27,7 +25,7 @@ class UserNoteCreateModal extends Component
     protected function rules()
     {
         return [
-            'message' => ['required', 'min:10']
+            'message' => ['required', 'min:10'],
         ];
     }
 
