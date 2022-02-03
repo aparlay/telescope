@@ -175,7 +175,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             ->middleware(['permission:delete notes'])
             ->name('delete');
 
-            Route::post('note/store', [NoteController::class, 'store'])
+            Route::post('note/{user}', [NoteController::class, 'store'])
             ->middleware(['permission:create notes'])
             ->name('store');
         });

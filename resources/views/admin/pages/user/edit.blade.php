@@ -355,8 +355,7 @@
             </div>
             <div id="noteModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
-                    <form action="{{ route('core.admin.note.store') }}" method="post">
-                        <input type="hidden" name="user_id" value="{{ $user->_id }}">
+                    <form action="{{ route('core.admin.note.store', ['user' => $user->_id]) }}" method="post">
                         <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header">

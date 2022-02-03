@@ -38,15 +38,14 @@ class NoteService
         return $this->noteRepository->delete($id);
     }
 
+
     /**
-     * Add new note.
-     *
-     * @param  User|Authenticatable  $creator
-     * @param  User  $user
-     * @param  int  $type
-     * @return void
+     * @param User|Authenticatable $creator
+     * @param User $user
+     * @param int $type
+     * @return Note
      */
-    public function addNewNote(User|Authenticatable $creator, User $user, int $type): void
+    public function addNewNote(User|Authenticatable $creator, User $user, int $type): Note
     {
         $data = [
             'creator' => [
@@ -63,6 +62,6 @@ class NoteService
             'message' => NoteType::from($type)->message($creator, $user),
         ];
 
-        $this->noteRepository->store($data);
+        return $this->noteRepository->store($data);
     }
 }

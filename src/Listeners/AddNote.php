@@ -9,7 +9,6 @@ class AddNote
 {
     public function handle(GenerateNote $event)
     {
-        \Log::error($event->type);
         $noteService = app()->make(NoteService::class);
         $noteService->addNewNote(
             $event->creator,
