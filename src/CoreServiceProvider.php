@@ -177,7 +177,7 @@ class CoreServiceProvider extends ServiceProvider
             'emails-table' => EmailsTable::class,
             'notes-table' => NotesTable::class,
             'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,
-            'modals.user-notes-create-modal' => UserNoteCreateModal::class
+            'modals.user-notes-create-modal' => UserNoteCreateModal::class,
         ];
 
         foreach ($components as $name => $class) {

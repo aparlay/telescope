@@ -64,7 +64,6 @@ class NoteService
         return $this->noteRepository->store($data);
     }
 
-
     /**
      * @param User|Authenticatable $creator
      * @param User $user
@@ -90,5 +89,4 @@ class NoteService
 
         return $this->noteRepository->store($data);
     }
-
 }

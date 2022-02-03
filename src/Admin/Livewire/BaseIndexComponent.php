@@ -18,7 +18,6 @@ abstract class BaseIndexComponent extends Component
     public array $sort = [];
     protected $model;
 
-
     public function updateParent()
     {
         $this->render();
