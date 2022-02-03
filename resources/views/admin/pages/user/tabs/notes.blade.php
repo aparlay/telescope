@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 table-responsive">
-                    <livewire:notes-table :userId="(string) $user->_id">
+                    <livewire:notes-table :userId="(string) $user->_id"/>
                 </div>
             </div>
         </div>
