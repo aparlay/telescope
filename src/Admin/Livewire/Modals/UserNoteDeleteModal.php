@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Livewire\Modals;
 
+use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\Note;
 use Aparlay\Core\Admin\Models\User;
@@ -16,8 +17,11 @@ use Livewire\Component;
 
 class UserNoteDeleteModal extends Component
 {
+    use CurrentUserTrait;
+
     public $selectedItem;
     public $note;
+
 
     public function mount($noteId)
     {
@@ -27,9 +31,7 @@ class UserNoteDeleteModal extends Component
 
     public function delete()
     {
-        $currentUserId = auth()->guard('admin')->id();
-        $currentUser = User::find($currentUserId);
-
+        $currentUser = $this->currentUser();
         if ($currentUser->can('delete notes')) {
             $userNote = Note::find($this->selectedItem);
             $userNote->delete();
