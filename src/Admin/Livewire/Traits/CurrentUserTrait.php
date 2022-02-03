@@ -10,7 +10,7 @@ trait CurrentUserTrait
     {
         $currentUserId = auth()->guard('admin')->id();
         $currentUser = User::find($currentUserId);
+
         return $currentUser;
     }
-
 }
