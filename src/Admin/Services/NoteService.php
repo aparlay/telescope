@@ -63,4 +63,32 @@ class NoteService
 
         return $this->noteRepository->store($data);
     }
+
+
+    /**
+     * @param User|Authenticatable $creator
+     * @param User $user
+     * @param int $type
+     * @return Note
+     */
+    public function addCustomNote(User|Authenticatable $creator, User $user, string $message): Note
+    {
+        $data = [
+            'creator' => [
+                '_id' => new ObjectId($creator->_id),
+                'username' => $creator->username,
+                'avatar' => $creator->avatar,
+            ],
+            'user' => [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ],
+            'type' => NoteType::OTHER->value,
+            'message' => NoteType::from(NoteType::OTHER->value)->otherMessage($creator, $user, $message),
+        ];
+
+        return $this->noteRepository->store($data);
+    }
+
 }

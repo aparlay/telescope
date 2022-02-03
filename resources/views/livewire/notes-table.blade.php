@@ -1,10 +1,18 @@
 
 <div class="notes-table">
+
+    <div class="col-md-2 ml-auto text-right">
+        <button
+            class="btn btn-md btn-success"
+            type="button"
+            wire:click="$emit('showModal', 'modals.user-notes-create-modal', '{{ $userId }}')"
+        >
+            Add New
+            <i class="fas fa-plus fa-xs"></i>
+        </button>
+    </div>
     <div class="filters pb-3">
         <div class="row">
-            <div class="col-md-9 pt-4">
-                <h4>Notes</h4>
-            </div>
             <div class="col-md-1">
                 <label for="">Start Date</label>
                 <x-date-picker
@@ -21,7 +29,8 @@
                         placeholder="End"
                 />
             </div>
-            <div class="col-md-1 ml-auto">
+
+            <div class="col-md-2 ml-auto">
                 <label for="">Per Page</label>
                 <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>

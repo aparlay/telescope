@@ -6,6 +6,6 @@
     wire:model="sort.{{ $fieldName }}"
     wire:click="sort('{{ $fieldName }}')">
 
-    <a href="#" class="text-primary">{{ $fieldLabel }}</a>
+    <a href="#" onclick="return false;" class="text-primary">{{ $fieldLabel }}</a>
 
 </label>

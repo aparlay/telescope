@@ -11,12 +11,18 @@ abstract class BaseIndexComponent extends Component
 {
     use WithPagination;
 
-    public int $perPage = 10;
     protected $paginationTheme = 'bootstrap';
+    protected $listeners = ['updateParent'];
+    public int $perPage = 10;
     public array $filter = [];
     public array $sort = [];
-
     protected $model;
+
+
+    public function updateParent()
+    {
+        $this->render();
+    }
 
     /**
      * @var Builder

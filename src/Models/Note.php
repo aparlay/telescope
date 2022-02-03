@@ -83,6 +83,7 @@ class Note extends BaseModel
             NoteType::WARNING_MESSAGE->value => NoteType::WARNING_MESSAGE->label(),
             NoteType::BAN_ALL_CC_PAYMENT->value => NoteType::BAN_ALL_CC_PAYMENT->label(),
             NoteType::UNBAN_ALL_CC_PAYMENT->value => NoteType::UNBAN_ALL_CC_PAYMENT->label(),
+            NoteType::OTHER->value => NoteType::OTHER->label(),
         ];
     }
 }

@@ -13,6 +13,7 @@ enum NoteType: int implements Enum
     case WARNING_MESSAGE = 5;
     case BAN_ALL_CC_PAYMENT = 6;
     case UNBAN_ALL_CC_PAYMENT = 7;
+    case OTHER = 8;
 
     public function label(): string
     {
@@ -24,6 +25,7 @@ enum NoteType: int implements Enum
             self::WARNING_MESSAGE => __('warning message'),
             self::BAN_ALL_CC_PAYMENT => __('ban all cc payments'),
             self::UNBAN_ALL_CC_PAYMENT => __('unban all cc payments'),
+            self::OTHER => __('other')
         };
     }
 
@@ -37,6 +39,7 @@ enum NoteType: int implements Enum
             self::WARNING_MESSAGE => __('warning'),
             self::BAN_ALL_CC_PAYMENT => __('secondary'),
             self::UNBAN_ALL_CC_PAYMENT => __('primary'),
+            self::OTHER => __('info'),
         };
     }
 
@@ -56,5 +59,15 @@ enum NoteType: int implements Enum
             self::UNBAN_ALL_CC_PAYMENT => __("User <b>{$user->note_admin_url}</b> is getting remove from ban for any creditcard transaction by <b>{$admin->note_admin_url}</b>"),
             default => __("User <b>{$user->note_admin_url}</b> is getting unknown notes by <b>{$admin->note_admin_url}</b>"),
         };
+    }
+
+    /**
+     * @param User $admin
+     * @param User $user
+     * @param $message
+     */
+    public function otherMessage(User $admin, User $user, $message)
+    {
+        return __("User <b>{$user->note_admin_url}</b> is getting {$message} by <b>{$admin->note_admin_url}</b>");
     }
 }

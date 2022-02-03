@@ -11,6 +11,7 @@ use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\EmailsTable;
 use Aparlay\Core\Admin\Livewire\MediasModerationTable;
 use Aparlay\Core\Admin\Livewire\MediasTable;
+use Aparlay\Core\Admin\Livewire\Modals\UserNoteCreateModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserNoteDeleteModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\NotesTable;
@@ -176,7 +177,7 @@ class CoreServiceProvider extends ServiceProvider
             'emails-table' => EmailsTable::class,
             'notes-table' => NotesTable::class,
             'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,
-
+            'modals.user-notes-create-modal' => UserNoteCreateModal::class
         ];
 
         foreach ($components as $name => $class) {

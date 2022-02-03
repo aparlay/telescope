@@ -12,14 +12,8 @@ use Jenssegers\Mongodb\Eloquent\Builder;
 class NotesTable extends BaseIndexComponent
 {
     public $model = Note::class;
-    protected $listeners = ['updateParent'];
-
     public $userId;
 
-    public function updateParent()
-    {
-        $this->render();
-    }
 
     public function getAllowedSorts()
     {
@@ -44,7 +38,9 @@ class NotesTable extends BaseIndexComponent
 
     public function buildQuery(): Builder
     {
-        $query = parent::buildQuery()->isNotDeleted()->recentFirst();
+        $query = parent::buildQuery()
+            ->isNotDeleted();
+
         if (! empty($this->userId)) {
             $query->user($this->userId);
         }
