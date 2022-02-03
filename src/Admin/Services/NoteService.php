@@ -38,7 +38,6 @@ class NoteService
         return $this->noteRepository->delete($id);
     }
 
-
     /**
      * @param User|Authenticatable $creator
      * @param User $user
