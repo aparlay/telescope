@@ -1,18 +1,3 @@
-@php
-    use Aparlay\Core\Models\Note;
-    use Aparlay\Core\Models\Enums\NoteType;
-
-    $allowedNoteTypes = [
-        NoteType::SUSPEND->value,
-        NoteType::UNSUSPEND->value,
-        NoteType::BAN->value,
-        NoteType::UNBAN->value,
-        NoteType::OTHER->value,
-    ];
-    $types = collect(Note::getTypes())->only($allowedNoteTypes)->all();
-@endphp
-
-
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
