@@ -25,7 +25,7 @@ class UserNoteCreateModal extends Component
     protected function rules()
     {
         return [
-            'message' => ['required', 'min:10'],
+            'message' => ['required', 'min:5'],
         ];
     }
 
@@ -36,7 +36,7 @@ class UserNoteCreateModal extends Component
         /** @var NoteService $noteService */
         $noteService = app()->make(NoteService::class);
         $user = User::find($this->userId);
-        $create = $noteService->addCustomNote($this->currentUser(), $user, $this->message);
+        $noteService->addCustomNote($this->currentUser(), $user, $this->message);
 
         $this->dispatchBrowserEvent('hideModal');
         $this->emit('updateParent');

@@ -1,21 +1,21 @@
 <div class="notes-table">
-
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Notes</h4>
+        </div>
+        <div class="col-md-6 text-right">
+            <button
+                class="btn btn-md btn-success"
+                type="button"
+                wire:click="$emit('showModal', 'modals.user-notes-create-modal', '{{ $userId }}')"
+            >
+                Add New
+                <i class="fas fa-plus fa-xs"></i>
+            </button>
+        </div>
+    </div>
     <div class="filters pb-3">
         <div class="row">
-            <div class="col-md-2 text-left">
-                <label for="" style="color: #fff">
-                    Create a new note
-                </label>
-                <button
-                    class="btn btn-md btn-success"
-                    type="button"
-                    wire:click="$emit('showModal', 'modals.user-notes-create-modal', '{{ $userId }}')"
-                >
-                    Add New
-                    <i class="fas fa-plus fa-xs"></i>
-                </button>
-            </div>
-
             <div class="col-md-3 ml-auto">
                 <div class="row">
                     <div class="col">
@@ -42,70 +42,68 @@
             </div>
         </div>
     </div>
-</div>
-
-<table class="table table-striped">
-    <tbody>
-    <tr>
-        <th class="col-md-2">
-            <div>
-
-                <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'"/>
-                <input class="form-control" type="text" wire:model="filter.creator_username"/>
-            </div>
-        </th>
-        <th class="col-md-6">
-            <div>
-                <x-sortable-column-header :sort="$sort" :fieldName="'message'" :fieldLabel="'Notes'"/>
-                <input class="form-control" type="text" wire:model="filter.message"/>
-            </div>
-        </th>
-        <th class="col-md-3">
-            <div>
-                <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
-            </div>
-        </th>
-        <th class="col-md-1">
-            <div>
-                <label for="">Action</label>
-
-            </div>
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach($notes as $note)
+    <table class="table table-striped">
+        <tbody>
         <tr>
-            <td>
-                <a href="">
-
-                    {{ $note->creator['username'] }}
-
-                </a>
-            </td>
-
-            <td>
-                {!! $note->message !!}
-            </td>
-            <td>
-                {{ $note->created_at }}
-            </td>
-            <td>
+            <th class="col-md-2">
                 <div>
-                    <button
-                        class="btn btn-sm btn-danger"
-                        type="button"
-                        wire:key="delete_note_{{ $note->_id }}}"
-                        wire:click="$emit('showModal', 'modals.user-notes-delete-modal', '{{ $note->_id }}')"
-                    >
-                        <i class="fa fa-trash"></i>
-                    </button>
+
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'"/>
+                    <input class="form-control" type="text" wire:model="filter.creator_username"/>
                 </div>
-            </td>
+            </th>
+            <th class="col-md-6">
+                <div>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'message'" :fieldLabel="'Notes'"/>
+                    <input class="form-control" type="text" wire:model="filter.message"/>
+                </div>
+            </th>
+            <th class="col-md-3">
+                <div>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
+                </div>
+            </th>
+            <th class="col-md-1">
+                <div>
+                    <label for="">Action</label>
+
+                </div>
+            </th>
+            <th></th>
         </tr>
 
-    @endforeach
-    </tbody>
-</table>
-{{ $notes->links() }}
+        @foreach($notes as $note)
+            <tr>
+                <td>
+                    <a href="">
+
+                        {{ $note->creator['username'] }}
+
+                    </a>
+                </td>
+
+                <td>
+                    {!! $note->message !!}
+                </td>
+                <td>
+                    {{ $note->created_at }}
+                </td>
+                <td>
+                    <div>
+                        <button
+                            class="btn btn-sm btn-danger"
+                            type="button"
+                            wire:key="delete_note_{{ $note->_id }}}"
+                            wire:click="$emit('showModal', 'modals.user-notes-delete-modal', '{{ $note->_id }}')"
+                        >
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+
+        @endforeach
+        </tbody>
+    </table>
+    {{ $notes->links() }}
 </div>

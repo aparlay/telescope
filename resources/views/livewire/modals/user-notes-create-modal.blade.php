@@ -11,6 +11,10 @@
             <div class="form-group">
                 <label for="">Message</label>
                 <input class="form-control" wire:model="message">
+
+                @error('message')
+                    <div class="text text-danger">{{ $message }}</div>
+                @enderror
             </div>
         </div>
 
