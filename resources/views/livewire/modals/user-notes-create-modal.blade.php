@@ -24,7 +24,7 @@
 
         <div class="modal-body">
             <div class="form-group">
-                <label for="">Custom note</label>
+                <label for="">Message</label>
                 <input class="form-control" wire:model="message">
             </div>
         </div>
