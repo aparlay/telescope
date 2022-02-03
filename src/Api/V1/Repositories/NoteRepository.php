@@ -17,16 +17,4 @@ class NoteRepository
 
         $this->model = $model;
     }
-
-    public function store(array $data)
-    {
-        $creator = auth()->user();
-        $data['creator'] = [
-            '_id' => new ObjectId($creator->_id),
-            'username' => $creator->username,
-            'avatar' => $creator->avatar,
-        ];
-
-        return $this->model->create($data);
-    }
 }
