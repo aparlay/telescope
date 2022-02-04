@@ -51,12 +51,13 @@ enum NoteType: int implements Enum
     public function message(User $admin, User $user): string
     {
         return match ($this) {
-            self::UNSUSPEND => __("User <b>{$user->note_admin_url}</b> is remove from suspension by <b>{$admin->note_admin_url}</b>"),
-            self::BAN => __("User <b>{$user->note_admin_url}</b> is getting ban by <b>{$admin->note_admin_url}</b>"),
-            self::UNBAN => __("User <b>{$user->note_admin_url}</b> is remove from being banned by <b>{$admin->note_admin_url}</b>"),
-            self::BAN_ALL_CC_PAYMENT => __("User <b>{$user->note_admin_url}</b> is getting ban for any creditcard transaction by <b>{$admin->note_admin_url}</b>"),
-            self::UNBAN_ALL_CC_PAYMENT => __("User <b>{$user->note_admin_url}</b> is getting remove from ban for any creditcard transaction by <b>{$admin->note_admin_url}</b>"),
-            default => __("User <b>{$user->note_admin_url}</b> is getting unknown notes by <b>{$admin->note_admin_url}</b>"),
+            self::SUSPEND => __("User {$user->note_admin_url} is <b class='text-danger'>Freezed</b> by {$admin->note_admin_url}"),
+            self::UNSUSPEND => __("User {$user->note_admin_url} is remove from <b class='text-success'>Freez</b> by {$admin->note_admin_url}"),
+            self::BAN => __("User {$user->note_admin_url} is <b class='text-success'>Banned</b> by {$admin->note_admin_url}"),
+            self::UNBAN => __("User {$user->note_admin_url} is <b class='text-success'>UnBanned</b> by {$admin->note_admin_url}"),
+            self::BAN_ALL_CC_PAYMENT => __("User {$user->note_admin_url} is getting ban for any creditcard transaction by {$admin->note_admin_url}"),
+            self::UNBAN_ALL_CC_PAYMENT => __("User {$user->note_admin_url} is getting remove from ban for any creditcard transaction by {$admin->note_admin_url}"),
+            default => __("User {$user->note_admin_url} is getting unknown notes by {$admin->note_admin_url}"),
         };
     }
 
@@ -67,7 +68,7 @@ enum NoteType: int implements Enum
      */
     public function warningMessage(User $admin, User $user, $message)
     {
-        return __("User <b>{$user->note_admin_url}</b> is getting warning with {$message} by <b>{$admin->note_admin_url}</b>");
+        return __("User {$user->note_admin_url} is getting <b class='text-warning'>Warning</b> with {$message} by {$admin->note_admin_url}");
     }
 
     /**
@@ -77,6 +78,6 @@ enum NoteType: int implements Enum
      */
     public function otherMessage(User $admin, User $user, $message)
     {
-        return __("User <b>{$user->note_admin_url}</b> is getting a warning message {$message} by <b>{$admin->note_admin_url}</b>");
+        return __("User {$user->note_admin_url} is getting a warning message {$message} by {$admin->note_admin_url}");
     }
 }
