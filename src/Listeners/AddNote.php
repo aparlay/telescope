@@ -6,8 +6,9 @@ use Aparlay\Core\Admin\Services\NoteService;
 use Aparlay\Core\Events\UserStatusChanged;
 
 class AddNote
+
 {
-    public function handle(UserStatusChanged $event)
+    public function handle($event)
     {
         $noteService = app()->make(NoteService::class);
         $noteService->addNewNote(

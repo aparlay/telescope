@@ -267,12 +267,7 @@
             </div>
             <div id="alertModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
-                    <form action="{{ route('core.admin.alert.store') }}" method="post">
-                        <input type="hidden" name="user_id" value="{{ $user->_id }}">
-                        <input type="hidden" name="type" value="{{ \Aparlay\Core\Models\Enums\AlertType::USER->value}}">
-                        <input type="hidden" name="status"
-                               value="{{ \Aparlay\Core\Models\Enums\AlertStatus::NOT_VISITED->value }}">
-                        <!-- Modal content-->
+                    <form action="{{ route('core.admin.alert.store.user', ['user' => $user->_id ]) }}" method="post">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLiveLabel">Alert User</h5>

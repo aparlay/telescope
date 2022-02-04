@@ -120,6 +120,10 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('alert', [AlertController::class, 'store'])
                ->middleware('permission:create alerts')
                ->name('store');
+
+            Route::post('alert/{user}', [AlertController::class, 'storeForUSer'])
+                ->middleware('permission:create alerts')
+                ->name('store.user');
         });
 
         /* E-mail Route */
