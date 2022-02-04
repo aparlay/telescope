@@ -13,6 +13,7 @@ use MongoDB\BSON\ObjectId;
 trait MediaScope
 {
     use BaseScope;
+    use DateScope;
 
     /**
      * @param  Builder  $query
