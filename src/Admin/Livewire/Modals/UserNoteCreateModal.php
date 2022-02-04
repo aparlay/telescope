@@ -33,10 +33,12 @@ class UserNoteCreateModal extends Component
     {
         $this->validate();
 
-        /** @var NoteService $noteService */
-        $noteService = app()->make(NoteService::class);
-        $user = User::find($this->userId);
-        $noteService->addCustomNote($this->currentUser(), $user, $this->message);
+        if ($this->currentUser()->can('create notes')) {
+            /** @var NoteService $noteService */
+            $noteService = app()->make(NoteService::class);
+            $user = User::find($this->userId);
+            $noteService->addCustomNote($this->currentUser(), $user, $this->message);
+        }
 
         $this->dispatchBrowserEvent('hideModal');
         $this->emit('updateParent');
