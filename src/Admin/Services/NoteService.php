@@ -46,21 +46,21 @@ class NoteService
      */
     public function addNewNote(User|Authenticatable $creator, User $user, int $type): Note
     {
-        $data = [
-            'creator' => [
-                '_id' => new ObjectId($creator->_id),
-                'username' => $creator->username,
-                'avatar' => $creator->avatar,
-            ],
-            'user' => [
-                '_id' => new ObjectId($user->_id),
-                'username' => $user->username,
-                'avatar' => $user->avatar,
-            ],
-            'type' => $type,
-            'message' => NoteType::from($type)->message($creator, $user),
-        ];
+        $formattedMessage = NoteType::from($type)->message($creator, $user);
+        $data = $this->prepareNoteData($creator, $user, $type, $formattedMessage);
+        return $this->noteRepository->store($data);
+    }
 
+    /**
+     * @param User|Authenticatable $creator
+     * @param User $user
+     * @param string $message
+     * @return Note
+     */
+    public function addWarningNote(User|Authenticatable $creator, User $user, string $message): Note
+    {
+        $formattedMessage = NoteType::from(NoteType::WARNING_MESSAGE->value)->warningMessage($creator, $user, $message);
+        $data =  $this->prepareNoteData($creator, $user, NoteType::WARNING_MESSAGE->value, $formattedMessage);
         return $this->noteRepository->store($data);
     }
 
@@ -72,7 +72,14 @@ class NoteService
      */
     public function addCustomNote(User|Authenticatable $creator, User $user, string $message): Note
     {
-        $data = [
+        $formattedMessage = NoteType::from(NoteType::OTHER->value)->otherMessage($creator, $user, $message);
+        $data =  $this->prepareNoteData($creator, $user, NoteType::OTHER->value, $formattedMessage);
+        return $this->noteRepository->store($data);
+    }
+
+    private function prepareNoteData(User|Authenticatable $creator, User $user, $type, string $message): array
+    {
+        return [
             'creator' => [
                 '_id' => new ObjectId($creator->_id),
                 'username' => $creator->username,
@@ -83,10 +90,8 @@ class NoteService
                 'username' => $user->username,
                 'avatar' => $user->avatar,
             ],
-            'type' => NoteType::OTHER->value,
-            'message' => NoteType::from(NoteType::OTHER->value)->otherMessage($creator, $user, $message),
+            'type' => $type,
+            'message' => $message,
         ];
-
-        return $this->noteRepository->store($data);
     }
 }

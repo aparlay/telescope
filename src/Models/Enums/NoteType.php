@@ -54,7 +54,6 @@ enum NoteType: int implements Enum
             self::UNSUSPEND => __("User <b>{$user->note_admin_url}</b> is remove from suspension by <b>{$admin->note_admin_url}</b>"),
             self::BAN => __("User <b>{$user->note_admin_url}</b> is getting ban by <b>{$admin->note_admin_url}</b>"),
             self::UNBAN => __("User <b>{$user->note_admin_url}</b> is remove from being banned by <b>{$admin->note_admin_url}</b>"),
-            self::WARNING_MESSAGE => __("User <b>{$user->note_admin_url}</b> is getting a warning message by <b>{$admin->note_admin_url}</b>"),
             self::BAN_ALL_CC_PAYMENT => __("User <b>{$user->note_admin_url}</b> is getting ban for any creditcard transaction by <b>{$admin->note_admin_url}</b>"),
             self::UNBAN_ALL_CC_PAYMENT => __("User <b>{$user->note_admin_url}</b> is getting remove from ban for any creditcard transaction by <b>{$admin->note_admin_url}</b>"),
             default => __("User <b>{$user->note_admin_url}</b> is getting unknown notes by <b>{$admin->note_admin_url}</b>"),
@@ -66,8 +65,19 @@ enum NoteType: int implements Enum
      * @param User $user
      * @param $message
      */
+    public function warningMessage(User $admin, User $user, $message)
+    {
+        return __("User <b>{$user->note_admin_url}</b> is getting warning with {$message} by <b>{$admin->note_admin_url}</b>");
+    }
+
+
+    /**
+     * @param User $admin
+     * @param User $user
+     * @param $message
+     */
     public function otherMessage(User $admin, User $user, $message)
     {
-        return __("User <b>{$user->note_admin_url}</b> is getting {$message} by <b>{$admin->note_admin_url}</b>");
+        return __("User <b>{$user->note_admin_url}</b> is getting a warning message {$message} by <b>{$admin->note_admin_url}</b>");
     }
 }
