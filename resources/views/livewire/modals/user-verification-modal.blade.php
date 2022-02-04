@@ -24,7 +24,8 @@
                     @endforeach
                 </select>
                 @error('verification_status')
-                <div class="text text-danger">{{ $message }}</div> @enderror
+                    <div class="text text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             @if (count($documents) > 0)

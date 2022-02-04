@@ -4,13 +4,17 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
-use Aparlay\Core\Helpers\ActionButtonBladeComponent;
+use Aparlay\Core\Api\V1\Traits\HasUserTrait;
+use Aparlay\Core\Events\UserStatusChanged;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
+use Aparlay\Core\Models\Enums\NoteType;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
 {
+    use HasUserTrait;
     protected UserRepository $userRepository;
 
     public function __construct()
@@ -183,8 +187,25 @@ class UserService extends AdminBaseService
         return false;
     }
 
-    public function updateStatus($id): bool
+    public function updateStatus($id, $userStatus): bool
     {
-        return $this->userRepository->update(['status' => request()->input('status')], $id);
+        $user = $this->find($id);
+
+        $noteType = match ($userStatus) {
+            UserStatus::SUSPENDED->value => NoteType::SUSPEND->value,
+            UserStatus::BLOCKED->value => NoteType::BAN->value,
+            UserStatus::ACTIVE->value => match ($user->status) {
+                UserStatus::SUSPENDED->value => NoteType::UNSUSPEND->value,
+                UserStatus::BLOCKED->value => NoteType::UNBAN->value,
+                default => null
+            },
+            default => null
+        };
+
+        if ($noteType) {
+            UserStatusChanged::dispatch($this->getUser(), $user, $noteType);
+        }
+
+        return $this->userRepository->update(['status' => $userStatus], $id);
     }
 }

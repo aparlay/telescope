@@ -6,7 +6,6 @@ use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Requests\MediaUploadRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
 use Aparlay\Core\Admin\Requests\UserUpdateRequest;
-use Aparlay\Core\Admin\Resources\UserResource;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Admin\Services\UploadService;
 use Aparlay\Core\Admin\Services\UserService;
@@ -118,8 +117,11 @@ class UserController extends Controller
      */
     public function updateStatus(User $user, UserStatusRequest $request): RedirectResponse
     {
-        $status = request()->input('status');
-        if ($this->userService->updateStatus($user->_id)) {
+        $this->userService->setUser(auth()->user());
+
+        $status = (int) request()->input('status');
+
+        if ($this->userService->updateStatus($user->_id, $status)) {
             if ($status == UserStatus::ACTIVE->value) {
                 return back()->with('success', 'User Reactivated successfully.');
             }

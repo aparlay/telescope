@@ -5,6 +5,7 @@ use Aparlay\Core\Admin\Controllers\AuthController;
 use Aparlay\Core\Admin\Controllers\DashboardController;
 use Aparlay\Core\Admin\Controllers\EmailController;
 use Aparlay\Core\Admin\Controllers\MediaController;
+use Aparlay\Core\Admin\Controllers\NoteController;
 use Aparlay\Core\Admin\Controllers\RoleController;
 use Aparlay\Core\Admin\Controllers\SettingController;
 use Aparlay\Core\Admin\Controllers\UserController;
@@ -119,6 +120,10 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('alert', [AlertController::class, 'store'])
                ->middleware('permission:create alerts')
                ->name('store');
+
+            Route::post('alert/{user}', [AlertController::class, 'storeForUSer'])
+                ->middleware('permission:create alerts')
+                ->name('store.user');
         });
 
         /* E-mail Route */
@@ -167,6 +172,12 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::delete('setting/{setting}', [SettingController::class, 'delete'])
                 ->middleware(['permission:delete settings'])
                 ->name('delete');
+        });
+
+        Route::name('note.')->group(function () {
+            Route::post('note/{user}', [NoteController::class, 'store'])
+            ->middleware(['permission:create notes'])
+            ->name('store');
         });
     });
 

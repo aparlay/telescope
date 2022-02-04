@@ -241,6 +241,24 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="card card-primary card-outline">
+                                        <div class="card-header" id="headingMainNine">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                        data-target="#collapseMainNine" aria-expanded="false"
+                                                        aria-controls="collapseMainNine">
+                                                    Notes
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseMainNine" class="collapse" aria-labelledby="headingMainNine"
+                                             data-parent="#accordion">
+                                            <div class="card-body">
+                                                @include('default_view::admin.pages.user.tabs.notes', ['user' => $user])
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -249,12 +267,7 @@
             </div>
             <div id="alertModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
-                    <form action="{{ route('core.admin.alert.store') }}" method="post">
-                        <input type="hidden" name="user_id" value="{{ $user->_id }}">
-                        <input type="hidden" name="type" value="{{ \Aparlay\Core\Models\Enums\AlertType::USER->value}}">
-                        <input type="hidden" name="status"
-                               value="{{ \Aparlay\Core\Models\Enums\AlertStatus::NOT_VISITED->value }}">
-                        <!-- Modal content-->
+                    <form action="{{ route('core.admin.alert.store.user', ['user' => $user->_id ]) }}" method="post">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLiveLabel">Alert User</h5>
@@ -335,6 +348,7 @@
                     </div>
                 </div>
             </div>
+
             <div id="activateModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                     <!-- Modal content-->
@@ -368,9 +382,7 @@
 
         @section('js')
             <script src="{{ URL::asset('admin/assets/js/ekko-lightbox.min.js') }}"></script>
-            <script src="{{ asset('vendor/datatables-plugins/responsive/js/dataTables.responsive.min.js') }}"></script>
-            <script src="{{ asset('vendor/datatables-plugins/responsive/js/responsive.bootstrap4.min.js') }}"></script>
-            <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
+
             <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
             <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
 
