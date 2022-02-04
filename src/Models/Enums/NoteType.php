@@ -51,7 +51,7 @@ enum NoteType: int implements Enum
     public function message(User $admin, User $user): string
     {
         return match ($this) {
-            self::SUSPEND => __("User {$user->note_admin_url} is <b class='text-danger'>Freezed</b> by {$admin->note_admin_url}"),
+            self::SUSPEND => __("User {$user->note_admin_url} is <b class='text-warning'>Freezed</b> by {$admin->note_admin_url}"),
             self::UNSUSPEND => __("User {$user->note_admin_url} is remove from <b class='text-success'>Freez</b> by {$admin->note_admin_url}"),
             self::BAN => __("User {$user->note_admin_url} is <b class='text-success'>Banned</b> by {$admin->note_admin_url}"),
             self::UNBAN => __("User {$user->note_admin_url} is <b class='text-success'>UnBanned</b> by {$admin->note_admin_url}"),
