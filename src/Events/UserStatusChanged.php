@@ -12,7 +12,6 @@ class UserStatusChanged
     use Dispatchable;
     use SerializesModels;
 
-
     /**
      * Create a new event instance.
      *
@@ -22,6 +21,6 @@ class UserStatusChanged
         public Authenticated|User $creator,
         public User $user,
         public int $type,
-    )
-    {}
+    ) {
+    }
 }

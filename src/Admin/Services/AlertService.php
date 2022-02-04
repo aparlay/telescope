@@ -36,13 +36,13 @@ class AlertService
             'type' => AlertType::USER->value,
             'status' => AlertStatus::NOT_VISITED->value,
             'user_id' => $user->_id,
-            'reason' => $reason
+            'reason' => $reason,
         ];
 
         UserAlertCreated::dispatch($this->getUser(), $user, NoteType::WARNING_MESSAGE->value, $reason);
+
         return $this->alertRepository->create($data);
     }
-
 
     public function create()
     {
@@ -50,6 +50,7 @@ class AlertService
             $this->mediaRepository->update(['status' => request()->input('mediaStatus')], request()->input('media_id'));
         }
         $data = request()->only(['user_id', 'media_id', 'status', 'type', 'reason']);
+
         return $this->alertRepository->create($data);
     }
 }

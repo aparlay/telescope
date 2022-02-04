@@ -7,7 +7,6 @@ use Aparlay\Core\Events\UserAlertCreated;
 use Aparlay\Core\Events\UserStatusChanged;
 
 class AddNote
-
 {
     public function handle($event)
     {

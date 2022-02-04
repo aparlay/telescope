@@ -42,7 +42,6 @@ class AlertController extends Controller
         return back()->with('error', 'Add alert failed.');
     }
 
-
     /**
      * Creates a new Alert model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -58,5 +57,4 @@ class AlertController extends Controller
 
         return back()->with('error', 'Add alert failed.');
     }
-
 }
