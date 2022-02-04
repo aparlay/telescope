@@ -4,7 +4,7 @@
             <div class="col-md-2">
                 <h4>Notes</h4>
             </div>
-            <div class="col-md-8 text-left">
+            <div class="col-md-7 text-left">
                 <button
                         class="btn btn-md btn-success"
                         type="button"
