@@ -7,7 +7,7 @@ use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserAlertCreated
+class UserReceiveAlertEvent
 {
     use Dispatchable;
     use SerializesModels;

@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Listeners;
 
 use Aparlay\Core\Admin\Services\NoteService;
-use Aparlay\Core\Events\UserAlertCreated;
+use Aparlay\Core\Events\UserReceiveAlertEvent;
 use Aparlay\Core\Events\UserStatusChanged;
 
 class AddNote
@@ -19,7 +19,7 @@ class AddNote
                 $event->type,
             );
         }
-        if($event instanceof UserAlertCreated) {
+        if($event instanceof UserReceiveAlertEvent) {
             $noteService->addWarningNote(
                 $event->creator,
                 $event->user,

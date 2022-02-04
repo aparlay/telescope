@@ -9,7 +9,7 @@ use Aparlay\Core\Admin\Repositories\AlertRepository;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
-use Aparlay\Core\Events\UserAlertCreated;
+use Aparlay\Core\Events\UserReceiveAlertEvent;
 use Aparlay\Core\Events\UserStatusChanged;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
@@ -39,7 +39,7 @@ class AlertService
             'reason' => $reason,
         ];
 
-        UserAlertCreated::dispatch($this->getUser(), $user, NoteType::WARNING_MESSAGE->value, $reason);
+        UserReceiveAlertEvent::dispatch($this->getUser(), $user, NoteType::WARNING_MESSAGE->value, $reason);
 
         return $this->alertRepository->create($data);
     }
