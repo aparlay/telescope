@@ -52,11 +52,17 @@
                     <input class="form-control" type="text" wire:model="filter.message"/>
                 </div>
             </th>
-            <th class="col-md-1">
+            <td class="col-md-1">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'"/>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'" />
+                    <select class="form-control" wire:model="filter.type">
+                        <option value="">Any</option>
+                        @foreach(\Aparlay\Core\Models\Note::getTypes() as $value => $label)
+                            <option value="{{$value}}">{{$label}}</option>
+                        @endforeach
+                    </select>
                 </div>
-            </th>
+            </td>
             <th class="col-md-2">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
