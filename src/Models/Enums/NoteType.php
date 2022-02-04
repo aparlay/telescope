@@ -62,9 +62,10 @@ enum NoteType: int implements Enum
     }
 
     /**
-     * @param User $admin
-     * @param User $user
+     * @param  User  $admin
+     * @param  User  $user
      * @param $message
+     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Translation\Translator|string|null
      */
     public function warningMessage(User $admin, User $user, $message)
     {
@@ -72,12 +73,13 @@ enum NoteType: int implements Enum
     }
 
     /**
-     * @param User $admin
-     * @param User $user
+     * @param  User  $admin
+     * @param  User  $user
      * @param $message
+     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Translation\Translator|string|null
      */
     public function otherMessage(User $admin, User $user, $message)
     {
-        return __("User {$user->note_admin_url} is getting a warning message {$message} by {$admin->note_admin_url}");
+        return __("<em>\"{$message}\"</em> by {$admin->note_admin_url}");
     }
 }
