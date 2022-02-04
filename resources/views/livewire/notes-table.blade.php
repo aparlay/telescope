@@ -1,44 +1,39 @@
 <div class="notes-table">
-    <div class="row">
-        <div class="col-md-6">
-            <h4>Notes</h4>
-        </div>
-        <div class="col-md-6 text-right">
-            <button
-                class="btn btn-md btn-success"
-                type="button"
-                wire:click="$emit('showModal', 'modals.user-notes-create-modal', '{{ $userId }}')"
-            >
-                Add New
-                <i class="fas fa-plus fa-xs"></i>
-            </button>
-        </div>
-    </div>
     <div class="filters pb-3">
         <div class="row">
-            <div class="col-md-3 ml-auto">
-                <div class="row">
-                    <div class="col">
-                        <label for="">Start Date</label>
-                        <x-date-picker
-                            wire:model.lazy="filter.created_at.start"
-                            autocomplete="off"
-                            placeholder="Start"
-                        />
-                    </div>
-                    <div class="col">
-                        <label for="">End Date</label>
-                        <x-date-picker
-                            wire:model.lazy="filter.created_at.end"
-                            autocomplete="off"
-                            placeholder="End"
-                        />
-                    </div>
-                    <div class="col">
-                        <label for="">Per Page</label>
-                        <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
-                    </div>
-                </div>
+            <div class="col-md-2">
+                <h4>Notes</h4>
+            </div>
+            <div class="col-md-8 text-left">
+                <button
+                        class="btn btn-md btn-success"
+                        type="button"
+                        wire:click="$emit('showModal', 'modals.user-notes-create-modal', '{{ $userId }}')"
+                >
+                    Add New
+                    <i class="fas fa-plus fa-xs"></i>
+                </button>
+            </div>
+
+            <div class="col-md-1">
+                <label for="">Start Date</label>
+                <x-date-picker
+                        wire:model.lazy="filter.created_at.start"
+                        autocomplete="off"
+                        placeholder="Start"
+                />
+            </div>
+            <div class="col-md-1">
+                <label for="">End Date</label>
+                <x-date-picker
+                        wire:model.lazy="filter.created_at.end"
+                        autocomplete="off"
+                        placeholder="End"
+                />
+            </div>
+            <div class="col-md-1 ml-auto">
+                <label for="">Per Page</label>
+                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
         </div>
     </div>
