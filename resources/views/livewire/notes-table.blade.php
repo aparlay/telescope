@@ -46,7 +46,7 @@
                     <input class="form-control" type="text" wire:model="filter.creator_username"/>
                 </div>
             </th>
-            <th class="col-md-5">
+            <th class="col-md-6">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'message'" :fieldLabel="'Notes'"/>
                     <input class="form-control" type="text" wire:model="filter.message"/>
@@ -77,9 +77,13 @@
                         {{ $note->creator['username'] }}
                     </a>
                 </td>
-
                 <td>
                     {!! $note->message !!}
+                </td>
+                <td>
+                    <span class="badge bg-{{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->badgeColor() }}">
+                        {{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->label() }}
+                    </span>
                 </td>
                 <td>
                     {{ $note->created_at }}
