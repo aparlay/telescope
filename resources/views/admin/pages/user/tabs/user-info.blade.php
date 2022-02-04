@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Arr;
+@endphp
+
 <div class="tab-pane active" id="user-info">
     <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data">
         @csrf()
@@ -49,7 +53,7 @@
             <label for="feature_tips" class="col-sm-2 col-form-label">Feature Tips</label>
             <div class="col-sm-10">
                 <div class="custom-control custom-switch mt-2">
-                    <input type="checkbox" value="1" class="custom-control-input" name="features[tips]" id="feature_tips" {!! $user->features['tips'] ? 'checked' : '' !!}>
+                    <input type="checkbox" value="1" class="custom-control-input" name="features[tips]" id="feature_tips" {!! Arr::get($user->features, 'tips') ? 'checked' : '' !!}>
                     <label class="custom-control-label" for="feature_tips"></label>
                 </div>
             </div>
@@ -58,7 +62,7 @@
             <label for="feature_demo" class="col-sm-2 col-form-label">Feature Demo User</label>
             <div class="col-sm-10">
                 <div class="custom-control custom-switch mt-2">
-                    <input type="checkbox" class="custom-control-input" value="1" name="features[demo]" id="feature_demo" {!! $user->features['demo'] ? 'checked' : '' !!}>
+                    <input type="checkbox" class="custom-control-input" value="1" name="features[demo]" id="feature_demo" {!! Arr::get($user->features, 'demo') ? 'checked' : '' !!}>
                     <label class="custom-control-label" for="feature_demo"></label>
                 </div>
             </div>
@@ -66,7 +70,7 @@
         <div class="form-group row">
             <label for="email_verified" class="col-sm-2 col-form-label">Verification Status</label>
             <div class="col-sm-10">
-                {{ $user->verification_status_name }}   
+                {{ $user->verification_status_name }}
             </div>
         </div>
 
