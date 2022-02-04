@@ -25,21 +25,6 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
 {
     /**
-     * The event listener mappings for the application.
-     *
-     * @var array
-     */
-    protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
-        ],
-        DispatchAuthenticatedEndpointsEvent::class => [
-            LogAuthenticatedListener::class,
-            OnlineUsersListener::class,
-        ],
-    ];
-
-    /**
      * Register any events for your application.
      *
      * @return void
