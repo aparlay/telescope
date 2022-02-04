@@ -13,6 +13,7 @@ use MongoDB\BSON\UTCDateTime;
 trait UserScope
 {
     use BaseScope;
+    use DateScope;
 
     /**
      * @return mixed
