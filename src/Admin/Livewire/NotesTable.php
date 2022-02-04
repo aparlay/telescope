@@ -5,7 +5,6 @@ namespace Aparlay\Core\Admin\Livewire;
 use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
-use Aparlay\Core\Admin\Filters\FilterScope;
 use Aparlay\Core\Models\Note;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
@@ -30,6 +29,7 @@ class NotesTable extends BaseIndexComponent
     {
         return [
             new FilterPartial('creator_username', 'string', 'creator.username'),
+            new FilterExact('type', 'int'),
             new FilterPartial('message', 'string'),
             new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];

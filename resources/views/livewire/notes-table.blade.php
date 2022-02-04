@@ -46,13 +46,18 @@
                     <input class="form-control" type="text" wire:model="filter.creator_username"/>
                 </div>
             </th>
-            <th class="col-md-6">
+            <th class="col-md-5">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'message'" :fieldLabel="'Notes'"/>
                     <input class="form-control" type="text" wire:model="filter.message"/>
                 </div>
             </th>
-            <th class="col-md-3">
+            <th class="col-md-1">
+                <div>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'"/>
+                </div>
+            </th>
+            <th class="col-md-2">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
                 </div>

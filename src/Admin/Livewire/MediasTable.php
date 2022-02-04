@@ -5,10 +5,9 @@ namespace Aparlay\Core\Admin\Livewire;
 use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
-use Aparlay\Core\Admin\Filters\FilterScope;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use App\Models\Media;
 use Jenssegers\Mongodb\Eloquent\Builder;
+
 use function view;
 
 class MediasTable extends BaseIndexComponent
