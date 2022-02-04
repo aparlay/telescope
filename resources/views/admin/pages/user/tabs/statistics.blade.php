@@ -1,10 +1,10 @@
 <div class="row">
     <div class="col-md-3 mb-3">
-        <div class="card card-stats mb-4 mb-xl-0 card-success card-outline">
+        <div class="card card-stats mb-4 mb-xl-0 card-danger card-outline">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <span class="mb-0 text-success d-block">
+                        <span class="mb-0 text-danger d-block">
                             <i class="fas fa-chevron-down"></i>
                             <span class="h2 font-weight-bold">
                                 {{ @money((int)$user->stats['amounts']['sent_tips'], 'USD') }}
@@ -17,34 +17,17 @@
         </div>
     </div>
     <div class="col-md-3 mb-3">
-        <div class="card card-stats mb-4 mb-xl-0 card-danger card-outline">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <span class="mb-0 text-danger d-block">
-                            <i class="fas fa-chevron-down"></i>
-                            <span class="h2 font-weight-bold">
-                                {{ @money((int)$user->stats['amounts']['received_tips'], 'USD') }}
-                            </span>
-                        </span>
-                        <h5 class="card-title text-uppercase text-muted mb-0 d-block">Rec. Tips</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-3">
         <div class="card card-stats mb-4 mb-xl-0 card-success card-outline">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
                         <span class="mb-0 text-success d-block">
-                            <i class="fas fa-chevron-down"></i>
+                            <i class="fas fa-chevron-up"></i>
                             <span class="h2 font-weight-bold">
-                                {{ @money((int)$user->stats['amounts']['subscribers'], 'USD') }}
+                                {{ @money((int)$user->stats['amounts']['received_tips'], 'USD') }}
                             </span>
                         </span>
-                        <h5 class="card-title text-uppercase text-muted mb-0 d-block">Subscribers</h5>
+                        <h5 class="card-title text-uppercase text-muted mb-0 d-block">Rec. Tips</h5>
                     </div>
                 </div>
             </div>
@@ -62,6 +45,23 @@
                             </span>
                         </span>
                         <h5 class="card-title text-uppercase text-muted mb-0 d-block">Subscriptions</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card card-stats mb-4 mb-xl-0 card-success card-outline">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <span class="mb-0 text-success d-block">
+                            <i class="fas fa-chevron-up"></i>
+                            <span class="h2 font-weight-bold">
+                                {{ @money((int)$user->stats['amounts']['subscribers'], 'USD') }}
+                            </span>
+                        </span>
+                        <h5 class="card-title text-uppercase text-muted mb-0 d-block">Subscribers</h5>
                     </div>
                 </div>
             </div>
