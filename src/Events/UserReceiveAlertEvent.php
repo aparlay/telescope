@@ -22,8 +22,8 @@ class UserReceiveAlertEvent
         public User $user,
         public int $type,
         public string $message
-    )
-    {}
+    ) {
+    }
 
     /**
      * @return User|Authenticated

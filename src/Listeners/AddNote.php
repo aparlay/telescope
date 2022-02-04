@@ -19,14 +19,12 @@ class AddNote
                 $event->type,
             );
         }
-        if($event instanceof UserReceiveAlertEvent) {
+        if ($event instanceof UserReceiveAlertEvent) {
             $noteService->addWarningNote(
                 $event->creator,
                 $event->user,
                 $event->getMessage()
             );
         }
-
-
     }
 }

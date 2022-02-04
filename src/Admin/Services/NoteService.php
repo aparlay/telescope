@@ -48,6 +48,7 @@ class NoteService
     {
         $formattedMessage = NoteType::from($type)->message($creator, $user);
         $data = $this->prepareNoteData($creator, $user, $type, $formattedMessage);
+
         return $this->noteRepository->store($data);
     }
 
@@ -60,7 +61,8 @@ class NoteService
     public function addWarningNote(User|Authenticatable $creator, User $user, string $message): Note
     {
         $formattedMessage = NoteType::from(NoteType::WARNING_MESSAGE->value)->warningMessage($creator, $user, $message);
-        $data =  $this->prepareNoteData($creator, $user, NoteType::WARNING_MESSAGE->value, $formattedMessage);
+        $data = $this->prepareNoteData($creator, $user, NoteType::WARNING_MESSAGE->value, $formattedMessage);
+
         return $this->noteRepository->store($data);
     }
 
@@ -73,7 +75,8 @@ class NoteService
     public function addCustomNote(User|Authenticatable $creator, User $user, string $message): Note
     {
         $formattedMessage = NoteType::from(NoteType::OTHER->value)->otherMessage($creator, $user, $message);
-        $data =  $this->prepareNoteData($creator, $user, NoteType::OTHER->value, $formattedMessage);
+        $data = $this->prepareNoteData($creator, $user, NoteType::OTHER->value, $formattedMessage);
+
         return $this->noteRepository->store($data);
     }
 

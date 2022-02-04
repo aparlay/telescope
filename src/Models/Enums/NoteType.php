@@ -70,7 +70,6 @@ enum NoteType: int implements Enum
         return __("User <b>{$user->note_admin_url}</b> is getting warning with {$message} by <b>{$admin->note_admin_url}</b>");
     }
 
-
     /**
      * @param User $admin
      * @param User $user
