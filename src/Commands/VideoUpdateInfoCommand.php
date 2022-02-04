@@ -24,5 +24,7 @@ class VideoUpdateInfoCommand extends Command
             $msg .= PHP_EOL;
             $this->line($msg);
         }
+
+        return self::SUCCESS;
     }
 }

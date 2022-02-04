@@ -13,5 +13,6 @@ class CoreCommand extends Command
     public function handle()
     {
         $this->comment('All done');
+        return self::SUCCESS;
     }
 }

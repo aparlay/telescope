@@ -32,6 +32,6 @@ class VideoScoreHourlyCommand extends Command
             $media->save();
         }
 
-        $this->info(Response::HTTP_OK);
+        return self::SUCCESS;
     }
 }

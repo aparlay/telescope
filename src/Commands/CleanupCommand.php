@@ -18,7 +18,9 @@ class CleanupCommand extends Command
         try {
             Uploader::pruneChunks(Storage::disk('local')->path('chunk'));
         } catch (FileOpenException $e) {
-            return ExitCode::TEMPFAIL;
+            return self::FAILURE;
         }
+
+        return self::SUCCESS;
     }
 }

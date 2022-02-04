@@ -65,5 +65,7 @@ class AnalyticsDailyCommand extends Command
             $model = new Analytic();
         }
         $model->fill($analytics)->save();
+
+        return self::SUCCESS;
     }
 }

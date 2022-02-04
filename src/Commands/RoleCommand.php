@@ -18,5 +18,6 @@ class RoleCommand extends Command
         $role = Role::where('name', $this->argument('role'))->firstOrFail();
 
         $user->assignRole($role);
+        return self::SUCCESS;
     }
 }

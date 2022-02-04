@@ -77,6 +77,6 @@ class VideoScoreCommand extends Command
         $headers = ['id', 'total', 'awesomeness', 'time', 'like', 'watch', 'link'];
         $this->table($headers, $rows);
 
-        $this->info(Response::HTTP_OK);
+        return self::SUCCESS;
     }
 }

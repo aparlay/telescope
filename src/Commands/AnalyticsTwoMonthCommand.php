@@ -70,6 +70,7 @@ class AnalyticsTwoMonthCommand extends Command
 
             $this->line('<fg=yellow;options=bold>'.$date.' analytics stored.'.PHP_EOL.'</>');
         }
-        $this->info(Response::HTTP_OK);
+
+        return self::SUCCESS;
     }
 }
