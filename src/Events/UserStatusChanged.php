@@ -7,7 +7,7 @@ use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GenerateNote
+class UserStatusChanged
 {
     use Dispatchable;
     use SerializesModels;

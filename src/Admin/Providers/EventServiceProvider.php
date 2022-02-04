@@ -9,7 +9,7 @@ use Aparlay\Core\Admin\Models\Setting;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Observers\AlertObserver;
 use Aparlay\Core\Admin\Observers\SettingObserver;
-use Aparlay\Core\Events\GenerateNote;
+use Aparlay\Core\Events\UserStatusChanged;
 use Aparlay\Core\Listeners\AddNote;
 use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\NoteObserver;
