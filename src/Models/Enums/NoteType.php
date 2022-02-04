@@ -68,7 +68,7 @@ enum NoteType: int implements Enum
      */
     public function warningMessage(User $admin, User $user, $message)
     {
-        return __("User {$user->note_admin_url} is getting <b class='text-warning'>Warning</b> with {$message} by {$admin->note_admin_url}");
+        return __("User {$user->note_admin_url} is getting <b class='text-warning'>Warning</b> with <em>\"{$message}\"</em> by {$admin->note_admin_url}");
     }
 
     /**
