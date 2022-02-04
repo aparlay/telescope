@@ -1,10 +1,10 @@
 <div class="notes-table">
     <div class="filters pb-3">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-2 pt-4">
                 <h4>Notes</h4>
             </div>
-            <div class="col-md-7 text-left">
+            <div class="col-md-7 pt-4 text-left">
                 <button
                         class="btn btn-md btn-success"
                         type="button"
