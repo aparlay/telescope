@@ -13,7 +13,7 @@ class AddUserFeatures extends Migration
      */
     public function up()
     {
-        User::where('features.wallet_cryptocurrency', null)->update([
+        \Aparlay\Core\Models\User::where('features.wallet_cryptocurrency', null)->update([
             'features' => [
                 'tips' => false,
                 'exclusive_content' => false,
