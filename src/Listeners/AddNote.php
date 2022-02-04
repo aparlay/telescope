@@ -6,7 +6,6 @@ use Aparlay\Core\Admin\Services\NoteService;
 use Aparlay\Core\Events\UserStatusChanged;
 
 class AddNote
-
 {
     public function handle($event)
     {

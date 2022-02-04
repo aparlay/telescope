@@ -21,6 +21,6 @@ class UserAlertCreated
         public Authenticated|User $creator,
         public User $user,
         public int $type,
-    )
-    {}
+    ) {
+    }
 }
