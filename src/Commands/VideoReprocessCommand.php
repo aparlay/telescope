@@ -30,6 +30,7 @@ class VideoReprocessCommand extends Command
             $msg .= PHP_EOL;
             $this->line($msg);
         }
+
         return self::SUCCESS;
     }
 }
