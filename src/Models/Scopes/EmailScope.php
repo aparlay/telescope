@@ -9,6 +9,7 @@ use MongoDB\BSON\ObjectId;
 trait EmailScope
 {
     use BaseScope;
+    use DateScope;
 
     /**
      * @param  Builder  $query
