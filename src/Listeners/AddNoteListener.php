@@ -4,15 +4,15 @@ namespace Aparlay\Core\Listeners;
 
 use Aparlay\Core\Admin\Services\NoteService;
 use Aparlay\Core\Events\UserReceiveAlertEvent;
-use Aparlay\Core\Events\UserStatusChanged;
+use Aparlay\Core\Events\UserStatusChangedEvent;
 
-class AddNote
+class AddNoteListener
 {
     public function handle($event)
     {
         $noteService = app()->make(NoteService::class);
 
-        if ($event instanceof UserStatusChanged) {
+        if ($event instanceof UserStatusChangedEvent) {
             $noteService->addNewNote(
                 $event->creator,
                 $event->user,

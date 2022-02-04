@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Http\Middleware;
 
-use Aparlay\Core\Events\DispatchAuthenticatedEndpoints;
+use Aparlay\Core\Events\DispatchAuthenticatedEndpointsEvent;
 use Closure;
 
 class DispatchAuthenticatedEndpointEvent
@@ -17,7 +17,7 @@ class DispatchAuthenticatedEndpointEvent
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        DispatchAuthenticatedEndpoints::dispatch();
+        DispatchAuthenticatedEndpointsEvent::dispatch();
 
         return $next($request);
     }

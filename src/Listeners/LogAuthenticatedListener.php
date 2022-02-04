@@ -6,7 +6,7 @@ use Aparlay\Core\Api\V1\Services\UserService;
 use Aparlay\Core\Helpers\IP;
 use Illuminate\Auth\Events\Authenticated;
 
-class LogAuthenticated
+class LogAuthenticatedListener
 {
     /**
      * Create the event listener.

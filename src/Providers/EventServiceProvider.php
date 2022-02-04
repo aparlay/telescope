@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Providers;
 
-use Aparlay\Core\Events\DispatchAuthenticatedEndpoints;
-use Aparlay\Core\Listeners\LogAuthenticated;
-use Aparlay\Core\Listeners\OnlineUsers;
+use Aparlay\Core\Events\DispatchAuthenticatedEndpointsEvent;
+use Aparlay\Core\Listeners\LogAuthenticatedListener;
+use Aparlay\Core\Listeners\OnlineUsersListener;
 use Aparlay\Core\Models\BaseModel;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;
@@ -31,9 +31,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        DispatchAuthenticatedEndpoints::class => [
-            LogAuthenticated::class,
-            OnlineUsers::class,
+        DispatchAuthenticatedEndpointsEvent::class => [
+            LogAuthenticatedListener::class,
+            OnlineUsersListener::class,
         ],
     ];
 

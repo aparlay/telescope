@@ -5,7 +5,7 @@ namespace Aparlay\Core\Admin\Services;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
-use Aparlay\Core\Events\UserStatusChanged;
+use Aparlay\Core\Events\UserStatusChangedEvent;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\NoteType;
@@ -203,7 +203,7 @@ class UserService extends AdminBaseService
         };
 
         if ($noteType) {
-            UserStatusChanged::dispatch($this->getUser(), $user, $noteType);
+            UserStatusChangedEvent::dispatch($this->getUser(), $user, $noteType);
         }
 
         return $this->userRepository->update(['status' => $userStatus], $id);

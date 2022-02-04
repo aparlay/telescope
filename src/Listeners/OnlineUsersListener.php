@@ -4,7 +4,7 @@ namespace Aparlay\Core\Listeners;
 
 use Aparlay\Core\Api\V1\Services\OnlineUserService;
 
-class OnlineUsers
+class OnlineUsersListener
 {
     /**
      * Create the event listener.

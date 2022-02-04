@@ -5,7 +5,7 @@ namespace Aparlay\Core\Events;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class DispatchAuthenticatedEndpoints
+class DispatchAuthenticatedEndpointsEvent
 {
     use Dispatchable;
     use SerializesModels;

@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Events\MediaProcessingCompleted;
+use Aparlay\Core\Events\MediaProcessingCompletedEvent;
 use Aparlay\Core\Microservices\ffmpeg\MediaClient;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeRequest;
 use Aparlay\Core\Microservices\ffmpeg\OptimizeResponse;
@@ -300,6 +300,6 @@ class ProcessMedia implements ShouldQueue
 
         $media->refresh();
         $media->notify(new VideoPending());
-        MediaProcessingCompleted::dispatch($media);
+        MediaProcessingCompletedEvent::dispatch($media);
     }
 }

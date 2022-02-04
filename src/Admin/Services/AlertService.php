@@ -10,7 +10,7 @@ use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Events\UserReceiveAlertEvent;
-use Aparlay\Core\Events\UserStatusChanged;
+use Aparlay\Core\Events\UserStatusChangedEvent;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\NoteType;
