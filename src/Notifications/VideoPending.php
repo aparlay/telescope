@@ -41,7 +41,7 @@ class VideoPending extends Notification
         $message .= PHP_EOL.'_*Log:*_ '.PHP_EOL.implode("\n", $notifiable->processing_log);
 
         return (new SlackMessage())
-            ->to('#' . config('app.slack_video_pending'))
+            ->to('#'.config('app.slack_video_pending'))
             ->content($message)
             ->success();
     }

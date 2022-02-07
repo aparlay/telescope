@@ -44,7 +44,7 @@ class UserDeactivateAccount extends Notification implements ShouldQueue
         $message = "User {$notifiable->slack_admin_url} deactivated his account";
 
         return (new SlackMessage())
-            ->to('#' . config('app.slack_report'))
+            ->to('#'.config('app.slack_report'))
             ->content($message)
             ->success();
     }
