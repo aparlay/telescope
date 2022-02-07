@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Models;
 
 use Aparlay\Core\Models\Email as EmailBase;
 use Aparlay\Core\Models\Scopes\BaseScope;
+use Aparlay\Core\Models\Scopes\DateScope;
 
 /**
  * Class Email.
@@ -11,6 +12,7 @@ use Aparlay\Core\Models\Scopes\BaseScope;
 class Email extends EmailBase
 {
     use BaseScope;
+    use DateScope;
 
     /**
      * @return string

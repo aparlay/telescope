@@ -5,6 +5,7 @@ namespace Aparlay\Core\Models\Scopes;
 trait SettingScope
 {
     use BaseScope;
+    use DateScope;
 
     public function scopeSettingGroup($query)
     {

@@ -8,6 +8,7 @@ use MongoDB\BSON\ObjectId;
 trait MediaVisitScope
 {
     use BaseScope;
+    use DateScope;
 
     /**
      * @param $query
