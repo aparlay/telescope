@@ -20,12 +20,12 @@ class JobFailed extends Notification
      *
      * @return void
      */
-    public function __construct(string $job, int $tried, string $exception, string $channel = '#waptap-testing')
+    public function __construct(string $job, int $tried, string $exception, string $channel = null)
     {
         $this->job = $job;
         $this->tried = $tried;
         $this->exception = $exception;
-        $this->channel = $channel;
+        $this->channel = $channel ?? '#' . config('app.slack_report');
     }
 
     /**

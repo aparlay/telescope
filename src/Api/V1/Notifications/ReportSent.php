@@ -46,7 +46,7 @@ class ReportSent extends Notification implements ShouldQueue
         $message .= PHP_EOL.'_*Reason:*_ '.$notifiable->reason;
 
         return (new SlackMessage())
-            ->to('#waptap-testing')
+            ->to('#' . config('app.slack_report'))
             ->content($message)
             ->success();
     }
