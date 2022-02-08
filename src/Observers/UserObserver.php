@@ -64,7 +64,6 @@ class UserObserver extends BaseModelObserver
         }
 
         if (empty($model->country_alpha2)) {
-
             $ip = IP::trueAddress();
             $db = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ?
                 database_path().'/ip2location/IP2LOCATION-LITE-DB11.BIN' :
