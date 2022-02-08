@@ -76,7 +76,7 @@ class UpdateUserCountry implements ShouldQueue
         $client = new Client(config('app.maxmind.accountId'), config('app.maxmind.licenseKey'), ['en']);
         $record = $client->country($this->ip);
 
-        if (isset($record->country->isoCode) && !empty($record->country->isoCode)) {
+        if (isset($record->country->isoCode) && ! empty($record->country->isoCode)) {
             $user->country_alpha2 = Str::lower($record->country->isoCode);
             $user->save();
         }
