@@ -20,6 +20,7 @@ use Aparlay\Core\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Redis;
 use IP2Location\Database;
+use Psy\Util\Str;
 
 class UserObserver extends BaseModelObserver
 {
@@ -71,7 +72,7 @@ class UserObserver extends BaseModelObserver
                 database_path().'/ip2location/IP2LOCATION-LITE-DB11.IPV6.BIN';
 
             $ip2location = (new Database($db, Database::FILE_IO))->lookup($ip, Database::ALL);
-            $model->country_alpha2 = $ip2location['countryCode'] ? \Str::lower($ip2location['countryCode']) : null;
+            $model->country_alpha2 = $ip2location['countryCode'] ? Str::lower($ip2location['countryCode']) : null;
         }
 
         parent::creating($model);
