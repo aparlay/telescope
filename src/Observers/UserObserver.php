@@ -66,13 +66,6 @@ class UserObserver extends BaseModelObserver
         parent::creating($model);
     }
 
-    public function created($model)
-    {
-        if (empty($model->country_alpha2)) {
-            UpdateUserCountry::dispatch((string) $model->_id, IP::trueAddress());
-        }
-    }
-
     /**
      * Handle the User "creating" event.
      *
@@ -82,6 +75,10 @@ class UserObserver extends BaseModelObserver
      */
     public function saving($model): void
     {
+        if (empty($model->country_alpha2) && !empty(IP::trueAddress())) {
+            UpdateUserCountry::dispatch((string) $model->_id, IP::trueAddress());
+        }
+
         if (! empty($model->promo_link) && ! str_starts_with($model->promo_link, 'http')) {
             $model->promo_link = 'https://'.$model->promo_link;
         }
