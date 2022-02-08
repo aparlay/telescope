@@ -2,11 +2,6 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Helpers\Cdn;
-use Aparlay\Core\Models\Block;
-use Aparlay\Core\Models\Follow;
-use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
@@ -16,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use MongoDB\BSON\ObjectId;
 use Throwable;
