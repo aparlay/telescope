@@ -56,6 +56,7 @@ class UpdateAvatar implements ShouldQueue
      */
     public function __construct(string $userId)
     {
+        $this->onQueue('low');
         $this->userId = $userId;
         User::findOrFail(new ObjectId($userId));
     }

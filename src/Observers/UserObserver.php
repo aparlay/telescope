@@ -10,6 +10,7 @@ use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateAvatar;
 use Aparlay\Core\Jobs\UpdateMedia;
+use Aparlay\Core\Jobs\UpdateUserCountry;
 use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
@@ -65,13 +66,7 @@ class UserObserver extends BaseModelObserver
         }
 
         if (empty($model->country_alpha2)) {
-            $ip = IP::trueAddress();
-            $db = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ?
-                database_path().'/ip2location/IP2LOCATION-LITE-DB11.BIN' :
-                database_path().'/ip2location/IP2LOCATION-LITE-DB11.IPV6.BIN';
-
-            $ip2location = (new Database($db, Database::FILE_IO))->lookup($ip, Database::ALL);
-            $model->country_alpha2 = $ip2location['countryCode'] ? Str::lower($ip2location['countryCode']) : null;
+            UpdateUserCountry::dispatch((string) $model->_id, IP::trueAddress());
         }
 
         parent::creating($model);
@@ -82,7 +77,7 @@ class UserObserver extends BaseModelObserver
      *
      * @param  User  $model
      * @return void
-     * @throws Exception
+     * @throws Exception|\Psr\SimpleCache\InvalidArgumentException
      */
     public function saving($model): void
     {
@@ -118,15 +113,15 @@ class UserObserver extends BaseModelObserver
     public function updated($model): void
     {
         if ($model->wasChanged('avatar')) {
-            UpdateAvatar::dispatch((string) $model->_id)->onQueue('low');
+            UpdateAvatar::dispatch((string) $model->_id);
         }
 
         if ($model->wasChanged('status')) {
             switch ($model->status) {
                 case UserStatus::DEACTIVATED->value:
                 case UserStatus::BLOCKED->value:
-                    DeleteUserMedia::dispatch((string) $model->_id)->onQueue('low');
-                    DeleteUserConnect::dispatch((string) $model->_id)->onQueue('low');
+                    DeleteUserMedia::dispatch((string) $model->_id);
+                    DeleteUserConnect::dispatch((string) $model->_id);
                     break;
             }
             if ($model->status === UserStatus::DEACTIVATED->value) {
@@ -135,7 +130,7 @@ class UserObserver extends BaseModelObserver
         }
 
         if ($model->wasChanged('visibility')) {
-            UpdateMedia::dispatch((string) $model->_id, ['visibility' => $model->visibility])->onQueue('low');
+            UpdateMedia::dispatch((string) $model->_id, ['visibility' => $model->visibility]);
         }
     }
 }

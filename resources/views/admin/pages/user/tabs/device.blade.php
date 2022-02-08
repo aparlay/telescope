@@ -20,7 +20,12 @@
         @foreach($user->user_agents as $index => $userDevice)
             @php
                 $i++;
-                $ip2location = (new \IP2Location\Database(database_path().'/ip2location/IP2LOCATION-LITE-DB11.BIN', \IP2Location\Database::FILE_IO))
+
+                $db = filter_var($userDevice['ip'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ?
+                    database_path().'/ip2location/IP2LOCATION-LITE-DB11.BIN' :
+                    database_path().'/ip2location/IP2LOCATION-LITE-DB11.IPV6.BIN';
+
+                $ip2location = (new \IP2Location\Database($db, \IP2Location\Database::FILE_IO))
                 ->lookup($userDevice['ip'], \IP2Location\Database::ALL);
                 $agent = new \Aparlay\Core\Admin\Services\UserAgent($userDevice['user_agent']);
             @endphp
