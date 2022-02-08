@@ -19,8 +19,8 @@ use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
 use IP2Location\Database;
-use Psy\Util\Str;
 
 class UserObserver extends BaseModelObserver
 {
