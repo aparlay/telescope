@@ -64,8 +64,13 @@ class UserObserver extends BaseModelObserver
         }
 
         if (empty($model->country_alpha2)) {
-            $ip2location = (new Database(database_path().'/ip2location/IP2LOCATION-LITE-DB11.BIN', Database::FILE_IO))
-                ->lookup(IP::trueAddress(), Database::ALL);
+
+            $ip = IP::trueAddress();
+            $db = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ?
+                database_path().'/ip2location/IP2LOCATION-LITE-DB11.BIN' :
+                database_path().'/ip2location/IP2LOCATION-LITE-DB11.IPV6.BIN';
+
+            $ip2location = (new Database($db, Database::FILE_IO))->lookup($ip, Database::ALL);
             $model->country_alpha2 = $ip2location['countryCode'] ? \Str::lower($ip2location['countryCode']) : null;
         }
 
