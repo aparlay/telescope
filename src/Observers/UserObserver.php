@@ -75,7 +75,7 @@ class UserObserver extends BaseModelObserver
      */
     public function saving($model): void
     {
-        if (empty($model->country_alpha2) && !empty(IP::trueAddress())) {
+        if (empty($model->country_alpha2) && ! empty(IP::trueAddress())) {
             UpdateUserCountry::dispatch((string) $model->_id, IP::trueAddress());
         }
 
