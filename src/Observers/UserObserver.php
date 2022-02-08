@@ -20,8 +20,6 @@ use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Str;
-use IP2Location\Database;
 
 class UserObserver extends BaseModelObserver
 {
@@ -65,11 +63,14 @@ class UserObserver extends BaseModelObserver
             $model->verification_status = UserVerificationStatus::UNVERIFIED->value;
         }
 
+        parent::creating($model);
+    }
+
+    public function created($model)
+    {
         if (empty($model->country_alpha2)) {
             UpdateUserCountry::dispatch((string) $model->_id, IP::trueAddress());
         }
-
-        parent::creating($model);
     }
 
     /**
