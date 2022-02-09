@@ -81,6 +81,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $text_search
  * @property int         $verification_status
  * @property float       $sort_score
+ * @property string      $deactivation_reason
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
@@ -154,10 +155,11 @@ class User extends Authenticatable implements JWTSubject
         'last_location',
         'text_search',
         'sort_score',
+        'verification_status',
+        'deactivation_reason',
         'created_at',
         'updated_at',
         'deleted_at',
-        'verification_status',
     ];
 
     protected $attributes = [
@@ -222,6 +224,7 @@ class User extends Authenticatable implements JWTSubject
         'username' => 'string',
         'full_name' => 'string',
         'email' => 'string',
+        'deactivation_reason' => 'string',
         'status' => 'integer',
         'email_verified' => 'boolean',
         'phone_number_verified' => 'boolean',

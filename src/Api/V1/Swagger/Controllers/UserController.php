@@ -85,8 +85,8 @@ class UserController
      */
 
     /**
-     * @OA\Delete (
-     *     path="/v1/me",
+     * @OA\POST (
+     *     path="/v1/me/delete",
      *     tags={"user"},
      *     summary="deactive a user",
      *     description="To deactive a user you need to call this endpoint.",
@@ -99,6 +99,19 @@ class UserController
      *         required=true,
      *         @OA\Schema(
      *             type="string"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     example="why user want to delete their accounts",
+     *                     property="reason",
+     *                     type="string"
+     *                 ),
+     *             )
      *         )
      *     ),
      *     @OA\Response(

@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
+use Aparlay\Core\Api\V1\Dto\UserDeleteDTO;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
@@ -50,17 +51,18 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  Request  $request
      * @return Response
      * @throws AuthorizationException
      */
-    public function destroy(): Response
+    public function destroy(Request $request): Response
     {
         /* Check the update permission */
         $this->authorize('delete', User::class);
 
         $user = auth()->user();
 
-        if ($this->userService->deleteAccount($user)) {
+        if ($this->userService->deleteAccount($user, UserDeleteDTO::fromRequest($request))) {
             $cookie1 = Cookie::forget('__Secure_token');
             $cookie2 = Cookie::forget('__Secure_refresh_token');
             $cookie3 = Cookie::forget('__Secure_username');
@@ -71,7 +73,7 @@ class UserController extends Controller
                 ->cookie($cookie3);
         }
 
-        return $user;
+        return $this->response([], '', Response::HTTP_NO_CONTENT);
     }
 
     /**

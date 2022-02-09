@@ -81,7 +81,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
         Route::delete('/logout', [AuthController::class, 'logout'])->name('user.logout');
         Route::prefix('me')->group(function () {
             Route::get('/', [UserController::class, 'me'])->name('user.me');
-            Route::delete('/', [UserController::class, 'destroy']);
+            Route::post('/delete', [UserController::class, 'destroy']);
             Route::match(['put', 'patch'], '/', [UserController::class, 'update']);
             Route::get('/token', [UserController::class, 'token']);
         });

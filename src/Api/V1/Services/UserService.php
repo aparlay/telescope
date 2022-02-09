@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
+use Aparlay\Core\Api\V1\Dto\UserDeleteDTO;
 use Aparlay\Core\Api\V1\Models\Login;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\UserRepository;
@@ -164,13 +165,15 @@ class UserService
      * Responsible for delete user account.
      *
      * @param  User|Authenticatable  $user
+     * @param  UserDeleteDTO  $userDeleteDTO
      * @return bool
+     * @throws Exception
      */
-    public function deleteAccount(User|Authenticatable $user)
+    public function deleteAccount(User|Authenticatable $user, UserDeleteDTO $userDeleteDTO): bool
     {
         $this->userRepository = new UserRepository($user);
 
-        return $this->userRepository->deleteAccount();
+        return $this->userRepository->deleteAccount($userDeleteDTO->reason);
     }
 
     /**

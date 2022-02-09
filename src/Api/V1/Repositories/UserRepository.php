@@ -146,15 +146,17 @@ class UserRepository
     /**
      * Responsible for delete user account.
      *
+     * @param  string  $reason
      * @return bool
      * @throws \Exception
      */
-    public function deleteAccount(): bool
+    public function deleteAccount(string $reason = ''): bool
     {
         $randString = random_int(1, 100);
         $this->model->email = 'del_'.$randString.'_'.$this->model->email;
         $this->model->phone_number = ! empty($this->model->phone_number) ? 'del_'.$randString.'_'.$this->model->phone_number : null;
         $this->model->status = UserStatus::DEACTIVATED->value;
+        $this->model->deactivation_reason = $reason;
 
         return $this->model->save();
     }
