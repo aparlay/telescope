@@ -26,6 +26,7 @@ use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CleanupCommand;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\RoleCommand;
+use Aparlay\Core\Commands\UserScoreCommand;
 use Aparlay\Core\Commands\VideoReprocessCommand;
 use Aparlay\Core\Commands\VideoScoreCommand;
 use Aparlay\Core\Commands\VideoScoreDailyCommand;
@@ -34,7 +35,6 @@ use Aparlay\Core\Commands\VideoUpdateInfoCommand;
 use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Helpers\ConfigHelper;
 use Aparlay\Core\Helpers\IP;
-use Aparlay\Payment\Admin\Livewire\CreditCardsTable;
 use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -92,6 +92,7 @@ class CoreServiceProvider extends ServiceProvider
                 VideoScoreDailyCommand::class,
                 VideoScoreHourlyCommand::class,
                 VideoUpdateInfoCommand::class,
+                UserScoreCommand::class,
                 WsCommand::class,
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,

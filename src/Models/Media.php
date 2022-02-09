@@ -58,6 +58,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property mixed       $filename
  * @property array       $links
  * @property bool        $is_protected
+ * @property array       $scores
+ * @property float       $sort_score
  * @property User        $userObj
  * @property Alert[]     $alertObjs
  *
@@ -178,6 +180,35 @@ class Media extends BaseModel
      * @var array
      */
     protected $appends = [];
+
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'global';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            '_id' => (string)$this->_id,
+            'type' => 'media',
+            'poster' => $this->cover_url,
+            'username' => $this->userObj->username,
+            'full_name' => $this->userObj->full_name,
+            'description' => $this->description,
+            'hashtags' => $this->hashtags,
+            'score' => $this->sort_score
+        ];
+    }
 
     /**
      * Create a new factory instance for the model.

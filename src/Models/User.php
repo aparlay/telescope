@@ -43,6 +43,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property string      $phone_number
  * @property bool        $phone_number_verified
  * @property string      $auth_key
+ * @property string      $bio
  * @property string      $avatar
  * @property int         $status
  * @property int         $gender
@@ -79,6 +80,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $country_flags
  * @property array       $text_search
  * @property int         $verification_status
+ * @property float       $sort_score
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
@@ -151,6 +153,7 @@ class User extends Authenticatable implements JWTSubject
         'stats',
         'last_location',
         'text_search',
+        'sort_score',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -185,6 +188,7 @@ class User extends Authenticatable implements JWTSubject
         'block_count' => 0,
         'followed_hashtag_count' => 0,
         'media_count' => 0,
+        'sort_score' => 0,
         'subscriptions' => [],
         'subscription_plan' => [],
         'user_agents' => [],
@@ -254,6 +258,16 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'global';
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -261,13 +275,14 @@ class User extends Authenticatable implements JWTSubject
     public function toSearchableArray()
     {
         return [
+            '_id' => (string)$this->_id,
+            'type' => 'user',
             'poster' => $this->avatar,
             'username' => $this->username,
-            'email' => $this->email,
-            'phone_number' => $this->phone_number,
             'full_name' => $this->full_name,
-            'follower_count' => $this->follower_count,
-            'like_count' => $this->like_count,
+            'description' => $this->bio,
+            'hashtags' => [],
+            'score' => $this->sort_score
         ];
     }
 
