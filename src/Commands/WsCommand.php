@@ -67,6 +67,7 @@ class WsCommand extends Command
                     $redis->subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
                         if ($message !== 'ping') {
                             $this->info('pong');
+
                             return;
                         }
 
