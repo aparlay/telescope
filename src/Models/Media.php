@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Redis;
+use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
 use MathPHP\Statistics\Descriptive;
@@ -81,6 +82,7 @@ class Media extends BaseModel
     use Notifiable;
     use MediaScope;
     use SimpleUserTrait;
+    use Searchable;
 
     /**
      * The collection associated with the model.
