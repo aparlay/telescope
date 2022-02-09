@@ -9,6 +9,7 @@ use Co;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
+use Laravel\Octane\Facades\Octane;
 use PHPOpenSourceSaver\JWTAuth\Claims\Audience;
 use PHPOpenSourceSaver\JWTAuth\Claims\Collection;
 use PHPOpenSourceSaver\JWTAuth\Claims\Custom;
@@ -50,6 +51,7 @@ class WsCommand extends Command
         $tokenInstance = JWTAuth::encode($payload);
         $token = $tokenInstance->get();
         Runtime::enableCoroutine(SWOOLE_HOOK_ALL);
+        ini_set('default_socket_timeout', -1);
         \Co\run(function () use ($token) {
             $client = new Client(config('app.websocket.host'), config('app.websocket.port'));
             $client->setHeaders([
@@ -61,14 +63,19 @@ class WsCommand extends Command
             if ($ret) {
                 $this->info('Connection established successfully!');
                 go(function () use ($client) {
-                    ini_set('default_socket_timeout', -1);
                     $redis = Redis::connection();
                     $redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
                     $redis->subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
+                        if ($message === 'ping') {
+                            $this->info('PONG!');
+                            return;
+                        }
                         $this->info('New broadcasting message arrived!');
                         $this->info($message);
                         $client->push($message);
                     });
+                    Octane::tick('redis-pubsub-pinger', fn () => $redis->publish(WsChannel::REDIS_CHANNEL, 'ping'))
+                        ->seconds(10);
                 });
 
                 while (true) {
