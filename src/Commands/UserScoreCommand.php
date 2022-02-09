@@ -15,22 +15,22 @@ class UserScoreCommand extends Command
 
     public function handle()
     {
-        $userQuery = User::Where(['is_fake' => ['$exists' => false]])->enable();
+        User::Where(['is_fake' => ['$exists' => false]])
+            ->enable()
+            ->each(function ($user) {
+                $count = Media::creator($user->_id)->count();
+                if ($count > 0) {
+                    $score = Media::creator($user->_id)->sum('sort_score');
+                    $user->sort_score = $score / $count;
 
-        foreach ($userQuery->get() as $user) {
-            $count = Media::creator($user->_id)->count();
-            if ($count > 0) {
-                $score = Media::creator($user->_id)->sum('sort_score');
-                $user->sort_score = $score / $count;
+                    $msg5 = '<fg=yellow;options=bold>';
+                    $msg5 .= '  - total set to '.$user->sort_score.'</>';
+                    $msg5 .= PHP_EOL;
+                    $this->line($msg5);
 
-                $msg5 = '<fg=yellow;options=bold>';
-                $msg5 .= '  - total set to '.$user->sort_score.'</>';
-                $msg5 .= PHP_EOL;
-                $this->line($msg5);
-
-                $user->save();
-            }
-        }
+                    $user->save();
+                }
+            });
 
         return self::SUCCESS;
     }
