@@ -66,16 +66,10 @@ class WsCommand extends Command
                     $redis = Redis::connection();
                     $redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
                     $redis->subscribe([WsChannel::REDIS_CHANNEL], function ($message) use ($client) {
-                        if ($message === 'ping') {
-                            $this->info('PONG!');
-                            return;
-                        }
                         $this->info('New broadcasting message arrived!');
                         $this->info($message);
                         $client->push($message);
                     });
-                    Octane::tick('redis-pubsub-pinger', fn () => $redis->publish(WsChannel::REDIS_CHANNEL, 'ping'))
-                        ->seconds(10);
                 });
 
                 while (true) {
