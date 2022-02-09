@@ -201,14 +201,14 @@ class Media extends BaseModel
     public function toSearchableArray()
     {
         return [
-            '_id' => (string)$this->_id,
+            '_id' => (string) $this->_id,
             'type' => 'media',
             'poster' => $this->cover_url,
             'username' => $this->userObj->username,
             'full_name' => $this->userObj->full_name,
             'description' => $this->description,
             'hashtags' => $this->hashtags,
-            'score' => $this->sort_score
+            'score' => $this->sort_score,
         ];
     }
 
