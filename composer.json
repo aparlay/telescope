@@ -65,7 +65,6 @@
         "ext-json": "*",
         "ext-mongodb": "*",
         "ext-openssl": "*",
-        "aparlay/telescope": "^4.6.1",
         "fideloper/proxy": "^4.4",
         "flowjs/flow-php-server": "^1.0",
         "fruitcake/laravel-cors": "^2.0",
@@ -73,7 +72,7 @@
         "grpc/grpc": "^1.38",
         "guzzlehttp/guzzle": "^7.0.1",
         "jenssegers/mongodb": "^3.8",
-        "laravel/framework": "^8.50",
+        "laravel/framework": "^8.82",
         "laravel/horizon": "^5.7",
         "laravel/octane": "^1.0",
         "laravel/slack-notification-channel": "^2.3",
@@ -101,6 +100,6 @@
         "jeroen-g/laravel-packager": "^2.5",
         "laravel/dusk": "^6.15",
         "laravel/envoy": "^2.7",
-        "orchestra/testbench": "^6.15"
+        "orchestra/testbench": "^6.24"
     }
 }

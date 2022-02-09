@@ -75,10 +75,6 @@ class UserObserver extends BaseModelObserver
      */
     public function saving($model): void
     {
-        if (empty($model->country_alpha2) && ! empty(IP::trueAddress()) && IP::trueAddress() !== '127.0.0.1') {
-            UpdateUserCountry::dispatch((string) $model->_id, IP::trueAddress());
-        }
-
         if (! empty($model->promo_link) && ! str_starts_with($model->promo_link, 'http')) {
             $model->promo_link = 'https://'.$model->promo_link;
         }
@@ -129,6 +125,13 @@ class UserObserver extends BaseModelObserver
 
         if ($model->wasChanged('visibility')) {
             UpdateMedia::dispatch((string) $model->_id, ['visibility' => $model->visibility]);
+        }
+    }
+
+    public function saved($model)
+    {
+        if (empty($model->country_alpha2) && ! empty(IP::trueAddress()) && IP::trueAddress() !== '127.0.0.1') {
+            UpdateUserCountry::dispatch((string) $model->_id, IP::trueAddress());
         }
     }
 }
