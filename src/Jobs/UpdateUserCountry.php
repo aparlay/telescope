@@ -68,10 +68,14 @@ class UpdateUserCountry implements ShouldQueue
     {
         $user = User::findOrFail(new ObjectId($this->userId));
         $client = new Client(config('app.maxmind.accountId'), config('app.maxmind.licenseKey'), ['en']);
-        $record = $client->country($this->ip);
+        $record = $client->city($this->ip);
 
         if (isset($record->country->isoCode) && ! empty($record->country->isoCode)) {
             $user->country_alpha2 = Str::lower($record->country->isoCode);
+            $user->last_location = [
+                'lat' => $record->location->latitude,
+                'lng' => $record->location->longitude,
+            ];
             $user->save();
         }
     }

@@ -282,7 +282,8 @@ class User extends Authenticatable implements JWTSubject
             'full_name' => $this->full_name,
             'description' => $this->bio,
             'hashtags' => [],
-            'score' => $this->sort_score
+            'score' => $this->sort_score,
+            '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0]
         ];
     }
 

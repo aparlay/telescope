@@ -208,7 +208,8 @@ class Media extends BaseModel
             'full_name' => $this->userObj->full_name,
             'description' => $this->description,
             'hashtags' => $this->hashtags,
-            'score' => $this->sort_score
+            'score' => $this->sort_score,
+            '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0]
         ];
     }
 
