@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\definitions;
 
-
 /**
- *
  * @OA\Schema(type="object", title="List Links", description="List Links response")
  */
 class ListLinks

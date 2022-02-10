@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\definitions;
 
-
 /**
- *
  * @OA\Schema(type="object", title="Meta", description="Meta response")
  */
 class Meta
