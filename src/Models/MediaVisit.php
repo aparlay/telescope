@@ -145,6 +145,7 @@ class MediaVisit extends BaseModel
     {
         $cacheKey = self::getCollection().':creator:'.$userId;
         $visitedMediaIds = Cache::store('octane')->get($cacheKey, false);
+
         return ($visitedMediaIds !== false) ? in_array($mediaId, explode(',', $visitedMediaIds)) :
             Redis::sismember($cacheKey, $mediaId);
     }

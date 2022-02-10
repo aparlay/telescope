@@ -160,6 +160,7 @@ class MediaLike extends BaseModel
     {
         $cacheKey = self::getCollection().':creator:'.$userId;
         $likedMedias = Cache::store('octane')->get($cacheKey, false);
+
         return ($likedMedias !== false) ? in_array($mediaId, explode(',', $likedMedias)) :
             Redis::sismember($cacheKey, $mediaId);
     }
