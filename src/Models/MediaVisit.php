@@ -123,7 +123,7 @@ class MediaVisit extends BaseModel
             $visitedMediaIds = Arr::flatten($visitedMediaIds);
             $visitedMediaIds = array_map('strval', $visitedMediaIds);
 
-            Cache::store('octane')->put($cacheKey, self::implode(',', $visitedMediaIds), 300);
+            Cache::store('octane')->put($cacheKey, implode(',', $visitedMediaIds), 300);
 
             Redis::sAdd($cacheKey, ...$visitedMediaIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
@@ -132,7 +132,7 @@ class MediaVisit extends BaseModel
         if (Cache::store('octane')->get($cacheKey, false) === false) {
             $visitedMediaIds = Redis::sMembers($cacheKey);
 
-            Cache::store('octane')->put($cacheKey, self::implode(',', $visitedMediaIds), 300);
+            Cache::store('octane')->put($cacheKey, implode(',', $visitedMediaIds), 300);
         }
     }
 

@@ -137,7 +137,7 @@ class MediaLike extends BaseModel
                 $likedMediaIds = [''];
             }
 
-            Cache::store('octane')->put($cacheKey, self::implode(',', $likedMediaIds), 300);
+            Cache::store('octane')->put($cacheKey, implode(',', $likedMediaIds), 300);
 
             Redis::sAdd($cacheKey, ...$likedMediaIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
@@ -146,7 +146,7 @@ class MediaLike extends BaseModel
         if (Cache::store('octane')->get($cacheKey, false) === false) {
             $likedMediaIds = Redis::sMembers($cacheKey);
 
-            Cache::store('octane')->put($cacheKey, self::implode(',', $likedMediaIds), 300);
+            Cache::store('octane')->put($cacheKey, implode(',', $likedMediaIds), 300);
         }
     }
 
