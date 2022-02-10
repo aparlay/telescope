@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use BeyondCode\ServerTiming\Facades\ServerTiming;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -33,8 +34,13 @@ class MediaFeedsCollection extends ResourceCollection
             'next' => ['href' => str_replace('http://', 'https://', $this->resource->url($this->resource->onFirstPage()))], // because of the caching and removing visited videos in feed next page is always the first page
         ];
 
+
+        ServerTiming::start('MediaFeedsCollection::generateItems');
+        $items = $this->resource->items();
+        ServerTiming::stop('MediaFeedsCollection::generateItems');
+
         return [
-            'items' => $this->resource->items(),
+            'items' => $items,
             '_links' => $links,
             '_meta' => [
                 'per_page' => $this->resource->perPage(),

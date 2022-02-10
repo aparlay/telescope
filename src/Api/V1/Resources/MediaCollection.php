@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use BeyondCode\ServerTiming\Facades\ServerTiming;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -43,8 +44,11 @@ class MediaCollection extends ResourceCollection
             ];
         }
 
+        ServerTiming::start('MediaCollection::generateItems');
+        $items = $this->resource->items();
+        ServerTiming::stop('MediaCollection::generateItems');
         return [
-            'items' => $this->resource->items(),
+            'items' => $items,
             '_links' => $links,
             '_meta' => [
                 'per_page' => $this->resource->perPage(),

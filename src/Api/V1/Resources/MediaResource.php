@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
-use Aparlay\Core\Helpers\Cdn;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class MediaResource extends JsonResource
 {

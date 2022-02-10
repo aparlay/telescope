@@ -11,6 +11,7 @@ use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaStatus;
+use BeyondCode\ServerTiming\Facades\ServerTiming;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
@@ -102,6 +103,7 @@ class MediaService
      */
     public function getPublicFeeds(): LengthAwarePaginator
     {
+        ServerTiming::start('MediaService::getPublicFeeds');
         $query = Media::query();
         $query->public()->confirmed()->sort();
 
@@ -140,6 +142,7 @@ class MediaService
         }
         Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
+        ServerTiming::stop('MediaService::getPublicFeeds');
         return $data;
     }
 
@@ -162,6 +165,7 @@ class MediaService
      */
     public function getFollowingFeed(): LengthAwarePaginator
     {
+        ServerTiming::start('MediaService::getFollowingFeed');
         $query = Media::query();
 
         if (! auth()->guest()) {
@@ -171,6 +175,7 @@ class MediaService
                 ->recentFirst();
         }
 
+        ServerTiming::stop('MediaService::getByUser');
         return $query->paginate(5)->withQueryString();
     }
 
@@ -181,6 +186,7 @@ class MediaService
      */
     public function getByUser(User $user): LengthAwarePaginator
     {
+        ServerTiming::start('MediaService::getByUser');
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();
 
@@ -203,6 +209,7 @@ class MediaService
             }
         }
 
+        ServerTiming::stop('MediaService::getByUser');
         return $query->paginate(15);
     }
 }
