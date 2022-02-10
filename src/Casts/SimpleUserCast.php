@@ -39,7 +39,7 @@ class SimpleUserCast implements CastsAttributes
             $isFollowed = false;
             if (! auth()->guest()) {
                 $loggedInUserId = auth()->user()->_id;
-                Follow::cacheByUserId($loggedInUserId);
+                Follow::cacheByUserId((string) $loggedInUserId);
 
                 $isFollowed = Follow::checkCreatorIsFollowedByUser((string) $userArray['_id'], (string) $loggedInUserId);
             }

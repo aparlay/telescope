@@ -80,9 +80,7 @@ class DeleteMediaLike implements ShouldQueue
         $user->save();
 
         // Reset the Redis cache
-        $cacheKey = (new MediaLike())->getCollection().':creator:'.$media->creator['_id'];
-        Redis::del($cacheKey);
-        MediaLike::cacheByUserId($media->creator['_id']);
+        MediaLike::cacheByUserId((string) $media->creator['_id'], true);
     }
 
     public function failed(Throwable $exception): void

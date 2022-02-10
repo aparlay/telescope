@@ -72,10 +72,7 @@ class MediaLikeObserver extends BaseModelObserver
         $user->save();
 
         // Reset the Redis cache
-        $cacheKey = (new MediaLike())->getCollection().':creator:'.$model->creator['_id'];
-        Cache::store('octane')->forget($cacheKey);
-        Redis::del($cacheKey);
-        MediaLike::cacheByUserId($model->creator['_id']);
+        MediaLike::cacheByUserId($model->creator['_id'], true);
     }
 
     /**
@@ -83,6 +80,7 @@ class MediaLikeObserver extends BaseModelObserver
      *
      * @param  MediaLike  $model
      * @return void
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function deleted($model): void
     {
