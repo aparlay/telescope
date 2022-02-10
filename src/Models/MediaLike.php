@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
@@ -118,12 +119,13 @@ class MediaLike extends BaseModel
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  ObjectId|string  $userId
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function cacheByUserId(ObjectId | string $userId): void
     {
         $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
-        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+        $cacheKey = self::getCollection().':creator:'.$userId;
 
         if (! Redis::exists($cacheKey)) {
             $likedMediaIds = self::project(['media_id' => true, '_id' => false])
@@ -135,10 +137,30 @@ class MediaLike extends BaseModel
                 $likedMediaIds = [''];
             }
 
-            $likedMediaIds = array_map('strval', $likedMediaIds);
+            Cache::store('octane')->put($cacheKey, self::implode(',', $likedMediaIds), 300);
 
             Redis::sAdd($cacheKey, ...$likedMediaIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
         }
+
+        if (Cache::store('octane')->get($cacheKey, false) === false) {
+            $likedMediaIds = Redis::sMembers($cacheKey);
+
+            Cache::store('octane')->put($cacheKey, self::implode(',', $likedMediaIds), 300);
+        }
+    }
+
+    /**
+     * @param  string  $mediaId
+     * @param  string  $userId
+     * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public static function checkMediaIsLikedByUser(string $mediaId, string $userId): bool
+    {
+        $cacheKey = self::getCollection().':creator:'.$userId;
+        $likedMedias = Cache::store('octane')->get($cacheKey, false);
+        return ($likedMedias !== false) ? in_array($mediaId, explode(',', $likedMedias)) :
+            Redis::sismember($cacheKey, $mediaId);
     }
 }

@@ -436,6 +436,7 @@ class Media extends BaseModel
 
     /**
      * Get the user's full name.
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getIsLikedAttribute(): bool
     {
@@ -443,14 +444,15 @@ class Media extends BaseModel
             return false;
         }
 
-        $mediaLikeCacheKey = (new MediaLike())->getCollection().':creator:'.auth()->user()->_id;
-        MediaLike::cacheByUserId(auth()->user()->_id);
+        $userId = auth()->user()->_id;
+        MediaLike::cacheByUserId($userId);
 
-        return Redis::sismember($mediaLikeCacheKey, (string) $this->_id);
+        return MediaLike::checkMediaIsLikedByUser($this->_id, $userId);
     }
 
     /**
      * Get the user's full name.
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getIsVisitedAttribute(): bool
     {
@@ -458,10 +460,10 @@ class Media extends BaseModel
             return false;
         }
 
-        $mediaVisitCacheKey = (new MediaVisit())->getCollection().':creator:'.auth()->user()->_id;
-        MediaVisit::cacheByUserId(auth()->user()->_id);
+        $userId = auth()->user()->_id;
+        MediaVisit::cacheByUserId($userId);
 
-        return Redis::sismember($mediaVisitCacheKey, (string) $this->_id);
+        return MediaVisit::checkMediaIsVisitedByUser((string) $this->_id, (string) $userId);
     }
 
     /**

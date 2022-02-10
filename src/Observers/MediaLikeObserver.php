@@ -5,6 +5,7 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
@@ -72,6 +73,7 @@ class MediaLikeObserver extends BaseModelObserver
 
         // Reset the Redis cache
         $cacheKey = (new MediaLike())->getCollection().':creator:'.$model->creator['_id'];
+        Cache::store('octane')->forget($cacheKey);
         Redis::del($cacheKey);
         MediaLike::cacheByUserId($model->creator['_id']);
     }

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
@@ -121,8 +122,30 @@ class MediaVisit extends BaseModel
             $visitedMediaIds = Arr::flatten($visitedMediaIds);
             $visitedMediaIds = array_map('strval', $visitedMediaIds);
 
+            Cache::store('octane')->put($cacheKey, self::implode(',', $visitedMediaIds), 300);
+
             Redis::sAdd($cacheKey, ...$visitedMediaIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
         }
+
+        if (Cache::store('octane')->get($cacheKey, false) === false) {
+            $visitedMediaIds = Redis::sMembers($cacheKey);
+
+            Cache::store('octane')->put($cacheKey, self::implode(',', $visitedMediaIds), 300);
+        }
+    }
+
+    /**
+     * @param  string  $mediaId
+     * @param  string  $userId
+     * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public static function checkMediaIsVisitedByUser(string $mediaId, string $userId): bool
+    {
+        $cacheKey = self::getCollection().':creator:'.$userId;
+        $visitedMediaIds = Cache::store('octane')->get($cacheKey, false);
+        return ($visitedMediaIds !== false) ? in_array($mediaId, explode(',', $visitedMediaIds)) :
+            Redis::sismember($cacheKey, $mediaId);
     }
 }
