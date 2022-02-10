@@ -103,7 +103,6 @@ class MediaService
      */
     public function getPublicFeeds(): LengthAwarePaginator
     {
-        ServerTiming::start('MediaService::getPublicFeeds');
         $query = Media::query();
         $query->public()->confirmed()->sort();
 
@@ -142,8 +141,6 @@ class MediaService
         }
         Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
-        ServerTiming::stop('MediaService::getPublicFeeds');
-
         return $data;
     }
 
@@ -166,7 +163,6 @@ class MediaService
      */
     public function getFollowingFeed(): LengthAwarePaginator
     {
-        ServerTiming::start('MediaService::getFollowingFeed');
         $query = Media::query();
 
         if (! auth()->guest()) {
@@ -175,8 +171,6 @@ class MediaService
                 ->notBlockedFor(auth()->user()->_id)
                 ->recentFirst();
         }
-
-        ServerTiming::stop('MediaService::getByUser');
 
         return $query->paginate(5)->withQueryString();
     }
@@ -188,7 +182,6 @@ class MediaService
      */
     public function getByUser(User $user): LengthAwarePaginator
     {
-        ServerTiming::start('MediaService::getByUser');
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();
 
@@ -210,8 +203,6 @@ class MediaService
                 $query->availableForFollower();
             }
         }
-
-        ServerTiming::stop('MediaService::getByUser');
 
         return $query->paginate(15);
     }

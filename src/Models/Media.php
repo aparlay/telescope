@@ -479,11 +479,10 @@ class Media extends BaseModel
 
         $tipClass = '\Aparlay\Payment\Models\Tip';
         if (class_exists($tipClass)) {
-            $mediaTipCacheKey = (new $tipClass())->getCollection().':creator:'.auth()->user()->_id;
+            $userId = auth()->user()->_id;
 
-            $tipClass::cacheByCreatorId(auth()->user()->_id);
-            $totalSentTips = Redis::hGet($mediaTipCacheKey, (string) $this->_id);
-            $totalSentTips = $totalSentTips !== false ? (int) $totalSentTips : 0;
+            $tipClass::cacheByCreatorId($userId);
+            $totalSentTips = $tipClass::totalSentTipsForMediaByUser((string) $this->_id, (string) $userId);
         }
 
         return $totalSentTips;
