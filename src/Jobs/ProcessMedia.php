@@ -174,7 +174,7 @@ class ProcessMedia implements ShouldQueue
         if ($status->code !== 0) {
             $media->addToSet('processing_log', 'Error: Cannot check video duration');
             $media->save($withoutTouch);
-            Log::error(__CLASS__.PHP_EOL.'Cannot check video duration');
+            Log::error(__CLASS__.PHP_EOL.'Cannot check video duration but keep moving');
         //throw new Exception(__CLASS__.PHP_EOL.'Cannot check video duration');
         } else {
             $media->length = (float) $response->GetSec();
@@ -196,7 +196,7 @@ class ProcessMedia implements ShouldQueue
         }
 
         // normalize audio
-        if ($volume === 'OK') {
+        if (isset($volume) && $volume === 'OK') {
             $toRemoveFiles[] = $src = config('app.media.path').'2-normalized-'.$this->file;
             $optimizeReq->setDes($src);
             [$response, $status] = $client->NormalizeAudio($optimizeReq)->wait();
