@@ -34,7 +34,6 @@ class MediaFeedsCollection extends ResourceCollection
             'next' => ['href' => str_replace('http://', 'https://', $this->resource->url($this->resource->onFirstPage()))], // because of the caching and removing visited videos in feed next page is always the first page
         ];
 
-
         ServerTiming::start('MediaFeedsCollection::generateItems');
         $items = $this->resource->items();
         ServerTiming::stop('MediaFeedsCollection::generateItems');

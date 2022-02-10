@@ -47,6 +47,7 @@ class MediaCollection extends ResourceCollection
         ServerTiming::start('MediaCollection::generateItems');
         $items = $this->resource->items();
         ServerTiming::stop('MediaCollection::generateItems');
+
         return [
             'items' => $items,
             '_links' => $links,
