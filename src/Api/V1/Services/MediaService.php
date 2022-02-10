@@ -143,6 +143,7 @@ class MediaService
         Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
         ServerTiming::stop('MediaService::getPublicFeeds');
+
         return $data;
     }
 
@@ -176,6 +177,7 @@ class MediaService
         }
 
         ServerTiming::stop('MediaService::getByUser');
+
         return $query->paginate(5)->withQueryString();
     }
 
@@ -210,6 +212,7 @@ class MediaService
         }
 
         ServerTiming::stop('MediaService::getByUser');
+
         return $query->paginate(15);
     }
 }
