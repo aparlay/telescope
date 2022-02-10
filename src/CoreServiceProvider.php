@@ -27,6 +27,7 @@ use Aparlay\Core\Commands\CleanupCommand;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\RoleCommand;
 use Aparlay\Core\Commands\UserScoreCommand;
+use Aparlay\Core\Commands\UserScoreDailyCommand;
 use Aparlay\Core\Commands\VideoReprocessCommand;
 use Aparlay\Core\Commands\VideoScoreCommand;
 use Aparlay\Core\Commands\VideoScoreDailyCommand;
@@ -93,6 +94,7 @@ class CoreServiceProvider extends ServiceProvider
                 VideoScoreHourlyCommand::class,
                 VideoUpdateInfoCommand::class,
                 UserScoreCommand::class,
+                UserScoreDailyCommand::class,
                 WsCommand::class,
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,
