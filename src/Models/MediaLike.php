@@ -128,7 +128,6 @@ class MediaLike extends BaseModel
         $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
 
-
         if ($refresh) {
             Redis::del($cacheKey);
             Cache::store('octane')->forget($cacheKey);
