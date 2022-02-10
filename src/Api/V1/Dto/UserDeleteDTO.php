@@ -13,7 +13,7 @@ class UserDeleteDTO extends DataTransferObject
     {
         return new self(
             [
-                'reason' => (string)$request->input('reason', ''),
+                'reason' => (string) $request->input('reason', ''),
             ]
         );
     }
