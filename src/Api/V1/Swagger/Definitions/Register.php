@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\definitions;
 
-
 /**
- *
  * @OA\Schema(type="object")
  */
 class Register
