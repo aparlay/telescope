@@ -103,7 +103,8 @@ class MediaVisit extends BaseModel
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  ObjectId|string  $userId
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function cacheByUserId(ObjectId | string $userId): void
     {
@@ -143,7 +144,7 @@ class MediaVisit extends BaseModel
      */
     public static function checkMediaIsVisitedByUser(string $mediaId, string $userId): bool
     {
-        $cacheKey = self::getCollection().':creator:'.$userId;
+        $cacheKey = (new self())->getCollection().':creator:'.$userId;
         $visitedMediaIds = Cache::store('octane')->get($cacheKey, false);
         return ($visitedMediaIds !== false) ? in_array($mediaId, explode(',', $visitedMediaIds)) :
             Redis::sismember($cacheKey, $mediaId);

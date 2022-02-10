@@ -125,7 +125,7 @@ class MediaLike extends BaseModel
     public static function cacheByUserId(ObjectId | string $userId): void
     {
         $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
-        $cacheKey = self::getCollection().':creator:'.$userId;
+        $cacheKey = (new self())->getCollection().':creator:'.$userId;
 
         if (! Redis::exists($cacheKey)) {
             $likedMediaIds = self::project(['media_id' => true, '_id' => false])
@@ -158,7 +158,7 @@ class MediaLike extends BaseModel
      */
     public static function checkMediaIsLikedByUser(string $mediaId, string $userId): bool
     {
-        $cacheKey = self::getCollection().':creator:'.$userId;
+        $cacheKey = (new self())->getCollection().':creator:'.$userId;
         $likedMedias = Cache::store('octane')->get($cacheKey, false);
         return ($likedMedias !== false) ? in_array($mediaId, explode(',', $likedMedias)) :
             Redis::sismember($cacheKey, $mediaId);
