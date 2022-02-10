@@ -421,6 +421,7 @@ class Media extends BaseModel
 
     /**
      * Get the user's full name.
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getIsFollowedAttribute(): bool
     {
@@ -428,10 +429,10 @@ class Media extends BaseModel
             return false;
         }
 
-        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->_id;
-        Follow::cacheByUserId(auth()->user()->_id);
+        $userId = auth()->user()->_id;
+        Follow::cacheByUserId($userId);
 
-        return Redis::sismember($cacheKey, (string) $this->creator['_id']);
+        return Follow::checkCreatorIsFollowedByUser((string) $this->creator['_id'], (string) $userId);
     }
 
     /**
@@ -447,7 +448,7 @@ class Media extends BaseModel
         $userId = auth()->user()->_id;
         MediaLike::cacheByUserId($userId);
 
-        return MediaLike::checkMediaIsLikedByUser($this->_id, $userId);
+        return MediaLike::checkMediaIsLikedByUser((string) $this->_id, (string) $userId);
     }
 
     /**

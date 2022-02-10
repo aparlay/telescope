@@ -119,8 +119,6 @@ class MediaLikeObserver extends BaseModelObserver
         $user->save();
 
         // Reset the Redis cache
-        $cacheKey = (new MediaLike())->getCollection().':creator:'.$model->creator['_id'];
-        Redis::del($cacheKey);
-        MediaLike::cacheByUserId($model->creator['_id']);
+        MediaLike::cacheByUserId($model->creator['_id'], true);
     }
 }

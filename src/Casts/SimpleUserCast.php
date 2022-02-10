@@ -39,10 +39,9 @@ class SimpleUserCast implements CastsAttributes
             $isFollowed = false;
             if (! auth()->guest()) {
                 $loggedInUserId = auth()->user()->_id;
-                $cacheKey = (new Follow())->getCollection().':creator:'.$loggedInUserId;
                 Follow::cacheByUserId($loggedInUserId);
 
-                $isFollowed = Redis::sismember($cacheKey, $userArray['_id']);
+                $isFollowed = Follow::checkCreatorIsFollowedByUser((string) $userArray['_id'], (string) $loggedInUserId);
             }
 
             $userArray['is_followed'] = $isFollowed;

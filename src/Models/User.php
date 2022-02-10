@@ -358,10 +358,10 @@ class User extends Authenticatable implements JWTSubject
             return false;
         }
 
-        $cacheKey = (new Follow())->getCollection().':creator:'.auth()->user()->_id;
+        $userId = auth()->user()->_id;
         Follow::cacheByUserId(auth()->user()->_id);
 
-        return Redis::sismember($cacheKey, (string) $this->_id);
+        return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
     }
 
     /**

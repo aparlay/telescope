@@ -104,12 +104,18 @@ class MediaVisit extends BaseModel
 
     /**
      * @param  ObjectId|string  $userId
+     * @param  bool  $refresh
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public static function cacheByUserId(ObjectId | string $userId): void
+    public static function cacheByUserId(ObjectId | string $userId, bool $refresh = false): void
     {
         $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
+
+        if ($refresh) {
+            Redis::del($cacheKey);
+            Cache::store('octane')->forget($cacheKey);
+        }
 
         if (! Redis::exists($cacheKey)) {
             $visitedMediaIds = self::project(['media_ids' => true, '_id' => false])

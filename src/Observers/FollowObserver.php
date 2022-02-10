@@ -71,9 +71,7 @@ class FollowObserver extends BaseModelObserver
         $model->creatorObj->save();
 
         // Reset the Redis cache
-        $cacheKey = (new Follow())->getCollection().':creator:'.$model->creator['_id'];
-        Redis::del($cacheKey);
-        Follow::cacheByUserId($model->creator['_id']);
+        Follow::cacheByUserId($model->creator['_id'], true);
     }
 
     /**
@@ -121,8 +119,6 @@ class FollowObserver extends BaseModelObserver
         $model->creatorObj->save();
 
         // Reset the Redis cache
-        $cacheKey = (new Follow())->getCollection().':creator:'.$model->creator['_id'];
-        Redis::del($cacheKey);
-        Follow::cacheByUserId($model->creator['_id']);
+        Follow::cacheByUserId($model->creator['_id'], true);
     }
 }

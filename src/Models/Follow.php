@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
@@ -103,12 +104,19 @@ class Follow extends BaseModel
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  ObjectId|string  $userId
+     * @param  bool  $refresh
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public static function cacheByUserId(ObjectId | string $userId): void
+    public static function cacheByUserId(ObjectId | string $userId, bool $refresh = false): void
     {
         $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
+
+        if ($refresh) {
+            Redis::del($cacheKey);
+            Cache::store('octane')->forget($cacheKey);
+        }
 
         if (! Redis::exists($cacheKey)) {
             $followerIds = self::project(['user._id' => true, '_id' => false])
@@ -122,9 +130,32 @@ class Follow extends BaseModel
 
             $followerIds = array_map('strval', $followerIds);
 
+            Cache::store('octane')->put($cacheKey, implode(',', $followerIds), 300);
+
             Redis::sAdd($cacheKey, ...$followerIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
         }
+
+        if (Cache::store('octane')->get($cacheKey, false) === false) {
+            $followerIds = Redis::sMembers($cacheKey);
+
+            Cache::store('octane')->put($cacheKey, implode(',', $followerIds), 300);
+        }
+    }
+
+    /**
+     * @param  string  $creatorId
+     * @param  string  $userId
+     * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public static function checkCreatorIsFollowedByUser(string $creatorId, string $userId): bool
+    {
+        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+        $followerIds = Cache::store('octane')->get($cacheKey, false);
+
+        return ($followerIds !== false) ? in_array($creatorId, explode(',', $followerIds)) :
+            Redis::sismember($cacheKey, (string) $creatorId);
     }
 
     /**
