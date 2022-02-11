@@ -84,7 +84,7 @@ class RegisterRequest extends FormRequest
         $this->username = uniqid('', false);
 
         /* Set gender by default value */
-        $this->gender = $this->gender !== null ? (int) $this->gender : UserGender::MALE->value;
+        $this->gender = (int) $this->gender ?? UserGender::FEMALE->value;
 
         /* Set avatar based on Gender */
         if (empty($this->avatar)) {
