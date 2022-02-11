@@ -66,7 +66,7 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function invalideAvatarExtension()
+    public function invalidAvatarExtension()
     {
         $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $this->actingAs($user)
@@ -219,7 +219,7 @@ class UserProfileTest extends ApiTestCase
 
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('delete', '/v1/me', [])
+            ->json('POST', '/v1/me/delete', [])
             ->assertStatus(204);
 
         $userDetails = User::where('_id', new ObjectId($user->_id))->first();

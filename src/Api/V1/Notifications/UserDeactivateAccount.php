@@ -45,7 +45,7 @@ class UserDeactivateAccount extends Notification implements ShouldQueue
         $message .= PHP_EOL.'_*Reason:*_ '.$notifiable->deactivation_reason;
 
         return (new SlackMessage())
-            ->to('#'.config('app.slack_account_deactivation_report'))
+            ->to(config('app.slack_account_deactivation_report'))
             ->content($message)
             ->success();
     }

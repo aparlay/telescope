@@ -71,7 +71,7 @@ class Media extends MediaBase
 
         return (new SlackMessage())
             ->from('Reporter', ':radioactive_sign:')
-            ->to('#alua-report')
+            ->to(config('app.slack_report'))
             ->content($message);
     }
 }

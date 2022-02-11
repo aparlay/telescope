@@ -44,7 +44,7 @@ class UserDeleteMedia extends Notification implements ShouldQueue
         $message = "User {$notifiable->slack_admin_url} was removed media";
 
         return (new SlackMessage())
-            ->to('#'.config('app.slack_report'))
+            ->to(config('app.slack_report'))
             ->content($message)
             ->success();
     }

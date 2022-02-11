@@ -9,6 +9,7 @@ use Aparlay\Core\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
+use Maklad\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -35,7 +36,7 @@ class UserSeeder extends Seeder
         $user->status = UserStatus::ACTIVE->value;
         $user->email = 'user@waptap.com';
         $user->save();
-
+        $role = Role::firstOrCreate(['name' => 'super-administrator', 'guard_name' => 'admin']);
         $user->assignRole('super-administrator');
     }
 }

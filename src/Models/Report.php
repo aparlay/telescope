@@ -122,8 +122,8 @@ class Report extends BaseModel
     public function getSlackSubjectAdminUrlAttribute(): string
     {
         return match ($this->type) {
-            ReportType::USER->value => $this->userObj->slack_admin_url,
-            ReportType::MEDIA->value => $this->mediaObj->slack_admin_url,
+            ReportType::USER->value => $this->userObj->slack_admin_url ?? '',
+            ReportType::MEDIA->value => $this->mediaObj->slack_admin_url ?? '',
             default => '',
         };
     }

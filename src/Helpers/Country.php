@@ -9,6 +9,7 @@ class Country
     public static function getAlpha2AndNames()
     {
         if (! Redis::exists('countries')) {
+            $countries = [];
             foreach (\Aparlay\Core\Models\Country::get() as $country) {
                 $countries[$country->alpha2] = $country->name;
             }

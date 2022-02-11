@@ -17,7 +17,7 @@ class UserTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('DELETE', '/v1/me', []);
+            ->json('POST', '/v1/me/delete', ['reason' => 'just to test me.']);
 
         $r->assertStatus(204);
 
