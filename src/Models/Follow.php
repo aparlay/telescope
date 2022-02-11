@@ -119,7 +119,7 @@ class Follow extends BaseModel
         }
 
         if (Cache::store('octane')->get($cacheKey, false) !== false) {
-            return ; // cache already exists
+            return; // cache already exists
         }
 
         if (! Redis::exists($cacheKey)) {
