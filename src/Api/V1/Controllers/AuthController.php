@@ -210,7 +210,8 @@ class AuthController extends Controller
                         'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
                     ];
                 }
-                return $this->response($response, 'OTP has been sent.',  Response::HTTP_I_AM_A_TEAPOT);
+
+                return $this->response($response, 'OTP has been sent.', Response::HTTP_I_AM_A_TEAPOT);
             }
         }
 
