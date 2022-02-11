@@ -69,7 +69,7 @@ class RegisterRequest extends FormRequest
             $this->phone_number = $this->username;
         }
 
-        if (! empty($this->referral_id) && ! ($this->referral_id instanceof ObjectId)) {
+        if (!empty($this->referral_id) && !($this->referral_id instanceof ObjectId)) {
             if (($user = User::user($this->referral_id)->first()) !== null) {
                 $this->referral_id = $user->_id;
             } elseif (($user = User::username($this->referral_id)->first()) !== null) {
@@ -84,7 +84,7 @@ class RegisterRequest extends FormRequest
         $this->username = uniqid('', false);
 
         /* Set gender by default value */
-        $this->gender = (int) $this->gender ?? UserGender::FEMALE->value;
+        $this->gender = array_search($this->gender, User::getGenders()) ?: UserGender::MALE->value;
 
         /* Set avatar based on Gender */
         if (empty($this->avatar)) {
@@ -93,7 +93,7 @@ class RegisterRequest extends FormRequest
             $filename = match ($this->gender) {
                 UserGender::FEMALE->value => $femaleFilename,
                 UserGender::MALE->value => $maleFilename,
-            default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
+                default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
             };
 
             $this->avatar = Cdn::avatar($filename);

@@ -4,7 +4,6 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Services\OnlineUserService;
 use Aparlay\Core\Database\Factories\UserFactory;
-use Aparlay\Core\Helpers\Country as CountryHelper;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserFeature;
 use Aparlay\Core\Models\Enums\UserGender;
