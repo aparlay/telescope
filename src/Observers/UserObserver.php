@@ -35,7 +35,7 @@ class UserObserver extends BaseModelObserver
         if (empty($model->status)) {
             $model->status = UserStatus::PENDING->value;
         }
-        if (empty($model->gender)) {
+        if (!in_array($model->gender, array_keys(User::getGenders()), true)) {
             $model->gender = UserGender::MALE->value;
         }
         if (empty($model->interested_in)) {
