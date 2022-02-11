@@ -25,7 +25,7 @@ class JobFailed extends Notification
         $this->job = $job;
         $this->tried = $tried;
         $this->exception = $exception;
-        $this->channel = $channel ?? '#'.config('app.slack_report');
+        $this->channel = $channel ?? '#'.config('app.slack_job_error');
     }
 
     /**
