@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use JsonSerializable;
 
 abstract class AbstractResourceCollection extends ResourceCollection
 {
@@ -14,20 +16,20 @@ abstract class AbstractResourceCollection extends ResourceCollection
     private function preparePagination()
     {
         $links = [
-            'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
-            'last' => ['href' => $this->resource->url($this->resource->lastPage())],
-            'self' => ['href' => $this->resource->url($this->resource->currentPage())],
+            'first' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->onFirstPage()))],
+            'last' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))],
+            'self' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))],
         ];
 
         if ($this->resource->previousPageUrl()) {
             $links['prev'] = [
-                'href' =>  $this->resource->previousPageUrl(),
+                'href' =>  $this->normalizeUrl($this->resource->previousPageUrl()),
             ];
         }
 
         if ($this->resource->nextPageUrl()) {
             $links['next'] = [
-                'href' =>  $this->resource->nextPageUrl(),
+                'href' =>  $this->normalizeUrl($this->resource->nextPageUrl()),
             ];
         }
 
@@ -43,5 +45,15 @@ abstract class AbstractResourceCollection extends ResourceCollection
         ];
 
         return $return;
+    }
+
+
+
+    public function normalizeUrl($url): array|string
+    {
+        $url = str_replace('http://', 'https://', $url);
+        $url = str_replace(['api1', 'api2', 'api3', 'api4', 'api5'], 'api', $url);
+
+        return $url;
     }
 }

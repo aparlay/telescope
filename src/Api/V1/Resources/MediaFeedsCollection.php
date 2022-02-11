@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use JsonSerializable;
 
-class MediaFeedsCollection extends ResourceCollection
+class MediaFeedsCollection extends AbstractResourceCollection
 {
     /**
      * The resource that this resource collects.
@@ -26,11 +26,11 @@ class MediaFeedsCollection extends ResourceCollection
     public function toArray($request): array | Arrayable | JsonSerializable
     {
         $links = [
-            'prev' => ['href' => str_replace('http://', 'https://', $this->resource->url($this->resource->lastPage() - 1))],
+            'prev' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage() - 1))],
             'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
             'last' => ['href' => $this->resource->url($this->resource->lastPage())],
             'self' => ['href' => $this->resource->url($this->resource->currentPage())],
-            'next' => ['href' => str_replace('http://', 'https://', $this->resource->url($this->resource->onFirstPage()))], // because of the caching and removing visited videos in feed next page is always the first page
+            'next' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->onFirstPage()))], // because of the caching and removing visited videos in feed next page is always the first page
         ];
 
         return [

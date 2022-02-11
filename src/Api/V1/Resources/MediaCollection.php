@@ -4,10 +4,9 @@ namespace Aparlay\Core\Api\V1\Resources;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use JsonSerializable;
 
-class MediaCollection extends ResourceCollection
+class MediaCollection extends AbstractResourceCollection
 {
     /**
      * The resource that this resource collects.
@@ -33,13 +32,13 @@ class MediaCollection extends ResourceCollection
 
         if ($this->resource->previousPageUrl()) {
             $links['prev'] = [
-                'href' => str_replace('http://', 'https://', $this->resource->previousPageUrl()),
+                'href' => $this->normalizeUrl($this->resource->previousPageUrl()),
             ];
         }
 
         if ($this->resource->nextPageUrl()) {
             $links['next'] = [
-                'href' => str_replace('http://', 'https://', $this->resource->nextPageUrl()),
+                'href' => $this->normalizeUrl($this->resource->nextPageUrl()),
             ];
         }
 
