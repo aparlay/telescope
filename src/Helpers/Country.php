@@ -50,14 +50,8 @@ class Country
     private static function getByAlpha2(string $alpha2): array
     {
         $alpha2 = \Str::lower($alpha2);
-        $key = 'countries:'.$alpha2;
-        $country = Cache::store('octane')->get($key, false);
-        if ($country === false) {
-            self::load();
-            $country = Cache::store('octane')->get($key, false);
-        }
 
-        return json_decode($country);
+        return self::buildCountryFromCacheBy($alpha2);
     }
 
     /**
@@ -67,28 +61,44 @@ class Country
     private static function load()
     {
         foreach (\Aparlay\Core\Models\Country::get() as $country) {
-            Cache::store('octane')->put('countries:'.$country->alpha2, json_encode([
-                'alpha2' => $country->alpha2,
-                'alpha3' => $country->alpha3,
-                'name' => $country->name,
-                'flags:16' => $country->flags['16'],
-                'flags:24' => $country->flags['24'],
-                'flags:32' => $country->flags['32'],
-                'flags:48' => $country->flags['48'],
-                'flags:64' => $country->flags['64'],
-                'flags:128' => $country->flags['128'],
-            ]), 300);
-            Cache::store('octane')->put('countries:'.$country->alpha3, json_encode([
-                'alpha2' => $country->alpha2,
-                'alpha3' => $country->alpha3,
-                'name' => $country->name,
-                'flags:16' => $country->flags['16'],
-                'flags:24' => $country->flags['24'],
-                'flags:32' => $country->flags['32'],
-                'flags:48' => $country->flags['48'],
-                'flags:64' => $country->flags['64'],
-                'flags:128' => $country->flags['128'],
-            ]), 300);
+            Cache::store('octane')->put('countries:'.$country->alpha2.':alpha2', $country->alpha2, 300);
+            Cache::store('octane')->put('countries:'.$country->alpha2.':alpha3', $country->alpha3, 300);
+            Cache::store('octane')->put('countries:'.$country->alpha2.':name', $country->name, 300);
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:16', $country->flags['16'], 300);
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:24', $country->flags['24'], 300);
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:32', $country->flags['32'], 300);
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:48', $country->flags['48'], 300);
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:64', $country->flags['64'], 300);
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:128', $country->flags['128'], 300);
+
+            Cache::store('octane')->put('countries:'.$country->alpha3.':alpha2', $country->alpha2, 300);
+            Cache::store('octane')->put('countries:'.$country->alpha3.':alpha3', $country->alpha3, 300);
+            Cache::store('octane')->put('countries:'.$country->alpha3.':name', $country->name, 300);
+            Cache::store('octane')->put('countries:'.$country->alpha3.':flags:16', $country->flags['16'], 300);
+            Cache::store('octane')->put('countries:'.$country->alpha3.':flags:24', $country->flags['24'], 300);
+            Cache::store('octane')->put('countries:'.$country->alpha3.':flags:32', $country->flags['32'], 300);
+            Cache::store('octane')->put('countries:'.$country->alpha3.':flags:48', $country->flags['48'], 300);
+            Cache::store('octane')->put('countries:'.$country->alpha3.':flags:64', $country->flags['64'], 300);
+            Cache::store('octane')->put('countries:'.$country->alpha3.':flags:128', $country->flags['128'], 300);
         }
+    }
+
+    public static function buildCountryFromCacheBy($alphaCode): array
+    {
+        if (Cache::store('octane')->get('countries:'.$alphaCode.':alpha2', false) === false) {
+            self::load();
+        }
+
+        $country['alpha2'] = Cache::store('octane')->get('countries:'.$alphaCode.':alpha2', false);
+        $country['alpha3'] = Cache::store('octane')->get('countries:'.$alphaCode.':alpha3', false);
+        $country['name'] = Cache::store('octane')->get('countries:'.$alphaCode.':name', false);
+        $country['flags:16'] = Cache::store('octane')->get('countries:'.$alphaCode.':flags:16', false);
+        $country['flags:24'] = Cache::store('octane')->get('countries:'.$alphaCode.':flags:24', false);
+        $country['flags:32'] = Cache::store('octane')->get('countries:'.$alphaCode.':flags:32', false);
+        $country['flags:48'] = Cache::store('octane')->get('countries:'.$alphaCode.':flags:48', false);
+        $country['flags:64'] = Cache::store('octane')->get('countries:'.$alphaCode.':flags:64', false);
+        $country['flags:128'] = Cache::store('octane')->get('countries:'.$alphaCode.':flags:128', false);
+
+        return $country;
     }
 }
