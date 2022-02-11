@@ -63,8 +63,9 @@ class UserController extends Controller
         $user = auth()->user();
 
         if ($this->userService->deleteAccount($user, UserDeleteDTO::fromRequest($request))) {
-            if (auth()->user()->getRememberToken())
-            auth()->logout();
+            if (auth()->user()->getRememberToken()) {
+                auth()->logout();
+            }
             $cookie1 = Cookie::forget('__Secure_token');
             $cookie2 = Cookie::forget('__Secure_refresh_token');
             $cookie3 = Cookie::forget('__Secure_username');
