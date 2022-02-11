@@ -133,6 +133,10 @@ class MediaLike extends BaseModel
             Cache::store('octane')->forget($cacheKey);
         }
 
+        if (Cache::store('octane')->get($cacheKey, false) !== false) {
+            return ; // cache already exists
+        }
+
         if (! Redis::exists($cacheKey)) {
             $likedMediaIds = self::project(['media_id' => true, '_id' => false])
                 ->creator($userId)

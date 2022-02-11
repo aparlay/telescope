@@ -2,22 +2,23 @@
 
 namespace Aparlay\Core\Helpers;
 
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cache;
 
 class Country
 {
     public static function getAlpha2AndNames()
     {
-        if (! Redis::exists('countries')) {
+        if (($countries = Cache::store('octane')->get('countries', false)) === false) {
             $countries = [];
             foreach (\Aparlay\Core\Models\Country::get() as $country) {
                 $countries[$country->alpha2] = $country->name;
             }
 
-            Redis::hMSet('countries', $countries);
+            $countries = json_encode($countries);
+            Cache::store('octane')->put('countries', $countries, 300);
         }
 
-        return Redis::hGetAll('countries');
+        return json_decode($countries, true);
     }
 
     public static function getFlagByAlpha2($alpha2, $size = '32')
@@ -44,49 +45,50 @@ class Country
     /**
      * @param  string  $alpha2
      * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     private static function getByAlpha2(string $alpha2): array
     {
         $alpha2 = \Str::lower($alpha2);
         $key = 'countries:'.$alpha2;
-
-        if (! Redis::exists($key)) {
+        $country = Cache::store('octane')->get($key, false);
+        if ($country === false) {
             self::load();
+            $country = Cache::store('octane')->get($key, false);
         }
 
-        return Redis::hGetAll($key);
+        return json_decode($country);
     }
 
     /**
      * @return void
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     private static function load()
     {
-        Redis::pipeline(function ($pipe) {
-            foreach (\Aparlay\Core\Models\Country::get() as $country) {
-                $pipe->hMSet('countries:'.$country->alpha2, [
-                    'alpha2' => $country->alpha2,
-                    'alpha3' => $country->alpha3,
-                    'name' => $country->name,
-                    'flags:16' => $country->flags['16'],
-                    'flags:24' => $country->flags['24'],
-                    'flags:32' => $country->flags['32'],
-                    'flags:48' => $country->flags['48'],
-                    'flags:64' => $country->flags['64'],
-                    'flags:128' => $country->flags['128'],
-                ]);
-                $pipe->hMSet('countries:'.$country->alpha3, [
-                    'alpha2' => $country->alpha2,
-                    'alpha3' => $country->alpha3,
-                    'name' => $country->name,
-                    'flags:16' => $country->flags['16'],
-                    'flags:24' => $country->flags['24'],
-                    'flags:32' => $country->flags['32'],
-                    'flags:48' => $country->flags['48'],
-                    'flags:64' => $country->flags['64'],
-                    'flags:128' => $country->flags['128'],
-                ]);
-            }
-        });
+        foreach (\Aparlay\Core\Models\Country::get() as $country) {
+            Cache::store('octane')->put('countries:'.$country->alpha2, json_encode([
+                'alpha2' => $country->alpha2,
+                'alpha3' => $country->alpha3,
+                'name' => $country->name,
+                'flags:16' => $country->flags['16'],
+                'flags:24' => $country->flags['24'],
+                'flags:32' => $country->flags['32'],
+                'flags:48' => $country->flags['48'],
+                'flags:64' => $country->flags['64'],
+                'flags:128' => $country->flags['128'],
+            ]), 300);
+            Cache::store('octane')->put('countries:'.$country->alpha3, json_encode([
+                'alpha2' => $country->alpha2,
+                'alpha3' => $country->alpha3,
+                'name' => $country->name,
+                'flags:16' => $country->flags['16'],
+                'flags:24' => $country->flags['24'],
+                'flags:32' => $country->flags['32'],
+                'flags:48' => $country->flags['48'],
+                'flags:64' => $country->flags['64'],
+                'flags:128' => $country->flags['128'],
+            ]), 300);
+        }
     }
 }
