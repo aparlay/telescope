@@ -78,6 +78,10 @@ class SimpleUserCast implements CastsAttributes
         $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
         $cacheKey = 'SimpleUserCast:'.$userId;
 
+        if (($userArray = Cache::store('octane')->get($cacheKey, false)) !== false) {
+            return json_decode($userArray, true); // cache already exists
+        }
+
         if (empty($userArray = Cache::store('redis')->get($cacheKey, []))) {
             $user = User::user($userId)->first();
             $userArray = [
@@ -86,7 +90,12 @@ class SimpleUserCast implements CastsAttributes
                 'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
             ];
 
+            Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);
             Cache::store('redis')->set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
+        }
+
+        if (Cache::store('octane')->get($cacheKey, false) === false) {
+            Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);
         }
 
         return $userArray;

@@ -36,7 +36,6 @@ use Aparlay\Core\Commands\VideoUpdateInfoCommand;
 use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Helpers\ConfigHelper;
 use Aparlay\Core\Helpers\IP;
-use App\Providers\TelescopeServiceProvider;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -58,8 +57,6 @@ class CoreServiceProvider extends ServiceProvider
     {
         if ($this->app->isLocal()) {
             $this->app->register(IdeHelperServiceProvider::class);
-            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
-            $this->app->register(TelescopeServiceProvider::class);
         }
         $this->app->register(AuthServiceProvider::class);
         $this->app->register(AdminServiceProvider::class);

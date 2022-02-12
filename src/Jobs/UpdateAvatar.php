@@ -16,6 +16,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
@@ -85,7 +86,8 @@ class UpdateAvatar implements ShouldQueue
             'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
         ];
 
-        Cache::store('redis')->set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
+        Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);
+        Redis::set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
     }
 
     public function failed(Throwable $exception)

@@ -2,8 +2,7 @@
 
 namespace Aparlay\Core\Values;
 
-use Aparlay\Core\Casts\SimpleUserCast;
-use Illuminate\Contracts\Database\Eloquent\Castable;
+use OpenApi\Annotations as OA;
 
 /**
  * Class SimpleUser.

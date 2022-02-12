@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\definitions;
 
+use OpenApi\Annotations as OA;
+
 /**
  * @OA\Schema(type="object", title="ViewLinks", description="View Links response")
  */
