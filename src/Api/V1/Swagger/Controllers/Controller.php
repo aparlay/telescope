@@ -30,12 +30,6 @@ use OpenApi\Annotations as OA;
  *     description="SwaggerHUB API Mocking",
  *     url="https://api.waptap.dev"
  * )
- * @OA\SecurityScheme(
- *     securityScheme="bearerAuth",
- *     type="http",
- *     scheme="bearer",
- *     bearerFormat="JWT",
- * )
  *
  * @OA\Schema(
  *      schema="201",
