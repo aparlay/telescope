@@ -10,5 +10,4 @@ use JsonSerializable;
 class MediaFeedsCollection extends AbstractResourceCollection
 {
     public $collects = MediaResource::class;
-
 }

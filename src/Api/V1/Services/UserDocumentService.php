@@ -36,7 +36,7 @@ class UserDocumentService
         $this->uploadFileService = $uploadFileService;
     }
 
-    public function index() : LengthAwarePaginator
+    public function index(): LengthAwarePaginator
     {
         return $this->userDocumentRepository->index($this->getUser());
     }

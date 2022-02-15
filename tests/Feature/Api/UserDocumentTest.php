@@ -30,7 +30,7 @@ class UserDocumentTest extends ApiTestCase
         $r->assertJsonStructure([
             'data' => [
                 'items'=>  [
-                    ['_id', 'type', 'status', 'url', 'status_label', 'type_label']
+                    ['_id', 'type', 'status', 'url', 'status_label', 'type_label'],
                 ],
             ],
         ]);
