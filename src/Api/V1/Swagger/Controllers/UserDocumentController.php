@@ -36,7 +36,7 @@ use OpenApi\Annotations as OA;
  *         description="type of sending verification document, it could be 0=card or 1=selfie",
  *         required=true,
  *         @OA\Schema(
- *             type="int"
+ *             type="integer"
  *         )
  *     ),
  *
