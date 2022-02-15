@@ -47,7 +47,6 @@ class UserDocumentController extends Controller
         }
         $userDocument = $this->userDocumentService->fetchById($id);
         $this->authorize('view', $userDocument);
-
         return $this->response(new UserDocumentResource($userDocument), '', Response::HTTP_OK);
     }
 
