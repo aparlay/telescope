@@ -96,8 +96,6 @@ class UserDocumentTest extends ApiTestCase
                     'type' => $documentType,
                 ]);
 
-            $r->dump();
-
             $r->assertJsonStructure([
                 'data' => [
                     '_id', 'type', 'status', 'status_label', 'type_label',
