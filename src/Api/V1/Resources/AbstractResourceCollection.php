@@ -19,9 +19,9 @@ abstract class AbstractResourceCollection extends ResourceCollection
     public function toArray($request): array | Arrayable | JsonSerializable
     {
         $links = [
-            'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
-            'last' => ['href' => $this->resource->url($this->resource->lastPage())],
-            'self' => ['href' => $this->resource->url($this->resource->currentPage())],
+            'first' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->onFirstPage()))],
+            'last' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))],
+            'self' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))],
         ];
 
         if ($this->resource->previousPageUrl()) {
