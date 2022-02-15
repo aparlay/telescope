@@ -9,7 +9,6 @@ use OpenApi\Annotations as OA;
  */
 class MediaLike
 {
-
     /**
      * @OA\Property(property="_id", type="string", example="60237caf5e41025e1e3c80b1")
      */

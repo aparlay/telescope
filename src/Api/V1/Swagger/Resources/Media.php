@@ -148,5 +148,4 @@ class Media
      * @OA\Property(property="_links", ref="#/components/schemas/ViewLinks")
      */
     public $_links;
-
 }
