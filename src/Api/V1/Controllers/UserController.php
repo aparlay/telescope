@@ -68,7 +68,7 @@ class UserController extends Controller
                     auth()->logout();
                 }
             } catch (\Throwable $e) {
-                \Log::error('Unable to logout ' . $e->getMessage());
+                \Log::error('Unable to logout '.$e->getMessage());
             }
 
             $cookie1 = Cookie::forget('__Secure_token');
