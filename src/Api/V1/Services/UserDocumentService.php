@@ -10,6 +10,7 @@ use Aparlay\Core\Jobs\DeleteFileJob;
 use Aparlay\Core\Jobs\UploadFileJob;
 use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\UserDocument;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 
@@ -35,7 +36,7 @@ class UserDocumentService
         $this->uploadFileService = $uploadFileService;
     }
 
-    public function index()
+    public function index() : LengthAwarePaginator
     {
         return $this->userDocumentRepository->index($this->getUser());
     }

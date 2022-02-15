@@ -3,37 +3,40 @@
 namespace Aparlay\Core\Api\V1\Resources;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use JsonSerializable;
 
 abstract class AbstractResourceCollection extends ResourceCollection
 {
+    /**
+     * Transform the resource collection into an array.
+     *
+     * @param  Request  $request
+     *
+     * @return array|Arrayable|JsonSerializable
+     */
     public function toArray($request): array | Arrayable | JsonSerializable
     {
-        return $this->preparePagination();
-    }
-
-    private function preparePagination()
-    {
         $links = [
-            'first' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->onFirstPage()))],
-            'last' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))],
-            'self' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))],
+            'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
+            'last' => ['href' => $this->resource->url($this->resource->lastPage())],
+            'self' => ['href' => $this->resource->url($this->resource->currentPage())],
         ];
 
         if ($this->resource->previousPageUrl()) {
             $links['prev'] = [
-                'href' =>  $this->normalizeUrl($this->resource->previousPageUrl()),
+                'href' => $this->normalizeUrl($this->resource->previousPageUrl()),
             ];
         }
 
         if ($this->resource->nextPageUrl()) {
             $links['next'] = [
-                'href' =>  $this->normalizeUrl($this->resource->nextPageUrl()),
+                'href' => $this->normalizeUrl($this->resource->nextPageUrl()),
             ];
         }
 
-        $return = [
+        return [
             'items' => $this->resource->items(),
             '_links' => $links,
             '_meta' => [
@@ -43,8 +46,6 @@ abstract class AbstractResourceCollection extends ResourceCollection
                 'total_count' => $this->resource->total(),
             ],
         ];
-
-        return $return;
     }
 
     public function normalizeUrl($url): array|string
