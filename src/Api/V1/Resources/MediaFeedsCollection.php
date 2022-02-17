@@ -10,4 +10,33 @@ use JsonSerializable;
 class MediaFeedsCollection extends AbstractResourceCollection
 {
     public $collects = MediaResource::class;
+
+    /**
+     * Transform the resource collection into an array.
+     *
+     * @param  Request  $request
+     *
+     * @return array|Arrayable|JsonSerializable
+     */
+    public function toArray($request): array | Arrayable | JsonSerializable
+    {
+        $links = [
+            'prev' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage() - 1))],
+            'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
+            'last' => ['href' => $this->resource->url($this->resource->lastPage())],
+            'self' => ['href' => $this->resource->url($this->resource->currentPage())],
+            'next' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->onFirstPage()))], // because of the caching and removing visited videos in feed next page is always the first page
+        ];
+
+        return [
+            'items' => $this->resource->items(),
+            '_links' => $links,
+            '_meta' => [
+                'per_page' => $this->resource->perPage(),
+                'current_page' => $this->resource->currentPage(),
+                'page_count' => $this->resource->lastPage(),
+                'total_count' => $this->resource->total(),
+            ],
+        ];
+    }
 }
