@@ -212,13 +212,20 @@ class UserProfileTest extends ApiTestCase
      */
     public function deleteAccount()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value, 'password' => 'password']);
 
         $oldEmail = $user->email;
         $oldPhoneNumber = $user->phone_number;
 
+        $user = \Aparlay\Core\Models\User::factory()->create(['password' => 'password']);
+        $credentials = ['username' => $user->username, 'password' => 'password'];
+        $token = auth()->attempt($credentials);
+
         $this->actingAs($user)
-            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->withHeaders([
+                'Authorization' => 'Bearer '. $token,
+                'X-DEVICE-ID' => 'random-string'
+            ])
             ->json('POST', '/v1/me/delete', [])
             ->assertStatus(204);
 

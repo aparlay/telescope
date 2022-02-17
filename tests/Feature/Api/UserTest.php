@@ -13,10 +13,14 @@ class UserTest extends ApiTestCase
      */
     public function testDelete()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value, 'password' => 'password']);
+        $credentials = ['username' => $user->username, 'password' => 'password'];
+        $token = auth()->attempt($credentials);
 
-        $r = $this->actingAs($user)
-            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+        $r = $this->withHeaders([
+                'Authorization' => 'Bearer '. $token,
+                'X-DEVICE-ID' => 'random-string'
+            ])
             ->json('POST', '/v1/me/delete', ['reason' => 'just to test me.']);
 
         $r->assertStatus(204);
