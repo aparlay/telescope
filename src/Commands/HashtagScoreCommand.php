@@ -33,9 +33,7 @@ class HashtagScoreCommand extends Command
 
         foreach ($tags as $tag => $counts) {
 
-            $msg5 = '<fg=yellow;options=bold>';
-            $msg5 .= '  - total set to '.$tag.'</>';
-            $msg5 .= PHP_EOL;
+            $msg5 = '<fg=yellow;options=bold>- adding new hashtag: #'.$tag.'</>' . PHP_EOL;
             $this->line($msg5);
 
             $hashtag = Hashtag::firstOrCreate(['tag' => $tag]);
