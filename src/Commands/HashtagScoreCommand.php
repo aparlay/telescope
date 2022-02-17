@@ -18,9 +18,9 @@ class HashtagScoreCommand extends Command
         $tags = [];
         Media::where('is_fake', ['$exists' => false])
             ->where('hashtags', ['$type' => 'array'])
-            ->each(function ($media) use(&$tags) {
+            ->each(function ($media) use (&$tags) {
                 foreach ($media->hashtags as $tag) {
-                    if (!isset($tags[$tag])) {
+                    if (! isset($tags[$tag])) {
                         $tags[$tag] = [
                             'like_count' => 0,
                             'visit_count' => 0,
@@ -32,7 +32,6 @@ class HashtagScoreCommand extends Command
             });
 
         foreach ($tags as $tag => $counts) {
-
             $msg5 = '<fg=yellow;options=bold>';
             $msg5 .= '  - total set to '.$tag.'</>';
             $msg5 .= PHP_EOL;

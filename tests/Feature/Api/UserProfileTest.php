@@ -223,8 +223,8 @@ class UserProfileTest extends ApiTestCase
 
         $this->actingAs($user)
             ->withHeaders([
-                'Authorization' => 'Bearer '. $token,
-                'X-DEVICE-ID' => 'random-string'
+                'Authorization' => 'Bearer '.$token,
+                'X-DEVICE-ID' => 'random-string',
             ])
             ->json('POST', '/v1/me/delete', [])
             ->assertStatus(204);

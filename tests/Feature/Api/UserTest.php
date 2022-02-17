@@ -18,8 +18,8 @@ class UserTest extends ApiTestCase
         $token = auth()->attempt($credentials);
 
         $r = $this->withHeaders([
-                'Authorization' => 'Bearer '. $token,
-                'X-DEVICE-ID' => 'random-string'
+                'Authorization' => 'Bearer '.$token,
+                'X-DEVICE-ID' => 'random-string',
             ])
             ->json('POST', '/v1/me/delete', ['reason' => 'just to test me.']);
 
