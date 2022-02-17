@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Models\UserDocument;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use MongoDB\BSON\ObjectId;
 
 class UserDocumentRepository
@@ -14,11 +15,12 @@ class UserDocumentRepository
      * @param User $user
      * @return mixed
      */
-    public function index($user)
+    public function index($user): LengthAwarePaginator
     {
         return UserDocument::creator($user->_id)
             ->with('alertObjs')
-            ->get();
+            ->paginate(5)
+            ->withQueryString();
     }
 
     public function fetchById($id)
