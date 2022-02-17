@@ -48,6 +48,8 @@ abstract class AbstractResourceCollection extends ResourceCollection
         ];
     }
 
+
+
     public function normalizeUrl($url): array|string
     {
         $url = str_replace('http://', 'https://', $url);
