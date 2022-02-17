@@ -26,9 +26,12 @@ class UserDocumentTest extends ApiTestCase
             ->get('/v1/user-document');
 
         $r->assertStatus(200);
+
         $r->assertJsonStructure([
             'data' => [
-                ['_id', 'type', 'status', 'url', 'status_label', 'type_label'],
+                'items'=>  [
+                    ['_id', 'type', 'status', 'url', 'status_label', 'type_label'],
+                ],
             ],
         ]);
 
