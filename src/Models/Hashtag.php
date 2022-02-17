@@ -34,7 +34,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $media_count
  * @property int         $visit_count
  * @property float       $sort_score
- *
  */
 class Hashtag extends BaseModel
 {

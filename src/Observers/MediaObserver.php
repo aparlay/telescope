@@ -126,7 +126,6 @@ class MediaObserver extends BaseModelObserver
             DeleteMediaLike::dispatch((string) $media->_id)->onQueue('low');
         }
 
-
         if ($media->wasChanged(['visit_count', 'sort_score', 'like_count'])) {
             foreach ($media->hashtags as $tag) {
                 RecalculateHashtag::dispatch($tag);
