@@ -15,7 +15,6 @@ class MediaCollection extends AbstractResourceCollection
      */
     public $collects = MediaResource::class;
 
-
     /**
      * Transform the resource collection into an array.
      *
