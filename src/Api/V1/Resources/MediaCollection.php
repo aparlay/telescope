@@ -14,4 +14,44 @@ class MediaCollection extends AbstractResourceCollection
      * @var string
      */
     public $collects = MediaResource::class;
+
+
+    /**
+     * Transform the resource collection into an array.
+     *
+     * @param  Request  $request
+     *
+     * @return array|Arrayable|JsonSerializable
+     */
+    public function toArray($request): array | Arrayable | JsonSerializable
+    {
+        $links = [
+            'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],
+            'last' => ['href' => $this->resource->url($this->resource->lastPage())],
+            'self' => ['href' => $this->resource->url($this->resource->currentPage())],
+        ];
+
+        if ($this->resource->previousPageUrl()) {
+            $links['prev'] = [
+                'href' => $this->normalizeUrl($this->resource->previousPageUrl()),
+            ];
+        }
+
+        if ($this->resource->nextPageUrl()) {
+            $links['next'] = [
+                'href' => $this->normalizeUrl($this->resource->nextPageUrl()),
+            ];
+        }
+
+        return [
+            'items' => $this->resource->items(),
+            '_links' => $links,
+            '_meta' => [
+                'per_page' => $this->resource->perPage(),
+                'current_page' => $this->resource->currentPage(),
+                'page_count' => $this->resource->lastPage(),
+                'total_count' => $this->resource->total(),
+            ],
+        ];
+    }
 }
