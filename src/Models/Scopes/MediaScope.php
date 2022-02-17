@@ -223,4 +223,14 @@ trait MediaScope
     {
         return $query->orderBy('sort_score', 'desc');
     }
+
+    /**
+     * @param  Builder  $query
+     * @param  string  $tag
+     * @return mixed
+     */
+    public function scopeHashtag(Builder $query, string $tag): Builder
+    {
+        return $query->where('hashtags', $tag);
+    }
 }

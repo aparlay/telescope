@@ -6,9 +6,11 @@ use Aparlay\Core\Api\V1\Notifications\UserDeleteMedia;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaLike;
+use Aparlay\Core\Jobs\RecalculateHashtag;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
+use Aparlay\Core\Models\Hashtag;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Exception;
@@ -122,6 +124,13 @@ class MediaObserver extends BaseModelObserver
             $media->userObj->save();
 
             DeleteMediaLike::dispatch((string) $media->_id)->onQueue('low');
+        }
+
+
+        if ($media->wasChanged(['visit_count', 'sort_score', 'like_count'])) {
+            foreach ($media->hashtags as $tag) {
+                RecalculateHashtag::dispatch($tag);
+            }
         }
     }
 

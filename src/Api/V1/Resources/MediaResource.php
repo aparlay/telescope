@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Akaunting\Money\Currency;
+use Akaunting\Money\Money;
 use Illuminate\Http\Request;
 
 class MediaResource extends JsonResource
@@ -37,7 +39,7 @@ class MediaResource extends JsonResource
         $tips = 0;
         $alerts = [];
         if (isset(auth()->user()->_id) && (string) auth()->user()->_id === (string) $this->creator['_id']) {
-            $tips = $this->tips;
+            $tips = new Money($this->tips, new Currency('USD'));
             $alerts = $this->alerts;
         }
 

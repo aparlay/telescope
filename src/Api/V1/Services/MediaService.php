@@ -16,6 +16,7 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
+use Str;
 
 class MediaService
 {
@@ -76,7 +77,7 @@ class MediaService
         $tags = [];
         foreach (explode(' ', $description) as $item) {
             if (isset($item[0]) && $item[0] === '#' && substr_count($item, '#') === 1) {
-                $tags[] = substr($item, 1);
+                $tags[] = Str::lower(substr($item, 1));
             }
         }
 

@@ -43,6 +43,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $visibility
  * @property int         $like_count
  * @property int         $comment_count
+ * @property int         $visit_count
  * @property array       $count_fields_updated_at
  * @property array       $likes
  * @property array       $comments
@@ -207,6 +208,9 @@ class Media extends BaseModel
             'username' => $this->userObj->username ?? '',
             'full_name' => $this->userObj->full_name ?? '',
             'description' => $this->description,
+            'like_count' => $this->like_count,
+            'visit_count' => $this->visit_count,
+            'comment_count' => $this->comment_count,
             'hashtags' => $this->hashtags,
             'score' => $this->sort_score,
             'country' => $this->userObj->country_alpha2 ?? '',

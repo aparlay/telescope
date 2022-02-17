@@ -25,6 +25,7 @@ use Aparlay\Core\Commands\AnalyticsDailyCommand;
 use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CleanupCommand;
 use Aparlay\Core\Commands\CoreCommand;
+use Aparlay\Core\Commands\HashtagScoreCommand;
 use Aparlay\Core\Commands\RoleCommand;
 use Aparlay\Core\Commands\UserScoreCommand;
 use Aparlay\Core\Commands\UserScoreDailyCommand;
@@ -92,6 +93,7 @@ class CoreServiceProvider extends ServiceProvider
                 VideoUpdateInfoCommand::class,
                 UserScoreCommand::class,
                 UserScoreDailyCommand::class,
+                HashtagScoreCommand::class,
                 WsCommand::class,
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,
