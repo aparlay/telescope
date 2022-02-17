@@ -66,7 +66,6 @@ class UserController extends Controller
             if (auth()->user()->getRememberToken()) {
                 auth()->logout();
             }
-
             $cookie1 = Cookie::forget('__Secure_token');
             $cookie2 = Cookie::forget('__Secure_refresh_token');
             $cookie3 = Cookie::forget('__Secure_username');
