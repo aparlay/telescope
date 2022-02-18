@@ -135,6 +135,16 @@ class Media
     public $tips_formatted;
 
     /**
+     * @OA\Property(property="sent_tips", type="string", example="235400")
+     */
+    public $sent_tips;
+
+    /**
+     * @OA\Property(property="sent_tips_formatted", type="string", example="$2354.00")
+     */
+    public $sent_tips_formatted;
+
+    /**
      * @OA\Property(property="created_by", type="string", example="60237caf5e41025e1e3c80b1")
      */
     public $created_by;
