@@ -68,6 +68,7 @@ class MediaResource extends JsonResource
             'tips' => $tips,
             'tips_formatted' => new Money($tips, new Currency('USD')),
             'sent_tips' => $this->sent_tips,
+            'sent_tips_formatted' => new Money($this->sent_tips, new Currency('USD')),
             'comments' => [],
             'slug' => $this->slug,
             'alerts' => AlertResource::collection($alerts),
