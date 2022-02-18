@@ -39,7 +39,7 @@ class MediaResource extends JsonResource
         $tips = 0;
         $alerts = [];
         if (isset(auth()->user()->_id) && (string) auth()->user()->_id === (string) $this->creator['_id']) {
-            $tips =  $this->tips;
+            $tips = $this->tips;
             $alerts = $this->alerts;
         }
 
