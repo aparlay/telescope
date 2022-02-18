@@ -125,6 +125,16 @@ class Media
     public $slug;
 
     /**
+     * @OA\Property(property="tips", type="string", example="235400")
+     */
+    public $tips;
+
+    /**
+     * @OA\Property(property="tips_formatted", type="string", example="$2354.00")
+     */
+    public $tips_formatted;
+
+    /**
      * @OA\Property(property="created_by", type="string", example="60237caf5e41025e1e3c80b1")
      */
     public $created_by;
