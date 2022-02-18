@@ -39,7 +39,7 @@ class MediaResource extends JsonResource
         $tips = 0;
         $alerts = [];
         if (isset(auth()->user()->_id) && (string) auth()->user()->_id === (string) $this->creator['_id']) {
-            $tips = new Money((int)$this->tips, new Currency('USD'));
+            $tips = $this->tips;
             $alerts = $this->alerts;
         }
 
