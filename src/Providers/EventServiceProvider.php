@@ -2,9 +2,6 @@
 
 namespace Aparlay\Core\Providers;
 
-use Aparlay\Core\Events\DispatchAuthenticatedEndpointsEvent;
-use Aparlay\Core\Listeners\LogAuthenticatedListener;
-use Aparlay\Core\Listeners\OnlineUsersListener;
 use Aparlay\Core\Models\BaseModel;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;

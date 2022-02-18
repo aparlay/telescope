@@ -15,6 +15,7 @@ class ApiTestCase extends TestCase
         parent::setUp();
 
         $this->app->make('config')->set('app.url', env('TEST_DOMAIN'));
+        $this->app->make('config')->set('profiler.enabled', false);
 
         $this->withoutMiddleware(
             DeviceIdThrottle::class
