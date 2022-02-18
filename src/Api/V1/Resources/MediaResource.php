@@ -39,7 +39,7 @@ class MediaResource extends JsonResource
         $tips = 0;
         $alerts = [];
         if (isset(auth()->user()->_id) && (string) auth()->user()->_id === (string) $this->creator['_id']) {
-            $tips = new Money((int)$this->tips, new Currency('USD'));
+            $tips = new Money((int) $this->tips, new Currency('USD'));
             $alerts = $this->alerts;
         }
 
@@ -66,9 +66,9 @@ class MediaResource extends JsonResource
             'visits' => $visits,
             'comment_count' => $this->comment_count,
             'tips' => $tips,
-            'tips_formatted' => new Money((int)$tips, new Currency('USD')),
+            'tips_formatted' => new Money((int) $tips, new Currency('USD')),
             'sent_tips' => $this->sent_tips,
-            'sent_tips_formatted' => new Money((int)$this->sent_tips, new Currency('USD')),
+            'sent_tips_formatted' => new Money((int) $this->sent_tips, new Currency('USD')),
             'comments' => [],
             'slug' => $this->slug,
             'alerts' => AlertResource::collection($alerts),
