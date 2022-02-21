@@ -1,6 +1,6 @@
 <?php
 
-namespace Aparlay\Core\definitions;
+namespace Aparlay\Core\Api\V1\Swagger\Definitions;
 
 use OpenApi\Annotations as OA;
 
