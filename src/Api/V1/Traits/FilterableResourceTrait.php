@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Traits;
 
+use Illuminate\Support\Collection;
+
 trait FilterableResourceTrait
 {
     /**
