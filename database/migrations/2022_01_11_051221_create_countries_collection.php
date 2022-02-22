@@ -1259,7 +1259,7 @@ class CreateCountriesCollection extends Migration
             ];
         }
 
-        if (!Schema::hasTable('countries')) {
+        if (! Schema::hasTable('countries')) {
             Schema::create('countries', function ($collection) {
                 $collection->geospatial('location', '2dsphere');
             });
