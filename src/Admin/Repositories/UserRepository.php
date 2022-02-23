@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\User;
+use Aparlay\Core\Events\UserVerificationStatusChangedEvent;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 
 class UserRepository
@@ -11,7 +12,7 @@ class UserRepository
 
     public function __construct($model)
     {
-        if (! ($model instanceof User)) {
+        if (!($model instanceof User)) {
             throw new \InvalidArgumentException('$model should be of User type');
         }
 
@@ -96,12 +97,18 @@ class UserRepository
         return $user;
     }
 
-    public function updateVerificationStatus($userId, $verificationStatus)
+    public function updateVerificationStatus($adminUser, $user, $verificationStatus)
     {
-        /** @var \App\Models\User $user */
-        $user = User::query()->find($userId);
+        $oldVerificationStatus = $user->verification_status;
         $user->verification_status = $verificationStatus;
         $user->save();
+
+        if (
+            $oldVerificationStatus !== $verificationStatus &&
+            in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])
+        ) {
+            UserVerificationStatusChangedEvent::dispatch($adminUser, $user, $verificationStatus);
+        }
 
         return $user;
     }

@@ -5,6 +5,8 @@ namespace Aparlay\Core\Listeners;
 use Aparlay\Core\Admin\Services\NoteService;
 use Aparlay\Core\Events\UserReceiveAlertEvent;
 use Aparlay\Core\Events\UserStatusChangedEvent;
+use Aparlay\Core\Events\UserVerificationStatusChangedEvent;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 
 class AddNoteListener
 {
@@ -24,6 +26,13 @@ class AddNoteListener
                 $event->creator,
                 $event->user,
                 $event->getMessage()
+            );
+        }
+        if ($event instanceof UserVerificationStatusChangedEvent) {
+            $noteService->addCustomNote(
+                $event->creator,
+                $event->user,
+                'Admin ' . $event->creator->note_admin_url . ' changed ' . $event->user->note_admin_url . '\'s verification status to ' . UserVerificationStatus::from($event->verificationStatus)->label(),
             );
         }
     }

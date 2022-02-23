@@ -70,6 +70,7 @@ class UserVerificationModal extends Component
         $alertRepository = new AlertRepository(new Alert());
 
         $this->userRepository->updateVerificationStatus(
+            auth()->user(),
             $this->selectedUser,
             $this->verification_status
         );
