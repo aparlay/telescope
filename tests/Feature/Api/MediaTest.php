@@ -266,7 +266,7 @@ class MediaTest extends ApiTestCase
         $taggedUser = User::factory()->create();
 
         $fileData = [
-            'file' => UploadedFile::fake()->create('fakefile.mp4', 100),
+            'file' => UploadedFile::fake()->create(uniqid() . '.mp4', 100),
         ];
 
         $response = $this->actingAs($activeUser)
@@ -388,6 +388,36 @@ class MediaTest extends ApiTestCase
             );
 
         $this->assertDatabaseHas('medias', ['created_by' => new ObjectId($activeUser->_id)]);
+    }
+
+    /**
+     * @test
+     */
+    public function testUploadStream()
+    {
+        $fileData = [
+            'file' => UploadedFile::fake()->create(uniqid() . '.mp4', 100),
+        ];
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->json('POST', 'v1/media/upload/stream', $fileData)
+            ->assertStatus(201)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 201)
+            ->assertJsonStructure([
+                'data' => [
+                    'file',
+                ],
+            ])
+            ->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType([
+                    'code' => 'integer',
+                    'status' => 'string',
+                    'data.file' => 'string',
+                ])
+            );
     }
 
     /**
@@ -1077,35 +1107,5 @@ class MediaTest extends ApiTestCase
                 'data' => [],
                 'message' => 'You can only view media that you\'ve created.',
             ]);
-    }
-
-    /**
-     * @test
-     */
-    public function testUploadStream()
-    {
-        $fileData = [
-            'file' => UploadedFile::fake()->create('fakefile.mp4', 100),
-        ];
-
-        $user = User::factory()->create();
-
-        $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('POST', 'v1/media/upload/stream', $fileData)
-            ->assertStatus(201)
-            ->assertJsonPath('status', 'OK')
-            ->assertJsonPath('code', 201)
-            ->assertJsonStructure([
-                'data' => [
-                    'file',
-                ],
-            ])
-            ->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType([
-                    'code' => 'integer',
-                    'status' => 'string',
-                    'data.file' => 'string',
-                ])
-            );
     }
 }

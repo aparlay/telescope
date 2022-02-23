@@ -96,7 +96,8 @@ class MediaLikeTest extends ApiTestCase
         $mediaCreator = User::factory()->create();
         $media = Media::factory()->for($mediaCreator, 'userObj')
             ->create(['status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
-        $res = $this->actingAs($user)
+
+        $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('PUT', '/v1/media/'.$media->_id.'/like', [])
             ->assertStatus(201)

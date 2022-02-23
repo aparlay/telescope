@@ -134,7 +134,8 @@ trait UserScope
     }
 
     /**
-     * @param ObjectId|string $userId
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
      *
      * @return mixed
      */
