@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Constants;
 
-
 class Permissions
 {
     const APPROVE_PAYOUTS = 'approve payouts';
@@ -14,6 +13,6 @@ class Permissions
      */
     public static function forRouter($permission): string
     {
-        return 'permission:' . $permission;
+        return 'permission:'.$permission;
     }
 }
