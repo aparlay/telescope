@@ -3,9 +3,9 @@
 namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Note;
-use Aparlay\Core\Models\User;
 use Aparlay\Core\Admin\Repositories\NoteRepository;
 use Aparlay\Core\Models\Enums\NoteType;
+use Aparlay\Core\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use MongoDB\BSON\ObjectId;
 

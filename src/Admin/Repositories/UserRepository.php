@@ -12,7 +12,7 @@ class UserRepository
 
     public function __construct($model)
     {
-        if (!($model instanceof User)) {
+        if (! ($model instanceof User)) {
             throw new \InvalidArgumentException('$model should be of User type');
         }
 

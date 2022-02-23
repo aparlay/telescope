@@ -17,6 +17,7 @@ class UserVerificationStatusChangedEvent
      *
      * @return void
      */
-    public function __construct(public Authenticated|User $creator, public User $user, public int $verificationStatus) {
+    public function __construct(public Authenticated|User $creator, public User $user, public int $verificationStatus)
+    {
     }
 }

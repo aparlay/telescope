@@ -32,7 +32,7 @@ class AddNoteListener
             $noteService->addCustomNote(
                 $event->creator,
                 $event->user,
-                'Admin ' . $event->creator->note_admin_url . ' changed ' . $event->user->note_admin_url . '\'s verification status to ' . UserVerificationStatus::from($event->verificationStatus)->label(),
+                'Admin '.$event->creator->note_admin_url.' changed '.$event->user->note_admin_url.'\'s verification status to '.UserVerificationStatus::from($event->verificationStatus)->label(),
             );
         }
     }
