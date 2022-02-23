@@ -17,6 +17,7 @@ class UserAvatarChangedEvent
      *
      * @return void
      */
-    public function __construct(public User $user, public string $avatar) {
+    public function __construct(public User $user, public string $avatar)
+    {
     }
 }

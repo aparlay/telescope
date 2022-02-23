@@ -266,7 +266,7 @@ class MediaTest extends ApiTestCase
         $taggedUser = User::factory()->create();
 
         $fileData = [
-            'file' => UploadedFile::fake()->create(uniqid() . '.mp4', 100),
+            'file' => UploadedFile::fake()->create(uniqid().'.mp4', 100),
         ];
 
         $response = $this->actingAs($activeUser)
@@ -396,7 +396,7 @@ class MediaTest extends ApiTestCase
     public function testUploadStream()
     {
         $fileData = [
-            'file' => UploadedFile::fake()->create(uniqid() . '.mp4', 100),
+            'file' => UploadedFile::fake()->create(uniqid().'.mp4', 100),
         ];
 
         $user = User::factory()->create();
