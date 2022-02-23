@@ -13,7 +13,6 @@ class AddVerificationStatusColumnOnUser extends Migration
      */
     public function up()
     {
-
         User::where('verification_status', null)->update(['verification_status' => UserVerificationStatus::UNVERIFIED->value]);
     }
 
