@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Events;
 
-
 use Aparlay\Core\Models\User;
 use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -21,8 +20,8 @@ class UserOtpRequestedEvent
     public function __construct(
         protected Authenticated|User $user,
         protected $deviceId
-    )
-    {}
+    ) {
+    }
 
     public function getUser()
     {
@@ -33,5 +32,4 @@ class UserOtpRequestedEvent
     {
         return $this->deviceId;
     }
-
 }
