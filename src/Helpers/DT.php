@@ -57,7 +57,7 @@ class DT
      */
     public static function utcToCarbon(UTCDateTime $utcDateTime): Carbon
     {
-        return (new Carbon($utcDateTime->toDateTime()));
+        return new Carbon($utcDateTime->toDateTime());
     }
 
     /**
