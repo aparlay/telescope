@@ -18,5 +18,4 @@ trait Creator
     {
         return $this->belongsTo(User::class, 'creator._id');
     }
-
 }
