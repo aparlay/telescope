@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Components\DatePicker;
 use Aparlay\Core\Admin\Components\MediaCover;
 use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
+use Aparlay\Core\Admin\Components\UtcFormatter;
 use Aparlay\Core\Admin\Components\WireDropDownList;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\EmailsTable;
@@ -191,5 +192,6 @@ class CoreServiceProvider extends ServiceProvider
         Blade::component('wire-dropdown-list', WireDropDownList::class);
         Blade::component('username-avatar', UserNameAvatar::class);
         Blade::component('media-cover', MediaCover::class);
+        Blade::component('utc-formatter', UtcFormatter::class);
     }
 }
