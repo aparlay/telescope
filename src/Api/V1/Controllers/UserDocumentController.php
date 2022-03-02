@@ -57,9 +57,7 @@ class UserDocumentController extends Controller
         $this->injectAuthUser($this->userDocumentService);
         $user = $this->userDocumentService->changeToPending();
 
-        return $this->response([
-            'verification_status' => $user->verification_status,
-        ], '', Response::HTTP_OK);
+        return $this->response([], '', Response::HTTP_OK);
     }
 
     /**

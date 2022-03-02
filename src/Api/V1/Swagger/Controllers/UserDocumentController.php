@@ -229,7 +229,7 @@ use OpenApi\Annotations as OA;
  *     path="/v1/send-to-verify",
  *     tags={"user-document"},
  *     summary="Submit documents to admin user to make them verified or rejected",
- *     description="This endpoint simply change user verification status and user document statuses to pending",
+ *     description="This endpoint simply change user verification status and user document statuses to pending. Must be triggered only once when need to submit docs to admin, second call without uploading any new stuff will give validation error",
  *     operationId="userDocumentSendToVerfy",
  *     security={{"bearerAuth": {}}},
  *     @OA\Parameter(
@@ -269,7 +269,6 @@ use OpenApi\Annotations as OA;
  *             )
  *         ),
  *         @OA\JsonContent(
- *             @OA\Property(property="data", type="array", @OA\Items (ref="#/components/schemas/UserDocument")),
  *             @OA\Property(property="code", format="integer", example=200),
  *             @OA\Property(property="status", format="string", example="OK")
  *         ),
