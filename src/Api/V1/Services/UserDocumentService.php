@@ -9,6 +9,7 @@ use Aparlay\Core\Constants\StorageType;
 use Aparlay\Core\Jobs\DeleteFileJob;
 use Aparlay\Core\Jobs\UploadFileJob;
 use Aparlay\Core\Models\Enums\UserDocumentType;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
@@ -51,8 +52,12 @@ class UserDocumentService
      */
     public function store(UserDocumentDto $documentDto)
     {
-        $documentDto->setUser($this->getUser());
+        $user = $this->getUser();
+        $documentDto->setUser($user);
         $userDocument = $this->userDocumentRepository->create($documentDto);
+
+        $user->verification_status = UserVerificationStatus::PENDING->value;
+        $user->save();
 
         if (\App::environment('testing')) {
             return $userDocument;
