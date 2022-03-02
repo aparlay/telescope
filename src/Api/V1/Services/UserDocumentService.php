@@ -63,6 +63,7 @@ class UserDocumentService
             return $userDocument;
         }
         $this->uploadDocument($documentDto->file, $userDocument);
+
         return $userDocument;
     }
 
