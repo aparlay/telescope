@@ -49,7 +49,6 @@ class UserDocumentController extends Controller
         return $this->response(new UserDocumentResource($userDocument), '', Response::HTTP_OK);
     }
 
-
     /**
      * @return Response
      */
@@ -59,10 +58,9 @@ class UserDocumentController extends Controller
         $user = $this->userDocumentService->changeToPending();
 
         return $this->response([
-            'verification_status' => $user->verification_status
+            'verification_status' => $user->verification_status,
         ], '', Response::HTTP_OK);
     }
-
 
     /**
      * @param UserDocumentRequest $request
