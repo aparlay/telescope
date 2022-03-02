@@ -57,7 +57,7 @@ class UserDocumentService extends AbstractService
                 'verification_status',
                 __('You need to upload some documents at first')
             );
-       }
+        }
 
         UserDocument::query()
             ->creator($this->getUser()->_id)
