@@ -72,6 +72,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::post('/', [UserDocumentController::class, 'store'])->name('store');
             Route::get('/', [UserDocumentController::class, 'index'])->name('index');
+            Route::put('/send-to-verify', [UserDocumentController::class, 'sendToVerify'])->name('send-to-verify');
             Route::get('/{doc_id}', [UserDocumentController::class, 'view'])->name('view');
         });
     });
