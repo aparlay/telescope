@@ -32,7 +32,7 @@ class UserVerificationModal extends Component
         $this->userRepository = new UserRepository(new User());
         $user = $this->userRepository->find($userId);
         $this->user = $user;
-        $this->documents = $user->userDocumentObjs ?? [];
+        $this->documents = $user->userDocumentObjs()->latest()->get() ?? [];
         $this->verification_status = $user->verification_status;
 
         foreach ($this->documents as $document) {
@@ -71,7 +71,7 @@ class UserVerificationModal extends Component
 
         $this->userRepository->updateVerificationStatus(
             auth()->user(),
-            $this->selectedUser,
+            $this->user,
             $this->verification_status
         );
 
