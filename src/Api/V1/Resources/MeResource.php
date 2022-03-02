@@ -101,7 +101,7 @@ class MeResource extends JsonResource
             '_links' => [
                 'self' => ['href' => url("/v1/user/view?id={$this->_id}")],
             ],
-            'is_verified' => $this->verification_status === UserVerificationStatus::VERIFIED->value,
+            'is_verified' => $this->is_verified,
             'country_alpha2' => $this->country_alpha2,
             'country_label' => $this->country_label,
             'country_flags' => $this->country_flags,

@@ -14,6 +14,7 @@ use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\Traits\CountryFields;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -83,10 +84,16 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property string      $deactivation_reason
  *
  * @property-read string $admin_url
+ * @property-read string $note_admin_url
  * @property-read string $slack_admin_url
  * @property-read bool $is_subscribable
  * @property-read bool $is_online
+ * @property-read bool $is_verified
  * @property-read bool $is_online_for_followers
+ *
+ * @method static |self|Builder username(string $username) get user
+ * @method static |self|Builder user(ObjectId|string $userId)    get user
+ * @method static |self|Builder availableForFollower()    get available content for followers
  */
 class User extends Authenticatable implements JWTSubject
 {
