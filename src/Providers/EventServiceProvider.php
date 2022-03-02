@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Providers;
 
+use Aparlay\Core\Events\UserOtpRequestedEvent;
+use Aparlay\Core\Listeners\SendOtpToUserListener;
 use Aparlay\Core\Models\BaseModel;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;
@@ -22,6 +24,12 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 
 class EventServiceProvider extends ServiceProvider
 {
+    protected $listen = [
+        UserOtpRequestedEvent::class => [
+            SendOtpToUserListener::class,
+        ],
+    ];
+
     /**
      * Register any events for your application.
      *
