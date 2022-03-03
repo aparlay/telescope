@@ -72,7 +72,7 @@
         "grpc/grpc": "^1.38",
         "guzzlehttp/guzzle": "^7.0.1",
         "jenssegers/mongodb": "^3.8",
-        "laravel/framework": "^8.82",
+        "laravel/framework": "^9.2",
         "laravel/horizon": "^5.7",
         "laravel/octane": "^1.0",
         "laravel/slack-notification-channel": "^2.3",
@@ -86,12 +86,12 @@
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9.1",
         "brianium/paratest": "^6.2",
-        "facade/ignition": "^2.5",
+        "spatie/laravel-ignition": "^1.0",
         "fakerphp/faker": "^1.9.1",
         "friendsofphp/php-cs-fixer": "^3.0",
         "laravel/sail": "^1.8",
         "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^5.3",
+        "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.3",
         "psalm/plugin-laravel": "^1.5",
         "roave/security-advisories": "dev-latest",
@@ -100,6 +100,6 @@
         "jeroen-g/laravel-packager": "^2.5",
         "laravel/dusk": "^6.15",
         "laravel/envoy": "^2.7",
-        "orchestra/testbench": "^6.24"
+        "orchestra/testbench": "^7.1"
     }
 }
