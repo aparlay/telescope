@@ -49,7 +49,6 @@ class UserDocumentController extends Controller
         return $this->response(new UserDocumentResource($userDocument), '', Response::HTTP_OK);
     }
 
-
     /**
      * @return Response
      */
