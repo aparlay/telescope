@@ -5,18 +5,22 @@ namespace Aparlay\Core\Api\V1\Services;
 use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
 use Aparlay\Core\Api\V1\Repositories\UserDocumentRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
+use Aparlay\Core\Api\V1\Traits\ValidationErrorTrait;
 use Aparlay\Core\Constants\StorageType;
 use Aparlay\Core\Jobs\DeleteFileJob;
 use Aparlay\Core\Jobs\UploadFileJob;
+use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 
-class UserDocumentService
+class UserDocumentService extends AbstractService
 {
     use HasUserTrait;
+    use ValidationErrorTrait;
 
     /**
      * @var UserDocumentRepository
@@ -41,6 +45,31 @@ class UserDocumentService
         return $this->userDocumentRepository->index($this->getUser());
     }
 
+    public function changeToPending()
+    {
+        $count = UserDocument::query()
+            ->creator($this->getUser()->_id)
+            ->status(UserDocumentStatus::CREATED->value)
+            ->count();
+
+        if ($count === 0) {
+            $this->throwClientError(
+                'verification_status',
+                __('You need to upload some documents at first')
+            );
+        }
+
+        UserDocument::query()
+            ->creator($this->getUser()->_id)
+            ->status(UserDocumentStatus::CREATED->value)
+            ->update(['status' => UserDocumentStatus::PENDING->value]);
+
+        $this->getUser()->status = UserVerificationStatus::PENDING->value;
+        $this->getUser()->save();
+
+        return $this->getUser();
+    }
+
     public function fetchById($id)
     {
         return $this->userDocumentRepository->fetchById($id);
@@ -51,7 +80,8 @@ class UserDocumentService
      */
     public function store(UserDocumentDto $documentDto)
     {
-        $documentDto->setUser($this->getUser());
+        $user = $this->getUser();
+        $documentDto->setUser($user);
         $userDocument = $this->userDocumentRepository->create($documentDto);
 
         if (\App::environment('testing')) {

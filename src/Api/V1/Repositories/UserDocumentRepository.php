@@ -34,7 +34,7 @@ class UserDocumentRepository
         try {
             return UserDocument::create([
                 'type' => $documentDto->type,
-                'status' => UserDocumentStatus::PENDING->value,
+                'status' => UserDocumentStatus::CREATED->value,
                 'creator' => [
                     '_id' => new ObjectId($creator->_id),
                     'username' => $creator->username,

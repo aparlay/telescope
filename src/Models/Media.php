@@ -2,9 +2,6 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Api\V1\Models\Alert;
-use Aparlay\Core\Api\V1\Models\MediaLike;
-use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
@@ -19,7 +16,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Redis;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;

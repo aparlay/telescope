@@ -42,13 +42,22 @@ class UserDocumentController extends Controller
      */
     public function view($id)
     {
-        if (auth()->check()) {
-            $this->userDocumentService->setUser(auth()->user());
-        }
+        $this->injectAuthUser($this->userDocumentService);
         $userDocument = $this->userDocumentService->fetchById($id);
         $this->authorize('view', $userDocument);
 
         return $this->response(new UserDocumentResource($userDocument), '', Response::HTTP_OK);
+    }
+
+    /**
+     * @return Response
+     */
+    public function sendToVerification()
+    {
+        $this->injectAuthUser($this->userDocumentService);
+        $user = $this->userDocumentService->changeToPending();
+
+        return $this->response([], '', Response::HTTP_OK);
     }
 
     /**

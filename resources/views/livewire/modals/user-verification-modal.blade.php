@@ -43,8 +43,10 @@
                                             {{ $document->status_label }}
                                         </span>
                                     </a>
+                                    <div class="text-sm" title="{{ $document->created_at }}">
+                                        Uploaded at: {{ $document->created_at->diffForHumans() }}
+                                    </div>
                                 </div>
-
 
                                 <div class="w-100">
                                     <div class="custom-control custom-switch">

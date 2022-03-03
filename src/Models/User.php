@@ -597,6 +597,11 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    public function getVerificationStatusLabelAttribute(): string
+    {
+        return UserStatus::from($this->verification_status)->label();
+    }
+
     public function getStatusLabelAttribute()
     {
         return UserStatus::from($this->status)->label();

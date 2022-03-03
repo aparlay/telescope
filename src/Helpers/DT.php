@@ -53,6 +53,15 @@ class DT
 
     /**
      * @param  UTCDateTime  $utcDateTime
+     * @return Carbon
+     */
+    public static function utcToCarbon(UTCDateTime $utcDateTime): Carbon
+    {
+        return new Carbon($utcDateTime->toDateTime());
+    }
+
+    /**
+     * @param  UTCDateTime  $utcDateTime
      * @return float
      */
     public static function utcToMillisec(UTCDateTime $utcDateTime): float

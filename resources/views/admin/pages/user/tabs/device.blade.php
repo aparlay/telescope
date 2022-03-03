@@ -1,4 +1,4 @@
-<div class="tab-pane active table-responsive" id="user-info">
+<div class="tab-pane table-responsive" id="devices">
     <table class="table table-sm table-hover table-striped">
         <thead class="thead-light">
         <tr>

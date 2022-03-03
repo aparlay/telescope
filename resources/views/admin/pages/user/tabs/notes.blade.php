@@ -1,4 +1,4 @@
-<div class="tab-pane" id="payment">
+<div class="tab-pane" id="notes">
     <div class="content">
         <div class="container-fluid">
             <div class="row">
