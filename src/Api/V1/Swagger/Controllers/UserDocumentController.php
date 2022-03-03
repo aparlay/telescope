@@ -226,7 +226,7 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Put (
- *     path="/v1/send-to-verify",
+ *     path="/v1/send-to-verification",
  *     tags={"user-document"},
  *     summary="Submit documents to admin user to make them verified or rejected",
  *     description="This endpoint simply change user verification status and user document statuses to pending. Must be triggered only once when need to submit docs to admin, second call without uploading any new stuff will give validation error",

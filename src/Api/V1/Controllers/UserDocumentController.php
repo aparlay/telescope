@@ -49,10 +49,11 @@ class UserDocumentController extends Controller
         return $this->response(new UserDocumentResource($userDocument), '', Response::HTTP_OK);
     }
 
+
     /**
      * @return Response
      */
-    public function sendToVerify()
+    public function sendToVerification()
     {
         $this->injectAuthUser($this->userDocumentService);
         $user = $this->userDocumentService->changeToPending();
