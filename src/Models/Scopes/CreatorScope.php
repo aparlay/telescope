@@ -6,7 +6,6 @@ use MongoDB\BSON\ObjectId;
 
 trait CreatorScope
 {
-
     /**
      * @param $query
      * @param $userId
@@ -18,5 +17,4 @@ trait CreatorScope
 
         return $query->where('creator._id', $userId);
     }
-
 }
