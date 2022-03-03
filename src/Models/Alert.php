@@ -68,6 +68,7 @@ class Alert extends BaseModel
         'created_at',
         'updated_at',
         'user_document_id',
+        'user_payout_id',
     ];
 
     /**
