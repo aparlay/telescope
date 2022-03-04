@@ -10,7 +10,6 @@ class Permissions
     const VERIFY_WALLETS = 'verify wallets';
     const LIST_WALLETS = 'approve wallets';
 
-
     /**
      * @param $permission
      * @return string
