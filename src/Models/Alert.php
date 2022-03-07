@@ -69,6 +69,7 @@ class Alert extends BaseModel
         'updated_at',
         'user_document_id',
         'user_payout_id',
+        'wallet_id'
     ];
 
     /**
