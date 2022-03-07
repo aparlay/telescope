@@ -64,7 +64,7 @@ class UserDocumentService extends AbstractService
             ->status(UserDocumentStatus::CREATED->value)
             ->update(['status' => UserDocumentStatus::PENDING->value]);
 
-        $this->getUser()->status = UserVerificationStatus::PENDING->value;
+        $this->getUser()->verification_status = UserVerificationStatus::PENDING->value;
         $this->getUser()->save();
 
         return $this->getUser();
