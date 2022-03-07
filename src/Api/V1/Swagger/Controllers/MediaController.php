@@ -504,7 +504,7 @@ use OpenApi\Annotations as OA;
  *     tags={"media"},
  *     summary="upload a new movie",
  *     description="To upload a new media file you need to call this endpoint.",
- *     operationId="uploadMediaFile",
+ *     operationId="uploadMediaFileStream",
  *     security={{"bearerAuth": {}}},
  *     @OA\Parameter(
  *         name="X-DEVICE-ID",
