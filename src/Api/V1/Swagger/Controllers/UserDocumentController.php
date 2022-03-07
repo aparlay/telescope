@@ -164,7 +164,7 @@ use OpenApi\Annotations as OA;
  *     tags={"user-document"},
  *     summary="Fetch all user documents for current user",
  *     description="Fetch all user documents for current user",
- *     operationId="fetchUsserDocument",
+ *     operationId="fetchUserDocumentList",
  *     security={{"bearerAuth": {}}},
  *     @OA\Parameter(
  *         name="X-DEVICE-ID",
