@@ -117,13 +117,7 @@ class Alert extends BaseModel
         return $this->belongsTo(Media::class, 'media_id');
     }
 
-    /**
-     * Get the media associated with the alert.
-     */
-    public function userDocumentObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
-    {
-        return $this->belongsTo(UserDocument::class, 'media_id');
-    }
+
 
     /**
      * @return array
