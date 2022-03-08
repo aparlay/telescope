@@ -117,8 +117,6 @@ class Alert extends BaseModel
         return $this->belongsTo(Media::class, 'media_id');
     }
 
-
-
     /**
      * @return array
      */
