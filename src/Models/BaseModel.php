@@ -47,16 +47,16 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
 
     public function addToPosition(string $attribute, mixed $content, int $position = 0): void
     {
-        $this::raw(function($collection) use($attribute, $content, $position) {
+        $this::raw(function ($collection) use ($attribute, $content, $position) {
             $collection->findOneAndUpdate(
                 ['_id' => $this->_id],
                 [
                     '$push' => [
                         $attribute => [
                             '$each' => [$content],
-                            '$position' => $position
-                        ]
-                    ]
+                            '$position' => $position,
+                        ],
+                    ],
                 ]
             );
         });
@@ -64,18 +64,18 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
 
     public function updateNestedArray(string $attribute, string $nestedField, mixed $nestedValue, string $keyName, mixed $keyValue): void
     {
-        $this::raw(function($collection) use($attribute, $nestedField, $nestedValue, $keyName, $keyValue) {
+        $this::raw(function ($collection) use ($attribute, $nestedField, $nestedValue, $keyName, $keyValue) {
             $collection->findOneAndUpdate(
                 [],
                 [
                     '$set' => [
-                        $attribute.'$[elem].' . $nestedField => $nestedValue
-                    ]
+                        $attribute.'$[elem].'.$nestedField => $nestedValue,
+                    ],
                 ],
                 [
                     'arrayFilters' => [
-                        'elem.'.$keyName => $keyValue
-                    ]
+                        'elem.'.$keyName => $keyValue,
+                    ],
                 ]
             );
         });
@@ -106,12 +106,12 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
     {
         $userId = false;
         if ($user instanceof ObjectId) {
-            $userId = (string)$user;
+            $userId = (string) $user;
         } elseif ($user instanceof Authenticatable) {
-            $userId = (string)$user->_id;
+            $userId = (string) $user->_id;
         }
 
-        return (string)$this->creatorObj->_id === $userId;
+        return (string) $this->creatorObj->_id === $userId;
     }
 
     /**
@@ -120,6 +120,6 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
      */
     public function idEqualTo($value)
     {
-        return (string)$this->_id === (string)$value;
+        return (string) $this->_id === (string) $value;
     }
 }
