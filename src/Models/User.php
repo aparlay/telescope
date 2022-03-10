@@ -638,4 +638,21 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->verification_status === UserVerificationStatus::VERIFIED->value;
     }
+
+    /**
+     * @param  User|Authenticatable|ObjectId|string|null  $user
+     * @return bool
+     */
+    public function equalTo(User|Authenticatable|ObjectId|string|null $user): bool
+    {
+        if ($user instanceof ObjectId) {
+            $userId = (string)$user;
+        } elseif ($user instanceof Authenticatable) {
+            $userId = (string)$user->_id;
+        } else {
+            $userId = (string)$user;
+        }
+
+        return (string)$this->_id === $userId;
+    }
 }

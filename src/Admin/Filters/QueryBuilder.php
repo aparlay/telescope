@@ -16,6 +16,7 @@ class QueryBuilder
     /**
      * @param $subject
      * @param $filter
+     * @param $sort
      * @return QueryBuilder
      */
     public function for($subject, $filter, $sort): self
