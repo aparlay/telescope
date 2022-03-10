@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum VersionOs: string implements Enum
 {
+    use EnumEnhancements;
+
     case ANDROID = 'android';
     case IOS = 'ios';
     case WINDOWS = 'windows';

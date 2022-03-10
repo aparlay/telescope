@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum EmailType: int implements Enum
 {
+    use EnumEnhancements;
+
     case OTP = 0;
     case CONTACT = 1;
 

@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum UserInterestedIn: int implements Enum
 {
+    use EnumEnhancements;
+
     case FEMALE = 0;
     case MALE = 1;
     case TRANSGENDER = 2;

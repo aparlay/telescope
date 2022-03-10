@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum UserVisibility: int implements Enum
 {
+    use EnumEnhancements;
+
     case PRIVATE = 0;
     case PUBLIC = 1;
 

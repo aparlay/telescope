@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum ReportStatus: int implements Enum
 {
+    use EnumEnhancements;
+
     case REPORTED = 0;
     case REVISED = 1;
 

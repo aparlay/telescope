@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum UserDocumentType: int implements Enum
 {
+    use EnumEnhancements;
+
     case ID_CARD = 0;
     case SELFIE = 1;
 

@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum AlertType: int implements Enum
 {
+    use EnumEnhancements;
+
     case USER = 0;
     case MEDIA_REMOVED = 20;
     case MEDIA_NOTICED = 21;

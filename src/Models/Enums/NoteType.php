@@ -6,6 +6,8 @@ use Aparlay\Core\Models\User;
 
 enum NoteType: int implements Enum
 {
+    use EnumEnhancements;
+
     case SUSPEND = 1;
     case UNSUSPEND = 2;
     case BAN = 3;

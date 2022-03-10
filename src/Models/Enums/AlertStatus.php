@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum AlertStatus: int implements Enum
 {
+    use EnumEnhancements;
+
     case NOT_VISITED = 0;
     case VISITED = 1;
 

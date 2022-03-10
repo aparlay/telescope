@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum UserStatus: int implements Enum
 {
+    use EnumEnhancements;
+
     case PENDING = 0;
     case VERIFIED = 1;
     case ACTIVE = 2;

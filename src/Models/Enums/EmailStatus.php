@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum EmailStatus: int implements Enum
 {
+    use EnumEnhancements;
+
     case QUEUED = 0;
     case SENT = 1;
     case OPENED = 2;
