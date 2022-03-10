@@ -32,6 +32,7 @@ class UserSeeder extends Seeder
     {
         $user = AdminUser::query()->first();
 
+        $user->type = UserType::ADMIN->value;
         $user->password_hash = Hash::make('waptap');
         $user->status = UserStatus::ACTIVE->value;
         $user->email = 'user@waptap.com';

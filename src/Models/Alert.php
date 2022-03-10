@@ -69,6 +69,7 @@ class Alert extends BaseModel
         'updated_at',
         'user_document_id',
         'user_payout_id',
+        'wallet_id',
     ];
 
     /**
@@ -114,14 +115,6 @@ class Alert extends BaseModel
     public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
-    }
-
-    /**
-     * Get the media associated with the alert.
-     */
-    public function userDocumentObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
-    {
-        return $this->belongsTo(UserDocument::class, 'media_id');
     }
 
     /**
