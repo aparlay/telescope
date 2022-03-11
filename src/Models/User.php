@@ -639,6 +639,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->verification_status === UserVerificationStatus::VERIFIED->value;
     }
 
+    public function getCountryAlpha3Attribute()
+    {
+        return \Aparlay\Core\Helpers\Country::getAlpha3ByAlpha2($this->country_alpha2);
+    }
+
     /**
      * @param  User|Authenticatable|ObjectId|string|null  $user
      * @return bool
