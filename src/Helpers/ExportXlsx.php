@@ -4,5 +4,4 @@ namespace Aparlay\Core\Helpers;
 
 class ExportXlsx
 {
-
 }
