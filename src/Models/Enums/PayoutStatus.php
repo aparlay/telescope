@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-
 enum PayoutStatus: int implements Enum
 {
     use EnumEnhancements;
