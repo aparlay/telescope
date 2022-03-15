@@ -12,6 +12,8 @@ enum AlertType: int implements Enum
 
     case USER_DOCUMENT_REJECTED = 50;
     case USER_PAYOUT_REJECTED = 30;
+    case USER_PAYOUT_FAILED = 31;
+
     case WALLET_REJECTED = 40;
 
     public function label(): string
