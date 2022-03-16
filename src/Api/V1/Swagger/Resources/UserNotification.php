@@ -35,7 +35,7 @@ class UserNotification
     public $status_label;
 
     /**
-     * @OA\Property(property="entity", type="array", @OA\Item (ref="#/components/schemas/Media"))
+     * @OA\Property(property="entity", type="object", @OA\Property (ref="#/components/schemas/Media"))
      */
     public $entity;
 }

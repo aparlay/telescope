@@ -130,22 +130,22 @@ class Me
     public $media_count;
 
     /**
-     * @OA\Property(property="country_alpha2", type="string", example='US')
+     * @OA\Property(property="country_alpha2", type="string", example="US")
      */
     public $country_alpha2;
 
     /**
-     * @OA\Property(property="country_alpha3", type="string", example='USA')
+     * @OA\Property(property="country_alpha3", type="string", example="USA")
      */
     public $country_alpha3;
 
     /**
-     * @OA\Property(property="country_label", type="string", example='United State of America')
+     * @OA\Property(property="country_label", type="string", example="United State of America")
      */
     public $country_label;
 
     /**
-     * @OA\Property(property="country_label", type="array", @OA\Items ())
+     * @OA\Property(property="country_flags", type="array", @OA\Items ())
      */
     public $country_flags;
 

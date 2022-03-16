@@ -10,7 +10,7 @@ use OpenApi\Annotations as OA;
  *     tags={"user-notification"},
  *     summary="Fetch all user notifications for current user",
  *     description="Fetch all user notifications for current user",
- *     operationId="fetchUserDocumentList",
+ *     operationId="fetchUserNotificationList",
  *     security={{"bearerAuth": {}}},
  *     @OA\Parameter(
  *         name="X-DEVICE-ID",
@@ -20,7 +20,7 @@ use OpenApi\Annotations as OA;
  *         @OA\Schema(
  *             type="string"
  *         )
- *     ),     *
+ *     ),
  *     @OA\Response(
  *         response=200,
  *         description="successful operation",
