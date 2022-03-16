@@ -247,6 +247,14 @@ class Media extends BaseModel
     }
 
     /**
+     * Get all of the post's comments.
+     */
+    public function userNotifications()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    /**
      * Get the user's full name.
      */
     public function getIsAdultAttribute(): bool

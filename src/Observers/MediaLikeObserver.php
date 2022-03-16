@@ -5,6 +5,8 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Notifications\ContactUs;
+use Aparlay\Core\Notifications\MediaLiked;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
@@ -51,6 +53,9 @@ class MediaLikeObserver extends BaseModelObserver
             ['likes' => DT::utcNow()]
         );
         $media->save();
+        $media->notify(
+            new MediaLiked($data['email'], $data['name'], 'Contact Us notification', $data['message'])
+        );
 
         $user = $media->userObj;
         $likeCount = MediaLike::user($user->_id)->count();
