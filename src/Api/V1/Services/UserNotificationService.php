@@ -3,16 +3,26 @@
 namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Dto\UserNotificationDto;
+use Aparlay\Core\Api\V1\Models\UserDocument;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\UserNotification;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 
-class NotificationService
+class UserNotificationService
 {
     use HasUserTrait;
+
+    public function index(): LengthAwarePaginator
+    {
+        return UserNotification::user($this->getUser()->_id)
+            ->with('usernotifiable')
+            ->cursorPaginate(20)
+            ->withQueryString();
+    }
 
     /**
      * Responsible to create like for given media.

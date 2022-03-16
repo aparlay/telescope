@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Notifications;
 
 use Aparlay\Core\Api\V1\Dto\UserNotificationDto;
-use Aparlay\Core\Api\V1\Services\NotificationService;
+use Aparlay\Core\Api\V1\Services\UserNotificationService;
 use Aparlay\Core\Events\UserNotificationEvent;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
@@ -28,7 +28,7 @@ final class UserNotificationChannel
     {
         $notificationDTO = UserNotificationDto::fromArray($notification->toArray($notifiable));
 
-        $notificationService = app()->make(NotificationService::class);
+        $notificationService = app()->make(UserNotificationService::class);
         $userNotification = $notificationService->create($notificationDTO);
 
         UserNotificationEvent::dispatch((string) $userNotification->_id, (string) $userNotification->user_id);

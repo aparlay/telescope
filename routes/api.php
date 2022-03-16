@@ -11,6 +11,7 @@ use Aparlay\Core\Api\V1\Controllers\ReportController;
 use Aparlay\Core\Api\V1\Controllers\SiteController;
 use Aparlay\Core\Api\V1\Controllers\UserController;
 use Aparlay\Core\Api\V1\Controllers\UserDocumentController;
+use Aparlay\Core\Api\V1\Controllers\UserNotificationController;
 use Aparlay\Core\Api\V1\Controllers\VersionController;
 use Illuminate\Support\Facades\Route;
 
@@ -71,12 +72,21 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
         ->prefix('user-document')
         ->name('user-document.')
         ->controller(UserDocumentController::class)->group(function () {
-            /* Authentication Group with user prifix */
+            /* Authentication Group with user prefix */
             Route::post('/', 'store')->name('store');
             Route::get('/', 'index')->name('index');
             Route::put('/send-to-verification', 'sendToVerification')->name('send-to-verification');
             Route::get('/{userDocument}', 'view')->name('view');
         });
+
+    Route::middleware(['auth:api', 'cookies-auth'])
+        ->prefix('user-notification')
+        ->name('user-notification.')
+        ->controller(UserNotificationController::class)->group(function () {
+        /* Authentication Group with user prefix */
+        Route::get('/', 'index')->name('index');
+        Route::put('/{userDocument}', 'read')->name('read');
+    });
 
     /* Authentication Group with me prefix */
     Route::middleware(['auth:api', 'cookies-auth'])->name('profile.')->group(function () {
