@@ -6,9 +6,12 @@ use Aparlay\Core\Database\Factories\AlertFactory;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Scopes\AlertScope;
+use Aparlay\Payout\Models\UserPayout;
+use Aparlay\Payout\Models\Wallet;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
@@ -67,9 +70,11 @@ class Alert extends BaseModel
         'updated_by',
         'created_at',
         'updated_at',
-        'user_document_id',
-        'user_payout_id',
-        'wallet_id',
+        'entity_id',
+        'entity_type',
+        'user_document_id', // @todo rework this fields
+        'user_payout_id',  // @todo rework this fields
+        'wallet_id',  // @todo rework this fields
     ];
 
     /**
@@ -93,6 +98,19 @@ class Alert extends BaseModel
         'status' => 'integer',
     ];
 
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // to keep entities in database without namespace
+        Relation::morphMap([
+            UserPayout::shortClassName() => UserPayout::class,
+            UserDocument::shortClassName() => UserDocument::class,
+            Wallet::shortClassName() => Wallet::class
+        ]);
+    }
+
     /**
      * Create a new factory instance for the model.
      */
@@ -107,6 +125,12 @@ class Alert extends BaseModel
     public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+
+    public function entityObj()
+    {
+        return $this->morphTo('entity');
     }
 
     /**
