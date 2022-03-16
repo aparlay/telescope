@@ -95,7 +95,6 @@ class Alert extends BaseModel
         'status' => 'integer',
     ];
 
-
     public static function boot()
     {
         parent::boot();
@@ -104,7 +103,7 @@ class Alert extends BaseModel
         Relation::morphMap([
             UserPayout::shortClassName() => UserPayout::class,
             UserDocument::shortClassName() => UserDocument::class,
-            Wallet::shortClassName() => Wallet::class
+            Wallet::shortClassName() => Wallet::class,
         ]);
     }
 
@@ -123,7 +122,6 @@ class Alert extends BaseModel
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
 
     public function entityObj()
     {
