@@ -67,24 +67,25 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
         });
     });
 
-    Route::prefix('user-document')->name('user-document.')->group(function () {
+    Route::middleware(['auth:api', 'cookies-auth'])
+        ->prefix('user-document')
+        ->name('user-document.')
+        ->controller(UserDocumentController::class)->group(function () {
         /* Authentication Group with user prifix */
-        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
-            Route::post('/', [UserDocumentController::class, 'store'])->name('store');
-            Route::get('/', [UserDocumentController::class, 'index'])->name('index');
-            Route::put('/send-to-verification', [UserDocumentController::class, 'sendToVerification'])->name('send-to-verification');
-            Route::get('/{doc_id}', [UserDocumentController::class, 'view'])->name('view');
-        });
+        Route::post('/', 'store')->name('store');
+        Route::get('/', 'index')->name('index');
+        Route::put('/send-to-verification', 'sendToVerification')->name('send-to-verification');
+        Route::get('/{userDocument}', 'view')->name('view');
     });
 
     /* Authentication Group with me prefix */
     Route::middleware(['auth:api', 'cookies-auth'])->name('profile.')->group(function () {
         Route::delete('/logout', [AuthController::class, 'logout'])->name('user.logout');
-        Route::prefix('me')->group(function () {
-            Route::get('/', [UserController::class, 'me'])->name('user.me');
-            Route::post('/delete', [UserController::class, 'destroy']);
-            Route::match(['put', 'patch'], '/', [UserController::class, 'update']);
-            Route::get('/token', [UserController::class, 'token']);
+        Route::prefix('me')->controller(UserController::class)->group(function () {
+            Route::get('/', 'me')->name('user.me');
+            Route::post('/delete', 'destroy');
+            Route::match(['put', 'patch'], '/', 'update');
+            Route::get('/token', 'token');
         });
     });
 
