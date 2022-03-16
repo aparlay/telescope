@@ -71,12 +71,12 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
         ->prefix('user-document')
         ->name('user-document.')
         ->controller(UserDocumentController::class)->group(function () {
-        /* Authentication Group with user prifix */
-        Route::post('/', 'store')->name('store');
-        Route::get('/', 'index')->name('index');
-        Route::put('/send-to-verification', 'sendToVerification')->name('send-to-verification');
-        Route::get('/{userDocument}', 'view')->name('view');
-    });
+            /* Authentication Group with user prifix */
+            Route::post('/', 'store')->name('store');
+            Route::get('/', 'index')->name('index');
+            Route::put('/send-to-verification', 'sendToVerification')->name('send-to-verification');
+            Route::get('/{userDocument}', 'view')->name('view');
+        });
 
     /* Authentication Group with me prefix */
     Route::middleware(['auth:api', 'cookies-auth'])->name('profile.')->group(function () {
