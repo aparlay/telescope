@@ -57,7 +57,7 @@ class UploadService
         $destinationPath = Storage::disk('upload')->path($fileName);
         if ($file->validateFile() && $file->save($destinationPath)) {
             $file->deleteChunks();
-            $hash = md5_file($destinationPath.PATH_SEPARATOR.$fileName);
+            $hash = md5_file($destinationPath);
             $result['data'] = [
                 'code' => 201,
                 'status' => 'OK',
