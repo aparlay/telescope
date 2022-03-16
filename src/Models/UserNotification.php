@@ -89,6 +89,7 @@ class UserNotification extends BaseModel
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     /**
      * Get the parent imageable model (user or post).
      */

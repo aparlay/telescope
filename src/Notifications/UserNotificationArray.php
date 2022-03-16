@@ -13,7 +13,6 @@ trait UserNotificationArray
     public string $message;
     public ObjectId $user_id;
 
-
     /**
      * Get the notification's delivery channels.
      *
