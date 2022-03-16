@@ -31,7 +31,7 @@ class UserNotificationFactory extends Factory
     {
         $category = $this->faker->randomElement(UserNotificationCategory::getAllValues());
 
-        $entityType = match ($category) {
+        $usernotifiableType = match ($category) {
             UserNotificationCategory::TIPS => Tip::class,
             UserNotificationCategory::LIKES, UserNotificationCategory::COMMENTS => Media::class,
             UserNotificationCategory::FOLLOWS => Follow::class,
@@ -42,9 +42,9 @@ class UserNotificationFactory extends Factory
             'user_id' => function () {
                 return new ObjectId(User::factory()->create()->_id);
             },
-            'entity_type' => $entityType,
-            'entity_id' => function () use ($entityType) {
-                return $entityType ? new ObjectId() : null;
+            'usernotifiable_type' => $usernotifiableType,
+            'usernotifiable_id' => function () use ($usernotifiableType) {
+                return $usernotifiableType ? new ObjectId() : null;
             },
             'category' => $this->faker->randomElement(UserNotificationCategory::getAllValues()),
             'status' => $this->faker->randomElement(UserNotificationStatus::getAllValues()),

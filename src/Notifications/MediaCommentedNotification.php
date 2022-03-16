@@ -4,12 +4,13 @@ namespace Aparlay\Core\Notifications;
 
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Notifications\Notification;
 
-class CreatorAccountApproved extends Notification
+class MediaCommentedNotification extends Notification
 {
     use Queueable;
     use UserNotificationArray;
@@ -19,10 +20,11 @@ class CreatorAccountApproved extends Notification
      *
      * @return void
      */
-    public function __construct(User|Authenticatable $user, string $message)
+    public function __construct(User|Authenticatable $user, Media $media, string $message)
     {
-        $this->entity_type = User::class;
-        $this->entity_id = $user->_id;
+        $this->usernotifiable_type = Media::class;
+        $this->usernotifiable_id = $media->_id;
+        $this->usernotifiable = $media;
         $this->user_id = $user->_id;
         $this->category = UserNotificationCategory::COMMENTS->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;

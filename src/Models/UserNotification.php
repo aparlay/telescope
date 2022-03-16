@@ -5,9 +5,11 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Database\Factories\AlertFactory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\Scopes\UserNotificationScope;
+use Aparlay\Payment\Models\Tip;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
@@ -16,8 +18,8 @@ use MongoDB\BSON\ObjectId;
  *
  * @property ObjectId $_id
  * @property ObjectId $user_id
- * @property ObjectId $entity_id
- * @property string $entity_type
+ * @property ObjectId $usernotifiable_id
+ * @property string $usernotifiable_type
  * @property string $reason
  * @property int $status
  * @property int $category
@@ -25,6 +27,7 @@ use MongoDB\BSON\ObjectId;
  * @property ObjectId $updated_by
  * @property string $created_at
  * @property string $updated_at
+ * @property User|Media|Tip $usernotifiable
  *
  * @property-read string $category_label
  * @property-read string $status_label
@@ -43,7 +46,7 @@ class UserNotification extends BaseModel
      *
      * @var string
      */
-    protected $collection = 'notifications';
+    protected $collection = 'user_notifications';
 
     /**
      * The attributes that are mass assignable.
@@ -53,8 +56,8 @@ class UserNotification extends BaseModel
     protected $fillable = [
         '_id',
         'user_id',
-        'entity_id',
-        'entity_type',
+        'usernotifiable_id',
+        'usernotifiable_type',
         'category',
         'status',
         'created_by',
@@ -91,9 +94,9 @@ class UserNotification extends BaseModel
     }
 
     /**
-     * Get the parent imageable model (user or post).
+     * Get the parent userNotifiable model (user or post).
      */
-    public function entity()
+    public function userNotifiable(): MorphTo|\Jenssegers\Mongodb\Relations\MorphTo
     {
         return $this->morphTo();
     }

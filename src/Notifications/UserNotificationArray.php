@@ -2,12 +2,16 @@
 
 namespace Aparlay\Core\Notifications;
 
+use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\User;
+use Aparlay\Payment\Models\Tip;
 use MongoDB\BSON\ObjectId;
 
 trait UserNotificationArray
 {
-    public string|null $entity_type;
-    public ObjectId|null $entity_id;
+    public string|null $usernotifiable_type;
+    public ObjectId|null $usernotifiable_id;
+    public Tip|Media|User|null $usernotifiable;
     public int $category;
     public int $status;
     public string $message;

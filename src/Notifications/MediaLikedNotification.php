@@ -4,13 +4,13 @@ namespace Aparlay\Core\Notifications;
 
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
-use Aparlay\Payment\Models\Tip;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Notifications\Notification;
 
-class TipSent extends Notification
+class MediaLikedNotification extends Notification
 {
     use Queueable;
     use UserNotificationArray;
@@ -20,12 +20,12 @@ class TipSent extends Notification
      *
      * @return void
      */
-    public function __construct(User|Authenticatable $user, Tip $tip, string $message)
+    public function __construct(User|Authenticatable $user, Media $media, string $message)
     {
-        $this->entity_type = Tip::class;
-        $this->entity_id = $tip->_id;
+        $this->usernotifiable_type = Media::class;
+        $this->usernotifiable_id = $media->_id;
         $this->user_id = $user->_id;
-        $this->category = UserNotificationCategory::TIPS->value;
+        $this->category = UserNotificationCategory::LIKES->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;
     }

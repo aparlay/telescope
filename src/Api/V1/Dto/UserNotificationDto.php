@@ -5,10 +5,10 @@ namespace Aparlay\Core\Api\V1\Dto;
 use Spatie\DataTransferObject\DataTransferObject;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
-class NotificationDto extends DataTransferObject
+class UserNotificationDto extends DataTransferObject
 {
-    public $entity_type;
-    public $entity_id;
+    public $usernotifiable_type;
+    public $usernotifiable_id;
     public $category;
     public $status;
     public $user_id;

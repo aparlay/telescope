@@ -3,17 +3,20 @@
 namespace Aparlay\Core\Events;
 
 use Aparlay\Core\Models\UserNotification;
+use Illuminate\Broadcasting\InteractsWithBroadcasting;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 use MongoDB\BSON\ObjectId;
 
-class UserNotificationEvent implements ShouldBroadcast
+class UserNotificationEvent implements  ShouldBroadcastNow
 {
     use Dispatchable;
     use InteractsWithSockets;
-    use InteractsWithSockets;
+    use SerializesModels;
+    use InteractsWithBroadcasting;
 
     /**
      * The credit card instance.
@@ -32,6 +35,7 @@ class UserNotificationEvent implements ShouldBroadcast
     {
         $this->userNotification = UserNotification::findOrFail(new ObjectId($userNotificationId));
         $this->userId = $userId;
+        $this->broadcastVia('socket');
     }
 
     /**
@@ -49,7 +53,7 @@ class UserNotificationEvent implements ShouldBroadcast
      *
      * @return string
      */
-    public function broadcastAs()
+    public function broadcastAs(): string
     {
         return 'UserNotification';
     }
@@ -59,14 +63,14 @@ class UserNotificationEvent implements ShouldBroadcast
      *
      * @return array
      */
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return [
             'category' => (string) $this->userNotification->category,
             'category_label' => (string) $this->userNotification->category_label,
             'status' => (string) $this->userNotification->status,
             'status_label' => (string) $this->userNotification->status_label,
-            'entity' => (string) $this->entity,
+            'entity' => (string) $this->userNotification->usernotifiable,
             'created_at' => $this->userNotification->created_at->valueOf(),
             'updated_at' => $this->userNotification->updated_at->valueOf(),
         ];

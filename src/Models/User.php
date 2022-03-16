@@ -325,6 +325,14 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get all the user's notifications.
+     */
+    public function userNotifiable()
+    {
+        return $this->morphMany(UserNotification::class, 'usernotifiable');
+    }
+
+    /**
      * @return string
      */
     public function getSlackAdminUrlAttribute(): string

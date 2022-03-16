@@ -5,11 +5,9 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
-use Aparlay\Core\Notifications\ContactUs;
-use Aparlay\Core\Notifications\MediaLiked;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
+use Aparlay\Core\Notifications\MediaLikedNotification;
 use MongoDB\BSON\ObjectId;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaLikeObserver extends BaseModelObserver
 {
@@ -37,6 +35,7 @@ class MediaLikeObserver extends BaseModelObserver
      *
      * @param  MediaLike  $model
      * @return void
+     * @throws InvalidArgumentException
      */
     public function created($model): void
     {
@@ -54,7 +53,7 @@ class MediaLikeObserver extends BaseModelObserver
         );
         $media->save();
         $media->notify(
-            new MediaLiked($data['email'], $data['name'], 'Contact Us notification', $data['message'])
+            new MediaLikedNotification($media->creatorObj, $media, '')
         );
 
         $user = $media->userObj;
@@ -85,7 +84,7 @@ class MediaLikeObserver extends BaseModelObserver
      *
      * @param  MediaLike  $model
      * @return void
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function deleted($model): void
     {

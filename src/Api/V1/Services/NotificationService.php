@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
-use Aparlay\Core\Api\V1\Dto\NotificationDto;
+use Aparlay\Core\Api\V1\Dto\UserNotificationDto;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\UserNotification;
@@ -17,10 +17,10 @@ class NotificationService
     /**
      * Responsible to create like for given media.
      *
-     * @param  NotificationDto  $notificationDto
+     * @param  UserNotificationDto  $notificationDto
      * @return Model|UserNotification|null
      */
-    public function create(NotificationDto $notificationDto): Model|UserNotification|null
+    public function create(UserNotificationDto $notificationDto): Model|UserNotification|null
     {
         $data = $notificationDto->except('user')->toArray();
         $data['user_id'] = new ObjectId($this->getUser()->_id);

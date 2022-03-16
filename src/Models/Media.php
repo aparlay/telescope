@@ -247,11 +247,11 @@ class Media extends BaseModel
     }
 
     /**
-     * Get all of the post's comments.
+     * Get all the user's notifications.
      */
-    public function userNotifications()
+    public function userNotifiable()
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->morphMany(UserNotification::class, 'usernotifiable');
     }
 
     /**
