@@ -5,7 +5,6 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Database\Factories\AlertFactory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\Scopes\UserNotificationScope;
-use Aparlay\Payment\Models\Tip;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,7 +26,7 @@ use MongoDB\BSON\ObjectId;
  * @property ObjectId $updated_by
  * @property string $created_at
  * @property string $updated_at
- * @property User|Media|Tip $usernotifiable
+ * @property mixed $usernotifiable
  *
  * @property-read string $category_label
  * @property-read string $status_label
