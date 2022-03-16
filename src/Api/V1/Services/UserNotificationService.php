@@ -16,7 +16,10 @@ class UserNotificationService
 {
     use HasUserTrait;
 
-    public function index(): LengthAwarePaginator
+    /**
+     * @return mixed
+     */
+    public function index(): mixed
     {
         return UserNotification::user($this->getUser()->_id)
             ->with('usernotifiable')
