@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use MongoDB\BSON\ObjectId;
 
-class UserNotificationEvent implements  ShouldBroadcastNow
+class UserNotificationEvent implements ShouldBroadcastNow
 {
     use Dispatchable;
     use InteractsWithSockets;

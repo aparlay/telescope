@@ -57,7 +57,7 @@ class UploadService
         $destinationPath = Storage::disk('upload')->path($fileName);
         if ($file->validateFile() && $file->save($destinationPath)) {
             $file->deleteChunks();
-            $hash = md5_file($destinationPath . PATH_SEPARATOR . $fileName);
+            $hash = md5_file($destinationPath.PATH_SEPARATOR.$fileName);
             $result['data'] = [
                 'code' => 201,
                 'status' => 'OK',
@@ -86,7 +86,7 @@ class UploadService
             $fileName = uniqid('tmp_', true).'.'.$file->getClientOriginalExtension();
             $destinationPath = Storage::disk('upload')->path('/');
             $file->move($destinationPath, $fileName);
-            $hash = md5_file($destinationPath . '/' . $fileName);
+            $hash = md5_file($destinationPath.'/'.$fileName);
 
             if (! Storage::disk('upload')->exists($fileName)) {
                 throw new UnprocessableEntityHttpException('Cannot upload the file.');

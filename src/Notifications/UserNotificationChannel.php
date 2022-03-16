@@ -31,6 +31,6 @@ final class UserNotificationChannel
         $notificationService = app()->make(NotificationService::class);
         $userNotification = $notificationService->create($notificationDTO);
 
-        UserNotificationEvent::dispatch((string)$userNotification->_id, (string)$userNotification->user_id);
+        UserNotificationEvent::dispatch((string) $userNotification->_id, (string) $userNotification->user_id);
     }
 }
