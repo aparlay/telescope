@@ -16,7 +16,7 @@ class UserNotificationPolicy
     {
         $userId = $user?->_id;
 
-        if ((string)$userId === (string)$userNotification->user_id) {
+        if ((string) $userId === (string) $userNotification->user_id) {
             return Response::allow();
         }
 

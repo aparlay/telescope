@@ -18,7 +18,7 @@ class UserDocumentPolicy
     {
         $userId = $user?->_id;
 
-        if ((string)$userId === (string)$userDocument->creatorObj->_id) {
+        if ((string) $userId === (string) $userDocument->creatorObj->_id) {
             return Response::allow();
         }
 
