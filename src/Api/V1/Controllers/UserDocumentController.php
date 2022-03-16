@@ -8,7 +8,9 @@ use Aparlay\Core\Api\V1\Resources\UserDocumentCollection;
 use Aparlay\Core\Api\V1\Resources\UserDocumentResource;
 use Aparlay\Core\Api\V1\Services\UserDocumentService;
 use Aparlay\Core\Models\UserDocument;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class UserDocumentController extends Controller
 {
@@ -23,9 +25,9 @@ class UserDocumentController extends Controller
     }
 
     /**
-     * @return UserDocumentCollection
+     * @return Response
      */
-    public function index()
+    public function index(): Response
     {
         if (auth()->check()) {
             $this->userDocumentService->setUser(auth()->user());
@@ -37,13 +39,13 @@ class UserDocumentController extends Controller
     }
 
     /**
-     * @param UserDocument $userDocument
-     * @return \Illuminate\Http\Response
+     * @param  UserDocument  $userDocument
+     * @return Response
+     * @throws AuthorizationException
      */
-    public function view($id)
+    public function view(UserDocument $userDocument): Response
     {
         $this->injectAuthUser($this->userDocumentService);
-        $userDocument = $this->userDocumentService->fetchById($id);
         $this->authorize('view', $userDocument);
 
         return $this->response(new UserDocumentResource($userDocument), '', Response::HTTP_OK);
@@ -52,7 +54,7 @@ class UserDocumentController extends Controller
     /**
      * @return Response
      */
-    public function sendToVerification()
+    public function sendToVerification(): Response
     {
         $this->injectAuthUser($this->userDocumentService);
         $user = $this->userDocumentService->changeToPending();
@@ -61,10 +63,11 @@ class UserDocumentController extends Controller
     }
 
     /**
-     * @param UserDocumentRequest $request
-     * @return \Illuminate\Http\Response
+     * @param  UserDocumentRequest  $request
+     * @return Response
+     * @throws UnknownProperties
      */
-    public function store(UserDocumentRequest $request)
+    public function store(UserDocumentRequest $request): Response
     {
         $dto = UserDocumentDto::fromRequest($request);
         if (auth()->check()) {
