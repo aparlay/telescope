@@ -72,9 +72,6 @@ class Alert extends BaseModel
         'updated_at',
         'entity_id',
         'entity_type',
-        'user_document_id', // @todo rework this fields
-        'user_payout_id',  // @todo rework this fields
-        'wallet_id',  // @todo rework this fields
     ];
 
     /**
