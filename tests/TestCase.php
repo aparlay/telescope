@@ -12,7 +12,7 @@ abstract class TestCase extends Orchestra
 
     protected $faker;
 
-    protected static  $isSeeded = false;
+    protected static $isSeeded = false;
 
     public function setUp(): void
     {
