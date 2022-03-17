@@ -117,6 +117,7 @@ class Hashtag extends BaseModel
     public function toSearchableArray()
     {
         $media = Media::hashtag($this->tag)->sort()->one();
+
         return [
             '_id' => (string) $this->_id,
             'type' => 'hashtag',
