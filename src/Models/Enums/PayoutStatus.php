@@ -6,10 +6,9 @@ enum PayoutStatus: int implements Enum
 {
     use EnumEnhancements;
 
-    case CREATED = 1;
-    case IN_PROGRESS = 2;
-    case SENT = 3;
-
+    case CREATED = 1; // ready for payout
+    case IN_PROGRESS = 2; // user made payout
+    case SENT = 3; // payout sent to gateway
     case COMPLETED = 8;
 
     public function label(): string
