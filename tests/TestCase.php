@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Tests;
 
+use Faker\Generator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -10,6 +11,7 @@ abstract class TestCase extends Orchestra
 {
     use CreatesApplication;
 
+    /** @var Generator  */
     protected $faker;
 
     protected static $isSeeded = false;
