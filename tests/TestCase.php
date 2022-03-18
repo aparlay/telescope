@@ -11,7 +11,9 @@ abstract class TestCase extends Orchestra
 {
     use CreatesApplication;
 
-    /** @var Generator  */
+    /**
+     * @var Generator
+     */
     protected $faker;
 
     protected static $isSeeded = false;
