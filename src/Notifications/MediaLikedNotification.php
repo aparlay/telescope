@@ -25,7 +25,6 @@ class MediaLikedNotification extends Notification
     {
         $this->usernotifiable_type = Media::class;
         $this->usernotifiable_id = new ObjectId($media->_id);
-        $this->usernotifiable = $media;
         $this->user_id = new ObjectId($user->_id);
         $this->category = UserNotificationCategory::LIKES->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;

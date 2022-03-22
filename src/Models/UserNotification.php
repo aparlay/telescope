@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\AlertFactory;
+use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\Scopes\UserNotificationScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -108,6 +109,6 @@ class UserNotification extends BaseModel
 
     public function getCategoryLabelAttribute(): string
     {
-        return UserNotificationStatus::from($this->status)->label();
+        return UserNotificationCategory::from($this->category)->label();
     }
 }

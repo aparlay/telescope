@@ -31,15 +31,15 @@ trait UserNotificationArray
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray(mixed $notifiable): array
     {
         return [
-            'usernotifiable_type' => $notifiable->usernotifiable_type,
-            'usernotifiable_id' => $notifiable->usernotifiable_id,
-            'category' => $notifiable->category,
-            'status' => $notifiable->status,
-            'user_id' => $notifiable->user_id,
-            'message' => $notifiable->message,
+            'usernotifiable_type' => $this->usernotifiable_type,
+            'usernotifiable_id' => $this->usernotifiable_id,
+            'category' => $this->category,
+            'status' => $this->status,
+            'user_id' => $this->user_id,
+            'message' => $this->message,
         ];
     }
 }
