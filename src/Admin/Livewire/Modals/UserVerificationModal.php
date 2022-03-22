@@ -9,6 +9,8 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
+use Aparlay\Core\Notifications\ContactUs;
+use Aparlay\Core\Notifications\CreatorAccountApprovedNotification;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
@@ -96,6 +98,10 @@ class UserVerificationModal extends Component
                     'user_document_id' => $document->_id,
                     'reason' => $reason,
                 ]);
+            } else {
+                $user->notify(
+                    new CreatorAccountApprovedNotification($user, __('Your account has been approved'))
+                );
             }
 
             $document->save();

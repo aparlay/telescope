@@ -247,6 +247,14 @@ class Media extends BaseModel
     }
 
     /**
+     * Get all the user's notifications.
+     */
+    public function userNotifiable()
+    {
+        return $this->morphMany(UserNotification::class, 'usernotifiable');
+    }
+
+    /**
      * Get the user's full name.
      */
     public function getIsAdultAttribute(): bool
