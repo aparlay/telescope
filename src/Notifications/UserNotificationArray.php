@@ -34,12 +34,12 @@ trait UserNotificationArray
     public function toArray($notifiable)
     {
         return [
-            'entity_type' => $this->entity_type,
-            'entity_id' => $this->entity_id,
-            'category' => $this->category,
-            'status' => $this->status,
-            'user_id' => $this->user_id,
-            'message' => $this->message,
+            'usernotifiable_type' => $notifiable->usernotifiable_type,
+            'usernotifiable_id' => $notifiable->usernotifiable_id,
+            'category' => $notifiable->category,
+            'status' => $notifiable->status,
+            'user_id' => $notifiable->user_id,
+            'message' => $notifiable->message,
         ];
     }
 }

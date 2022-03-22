@@ -9,6 +9,7 @@ use Aparlay\Core\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Notifications\Notification;
+use MongoDB\BSON\ObjectId;
 
 class MediaCommentedNotification extends Notification
 {
@@ -23,9 +24,9 @@ class MediaCommentedNotification extends Notification
     public function __construct(User|Authenticatable $user, Media $media, string $message)
     {
         $this->usernotifiable_type = Media::class;
-        $this->usernotifiable_id = $media->_id;
+        $this->usernotifiable_id = new ObjectId($media->_id);
         $this->usernotifiable = $media;
-        $this->user_id = $user->_id;
+        $this->user_id = new ObjectId($user->_id);
         $this->category = UserNotificationCategory::COMMENTS->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;

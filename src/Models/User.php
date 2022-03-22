@@ -82,6 +82,8 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property int         $verification_status
  * @property float       $sort_score
  * @property string      $deactivation_reason
+ * @property bool        $has_unread_chat
+ * @property bool        $has_notification
  *
  * @property-read string $admin_url
  * @property-read string $note_admin_url
