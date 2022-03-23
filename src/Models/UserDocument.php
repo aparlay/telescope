@@ -139,6 +139,6 @@ class UserDocument extends BaseModel
 
     public function alertObjs()
     {
-        return $this->hasMany(Alert::class, 'user_document_id');
+        return $this->morphMany(Alert::class, 'entity');
     }
 }

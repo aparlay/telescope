@@ -12,6 +12,15 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
         'updated_at',
     ];
 
+    /**
+     * Get only class name without namespace.
+     * @return bool|string
+     */
+    public static function shortClassName()
+    {
+        return substr(strrchr(static::class, '\\'), 1);
+    }
+
     public function addToSet(string $attribute, mixed $item, int $length = null): void
     {
         if (! is_array($this->$attribute)) {

@@ -10,10 +10,11 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
-use Aparlay\Core\Notifications\ContactUs;
+use Aparlay\Core\Models\UserDocument;
 use Aparlay\Core\Notifications\CreatorAccountApprovedNotification;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use MongoDB\BSON\ObjectId;
 
 class UserVerificationModal extends Component
 {
@@ -95,10 +96,12 @@ class UserVerificationModal extends Component
             $reason = $datum['reason'] ?? '';
 
             if (! $isApproved) {
-                $alertRepository->firstOrCreate([
+                Alert::create([
+                    'created_by' => new ObjectId($this->currentUser()->_id),
+                    'entity_id' => new ObjectId($document->_id),
                     'status' => AlertStatus::NOT_VISITED->value,
+                    'entity_type' => UserDocument::shortClassName(),
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
-                    'user_document_id' => $document->_id,
                     'reason' => $reason,
                 ]);
             } else {
