@@ -25,7 +25,7 @@ class CreatorAccountApprovedNotification extends Notification
         $this->usernotifiable_type = User::class;
         $this->usernotifiable_id = new ObjectId($user->_id);
         $this->user_id = new ObjectId($user->_id);
-        $this->category = UserNotificationCategory::COMMENTS->value;
+        $this->category = UserNotificationCategory::SYSTEM->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;
     }

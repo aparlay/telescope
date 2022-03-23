@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Events;
 
 use Aparlay\Core\Models\User;
-use Illuminate\Auth\Events\Authenticated;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -17,7 +17,7 @@ class UserVerificationStatusChangedEvent
      *
      * @return void
      */
-    public function __construct(public Authenticated|User $creator, public User $user, public int $verificationStatus)
+    public function __construct(public Authenticatable|User $creator, public User $user, public int $verificationStatus)
     {
     }
 }

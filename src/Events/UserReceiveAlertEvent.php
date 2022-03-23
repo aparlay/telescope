@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Events;
 
 use Aparlay\Core\Models\User;
-use Illuminate\Auth\Events\Authenticated;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -18,7 +18,7 @@ class UserReceiveAlertEvent
      * @return void
      */
     public function __construct(
-        public Authenticated|User $creator,
+        public Authenticatable|User $creator,
         public User $user,
         public int $type,
         public string $message
@@ -26,9 +26,9 @@ class UserReceiveAlertEvent
     }
 
     /**
-     * @return User|Authenticated
+     * @return User|Authenticatable
      */
-    public function getCreator(): User|Authenticated
+    public function getCreator(): User|Authenticatable
     {
         return $this->creator;
     }

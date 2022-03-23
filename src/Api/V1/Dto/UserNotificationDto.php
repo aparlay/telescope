@@ -11,6 +11,7 @@ class UserNotificationDto extends DataTransferObject
     public $usernotifiable_id;
     public $category;
     public $status;
+    public $message;
     public $user_id;
     private $user;
 

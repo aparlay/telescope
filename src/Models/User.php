@@ -651,7 +651,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getCountryAlpha3Attribute()
     {
-        return \Aparlay\Core\Helpers\Country::getAlpha3ByAlpha2($this->country_alpha2);
+        return $this->country_alpha2 ? \Aparlay\Core\Helpers\Country::getAlpha3ByAlpha2($this->country_alpha2) : '';
     }
 
     /**

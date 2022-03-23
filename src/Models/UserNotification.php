@@ -61,6 +61,7 @@ class UserNotification extends BaseModel
         'usernotifiable_type',
         'category',
         'status',
+        'message',
         'created_by',
         'updated_by',
         'created_at',

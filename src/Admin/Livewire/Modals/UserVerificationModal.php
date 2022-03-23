@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Livewire\Modals;
 
+use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\AlertRepository;
@@ -16,6 +17,8 @@ use Livewire\Component;
 
 class UserVerificationModal extends Component
 {
+    use CurrentUserTrait;
+
     public $selectedUser;
     public $verification_status;
     public $documents = [];
@@ -72,7 +75,7 @@ class UserVerificationModal extends Component
         $alertRepository = new AlertRepository(new Alert());
 
         $this->userRepository->updateVerificationStatus(
-            auth()->user(),
+            $this->currentUser(),
             $this->user,
             $this->verification_status
         );

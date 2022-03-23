@@ -43,6 +43,7 @@ class UserNotificationResource extends JsonResource
             'status_label' => $this->status_label,
             'category' => $this->category,
             'category_label' => $this->category_label,
+            'message' => $this->message,
             'entity' => $entity,
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
