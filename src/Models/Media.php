@@ -60,6 +60,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property float       $sort_score
  * @property User        $userObj
  * @property Alert[]     $alertObjs
+ * @property UserNotification[]     $userNotificationObjs
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
@@ -249,7 +250,7 @@ class Media extends BaseModel
     /**
      * Get all the user's notifications.
      */
-    public function userNotifiable()
+    public function userNotificationObjs()
     {
         return $this->morphMany(UserNotification::class, 'usernotifiable');
     }

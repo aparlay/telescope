@@ -15,11 +15,17 @@ abstract class AbstractResourceCollection extends ResourceCollection
 
     private function preparePagination()
     {
-        $links = [
-            'first' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->onFirstPage()))],
-            'last' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))],
-            'self' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))],
-        ];
+        if ($this->resource->onFirstPage() !== true) {
+            $links['first'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->firstPage()))];
+        }
+
+        if ($this->resource->onLastPage() !== true) {
+            $links['last'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))];
+        }
+
+        if ($this->resource->currentPage()) {
+            $links['self'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))];
+        }
 
         if ($this->resource->previousPageUrl()) {
             $links['prev'] = [
