@@ -75,16 +75,6 @@ class Alert extends BaseModel
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
      * The attributes that should be cast to native types.
      *
      * @var array
@@ -101,9 +91,9 @@ class Alert extends BaseModel
 
         // to keep entities in database without namespace
         Relation::morphMap([
-            UserPayout::shortClassName() => UserPayout::class,
-            UserDocument::shortClassName() => UserDocument::class,
-            Wallet::shortClassName() => Wallet::class,
+            'UserPayout' => UserPayout::class,
+            'UserDocument' => UserDocument::class,
+            'Wallet' => Wallet::class,
         ]);
     }
 

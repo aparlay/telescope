@@ -52,7 +52,7 @@ use OpenApi\Annotations as OA;
  *              @OA\Property(
  *                  property="data",
  *                  type="object",
- *                  ref="#/components/schemas/User"
+ *                  ref="#/components/schemas/Me"
  *              ),
  *              @OA\Property(
  *                  property="status",

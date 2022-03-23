@@ -82,6 +82,8 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property int         $verification_status
  * @property float       $sort_score
  * @property string      $deactivation_reason
+ * @property bool        $has_unread_chat
+ * @property bool        $has_notification
  *
  * @property-read string $admin_url
  * @property-read string $note_admin_url
@@ -322,6 +324,14 @@ class User extends Authenticatable implements JWTSubject
     public function userDocumentObjs(): HasMany|\Jenssegers\Mongodb\Relations\HasMany
     {
         return $this->hasMany(UserDocument::class, 'creator._id');
+    }
+
+    /**
+     * Get all the user's notifications.
+     */
+    public function userNotifiable()
+    {
+        return $this->morphMany(UserNotification::class, 'usernotifiable');
     }
 
     /**
@@ -637,6 +647,11 @@ class User extends Authenticatable implements JWTSubject
     public function getIsVerifiedAttribute()
     {
         return $this->verification_status === UserVerificationStatus::VERIFIED->value;
+    }
+
+    public function getCountryAlpha3Attribute()
+    {
+        return \Aparlay\Core\Helpers\Country::getAlpha3ByAlpha2($this->country_alpha2);
     }
 
     /**

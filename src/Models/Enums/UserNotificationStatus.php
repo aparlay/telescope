@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-enum AlertStatus: int implements Enum
+enum UserNotificationStatus: int implements Enum
 {
     use EnumEnhancements;
 

@@ -11,7 +11,7 @@ use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\UserDocument;
-use Aparlay\Payout\Models\UserPayout;
+use Aparlay\Core\Notifications\CreatorAccountApprovedNotification;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use MongoDB\BSON\ObjectId;
@@ -104,6 +104,10 @@ class UserVerificationModal extends Component
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
                     'reason' => $reason,
                 ]);
+            } else {
+                $user->notify(
+                    new CreatorAccountApprovedNotification($user, __('Your account has been approved'))
+                );
             }
 
             $document->save();
