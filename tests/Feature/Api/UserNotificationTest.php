@@ -18,7 +18,7 @@ class UserNotificationTest extends ApiTestCase
         $user = User::factory()->create();
         $userNotification = UserNotification::factory()->create([
             'user_id' => $user->_id,
-            'category' => UserNotificationCategory::SYSTEM->value
+            'category' => UserNotificationCategory::SYSTEM->value,
         ]);
         $this->actingAs($userNotification->userObj)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/user-notification', [])

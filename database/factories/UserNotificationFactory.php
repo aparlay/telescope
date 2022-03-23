@@ -46,7 +46,7 @@ class UserNotificationFactory extends Factory
             'usernotifiable_id' => function () use ($usernotifiableType) {
                 return $usernotifiableType ? new ObjectId() : null;
             },
-            'message' => ($category == UserNotificationCategory::SYSTEM->value) ? 'Your Creator application has been approved! 🎉': null,
+            'message' => ($category == UserNotificationCategory::SYSTEM->value) ? 'Your Creator application has been approved! 🎉' : null,
             'category' => $this->faker->randomElement(UserNotificationCategory::getAllValues()),
             'status' => $this->faker->randomElement(UserNotificationStatus::getAllValues()),
             'created_by' => function ($alert) {
