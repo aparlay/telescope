@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 /**
  * @mixin UserDocument
  */
-class UserNotificationCollection extends AbstractResourceCollection
+class UserNotificationCollection extends ResourceCollection
 {
-    public $collects = UserDocumentResource::class;
+    public $collects = UserNotificationResource::class;
 }

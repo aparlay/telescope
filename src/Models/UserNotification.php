@@ -61,6 +61,7 @@ class UserNotification extends BaseModel
         'usernotifiable_type',
         'category',
         'status',
+        'message',
         'created_by',
         'updated_by',
         'created_at',
@@ -97,7 +98,7 @@ class UserNotification extends BaseModel
     /**
      * Get the parent userNotifiable model (user or post).
      */
-    public function userNotifiable(): MorphTo|\Jenssegers\Mongodb\Relations\MorphTo
+    public function usernotifiable(): MorphTo|\Jenssegers\Mongodb\Relations\MorphTo
     {
         return $this->morphTo();
     }

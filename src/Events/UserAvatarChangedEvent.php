@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Events;
 
 use Aparlay\Core\Models\User;
-use Illuminate\Auth\Events\Authenticated;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -17,7 +17,7 @@ class UserAvatarChangedEvent
      *
      * @return void
      */
-    public function __construct(public User $user, public string $avatar)
+    public function __construct(public Authenticatable|User $user, public string $avatar)
     {
     }
 }

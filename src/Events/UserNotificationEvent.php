@@ -35,7 +35,7 @@ class UserNotificationEvent implements ShouldBroadcastNow
     {
         $this->userNotification = UserNotification::findOrFail(new ObjectId($userNotificationId));
         $this->userId = $userId;
-        $this->broadcastVia('socket');
+        //$this->broadcastVia('socket');
     }
 
     /**

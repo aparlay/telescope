@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Livewire\Modals;
 
+use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\AlertRepository;
@@ -9,13 +10,16 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
-use Aparlay\Core\Notifications\ContactUs;
+use Aparlay\Core\Models\UserDocument;
 use Aparlay\Core\Notifications\CreatorAccountApprovedNotification;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use MongoDB\BSON\ObjectId;
 
 class UserVerificationModal extends Component
 {
+    use CurrentUserTrait;
+
     public $selectedUser;
     public $verification_status;
     public $documents = [];
@@ -72,7 +76,7 @@ class UserVerificationModal extends Component
         $alertRepository = new AlertRepository(new Alert());
 
         $this->userRepository->updateVerificationStatus(
-            auth()->user(),
+            $this->currentUser(),
             $this->user,
             $this->verification_status
         );
@@ -92,10 +96,12 @@ class UserVerificationModal extends Component
             $reason = $datum['reason'] ?? '';
 
             if (! $isApproved) {
-                $alertRepository->firstOrCreate([
+                Alert::create([
+                    'created_by' => new ObjectId($this->currentUser()->_id),
+                    'entity_id' => new ObjectId($document->_id),
                     'status' => AlertStatus::NOT_VISITED->value,
+                    'entity_type' => UserDocument::shortClassName(),
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
-                    'user_document_id' => $document->_id,
                     'reason' => $reason,
                 ]);
             } else {

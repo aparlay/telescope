@@ -49,7 +49,11 @@ use OpenApi\Annotations as OA;
  *             )
  *         ),
  *         @OA\JsonContent(
- *             @OA\Property(property="data", type="array", @OA\Items (ref="#/components/schemas/UserNotification")),
+ *             @OA\Property(property="data", type="object",
+ *                 @OA\Property(property="items", type="array", @OA\Items(ref="#/components/schemas/UserNotification")),
+ *                 @OA\Property(property="_links", ref="#/components/schemas/ListLinks"),
+ *                 @OA\Property(property="_meta", ref="#/components/schemas/Meta")
+ *             ),
  *             @OA\Property(property="code", format="integer", example=200),
  *             @OA\Property(property="status", format="string", example="OK")
  *         ),
