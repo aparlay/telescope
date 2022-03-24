@@ -111,11 +111,12 @@ class UserRepository
         ) {
             UserVerificationStatusChangedEvent::dispatch($adminUser, $user, $verificationStatus);
 
+            $message = 'Your Creator application has been reject! 😔';
             if ($verificationStatus == UserVerificationStatus::VERIFIED->value) {
-                $user->notify(
-                    new CreatorAccountApprovedNotification($user, 'Your Creator application has been approved! 🎉')
-                );
+                $message = 'Your Creator application has been approved! 🎉';
             }
+
+            $user->notify(new CreatorAccountApprovedNotification($user, $message));
         }
 
         return $user;
