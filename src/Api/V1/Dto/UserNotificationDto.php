@@ -9,7 +9,6 @@ class UserNotificationDto extends DataTransferObject
 {
     public $entity_type;
     public $entity_id;
-    public $entity;
     public $category;
     public $status;
     public $message;
@@ -23,8 +22,6 @@ class UserNotificationDto extends DataTransferObject
      */
     public static function fromArray(array $data): self
     {
-        $data['entity']['_id'] = $data['entity_id'];
-        $data['entity']['_type'] = $data['entity_type'];
         return new self($data);
     }
 

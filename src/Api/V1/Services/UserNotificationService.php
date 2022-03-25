@@ -37,6 +37,8 @@ class UserNotificationService
     {
         $data = $notificationDto->except('user')->toArray();
         $data['user_id'] = new ObjectId($this->getUser()->_id);
+        $data['entity._id'] = new ObjectId($data['entity_id']);
+        $data['entity._type'] = $data['entity_type'];
         try {
             $model = UserNotification::create($data);
         } catch (\Exception $e) {
