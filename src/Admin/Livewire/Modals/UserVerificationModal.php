@@ -43,9 +43,6 @@ class UserVerificationModal extends Component
         $this->verification_status = $user->verification_status;
 
         foreach ($this->documents as $document) {
-            Log::error($document->alertObjs);
-            Log::error($document->alertObjs()->latest()->first());
-
             $alert = $document->alertObjs()->latest()->first();
             $this->documentsData[$document->_id]['is_approved'] = $document->status === UserDocumentStatus::APPROVED->value;
             $this->documentsData[$document->_id]['reason'] = $alert ? $alert->reason : '';
