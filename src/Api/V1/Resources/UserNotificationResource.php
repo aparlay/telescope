@@ -30,9 +30,9 @@ class UserNotificationResource extends JsonResource
     public function toArray($request)
     {
         $entity = match ($this->category) {
-            UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value => new MediaResource($this->usernotifiable),
-            UserNotificationCategory::FOLLOWS->value => new FollowResource($this->usernotifiable),
-            UserNotificationCategory::TIPS->value => new TipResource($this->usernotifiable),
+            UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value => new MediaResource($this->entityObj),
+            UserNotificationCategory::FOLLOWS->value => new FollowResource($this->entityObj),
+            UserNotificationCategory::TIPS->value => new TipResource($this->entityObj),
             default => null,
         };
 

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\BelongsTo;
+use Jenssegers\Mongodb\Relations\MorphMany;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -105,6 +106,11 @@ class UserDocument extends BaseModel
         return $this->belongsTo(User::class, 'creator._id');
     }
 
+    public function alertObjs(): \Illuminate\Database\Eloquent\Relations\MorphMany|MorphMany
+    {
+        return $this->morphMany(Alert::class, 'entity.');
+    }
+
     public function getFilePath()
     {
         if ($this->creatorObj) {
@@ -135,10 +141,5 @@ class UserDocument extends BaseModel
     public function getStatusBadgeColorAttribute()
     {
         return UserDocumentStatus::from($this->status)->badgeColor();
-    }
-
-    public function alertObjs()
-    {
-        return $this->morphMany(Alert::class, 'entity');
     }
 }

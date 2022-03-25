@@ -27,7 +27,7 @@ use MongoDB\BSON\ObjectId;
  * @property ObjectId $updated_by
  * @property string $created_at
  * @property string $updated_at
- * @property mixed $usernotifiable
+ * @property mixed $entityObj
  *
  * @property-read string $category_label
  * @property-read string $status_label
@@ -98,9 +98,9 @@ class UserNotification extends BaseModel
     /**
      * Get the parent userNotifiable model (user or post).
      */
-    public function usernotifiable(): MorphTo|\Jenssegers\Mongodb\Relations\MorphTo
+    public function entityObj(): MorphTo|\Jenssegers\Mongodb\Relations\MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo('entity.');
     }
 
     public function getStatusLabelAttribute(): string

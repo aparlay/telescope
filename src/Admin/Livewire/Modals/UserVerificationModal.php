@@ -12,6 +12,7 @@ use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\UserDocument;
 use Aparlay\Core\Notifications\CreatorAccountApprovedNotification;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use MongoDB\BSON\ObjectId;
@@ -38,10 +39,13 @@ class UserVerificationModal extends Component
         $this->userRepository = new UserRepository(new User());
         $user = $this->userRepository->find($userId);
         $this->user = $user;
-        $this->documents = $user->userDocumentObjs()->latest()->get() ?? [];
+        $this->documents = $user->userDocumentObjs()->with('alertObjs')->latest()->get() ?? [];
         $this->verification_status = $user->verification_status;
 
         foreach ($this->documents as $document) {
+            Log::error($document->alertObjs);
+            Log::error($document->alertObjs()->latest()->first());
+
             $alert = $document->alertObjs()->latest()->first();
             $this->documentsData[$document->_id]['is_approved'] = $document->status === UserDocumentStatus::APPROVED->value;
             $this->documentsData[$document->_id]['reason'] = $alert ? $alert->reason : '';

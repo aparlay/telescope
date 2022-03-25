@@ -329,9 +329,9 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get all the user's notifications.
      */
-    public function userNotifiable()
+    public function userNotificationObjs()
     {
-        return $this->morphMany(UserNotification::class, 'usernotifiable');
+        return $this->morphMany(UserNotification::class, 'entity.');
     }
 
     /**

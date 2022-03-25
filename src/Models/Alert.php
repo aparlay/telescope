@@ -11,6 +11,7 @@ use Aparlay\Payout\Models\Wallet;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\BelongsTo;
@@ -113,9 +114,9 @@ class Alert extends BaseModel
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function entityObj()
+    public function entityObj(): MorphTo|\Jenssegers\Mongodb\Relations\MorphTo
     {
-        return $this->morphTo('entity');
+        return $this->morphTo('entity.');
     }
 
     /**

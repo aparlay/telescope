@@ -252,7 +252,7 @@ class Media extends BaseModel
      */
     public function userNotificationObjs()
     {
-        return $this->morphMany(UserNotification::class, 'usernotifiable');
+        return $this->morphMany(UserNotification::class, 'entity.');
     }
 
     /**
