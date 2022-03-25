@@ -106,6 +106,7 @@ class User extends Authenticatable implements JWTSubject
     use Searchable;
     use CountryFields;
 
+
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
 
@@ -669,5 +670,14 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return (string) $this->_id === $userId;
+    }
+
+    /**
+     * Get only class name without namespace.
+     * @return bool|string
+     */
+    public static function shortClassName()
+    {
+        return substr(strrchr(static::class, '\\'), 1);
     }
 }
