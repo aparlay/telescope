@@ -27,6 +27,8 @@ class UserDocumentResource extends JsonResource
      */
     public function toArray($request)
     {
+        $alert = $this->alertObjs()->latest()->first();
+
         $data = [
             '_id' => (string) $this->_id,
             'type' => $this->type,
@@ -34,7 +36,7 @@ class UserDocumentResource extends JsonResource
             'url' => $this->temporaryUrl(),
             'status_label' => $this->status_label,
             'type_label' => $this->type_label,
-            'alerts' => new AlertCollection($this->whenLoaded('alertObjs')),
+            'reason' => $alert ? $alert->reason : '',
         ];
 
         return $this->filtrateFields($this->filter($data));
