@@ -106,7 +106,6 @@ class User extends Authenticatable implements JWTSubject
     use Searchable;
     use CountryFields;
 
-
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
 
