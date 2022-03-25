@@ -23,8 +23,8 @@ class MediaCommentedNotification extends Notification
      */
     public function __construct(User|Authenticatable $user, Media $media, string $message)
     {
-        $this->usernotifiable_type = Media::class;
-        $this->usernotifiable_id = new ObjectId($media->_id);
+        $this->entity_type = Media::class;
+        $this->entity_id = new ObjectId($media->_id);
         $this->user_id = new ObjectId($user->_id);
         $this->category = UserNotificationCategory::COMMENTS->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;

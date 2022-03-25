@@ -6,8 +6,8 @@ use MongoDB\BSON\ObjectId;
 
 trait UserNotificationArray
 {
-    public string|null $usernotifiable_type;
-    public ObjectId|null $usernotifiable_id;
+    public string|null $entity_type;
+    public ObjectId|null $entity_id;
     public mixed $usernotifiable;
     public int $category;
     public int $status;
@@ -34,8 +34,8 @@ trait UserNotificationArray
     public function toArray(mixed $notifiable): array
     {
         return [
-            'usernotifiable_type' => $this->usernotifiable_type,
-            'usernotifiable_id' => $this->usernotifiable_id,
+            'entity_type' => $this->entity_type,
+            'entity_id' => $this->entity_id,
             'category' => $this->category,
             'status' => $this->status,
             'user_id' => $this->user_id,

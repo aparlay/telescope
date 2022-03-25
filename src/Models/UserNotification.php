@@ -17,8 +17,7 @@ use MongoDB\BSON\ObjectId;
  * Class Alert.
  *
  * @property ObjectId $_id
- * @property ObjectId $usernotifiable_id
- * @property string $usernotifiable_type
+ * @property array $entity
  * @property string $reason
  * @property int $status
  * @property int $category

@@ -42,8 +42,8 @@ class UserNotificationFactory extends Factory
             'user_id' => function () {
                 return new ObjectId(User::factory()->create()->_id);
             },
-            'usernotifiable_type' => $usernotifiableType,
-            'usernotifiable_id' => function () use ($usernotifiableType) {
+            'entity._type' => $usernotifiableType,
+            'entity._id' => function () use ($usernotifiableType) {
                 return $usernotifiableType ? new ObjectId() : null;
             },
             'message' => ($category == UserNotificationCategory::SYSTEM->value) ? 'Your Creator application has been approved! 🎉' : null,
