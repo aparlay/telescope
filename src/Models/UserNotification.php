@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
@@ -77,6 +78,18 @@ class UserNotification extends BaseModel
         'category' => 'integer',
         'status' => 'integer',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // to keep entities in database without namespace
+        Relation::morphMap([
+            'Media' => Media::class,
+            'User' => User::class,
+            'Tip' => 'Aparlay\Payment\Models\Tip',
+        ]);
+    }
 
     /**
      * Create a new factory instance for the model.

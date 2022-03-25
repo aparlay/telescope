@@ -23,7 +23,7 @@ class MediaLikedNotification extends Notification
      */
     public function __construct(User|Authenticatable $user, Media $media, string $message)
     {
-        $this->entity_type = Media::class;
+        $this->entity_type = Media::shortClassName();
         $this->entity_id = new ObjectId($media->_id);
         $this->user_id = new ObjectId($user->_id);
         $this->category = UserNotificationCategory::LIKES->value;

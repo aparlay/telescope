@@ -22,7 +22,7 @@ class CreatorAccountApprovedNotification extends Notification
      */
     public function __construct(User|Authenticatable $user, string $message)
     {
-        $this->entity_type = User::class;
+        $this->entity_type = User::shortClassName();
         $this->entity_id = new ObjectId($user->_id);
         $this->user_id = new ObjectId($user->_id);
         $this->category = UserNotificationCategory::SYSTEM->value;
