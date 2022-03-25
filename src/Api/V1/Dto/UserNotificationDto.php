@@ -25,6 +25,7 @@ class UserNotificationDto extends DataTransferObject
     {
         $data['entity']['_id'] = $data['entity_id'];
         $data['entity']['_type'] = $data['entity_type'];
+
         return new self($data);
     }
 
