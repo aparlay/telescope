@@ -670,4 +670,13 @@ class User extends Authenticatable implements JWTSubject
 
         return (string) $this->_id === $userId;
     }
+
+    /**
+     * Get only class name without namespace.
+     * @return bool|string
+     */
+    public static function shortClassName()
+    {
+        return substr(strrchr(static::class, '\\'), 1);
+    }
 }
