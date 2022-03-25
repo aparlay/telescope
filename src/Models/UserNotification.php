@@ -57,8 +57,8 @@ class UserNotification extends BaseModel
     protected $fillable = [
         '_id',
         'user_id',
-        'usernotifiable_id',
-        'usernotifiable_type',
+        'entity._id',
+        'entity._type',
         'category',
         'status',
         'message',

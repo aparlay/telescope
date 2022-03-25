@@ -99,9 +99,9 @@ class UserVerificationModal extends Component
             if (! $isApproved) {
                 Alert::create([
                     'created_by' => new ObjectId($this->currentUser()->_id),
-                    'entity_id' => new ObjectId($document->_id),
+                    'entity._id' => new ObjectId($document->_id),
                     'status' => AlertStatus::NOT_VISITED->value,
-                    'entity_type' => UserDocument::shortClassName(),
+                    'entity._type' => UserDocument::shortClassName(),
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
                     'reason' => $reason,
                 ]);

@@ -71,8 +71,8 @@ class Alert extends BaseModel
         'updated_by',
         'created_at',
         'updated_at',
-        'entity_id',
-        'entity_type',
+        'entity._id',
+        'entity._type',
     ];
 
     /**
