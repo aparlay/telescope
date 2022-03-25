@@ -36,7 +36,7 @@ class UserDocumentResource extends JsonResource
             'url' => $this->temporaryUrl(),
             'status_label' => $this->status_label,
             'type_label' => $this->type_label,
-            'reason' => $alert ? $alert->reason : ''
+            'reason' => $alert ? $alert->reason : '',
         ];
 
         return $this->filtrateFields($this->filter($data));
