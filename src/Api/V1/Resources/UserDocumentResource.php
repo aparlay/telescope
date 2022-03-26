@@ -3,12 +3,9 @@
 namespace Aparlay\Core\Api\V1\Resources;
 
 use Aparlay\Core\Api\V1\Traits\FilterableResourceTrait;
-use Aparlay\Core\Models\Enums\UserDocumentStatus;
-use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use MongoDB\BSON\ObjectId;
 
 /**
  * @mixin UserDocument
