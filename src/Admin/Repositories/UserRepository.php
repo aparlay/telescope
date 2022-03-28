@@ -106,7 +106,6 @@ class UserRepository
         $user->save();
 
         if ($oldVerificationStatus !== $verificationStatus) {
-
             if (in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])) {
                 UserVerificationStatusChangedEvent::dispatch($adminUser, $user, $verificationStatus);
             }
@@ -119,9 +118,6 @@ class UserRepository
 
             $user->notify(new CreatorAccountApprovedNotification($user, $message));
         }
-
-
-
 
         return $user;
     }
