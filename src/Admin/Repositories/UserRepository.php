@@ -112,6 +112,7 @@ class UserRepository
             }
 
             $message = match ($verificationStatus) {
+                UserVerificationStatus::PENDING->value => 'We have received your application and will review it shortly',
                 UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
                 UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
             };
