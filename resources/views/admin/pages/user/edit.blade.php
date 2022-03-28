@@ -303,6 +303,25 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="card card-maroon card-outline">
+                                <div class="card-header" id="headingMainTen">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#payoutsTab" aria-expanded="false"
+                                                aria-controls="collapseMainTen">
+                                            Payouts
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="payoutsTab" class="collapse" aria-labelledby="headingMainTen"
+                                     data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.payouts', ['user' => $user])
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
