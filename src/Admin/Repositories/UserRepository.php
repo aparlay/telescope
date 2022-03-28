@@ -110,13 +110,16 @@ class UserRepository
                 UserVerificationStatusChangedEvent::dispatch($adminUser, $user, $verificationStatus);
             }
 
-            $message = match ($verificationStatus) {
-                UserVerificationStatus::PENDING->value => 'We have received your application and will review it shortly',
-                UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
-                UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
-            };
+            if ($oldVerificationStatus == UserVerificationStatus::UNDER_REVIEW->value) {
 
-            $user->notify(new CreatorAccountApprovedNotification($user, $message));
+                $message = match ($verificationStatus) {
+                    UserVerificationStatus::PENDING->value => 'We have received your application and will review it shortly.',
+                    UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
+                    UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
+                };
+
+                $user->notify(new CreatorAccountApprovedNotification($user, $message));
+            }
         }
 
         return $user;
