@@ -5,14 +5,11 @@ namespace Aparlay\Core\Admin\Livewire\Modals;
 use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\User;
-use Aparlay\Core\Admin\Repositories\AlertRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\UserDocument;
-use Aparlay\Core\Notifications\CreatorAccountApprovedNotification;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use MongoDB\BSON\ObjectId;
@@ -74,7 +71,6 @@ class UserVerificationModal extends Component
         $this->validate();
 
         $this->userRepository = new UserRepository(new User());
-        $alertRepository = new AlertRepository(new Alert());
 
         $this->userRepository->updateVerificationStatus(
             $this->currentUser(),
