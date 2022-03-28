@@ -7,7 +7,6 @@ use Aparlay\Core\Models\UserDocument;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-
 /**
  * @mixin UserDocument
  */
