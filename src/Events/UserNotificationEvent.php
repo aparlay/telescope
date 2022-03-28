@@ -70,7 +70,7 @@ class UserNotificationEvent implements ShouldBroadcastNow
             'category_label' => (string) $this->userNotification->category_label,
             'status' => (string) $this->userNotification->status,
             'status_label' => (string) $this->userNotification->status_label,
-            'entity' => (string) $this->userNotification->usernotifiable,
+            'entity' => (string) $this->userNotification->entityObj,
             'created_at' => $this->userNotification->created_at->valueOf(),
             'updated_at' => $this->userNotification->updated_at->valueOf(),
         ];

@@ -84,6 +84,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property string      $deactivation_reason
  * @property bool        $has_unread_chat
  * @property bool        $has_notification
+ * @property UTCDateTime $last_online_at
  *
  * @property-read string $admin_url
  * @property-read string $note_admin_url
@@ -168,6 +169,7 @@ class User extends Authenticatable implements JWTSubject
         'created_at',
         'updated_at',
         'deleted_at',
+        'last_online_at',
     ];
 
     protected $attributes = [
@@ -253,6 +255,7 @@ class User extends Authenticatable implements JWTSubject
     protected $dates = [
         'email_verified_at',
         'phone_number_verified_at',
+        'last_online_at',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -279,6 +282,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Determine if the model should be searchable.
+     *
+     * @return bool
+     */
+    public function shouldBeSearchable(): bool
+    {
+        return $this->visibility == UserVisibility::PUBLIC->value;
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -296,6 +309,7 @@ class User extends Authenticatable implements JWTSubject
             'score' => $this->sort_score,
             'country' => $this->country_alpha2,
             'like_count' => $this->like_count,
+            'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
             'visit_count' => 0,
             'comment_count' => 0,
             '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0],

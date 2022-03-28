@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\UserRepository;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Redis;
@@ -66,6 +67,10 @@ class OnlineUserService
      */
     public function online(User|Authenticatable $user)
     {
+        if ($user->is_online === false) {
+            $user->update(['last_online_at' => DT::utcNow()]);
+        }
+
         [$currentWindow, $nextWindow] = self::timeWindows();
 
         $onlineAllCurrent = config('app.cache.keys.online.all').':'.$currentWindow;

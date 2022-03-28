@@ -131,4 +131,9 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
     {
         return (string) $this->_id === (string) $value;
     }
+
+    public function getMorphClass()
+    {
+        return self::shortClassName();
+    }
 }

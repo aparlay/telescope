@@ -86,18 +86,6 @@ class Alert extends BaseModel
         'status' => 'integer',
     ];
 
-    public static function boot()
-    {
-        parent::boot();
-
-        // to keep entities in database without namespace
-        Relation::morphMap([
-            'UserPayout' => UserPayout::class,
-            'UserDocument' => UserDocument::class,
-            'Wallet' => Wallet::class,
-        ]);
-    }
-
     /**
      * Create a new factory instance for the model.
      */

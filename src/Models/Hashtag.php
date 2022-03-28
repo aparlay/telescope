@@ -130,6 +130,7 @@ class Hashtag extends BaseModel
             'country' => '',
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
+            'last_online_at' => 0,
             'comment_count' => 0,
             '_geo' => ['lat' => 0.0, 'lng' => 0.0],
         ];

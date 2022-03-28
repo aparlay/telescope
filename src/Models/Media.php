@@ -192,6 +192,16 @@ class Media extends BaseModel
     }
 
     /**
+     * Determine if the model should be searchable.
+     *
+     * @return bool
+     */
+    public function shouldBeSearchable(): bool
+    {
+        return $this->visibility == MediaVisibility::PUBLIC->value;
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -211,6 +221,7 @@ class Media extends BaseModel
             'hashtags' => $this->hashtags,
             'score' => $this->sort_score,
             'country' => $this->userObj->country_alpha2 ?? '',
+            'last_online_at' => 0,
             '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
         ];
     }
