@@ -255,6 +255,7 @@ class User extends Authenticatable implements JWTSubject
     protected $dates = [
         'email_verified_at',
         'phone_number_verified_at',
+        'last_online_at',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -308,7 +309,7 @@ class User extends Authenticatable implements JWTSubject
             'score' => $this->sort_score,
             'country' => $this->country_alpha2,
             'like_count' => $this->like_count,
-            'last_online_at' => $this->last_online_at,
+            'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
             'visit_count' => 0,
             'comment_count' => 0,
             '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
