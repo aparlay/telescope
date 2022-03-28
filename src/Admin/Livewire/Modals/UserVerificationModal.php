@@ -105,12 +105,7 @@ class UserVerificationModal extends Component
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
                     'reason' => $reason,
                 ]);
-            } else {
-                $user->notify(
-                    new CreatorAccountApprovedNotification($user, __('Your account has been approved'))
-                );
             }
-
             $document->save();
         }
 
