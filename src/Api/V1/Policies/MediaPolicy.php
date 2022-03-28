@@ -39,7 +39,7 @@ class MediaPolicy
             return Response::allow();
         }
 
-        if (!auth()->guest()) {
+        if (! auth()->guest()) {
             $isFollowed = Follow::select(['created_by', '_id'])
                 ->creator($userId)
                 ->user($media->created_by)
