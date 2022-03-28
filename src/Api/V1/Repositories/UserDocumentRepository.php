@@ -10,7 +10,6 @@ use MongoDB\BSON\ObjectId;
 
 class UserDocumentRepository
 {
-
     public function index($user)
     {
         return UserDocument::creator($user->_id)
