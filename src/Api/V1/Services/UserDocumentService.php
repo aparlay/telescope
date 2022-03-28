@@ -40,7 +40,7 @@ class UserDocumentService extends AbstractService
         $this->uploadFileService = $uploadFileService;
     }
 
-    public function index(): LengthAwarePaginator
+    public function index()
     {
         return $this->userDocumentRepository->index($this->getUser());
     }
