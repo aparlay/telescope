@@ -111,7 +111,6 @@ class UserRepository
             }
 
             if ($oldVerificationStatus == UserVerificationStatus::UNDER_REVIEW->value) {
-
                 $message = match ($verificationStatus) {
                     UserVerificationStatus::PENDING->value => 'We have received your application and will review it shortly.',
                     UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
