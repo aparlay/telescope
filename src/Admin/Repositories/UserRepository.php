@@ -105,19 +105,22 @@ class UserRepository
         $user->verification_status = $verificationStatus;
         $user->save();
 
-        if (
-            $oldVerificationStatus !== $verificationStatus &&
-            in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])
-        ) {
-            UserVerificationStatusChangedEvent::dispatch($adminUser, $user, $verificationStatus);
+        if ($oldVerificationStatus !== $verificationStatus) {
 
-            $message = 'Your Creator application has been reject! 😔';
-            if ($verificationStatus == UserVerificationStatus::VERIFIED->value) {
-                $message = 'Your Creator application has been approved! 🎉';
+            if (in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])) {
+                UserVerificationStatusChangedEvent::dispatch($adminUser, $user, $verificationStatus);
             }
+
+            $message = match ($verificationStatus) {
+                UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
+                UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
+            };
 
             $user->notify(new CreatorAccountApprovedNotification($user, $message));
         }
+
+
+
 
         return $user;
     }
