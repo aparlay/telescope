@@ -115,9 +115,12 @@ class UserRepository
                     UserVerificationStatus::UNDER_REVIEW->value => 'We have received your application and will review it shortly.',
                     UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
                     UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
+                    default => ''
                 };
 
-                $user->notify(new CreatorAccountApprovedNotification($user, $message));
+                if (!empty($message)) {
+                    $user->notify(new CreatorAccountApprovedNotification($user, $message));
+                }
             }
         }
 
