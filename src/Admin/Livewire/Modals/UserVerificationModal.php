@@ -82,7 +82,7 @@ class UserVerificationModal extends Component
 
         $user = $this->userRepository->find($this->selectedUser);
 
-        $message = [];
+        $payload = [];
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
 
@@ -104,13 +104,20 @@ class UserVerificationModal extends Component
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
                     'reason' => $reason,
                 ]);
-                $message[] = $document->alertObjs()->latest()->first();
+                $payload[] = $document->alertObjs()->latest()->first();
             }
             $document->save();
         }
 
-        if ($this->verification_status == UserVerificationStatus::VERIFIED->value || ! empty($message)) {
-            $user->notify(new CreatorAccountApprovementNotification($user, $message));
+        if ($this->user->verification_status == $this->verification_status) {
+            $message = match ((int) $this->verification_status) {
+                UserVerificationStatus::UNDER_REVIEW->value => 'We have received your application and will review it shortly.',
+                UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
+                UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
+                default => ''
+            };
+
+            $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
         }
 
         $this->dispatchBrowserEvent('hideModal');

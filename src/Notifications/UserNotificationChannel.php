@@ -33,8 +33,9 @@ final class UserNotificationChannel
         UserNotificationEvent::dispatch(
             (string) $userNotification->_id,
             (string) $userNotification->user_id,
-            $notification->message,
-            $notification->eventType,
+            $notification->message ?? '',
+            $notification->payload ?? [],
+            $notification->eventType ?? '',
         );
     }
 }

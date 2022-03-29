@@ -31,19 +31,21 @@ class UserNotificationEvent implements ShouldBroadcast
     public UserNotification $userNotification;
     public string $userId;
     public string $eventType;
-    public string $message;
+    public $message;
+    public $payload;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(string $userNotificationId, string $userId, string $message = '', string $eventType = '')
+    public function __construct(string $userNotificationId, string $userId, string $message = '', array $payload = [], string $eventType = '')
     {
         $this->userNotification = UserNotification::findOrFail(new ObjectId($userNotificationId));
         $this->userId = $userId;
         $this->eventType = $eventType;
         $this->message = $message;
+        $this->payload = $payload;
     }
 
     /**
@@ -86,6 +88,7 @@ class UserNotificationEvent implements ShouldBroadcast
             'status' => $this->userNotification->status,
             'status_label' => $this->userNotification->status_label,
             'message' => $this->message,
+            'payload' => $this->payload,
             'created_at' => $this->userNotification->created_at->valueOf(),
             'updated_at' => $this->userNotification->updated_at->valueOf(),
             'entity' => $entity,

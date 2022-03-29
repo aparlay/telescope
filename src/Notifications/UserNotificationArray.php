@@ -11,7 +11,8 @@ trait UserNotificationArray
     public mixed $usernotifiable;
     public int $category;
     public int $status;
-    public $message;
+    public string $message;
+    public array $payload;
     public string $eventType;
     public ObjectId $user_id;
 
@@ -41,6 +42,7 @@ trait UserNotificationArray
             'status' => $this->status,
             'user_id' => $this->user_id,
             'message' => $this->message,
+            'payload' => $this->payload,
         ];
     }
 }

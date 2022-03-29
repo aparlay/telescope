@@ -20,7 +20,7 @@ class CreatorAccountApprovementNotification extends Notification
      *
      * @return void
      */
-    public function __construct(User|Authenticatable $user, $message)
+    public function __construct(User|Authenticatable $user, $message, $payload)
     {
         $this->entity_type = User::shortClassName();
         $this->entity_id = new ObjectId($user->_id);
@@ -28,6 +28,7 @@ class CreatorAccountApprovementNotification extends Notification
         $this->category = UserNotificationCategory::SYSTEM->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;
+        $this->payload = $payload;
         $this->eventType = 'CreatorAccountApprovement';
     }
 }

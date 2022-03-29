@@ -62,6 +62,7 @@ class UserNotification extends BaseModel
         'category',
         'status',
         'message',
+        'payload',
         'created_by',
         'updated_by',
         'created_at',
@@ -74,21 +75,10 @@ class UserNotification extends BaseModel
      * @var array
      */
     protected $casts = [
+        'message' => 'string',
         'category' => 'integer',
         'status' => 'integer',
     ];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        // to keep entities in database without namespace
-        Relation::morphMap([
-            'Media' => Media::class,
-            'User' => User::class,
-            'Tip' => 'Aparlay\Payment\Models\Tip',
-        ]);
-    }
 
     /**
      * Create a new factory instance for the model.
