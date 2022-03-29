@@ -6,12 +6,12 @@ use Aparlay\Core\Models\UserNotification;
 use Illuminate\Broadcasting\InteractsWithBroadcasting;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use MongoDB\BSON\ObjectId;
 
-class UserNotificationEvent implements ShouldBroadcastNow
+class UserNotificationEvent implements ShouldBroadcast
 {
     use Dispatchable;
     use InteractsWithSockets;
@@ -70,7 +70,7 @@ class UserNotificationEvent implements ShouldBroadcastNow
             'category_label' => (string) $this->userNotification->category_label,
             'status' => (string) $this->userNotification->status,
             'status_label' => (string) $this->userNotification->status_label,
-            'entity' => (string) $this->userNotification->entityObj,
+            'entity' => $this->userNotification->entityObj,
             'created_at' => $this->userNotification->created_at->valueOf(),
             'updated_at' => $this->userNotification->updated_at->valueOf(),
         ];
