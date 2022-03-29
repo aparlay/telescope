@@ -31,6 +31,7 @@ class UserNotificationEvent implements ShouldBroadcast
     public UserNotification $userNotification;
     public string $userId;
     public string $eventType;
+    public string $message;
 
     /**
      * Create a new event instance.
