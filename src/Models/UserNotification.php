@@ -80,6 +80,18 @@ class UserNotification extends BaseModel
         'status' => 'integer',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        // to keep entities in database without namespace
+        Relation::morphMap([
+            'Media' => Media::class,
+            'User' => User::class,
+            'Tip' => 'Aparlay\Payment\Models\Tip',
+        ]);
+    }
+
     /**
      * Create a new factory instance for the model.
      */
