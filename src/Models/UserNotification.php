@@ -74,7 +74,6 @@ class UserNotification extends BaseModel
      * @var array
      */
     protected $casts = [
-        'message' => 'string',
         'category' => 'integer',
         'status' => 'integer',
     ];
