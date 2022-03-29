@@ -109,7 +109,7 @@ class UserVerificationModal extends Component
             $document->save();
         }
 
-        if ($this->verification_status == UserVerificationStatus::VERIFIED->value || !empty($message)) {
+        if ($this->verification_status == UserVerificationStatus::VERIFIED->value || ! empty($message)) {
             $user->notify(new CreatorAccountApprovementNotification($user, $message));
         }
 
