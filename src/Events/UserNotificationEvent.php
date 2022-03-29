@@ -37,11 +37,12 @@ class UserNotificationEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(string $userNotificationId, string $userId, string $eventType)
+    public function __construct(string $userNotificationId, string $userId, string $message = '', string $eventType = '')
     {
         $this->userNotification = UserNotification::findOrFail(new ObjectId($userNotificationId));
         $this->userId = $userId;
         $this->eventType = $eventType;
+        $this->message = $message;
     }
 
     /**
@@ -83,9 +84,10 @@ class UserNotificationEvent implements ShouldBroadcast
             'category_label' => $this->userNotification->category_label,
             'status' => $this->userNotification->status,
             'status_label' => $this->userNotification->status_label,
-            'entity' => $entity,
+            'message' => $this->message,
             'created_at' => $this->userNotification->created_at->valueOf(),
             'updated_at' => $this->userNotification->updated_at->valueOf(),
+            'entity' => $entity,
         ];
     }
 }
