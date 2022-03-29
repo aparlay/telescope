@@ -10,7 +10,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Notifications\Notification;
 use MongoDB\BSON\ObjectId;
 
-class CreatorAccountApprovedNotification extends Notification
+class CreatorAccountApprovementNotification extends Notification
 {
     use Queueable;
     use UserNotificationArray;
@@ -28,5 +28,6 @@ class CreatorAccountApprovedNotification extends Notification
         $this->category = UserNotificationCategory::SYSTEM->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;
+        $this->eventType = 'CreatorAccountApprovement';
     }
 }

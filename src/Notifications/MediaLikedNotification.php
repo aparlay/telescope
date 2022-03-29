@@ -29,5 +29,6 @@ class MediaLikedNotification extends Notification
         $this->category = UserNotificationCategory::LIKES->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;
+        $this->eventType = 'MediaLike';
     }
 }

@@ -2,7 +2,11 @@
 
 namespace Aparlay\Core\Events;
 
+use Aparlay\Core\Api\V1\Resources\FollowResource;
+use Aparlay\Core\Api\V1\Resources\MediaResource;
+use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\UserNotification;
+use Aparlay\Payment\Api\V1\Resources\TipResource;
 use Illuminate\Broadcasting\InteractsWithBroadcasting;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -25,17 +29,18 @@ class UserNotificationEvent implements ShouldBroadcast
      */
     public UserNotification $userNotification;
     public string $userId;
+    public string $eventType;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(string $userNotificationId, string $userId)
+    public function __construct(string $userNotificationId, string $userId, string $eventType)
     {
         $this->userNotification = UserNotification::findOrFail(new ObjectId($userNotificationId));
         $this->userId = $userId;
-        //$this->broadcastVia('socket');
+        $this->eventType = $eventType;
     }
 
     /**
@@ -55,7 +60,7 @@ class UserNotificationEvent implements ShouldBroadcast
      */
     public function broadcastAs(): string
     {
-        return 'UserNotification';
+        return 'UserNotification.' . $this->eventType;
     }
 
     /**
@@ -65,12 +70,19 @@ class UserNotificationEvent implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
+        $entity = match ($this->userNotification->category) {
+            UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value => new MediaResource($this->userNotification->entityObj),
+            UserNotificationCategory::FOLLOWS->value => new FollowResource($this->userNotification->entityObj),
+            UserNotificationCategory::TIPS->value => new TipResource($this->userNotification->entityObj),
+            default => null,
+        };
+
         return [
-            'category' => (string) $this->userNotification->category,
-            'category_label' => (string) $this->userNotification->category_label,
-            'status' => (string) $this->userNotification->status,
-            'status_label' => (string) $this->userNotification->status_label,
-            'entity' => $this->userNotification->entityObj,
+            'category' => $this->userNotification->category,
+            'category_label' => $this->userNotification->category_label,
+            'status' => $this->userNotification->status,
+            'status_label' => $this->userNotification->status_label,
+            'entity' => $entity,
             'created_at' => $this->userNotification->created_at->valueOf(),
             'updated_at' => $this->userNotification->updated_at->valueOf(),
         ];

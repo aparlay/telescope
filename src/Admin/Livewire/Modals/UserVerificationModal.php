@@ -9,7 +9,9 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
+use Aparlay\Core\Notifications\CreatorAccountApprovementNotification;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use MongoDB\BSON\ObjectId;
@@ -72,6 +74,16 @@ class UserVerificationModal extends Component
 
         $this->userRepository = new UserRepository(new User());
 
+        $message = '';
+        if ($this->user->verification_status != $this->verification_status) {
+            $message = match ((int) $this->verification_status) {
+                UserVerificationStatus::UNDER_REVIEW->value => 'We have received your application and will review it shortly.',
+                UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
+                UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
+                default => ''
+            };
+        }
+
         $this->userRepository->updateVerificationStatus(
             $this->currentUser(),
             $this->user,
@@ -101,8 +113,13 @@ class UserVerificationModal extends Component
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
                     'reason' => $reason,
                 ]);
+                $message = $message . PHP_EOL .$reason;
             }
             $document->save();
+        }
+
+        if (! empty($message)) {
+            $user->notify(new CreatorAccountApprovementNotification($user, $message));
         }
 
         $this->dispatchBrowserEvent('hideModal');

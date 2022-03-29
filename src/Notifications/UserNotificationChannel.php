@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Notifications;
 
 use Aparlay\Core\Api\V1\Dto\UserNotificationDto;
+use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Services\UserNotificationService;
 use Aparlay\Core\Events\UserNotificationEvent;
 use Aparlay\Core\Models\User;
@@ -29,6 +30,10 @@ final class UserNotificationChannel
         $notificationService->setUser(User::user($notification->user_id)->first());
         $userNotification = $notificationService->create($notificationDTO);
 
-        UserNotificationEvent::dispatch((string) $userNotification->_id, (string) $userNotification->user_id);
+        UserNotificationEvent::dispatch(
+            (string) $userNotification->_id,
+            (string) $userNotification->user_id,
+            $notification->eventType
+        );
     }
 }

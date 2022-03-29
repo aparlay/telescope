@@ -5,8 +5,6 @@ namespace Aparlay\Core\Admin\Repositories;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Events\UserVerificationStatusChangedEvent;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
-use Aparlay\Core\Notifications\CreatorAccountApprovedNotification;
-use Aparlay\Core\Notifications\MediaLikedNotification;
 
 class UserRepository
 {
@@ -108,17 +106,6 @@ class UserRepository
         if ($oldVerificationStatus !== $verificationStatus) {
             if (in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])) {
                 UserVerificationStatusChangedEvent::dispatch($adminUser, $user, $verificationStatus);
-            }
-
-            $message = match ($verificationStatus) {
-                UserVerificationStatus::UNDER_REVIEW->value => 'We have received your application and will review it shortly.',
-                UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
-                UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
-                default => ''
-            };
-
-            if (! empty($message)) {
-                $user->notify(new CreatorAccountApprovedNotification($user, $message));
             }
         }
 

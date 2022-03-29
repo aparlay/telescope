@@ -12,6 +12,7 @@ trait UserNotificationArray
     public int $category;
     public int $status;
     public string $message;
+    public string $eventType;
     public ObjectId $user_id;
 
     /**

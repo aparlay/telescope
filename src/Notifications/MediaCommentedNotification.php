@@ -29,5 +29,6 @@ class MediaCommentedNotification extends Notification
         $this->category = UserNotificationCategory::COMMENTS->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;
+        $this->eventType = 'MediaComment';
     }
 }
