@@ -99,7 +99,7 @@ class UserRepository
         return $user;
     }
 
-    public function updateVerificationStatus($adminUser, $user, $verificationStatus)
+    public function updateVerificationStatus($adminUser, $user, int $verificationStatus)
     {
         $oldVerificationStatus = $user->verification_status;
         $user->verification_status = $verificationStatus;

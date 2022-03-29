@@ -75,7 +75,7 @@ class UserVerificationModal extends Component
         $this->userRepository->updateVerificationStatus(
             $this->currentUser(),
             $this->user,
-            $this->verification_status
+            (int) $this->verification_status
         );
 
         $user = $this->userRepository->find($this->selectedUser);
