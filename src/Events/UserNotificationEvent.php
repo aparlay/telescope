@@ -60,7 +60,7 @@ class UserNotificationEvent implements ShouldBroadcast
      */
     public function broadcastAs(): string
     {
-        return 'UserNotification.' . $this->eventType;
+        return 'UserNotification.'.$this->eventType;
     }
 
     /**

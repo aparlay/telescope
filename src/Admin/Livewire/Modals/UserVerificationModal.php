@@ -113,7 +113,7 @@ class UserVerificationModal extends Component
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
                     'reason' => $reason,
                 ]);
-                $message = $message . PHP_EOL .$reason;
+                $message = $message.PHP_EOL.$reason;
             }
             $document->save();
         }
