@@ -379,7 +379,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getAlertsAttribute(): array|Collection
     {
-        return Alert::user(auth()->user()->_id)->userOnly()->notVisited()->get();
+        return Alert::user($this->_id)->userOnly()->notVisited()->get();
     }
 
     /**
