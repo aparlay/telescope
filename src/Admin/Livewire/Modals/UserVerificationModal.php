@@ -73,7 +73,7 @@ class UserVerificationModal extends Component
         $this->validate();
 
         $this->userRepository = new UserRepository(new User());
-
+        $shouldSendNotification = $this->user->verification_status != $this->verification_status;
         $this->userRepository->updateVerificationStatus(
             $this->currentUser(),
             $this->user,
@@ -114,7 +114,7 @@ class UserVerificationModal extends Component
             $document->save();
         }
 
-        if ($this->user->verification_status != $this->verification_status) {
+        if ($shouldSendNotification) {
             $message = match ((int) $this->verification_status) {
                 UserVerificationStatus::UNDER_REVIEW->value => 'We have received your application and will review it shortly.',
                 UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
