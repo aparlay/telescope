@@ -74,16 +74,6 @@ class UserVerificationModal extends Component
 
         $this->userRepository = new UserRepository(new User());
 
-        $message = '';
-        if ($this->user->verification_status != $this->verification_status) {
-            $message = match ((int) $this->verification_status) {
-                UserVerificationStatus::UNDER_REVIEW->value => 'We have received your application and will review it shortly.',
-                UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
-                UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
-                default => ''
-            };
-        }
-
         $this->userRepository->updateVerificationStatus(
             $this->currentUser(),
             $this->user,
@@ -92,6 +82,7 @@ class UserVerificationModal extends Component
 
         $user = $this->userRepository->find($this->selectedUser);
 
+        $message = [];
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
 
@@ -108,17 +99,17 @@ class UserVerificationModal extends Component
                 Alert::create([
                     'created_by' => new ObjectId($this->currentUser()->_id),
                     'entity._id' => new ObjectId($document->_id),
-                    'status' => AlertStatus::NOT_VISITED->value,
                     'entity._type' => UserDocument::shortClassName(),
+                    'status' => AlertStatus::NOT_VISITED->value,
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
                     'reason' => $reason,
                 ]);
-                $message = $message.PHP_EOL.$reason;
+                $message[] = $document->alertObjs()->latest()->first();
             }
             $document->save();
         }
 
-        if (! empty($message)) {
+        if ($this->verification_status == UserVerificationStatus::VERIFIED->value || !empty($message)) {
             $user->notify(new CreatorAccountApprovementNotification($user, $message));
         }
 

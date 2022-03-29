@@ -21,7 +21,7 @@ class MediaLikedNotification extends Notification
      *
      * @return void
      */
-    public function __construct(User|Authenticatable $user, Media $media, string $message)
+    public function __construct(User|Authenticatable $user, Media $media, $message)
     {
         $this->entity_type = Media::shortClassName();
         $this->entity_id = new ObjectId($media->_id);
