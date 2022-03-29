@@ -104,7 +104,12 @@ class UserVerificationModal extends Component
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
                     'reason' => $reason,
                 ]);
-                $payload[] = $document->alertObjs()->latest()->first();
+                $payload[] = [
+                    'user_document_id' => (string) $document->_id,
+                    'reason' => $reason,
+                    'type' => $document->type,
+                    'type_label' => $document->type_label,
+                ];
             }
             $document->save();
         }
