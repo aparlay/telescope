@@ -109,7 +109,7 @@ class UserVerificationModal extends Component
             $document->save();
         }
 
-        if ($this->user->verification_status == $this->verification_status) {
+        if ($this->user->verification_status != $this->verification_status) {
             $message = match ((int) $this->verification_status) {
                 UserVerificationStatus::UNDER_REVIEW->value => 'We have received your application and will review it shortly.',
                 UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
