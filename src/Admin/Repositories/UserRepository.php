@@ -118,7 +118,7 @@ class UserRepository
                     default => ''
                 };
 
-                if (!empty($message)) {
+                if (! empty($message)) {
                     $user->notify(new CreatorAccountApprovedNotification($user, $message));
                 }
             }
