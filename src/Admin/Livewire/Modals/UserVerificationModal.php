@@ -9,9 +9,11 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
+use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
 use Aparlay\Core\Notifications\CreatorAccountApprovementNotification;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use MongoDB\BSON\ObjectId;
@@ -38,13 +40,15 @@ class UserVerificationModal extends Component
         $this->userRepository = new UserRepository(new User());
         $user = $this->userRepository->find($userId);
         $this->user = $user;
-        $this->documents = $user->userDocumentObjs()->latest()->get() ?? [];
-        $this->verification_status = $user->verification_status;
 
+
+        $this->loadDocuments();
+
+        $this->verification_status = $user->verification_status;
         foreach ($this->documents as $document) {
             $alert = $document->alertObjs()->latest()->first();
-            $this->documentsData[$document->_id]['is_approved'] = $document->status === UserDocumentStatus::APPROVED->value;
-            $this->documentsData[$document->_id]['reason'] = $alert ? $alert->reason : '';
+            $this->documentsData[(string) $document->_id]['status'] = $document->status;
+            $this->documentsData[(string) $document->_id]['reason'] = $alert ? $alert->reason : '';
         }
     }
 
@@ -52,9 +56,12 @@ class UserVerificationModal extends Component
     {
         return [
             'verification_status' => Rule::in(array_keys(User::getVerificationStatuses())),
-            'documentsData.*.is_approved' => ['required', 'boolean'],
+            'documentsData.*.status' => ['required', Rule::in([
+                UserDocumentStatus::APPROVED->value,
+                UserDocumentStatus::REJECTED->value])
+            ],
             'documentsData.*.reason' => [
-                'required_if:documentsData.*.is_approved,false',
+                'required_if:documentsData.*.status,-1',
                 'min:5',
             ],
         ];
@@ -68,11 +75,36 @@ class UserVerificationModal extends Component
         ];
     }
 
+    private function loadDocuments()
+    {
+        $user = $this->user;
+        $selfie = $user->userDocumentObjs()
+            ->type(UserDocumentType::SELFIE->value)
+            ->first();
+
+        $creditCard = $user->userDocumentObjs()
+            ->type(UserDocumentType::ID_CARD->value)
+            ->latest()
+            ->first();
+
+        $collection = new Collection();
+
+        if ($creditCard) {
+            $collection->push($creditCard);
+        }
+
+        if ($selfie) {
+            $collection->push($selfie);
+        }
+
+        $this->documents = $collection;
+    }
+
     public function save()
     {
         $this->validate();
-
         $this->userRepository = new UserRepository(new User());
+
         $shouldSendNotification = $this->user->verification_status != $this->verification_status;
         $this->userRepository->updateVerificationStatus(
             $this->currentUser(),
@@ -83,17 +115,12 @@ class UserVerificationModal extends Component
         $user = $this->userRepository->find($this->selectedUser);
 
         $payload = $approvedTypes = [];
+
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
-
-            $isApproved = $datum['is_approved'] ?? false;
-
-            $status = match ($isApproved) {
-                true => UserDocumentStatus::APPROVED->value,
-                false => UserDocumentStatus::REJECTED->value
-            };
-            $document->status = $status;
+            $document->status = (int) $datum['status'];
             $reason = $datum['reason'] ?? '';
+            $isApproved = (int) $datum['status'] === UserDocumentStatus::APPROVED->value;
 
             if (! $isApproved) {
                 Alert::create([
