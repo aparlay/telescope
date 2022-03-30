@@ -60,13 +60,24 @@
                                             </a>
                                         @endif
 
-                                        @if ($document->type === UserDocumentType::SELFIE->value):
+                                        @if ($document->type === UserDocumentType::SELFIE->value)
                                             <video width="100%" controls poster="{{ '' }}" style="max-height:400px">
                                                 @if ($document->temporaryUrl())
                                                     <source src="{{ $document->temporaryUrl() }}">
                                                 @endif
                                                 Your browser does not support the video tag.
                                             </video>
+
+                                            <p>
+                                                <a target="_blank" href="{{ $document->temporaryUrl() }}">
+                                                    {{ $document->file }}
+                                                </a>
+
+                                                <span
+                                                    class="badge badge-{{ UserDocumentStatus::from($document->status)->badgeColor()}}">
+                                                {{ $document->status_label }}
+                                                </span>
+                                            </p>
                                         @endif
 
 

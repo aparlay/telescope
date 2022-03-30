@@ -47,18 +47,20 @@ class UserVerificationModal extends Component
         $this->verification_status = $user->verification_status;
         foreach ($this->documents as $document) {
             $alert = $document->alertObjs()->latest()->first();
-            $this->documentsData[(string) $document->_id]['status'] = $document->status;
+            $isRejected = $document->status === UserDocumentStatus::REJECTED->value;
+            $this->documentsData[(string) $document->_id]['status'] = !$isRejected ? UserDocumentStatus::APPROVED->value : UserDocumentStatus::REJECTED->value;
             $this->documentsData[(string) $document->_id]['reason'] = $alert ? $alert->reason : '';
         }
     }
+
 
     protected function rules()
     {
         return [
             'verification_status' => Rule::in(array_keys(User::getVerificationStatuses())),
-            'documentsData.*.status' => ['required', Rule::in([
-                UserDocumentStatus::APPROVED->value,
-                UserDocumentStatus::REJECTED->value])
+            'documentsData.*.status' => [
+                'required',
+                Rule::in([UserDocumentStatus::REJECTED->value, UserDocumentStatus::APPROVED->value])
             ],
             'documentsData.*.reason' => [
                 'required_if:documentsData.*.status,-1',
@@ -80,6 +82,7 @@ class UserVerificationModal extends Component
         $user = $this->user;
         $selfie = $user->userDocumentObjs()
             ->type(UserDocumentType::SELFIE->value)
+            ->latest()
             ->first();
 
         $creditCard = $user->userDocumentObjs()
@@ -115,6 +118,11 @@ class UserVerificationModal extends Component
         $user = $this->userRepository->find($this->selectedUser);
 
         $payload = $approvedTypes = [];
+        $allDocsApproved = true;
+
+        \Log::info('datum', [
+            'datum' => $this->documentsData
+        ]);
 
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
@@ -122,7 +130,10 @@ class UserVerificationModal extends Component
             $reason = $datum['reason'] ?? '';
             $isApproved = (int) $datum['status'] === UserDocumentStatus::APPROVED->value;
 
+            $singleDocWasApproved = true;
+
             if (! $isApproved) {
+                $singleDocWasApproved = false;
                 Alert::create([
                     'created_by' => new ObjectId($this->currentUser()->_id),
                     'entity._id' => new ObjectId($document->_id),
@@ -132,6 +143,8 @@ class UserVerificationModal extends Component
                     'reason' => $reason,
                 ]);
             }
+
+            $allDocsApproved &= $singleDocWasApproved;
 
             // check if the given type has any approved document
             $approvedTypes[$document->type] = ($approvedTypes[$document->type] ?? $isApproved) || $isApproved;
@@ -144,6 +157,20 @@ class UserVerificationModal extends Component
             ];
 
             $document->save();
+        }
+
+        if ($allDocsApproved && count($this->documentsData) == 2) {
+            $this->userRepository->updateVerificationStatus(
+                $this->currentUser(),
+                $this->user,
+                UserVerificationStatus::VERIFIED->value
+            );
+        } else {
+            $this->userRepository->updateVerificationStatus(
+                $this->currentUser(),
+                $this->user,
+                UserVerificationStatus::REJECTED->value
+            );
         }
 
         // remove approved types document from payload and send payload only if there is not any approved doc
