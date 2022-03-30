@@ -18,36 +18,36 @@ abstract class AbstractResourceCollection extends ResourceCollection
     {
         $links = $meta = [];
 
-        if ($this->resource instanceof CursorPaginator) {
-            $meta = [
-                'per_page' => $this->resource->perPage(),
-            ];
-        } else {
-            if ($this->resource->onFirstPage() !== true) {
-                $links['first'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->firstPage()))];
-            }
-
-            if ($this->resource->onLastPage() !== true) {
-                $links['last'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))];
-            }
-
-            if ($this->resource->currentPage()) {
-                $links['self'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))];
-            }
-
-            $meta = [
-                'per_page' => $this->resource->perPage(),
-                'current_page' => $this->resource->currentPage(),
-                'page_count' => $this->resource->lastPage(),
-                'total_count' => $this->resource->total(),
-            ];
+        if (method_exists($this->resource, 'perPage')) {
+            $meta['per_page'] = $this->resource->perPage();
+        }
+        if (method_exists($this->resource, 'currentPage')) {
+            $meta['current_page'] = $this->resource->currentPage();
+        }
+        if (method_exists($this->resource, 'lastPage')) {
+            $meta['page_count'] = $this->resource->lastPage();
+        }
+        if (method_exists($this->resource, 'total')) {
+            $meta['total_count'] = $this->resource->total();
         }
 
-        if ($this->resource->previousPageUrl()) {
+        if (method_exists($this->resource, 'onFirstPage') && $this->resource->onFirstPage() !== true) {
+            $links['first'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->firstPage()))];
+        }
+
+        if (method_exists($this->resource, 'lastPage') && $this->resource->onLastPage() !== true) {
+            $links['last'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))];
+        }
+
+        if (method_exists($this->resource, 'currentPage') && $this->resource->currentPage()) {
+            $links['self'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))];
+        }
+
+        if (method_exists($this->resource, 'previousPageUrl') && $this->resource->previousPageUrl()) {
             $links['prev'] = ['href' =>  $this->normalizeUrl($this->resource->previousPageUrl())];
         }
 
-        if ($this->resource->nextPageUrl()) {
+        if (method_exists($this->resource, 'nextPageUrl') && $this->resource->nextPageUrl()) {
             $links['next'] = ['href' =>  $this->normalizeUrl($this->resource->nextPageUrl())];
         }
 
