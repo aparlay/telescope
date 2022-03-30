@@ -14,4 +14,14 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 class UserDocumentCollection extends ResourceCollection
 {
     public $collects = UserDocumentResource::class;
+
+    public function toArray($request): array | Arrayable
+    {
+        $output = parent::toArray($request);
+        foreach ($output as $item) {
+            $output[$item['type']] = $item;
+        }
+
+        return array_values($output);
+    }
 }
