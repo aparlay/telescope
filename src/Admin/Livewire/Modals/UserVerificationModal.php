@@ -155,7 +155,6 @@ class UserVerificationModal extends Component
 
         $shouldSendNotification = false;
         if ($user->verification_status !== $newVerificationStatus) {
-
             $this->userRepository->updateVerificationStatus(
                 $this->currentUser(),
                 $this->user,
