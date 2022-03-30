@@ -14,7 +14,7 @@ class UserDocumentRepository
     {
         return UserDocument::creator($user->_id)
             ->with('alertObjs')
-            ->oldest()
+            ->oldest('created_at')
             ->get();
     }
 
