@@ -41,7 +41,6 @@ class UserVerificationModal extends Component
         $user = $this->userRepository->find($userId);
         $this->user = $user;
 
-
         $this->loadDocuments();
 
         $this->verification_status = $user->verification_status;
@@ -120,9 +119,6 @@ class UserVerificationModal extends Component
         $payload = $approvedTypes = [];
         $allDocsApproved = true;
 
-        \Log::info('datum', [
-            'datum' => $this->documentsData
-        ]);
 
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
