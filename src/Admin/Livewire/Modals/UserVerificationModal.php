@@ -62,7 +62,7 @@ class UserVerificationModal extends Component
                 Rule::in([UserDocumentStatus::REJECTED->value, UserDocumentStatus::APPROVED->value]),
             ],
             'documentsData.*.reason' => [
-                'required_if:documentsData.*.status,' . UserDocumentStatus::REJECTED->value,
+                'required_if:documentsData.*.status,'.UserDocumentStatus::REJECTED->value,
                 'min:5',
             ],
         ];
