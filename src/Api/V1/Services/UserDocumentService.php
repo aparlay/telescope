@@ -42,7 +42,13 @@ class UserDocumentService extends AbstractService
 
     public function index()
     {
-        return $this->userDocumentRepository->index($this->getUser());
+        $documents = $this->userDocumentRepository->index($this->getUser());
+        $output = [];
+        foreach ($documents as $item) {
+            $output[$item['type']] = $item;
+        }
+
+        return array_values($output);
     }
 
     public function changeToPending()
