@@ -48,11 +48,10 @@ class UserVerificationModal extends Component
         foreach ($this->documents as $document) {
             $alert = $document->alertObjs()->latest()->first();
             $isRejected = $document->status === UserDocumentStatus::REJECTED->value;
-            $this->documentsData[(string) $document->_id]['status'] = !$isRejected ? UserDocumentStatus::APPROVED->value : UserDocumentStatus::REJECTED->value;
+            $this->documentsData[(string) $document->_id]['status'] = ! $isRejected ? UserDocumentStatus::APPROVED->value : UserDocumentStatus::REJECTED->value;
             $this->documentsData[(string) $document->_id]['reason'] = $alert ? $alert->reason : '';
         }
     }
-
 
     protected function rules()
     {
@@ -60,7 +59,7 @@ class UserVerificationModal extends Component
             'verification_status' => Rule::in(array_keys(User::getVerificationStatuses())),
             'documentsData.*.status' => [
                 'required',
-                Rule::in([UserDocumentStatus::REJECTED->value, UserDocumentStatus::APPROVED->value])
+                Rule::in([UserDocumentStatus::REJECTED->value, UserDocumentStatus::APPROVED->value]),
             ],
             'documentsData.*.reason' => [
                 'required_if:documentsData.*.status,-1',
