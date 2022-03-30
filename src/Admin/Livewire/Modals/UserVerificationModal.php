@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
+use Aparlay\Core\Constants\Roles;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
@@ -107,18 +108,10 @@ class UserVerificationModal extends Component
         $this->validate();
         $this->userRepository = new UserRepository(new User());
 
-        $shouldSendNotification = $this->user->verification_status != $this->verification_status;
-        $this->userRepository->updateVerificationStatus(
-            $this->currentUser(),
-            $this->user,
-            (int) $this->verification_status
-        );
-
         $user = $this->userRepository->find($this->selectedUser);
 
         $payload = $approvedTypes = [];
         $allDocsApproved = true;
-
 
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
@@ -156,17 +149,20 @@ class UserVerificationModal extends Component
         }
 
         if ($allDocsApproved && count($this->documentsData) == 2) {
+            $newVerificationStatus = UserVerificationStatus::VERIFIED->value;
+        } else {
+            $newVerificationStatus = UserVerificationStatus::REJECTED->value;
+        }
+
+        $shouldSendNotification = false;
+        if ($user->verification_status !== $newVerificationStatus) {
+
             $this->userRepository->updateVerificationStatus(
                 $this->currentUser(),
                 $this->user,
                 UserVerificationStatus::VERIFIED->value
             );
-        } else {
-            $this->userRepository->updateVerificationStatus(
-                $this->currentUser(),
-                $this->user,
-                UserVerificationStatus::REJECTED->value
-            );
+            $shouldSendNotification = true;
         }
 
         // remove approved types document from payload and send payload only if there is not any approved doc
