@@ -110,7 +110,7 @@ class UserVerificationModal extends Component
         $user = $this->userRepository->find($this->selectedUser);
 
         $payload = $approvedTypes = [];
-        $allDocsApproved = true;
+        $docsApprovedCounter = 0;
 
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
@@ -118,10 +118,7 @@ class UserVerificationModal extends Component
             $reason = $datum['reason'] ?? '';
             $isApproved = (int) $datum['status'] === UserDocumentStatus::APPROVED->value;
 
-            $singleDocWasApproved = true;
-
             if (! $isApproved) {
-                $singleDocWasApproved = false;
                 Alert::create([
                     'created_by' => new ObjectId($this->currentUser()->_id),
                     'entity._id' => new ObjectId($document->_id),
@@ -130,9 +127,10 @@ class UserVerificationModal extends Component
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
                     'reason' => $reason,
                 ]);
+            } else {
+                $docsApprovedCounter ++;
             }
 
-            $allDocsApproved &= $singleDocWasApproved;
 
             // check if the given type has any approved document
             $approvedTypes[$document->type] = ($approvedTypes[$document->type] ?? $isApproved) || $isApproved;
@@ -147,7 +145,7 @@ class UserVerificationModal extends Component
             $document->save();
         }
 
-        if ($allDocsApproved && count($this->documentsData) == 2) {
+        if ($docsApprovedCounter === 2) {
             $newVerificationStatus = UserVerificationStatus::VERIFIED->value;
         } else {
             $newVerificationStatus = UserVerificationStatus::REJECTED->value;
@@ -156,10 +154,14 @@ class UserVerificationModal extends Component
         $shouldSendNotification = false;
 
         if ($user->verification_status !== $newVerificationStatus) {
+            \Log::info('new verification status updated', [
+                'new' => $newVerificationStatus,
+                'user' => $user->verification_status
+            ]);
             $this->userRepository->updateVerificationStatus(
                 $this->currentUser(),
                 $this->user,
-                UserVerificationStatus::VERIFIED->value
+                $newVerificationStatus
             );
             $shouldSendNotification = true;
         }
@@ -172,14 +174,15 @@ class UserVerificationModal extends Component
         }
 
         if ($shouldSendNotification) {
-            $message = match ((int) $this->verification_status) {
-                UserVerificationStatus::UNDER_REVIEW->value => 'We have received your application and will review it shortly.',
+            $message = match ((int) $newVerificationStatus) {
                 UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
                 UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
                 default => ''
             };
 
-            $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
+            if ($message) {
+                $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
+            }
         }
 
         $this->dispatchBrowserEvent('hideModal');
