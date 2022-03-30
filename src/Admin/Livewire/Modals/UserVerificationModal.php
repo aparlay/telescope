@@ -82,7 +82,7 @@ class UserVerificationModal extends Component
 
         $user = $this->userRepository->find($this->selectedUser);
 
-        $payload = [];
+        $payload = $approvedTypes = [];
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
 
@@ -104,14 +104,26 @@ class UserVerificationModal extends Component
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
                     'reason' => $reason,
                 ]);
-                $payload[] = [
-                    'user_document_id' => (string) $document->_id,
-                    'reason' => $reason,
-                    'type' => $document->type,
-                    'type_label' => $document->type_label,
-                ];
             }
+
+            // check if the given type has any approved document
+            $approvedTypes[$document->type] = ($approvedTypes[$document->type] ?? $isApproved) || $isApproved;
+
+            $payload[$document->type] = [
+                'user_document_id' => (string) $document->_id,
+                'reason' => $reason,
+                'type' => $document->type,
+                'type_label' => $document->type_label,
+            ];
+
             $document->save();
+        }
+
+        // remove approved types document from payload and send payload only if there is not any approved doc
+        foreach ($approvedTypes as $type => $isApproved) {
+            if ($isApproved && isset($payload[$type])) {
+                unset($payload[$type]);
+            }
         }
 
         if ($shouldSendNotification) {
