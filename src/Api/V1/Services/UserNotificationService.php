@@ -22,7 +22,7 @@ class UserNotificationService
     public function index(): mixed
     {
         return UserNotification::user($this->getUser()->_id)
-            ->with('usernotifiable')
+            ->with('entityObj')
             ->cursorPaginate(20)
             ->withQueryString();
     }
