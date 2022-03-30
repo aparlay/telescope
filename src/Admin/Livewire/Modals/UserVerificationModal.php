@@ -6,7 +6,6 @@ use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
-use Aparlay\Core\Constants\Roles;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
@@ -128,9 +127,8 @@ class UserVerificationModal extends Component
                     'reason' => $reason,
                 ]);
             } else {
-                $docsApprovedCounter ++;
+                $docsApprovedCounter++;
             }
-
 
             // check if the given type has any approved document
             $approvedTypes[$document->type] = ($approvedTypes[$document->type] ?? $isApproved) || $isApproved;
