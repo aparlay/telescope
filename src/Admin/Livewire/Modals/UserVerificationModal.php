@@ -24,7 +24,7 @@ class UserVerificationModal extends Component
     use CurrentUserTrait;
 
     public $selectedUser;
-    public $verification_status;
+
     public $documents = [];
     public $user;
     public $documentsData;
@@ -154,6 +154,7 @@ class UserVerificationModal extends Component
         }
 
         $shouldSendNotification = false;
+
         if ($user->verification_status !== $newVerificationStatus) {
             $this->userRepository->updateVerificationStatus(
                 $this->currentUser(),

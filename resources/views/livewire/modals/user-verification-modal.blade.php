@@ -28,21 +28,6 @@
                 </span>
             </div>
 
-            @if (false)
-            <div>
-                <label for="">Verification Status</label>
-                <select class="form-control" wire:model="verification_status">
-                    @foreach(UserVerificationStatus::getAllCases() as $value => $label)
-                        <option value="{{$value}}">{{$label}}</option>
-                    @endforeach
-                </select>
-
-                @error('verification_status')
-                    <div class="text text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            @endif
-
             @if (count($documents) > 0)
                 <div class="documents-list mt-2">
                     <div class="row">
