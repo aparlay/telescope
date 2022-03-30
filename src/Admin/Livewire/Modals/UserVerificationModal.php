@@ -41,7 +41,6 @@ class UserVerificationModal extends Component
         $user = $this->userRepository->find($userId);
         $this->user = $user;
 
-
         $this->loadDocuments();
 
         $this->verification_status = $user->verification_status;
@@ -58,7 +57,7 @@ class UserVerificationModal extends Component
             'verification_status' => Rule::in(array_keys(User::getVerificationStatuses())),
             'documentsData.*.status' => ['required', Rule::in([
                 UserDocumentStatus::APPROVED->value,
-                UserDocumentStatus::REJECTED->value])
+                UserDocumentStatus::REJECTED->value, ]),
             ],
             'documentsData.*.reason' => [
                 'required_if:documentsData.*.status,-1',
