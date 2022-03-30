@@ -35,7 +35,6 @@ class UserDocumentController extends Controller
         $userDocuments = $this->userDocumentService->index();
         $collection = new UserDocumentCollection($userDocuments);
 
-
         return $this->response($collection, '', Response::HTTP_OK);
     }
 
