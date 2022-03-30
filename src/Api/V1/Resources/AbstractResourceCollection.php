@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Resources;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Pagination\CursorPaginator;
 use JsonSerializable;
 
 abstract class AbstractResourceCollection extends ResourceCollection
@@ -15,42 +16,46 @@ abstract class AbstractResourceCollection extends ResourceCollection
 
     private function preparePagination()
     {
-        if ($this->resource->onFirstPage() !== true) {
-            $links['first'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->firstPage()))];
-        }
+        $links = $meta = [];
 
-        if ($this->resource->onLastPage() !== true) {
-            $links['last'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))];
-        }
-
-        if ($this->resource->currentPage()) {
-            $links['self'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))];
-        }
-
-        if ($this->resource->previousPageUrl()) {
-            $links['prev'] = [
-                'href' =>  $this->normalizeUrl($this->resource->previousPageUrl()),
+        if ($this->resource instanceof CursorPaginator) {
+            $meta = [
+                'per_page' => $this->resource->perPage(),
             ];
-        }
+        } else {
+            if ($this->resource->onFirstPage() !== true) {
+                $links['first'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->firstPage()))];
+            }
 
-        if ($this->resource->nextPageUrl()) {
-            $links['next'] = [
-                'href' =>  $this->normalizeUrl($this->resource->nextPageUrl()),
-            ];
-        }
+            if ($this->resource->onLastPage() !== true) {
+                $links['last'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))];
+            }
 
-        $return = [
-            'items' => $this->resource->items(),
-            '_links' => $links,
-            '_meta' => [
+            if ($this->resource->currentPage()) {
+                $links['self'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))];
+            }
+
+            $meta = [
                 'per_page' => $this->resource->perPage(),
                 'current_page' => $this->resource->currentPage(),
                 'page_count' => $this->resource->lastPage(),
                 'total_count' => $this->resource->total(),
-            ],
-        ];
+            ];
+        }
 
-        return $return;
+        if ($this->resource->previousPageUrl()) {
+            $links['prev'] = ['href' =>  $this->normalizeUrl($this->resource->previousPageUrl())];
+        }
+
+        if ($this->resource->nextPageUrl()) {
+            $links['next'] = ['href' =>  $this->normalizeUrl($this->resource->nextPageUrl())];
+        }
+
+        return [
+            'items' => $this->resource->items(),
+            '_links' => $links,
+            '_meta' => $meta,
+        ];
     }
 
     public function normalizeUrl($url): array|string
