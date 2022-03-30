@@ -128,9 +128,8 @@ class UserVerificationModal extends Component
                     'reason' => $reason,
                 ]);
             } else {
-                $docsApprovedCounter ++;
+                $docsApprovedCounter++;
             }
-
 
             // check if the given type has any approved document
             $approvedTypes[$document->type] = ($approvedTypes[$document->type] ?? $isApproved) || $isApproved;
@@ -156,7 +155,7 @@ class UserVerificationModal extends Component
         if ($user->verification_status !== $newVerificationStatus) {
             \Log::info('new verification status updated', [
                 'new' => $newVerificationStatus,
-                'user' => $user->verification_status
+                'user' => $user->verification_status,
             ]);
             $this->userRepository->updateVerificationStatus(
                 $this->currentUser(),
