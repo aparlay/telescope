@@ -154,10 +154,6 @@ class UserVerificationModal extends Component
         $shouldSendNotification = false;
 
         if ($user->verification_status !== $newVerificationStatus) {
-            \Log::info('new verification status updated', [
-                'new' => $newVerificationStatus,
-                'user' => $user->verification_status
-            ]);
             $this->userRepository->updateVerificationStatus(
                 $this->currentUser(),
                 $this->user,
