@@ -4,7 +4,7 @@ namespace Aparlay\Core\Events;
 
 use Aparlay\Core\Api\V1\Resources\FollowResource;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
-use Aparlay\Core\Api\V1\Resources\MeResource;
+use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\UserNotification;
 use Aparlay\Payment\Api\V1\Resources\TipResource;
@@ -79,7 +79,7 @@ class UserNotificationEvent implements ShouldBroadcast
             UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value => new MediaResource($this->userNotification->entityObj),
             UserNotificationCategory::FOLLOWS->value => new FollowResource($this->userNotification->entityObj),
             UserNotificationCategory::TIPS->value => new TipResource($this->userNotification->entityObj),
-            default => new MeResource($this->userNotification->entityObj),
+            default => new UserResource($this->userNotification->entityObj),
         };
 
         return [

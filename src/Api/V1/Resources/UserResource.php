@@ -47,6 +47,8 @@ class UserResource extends JsonResource
             'follower_count' => $this->follower_count,
             'following_count' => $this->following_count,
             'like_count' => $this->like_count,
+            'verification_status' => $this->verification_status,
+            'verification_status_label' => $this->verification_status_label,
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [

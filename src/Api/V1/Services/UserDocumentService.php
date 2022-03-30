@@ -82,7 +82,9 @@ class UserDocumentService extends AbstractService
     }
 
     /**
-     * @param UserDocumentDto $documentDto
+     * @param  UserDocumentDto  $documentDto
+     * @return \Aparlay\Core\Api\V1\Models\UserDocument|\Illuminate\Database\Eloquent\Model
+     * @throws \Exception
      */
     public function store(UserDocumentDto $documentDto)
     {
