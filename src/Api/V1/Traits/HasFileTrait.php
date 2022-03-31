@@ -13,7 +13,13 @@ trait HasFileTrait
             return '';
         }
 
-        return Storage::disk($this->getStorageDisk())->temporaryUrl($this->getFilePath(), now()->addMinutes($duration));
+        $validTo = now()->addMinutes($duration);
+
+        if (\App::environment('development', 'local')) {
+            $validTo = now()->addDays($duration);
+        }
+
+        return Storage::disk($this->getStorageDisk())->temporaryUrl($this->getFilePath(), $validTo);
     }
 
     public function getFilePath()
