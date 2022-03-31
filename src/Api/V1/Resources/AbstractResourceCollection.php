@@ -31,7 +31,7 @@ abstract class AbstractResourceCollection extends ResourceCollection
             $meta['total_count'] = $this->resource->total();
         }
 
-        if (method_exists($this->resource, 'onFirstPage') && $this->resource->onFirstPage() !== true) {
+        if (method_exists($this->resource, 'firstPage') && $this->resource->onFirstPage() !== true) {
             $links['first'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->firstPage()))];
         }
 
@@ -61,8 +61,6 @@ abstract class AbstractResourceCollection extends ResourceCollection
     public function normalizeUrl($url): array|string
     {
         $url = str_replace('http://', 'https://', $url);
-        $url = str_replace(['api1', 'api2', 'api3', 'api4', 'api5'], 'api', $url);
-
-        return $url;
+        return str_replace(['api1', 'api2', 'api3', 'api4', 'api5'], 'api', $url);
     }
 }
