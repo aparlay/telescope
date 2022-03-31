@@ -16,10 +16,6 @@ class User extends UserBase
 
     protected $hidden = ['password_hash'];
 
-    public const ROLE_SUPER_ADMINISTRATOR = 'super-administrator';
-    public const ROLE_ADMINISTRATOR = 'administrator';
-    public const ROLE_SUPPORT = 'support';
-
     protected $fillable = [
         'username',
         'email',

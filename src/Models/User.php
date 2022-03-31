@@ -72,6 +72,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $subscriptions
  * @property array       $subscription_plan
  * @property array       $user_agents
+ * @property array       $subscribed_to
  * @property array       $stats
  * @property array       $last_location
  * @property string      $country_alpha2
@@ -109,6 +110,10 @@ class User extends Authenticatable implements JWTSubject
 
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
+
+    public const ROLE_SUPER_ADMINISTRATOR = 'super-administrator';
+    public const ROLE_ADMINISTRATOR = 'administrator';
+    public const ROLE_SUPPORT = 'support';
 
     /**
      * The collection associated with the model.
@@ -205,6 +210,7 @@ class User extends Authenticatable implements JWTSubject
         'subscription_plan' => [],
         'user_agents' => [],
         'search' => [],
+        'subscribed_to' => [],
         'stats' => [
             'amounts' => [
                 'sent_tips' => 0,
