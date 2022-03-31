@@ -15,7 +15,7 @@ trait HasFileTrait
 
         $validTo = now()->addMinutes($duration);
 
-        if (\App::environment('development')) {
+        if (\App::environment('development', 'local')) {
             $validTo = now()->addDays($duration);
         }
 
