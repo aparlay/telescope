@@ -1,16 +1,16 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title">Create a new Note</h5>
+            <h5 class="modal-title">Add a new note</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true close-btn">×</span>
+                <span aria-hidden="true">×</span>
             </button>
         </div>
 
         <div class="modal-body">
             <div class="form-group">
                 <label for="">Message</label>
-                <input class="form-control" wire:model="message">
+                <textarea class="form-control" wire:model="message"></textarea>
 
                 @error('message')
                     <div class="text text-danger">{{ $message }}</div>
