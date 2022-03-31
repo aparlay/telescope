@@ -43,7 +43,7 @@ class UserUpdateRequest extends FormRequest
                 'max:255',
             ],
             'verification_status' => [
-                'nullable', Rule::in(UserVerificationStatus::getAllValues())
+                'nullable', Rule::in(UserVerificationStatus::getAllValues()),
             ],
             'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
             'country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
