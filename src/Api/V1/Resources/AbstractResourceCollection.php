@@ -61,6 +61,7 @@ abstract class AbstractResourceCollection extends ResourceCollection
     public function normalizeUrl($url): array|string
     {
         $url = str_replace('http://', 'https://', $url);
+
         return str_replace(['api1', 'api2', 'api3', 'api4', 'api5'], 'api', $url);
     }
 }
