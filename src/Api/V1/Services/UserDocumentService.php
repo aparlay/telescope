@@ -95,7 +95,13 @@ class UserDocumentService extends AbstractService
         if (\App::environment('testing')) {
             return $userDocument;
         }
+
         $this->uploadDocument($documentDto->file, $userDocument);
+
+        if ($user->verification_status === UserVerificationStatus::VERIFIED->value) {
+            $user->verification_status = UserVerificationStatus::UNVERIFIED->value;
+            $user->save();
+        }
 
         return $userDocument;
     }
