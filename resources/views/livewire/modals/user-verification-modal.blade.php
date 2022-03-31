@@ -22,7 +22,7 @@
 
         <div class="modal-body">
             <div class="alert-default-secondary p-3">
-                <div class="row">
+                <div class="row mt-0">
                     <div class="col-md-6 my-auto">
                         <div class="row">
                             <div class="col">
