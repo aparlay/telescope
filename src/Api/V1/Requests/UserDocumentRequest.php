@@ -14,7 +14,6 @@ class UserDocumentRequest extends BaseFormRequest
      */
     public function rules()
     {
-
         $rules = [
             'file' => ['required', 'file'],
             'type' => [
@@ -24,10 +23,10 @@ class UserDocumentRequest extends BaseFormRequest
         ];
 
         if ((int) $this->type === UserDocumentType::SELFIE->value) {
-           $rules['file'] = [
+            $rules['file'] = [
                'required',
                'mimes:mp4,mov,ogg,qt',
-               'max:50000'
+               'max:50000',
            ];
         }
 
@@ -41,6 +40,4 @@ class UserDocumentRequest extends BaseFormRequest
 
         return  $rules;
     }
-
-
 }
