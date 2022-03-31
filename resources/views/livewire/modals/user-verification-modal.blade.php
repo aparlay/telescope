@@ -39,9 +39,9 @@
                     </div>
 
                     <div class="col-md-6 text-right my-auto">
-                        <span class="badge badge-{{ UserVerificationStatus::from($user->verification_status)->badgeColor()}}">
+                        <h2 class="p-2 badge badge-{{ UserVerificationStatus::from($user->verification_status)->badgeColor()}}">
                             {{ $user->verification_status_label }}
-                        </span>
+                        </h2>
                     </div>
                 </div>
             </div>
