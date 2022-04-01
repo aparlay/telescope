@@ -16,11 +16,18 @@ class UserNotificationTest extends ApiTestCase
      */
     public function index()
     {
-        $userNotification = UserNotification::latest()->first();
+        $user = User::factory()->create();
+        $userNotification = UserNotification::factory()->create([
+            'category' => UserNotificationCategory::SYSTEM->value,
+            'entity._type' => User::shortClassName(),
+            'entity._id' => new ObjectId($user->_id),
+        ]);
 
-        $r = $this->actingAs($userNotification->userObj)->withHeaders(['X-DEVICE-ID' => 'random-string'])
+        $r = $this->actingAs($userNotification->userObj)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/user-notification', []);
 
+        $r->dump();
         $r->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)

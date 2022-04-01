@@ -31,20 +31,34 @@ class UserNotificationFactory extends Factory
     {
         $category = $this->faker->randomElement(UserNotificationCategory::getAllValues());
 
-        $usernotifiableType = match ($category) {
-            UserNotificationCategory::TIPS->value => Tip::shortClassName(),
-            UserNotificationCategory::LIKES->value, UserNotificationCategory::COMMENTS->value => Media::shortClassName(),
-            UserNotificationCategory::FOLLOWS->value => Follow::shortClassName(),
-            UserNotificationCategory::SYSTEM->value => null
-        };
 
         $user = User::factory()->create();
 
+        switch ($category) {
+            case UserNotificationCategory::TIPS->value:
+                $entityType = Tip::shortClassName();
+                $entityId = new ObjectId(Tip::factory()->create()->_id);
+                break;
+            case UserNotificationCategory::LIKES->value:
+            case UserNotificationCategory::COMMENTS->value:
+                $entityType = Media::shortClassName();
+                $entityId = new ObjectId(Media::factory()->create()->_id);
+                break;
+            case UserNotificationCategory::FOLLOWS->value:
+                $entityType = Follow::shortClassName();
+                $entityId = new ObjectId(Follow::factory()->create()->_id);
+                break;
+            default:
+                $entityType = User::shortClassName();
+                $entityId = new ObjectId($user->_id);
+                break;
+        };
+
         return [
             'user_id' => new ObjectId($user->_id),
-            'entity._type' => $usernotifiableType,
-            'entity._id' => $usernotifiableType ? new ObjectId() : null,
-            'message' => ($category == UserNotificationCategory::SYSTEM->value) ? 'Your Creator application has been approved! 🎉' : null,
+            'entity._type' => $entityType,
+            'entity._id' => $entityId,
+            'message' => ($category == UserNotificationCategory::SYSTEM->value) ? 'Your Creator application has been approved! 🎉' : '',
             'category' => $this->faker->randomElement(UserNotificationCategory::getAllValues()),
             'status' => $this->faker->randomElement(UserNotificationStatus::getAllValues()),
             'created_by' => new ObjectId($user->_id),

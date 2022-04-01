@@ -2,22 +2,17 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
-use Aparlay\Core\Api\V1\Traits\FilterableResourceTrait;
-use Aparlay\Core\Models\Enums\UserDocumentStatus;
-use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\UserDocument;
 use Aparlay\Payment\Api\V1\Resources\TipResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use MongoDB\BSON\ObjectId;
 
 /**
  * @mixin UserDocument
  */
 class UserNotificationResource extends JsonResource
 {
-    use FilterableResourceTrait;
 
     /**
      * Transform the resource into an array.
@@ -36,7 +31,8 @@ class UserNotificationResource extends JsonResource
             default => [],
         };
 
-        $data = [
+
+        return [
             '_id' => (string) $this->_id,
             'status' => $this->status,
             'status_label' => $this->status_label,
@@ -47,7 +43,5 @@ class UserNotificationResource extends JsonResource
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
         ];
-
-        return $this->filtrateFields($this->filter($data));
     }
 }
