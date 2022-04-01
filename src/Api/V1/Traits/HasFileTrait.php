@@ -16,7 +16,7 @@ trait HasFileTrait
         $validTo = now()->addMinutes($duration);
 
         if (\App::environment('development', 'local')) {
-            $validTo = now()->addDays($duration);
+            $validTo = now()->addDays(2);
         }
 
         return Storage::disk($this->getStorageDisk())->temporaryUrl($this->getFilePath(), $validTo);
