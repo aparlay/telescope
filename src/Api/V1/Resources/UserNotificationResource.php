@@ -33,7 +33,7 @@ class UserNotificationResource extends JsonResource
             UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value => new MediaResource($this->entityObj),
             UserNotificationCategory::FOLLOWS->value => new FollowResource($this->entityObj),
             UserNotificationCategory::TIPS->value => new TipResource($this->entityObj),
-            default => null,
+            default => [],
         };
 
         $data = [

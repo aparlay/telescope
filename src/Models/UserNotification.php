@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\AlertFactory;
+use Aparlay\Core\Database\Factories\UserNotificationFactory;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\Scopes\UserNotificationScope;
@@ -97,7 +98,7 @@ class UserNotification extends BaseModel
      */
     protected static function newFactory(): Factory
     {
-        return AlertFactory::new();
+        return UserNotificationFactory::new();
     }
 
     /**

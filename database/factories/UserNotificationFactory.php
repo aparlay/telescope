@@ -32,29 +32,22 @@ class UserNotificationFactory extends Factory
         $category = $this->faker->randomElement(UserNotificationCategory::getAllValues());
 
         $usernotifiableType = match ($category) {
-            UserNotificationCategory::TIPS->value => Tip::class,
-            UserNotificationCategory::LIKES->value, UserNotificationCategory::COMMENTS->value => Media::class,
-            UserNotificationCategory::FOLLOWS->value => Follow::class,
+            UserNotificationCategory::TIPS->value => Tip::shortClassName(),
+            UserNotificationCategory::LIKES->value, UserNotificationCategory::COMMENTS->value => Media::shortClassName(),
+            UserNotificationCategory::FOLLOWS->value => Follow::shortClassName(),
             UserNotificationCategory::SYSTEM->value => null
         };
 
+        $user = User::factory()->create();
         return [
-            'user_id' => function () {
-                return new ObjectId(User::factory()->create()->_id);
-            },
+            'user_id' => new ObjectId($user->_id),
             'entity._type' => $usernotifiableType,
-            'entity._id' => function () use ($usernotifiableType) {
-                return $usernotifiableType ? new ObjectId() : null;
-            },
+            'entity._id' => $usernotifiableType ? new ObjectId() : null,
             'message' => ($category == UserNotificationCategory::SYSTEM->value) ? 'Your Creator application has been approved! 🎉' : null,
             'category' => $this->faker->randomElement(UserNotificationCategory::getAllValues()),
             'status' => $this->faker->randomElement(UserNotificationStatus::getAllValues()),
-            'created_by' => function ($alert) {
-                return new ObjectId($alert['user_id']);
-            },
-            'updated_by' => function ($alert) {
-                return new ObjectId($alert['user_id']);
-            },
+            'created_by' => new ObjectId($user->_id),
+            'updated_by' => new ObjectId($user->_id),
             'created_at' => DT::utcNow(),
             'updated_at' => DT::utcNow(),
         ];
