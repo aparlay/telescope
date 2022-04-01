@@ -141,6 +141,7 @@ class UserService extends AdminBaseService
             'referral_id',
             'promo_link',
             'country_alpha2',
+            'verification_status',
         ]);
 
         $dataBooleans = [

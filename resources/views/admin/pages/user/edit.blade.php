@@ -253,16 +253,16 @@
                                 </div>
                             </div>
                             <div class="card card-primary card-outline">
-                                <div class="card-header" id="headingMainNine">
+                                <div class="card-header" id="headingNotes">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
-                                                data-target="#collapseMainNine" aria-expanded="false"
-                                                aria-controls="collapseMainNine">
+                                                data-target="#collapseNotes" aria-expanded="false"
+                                                aria-controls="collapseNotes">
                                             Notes
                                         </button>
                                     </h5>
                                 </div>
-                                <div id="collapseMainNine" class="collapse" aria-labelledby="headingMainNine"
+                                <div id="collapseNotes" class="collapse" aria-labelledby="collapseNotes"
                                      data-parent="#accordion">
                                     <div class="card-body">
                                         @include('default_view::admin.pages.user.tabs.notes', ['user' => $user])

@@ -14,12 +14,30 @@ class UserDocumentRequest extends BaseFormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'file' => ['required', 'file'],
             'type' => [
                 'required',
                 Rule::in([UserDocumentType::ID_CARD->value, UserDocumentType::SELFIE->value]),
             ],
         ];
+
+        if ((int) $this->type === UserDocumentType::SELFIE->value) {
+            $rules['file'] = [
+               'required',
+               'mimes:mp4,mov,ogg,qt',
+               'max:50000',
+           ];
+        }
+
+        if ((int) $this->type === UserDocumentType::ID_CARD->value) {
+            $rules['file'] = [
+                'required',
+                'mimes:jpeg,jpg,png',
+                'max:5120',
+            ];
+        }
+
+        return  $rules;
     }
 }

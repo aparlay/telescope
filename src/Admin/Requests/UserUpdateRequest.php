@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Helpers\Country;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -40,6 +41,9 @@ class UserUpdateRequest extends FormRequest
                 'required',
                 Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
                 'max:255',
+            ],
+            'verification_status' => [
+                'nullable', Rule::in(UserVerificationStatus::getAllValues()),
             ],
             'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
             'country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
