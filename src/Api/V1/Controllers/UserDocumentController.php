@@ -7,7 +7,7 @@ use Aparlay\Core\Api\V1\Requests\UserDocumentRequest;
 use Aparlay\Core\Api\V1\Resources\UserDocumentCollection;
 use Aparlay\Core\Api\V1\Resources\UserDocumentResource;
 use Aparlay\Core\Api\V1\Services\UserDocumentService;
-use Aparlay\Core\Models\UserDocument;
+use Aparlay\Core\Api\V1\Models\UserDocument;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
@@ -46,7 +46,7 @@ class UserDocumentController extends Controller
     public function view(UserDocument $userDocument): Response
     {
         $this->injectAuthUser($this->userDocumentService);
-        $this->authorize('view', $userDocument);
+        $this->authorize('view', [UserDocument::class, $userDocument]);
 
         return $this->response(new UserDocumentResource($userDocument), '', Response::HTTP_OK);
     }
