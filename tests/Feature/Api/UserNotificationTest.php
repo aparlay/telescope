@@ -18,7 +18,6 @@ class UserNotificationTest extends ApiTestCase
     {
         $userNotification = UserNotification::latest()->first();
 
-
         $r = $this->actingAs($userNotification->userObj)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/user-notification', []);
 
@@ -38,12 +37,12 @@ class UserNotificationTest extends ApiTestCase
                             'entity',
                             'created_at',
                             'updated_at',
-                        ]
+                        ],
                     ],
                     '_links' => [],
                     '_meta' => [
-                        'per_page'
-                    ]
+                        'per_page',
+                    ],
                 ],
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([

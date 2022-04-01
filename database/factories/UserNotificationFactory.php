@@ -39,6 +39,7 @@ class UserNotificationFactory extends Factory
         };
 
         $user = User::factory()->create();
+
         return [
             'user_id' => new ObjectId($user->_id),
             'entity._type' => $usernotifiableType,

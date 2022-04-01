@@ -35,7 +35,7 @@ class UserNotificationSeeder extends Seeder
                     'message' => 'We have received your application and will review it shortly.',
                     'user_id' => new ObjectId($user->_id),
                     'entity._id' => new ObjectId($user->_id),
-                    'entity._type' => 'User'
+                    'entity._type' => 'User',
                 ];
             })
             ->create();
