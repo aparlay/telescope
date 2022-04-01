@@ -31,7 +31,6 @@ class UserNotificationFactory extends Factory
     {
         $category = $this->faker->randomElement(UserNotificationCategory::getAllValues());
 
-
         $user = User::factory()->create();
 
         switch ($category) {
@@ -52,7 +51,7 @@ class UserNotificationFactory extends Factory
                 $entityType = User::shortClassName();
                 $entityId = new ObjectId($user->_id);
                 break;
-        };
+        }
 
         return [
             'user_id' => new ObjectId($user->_id),

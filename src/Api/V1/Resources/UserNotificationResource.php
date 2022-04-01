@@ -13,7 +13,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class UserNotificationResource extends JsonResource
 {
-
     /**
      * Transform the resource into an array.
      *
@@ -30,7 +29,6 @@ class UserNotificationResource extends JsonResource
             UserNotificationCategory::TIPS->value => new TipResource($this->entityObj),
             default => [],
         };
-
 
         return [
             '_id' => (string) $this->_id,
