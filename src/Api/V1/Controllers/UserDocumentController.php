@@ -3,11 +3,11 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
+use Aparlay\Core\Api\V1\Models\UserDocument;
 use Aparlay\Core\Api\V1\Requests\UserDocumentRequest;
 use Aparlay\Core\Api\V1\Resources\UserDocumentCollection;
 use Aparlay\Core\Api\V1\Resources\UserDocumentResource;
 use Aparlay\Core\Api\V1\Services\UserDocumentService;
-use Aparlay\Core\Api\V1\Models\UserDocument;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
