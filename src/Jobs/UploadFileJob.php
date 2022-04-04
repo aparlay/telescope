@@ -37,7 +37,8 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
      *
      * @throws Exception
      */
-    public function __construct(string $fileName, string $fileDisk, Collection $storages, $storageFilePath = null) {
+    public function __construct(string $fileName, string $fileDisk, Collection $storages, $storageFilePath = null)
+    {
         parent::__construct();
 
         $this->fileName = $fileName;
@@ -54,7 +55,7 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
             $this->storages->each(function ($storageName) use ($storageFilePath) {
                 $storage = Storage::disk($storageName);
 
-                Log::debug($storageName . ': storage file path '.$storageFilePath);
+                Log::debug($storageName.': storage file path '.$storageFilePath);
 
                 $storage->writeStream($storageFilePath, Storage::disk($this->fileDisk)->readStream($this->fileName));
                 if (! $storage->exists($storageFilePath)) {
