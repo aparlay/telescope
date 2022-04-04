@@ -11,37 +11,38 @@
     ];
 @endphp
 
-<div class="modal-dialog" role="document">
+<div class="modal-dialog modal-xl verify-user-modal" role="document">
     <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">ID Verification</h5>
+        <div class="modal-header pb-0">
+            <h3 class="text-center w-100 mb-0">ID Verification</h3>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
             </button>
         </div>
-
-        <div class="modal-body">
-            <div class="alert-default-secondary p-3">
+        <div class="modal-body pt-0">
+            <div class="alert-default-secondary verify-header p-2">
                 <div class="row mt-0">
                     <div class="col-md-6 my-auto">
-                        <div class="row">
-                            <div class="col">
+                        <div class="d-flex">
+                            <div class="avatar">
                                 <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="profile-user-img img-fluid img-circle">
                             </div>
 
-                            <div class="col my-auto">
+                            <div class="user-details">
                                 <a href="{{$user->admin_url}}">
                                     {{ $user->full_name }}
                                 </a>
-                                <span class="text-sm">{{ $user->country_label }}</span>
+                                <div>
+                                    <span class="text-sm">{{ $user->country_label }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-6 text-right my-auto">
-                        <h2 class="p-2 badge badge-{{ UserVerificationStatus::from($user->verification_status)->badgeColor()}}">
+                    <div class="col-md-6 text-right my-auto verification-status">
+                        <span class="p-2 text-uppercase badge badge-{{ UserVerificationStatus::from($user->verification_status)->badgeColor()}}">
                             {{ $user->verification_status_label }}
-                        </h2>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -55,15 +56,16 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             @if ($document->type === UserDocumentType::ID_CARD->value)
-                                                <a target="_blank" href="{{ $document->temporaryUrl() }}"
+                                                <a class="d-block" target="_blank" href="{{ $document->temporaryUrl() }}"
                                                    title="{{$document->file}}">
                                                     <img class="img-thumbnail" src="{{$document->temporaryUrl()}}" alt="">
                                                     {{ $document->file }}
-                                                    <span
-                                                        class="badge badge-{{ UserDocumentStatus::from($document->status)->badgeColor()}}">
+                                                </a>
+
+                                                <span
+                                                    class="badge badge-{{ UserDocumentStatus::from($document->status)->badgeColor()}}">
                                                         {{ $document->status_label }}
                                                     </span>
-                                                </a>
                                             @endif
 
                                             @if ($document->type === UserDocumentType::SELFIE->value)
@@ -100,19 +102,37 @@
                                                         2. Video Selfie
                                                     @endif
                                                 </h6>
-                                                <select
-                                                    id="{{ 'wire_dropdown_'  . uniqid() }}"
-                                                    class="form-control"
-                                                    wire:key="{{ uniqid() }}"
-                                                    wire:model="documentsData.{{$document->_id}}.status">
-                                                    @foreach($documentVerificationStatus as $value => $label)
-                                                        <option value="{{$value}}">{{$label}}</option>
-                                                    @endforeach
-                                                </select>
+
+                                                <div class="form-check">
+                                                    <input class="form-check-input"
+                                                           type="radio"
+                                                           wire:model="documentsData.{{$document->_id}}.status"
+                                                           name="{{ 'document_radio_reject_' . $document->_id }}"
+                                                           value="{{ UserDocumentStatus::APPROVED->value }}">
+
+                                                    <label class="form-check-label" for="{{ 'document_radio_reject_' . $document->_id }}">
+                                                        Approve
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input
+                                                        class="form-check-input"
+                                                        wire:model="documentsData.{{$document->_id}}.status"
+                                                        value="{{ UserDocumentStatus::REJECTED->value }}"
+                                                        name="{{ 'document_radio_reject_' . $document->_id }}"
+                                                        type="radio"
+                                                        checked>
+                                                    <label class="form-check-label" for="{{ 'document_radio_reject_' . $document->_id }}">
+                                                        Reject
+                                                    </label>
+                                                </div>
                                             </div>
 
                                             @if ((int) Arr::get($documentsData, "$document->_id.status", false) === UserDocumentStatus::REJECTED->value)
-                                                <div class="mt-2 w-100">
+                                                <div class="mt-2 w-100 reject-reason">
+                                                    <label for="reason">
+                                                        Reason *
+                                                    </label>
                                                     <textarea type="text"
                                                               wire:model="documentsData.{{$document->_id}}.reason"
                                                               class="form-control"
@@ -140,8 +160,7 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
-            <button type="button" wire:click="save()" class="btn btn-primary close-modal">Save</button>
+            <button type="button" wire:click="save()" class="btn btn-block btn-primary close-modal text-uppercase">Submit</button>
         </div>
     </div>
 </div>
