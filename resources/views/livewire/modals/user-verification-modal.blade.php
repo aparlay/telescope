@@ -102,15 +102,30 @@
                                                         2. Video Selfie
                                                     @endif
                                                 </h6>
-                                                <select
-                                                    id="{{ 'wire_dropdown_'  . uniqid() }}"
-                                                    class="form-control"
-                                                    wire:key="{{ uniqid() }}"
-                                                    wire:model="documentsData.{{$document->_id}}.status">
-                                                    @foreach($documentVerificationStatus as $value => $label)
-                                                        <option value="{{$value}}">{{$label}}</option>
-                                                    @endforeach
-                                                </select>
+
+                                                <div class="form-check">
+                                                    <input class="form-check-input"
+                                                           type="radio"
+                                                           wire:model="documentsData.{{$document->_id}}.status"
+                                                           name="{{ 'document_radio_reject_' . $document->_id }}"
+                                                           value="{{ UserDocumentStatus::APPROVED->value }}">
+
+                                                    <label class="form-check-label" for="{{ 'document_radio_reject_' . $document->_id }}">
+                                                        Approve
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input
+                                                        class="form-check-input"
+                                                        wire:model="documentsData.{{$document->_id}}.status"
+                                                        value="{{ UserDocumentStatus::REJECTED->value }}"
+                                                        name="{{ 'document_radio_reject_' . $document->_id }}"
+                                                        type="radio"
+                                                        checked>
+                                                    <label class="form-check-label" for="{{ 'document_radio_reject_' . $document->_id }}">
+                                                        Reject
+                                                    </label>
+                                                </div>
                                             </div>
 
                                             @if ((int) Arr::get($documentsData, "$document->_id.status", false) === UserDocumentStatus::REJECTED->value)
