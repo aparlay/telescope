@@ -13,7 +13,6 @@ use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 
@@ -138,7 +137,7 @@ class UserDocumentService extends AbstractService
             },
             new DeleteFileJob($storageDisk, $tempFilePath),
         ])
-            ->onQueue('low')
-            ->dispatch();
+        ->onQueue(config('app.server_specific_queue'))
+        ->dispatch();
     }
 }

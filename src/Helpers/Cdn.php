@@ -67,6 +67,42 @@ class Cdn
      *
      * @throws Exception
      */
+    public static function galleryVideo(string $url): string
+    {
+        if (empty($url)) {
+            throw new Exception('gallery file is missing');
+        }
+
+        if (! config('app.cdn.enabled')) {
+            return $url;
+        }
+
+        return config('app.cdn.galleries.video').$url;
+    }
+
+    /**
+     * Responsible for returning the avatar URL based on filename if cdn is enabled.
+     *
+     * @throws Exception
+     */
+    public static function galleryImage(string $url): string
+    {
+        if (empty($url)) {
+            throw new Exception('gallery file is missing');
+        }
+
+        if (! config('app.cdn.enabled')) {
+            return $url;
+        }
+
+        return config('app.cdn.galleries.image').$url;
+    }
+
+    /**
+     * Responsible for returning the avatar URL based on filename if cdn is enabled.
+     *
+     * @throws Exception
+     */
     public static function document(string $url): string
     {
         if (empty($url)) {
