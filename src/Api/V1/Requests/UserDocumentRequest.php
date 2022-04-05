@@ -27,7 +27,7 @@ class UserDocumentRequest extends BaseFormRequest
         ];
 
         if ((int) $this->type === UserDocumentType::SELFIE->value) {
-            $this->maxInMb = 100;
+            $this->maxInMb = 200;
             $rules['file'] = [
                'required',
                'mimes:mp4,mov,ogg,qt',
@@ -36,7 +36,7 @@ class UserDocumentRequest extends BaseFormRequest
         }
 
         if ((int) $this->type === UserDocumentType::ID_CARD->value) {
-            $this->maxInMb = 10;
+            $this->maxInMb = 20;
             $rules['file'] = [
                 'required',
                 'mimes:jpeg,jpg,png',
