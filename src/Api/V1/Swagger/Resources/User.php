@@ -55,6 +55,11 @@ class User
     public $status;
 
     /**
+     * @OA\Property(property="verification_status", type="integer", description="unverified=3, pending=1, verified=2, rejected=-1, under_review=4", example=2)
+     */
+    public $verification_Status;
+
+    /**
      * @OA\Property(property="bio", type="string", example="My boo boo is the best!")
      */
     public $bio;
