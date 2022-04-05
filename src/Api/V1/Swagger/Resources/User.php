@@ -55,7 +55,16 @@ class User
     public $status;
 
     /**
-     * @OA\Property(property="verification_status", type="integer", description="unverified=3, pending=1, verified=2, rejected=-1, under_review=4", example=2)
+     * @OA\Property(
+     *     property="verification_status",
+     *     type="integer",
+     *     description="unverified=3, pending=1, verified=2, rejected=-1, under_review=4.
+     *
+     *     Initially user has unverified status, when he uploads some new documents he can change his status to  pending,
+     *     That indicates to admin user to pickup and moderate this user so status will be under_review. it prevents other admin users to pick up and moderate same user.
+     *     When admin user moderates current user and their document he can approve both documents then user status will became verified,
+     *     or reject one or both documemnts, then user status will be rejected",
+     *     example=2)
      */
     public $verification_Status;
 
