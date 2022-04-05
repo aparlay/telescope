@@ -31,7 +31,7 @@ class UserDocumentRequest extends BaseFormRequest
             $rules['file'] = [
                'required',
                'mimes:mp4,mov,ogg,qt',
-               'max:' . self::ONE_MB * $this->maxInMb,
+               'max:'.self::ONE_MB * $this->maxInMb,
            ];
         }
 
@@ -40,7 +40,7 @@ class UserDocumentRequest extends BaseFormRequest
             $rules['file'] = [
                 'required',
                 'mimes:jpeg,jpg,png',
-                'max:'. self::ONE_MB * $this->maxInMb,
+                'max:'.self::ONE_MB * $this->maxInMb,
             ];
         }
 
@@ -51,8 +51,8 @@ class UserDocumentRequest extends BaseFormRequest
     {
         return [
             'file.max' => __('Maximum file size to upload is :max MB If you are uploading a photo or video, try to reduce its resolution to make it under :max MB', [
-                'max' => $this->maxInMb
-            ])
+                'max' => $this->maxInMb,
+            ]),
         ];
     }
 }
