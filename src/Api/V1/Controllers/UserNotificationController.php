@@ -17,9 +17,9 @@ class UserNotificationController extends Controller
      */
     private $userNotificationService;
 
-    public function __construct(UserNotificationService $documentService)
+    public function __construct(UserNotificationService $userNotificationService)
     {
-        $this->userNotificationService = $documentService;
+        $this->userNotificationService = $userNotificationService;
     }
 
     /**
@@ -41,7 +41,7 @@ class UserNotificationController extends Controller
      * @return Response
      * @throws AuthorizationException
      */
-    public function read(UserNotification $userNotification): Response
+    public function readNotification(UserNotification $userNotification): Response
     {
         if (auth()->check()) {
             $this->userNotificationService->setUser(auth()->user());
