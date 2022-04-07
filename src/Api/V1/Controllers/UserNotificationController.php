@@ -2,10 +2,10 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
+use Aparlay\Core\Api\V1\Models\UserNotification;
 use Aparlay\Core\Api\V1\Resources\UserNotificationCollection;
 use Aparlay\Core\Api\V1\Resources\UserNotificationResource;
 use Aparlay\Core\Api\V1\Services\UserNotificationService;
-use Aparlay\Core\Api\V1\Models\UserNotification;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
 
