@@ -142,6 +142,50 @@ use OpenApi\Annotations as OA;
  *  )
  *
  * @OA\Schema(
+ *      schema="403",
+ *      required={"name", "message", "status", "code"},
+ *      @OA\Property(
+ *          property="name",
+ *          format="string",
+ *          example="Unauthorized"
+ *      ),
+ *      @OA\Property(
+ *          property="message",
+ *          type="string",
+ *          example="You are not allowed to perform this action"
+ *      ),
+ *      @OA\Property(
+ *          property="status",
+ *          type="string",
+ *          format="string",
+ *          example="ERROR"
+ *      ),
+ *      @OA\Property(
+ *          property="code",
+ *          type="integer",
+ *          format="int32",
+ *          example=401
+ *      ),
+ *      @OA\Property(
+ *          property="items",
+ *          type="array",
+ *          format="array",
+ *          @OA\Items (
+ *              @OA\Property(
+ *                  property="field",
+ *                  type="string",
+ *                  example="username"
+ *              ),
+ *              @OA\Property(
+ *                  property="message",
+ *                  type="string",
+ *                  example="Username is not a valid email address."
+ *              )
+ *          )
+ *      )
+ *  )
+ *
+ * @OA\Schema(
  *      schema="418",
  *      required={"message", "status", "code", "data"},
  *      @OA\Property(
