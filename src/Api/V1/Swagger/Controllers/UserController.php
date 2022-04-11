@@ -83,7 +83,7 @@ use OpenApi\Annotations as OA;
  *     ),
  * )
  *
- * @OA\POST (
+ * @OA\Post (
  *     path="/v1/me/delete",
  *     tags={"user"},
  *     summary="deactive a user",

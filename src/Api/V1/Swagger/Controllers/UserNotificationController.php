@@ -5,7 +5,7 @@ namespace Aparlay\Core\Api\V1\Swagger\Controllers;
 use OpenApi\Annotations as OA;
 
 /**
- * @OA\GET(
+ * @OA\Get(
  *     path="/v1/user-notification",
  *     tags={"user-notification"},
  *     summary="Fetch all user notifications for current user",

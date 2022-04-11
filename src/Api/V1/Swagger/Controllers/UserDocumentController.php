@@ -91,7 +91,7 @@ use OpenApi\Annotations as OA;
  *     ),
  * )
  *
- * @OA\GET(
+ * @OA\Get(
  *     path="/v1/user-document/{document_id}",
  *     tags={"user-document"},
  *     summary="Fetch a signle user documents for current user",
@@ -159,7 +159,7 @@ use OpenApi\Annotations as OA;
  *     ),
  * )
  *
- * @OA\GET(
+ * @OA\Get(
  *     path="/v1/user-document",
  *     tags={"user-document"},
  *     summary="Fetch all user documents for current user",
