@@ -3,12 +3,11 @@
 namespace Aparlay\Core\Api\V1\Resources;
 
 use Aparlay\Core\Models\UserDocument;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
  * @mixin UserDocument
  */
-class UserDocumentCollection extends ResourceCollection
+class UserDocumentCollection extends AbstractResourceCollection
 {
     public $collects = UserDocumentResource::class;
 }
