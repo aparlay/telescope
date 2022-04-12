@@ -19,7 +19,7 @@ class ObjectIdCast implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        return (string) $value;
+        return $value instanceof ObjectId ? $value : new ObjectId($value);
     }
 
     /**
