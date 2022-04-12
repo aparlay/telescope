@@ -23,7 +23,8 @@ class UserNotificationService
     {
         return UserNotification::user($this->getUser()->_id)
             ->with('entityObj')
-            ->cursorPaginate(50)
+            ->recentFirst()
+            ->cursorPaginate(20)
             ->withQueryString();
     }
 
