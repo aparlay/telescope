@@ -10,6 +10,9 @@ class Permissions
     const VERIFY_WALLETS = 'verify wallets';
     const LIST_WALLETS = 'approve wallets';
 
+    const VIEW_CHATS = 'view chats';
+    const LIST_CHATS = 'list chats';
+
     /**
      * @param $permission
      * @return string
