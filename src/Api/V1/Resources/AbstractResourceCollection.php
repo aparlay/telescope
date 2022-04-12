@@ -4,7 +4,6 @@ namespace Aparlay\Core\Api\V1\Resources;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Pagination\CursorPaginator;
 use JsonSerializable;
 
 abstract class AbstractResourceCollection extends ResourceCollection
