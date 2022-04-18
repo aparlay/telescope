@@ -13,6 +13,8 @@ enum AlertType: int implements Enum
     case USER_DOCUMENT_REJECTED = 50;
     case USER_PAYOUT_DELETED = 30;
     case USER_PAYOUT_FAILED = 31;
+    case USER_PAYOUT_CANCELLED = 32;
+
     case USER_PAYOUT_COMPLETED_MANUALLY = 33;
 
     case WALLET_REJECTED = 40;
@@ -25,7 +27,6 @@ enum AlertType: int implements Enum
             self::MEDIA_NOTICED => __('media noticed'),
             self::USER_DOCUMENT_REJECTED => __('user document rejected'),
             self::USER_PAYOUT_DELETED => __('user payout deleted'),
-            self::USER_PAYOUT_REJECTED => __('user payout rejected')
         };
     }
 
