@@ -13,7 +13,6 @@ enum AlertType: int implements Enum
     case USER_DOCUMENT_REJECTED = 50;
     case USER_PAYOUT_DELETED = 30;
     case USER_PAYOUT_FAILED = 31;
-    case USER_PAYOUT_REJECTED = 32;
     case USER_PAYOUT_COMPLETED_MANUALLY = 33;
 
     case WALLET_REJECTED = 40;
