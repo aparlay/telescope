@@ -31,6 +31,23 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
     private $storageFilePath;
 
     /**
+     * The number of times the job may be attempted.
+     */
+    public int $tries = 30;
+
+    /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     */
+    public int $maxExceptions = 10;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int|array
+     */
+    public $backoff = [3, 10, 15, 30, 60];
+
+    /**
      * Create a new job instance.
      *
      * @return void
