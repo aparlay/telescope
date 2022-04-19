@@ -13,7 +13,7 @@ abstract class BaseIndexComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $listeners = ['updateParent'];
-    public int $perPage = 10;
+    public int $perPage = 5;
     public array $filter = [];
     public array $sort = [];
     protected $model;
@@ -88,5 +88,10 @@ abstract class BaseIndexComponent extends Component
         $query = $this->buildQuery();
 
         return $query->cursorPaginate($this->perPage)->appends(request()->query());
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += 10;
     }
 }
