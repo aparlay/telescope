@@ -87,7 +87,7 @@ abstract class BaseIndexComponent extends Component
     {
         $query = $this->buildQuery();
 
-        return $query->cursorPaginate($this->perPage)->appends(request()->query());
+        return $query->paginate($this->perPage)->appends(request()->query());
     }
 
     public function loadMore()
