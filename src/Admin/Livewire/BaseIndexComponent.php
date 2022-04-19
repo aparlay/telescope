@@ -38,7 +38,7 @@ abstract class BaseIndexComponent extends Component
         $this->resetPage();
     }
 
-    public function getDefaultSort() : array
+    public function getDefaultSort(): array
     {
         return [];
     }

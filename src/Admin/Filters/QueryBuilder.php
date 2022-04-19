@@ -14,7 +14,6 @@ class QueryBuilder
     private $allowedFilters;
     protected $defaultSort;
 
-
     /**
      * @param $subject
      * @param $filter
@@ -37,6 +36,7 @@ class QueryBuilder
     public function applyDefaultSort(array $sort)
     {
         $this->defaultSort = $sort;
+
         return $this;
     }
 
@@ -128,7 +128,7 @@ class QueryBuilder
 
         if ($sort) {
             $this->query->orderBy($sort->get('column'), $sort->get('direction'));
-        } elseif (!empty($this->defaultSort)) {
+        } elseif (! empty($this->defaultSort)) {
             $this->query->orderBy($this->defaultSort[0], $this->defaultSort[1]);
         }
 
