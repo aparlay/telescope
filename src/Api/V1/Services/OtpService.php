@@ -7,10 +7,12 @@ use Aparlay\Core\Api\V1\Models\Otp;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\EmailRepository;
 use Aparlay\Core\Api\V1\Repositories\OtpRepository;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\Email as EmailJob;
 use App\Exceptions\BlockedException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 
 class OtpService
@@ -24,12 +26,12 @@ class OtpService
 
     /**
      * send otp if status in pending and request otp is null.
-     * @param  User|Authenticatable  $user
-     * @param  string  $deviceId
+     * @param User|Authenticatable $user
+     * @param string $deviceId
      * @return bool
      * @throws BlockedException
      */
-    public function sendOtp(User | Authenticatable $user, string $deviceId)
+    public function sendOtp(User|Authenticatable $user, string $deviceId)
     {
         $otp = $this->generateOtp($user->email, $deviceId);
         $this->sendByEmail($user, $otp);
@@ -46,11 +48,20 @@ class OtpService
      */
     public function generateOtp(string $identity, string $device_id = null)
     {
-        $previousOTP = Otp::identity($identity)->get();
+        $minutes = \App::environment('production') ? 5 : 1;
+        $lastFiveMinutes = DT::timestampToUtc(now()->subMinutes($minutes)->timestamp);
+
+        $previousOTP = Otp::identity($identity)
+            ->whereDate('created_at', '>=', $lastFiveMinutes)
+            ->get();
+
+        $maxMinutes = $previousOTP->pluck('created_at')->max();
 
         if (count($previousOTP) > 4) {
             throw new BlockedException(
-                'You cannot create more OTP, please wait a while to receive an otp or try again later.',
+                __('You cannot create more OTP, please wait :count minutes to receive an otp or try again later.', [
+                    'count' => now()->diffInMinutes($maxMinutes)
+                ]),
                 'ERROR',
                 'LOCKED',
                 Response::HTTP_LOCKED
@@ -62,8 +73,8 @@ class OtpService
 
         /** Prepare request params for new OTP request */
         $request = [
-            'identity'      => $identity,
-            'device_id'     => $device_id,
+            'identity' => $identity,
+            'device_id' => $device_id,
         ];
 
         return $this->otpRepository->create($request);
@@ -75,7 +86,7 @@ class OtpService
      * @param object $otp
      * @return bool
      */
-    public function sendByEmail(User | Authenticatable $user, object $otp)
+    public function sendByEmail(User|Authenticatable $user, object $otp)
     {
         /** Prepare email request data and insert in Email table */
         $request = [
@@ -93,9 +104,9 @@ class OtpService
         ]);
         $type = Email::TEMPLATE_EMAIL_VERIFICATION;
         $payload = [
-            'otp'               => $otp->otp,
-            'otpLink'           => '',
-            'tracking_url'      => config('app.frontend_url').'/t/'.$otp->_id,
+            'otp' => $otp->otp,
+            'otpLink' => '',
+            'tracking_url' => config('app.frontend_url') . '/t/' . $otp->_id,
         ];
         EmailJob::dispatch($email, $subject, $type, $payload);
 
@@ -136,8 +147,8 @@ class OtpService
             ->increment('incorrect', 1);
 
         $previousOTP = Otp::identity($identity)
-                        ->recentFirst()
-                        ->first();
+            ->recentFirst()
+            ->first();
 
         if ($previousOTP->incorrect > 3) {
             throw ValidationException::withMessages([
