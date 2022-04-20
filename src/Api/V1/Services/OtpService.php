@@ -12,8 +12,8 @@ use Aparlay\Core\Jobs\Email as EmailJob;
 use App\Exceptions\BlockedException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\App;
+use Illuminate\Validation\ValidationException;
 
 class OtpService
 {
