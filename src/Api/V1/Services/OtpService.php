@@ -12,8 +12,8 @@ use Aparlay\Core\Jobs\Email as EmailJob;
 use App\Exceptions\BlockedException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\App;
 
 class OtpService
 {
@@ -48,7 +48,7 @@ class OtpService
      */
     public function generateOtp(string $identity, string $device_id = null)
     {
-        $minutes = \App::environment('production') ? 5 : 1;
+        $minutes = App::environment('production') ? 5 : 1;
         $lastFiveMinutes = DT::timestampToUtc(now()->subMinutes($minutes)->timestamp);
 
         $previousOTP = Otp::identity($identity)
