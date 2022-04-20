@@ -12,8 +12,8 @@ use Aparlay\Core\Jobs\Email as EmailJob;
 use App\Exceptions\BlockedException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\App;
+use Illuminate\Validation\ValidationException;
 
 class OtpService
 {
@@ -60,7 +60,7 @@ class OtpService
         if (count($previousOTP) > 4) {
             throw new BlockedException(
                 __('You cannot create more OTP, please wait :count minutes to receive an otp or try again later.', [
-                    'count' => now()->diffInMinutes($maxMinutes)
+                    'count' => now()->diffInMinutes($maxMinutes),
                 ]),
                 'ERROR',
                 'LOCKED',
@@ -106,7 +106,7 @@ class OtpService
         $payload = [
             'otp' => $otp->otp,
             'otpLink' => '',
-            'tracking_url' => config('app.frontend_url') . '/t/' . $otp->_id,
+            'tracking_url' => config('app.frontend_url').'/t/'.$otp->_id,
         ];
         EmailJob::dispatch($email, $subject, $type, $payload);
 
