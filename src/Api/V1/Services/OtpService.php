@@ -48,19 +48,18 @@ class OtpService
      */
     public function generateOtp(string $identity, string $device_id = null)
     {
-        $minutes = App::environment('production') ? 5 : 1;
-        $lastFiveMinutes = DT::timestampToUtc(now()->subMinutes($minutes)->timestamp);
+        $lastMinute = DT::timestampToUtc(now()->subMinutes(1)->timestamp);
 
         $previousOTP = Otp::identity($identity)
-            ->whereDate('created_at', '>=', $lastFiveMinutes)
+            ->whereDate('created_at', '>=', $lastMinute)
             ->get();
 
-        $maxMinutes = $previousOTP->pluck('created_at')->max();
+        $minOtpCreatedAt = $previousOTP->pluck('created_at')->min();
 
         if (count($previousOTP) > 4) {
             throw new BlockedException(
-                __('You cannot create more OTP, please wait :count minutes to receive an otp or try again later.', [
-                    'count' => now()->diffInMinutes($maxMinutes)
+                __('You cannot create more OTP, please wait :count seconds to request a new otp or try again later.', [
+                    'count' => $minOtpCreatedAt->addMinutes(1)->diffInSeconds(now()),
                 ]),
                 'ERROR',
                 'LOCKED',
