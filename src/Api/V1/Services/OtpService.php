@@ -105,7 +105,7 @@ class OtpService
         $payload = [
             'otp' => $otp->otp,
             'otpLink' => '',
-            'tracking_url' => config('app.frontend_url') . '/t/' . $otp->_id,
+            'tracking_url' => config('app.frontend_url').'/t/'.$otp->_id,
         ];
         EmailJob::dispatch($email, $subject, $type, $payload);
 
