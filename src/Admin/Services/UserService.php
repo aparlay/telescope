@@ -92,6 +92,7 @@ class UserService extends AdminBaseService
 
     /**
      * @param $id
+     * @return User|User[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
     public function find($id)
     {
