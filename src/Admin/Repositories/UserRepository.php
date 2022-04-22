@@ -30,6 +30,16 @@ class UserRepository
     }
 
     /**
+     * @return bool
+     */
+    public function hasPending()
+    {
+        return User::query()
+            ->where('verification_status', UserVerificationStatus::PENDING->value)
+            ->first() !== null;
+    }
+
+    /**
      * @param $user
      * @return mixed
      */
