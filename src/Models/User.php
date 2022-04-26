@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Services\OnlineUserService;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
@@ -698,5 +699,35 @@ class User extends Authenticatable implements JWTSubject
     public static function shortClassName()
     {
         return substr(strrchr(static::class, '\\'), 1);
+    }
+
+    /**
+     * Get only class name without namespace.
+     * @param  User|Authenticatable|ObjectId|string  $user
+     * @return bool
+     */
+    public function blockedUser(User | Authenticatable | ObjectId | string $user): bool
+    {
+        if (is_string($user)) {
+            $user = new ObjectId($user);
+        }
+
+        if ($user instanceof ObjectId) {
+            $user = self::firstOrFail($user);
+        }
+
+        return Block::creator($user->_id)->user($this->_id)->exists() ||
+            Block::user($user->_id)->creator($this->_id)->exists() ||
+            $this->blockedCountry($user->country_alpha2);
+    }
+
+    /**
+     * Get only class name without namespace.
+     * @param  string  $countryAlpha2
+     * @return bool
+     */
+    public function blockedCountry(string $countryAlpha2): bool
+    {
+        return Block::creator($this->_id)->country($countryAlpha2)->exists();
     }
 }

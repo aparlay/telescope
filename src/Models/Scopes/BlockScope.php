@@ -42,4 +42,9 @@ trait BlockScope
     {
         return $query->where('is_deleted', false);
     }
+
+    public function scopeCountry(Builder $query, string $countryAlpha2): Builder
+    {
+        return $query->where('country_alpha2', $countryAlpha2);
+    }
 }

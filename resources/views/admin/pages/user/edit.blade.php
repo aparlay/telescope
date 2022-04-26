@@ -86,7 +86,7 @@
                                         <button type="button" class="btn btn-block btn-warning"
                                                 data-toggle="modal" data-target="#suspendModal">
                                             <i class="fas fa-minus-circle"></i>
-                                            <strong>Freez</strong>
+                                            <strong>Suspend</strong>
                                         </button>
                                     @endif
                                 </div>

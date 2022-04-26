@@ -31,6 +31,7 @@ use MongoDB\BSON\ObjectId;
  * @method static |self|Builder isNotDeleted()                   get not deleted blocks
  * @method static |self|Builder creator(ObjectId|string $userId) get creator user
  * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
+ * @method static |self|Builder country(string $countryAlpha2)   get blocked country
  */
 class Block extends BaseModel
 {
