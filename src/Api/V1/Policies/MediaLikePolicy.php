@@ -29,7 +29,7 @@ class MediaLikePolicy
         $userId = $user?->_id;
 
         $isBlocked = Block::select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
-        if (!$isBlocked) {
+        if (! $isBlocked) {
             return Response::allow();
         }
 
