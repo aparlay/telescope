@@ -55,6 +55,7 @@ class Block extends BaseModel
         '_id',
         'user',
         'creator',
+        'country_alpha2',
         'is_deleted',
         'created_at',
     ];
