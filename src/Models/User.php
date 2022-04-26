@@ -706,7 +706,7 @@ class User extends Authenticatable implements JWTSubject
      * @param  User|Authenticatable|ObjectId|string  $user
      * @return bool
      */
-    public function blockedUser(User | Authenticatable | ObjectId | string $user): bool
+    public function blockedUser(self | Authenticatable | ObjectId | string $user): bool
     {
         if (is_string($user)) {
             $user = new ObjectId($user);
