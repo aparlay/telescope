@@ -60,6 +60,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property float       $sort_score
  * @property User        $userObj
  * @property Alert[]     $alertObjs
+ * @property UserNotification[]     $userNotificationObjs
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
@@ -191,6 +192,16 @@ class Media extends BaseModel
     }
 
     /**
+     * Determine if the model should be searchable.
+     *
+     * @return bool
+     */
+    public function shouldBeSearchable(): bool
+    {
+        return $this->visibility == MediaVisibility::PUBLIC->value;
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -210,6 +221,7 @@ class Media extends BaseModel
             'hashtags' => $this->hashtags,
             'score' => $this->sort_score,
             'country' => $this->userObj->country_alpha2 ?? '',
+            'last_online_at' => 0,
             '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
         ];
     }
@@ -244,6 +256,14 @@ class Media extends BaseModel
     public function alertObjs()
     {
         return $this->hasMany(Alert::class, 'media_id');
+    }
+
+    /**
+     * Get all the user's notifications.
+     */
+    public function userNotificationObjs()
+    {
+        return $this->morphMany(UserNotification::class, 'entity.');
     }
 
     /**

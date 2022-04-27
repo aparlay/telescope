@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Services\OnlineUserService;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
@@ -72,6 +73,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $subscriptions
  * @property array       $subscription_plan
  * @property array       $user_agents
+ * @property array       $subscribed_to
  * @property array       $stats
  * @property array       $last_location
  * @property string      $country_alpha2
@@ -82,6 +84,9 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property int         $verification_status
  * @property float       $sort_score
  * @property string      $deactivation_reason
+ * @property bool        $has_unread_chat
+ * @property bool        $has_notification
+ * @property UTCDateTime $last_online_at
  *
  * @property-read string $admin_url
  * @property-read string $note_admin_url
@@ -106,6 +111,10 @@ class User extends Authenticatable implements JWTSubject
 
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
+
+    public const ROLE_SUPER_ADMINISTRATOR = 'super-administrator';
+    public const ROLE_ADMINISTRATOR = 'administrator';
+    public const ROLE_SUPPORT = 'support';
 
     /**
      * The collection associated with the model.
@@ -166,6 +175,7 @@ class User extends Authenticatable implements JWTSubject
         'created_at',
         'updated_at',
         'deleted_at',
+        'last_online_at',
     ];
 
     protected $attributes = [
@@ -201,6 +211,7 @@ class User extends Authenticatable implements JWTSubject
         'subscription_plan' => [],
         'user_agents' => [],
         'search' => [],
+        'subscribed_to' => [],
         'stats' => [
             'amounts' => [
                 'sent_tips' => 0,
@@ -251,6 +262,7 @@ class User extends Authenticatable implements JWTSubject
     protected $dates = [
         'email_verified_at',
         'phone_number_verified_at',
+        'last_online_at',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -277,6 +289,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Determine if the model should be searchable.
+     *
+     * @return bool
+     */
+    public function shouldBeSearchable(): bool
+    {
+        return $this->visibility == UserVisibility::PUBLIC->value;
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array
@@ -294,6 +316,7 @@ class User extends Authenticatable implements JWTSubject
             'score' => $this->sort_score,
             'country' => $this->country_alpha2,
             'like_count' => $this->like_count,
+            'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
             'visit_count' => 0,
             'comment_count' => 0,
             '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
@@ -322,6 +345,14 @@ class User extends Authenticatable implements JWTSubject
     public function userDocumentObjs(): HasMany|\Jenssegers\Mongodb\Relations\HasMany
     {
         return $this->hasMany(UserDocument::class, 'creator._id');
+    }
+
+    /**
+     * Get all the user's notifications.
+     */
+    public function userNotificationObjs()
+    {
+        return $this->morphMany(UserNotification::class, 'entity.');
     }
 
     /**
@@ -355,7 +386,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getAlertsAttribute(): array|Collection
     {
-        return Alert::user(auth()->user()->_id)->userOnly()->notVisited()->get();
+        return Alert::user($this->_id)->userOnly()->notVisited()->get();
     }
 
     /**
@@ -599,7 +630,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getVerificationStatusLabelAttribute(): string
     {
-        return UserStatus::from($this->verification_status)->label();
+        return UserVerificationStatus::from($this->verification_status)->label();
     }
 
     public function getStatusLabelAttribute()
@@ -637,5 +668,66 @@ class User extends Authenticatable implements JWTSubject
     public function getIsVerifiedAttribute()
     {
         return $this->verification_status === UserVerificationStatus::VERIFIED->value;
+    }
+
+    public function getCountryAlpha3Attribute()
+    {
+        return $this->country_alpha2 ? \Aparlay\Core\Helpers\Country::getAlpha3ByAlpha2($this->country_alpha2) : '';
+    }
+
+    /**
+     * @param  User|Authenticatable|ObjectId|string|null  $user
+     * @return bool
+     */
+    public function equalTo(self|Authenticatable|ObjectId|string|null $user): bool
+    {
+        if ($user instanceof ObjectId) {
+            $userId = (string) $user;
+        } elseif ($user instanceof Authenticatable) {
+            $userId = (string) $user->_id;
+        } else {
+            $userId = (string) $user;
+        }
+
+        return (string) $this->_id === $userId;
+    }
+
+    /**
+     * Get only class name without namespace.
+     * @return bool|string
+     */
+    public static function shortClassName()
+    {
+        return substr(strrchr(static::class, '\\'), 1);
+    }
+
+    /**
+     * Get only class name without namespace.
+     * @param  User|Authenticatable|ObjectId|string  $user
+     * @return bool
+     */
+    public function blockedUser(self | Authenticatable | ObjectId | string $user): bool
+    {
+        if (is_string($user)) {
+            $user = new ObjectId($user);
+        }
+
+        if ($user instanceof ObjectId) {
+            $user = self::firstOrFail($user);
+        }
+
+        return Block::creator($user->_id)->user($this->_id)->exists() ||
+            Block::user($user->_id)->creator($this->_id)->exists() ||
+            $this->blockedCountry($user->country_alpha2);
+    }
+
+    /**
+     * Get only class name without namespace.
+     * @param  string  $countryAlpha2
+     * @return bool
+     */
+    public function blockedCountry(string $countryAlpha2): bool
+    {
+        return Block::creator($this->_id)->country($countryAlpha2)->exists();
     }
 }

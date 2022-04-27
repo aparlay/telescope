@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum FollowStatus: int implements Enum
 {
+    use EnumEnhancements;
+
     case PENDING = 0;
     case ACCEPTED = 1;
 

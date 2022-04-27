@@ -31,22 +31,35 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
     private $storageFilePath;
 
     /**
+     * The number of times the job may be attempted.
+     */
+    public int $tries = 30;
+
+    /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     */
+    public int $maxExceptions = 10;
+
+    /**
+     * The number of seconds to wait before retrying the job.
+     *
+     * @var int|array
+     */
+    public $backoff = [3, 10, 15, 30, 60];
+
+    /**
      * Create a new job instance.
      *
      * @return void
      *
      * @throws Exception
      */
-    public function __construct(
-        string $fileName,
-        string $fileDisk,
-        Collection $storages,
-        $storageFilePath = null
-    ) {
+    public function __construct(string $fileName, string $fileDisk, Collection $storages, $storageFilePath = null)
+    {
         parent::__construct();
 
-        $this->fileDisk = $fileDisk;
         $this->fileName = $fileName;
+        $this->fileDisk = $fileDisk;
         $this->storages = $storages;
         $this->storageFilePath = $storageFilePath;
     }
@@ -59,9 +72,13 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
             $this->storages->each(function ($storageName) use ($storageFilePath) {
                 $storage = Storage::disk($storageName);
 
-                Log::debug('storage file path '.$storageFilePath);
+                Log::debug($storageName.': store file in path '.$storageFilePath);
+                if (! $storage->exists($storageFilePath)) {
+                    $storage->writeStream($storageFilePath, Storage::disk($this->fileDisk)->readStream($this->fileName));
+                } else {
+                    Log::debug($storageName.': file already exists '.$storageFilePath);
+                }
 
-                $storage->writeStream($storageFilePath, Storage::disk($this->fileDisk)->readStream($this->fileName));
                 if (! $storage->exists($storageFilePath)) {
                     throw new \Error("{$storageFilePath} failed to upload to {$storageName}");
                 }

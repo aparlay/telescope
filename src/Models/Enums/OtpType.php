@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum OtpType: string implements Enum
 {
+    use EnumEnhancements;
+
     case EMAIL = 'email';
     case SMS = 'sms';
 

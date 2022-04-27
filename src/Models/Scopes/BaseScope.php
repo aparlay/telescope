@@ -45,4 +45,14 @@ trait BaseScope
     {
         return $query->orderBy('created_at', 'desc');
     }
+
+    /**
+     * @param $query
+     * @param  UTCDateTime  $date
+     * @return mixed
+     */
+    public function scopeSince($query, UTCDateTime $date): mixed
+    {
+        return $query->where('created_at', ['$gte' => $date]);
+    }
 }

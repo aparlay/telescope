@@ -116,10 +116,12 @@ class Hashtag extends BaseModel
      */
     public function toSearchableArray()
     {
+        $media = Media::hashtag($this->tag)->sort()->first();
+
         return [
             '_id' => (string) $this->_id,
             'type' => 'hashtag',
-            'poster' => '',
+            'poster' => $media?->cover_url,
             'username' => $this->tag,
             'full_name' => $this->tag,
             'description' => $this->tag,
@@ -128,6 +130,7 @@ class Hashtag extends BaseModel
             'country' => '',
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
+            'last_online_at' => 0,
             'comment_count' => 0,
             '_geo' => ['lat' => 0.0, 'lng' => 0.0],
         ];

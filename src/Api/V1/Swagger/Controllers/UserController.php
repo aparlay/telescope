@@ -52,7 +52,7 @@ use OpenApi\Annotations as OA;
  *              @OA\Property(
  *                  property="data",
  *                  type="object",
- *                  ref="#/components/schemas/User"
+ *                  ref="#/components/schemas/Me"
  *              ),
  *              @OA\Property(
  *                  property="status",
@@ -83,7 +83,7 @@ use OpenApi\Annotations as OA;
  *     ),
  * )
  *
- * @OA\POST (
+ * @OA\Post (
  *     path="/v1/me/delete",
  *     tags={"user"},
  *     summary="deactive a user",

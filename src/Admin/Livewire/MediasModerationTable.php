@@ -50,8 +50,6 @@ class MediasModerationTable extends BaseIndexComponent
     public function getAllowedSorts()
     {
         return [
-            'file',
-            'created_by',
             'description',
             'status',
             'like_count',

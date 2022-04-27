@@ -3,12 +3,9 @@
 namespace Aparlay\Core\Api\V1\Resources;
 
 use Aparlay\Core\Api\V1\Traits\FilterableResourceTrait;
-use Aparlay\Core\Models\Enums\UserDocumentStatus;
-use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use MongoDB\BSON\ObjectId;
 
 /**
  * @mixin UserDocument
@@ -27,6 +24,8 @@ class UserDocumentResource extends JsonResource
      */
     public function toArray($request)
     {
+        $alert = $this->alertObjs()->latest()->first();
+
         $data = [
             '_id' => (string) $this->_id,
             'type' => $this->type,
@@ -34,7 +33,7 @@ class UserDocumentResource extends JsonResource
             'url' => $this->temporaryUrl(),
             'status_label' => $this->status_label,
             'type_label' => $this->type_label,
-            'alerts' => new AlertCollection($this->whenLoaded('alertObjs')),
+            'reason' => $alert ? $alert->reason : '',
         ];
 
         return $this->filtrateFields($this->filter($data));

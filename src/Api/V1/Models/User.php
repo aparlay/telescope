@@ -58,6 +58,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $verification_status
  * @property float       $sort_score
  * @property string      $deactivation_reason
+ * @property UTCDateTime $last_online_at
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url

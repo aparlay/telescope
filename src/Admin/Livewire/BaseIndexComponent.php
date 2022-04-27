@@ -13,7 +13,7 @@ abstract class BaseIndexComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $listeners = ['updateParent'];
-    public int $perPage = 10;
+    public int $perPage = 5;
     public array $filter = [];
     public array $sort = [];
     protected $model;
@@ -38,6 +38,11 @@ abstract class BaseIndexComponent extends Component
         $this->resetPage();
     }
 
+    public function getDefaultSort(): array
+    {
+        return [];
+    }
+
     public function updatingPerpage()
     {
         $this->resetPage();
@@ -51,6 +56,7 @@ abstract class BaseIndexComponent extends Component
     {
         $queryBuilder = (new QueryBuilder())
             ->for($this->model, $this->filter, $this->sort)
+            ->applyDefaultSort($this->getDefaultSort())
             ->applyFilters($this->getFilters())
             ->applySorts($this->getAllowedSorts());
 
@@ -81,6 +87,11 @@ abstract class BaseIndexComponent extends Component
     {
         $query = $this->buildQuery();
 
-        return $query->paginate($this->perPage);
+        return $query->paginate($this->perPage)->appends(request()->query());
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += 10;
     }
 }

@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
         DB::collection('users')->truncate();
         DB::collection('versions')->truncate();
         DB::collection('user_documents')->truncate();
+        DB::collection('user_notifications')->truncate();
         DB::collection('notes')->truncate();
 
         $this->call([
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
             MediaVisitSeeder::class,
             UserSeeder::class,
             UserDocumentSeeder::class,
+            UserNotificationSeeder::class,
             VersionSeeder::class,
             NoteSeeder::class,
         ]);

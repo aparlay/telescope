@@ -29,11 +29,11 @@ class MediaLikePolicy
         $userId = $user?->_id;
 
         $isBlocked = Block::select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
-        if ($isBlocked) {
-            return Response::deny(__('You cannot like this video at the moment.'));
+        if (! $isBlocked) {
+            return Response::allow();
         }
 
-        return Response::allow();
+        return Response::deny(__('You cannot like this video at the moment.'));
     }
 
     public function update()

@@ -13,7 +13,6 @@ use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 
@@ -40,9 +39,15 @@ class UserDocumentService extends AbstractService
         $this->uploadFileService = $uploadFileService;
     }
 
-    public function index(): LengthAwarePaginator
+    public function index()
     {
-        return $this->userDocumentRepository->index($this->getUser());
+        $documents = $this->userDocumentRepository->index($this->getUser());
+        $output = [];
+        foreach ($documents as $item) {
+            $output[$item['type']] = $item;
+        }
+
+        return array_values($output);
     }
 
     public function changeToPending()
@@ -64,7 +69,7 @@ class UserDocumentService extends AbstractService
             ->status(UserDocumentStatus::CREATED->value)
             ->update(['status' => UserDocumentStatus::PENDING->value]);
 
-        $this->getUser()->status = UserVerificationStatus::PENDING->value;
+        $this->getUser()->verification_status = UserVerificationStatus::PENDING->value;
         $this->getUser()->save();
 
         return $this->getUser();
@@ -76,7 +81,9 @@ class UserDocumentService extends AbstractService
     }
 
     /**
-     * @param UserDocumentDto $documentDto
+     * @param  UserDocumentDto  $documentDto
+     * @return \Aparlay\Core\Api\V1\Models\UserDocument|\Illuminate\Database\Eloquent\Model
+     * @throws \Exception
      */
     public function store(UserDocumentDto $documentDto)
     {
@@ -87,7 +94,13 @@ class UserDocumentService extends AbstractService
         if (\App::environment('testing')) {
             return $userDocument;
         }
+
         $this->uploadDocument($documentDto->file, $userDocument);
+
+        if ($user->verification_status === UserVerificationStatus::VERIFIED->value) {
+            $user->verification_status = UserVerificationStatus::UNVERIFIED->value;
+            $user->save();
+        }
 
         return $userDocument;
     }
@@ -124,7 +137,7 @@ class UserDocumentService extends AbstractService
             },
             new DeleteFileJob($storageDisk, $tempFilePath),
         ])
-            ->onQueue('low')
-            ->dispatch();
+        ->onQueue(config('app.server_specific_queue'))
+        ->dispatch();
     }
 }

@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum UserFeature: string implements Enum
 {
+    use EnumEnhancements;
+
     case TIPS = 'tips';
     case DEMO = 'demo';
 

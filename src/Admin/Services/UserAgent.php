@@ -137,10 +137,10 @@ class UserAgent
         $pattern = '#(?<browser>'.implode('|', ['Version', $this->prefix, 'other']).')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
         preg_match_all($pattern, $this->agent, $matches);
 
-        $this->version = $matches['version'][0];
+        $this->version = $matches['version'][0] ?? 0;
 
         if (count($matches['browser']) != 1) {
-            $this->version = strripos($this->agent, 'Version') < strripos($this->agent, $this->prefix) ? $matches['version'][0] : $matches['version'][1];
+            $this->version = strripos($this->agent, 'Version') < strripos($this->agent, $this->prefix) ? ($matches['version'][0] ?? 0) : ($matches['version'][1] ?? 0);
         }
 
         // Check if is a BOT

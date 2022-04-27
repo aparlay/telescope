@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum UserType: int implements Enum
 {
+    use EnumEnhancements;
+
     case USER = 0;
     case ADMIN = 1;
 

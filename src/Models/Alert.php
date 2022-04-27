@@ -6,9 +6,13 @@ use Aparlay\Core\Database\Factories\AlertFactory;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Scopes\AlertScope;
+use Aparlay\Payout\Models\UserPayout;
+use Aparlay\Payout\Models\Wallet;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
@@ -67,17 +71,8 @@ class Alert extends BaseModel
         'updated_by',
         'created_at',
         'updated_at',
-        'user_document_id',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+        'entity._id',
+        'entity._type',
     ];
 
     /**
@@ -107,20 +102,17 @@ class Alert extends BaseModel
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function entityObj(): MorphTo|\Jenssegers\Mongodb\Relations\MorphTo
+    {
+        return $this->morphTo('entity.');
+    }
+
     /**
      * Get the media associated with the alert.
      */
     public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
-    }
-
-    /**
-     * Get the media associated with the alert.
-     */
-    public function userDocumentObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
-    {
-        return $this->belongsTo(UserDocument::class, 'media_id');
     }
 
     /**

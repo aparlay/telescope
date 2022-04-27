@@ -1,5 +1,6 @@
 @php
     use Illuminate\Support\Arr;
+    use Aparlay\Core\Models\Enums\UserVerificationStatus;
 @endphp
 
 <div class="tab-pane active" id="user-info">
@@ -68,11 +69,16 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="email_verified" class="col-sm-2 col-form-label">Verification Status</label>
+            <label for="gender" class="col-sm-2 col-form-label">Verification status</label>
             <div class="col-sm-10">
-                {{ $user->verification_status_name }}
+                <select name="verification_status" id="verification_status" class="form-control">
+                    @foreach(UserVerificationStatus::getAllCases() as $key => $label)
+                        <option value="{{ $key }}" {!! $user->verification_status == $key ? 'selected' : '' !!}>{{ $label }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
+
 
         <div class="form-group row">
             <label for="gender" class="col-sm-2 col-form-label">Gender</label>

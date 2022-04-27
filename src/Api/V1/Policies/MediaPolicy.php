@@ -15,7 +15,11 @@ class MediaPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User | Authenticatable | null $user)
+    /**
+     * @param  User|Authenticatable|null  $user
+     * @return Response
+     */
+    public function viewAny(User|Authenticatable|null $user): Response
     {
         return Response::allow();
     }
@@ -23,11 +27,11 @@ class MediaPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \Aparlay\Core\Api\V1\Models\User  $user
-     * @param  \Aparlay\Core\Api\V1\Models\Media  $media
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  User|Authenticatable|null  $user
+     * @param  Media  $media
+     * @return Response|bool
      */
-    public function view(User | Authenticatable | null $user, Media $media)
+    public function view(User|Authenticatable|null $user, Media $media): Response|bool
     {
         $userId = $user?->_id;
 
@@ -46,15 +50,15 @@ class MediaPolicy
             }
         }
 
-        return Response::deny(__('You can only view media that you\'ve created.'));
+        return Response::deny(__('This content is not available for you.'));
     }
 
     /**
      * Determine whether the user can create models.
      *
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @return Response|bool
      */
-    public function create()
+    public function create(): Response|bool
     {
         return auth()->user()->status !== UserStatus::PENDING->value
             ? Response::allow()
@@ -64,11 +68,11 @@ class MediaPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \Aparlay\Core\Api\V1\Models\User  $user
-     * @param  \Aparlay\Core\Api\V1\Models\Media  $media
-     * @return \Illuminate\Auth\Access\Response|bool
+     * @param  User|Authenticatable  $user
+     * @param  Media  $media
+     * @return Response|bool
      */
-    public function update(User | Authenticatable $user, Media $media)
+    public function update(User|Authenticatable $user, Media $media): Response|bool
     {
         $userId = $user->_id ?? null;
 
@@ -77,7 +81,12 @@ class MediaPolicy
             : Response::deny(__('You can only update media that you\'ve created.'));
     }
 
-    public function delete($user, $media)
+    /**
+     * @param $user
+     * @param $media
+     * @return Response
+     */
+    public function delete($user, $media): Response
     {
         $userId = $user->_id ?? null;
 

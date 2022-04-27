@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum UserDocumentStatus: int implements Enum
 {
+    use EnumEnhancements;
+
     case CREATED = 0;
     case PENDING = 1;
     case REJECTED = -1;

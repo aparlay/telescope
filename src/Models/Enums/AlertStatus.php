@@ -4,14 +4,16 @@ namespace Aparlay\Core\Models\Enums;
 
 enum AlertStatus: int implements Enum
 {
-    case NOT_VISITED = 0;
+    use EnumEnhancements;
+
+    case NOT_VISITED = -1;
     case VISITED = 1;
 
     public function label(): string
     {
         return match ($this) {
-            self::NOT_VISITED => __('queued'),
-            self::VISITED => __('uploaded'),
+            self::NOT_VISITED => __('not visited'),
+            self::VISITED => __('visited'),
         };
     }
 

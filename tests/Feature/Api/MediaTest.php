@@ -480,7 +480,7 @@ class MediaTest extends ApiTestCase
                 'code' => 403,
                 'status' => 'ERROR',
                 'data' => [],
-                'message' => 'You can only view media that you\'ve created.',
+                'message' => 'This content is not available for you.',
             ]);
     }
 
@@ -1105,7 +1105,7 @@ class MediaTest extends ApiTestCase
                 'code' => 403,
                 'status' => 'ERROR',
                 'data' => [],
-                'message' => 'You can only view media that you\'ve created.',
+                'message' => 'This content is not available for you.',
             ]);
     }
 }

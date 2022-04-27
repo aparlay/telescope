@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum MediaStatus: int implements Enum
 {
+    use EnumEnhancements;
+
     case QUEUED = 0;
     case UPLOADED = 1;
     case IN_PROGRESS = 2;

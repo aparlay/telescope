@@ -30,6 +30,16 @@ class UserRepository
     }
 
     /**
+     * @return bool
+     */
+    public function hasPending()
+    {
+        return User::query()
+            ->where('verification_status', UserVerificationStatus::PENDING->value)
+            ->first() !== null;
+    }
+
+    /**
      * @param $user
      * @return mixed
      */
@@ -97,17 +107,16 @@ class UserRepository
         return $user;
     }
 
-    public function updateVerificationStatus($adminUser, $user, $verificationStatus)
+    public function updateVerificationStatus($adminUser, $user, int $verificationStatus)
     {
         $oldVerificationStatus = $user->verification_status;
         $user->verification_status = $verificationStatus;
         $user->save();
 
-        if (
-            $oldVerificationStatus !== $verificationStatus &&
-            in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])
-        ) {
-            UserVerificationStatusChangedEvent::dispatch($adminUser, $user, $verificationStatus);
+        if ($oldVerificationStatus !== $verificationStatus) {
+            if (in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])) {
+                UserVerificationStatusChangedEvent::dispatch($adminUser, $user, $verificationStatus);
+            }
         }
 
         return $user;

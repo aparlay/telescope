@@ -15,43 +15,56 @@ abstract class AbstractResourceCollection extends ResourceCollection
 
     private function preparePagination()
     {
-        $links = [
-            'first' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->onFirstPage()))],
-            'last' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))],
-            'self' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))],
-        ];
+        $links = $meta = [];
 
-        if ($this->resource->previousPageUrl()) {
-            $links['prev'] = [
-                'href' =>  $this->normalizeUrl($this->resource->previousPageUrl()),
-            ];
+        if (method_exists($this->resource, 'perPage')) {
+            $meta['per_page'] = $this->resource->perPage();
+        }
+        if (method_exists($this->resource, 'currentPage')) {
+            $meta['current_page'] = $this->resource->currentPage();
+        }
+        if (method_exists($this->resource, 'lastPage')) {
+            $meta['page_count'] = $this->resource->lastPage();
+        }
+        if (method_exists($this->resource, 'total')) {
+            $meta['total_count'] = $this->resource->total();
         }
 
-        if ($this->resource->nextPageUrl()) {
-            $links['next'] = [
-                'href' =>  $this->normalizeUrl($this->resource->nextPageUrl()),
-            ];
+        if (method_exists($this->resource, 'firstPage') && $this->resource->onFirstPage() !== true) {
+            $links['first'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->firstPage()))];
         }
 
-        $return = [
+        if (method_exists($this->resource, 'lastPage') && $this->resource->onLastPage() !== true) {
+            $links['last'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage()))];
+        }
+
+        if (method_exists($this->resource, 'currentPage') && $this->resource->currentPage()) {
+            $links['self'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->currentPage()))];
+        }
+
+        if (method_exists($this->resource, 'cursor')) {
+            $links['self'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->cursor()))];
+        }
+
+        if (method_exists($this->resource, 'previousPageUrl') && $this->resource->previousPageUrl()) {
+            $links['prev'] = ['href' =>  $this->normalizeUrl($this->resource->previousPageUrl())];
+        }
+
+        if (method_exists($this->resource, 'nextPageUrl') && $this->resource->nextPageUrl()) {
+            $links['next'] = ['href' =>  $this->normalizeUrl($this->resource->nextPageUrl())];
+        }
+
+        return [
             'items' => $this->resource->items(),
             '_links' => $links,
-            '_meta' => [
-                'per_page' => $this->resource->perPage(),
-                'current_page' => $this->resource->currentPage(),
-                'page_count' => $this->resource->lastPage(),
-                'total_count' => $this->resource->total(),
-            ],
+            '_meta' => $meta,
         ];
-
-        return $return;
     }
 
     public function normalizeUrl($url): array|string
     {
         $url = str_replace('http://', 'https://', $url);
-        $url = str_replace(['api1', 'api2', 'api3', 'api4', 'api5'], 'api', $url);
 
-        return $url;
+        return str_replace(['api1', 'api2', 'api3', 'api4', 'api5'], 'api', $url);
     }
 }

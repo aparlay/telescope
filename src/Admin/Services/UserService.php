@@ -27,7 +27,7 @@ class UserService extends AdminBaseService
 
     public function isModerationQueueNotEmpty()
     {
-        return $this->userRepository->countPending() > 0;
+        return $this->userRepository->hasPending();
     }
 
     public function firstNextPending($currentUser, $userId)
@@ -92,6 +92,7 @@ class UserService extends AdminBaseService
 
     /**
      * @param $id
+     * @return User|User[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
     public function find($id)
     {
@@ -141,6 +142,7 @@ class UserService extends AdminBaseService
             'referral_id',
             'promo_link',
             'country_alpha2',
+            'verification_status',
         ]);
 
         $dataBooleans = [

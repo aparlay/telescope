@@ -18,10 +18,8 @@ class UserDocumentPolicy
     {
         $userId = $user?->_id;
 
-        if ($userId === $userDocument->creatorObj->_id) {
-            return Response::allow();
-        }
-
-        return Response::deny(__('You cannot view this document'));
+        return $userDocument->creatorObj->equalTo($userId)
+            ? Response::allow()
+            : Response::deny(__('You cannot view this document'));
     }
 }

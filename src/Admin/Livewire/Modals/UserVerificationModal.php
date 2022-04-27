@@ -2,20 +2,28 @@
 
 namespace Aparlay\Core\Admin\Livewire\Modals;
 
+use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\User;
-use Aparlay\Core\Admin\Repositories\AlertRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
+use Aparlay\Core\Models\Enums\UserDocumentType;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
+use Aparlay\Core\Models\UserDocument;
+use Aparlay\Core\Notifications\CreatorAccountApprovementNotification;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use MongoDB\BSON\ObjectId;
 
 class UserVerificationModal extends Component
 {
+    use CurrentUserTrait;
+
     public $selectedUser;
-    public $verification_status;
+
     public $documents = [];
     public $user;
     public $documentsData;
@@ -32,13 +40,15 @@ class UserVerificationModal extends Component
         $this->userRepository = new UserRepository(new User());
         $user = $this->userRepository->find($userId);
         $this->user = $user;
-        $this->documents = $user->userDocumentObjs()->latest()->get() ?? [];
-        $this->verification_status = $user->verification_status;
 
+        $this->loadDocuments();
+
+        $this->verification_status = $user->verification_status;
         foreach ($this->documents as $document) {
             $alert = $document->alertObjs()->latest()->first();
-            $this->documentsData[$document->_id]['is_approved'] = $document->status === UserDocumentStatus::APPROVED->value;
-            $this->documentsData[$document->_id]['reason'] = $alert ? $alert->reason : '';
+            $isRejected = $document->status === UserDocumentStatus::REJECTED->value;
+            $this->documentsData[(string) $document->_id]['status'] = ! $isRejected ? UserDocumentStatus::APPROVED->value : UserDocumentStatus::REJECTED->value;
+            $this->documentsData[(string) $document->_id]['reason'] = $alert ? $alert->reason : '';
         }
     }
 
@@ -46,9 +56,12 @@ class UserVerificationModal extends Component
     {
         return [
             'verification_status' => Rule::in(array_keys(User::getVerificationStatuses())),
-            'documentsData.*.is_approved' => ['required', 'boolean'],
+            'documentsData.*.status' => [
+                'required',
+                Rule::in([UserDocumentStatus::REJECTED->value, UserDocumentStatus::APPROVED->value]),
+            ],
             'documentsData.*.reason' => [
-                'required_if:documentsData.*.is_approved,false',
+                'required_if:documentsData.*.status,'.UserDocumentStatus::REJECTED->value,
                 'min:5',
             ],
         ];
@@ -62,43 +75,108 @@ class UserVerificationModal extends Component
         ];
     }
 
+    private function loadDocuments()
+    {
+        $user = $this->user;
+        $selfie = $user->userDocumentObjs()
+            ->type(UserDocumentType::SELFIE->value)
+            ->latest()
+            ->first();
+
+        $creditCard = $user->userDocumentObjs()
+            ->type(UserDocumentType::ID_CARD->value)
+            ->latest()
+            ->first();
+
+        $collection = new Collection();
+
+        if ($creditCard) {
+            $collection->push($creditCard);
+        }
+
+        if ($selfie) {
+            $collection->push($selfie);
+        }
+
+        $this->documents = $collection;
+    }
+
     public function save()
     {
         $this->validate();
-
         $this->userRepository = new UserRepository(new User());
-        $alertRepository = new AlertRepository(new Alert());
-
-        $this->userRepository->updateVerificationStatus(
-            auth()->user(),
-            $this->user,
-            $this->verification_status
-        );
 
         $user = $this->userRepository->find($this->selectedUser);
 
+        $payload = $approvedTypes = [];
+        $docsApprovedCounter = 0;
+
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
-
-            $isApproved = $datum['is_approved'] ?? false;
-
-            $status = match ($isApproved) {
-                true => UserDocumentStatus::APPROVED->value,
-                false => UserDocumentStatus::REJECTED->value
-            };
-            $document->status = $status;
+            $document->status = (int) $datum['status'];
             $reason = $datum['reason'] ?? '';
+            $isApproved = (int) $datum['status'] === UserDocumentStatus::APPROVED->value;
 
             if (! $isApproved) {
-                $alertRepository->firstOrCreate([
+                Alert::create([
+                    'created_by' => new ObjectId($this->currentUser()->_id),
+                    'entity._id' => new ObjectId($document->_id),
+                    'entity._type' => UserDocument::shortClassName(),
                     'status' => AlertStatus::NOT_VISITED->value,
                     'type' => AlertType::USER_DOCUMENT_REJECTED->value,
-                    'user_document_id' => $document->_id,
                     'reason' => $reason,
                 ]);
+            } else {
+                $docsApprovedCounter++;
             }
 
+            // check if the given type has any approved document
+            $approvedTypes[$document->type] = ($approvedTypes[$document->type] ?? $isApproved) || $isApproved;
+
+            $payload[$document->type] = [
+                'user_document_id' => (string) $document->_id,
+                'reason' => $reason,
+                'type' => $document->type,
+                'type_label' => $document->type_label,
+            ];
+
             $document->save();
+        }
+
+        if ($docsApprovedCounter === 2) {
+            $newVerificationStatus = UserVerificationStatus::VERIFIED->value;
+        } else {
+            $newVerificationStatus = UserVerificationStatus::REJECTED->value;
+        }
+
+        $shouldSendNotification = false;
+
+        if ($user->verification_status !== $newVerificationStatus) {
+            $this->userRepository->updateVerificationStatus(
+                $this->currentUser(),
+                $this->user,
+                $newVerificationStatus
+            );
+            $shouldSendNotification = true;
+        }
+
+        // remove approved types document from payload and send payload only if there is not any approved doc
+        foreach ($approvedTypes as $type => $isApproved) {
+            if ($isApproved && isset($payload[$type])) {
+                unset($payload[$type]);
+            }
+        }
+
+        if ($shouldSendNotification) {
+            $message = match ((int) $newVerificationStatus) {
+                UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
+                UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
+                default => ''
+            };
+
+            if ($message) {
+                $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
+            }
         }
 
         $this->dispatchBrowserEvent('hideModal');

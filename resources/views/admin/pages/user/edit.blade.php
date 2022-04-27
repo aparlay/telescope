@@ -86,7 +86,7 @@
                                         <button type="button" class="btn btn-block btn-warning"
                                                 data-toggle="modal" data-target="#suspendModal">
                                             <i class="fas fa-minus-circle"></i>
-                                            <strong>Freez</strong>
+                                            <strong>Suspend</strong>
                                         </button>
                                     @endif
                                 </div>
@@ -253,19 +253,36 @@
                                 </div>
                             </div>
                             <div class="card card-primary card-outline">
+                                <div class="card-header" id="headingNotes">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#collapseNotes" aria-expanded="false"
+                                                aria-controls="collapseNotes">
+                                            Notes
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseNotes" class="collapse" aria-labelledby="collapseNotes"
+                                     data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.notes', ['user' => $user])
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-primary card-outline">
                                 <div class="card-header" id="headingMainNine">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
                                                 data-target="#collapseMainNine" aria-expanded="false"
                                                 aria-controls="collapseMainNine">
-                                            Notes
+                                            Wallets
                                         </button>
                                     </h5>
                                 </div>
                                 <div id="collapseMainNine" class="collapse" aria-labelledby="headingMainNine"
                                      data-parent="#accordion">
                                     <div class="card-body">
-                                        @include('default_view::admin.pages.user.tabs.notes', ['user' => $user])
+                                        @include('default_view::admin.pages.user.tabs.wallets', ['user' => $user])
                                     </div>
                                 </div>
                             </div>
@@ -286,6 +303,25 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="card card-maroon card-outline">
+                                <div class="card-header" id="headingMainTen">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#payoutsTab" aria-expanded="false"
+                                                aria-controls="collapseMainTen">
+                                            Payouts
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="payoutsTab" class="collapse" aria-labelledby="headingMainTen"
+                                     data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.payouts', ['user' => $user])
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

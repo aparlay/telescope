@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Requests;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserStatus;
@@ -137,6 +138,7 @@ class RegisterRequest extends FormRequest
             ],
             'referral_id' => $this->referral_id,
             'features' => array_fill_keys(array_keys(User::getFeatures()), false),
+            'last_online_at' => DT::utcNow(),
         ]);
     }
 }

@@ -5,7 +5,7 @@ namespace Aparlay\Core\Api\V1\Swagger\Controllers;
 use OpenApi\Annotations as OA;
 
 /**
- * @OA\POST(
+ * @OA\Post(
  *     path="/v1/user/{id}/report",
  *     tags={"user"},
  *     summary="report a user",
@@ -85,7 +85,7 @@ use OpenApi\Annotations as OA;
  *     )
  * )
  *
- * @OA\POST(
+ * @OA\Post(
  *     path="/v1/media/{id}/report",
  *     tags={"media"},
  *     summary="report a media",

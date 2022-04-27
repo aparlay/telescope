@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models\Enums;
 
 enum UserShowOnlineStatus: int implements Enum
 {
+    use EnumEnhancements;
+
     case NONE = 0;
     case FOLLOWERS = 1;
     case All = 2;

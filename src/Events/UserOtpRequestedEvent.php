@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Events;
 
 use Aparlay\Core\Models\User;
-use Illuminate\Auth\Events\Authenticated;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -18,7 +18,7 @@ class UserOtpRequestedEvent
      * @return void
      */
     public function __construct(
-        protected Authenticated|User $user,
+        protected Authenticatable|User $user,
         protected $deviceId
     ) {
     }
