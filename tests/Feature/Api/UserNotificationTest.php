@@ -23,12 +23,11 @@ class UserNotificationTest extends ApiTestCase
             'entity._id' => new ObjectId($user->_id),
         ]);
 
-        $r = $this->actingAs($userNotification->userObj)
+        $response = $this->actingAs($userNotification->userObj)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/user-notification', []);
 
-        $r->dump();
-        $r->assertStatus(200)
+        $response->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJsonStructure([
