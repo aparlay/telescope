@@ -89,7 +89,7 @@ class RequestOtpTest extends ApiTestCase
                 'code' => 423,
                 'status' => 'ERROR',
                 'data' => [],
-                'message' => 'You cannot create more OTP, please wait a while to receive an otp or try again later.',
+                'message' => 'You cannot create more OTP, please wait 59 seconds to request a new otp or try again later.',
             ]);
     }
 

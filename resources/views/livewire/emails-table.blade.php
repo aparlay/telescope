@@ -7,10 +7,10 @@
 <div class="user-table">
     <div class="filters pb-3">
         <div class="row">
-            <div class="col-md-9 pt-4">
+            <div class="col-md-6 pt-4">
                 <h4>Emails</h4>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <label for="">Start Date</label>
                 <x-date-picker
                         wire:model.lazy="filter.created_at.start"
@@ -18,7 +18,7 @@
                         placeholder="Start"
                 />
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <label for="">End Date</label>
                 <x-date-picker
                         wire:model.lazy="filter.created_at.end"
@@ -26,7 +26,7 @@
                         placeholder="End"
                 />
             </div>
-            <div class="col-md-1 ml-auto">
+            <div class="col-md-2 ml-auto">
                 <label for="">Per Page</label>
                 <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>

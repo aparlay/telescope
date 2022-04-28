@@ -713,7 +713,7 @@ class User extends Authenticatable implements JWTSubject
         }
 
         if ($user instanceof ObjectId) {
-            $user = self::firstOrFail($user);
+            $user = self::findOrFail($user);
         }
 
         return Block::creator($user->_id)->user($this->_id)->exists() ||

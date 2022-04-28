@@ -7,37 +7,29 @@
 <div class="medias-table">
     <div class="filters pb-3">
         <div class="row">
-            <div class="col-md-3 pt-4">
+            <div class="col-md-6 pt-4">
                 <h4>Medias Moderation</h4>
             </div>
-
-            <div class="col-md-2 offset-6">
-                <div class="row">
-                    <div class="col">
-                        <label for="">Start Date</label>
-                        <x-date-picker
-                                wire:model.lazy="filter.created_at.start"
-                                autocomplete="off"
-                                placeholder="Start"
-                        />
-                    </div>
-                    <div class="col">
-                        <label for="">End Date</label>
-                        <x-date-picker
-                                wire:model.lazy="filter.created_at.end"
-                                autocomplete="off"
-                                placeholder="End"
-                        />
-                    </div>
-                </div>
+            <div class="col-md-2">
+                <label for="">Start Date</label>
+                <x-date-picker
+                        wire:model.lazy="filter.created_at.start"
+                        autocomplete="off"
+                        placeholder="Start"
+                />
             </div>
-
-
-            <div class="col-md-1  ml-auto">
+            <div class="col-md-2">
+                <label for="">End Date</label>
+                <x-date-picker
+                        wire:model.lazy="filter.created_at.end"
+                        autocomplete="off"
+                        placeholder="End"
+                />
+            </div>
+            <div class="col-md-2 ml-auto">
                 <label for="">Per Page</label>
                 <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
-
         </div>
     </div>
 

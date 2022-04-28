@@ -150,7 +150,7 @@ class UserProfileTest extends ApiTestCase
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->get('/v1/user/'.$userDeactivated->_id)
-            ->assertStatus(422);
+            ->assertStatus(423);
 
         $this->actingAs($userViewer)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
