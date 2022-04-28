@@ -4,6 +4,7 @@ namespace Aparlay\Core;
 
 use Aparlay\Core\Admin\Components\DatePicker;
 use Aparlay\Core\Admin\Components\MediaCover;
+use Aparlay\Core\Admin\Components\Modals;
 use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
 use Aparlay\Core\Admin\Components\UtcFormatter;
@@ -181,6 +182,7 @@ class CoreServiceProvider extends ServiceProvider
             'settings-table' => SettingsTable::class,
             'emails-table' => EmailsTable::class,
             'notes-table' => NotesTable::class,
+            'modals' => Modals::class,
             'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,
             'modals.user-notes-create-modal' => UserNoteCreateModal::class,
         ];
