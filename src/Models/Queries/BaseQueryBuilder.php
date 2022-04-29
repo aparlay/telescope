@@ -1,4 +1,5 @@
 <?php
+
 namespace Aparlay\Core\Models\Queries;
 
 use Jenssegers\Mongodb\Eloquent\Builder;
