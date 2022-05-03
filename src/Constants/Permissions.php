@@ -13,6 +13,10 @@ class Permissions
     const VIEW_CHATS = 'view chats';
     const LIST_CHATS = 'list chats';
 
+    const LIST_PAYERS = 'list payers';
+    const VIEW_PAYERS = 'view payers';
+    const UPDATE_PAYERS = 'update payers';
+
     /**
      * @param $permission
      * @return string
