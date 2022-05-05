@@ -30,7 +30,7 @@ class UserResource extends JsonResource
             // TODO: $isBlocked = collect($user->blocks)->pluck('_id')
             $isBlocked = in_array((string) $this->_id, $blockedIds);
 
-            $isOnline = $isFollowed ? $this->is_online_for_followers : $this->is_online_for_all;
+            $isOnline = $this->is_online; //$isFollowed ? $this->is_online_for_followers : $this->is_online_for_all;
         }
 
         return [
