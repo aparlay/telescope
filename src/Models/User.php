@@ -653,7 +653,7 @@ class User extends Authenticatable implements JWTSubject
         return self::isOnlineForAll($this->_id);
     }
 
-    public function isOnline($userId): bool
+    public static function isOnline($userId): bool
     {
         [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
 
