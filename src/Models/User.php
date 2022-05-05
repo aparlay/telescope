@@ -657,7 +657,7 @@ class User extends Authenticatable implements JWTSubject
         return self::isOnlineForAll($this->_id);
     }
 
-    public static function isOnlineForFollowers(ObjectId $userId): bool
+    public static function isOnlineForFollowers($userId): bool
     {
         [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
 
@@ -666,7 +666,7 @@ class User extends Authenticatable implements JWTSubject
         return Redis::sismember($cacheKey, (string) $userId);
     }
 
-    public static function isOnlineForAll(ObjectId $userId): bool
+    public static function isOnlineForAll($userId): bool
     {
         [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
 
