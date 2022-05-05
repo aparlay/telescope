@@ -640,11 +640,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getIsOnlineAttribute(): bool
     {
-        [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
-
-        $cacheKey = config('app.cache.keys.online.none').':'.$currentWindow;
-
-        return Redis::sismember($cacheKey, (string) $this->_id);
+        return self::isOnline($this->_id);
     }
 
     public function getIsOnlineForFollowersAttribute(): bool
@@ -655,6 +651,15 @@ class User extends Authenticatable implements JWTSubject
     public function getIsOnlineForAllAttribute(): bool
     {
         return self::isOnlineForAll($this->_id);
+    }
+
+    public function isOnline($userId): bool
+    {
+        [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
+
+        $cacheKey = config('app.cache.keys.online.none').':'.$currentWindow;
+
+        return Redis::sismember($cacheKey, (string) $userId);
     }
 
     public static function isOnlineForFollowers($userId): bool
