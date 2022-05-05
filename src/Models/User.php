@@ -665,6 +665,24 @@ class User extends Authenticatable implements JWTSubject
         return Redis::sismember($cacheKey, (string) $this->_id);
     }
 
+    public static function isOnlineForFollowers(ObjectId $userId): bool
+    {
+        [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
+
+        $cacheKey = config('app.cache.keys.online.followings').':'.$currentWindow;
+
+        return Redis::sismember($cacheKey, (string) $userId);
+    }
+
+    public static function isOnlineForAll(ObjectId $userId): bool
+    {
+        [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
+
+        $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
+
+        return Redis::sismember($cacheKey, (string) $userId);
+    }
+
     public function getIsVerifiedAttribute()
     {
         return $this->verification_status === UserVerificationStatus::VERIFIED->value;
