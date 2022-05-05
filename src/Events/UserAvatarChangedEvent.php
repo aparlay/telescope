@@ -19,7 +19,8 @@ class UserAvatarChangedEvent
      */
     public function __construct(
         public Authenticatable|User $user,
-        public string $avatar)
+        public string $avatar
+    )
     {
     }
 }
