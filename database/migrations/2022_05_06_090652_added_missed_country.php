@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Aparlay\Core\Database\Seeders\CountrySeeder;
+use Illuminate\Database\Migrations\Migration;
 
 return new class() extends Migration {
     /**
@@ -13,7 +13,7 @@ return new class() extends Migration {
     {
         Artisan::call('db:seed', [
             '--class' => CountrySeeder::class,
-            '--force'   => true
+            '--force'   => true,
         ]);
     }
 
