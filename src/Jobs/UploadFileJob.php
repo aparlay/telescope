@@ -73,13 +73,13 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
                 $storage = Storage::disk($storageName);
 
                 Log::debug($storageName.': store file in path '.$storageFilePath);
-                if (! $storage->exists($storageFilePath)) {
+                if ($storage->fileMissing($storageFilePath)) {
                     $storage->writeStream($storageFilePath, Storage::disk($this->fileDisk)->readStream($this->fileName));
                 } else {
                     Log::debug($storageName.': file already exists '.$storageFilePath);
                 }
 
-                if (! $storage->exists($storageFilePath)) {
+                if ($storage->fileMissing($storageFilePath)) {
                     throw new \Error("{$storageFilePath} failed to upload to {$storageName}");
                 }
             });

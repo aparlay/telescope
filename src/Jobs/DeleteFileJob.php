@@ -64,7 +64,7 @@ class DeleteFileJob implements ShouldQueue
     public function handle()
     {
         try {
-            $fileExists = Storage::disk($this->fileDisk)->exists($this->fileName);
+            $fileExists = Storage::disk($this->fileDisk)->fileExists($this->fileName);
             if ($fileExists) {
                 Storage::disk($this->fileDisk)->delete($this->fileName);
             }

@@ -78,7 +78,7 @@ class UpdateMediaInfo implements ShouldQueue
             'file' => $this->file,
             'created_at' => DT::utcNow(),
         ];
-        if ($b2->exists($this->file)) {
+        if ($b2->fileExists($this->file)) {
             $ctx = hash_init('sha1');
             hash_update_stream($ctx, $b2->readStream($this->file));
             $fileHistory['hash'] = hash_final($ctx);
