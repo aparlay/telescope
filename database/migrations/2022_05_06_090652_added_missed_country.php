@@ -1,11 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\Schema;
 use Aparlay\Core\Database\Seeders\CountrySeeder;
 
-class CreateCountriesCollection extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,19 +11,10 @@ class CreateCountriesCollection extends Migration
      */
     public function up()
     {
-        if (! Schema::hasTable('countries')) {
-            Schema::create('countries', function ($collection) {
-                $collection->geospatial('location', '2dsphere');
-            });
-        }
-
         Artisan::call('db:seed', [
             '--class' => CountrySeeder::class,
             '--force'   => true
         ]);
-
-
-
     }
 
     /**
@@ -35,6 +24,6 @@ class CreateCountriesCollection extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('countries');
+        //
     }
-}
+};
