@@ -12,9 +12,9 @@ class CountrySeeder extends Seeder
     {
         $countries = [
             [
-                "name" =>  'Abkhazia',
-                "alpha2" => 'ab',
-                "alpha3" => 'abk',
+                'name' =>  'Abkhazia',
+                'alpha2' => 'ab',
+                'alpha3' => 'abk',
             ],
             [
                 'name' => 'American Samoa',
