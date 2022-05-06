@@ -12,114 +12,114 @@ class CountrySeeder extends Seeder
     {
         $countries = [
             [
-                "name" => "American Samoa",
-                "alpha2" => "as",
-                "alpha3" => "asm"
+                'name' => 'American Samoa',
+                'alpha2' => 'as',
+                'alpha3' => 'asm',
             ],
             [
-                "name" => "Anguilla",
-                "alpha2" => "ai",
-                "alpha3" => "aia"
+                'name' => 'Anguilla',
+                'alpha2' => 'ai',
+                'alpha3' => 'aia',
             ],
             [
-                "name" => "Aruba",
-                "alpha2" => "aw",
-                "alpha3" => "abw"
+                'name' => 'Aruba',
+                'alpha2' => 'aw',
+                'alpha3' => 'abw',
             ],
             [
-                "name" => "Bermuda",
-                "alpha2" => "bm",
-                "alpha3" => "bmu"
+                'name' => 'Bermuda',
+                'alpha2' => 'bm',
+                'alpha3' => 'bmu',
             ],
             [
-                "name" => "British Virgin Islands",
-                "alpha2" => "vg",
-                "alpha3" => "vgb"
+                'name' => 'British Virgin Islands',
+                'alpha2' => 'vg',
+                'alpha3' => 'vgb',
             ],
             [
-                "name" => "Hong Kong",
-                "alpha2" => "hk",
-                "alpha3" => "hkg"
+                'name' => 'Hong Kong',
+                'alpha2' => 'hk',
+                'alpha3' => 'hkg',
             ],
             [
-                "name" => "Macao",
-                "alpha2" => "mo",
-                "alpha3" => "mac"
+                'name' => 'Macao',
+                'alpha2' => 'mo',
+                'alpha3' => 'mac',
             ],
             [
-                "name" => "Faroe Islands",
-                "alpha2" => "fo",
-                "alpha3" => "fro"
+                'name' => 'Faroe Islands',
+                'alpha2' => 'fo',
+                'alpha3' => 'fro',
             ],
             [
-                "name" => "French Guiana",
-                "alpha2" => "gf",
-                "alpha3" => "guf"
+                'name' => 'French Guiana',
+                'alpha2' => 'gf',
+                'alpha3' => 'guf',
             ],
             [
-                "name" => "French Polynesia",
-                "alpha2" => "pf",
-                "alpha3" => "pyf"
+                'name' => 'French Polynesia',
+                'alpha2' => 'pf',
+                'alpha3' => 'pyf',
             ],
             [
-                "name" => "Greenland",
-                "alpha2" => "gl",
-                "alpha3" => "grl"
+                'name' => 'Greenland',
+                'alpha2' => 'gl',
+                'alpha3' => 'grl',
             ],
             [
-                "name" => "Guadeloupe",
-                "alpha2" => "gp",
-                "alpha3" => "glp"
+                'name' => 'Guadeloupe',
+                'alpha2' => 'gp',
+                'alpha3' => 'glp',
             ],
             [
-                "name" => "Guam",
-                "alpha2" => "gu",
-                "alpha3" => "gum"
+                'name' => 'Guam',
+                'alpha2' => 'gu',
+                'alpha3' => 'gum',
             ],
             [
-                "name" => "Martinique",
-                "alpha2" => "mq",
-                "alpha3" => "mtq"
+                'name' => 'Martinique',
+                'alpha2' => 'mq',
+                'alpha3' => 'mtq',
             ],
             [
-                "name" => "Montserrat",
-                "alpha2" => "ms",
-                "alpha3" => "msr"
+                'name' => 'Montserrat',
+                'alpha2' => 'ms',
+                'alpha3' => 'msr',
             ],
             [
-                "name" => "Netherlands Antilles",
-                "alpha2" => "an",
-                "alpha3" => "ant"
+                'name' => 'Netherlands Antilles',
+                'alpha2' => 'an',
+                'alpha3' => 'ant',
             ],
             [
-                "name" => "New Caledonia",
-                "alpha2" => "nc",
-                "alpha3" => "ncl"
+                'name' => 'New Caledonia',
+                'alpha2' => 'nc',
+                'alpha3' => 'ncl',
             ],
             [
-                "name" => "Northern Mariana Islands",
-                "alpha2" => "mp",
-                "alpha3" => "mnp"
+                'name' => 'Northern Mariana Islands',
+                'alpha2' => 'mp',
+                'alpha3' => 'mnp',
             ],
             [
-                "name" => "Pitcairn",
-                "alpha2" => "pn",
-                "alpha3" => "pcn"
+                'name' => 'Pitcairn',
+                'alpha2' => 'pn',
+                'alpha3' => 'pcn',
             ],
             [
-                "name" => "Puerto Rico",
-                "alpha2" => "pr",
-                "alpha3" => "pri"
+                'name' => 'Puerto Rico',
+                'alpha2' => 'pr',
+                'alpha3' => 'pri',
             ],
             [
-                "name" => "Réunion",
-                "alpha2" => "re",
-                "alpha3" => "reu"
+                'name' => 'Réunion',
+                'alpha2' => 're',
+                'alpha3' => 'reu',
             ],
             [
-                "name" => "Virgin Islands, US",
-                "alpha2" => "vi",
-                "alpha3" => "vir"
+                'name' => 'Virgin Islands, US',
+                'alpha2' => 'vi',
+                'alpha3' => 'vir',
             ],
 
             [
@@ -1368,9 +1368,9 @@ class CountrySeeder extends Seeder
 
         foreach ($countries as $country) {
             $countryExist = Country::query()->where('alpha3', $country['alpha3'])->first();
-            if (!$countryExist) {
+            if (! $countryExist) {
                 Country::create($country);
-                echo "Country was created " . $country['name'] . "\n\r";
+                echo 'Country was created '.$country['name']."\n\r";
             }
         }
     }

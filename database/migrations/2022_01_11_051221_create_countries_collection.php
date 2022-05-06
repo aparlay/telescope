@@ -1,8 +1,8 @@
 <?php
 
+use Aparlay\Core\Database\Seeders\CountrySeeder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
-use Aparlay\Core\Database\Seeders\CountrySeeder;
 
 class CreateCountriesCollection extends Migration
 {
@@ -21,11 +21,8 @@ class CreateCountriesCollection extends Migration
 
         Artisan::call('db:seed', [
             '--class' => CountrySeeder::class,
-            '--force'   => true
+            '--force'   => true,
         ]);
-
-
-
     }
 
     /**
