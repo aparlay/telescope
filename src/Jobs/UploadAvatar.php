@@ -81,7 +81,7 @@ class UploadAvatar implements ShouldQueue
         $gc->writeStream($filename, $local->readStream($this->file));
 
         $this->user->avatar = Cdn::avatar($filename);
-        if ($this->user->save() && $b2->exists($filename) && $gc->exists($filename)) {
+        if ($this->user->save() && $b2->fileExists($filename) && $gc->fileExists($filename)) {
             $deleteUploaded = new DeleteAvatar($this->file);
             dispatch($deleteUploaded->delay(300)->onQueue('low'));
         }
