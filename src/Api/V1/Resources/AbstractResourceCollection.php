@@ -46,7 +46,7 @@ abstract class AbstractResourceCollection extends ResourceCollection
             $links['self'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->cursor()))];
         }
 
-        if (!$this->resource->onFirstPage() && $this->resource->previousPageUrl()) {
+        if (! $this->resource->onFirstPage() && $this->resource->previousPageUrl()) {
             $links['prev'] = ['href' =>  $this->normalizeUrl($this->resource->previousPageUrl())];
         }
 
