@@ -31,9 +31,9 @@ trait SimpleUserTrait
         }
 
         if (! auth()->guest()) {
-            $userData['is_followed'] = (bool) $this->is_followed;
+            $userData['is_followed'] = $this->is_followed;
             $userData['is_online'] = empty($userArray['is_followed']) ? $this->is_online : $this->is_online_for_followers;
-            $userData['is_liked'] = (bool) $this->is_liked;
+            $userData['is_liked'] = $this->is_liked;
         }
 
         $output = [];
@@ -55,7 +55,7 @@ trait SimpleUserTrait
                 '_id' => (string) $user->_id,
                 'username' => $user->username,
                 'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
-                'is_verified' => (bool) $user->is_verified,
+                'is_verified' => $user->is_verified,
             ];
         }
 

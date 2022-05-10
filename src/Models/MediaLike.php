@@ -83,7 +83,7 @@ class MediaLike extends BaseModel
      * @var array
      */
     protected $casts = [
-        'creator' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed',
+        'creator' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed,is_verified',
     ];
 
     /**
