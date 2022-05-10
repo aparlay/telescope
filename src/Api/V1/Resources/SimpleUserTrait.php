@@ -30,8 +30,7 @@ trait SimpleUserTrait
             $userData['avatar'] = $userArray['avatar'] ?? Cdn::avatar('default.jpg');
         }
 
-
-        if (!auth()->guest()) {
+        if (! auth()->guest()) {
             $userData['is_followed'] = (bool) $this->is_followed;
             $userData['is_online'] = empty($userArray['is_followed']) ? $this->is_online : $this->is_online_for_followers;
             $userData['is_liked'] = (bool) $this->is_liked;
