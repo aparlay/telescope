@@ -32,7 +32,7 @@ class UpdateCoreAvatarListener implements ShouldQueue
             'is_verified' => (bool)$event->user->is_verified,
         ];
 
-        Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);
+        Cache::store('octane')->put($cacheKey, json_encode($userArray), config('app.cache.veryLongDuration'));
         Redis::set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
     }
 }
