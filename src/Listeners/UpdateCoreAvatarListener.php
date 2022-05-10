@@ -29,6 +29,7 @@ class UpdateCoreAvatarListener implements ShouldQueue
             '_id' => (string) $event->user->_id,
             'username' => $event->user->username,
             'avatar' => $event->user->avatar ?? Cdn::avatar('default.jpg'),
+            'is_verified' => (bool)$event->user->is_verified,
         ];
 
         Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);
