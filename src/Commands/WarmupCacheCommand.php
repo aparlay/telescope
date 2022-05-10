@@ -27,13 +27,12 @@ class WarmupCacheCommand extends Command
                 ];
                 $octane['SimpleUserCast:'.$user->_id] = json_encode($data);
                 $redis['SimpleUserCast:'.$user->_id] = $data;
-                $this->info('User ' . $user->_id . ' ' . $user->username . ' cached');
+                $this->info('User '.$user->_id.' '.$user->username.' cached');
             }
 
             Cache::store('octane')->setMultiple($octane, config('app.cache.veryLongDuration'));
             Cache::store('redis')->setMultiple($redis, config('app.cache.veryLongDuration'));
         });
-
 
         return self::SUCCESS;
     }
