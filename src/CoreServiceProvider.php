@@ -37,6 +37,7 @@ use Aparlay\Core\Commands\VideoScoreCommand;
 use Aparlay\Core\Commands\VideoScoreDailyCommand;
 use Aparlay\Core\Commands\VideoScoreHourlyCommand;
 use Aparlay\Core\Commands\VideoUpdateInfoCommand;
+use Aparlay\Core\Commands\WarmupCacheCommand;
 use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Helpers\ConfigHelper;
 use Aparlay\Core\Helpers\IP;
@@ -99,6 +100,7 @@ class CoreServiceProvider extends ServiceProvider
                 HashtagScoreCommand::class,
                 MeilisearchSettingCommand::class,
                 WsCommand::class,
+                WarmupCacheCommand::class,
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,
                 CleanupCommand::class,
