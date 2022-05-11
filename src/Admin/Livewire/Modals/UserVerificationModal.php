@@ -48,7 +48,7 @@ class UserVerificationModal extends Component
     {
         return [
             'payoutCountry' => [
-                'required'
+                'required',
             ],
             'documentsData.*.status' => [
                 'required',
