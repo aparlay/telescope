@@ -145,10 +145,8 @@ class UserService extends AdminBaseService
             'promo_link',
             'country_alpha2',
             'verification_status',
-            'payout_country_id',
+            'payout_country_alpha2',
         ]);
-
-        $payoutCountryId = $data['payout_country_id'] ?? null;
 
         $dataBooleans = [
             'email_verified' => request()->boolean('email_verified'),
@@ -166,11 +164,6 @@ class UserService extends AdminBaseService
         }
 
         $user->fill($data);
-
-        if ($payoutCountryId) {
-            $user->payout_country_id = new ObjectId($payoutCountryId);
-        }
-
         $user->save();
 
         return $user;

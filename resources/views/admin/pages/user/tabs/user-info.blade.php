@@ -82,10 +82,10 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="payout_country">Payout Country</label>
             <div class="col-sm-10">
-                <select name="payout_country_id" class="form-control" id="payout_country">
+                <select name="payout_country_alpha2" class="form-control" id="payout_country">
                     <option value="">Select a country</option>
                     @foreach($countries as $country)
-                        <option {!! $user->payout_country_id == $country->_id ? 'selected' : '' !!} value="{{ $country->_id }}">
+                        <option {!! $user->payout_country_alpha2 == $country->alpha2 ? 'selected' : '' !!} value="{{ $country->alpha2 }}">
                             {{ $country->name }}
                         </option>
                     @endforeach
