@@ -139,7 +139,6 @@ class Me
      */
     public $country_alpha2;
 
-
     /**
      * @OA\Property(property="country_alpha3", type="string", example="USA")
      */
