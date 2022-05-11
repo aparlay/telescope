@@ -38,11 +38,25 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-6 text-right my-auto verification-status">
                         <span class="p-2 text-uppercase badge badge-{{ UserVerificationStatus::from($user->verification_status)->badgeColor()}}">
                             {{ $user->verification_status_label }}
                         </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="payout_country">Payout Country</label>
+                        <select wire:model="payoutCountry" class="form-control" id="payout_country">
+                            @foreach($countries as $country)
+                                <option value="{{ $country->_id }}">
+                                    {{ $country->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
