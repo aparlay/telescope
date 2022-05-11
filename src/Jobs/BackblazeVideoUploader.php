@@ -102,7 +102,7 @@ class BackblazeVideoUploader implements ShouldQueue
             $fileHistory['hash'] = sha1_file($filePath);
             $fileHistory['size'] = $storage->size($this->file);
             $fileHistory['mime_type'] = $storage->mimeType($this->file);
-            if (! $b2->exists($newFilename)) {
+            if ($b2->fileMissing($newFilename)) {
                 $b2->writeStream($newFilename, $storage->readStream($this->file));
             }
             $storage->delete($this->file);
@@ -110,7 +110,7 @@ class BackblazeVideoUploader implements ShouldQueue
             $this->user->notify(new JobFailed(self::class, $this->attempts(), 'File not exists'));
         }
 
-        if (($this->file !== $newFilename) && $b2->exists($this->file)) {
+        if (($this->file !== $newFilename) && $b2->fileExists($this->file)) {
             $b2->move($this->file, $newFilename);
         }
 

@@ -57,7 +57,7 @@ class ReprocessMedia implements ShouldQueue
 
         try {
             $b2File = $this->file;
-            if ($b2->exists($this->file)) {
+            if ($b2->fileExists($this->file)) {
                 if (! $mediaServer->exists($b2File)) {
                     $mediaServer->writeStream($b2File, $b2->readStream($this->file));
                 }

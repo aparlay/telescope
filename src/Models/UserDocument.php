@@ -81,7 +81,7 @@ class UserDocument extends BaseModel
     protected $casts = [
         'status' => 'integer',
         'type' => 'integer',
-        'creator' => SimpleUserCast::class.':_id,username,avatar',
+        'creator' => SimpleUserCast::class.':_id,username,avatar,is_verified',
     ];
 
     protected $dates = [

@@ -84,6 +84,7 @@ class UpdateAvatar implements ShouldQueue
             '_id' => (string) $user->_id,
             'username' => $user->username,
             'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
+            'is_verified' => $user->is_verified,
         ];
 
         Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);

@@ -29,9 +29,10 @@ class UpdateCoreAvatarListener implements ShouldQueue
             '_id' => (string) $event->user->_id,
             'username' => $event->user->username,
             'avatar' => $event->user->avatar ?? Cdn::avatar('default.jpg'),
+            'is_verified' => $event->user->is_verified,
         ];
 
-        Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);
+        Cache::store('octane')->put($cacheKey, json_encode($userArray), config('app.cache.veryLongDuration'));
         Redis::set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
     }
 }
