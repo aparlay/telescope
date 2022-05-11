@@ -9,6 +9,7 @@ use Aparlay\Core\Admin\Requests\UserUpdateRequest;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Admin\Services\UploadService;
 use Aparlay\Core\Admin\Services\UserService;
+use Aparlay\Core\Models\Country;
 use Aparlay\Core\Models\Enums\UserStatus;
 use ErrorException;
 use Illuminate\Http\RedirectResponse;
@@ -91,11 +92,19 @@ class UserController extends Controller
         $user = $this->userService->find($user->_id);
         $moderationQueueNotEmpty = $this->userService->isModerationQueueNotEmpty();
         $roles = Role::where('guard_name', 'admin')->get();
+        $countries = Country::query()->get();
 
         $hasPrev = $this->userService->hasPrevPending($user->_id);
         $hasNext = $this->userService->hasNextPending($user->_id);
 
-        return view('default_view::admin.pages.user.edit', compact('user', 'roles', 'moderationQueueNotEmpty', 'hasNext', 'hasPrev'));
+        return view('default_view::admin.pages.user.edit', compact(
+            'user',
+            'roles',
+            'moderationQueueNotEmpty',
+            'hasNext',
+            'hasPrev',
+            'countries'
+        ));
     }
 
     /**
