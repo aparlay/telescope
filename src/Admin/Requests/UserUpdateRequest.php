@@ -46,7 +46,7 @@ class UserUpdateRequest extends FormRequest
                 'nullable', Rule::in(UserVerificationStatus::getAllValues()),
             ],
             'payout_country_id' => [
-                'sometimes'
+                'sometimes',
             ],
             'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
             'country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],

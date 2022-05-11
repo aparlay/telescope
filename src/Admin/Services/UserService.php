@@ -145,7 +145,7 @@ class UserService extends AdminBaseService
             'promo_link',
             'country_alpha2',
             'verification_status',
-            'payout_country_id'
+            'payout_country_id',
         ]);
 
         $payoutCountryId = $data['payout_country_id'] ?? null;

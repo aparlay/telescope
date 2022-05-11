@@ -176,7 +176,7 @@ class User extends Authenticatable implements JWTSubject
         'updated_at',
         'deleted_at',
         'last_online_at',
-        'payout_country_id'
+        'payout_country_id',
     ];
 
     protected $attributes = [
