@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Facades;
 
+use Illuminate\Pagination\PaginationState;
 use JKocik\Laravel\Profiler\Events\ResetTrackers;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTFactory;
@@ -14,6 +15,7 @@ class RestartIncompatibleFacades
         JWTAuth::clearResolvedInstances();
         JWTFactory::clearResolvedInstances();
         JWTProvider::clearResolvedInstances();
+        PaginationState::resolveUsing($event->app);
         event(ResetTrackers::class);
     }
 }

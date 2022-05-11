@@ -47,4 +47,14 @@ trait BlockScope
     {
         return $query->where('country_alpha2', $countryAlpha2);
     }
+
+    public function scopeCountryType(Builder $query): Builder
+    {
+        return $query->where('user', null);
+    }
+
+    public function scopeUserType(Builder $query): Builder
+    {
+        return $query->where('country_alpha2', null);
+    }
 }
