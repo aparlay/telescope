@@ -29,7 +29,6 @@ class UserVerificationModal extends Component
     public $documentsData;
     public $payoutCountry;
 
-
     public function mount($userId)
     {
         $this->user = User::find($userId);
@@ -181,8 +180,9 @@ class UserVerificationModal extends Component
     public function render()
     {
         return view(
-            'default_view::livewire.modals.user-verification-modal', [
-                'countries' => Country::query()->get()
+            'default_view::livewire.modals.user-verification-modal',
+            [
+                'countries' => Country::query()->get(),
             ]
         );
     }
