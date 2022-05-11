@@ -81,7 +81,9 @@ trait SimpleUserTrait
 
     private function cacheSimpleUser($user): void
     {
-        $cacheKey = $this->cacheKeyPrefix.$user['_id'];
-        Cache::store('octane')->put($cacheKey, json_encode($user), config('app.cache.veryLongDuration'));
+        if (!empty($user)) {
+            $cacheKey = $this->cacheKeyPrefix.$user['_id'];
+            Cache::store('octane')->put($cacheKey, json_encode($user), config('app.cache.veryLongDuration'));
+        }
     }
 }
