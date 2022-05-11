@@ -4,6 +4,7 @@
     use \Aparlay\Core\Models\Enums\UserDocumentStatus;
     use Illuminate\Support\Arr;
     use Aparlay\Core\Models\Enums\UserDocumentType;
+    use Aparlay\Core\Models\UserDocument;
 
     $documentVerificationStatus = [
        UserDocumentStatus::APPROVED->value => UserDocumentStatus::APPROVED->label(),
@@ -51,12 +52,17 @@
                     <div class="form-group">
                         <label for="payout_country">Payout Country</label>
                         <select wire:model="payoutCountry" class="form-control" id="payout_country">
+                            <option value="">Select a country</option>
                             @foreach($countries as $country)
                                 <option value="{{ $country->_id }}">
                                     {{ $country->name }}
                                 </option>
                             @endforeach
                         </select>
+
+                        @error('payoutCountry')
+                            <span class="text text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
             </div>
@@ -65,7 +71,7 @@
                 <div class="documents-list mt-2">
                     <div class="row">
                         @foreach($documents as $document)
-                            @if ($document instanceof \Aparlay\Core\Models\UserDocument)
+                            @if ($document instanceof UserDocument)
                                 <div class="col-md-12 pb-3">
                                     <div class="row">
                                         <div class="col-md-6">

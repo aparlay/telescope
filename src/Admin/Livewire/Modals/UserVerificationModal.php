@@ -48,6 +48,9 @@ class UserVerificationModal extends Component
     protected function rules()
     {
         return [
+            'payoutCountry' => [
+                'required'
+            ],
             'documentsData.*.status' => [
                 'required',
                 Rule::in([UserDocumentStatus::REJECTED->value, UserDocumentStatus::APPROVED->value]),
@@ -62,6 +65,7 @@ class UserVerificationModal extends Component
     public function messages()
     {
         return [
+            'payoutCountry.required' => 'You must specify payout country',
             'documentsData.*.reason.required_if' => 'You must specify reject reason for this document',
             'documentsData.*.reason.min' => 'You must specify at least 5 characters',
         ];
