@@ -46,27 +46,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="payout_country">Payout Country</label>
-                        <select wire:model="payoutCountry" class="form-control" id="payout_country">
-                            <option value="">Select a country</option>
-                            @foreach($countries as $country)
-                                <option value="{{ $country->_id }}">
-                                    {{ $country->name }}
-                                </option>
-                            @endforeach
-                        </select>
-
-                        @error('payoutCountry')
-                            <span class="text text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-            </div>
-
             @if (count($documents) > 0)
                 <div class="documents-list mt-2">
                     <div class="row">

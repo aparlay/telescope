@@ -27,13 +27,10 @@ class UserVerificationModal extends Component
     public $documents = [];
 
     public $documentsData;
-    public $payoutCountry;
 
     public function mount($userId)
     {
         $this->user = User::find($userId);
-        $this->payoutCountry = (string) $this->user->payout_country_id;
-
         $this->loadDocuments();
 
         foreach ($this->documents as $document) {
@@ -47,9 +44,6 @@ class UserVerificationModal extends Component
     protected function rules()
     {
         return [
-            'payoutCountry' => [
-                'required',
-            ],
             'documentsData.*.status' => [
                 'required',
                 Rule::in([UserDocumentStatus::REJECTED->value, UserDocumentStatus::APPROVED->value]),
@@ -64,7 +58,6 @@ class UserVerificationModal extends Component
     public function messages()
     {
         return [
-            'payoutCountry.required' => 'You must specify payout country',
             'documentsData.*.reason.required_if' => 'You must specify reject reason for this document',
             'documentsData.*.reason.min' => 'You must specify at least 5 characters',
         ];
@@ -103,9 +96,6 @@ class UserVerificationModal extends Component
         $user = $this->user;
         $payload = $approvedTypes = [];
         $docsApprovedCounter = 0;
-
-        $user->payout_country_id = new ObjectId($this->payoutCountry);
-        $user->save();
 
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
@@ -185,9 +175,6 @@ class UserVerificationModal extends Component
     {
         return view(
             'default_view::livewire.modals.user-verification-modal',
-            [
-                'countries' => Country::query()->get(),
-            ]
         );
     }
 }
