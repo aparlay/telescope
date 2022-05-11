@@ -45,6 +45,23 @@ trait SimpleUserTrait
     }
 
     /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws Exception
+     */
+    private function getSimpleUser(string|ObjectId $id): array
+    {
+        $cacheKey = $this->cacheKeyPrefix.$id;
+        if (($simpleUser = Cache::store('octane')->get($cacheKey, false)) !== false) {
+            return json_decode($simpleUser, true); // cache already exists
+        }
+
+        $user = $this->createSimpleUserById($id);
+        $this->cacheSimpleUser($user);
+
+        return $user;
+    }
+
+    /**
      * @throws Exception
      */
     public function createSimpleUserById(string|ObjectId $id): array
@@ -66,19 +83,5 @@ trait SimpleUserTrait
     {
         $cacheKey = $this->cacheKeyPrefix.$user['_id'];
         Cache::store('octane')->put($cacheKey, json_encode($user), config('app.cache.veryLongDuration'));
-    }
-
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws Exception
-     */
-    private function getSimpleUser(string|ObjectId $id): array
-    {
-        $cacheKey = $this->cacheKeyPrefix.$id;
-        if (($simpleUser = Cache::store('octane')->get($cacheKey, false)) !== false) {
-            return json_decode($simpleUser, true); // cache already exists
-        }
-
-        return $this->createSimpleUserById($id);
     }
 }
