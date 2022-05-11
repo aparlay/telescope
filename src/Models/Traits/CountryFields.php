@@ -6,6 +6,11 @@ use Aparlay\Core\Helpers\Country as CountryHelper;
 
 trait CountryFields
 {
+    public function getPayoutCountryLabelAttribute()
+    {
+        return $this->payout_country_alpha2 ? CountryHelper::getNameByAlpha2($this->payout_country_alpha2) : '';
+    }
+
     public function getCountryLabelAttribute()
     {
         return $this->country_alpha2 ? CountryHelper::getNameByAlpha2($this->country_alpha2) : '';
