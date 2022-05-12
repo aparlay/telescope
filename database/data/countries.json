@@ -465,9 +465,9 @@
         "alpha3":"gtm"
     },
     {
-        "name":"Guernsey",
+        "name":"Guernsey, Channel Islands",
         "alpha2":"gg",
-        "alpha3":"ggy"
+        "alpha3":"gsy"
     },
     {
         "name":"Guinea",
@@ -588,6 +588,11 @@
         "name":"Kenya",
         "alpha2":"ke",
         "alpha3":"ken"
+    },
+    {
+        "name" : "Kosovo",
+        "alpha2": "xk",
+        "alpha3": "xkx"
     },
     {
         "name":"Kiribati",
