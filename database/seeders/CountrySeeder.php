@@ -10,7 +10,6 @@ class CountrySeeder extends Seeder
 {
     public function run()
     {
-
         $countriesJson = file_get_contents(base_path('packages/Aparlay/Core/database/data/countries.json'));
         $countries = json_decode($countriesJson, true);
 
