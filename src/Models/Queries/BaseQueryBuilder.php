@@ -9,10 +9,10 @@ use MongoDB\BSON\UTCDateTime;
 class BaseQueryBuilder extends Builder
 {
     /**
-     * @param $filters
-     * @return $this
+     * @param array $filters
+     * @return self
      */
-    public function filter($filters): self
+    public function filter(array $filters): self
     {
         foreach ($filters as $key => $filter) {
             if (is_numeric($filter)) {
@@ -26,10 +26,10 @@ class BaseQueryBuilder extends Builder
     }
 
     /**
-     * @param $sorts
-     * @return $this
+     * @param array $sorts
+     * @return self
      */
-    public function sortBy($sorts): self
+    public function sortBy(array $sorts): self
     {
         foreach ($sorts as $field => $direction) {
             $this->orderBy($field, $direction);
@@ -39,7 +39,7 @@ class BaseQueryBuilder extends Builder
     }
 
     /**
-     * @return $this
+     * @return self
      */
     public function recentFirst(): self
     {
@@ -47,8 +47,16 @@ class BaseQueryBuilder extends Builder
     }
 
     /**
+     * @return self
+     */
+    public function recent(): self
+    {
+        return $this->recentFirst();
+    }
+
+    /**
      * @param  UTCDateTime  $date
-     * @return $this
+     * @return self
      */
     public function since(UTCDateTime $date): self
     {
