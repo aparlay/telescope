@@ -110,7 +110,7 @@ class UserController extends Controller
                 $requestData = $request->except('payout_country_alpha2');
             }
             /* Update User Profile Information */
-            $this->userService->getUser()->update($requestData);
+            $this->userService->getUser()->fill($requestData);
             if ($this->userService->getUser()->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
                 $this->userService->getUser()->status = UserStatus::ACTIVE->value;
             }
