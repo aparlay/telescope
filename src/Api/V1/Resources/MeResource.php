@@ -105,6 +105,8 @@ class MeResource extends JsonResource
             ],
             'is_verified' => $this->is_verified,
             'country_alpha3' => $this->country_alpha3,
+            'payout_country_label' => $this->payout_country_label,
+            'payout_country_alpha2' => $this->payout_country_alpha2,
             'country_alpha2' => $this->country_alpha2,
             'country_label' => $this->country_label,
             'country_flags' => $this->country_flags,

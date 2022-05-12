@@ -4,6 +4,7 @@
     use \Aparlay\Core\Models\Enums\UserDocumentStatus;
     use Illuminate\Support\Arr;
     use Aparlay\Core\Models\Enums\UserDocumentType;
+    use Aparlay\Core\Models\UserDocument;
 
     $documentVerificationStatus = [
        UserDocumentStatus::APPROVED->value => UserDocumentStatus::APPROVED->label(),
@@ -38,7 +39,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-6 text-right my-auto verification-status">
                         <span class="p-2 text-uppercase badge badge-{{ UserVerificationStatus::from($user->verification_status)->badgeColor()}}">
                             {{ $user->verification_status_label }}
@@ -46,13 +46,11 @@
                     </div>
                 </div>
             </div>
-
             @if (count($documents) > 0)
                 <div class="documents-list mt-2">
                     <div class="row">
                         @foreach($documents as $document)
-                            @if ($document instanceof \Aparlay\Core\Models\UserDocument)
-                                <div class="col-md-12 pb-3">
+                            <div class="col-md-12 pb-3">
                                     <div class="row">
                                         <div class="col-md-6">
                                             @if ($document->type === UserDocumentType::ID_CARD->value)
@@ -146,7 +144,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endif
                         @endforeach
                     </div>
                 </div>

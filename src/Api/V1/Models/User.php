@@ -51,6 +51,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $stats
  * @property array       $last_location
  * @property string      $country_alpha2
+ * @property string      $payout_country_alpha2
  * @property string      $country_label
  * @property string      $country_flag
  * @property array       $country_flags

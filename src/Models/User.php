@@ -165,6 +165,7 @@ class User extends Authenticatable implements JWTSubject
         'promo_link',
         'referral_id',
         'country_alpha2',
+        'payout_country_alpha2',
         'user_agents',
         'stats',
         'last_location',

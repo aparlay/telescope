@@ -88,8 +88,10 @@ class UserController extends Controller
      */
     public function update(MeRequest $request): object
     {
+        $user = auth()->user();
+
         if (auth()->check()) {
-            $this->userService->setUser(auth()->user());
+            $this->userService->setUser($user);
         }
         /* Check the update permission */
         $this->authorize('update', User::class);
@@ -101,8 +103,14 @@ class UserController extends Controller
             if ($request->has('avatar') && empty($request->avatar)) {
                 $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
+
+            $requestData = $request->all();
+
+            if ($user->payout_country_alpha2) {
+                $requestData = $request->except('payout_country_alpha2');
+            }
             /* Update User Profile Information */
-            $this->userService->getUser()->fill($request->all());
+            $this->userService->getUser()->fill($requestData);
             if ($this->userService->getUser()->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
                 $this->userService->getUser()->status = UserStatus::ACTIVE->value;
             }

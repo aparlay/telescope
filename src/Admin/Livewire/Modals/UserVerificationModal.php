@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
+use Aparlay\Core\Models\Country;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
@@ -22,28 +23,16 @@ class UserVerificationModal extends Component
 {
     use CurrentUserTrait;
 
-    public $selectedUser;
-
-    public $documents = [];
     public $user;
-    public $documentsData;
+    public $documents = [];
 
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    public $documentsData;
 
     public function mount($userId)
     {
-        $this->selectedUser = $userId;
-
-        $this->userRepository = new UserRepository(new User());
-        $user = $this->userRepository->find($userId);
-        $this->user = $user;
-
+        $this->user = User::find($userId);
         $this->loadDocuments();
 
-        $this->verification_status = $user->verification_status;
         foreach ($this->documents as $document) {
             $alert = $document->alertObjs()->latest()->first();
             $isRejected = $document->status === UserDocumentStatus::REJECTED->value;
@@ -55,7 +44,6 @@ class UserVerificationModal extends Component
     protected function rules()
     {
         return [
-            'verification_status' => Rule::in(array_keys(User::getVerificationStatuses())),
             'documentsData.*.status' => [
                 'required',
                 Rule::in([UserDocumentStatus::REJECTED->value, UserDocumentStatus::APPROVED->value]),
@@ -104,10 +92,8 @@ class UserVerificationModal extends Component
     public function save()
     {
         $this->validate();
-        $this->userRepository = new UserRepository(new User());
 
-        $user = $this->userRepository->find($this->selectedUser);
-
+        $user = $this->user;
         $payload = $approvedTypes = [];
         $docsApprovedCounter = 0;
 
@@ -151,8 +137,10 @@ class UserVerificationModal extends Component
 
         $shouldSendNotification = false;
 
+        $userRepository = new UserRepository(new User());
+
         if ($user->verification_status !== $newVerificationStatus) {
-            $this->userRepository->updateVerificationStatus(
+            $userRepository->updateVerificationStatus(
                 $this->currentUser(),
                 $this->user,
                 $newVerificationStatus
@@ -185,6 +173,8 @@ class UserVerificationModal extends Component
 
     public function render()
     {
-        return view('default_view::livewire.modals.user-verification-modal');
+        return view(
+            'default_view::livewire.modals.user-verification-modal',
+        );
     }
 }

@@ -31,6 +31,7 @@ class User extends UserBase
         'promo_link',
         'verification_status',
         'country_alpha2',
+        'payout_country_alpha2',
     ];
 
     /**

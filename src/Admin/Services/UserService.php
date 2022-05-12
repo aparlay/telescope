@@ -5,12 +5,14 @@ namespace Aparlay\Core\Admin\Services;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
+use Aparlay\Core\Constants\Roles;
 use Aparlay\Core\Events\UserStatusChangedEvent;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Illuminate\Support\Facades\Storage;
+use MongoDB\BSON\ObjectId;
 
 class UserService extends AdminBaseService
 {
@@ -143,6 +145,7 @@ class UserService extends AdminBaseService
             'promo_link',
             'country_alpha2',
             'verification_status',
+            'payout_country_alpha2',
         ]);
 
         $dataBooleans = [
@@ -155,11 +158,15 @@ class UserService extends AdminBaseService
 
         $data = array_merge($data, $dataBooleans);
         $role = request()?->input('role');
-        if ($role && auth()->user()->hasRole(User::ROLE_SUPER_ADMINISTRATOR)) {
+
+        if ($role && auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
             $user->syncRoles(request()->input('role'));
         }
 
-        $this->userRepository->update($data, $user->_id);
+        $user->fill($data);
+        $user->save();
+
+        return $user;
     }
 
     public function uploadAvatar($user): bool
