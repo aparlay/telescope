@@ -3,20 +3,30 @@
 namespace Aparlay\Core\Admin\Livewire;
 
 use Aparlay\Core\Admin\Filters\QueryBuilder;
+use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 abstract class BaseIndexComponent extends Component
 {
+    use CurrentUserTrait;
     use WithPagination;
 
+    public $currentUser;
     protected $paginationTheme = 'bootstrap';
     protected $listeners = ['updateParent'];
     public int $perPage = 5;
     public array $filter = [];
     public array $sort = [];
     protected $model;
+
+
+    public function mount()
+    {
+        $this->currentUser = $this->currentUser();
+    }
+
 
     public function updateParent()
     {
