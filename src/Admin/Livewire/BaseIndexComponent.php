@@ -21,12 +21,10 @@ abstract class BaseIndexComponent extends Component
     public array $sort = [];
     protected $model;
 
-
     public function mount()
     {
         $this->currentUser = $this->currentUser();
     }
-
 
     public function updateParent()
     {
