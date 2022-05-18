@@ -16,10 +16,10 @@ return new class() extends Migration {
             'core' => [
                 'tiers' => [
                     '1' => [
-                        'US', 'AU', 'CA', 'GB', 'NZ', 'SG', 'DE', 'AE', 'HK', 'NL', 'FR', 'KR', 'JP', 'SA', 'KW', 'QA'
+                        'US', 'AU', 'CA', 'GB', 'NZ', 'SG', 'DE', 'AE', 'HK', 'NL', 'FR', 'KR', 'JP', 'SA', 'KW', 'QA',
                     ],
                     '3' => [
-                        'PH', 'ID', 'MY', 'BR', 'CO', 'AR', 'PE', 'VE', 'CL', 'EC', 'BO', 'PY', 'UY', 'IN', 'VN', 'KH'
+                        'PH', 'ID', 'MY', 'BR', 'CO', 'AR', 'PE', 'VE', 'CL', 'EC', 'BO', 'PY', 'UY', 'IN', 'VN', 'KH',
                     ],
                 ],
             ],

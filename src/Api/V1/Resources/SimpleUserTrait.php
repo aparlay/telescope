@@ -51,7 +51,7 @@ trait SimpleUserTrait
     private function getSimpleUser(string|ObjectId $id): array
     {
         $cacheKey = $this->cacheKeyPrefix.$id;
-        if (!config('app.is_testing') && ($simpleUser = Cache::store('octane')->get($cacheKey, false)) !== false) {
+        if (! config('app.is_testing') && ($simpleUser = Cache::store('octane')->get($cacheKey, false)) !== false) {
             return json_decode($simpleUser, true); // cache already exists
         }
 
@@ -81,7 +81,7 @@ trait SimpleUserTrait
 
     private function cacheSimpleUser($user): void
     {
-        if (!config('app.is_testing') && ! empty($user)) {
+        if (! config('app.is_testing') && ! empty($user)) {
             $cacheKey = $this->cacheKeyPrefix.$user['_id'];
             Cache::store('octane')->put($cacheKey, json_encode($user), config('app.cache.veryLongDuration'));
         }
