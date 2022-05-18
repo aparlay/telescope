@@ -18,8 +18,8 @@ class AddStatsUserColumns extends Migration
             foreach ($models as $user) {
                 $user->stats = [
                     'amounts' => [
-                        'sent_tips' => Tip::creator($user->_id)->completed()->sum('amount'),
-                        'received_tips' => Tip::user($user->_id)->completed()->sum('amount'),
+                        'sent_tips' => Tip::query()->creator($user->_id)->completed()->sum('amount'),
+                        'received_tips' => Tip::query()->user($user->_id)->completed()->sum('amount'),
                         'subscriptions' => 0,
                         'subscribers' => 0,
                     ],

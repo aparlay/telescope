@@ -2,28 +2,11 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Api\V1\Services\OnlineUserService;
-use Aparlay\Core\Database\Factories\UserFactory;
-use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Enums\UserFeature;
-use Aparlay\Core\Models\Enums\UserGender;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
-use Aparlay\Core\Models\Enums\UserStatus;
-use Aparlay\Core\Models\Enums\UserType;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
-use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\MediaScope;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Redis;
-use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Scout\Searchable;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
 
 /**
  * User model.

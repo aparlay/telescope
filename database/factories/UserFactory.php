@@ -98,7 +98,7 @@ class UserFactory extends Factory
             'medias' => [],
             'promo_link' => null,
             'referral_id' => null,
-            'country_alpha2' => strtolower($this->faker->countryCode),
+            'country_alpha2' => 'US',
         ];
     }
 

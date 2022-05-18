@@ -3,13 +3,14 @@
 namespace Aparlay\Core\Models\Queries;
 
 use Jenssegers\Mongodb\Eloquent\Builder;
+use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
 
 class BaseQueryBuilder extends Builder
 {
     /**
-     * @param array $filters
+     * @param  array  $filters
      * @return self
      */
     public function filter(array $filters): self
@@ -26,7 +27,7 @@ class BaseQueryBuilder extends Builder
     }
 
     /**
-     * @param array $sorts
+     * @param  array  $sorts
      * @return self
      */
     public function sortBy(array $sorts): self
@@ -84,5 +85,32 @@ class BaseQueryBuilder extends Builder
                 'direction' => $direction === 1 ? 'asc' : 'desc',
             ];
         })->values();
+    }
+
+    /**
+     * @param  string  $field
+     * @param  ObjectId|string  $id
+     * @return $this
+     */
+    public function whereId(ObjectId|string $id, string $field = '_id'): self
+    {
+        $id = $id instanceof ObjectId ? $id : new ObjectId($id);
+
+        return $this->where($field, $id);
+    }
+
+    /**
+     * @param  string  $field
+     * @param  array  $ids
+     * @return self
+     */
+    public function whereInIds(string $field, array $ids): self
+    {
+        $castedIds = [];
+        foreach ($ids as $id) {
+            $castedIds[] = $id instanceof ObjectId ? $id : new ObjectId($id);
+        }
+
+        return $this->whereIn($field, $castedIds);
     }
 }

@@ -2,25 +2,25 @@
 
 namespace Aparlay\Core\Api\V1\Traits;
 
-use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 trait HasUserTrait
 {
-    /**
-     * @var Authenticatable|User
-     */
-    private Authenticatable|User $user;
+    private User|Authenticatable $user;
 
-    public function getUser(): Authenticatable|User
+    /**
+     * @return User
+     */
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
-     * @param Authenticatable|User $user
+     * @param User|Authenticatable $user
      */
-    public function setUser(Authenticatable|User $user): void
+    public function setUser(User|Authenticatable $user): void
     {
         $this->user = $user;
     }

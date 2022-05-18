@@ -15,7 +15,6 @@ class RestartIncompatibleFacades
         JWTAuth::clearResolvedInstances();
         JWTFactory::clearResolvedInstances();
         JWTProvider::clearResolvedInstances();
-        PaginationState::resolveUsing($event->app);
         event(ResetTrackers::class);
     }
 }
