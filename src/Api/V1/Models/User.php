@@ -57,7 +57,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $country_flags
  * @property array       $text_search
  * @property int         $verification_status
- * @property float       $sort_score
+ * @property array       $scores
  * @property string      $deactivation_reason
  * @property UTCDateTime $last_online_at
  *

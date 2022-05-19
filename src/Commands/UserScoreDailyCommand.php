@@ -23,14 +23,16 @@ class UserScoreDailyCommand extends Command
                 $user = $media->creatorObj;
                 $count = Media::creator($user->_id)->count();
                 $score = Media::creator($user->_id)->sum('sort_score');
-                $user->sort_score = $score / $count;
+
+                $scores = $user->scores;
+                $scores['sort'] = $score / $count;
 
                 $msg5 = '<fg=yellow;options=bold>';
-                $msg5 .= '  - total set to '.$user->sort_score.'</>';
+                $msg5 .= '  - total set to '.$user->scores['sort'].'</>';
                 $msg5 .= PHP_EOL;
                 $this->line($msg5);
 
-                $user->save();
+                $user->update(['scores' => $scores]);
             });
 
         return self::SUCCESS;

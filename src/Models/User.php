@@ -82,7 +82,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $country_flags
  * @property array       $text_search
  * @property int         $verification_status
- * @property float       $sort_score
+ * @property array       $scores
  * @property string      $deactivation_reason
  * @property bool        $has_unread_chat
  * @property bool        $has_notification
@@ -170,7 +170,7 @@ class User extends Authenticatable implements JWTSubject
         'stats',
         'last_location',
         'text_search',
-        'sort_score',
+        'scores',
         'verification_status',
         'deactivation_reason',
         'created_at',
@@ -207,7 +207,10 @@ class User extends Authenticatable implements JWTSubject
         'block_count' => 0,
         'followed_hashtag_count' => 0,
         'media_count' => 0,
-        'sort_score' => 0,
+        'scores' => [
+            'sort' => 0,
+            'risk' => 0
+        ],
         'subscriptions' => [],
         'subscription_plan' => [],
         'user_agents' => [],
@@ -314,7 +317,7 @@ class User extends Authenticatable implements JWTSubject
             'full_name' => $this->full_name,
             'description' => $this->bio,
             'hashtags' => [],
-            'score' => $this->sort_score,
+            'score' => $this->scores['sort'],
             'country' => $this->country_alpha2,
             'like_count' => $this->like_count,
             'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
