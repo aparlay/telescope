@@ -209,7 +209,7 @@ class User extends Authenticatable implements JWTSubject
         'media_count' => 0,
         'scores' => [
             'sort' => 0,
-            'risk' => 0
+            'risk' => 0,
         ],
         'subscriptions' => [],
         'subscription_plan' => [],
