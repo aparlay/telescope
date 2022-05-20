@@ -148,8 +148,8 @@
                 <td>
                     <div class="col-md-6">
                         <div>
-                            <a class="btn btn-success" href="{{$user->admin_url}}">
-                                <i title="Profile" class="fa fa-user-circle"></i>
+                            <a class="" href="{{$user->admin_url}}">
+                                <i title="Profile" class="fa fa-fw fa-eye"></i>
                             </a>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Events\UserBlockedEvent;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
@@ -32,10 +33,14 @@ class BlockRepository
         $creator = auth()->user();
 
         try {
-            return Block::create([
+            $block = Block::create([
                 'user' => $data['user'],
                 'creator' => ['_id' => new ObjectId($creator->_id)],
             ]);
+
+            UserBlockedEvent::dispatch((string)$creator->_id, (string)$data['user']['_id']);
+
+            return $block;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 

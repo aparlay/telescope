@@ -16,7 +16,7 @@ abstract class BaseIndexComponent extends Component
     public $currentUser;
     protected $paginationTheme = 'bootstrap';
     protected $listeners = ['updateParent'];
-    public int $perPage = 5;
+    public int $perPage = 30;
     public array $filter = [];
     public array $sort = [];
     protected $model;

@@ -90,14 +90,13 @@
                 </td>
                 <td>
                     <div>
-                        <button
-                            class="btn btn-sm btn-danger"
-                            type="button"
+                        <a
+                            class=""
                             wire:key="delete_note_{{ $note->_id }}}"
                             wire:click="$emit('showModal', 'modals.user-notes-delete-modal', '{{ $note->_id }}')"
                         >
-                            <i class="fa fa-trash"></i>
-                        </button>
+                            <i class="fa fa-fw fa-trash"></i>
+                        </a>
                     </div>
                 </td>
             </tr>

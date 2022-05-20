@@ -113,4 +113,9 @@ class BaseQueryBuilder extends Builder
 
         return $this->whereIn($field, $castedIds);
     }
+
+    public function date(UTCDateTime $start, UTCDateTime $end, string $field = 'created_at'): self
+    {
+        return $this->whereBetween($field, [$start, $end]);
+    }
 }

@@ -135,14 +135,13 @@
                 <td>
                     <div class="col-md-6">
                         <div>
-                            <button
-                                class="btn btn-sm btn-success"
-                                type="button"
+                            <a
+                                class=""
                                 wire:key="verify_button_{{ $user->_id }}}"
                                 wire:click="$emit('showModal', 'modals.user-verification-modal', '{{ $user->_id }}')"
                             >
-                                <i class="fa fa-edit"></i>
-                            </button>
+                                <i class="fa fa-fw fa-edit"></i>
+                            </a>
                         </div>
                     </div>
                 </td>

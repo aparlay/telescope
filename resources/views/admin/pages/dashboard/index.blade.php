@@ -5,6 +5,9 @@
 {{-- Enable Chartjs plugins --}}
 @section('plugins.Chartjs', true)
 
+@section('css')
+    <link rel="stylesheet" href="/css/admin.css">
+@stop
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
