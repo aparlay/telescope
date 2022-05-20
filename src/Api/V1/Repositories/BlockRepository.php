@@ -38,7 +38,7 @@ class BlockRepository
                 'creator' => ['_id' => new ObjectId($creator->_id)],
             ]);
 
-            UserBlockedEvent::dispatch((string)$creator->_id, (string)$data['user']['_id']);
+            UserBlockedEvent::dispatch((string) $creator->_id, (string) $data['user']['_id']);
 
             return $block;
         } catch (\Exception $e) {
