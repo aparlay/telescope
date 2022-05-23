@@ -26,7 +26,7 @@ return new class() extends Migration {
                 'block_unverified_cc' => false,
                 'spent_amount' => 0,
             ],
-            'block_unverified_cc' => false
+            'block_unverified_cc' => false,
         ];
         foreach (User::lazy() as $user) {
             $setting = $user->setting;
