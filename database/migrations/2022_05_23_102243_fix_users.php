@@ -55,7 +55,8 @@ return new class() extends Migration {
                 ];
             }
 
-            $user->update(['setting' => $setting]);
+            $user->setting = $setting;
+            $user->saveQuietly();
         }
     }
 
