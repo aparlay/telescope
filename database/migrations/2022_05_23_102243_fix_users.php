@@ -13,38 +13,39 @@ return new class() extends Migration {
      */
     public function up()
     {
+        $default = [
+            'otp' => false,
+            'notifications' => [
+                'unread_message_alerts' => false,
+                'new_followers' => false,
+                'news_and_updates' => false,
+                'tips' => false,
+                'new_subscribers' => false,
+            ],
+            'risk' => [
+                'block_unverified_cc' => false,
+                'spent_amount' => 0,
+            ],
+            'block_unverified_cc' => false
+        ];
         foreach (User::lazy() as $user) {
-            if (empty($user->setting)) {
-                $user->update(['setting' => [
-                    'otp' => false,
-                    'notifications' => [
-                        'unread_message_alerts' => false,
-                        'new_followers' => false,
-                        'news_and_updates' => false,
-                        'tips' => false,
-                        'new_subscribers' => false,
-                    ],
-                    'risk' => [
-                        'block_unverified_cc' => false,
-                        'spent_amount' => 0,
-                    ],
-                ]]);
+            $setting = $user->setting;
+            if (empty($setting)) {
+                $setting = $default;
             }
             if (empty($user->setting['risk'])) {
-                $setting = $user->setting;
                 $setting['risk'] = [
                     'block_unverified_cc' => false,
                     'spent_amount' => 0,
                 ];
-                $user->update(['setting' => $setting]);
+            }
+            if (empty($user->setting['block_unverified_cc'])) {
+                $setting['block_unverified_cc'] = false;
             }
             if (empty($user->setting['otp'])) {
-                $setting = $user->setting;
                 $setting['otp'] = false;
-                $user->update(['setting' => $setting]);
             }
             if (empty($user->setting['notifications'])) {
-                $setting = $user->setting;
                 $setting['notifications'] = [
                     'unread_message_alerts' => false,
                     'new_followers' => false,
@@ -52,8 +53,9 @@ return new class() extends Migration {
                     'tips' => false,
                     'new_subscribers' => false,
                 ];
-                $user->update(['setting' => $setting]);
             }
+
+            $user->update(['setting' => $setting]);
         }
     }
 
