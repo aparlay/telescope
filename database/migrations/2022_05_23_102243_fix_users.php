@@ -39,6 +39,22 @@ return new class extends Migration
                 ];
                 $user->update(['setting' => $setting]);
             }
+            if (empty($user->setting['otp'])) {
+                $setting = $user->setting;
+                $setting['otp'] = false;
+                $user->update(['setting' => $setting]);
+            }
+            if (empty($user->setting['notifications'])) {
+                $setting = $user->setting;
+                $setting['notifications'] = [
+                    'unread_message_alerts' => false,
+                    'new_followers' => false,
+                    'news_and_updates' => false,
+                    'tips' => false,
+                    'new_subscribers' => false,
+                ];
+                $user->update(['setting' => $setting]);
+            }
         }
     }
 
