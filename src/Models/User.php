@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Scout\Searchable;
@@ -95,6 +96,8 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property-read bool $is_online
  * @property-read bool $is_verified
  * @property-read bool $is_online_for_followers
+ * @property-read bool $is_tier3
+ * @property-read bool $is_risky
  *
  * @method static |self|Builder username(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
@@ -190,6 +193,10 @@ class User extends Authenticatable implements JWTSubject
                 'tips' => false,
                 'new_subscribers' => false,
             ],
+            'risk' => [
+                'block_unverified_cc' => false,
+                'spent_amount' => 0,
+            ]
         ],
         'features' => [
             'tips' => false,
@@ -391,6 +398,32 @@ class User extends Authenticatable implements JWTSubject
     public function getAlertsAttribute(): array|Collection
     {
         return Alert::user($this->_id)->userOnly()->notVisited()->get();
+    }
+
+    /**
+     * Get the user risk
+     * @todo this method implementation should change and rely on risk score
+     *
+     * @return bool
+     */
+    public function getIsRiskyAttribute(): bool
+    {
+        return $this->setting['block_unverified_cc'] ||
+            ($this->is_tier3) ||
+            (
+                !$this->is_tier3 &&
+                $this->setting['risk']['spent_amount'] > config('payment.fraud.big_spender.maximum_total_amount')
+            );
+    }
+
+    /**
+     * Get the user country tier
+     *
+     * @return bool
+     */
+    public function getIsTier3Attribute(): bool
+    {
+        return in_array(Str::upper($this->country_alpha2), config('core.tiers.3'), true);
     }
 
     /**
@@ -632,31 +665,6 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    public function getVerificationStatusLabelAttribute(): string
-    {
-        return UserVerificationStatus::from($this->verification_status)->label();
-    }
-
-    public function getStatusLabelAttribute()
-    {
-        return UserStatus::from($this->status)->label();
-    }
-
-    public function getIsOnlineAttribute(): bool
-    {
-        return self::isOnline($this->_id);
-    }
-
-    public function getIsOnlineForFollowersAttribute(): bool
-    {
-        return self::isOnlineForFollowers($this->_id);
-    }
-
-    public function getIsOnlineForAllAttribute(): bool
-    {
-        return self::isOnlineForAll($this->_id);
-    }
-
     public static function isOnline($userId): bool
     {
         [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
@@ -692,6 +700,31 @@ class User extends Authenticatable implements JWTSubject
     public function getCountryAlpha3Attribute()
     {
         return $this->country_alpha2 ? \Aparlay\Core\Helpers\Country::getAlpha3ByAlpha2($this->country_alpha2) : '';
+    }
+
+    public function getVerificationStatusLabelAttribute(): string
+    {
+        return UserVerificationStatus::from($this->verification_status)->label();
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return UserStatus::from($this->status)->label();
+    }
+
+    public function getIsOnlineAttribute(): bool
+    {
+        return self::isOnline($this->_id);
+    }
+
+    public function getIsOnlineForFollowersAttribute(): bool
+    {
+        return self::isOnlineForFollowers($this->_id);
+    }
+
+    public function getIsOnlineForAllAttribute(): bool
+    {
+        return self::isOnlineForAll($this->_id);
     }
 
     /**
