@@ -196,7 +196,7 @@ class User extends Authenticatable implements JWTSubject
             'risk' => [
                 'block_unverified_cc' => false,
                 'spent_amount' => 0,
-            ]
+            ],
         ],
         'features' => [
             'tips' => false,
@@ -401,7 +401,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Get the user risk
+     * Get the user risk.
      * @todo this method implementation should change and rely on risk score
      *
      * @return bool
@@ -411,13 +411,13 @@ class User extends Authenticatable implements JWTSubject
         return $this->setting['block_unverified_cc'] ||
             ($this->is_tier3) ||
             (
-                !$this->is_tier3 &&
+                ! $this->is_tier3 &&
                 $this->setting['risk']['spent_amount'] > config('payment.fraud.big_spender.maximum_total_amount')
             );
     }
 
     /**
-     * Get the user country tier
+     * Get the user country tier.
      *
      * @return bool
      */
