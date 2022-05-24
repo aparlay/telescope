@@ -96,7 +96,7 @@ class UserObserver extends BaseModelObserver
 
         if ($model->isDirty(['country_alpha2'])) {
             $setting = $model->setting;
-            $setting['payment']['allow_unverified_cc'] = !$model->is_tier3;
+            $setting['payment']['allow_unverified_cc'] = ! $model->is_tier3;
             $setting['payment']['block_unverified_cc'] = $model->is_tier3;
             $setting['payment']['block_cc_payments'] = false;
             $model->setting = $setting;
