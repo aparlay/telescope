@@ -65,9 +65,9 @@ class AddNoteListener
 
         if ($event instanceof RiskyUserDetectedEvent) {
             $noteService->addCustomNote(
-                $event->creator,
-                $event->creator,
-                $event->creator->note_admin_url.
+                $event->user,
+                $event->user,
+                $event->user->note_admin_url.
                 '\'s user recognized as risky with score '.
                 $event->user->scores['risk'],
             );
