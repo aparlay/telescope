@@ -2,8 +2,6 @@
 
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration {
     /**
@@ -22,25 +20,30 @@ return new class() extends Migration {
                 'tips' => false,
                 'new_subscribers' => false,
             ],
-            'risk' => [
+            'payment' => [
+                'allow_unverified_cc' => false,
                 'block_unverified_cc' => false,
+                'block_cc_payments' => false,
                 'spent_amount' => 0,
             ],
             'block_unverified_cc' => false,
         ];
         foreach (User::lazy() as $user) {
             $setting = $user->setting;
+
             if (empty($setting)) {
                 $setting = $default;
             }
-            if (empty($user->setting['risk'])) {
-                $setting['risk'] = [
+
+            unset($setting['block_unverified_cc'], $setting['risk']);
+
+            if (empty($user->setting['payment'])) {
+                $setting['payment'] = [
+                    'allow_unverified_cc' => false,
                     'block_unverified_cc' => false,
+                    'block_cc_payments' => false,
                     'spent_amount' => 0,
                 ];
-            }
-            if (empty($user->setting['block_unverified_cc'])) {
-                $setting['block_unverified_cc'] = false;
             }
             if (empty($user->setting['otp'])) {
                 $setting['otp'] = false;

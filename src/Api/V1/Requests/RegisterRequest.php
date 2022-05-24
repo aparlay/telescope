@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Requests;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
+use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
@@ -134,6 +135,12 @@ class RegisterRequest extends FormRequest
                     'news_and_updates' => false,
                     'tips' => false,
                     'new_subscribers' => false,
+                ],
+                'payment' => [
+                    'allow_unverified_cc' => false,
+                    'block_unverified_cc' => true,
+                    'block_payments' => true,
+                    'spent_amount' => 0,
                 ],
             ],
             'referral_id' => $this->referral_id,

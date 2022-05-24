@@ -94,6 +94,14 @@ class UserObserver extends BaseModelObserver
             $model->text_search = $text_search;
         }
 
+        if ($model->isDirty(['country_alpha2'])) {
+            $setting = $model->setting;
+            $setting['payment']['allow_unverified_cc'] = !$model->is_tier3;
+            $setting['payment']['block_unverified_cc'] = $model->is_tier3;
+            $setting['payment']['block_cc_payments'] = false;
+            $model->setting = $setting;
+        }
+
         parent::saving($model);
     }
 

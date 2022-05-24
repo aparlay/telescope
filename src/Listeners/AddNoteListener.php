@@ -9,6 +9,7 @@ use Aparlay\Core\Events\UserVerificationStatusChangedEvent;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Payment\Events\RiskyCreditCardDetectedEvent;
 use Aparlay\Payment\Events\RiskyOrderDetectedEvent;
+use Aparlay\Payment\Events\RiskyUserDetectedEvent;
 
 class AddNoteListener
 {
@@ -59,6 +60,16 @@ class AddNoteListener
                 $event->creator->note_admin_url.
                 '\'s order recognized as risky with score '.
                 $event->order->risk_score,
+            );
+        }
+
+        if ($event instanceof RiskyUserDetectedEvent) {
+            $noteService->addCustomNote(
+                $event->creator,
+                $event->creator,
+                $event->creator->note_admin_url.
+                '\'s user recognized as risky with score '.
+                $event->user->scores['risk'],
             );
         }
     }

@@ -193,8 +193,10 @@ class User extends Authenticatable implements JWTSubject
                 'tips' => false,
                 'new_subscribers' => false,
             ],
-            'risk' => [
+            'payment' => [
+                'allow_unverified_cc' => false,
                 'block_unverified_cc' => false,
+                'block_cc_payments' => false,
                 'spent_amount' => 0,
             ],
         ],
@@ -408,12 +410,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getIsRiskyAttribute(): bool
     {
-        return $this->setting['block_unverified_cc'] ||
+        return $this->setting['payment']['block_unverified_cc'] ||
             ($this->is_tier3) ||
-            (
-                ! $this->is_tier3 &&
-                $this->setting['risk']['spent_amount'] > config('payment.fraud.big_spender.maximum_total_amount')
-            );
+            ($this->setting['payment']['spent_amount'] > config('payment.fraud.big_spender.maximum_total_amount'));
     }
 
     /**
