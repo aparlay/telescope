@@ -294,6 +294,7 @@ class CountrySeeder extends Seeder
         foreach ($countries as $country) {
             $countryExist = Country::query()->where('alpha3', $country['alpha3'])->first();
             if (! $countryExist) {
+                $country['is_enabled'] = true;
                 Country::create($country);
                 echo 'Country was created '.$country['name']."\n\r";
             }

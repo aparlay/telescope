@@ -52,6 +52,7 @@ class Country extends BaseModel
         'location',
         'created_at',
         'updated_at',
+        'is_enabled'
     ];
 
     /**
@@ -69,6 +70,7 @@ class Country extends BaseModel
      * @var array
      */
     protected $casts = [
+        'is_enabled' => 'boolean'
     ];
 
     protected $dates = [
