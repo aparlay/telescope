@@ -428,7 +428,11 @@ class Media extends BaseModel
      */
     public function getAdminUrlAttribute(): string
     {
-        return route('core.admin.media.view', ['media' => $this->_id]);
+        return str_ireplace(
+            config('core.api.domain'),
+            config('core.admin.domain'),
+            route('core.admin.media.view', ['media' => $this->_id])
+        );
     }
 
     /**

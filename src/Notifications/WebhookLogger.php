@@ -41,9 +41,9 @@ class WebhookLogger extends Notification
     {
         return (new SlackMessage())
             ->to($this->channel)
-            ->content('Sending Request to 3rd Party API')
+            ->content('Receive Webhook from 3rd Party')
             ->attachment(function ($attachment) {
-                $attachment->title('Sending Request to 3rd Party API', $this->ref)
+                $attachment->title('Open Admin area', $this->ref)
                     ->fields([
                         'Service' => $this->service,
                         'URL' => '`'.$this->url.'`',

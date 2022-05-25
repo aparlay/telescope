@@ -43,7 +43,7 @@ class ThirdPartyLogger extends Notification
             ->to($this->channel)
             ->content('Sending Request to 3rd Party API')
             ->attachment(function ($attachment) {
-                $attachment->title('Sending Request to 3rd Party API', $this->ref)
+                $attachment->title('Open Admin area', $this->ref)
                     ->fields([
                         'Service' => $this->service,
                         'URL' => '`'.$this->url.'`',
