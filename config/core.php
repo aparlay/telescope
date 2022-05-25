@@ -20,6 +20,6 @@ return [
             'page_count' => 20,
             'user_page_count' => 5,
         ],
+        'domain' => env('ADMIN_DOMAIN', 'toptop.waptap.dev'),
     ],
-
 ];

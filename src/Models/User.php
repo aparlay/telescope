@@ -389,11 +389,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getAdminUrlAttribute(): string
     {
-        return str_ireplace(
-            config('core.api.domain'),
-            config('core.admin.domain'),
-            route('core.admin.user.view', ['user' => $this->_id])
-        );
+        return route('core.admin.user.view', ['user' => $this->_id]);
     }
 
     /**
