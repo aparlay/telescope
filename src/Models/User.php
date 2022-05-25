@@ -781,4 +781,16 @@ class User extends Authenticatable implements JWTSubject
     {
         return Block::creator($this->_id)->country($countryAlpha2)->exists();
     }
+
+    /**
+     * @param  int  $amount
+     * @return bool
+     */
+    public function unverifiedCCSpentAmount(int $amount): bool
+    {
+        $setting = $this->setting;
+        $setting['payment']['spent_amount'] += $amount;
+
+        return $this->update(['setting' => $setting]);
+    }
 }
