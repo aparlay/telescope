@@ -46,9 +46,9 @@ class ThirdPartyLogger extends Notification
                 $attachment->title('Sending Request to 3rd Party API', $this->ref)
                     ->fields([
                         'Service' => $this->service,
-                        'URL' => $this->url,
-                        'Request' => json_encode($this->req ?? []),
-                        'Response' => json_encode($this->res ?? []),
+                        'URL' => '`'.$this->url.'`',
+                        'Request' => '```'.json_encode($this->req ?? []).'```',
+                        'Response' => '```'.json_encode($this->res ?? []).'```',
                     ]);
             })
             ->info();
