@@ -15,7 +15,7 @@ class ThirdPartyLogger extends Notification
      *
      * @return void
      */
-    public function __construct(public string $service, public string $url, public array $req, public array $res, public string $channel = '')
+    public function __construct(public string $ref, public string $service, public string $url, public array $req, public array $res, public string $channel = '')
     {
         $this->channel = (! empty($channel) ? $channel : config('app.slack_third_party_logger'));
     }
@@ -39,14 +39,19 @@ class ThirdPartyLogger extends Notification
      */
     public function toSlack($notifiable)
     {
-        $message = '[' . $this->service . '] ['.$this->url.']';
-        $message .= PHP_EOL.'_*Request:*_ '.! empty($this->req) ? json_encode($this->req) : ' empty.';
-        $message .= PHP_EOL.'_*Response:*_ '.! empty($this->res) ? json_encode($this->res) : ' empty.';
-
         return (new SlackMessage())
             ->to($this->channel)
-            ->content($message)
-            ->success();
+            ->content('Sending Request to 3rd Party API')
+            ->attachment(function ($attachment) {
+                $attachment->title('Sending Request to 3rd Party API', $this->ref)
+                    ->fields([
+                        'Service' => $this->service,
+                        'URL' => $this->url,
+                        'Request' => json_encode($this->req ?? []),
+                        'Response' => json_encode($this->res ?? []),
+                    ]);
+            })
+            ->info();
     }
 
     /**
