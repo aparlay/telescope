@@ -39,7 +39,7 @@ class ThirdPartyLogger extends Notification
      */
     public function toSlack($notifiable)
     {
-        $message = '[' . $this->service . '] ['.$this->url.']';
+        $message = '['.$this->service.'] ['.$this->url.']';
         $message .= PHP_EOL.'_*Request:*_ '.! empty($this->req) ? json_encode($this->req) : ' empty.';
         $message .= PHP_EOL.'_*Response:*_ '.! empty($this->res) ? json_encode($this->res) : ' empty.';
 
