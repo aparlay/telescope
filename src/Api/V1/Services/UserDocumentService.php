@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
-use Aparlay\Core\Api\V1\Repositories\UserDocumentRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Api\V1\Traits\ValidationErrorTrait;
 use Aparlay\Core\Constants\StorageType;
@@ -22,10 +21,6 @@ class UserDocumentService extends AbstractService
     use HasUserTrait;
     use ValidationErrorTrait;
 
-    /**
-     * @var UserDocumentRepository
-     */
-    private $userDocumentRepository;
 
     /**
      * @var UploadFileService
@@ -33,10 +28,8 @@ class UserDocumentService extends AbstractService
     private $uploadFileService;
 
     public function __construct(
-        UserDocumentRepository $userDocumentRepository,
         UploadFileService $uploadFileService
     ) {
-        $this->userDocumentRepository = $userDocumentRepository;
         $this->uploadFileService = $uploadFileService;
     }
 
@@ -74,9 +67,10 @@ class UserDocumentService extends AbstractService
             abort(423, __('You need to upload both documents: video selfie and id card photo at first'));
         }
 
-        if ($this->getUser()->is_tier1 && !$idCard) {
+        if (!$idCard) {
             abort(423, __('You need to upload id card at first'));
         }
+
         UserDocument::query()
             ->creator($this->getUser()->_id)
             ->status(UserDocumentStatus::CREATED->value)
