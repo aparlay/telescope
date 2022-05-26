@@ -21,7 +21,6 @@ class UserDocumentService extends AbstractService
     use HasUserTrait;
     use ValidationErrorTrait;
 
-
     /**
      * @var UploadFileService
      */
@@ -63,11 +62,11 @@ class UserDocumentService extends AbstractService
             ->status(UserDocumentStatus::CREATED->value)
             ->first();
 
-        if ($this->getUser()->is_tier3 && (!$videoSelfie || !$idCard)) {
+        if ($this->getUser()->is_tier3 && (! $videoSelfie || ! $idCard)) {
             abort(423, __('You need to upload both documents: video selfie and id card photo at first'));
         }
 
-        if (!$idCard) {
+        if (! $idCard) {
             abort(423, __('You need to upload id card at first'));
         }
 
@@ -82,7 +81,6 @@ class UserDocumentService extends AbstractService
         return $this->getUser();
     }
 
-
     /**
      * @param  UserDocumentDto  $documentDto
      * @return \Aparlay\Core\Api\V1\Models\UserDocument|\Illuminate\Database\Eloquent\Model
@@ -92,7 +90,7 @@ class UserDocumentService extends AbstractService
     {
         $user = $this->getUser();
 
-        $userDocument =  UserDocument::create([
+        $userDocument = UserDocument::create([
             'type' => $documentDto->type,
             'status' => UserDocumentStatus::CREATED->value,
             'creator' => [
