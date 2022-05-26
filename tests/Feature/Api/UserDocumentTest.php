@@ -87,7 +87,7 @@ class UserDocumentTest extends ApiTestCase
 
         $documentTypes = [
             UserDocumentType::ID_CARD->value => $idCardFile,
-            UserDocumentType::SELFIE->value => $selfie,
+            UserDocumentType::VIDEO_SELFIE->value => $selfie,
         ];
 
         foreach ($documentTypes as $documentType => $uploadedFile) {

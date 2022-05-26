@@ -15,6 +15,7 @@ use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
+use MongoDB\BSON\ObjectId;
 
 class UserDocumentService extends AbstractService
 {
@@ -41,8 +42,13 @@ class UserDocumentService extends AbstractService
 
     public function index()
     {
-        $documents = $this->userDocumentRepository->index($this->getUser());
+        $documents = UserDocument::creator($this->getUser()->_id)
+            ->with('alertObjs')
+            ->oldest('created_at')
+            ->get();
+
         $output = [];
+
         foreach ($documents as $item) {
             $output[$item['type']] = $item;
         }
@@ -52,18 +58,25 @@ class UserDocumentService extends AbstractService
 
     public function changeToPending()
     {
-        $count = UserDocument::query()
+        $idCard = UserDocument::query()
             ->creator($this->getUser()->_id)
+            ->type(UserDocumentType::ID_CARD->value)
             ->status(UserDocumentStatus::CREATED->value)
-            ->count();
+            ->first();
 
-        if ($count === 0) {
-            $this->throwClientError(
-                'verification_status',
-                __('You need to upload some documents at first')
-            );
+        $videoSelfie = UserDocument::query()
+            ->creator($this->getUser()->_id)
+            ->type(UserDocumentType::VIDEO_SELFIE->value)
+            ->status(UserDocumentStatus::CREATED->value)
+            ->first();
+
+        if ($this->getUser()->is_tier3 && (!$videoSelfie || !$idCard)) {
+            abort(423, __('You need to upload both documents: video selfie and id card photo at first'));
         }
 
+        if ($this->getUser()->is_tier1 && !$idCard) {
+            abort(423, __('You need to upload id card at first'));
+        }
         UserDocument::query()
             ->creator($this->getUser()->_id)
             ->status(UserDocumentStatus::CREATED->value)
@@ -75,10 +88,6 @@ class UserDocumentService extends AbstractService
         return $this->getUser();
     }
 
-    public function fetchById($id)
-    {
-        return $this->userDocumentRepository->fetchById($id);
-    }
 
     /**
      * @param  UserDocumentDto  $documentDto
@@ -88,8 +97,16 @@ class UserDocumentService extends AbstractService
     public function store(UserDocumentDto $documentDto)
     {
         $user = $this->getUser();
-        $documentDto->setUser($user);
-        $userDocument = $this->userDocumentRepository->create($documentDto);
+
+        $userDocument =  UserDocument::create([
+            'type' => $documentDto->type,
+            'status' => UserDocumentStatus::CREATED->value,
+            'creator' => [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ],
+        ]);
 
         if (\App::environment('testing')) {
             return $userDocument;
@@ -108,7 +125,7 @@ class UserDocumentService extends AbstractService
     private function uploadDocument(UploadedFile $file, UserDocument $userDocument)
     {
         $filePrefix = match ($userDocument->type) {
-            UserDocumentType::SELFIE->value => 'selfie_',
+            UserDocumentType::VIDEO_SELFIE->value => 'selfie_',
             UserDocumentType::ID_CARD->value => 'id_card_',
         };
 

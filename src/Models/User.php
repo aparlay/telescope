@@ -97,6 +97,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property-read bool $is_verified
  * @property-read bool $is_online_for_followers
  * @property-read bool $is_tier3
+ * @property-read bool $is_tier1
  * @property-read bool $is_risky
  *
  * @method static |self|Builder username(string $username) get user
@@ -424,6 +425,16 @@ class User extends Authenticatable implements JWTSubject
     public function getIsTier3Attribute(): bool
     {
         return in_array(Str::upper($this->country_alpha2), config('core.tiers.3'), true);
+    }
+
+    /**
+     * Get the user country tier.
+     *
+     * @return bool
+     */
+    public function getIsTier1Attribute(): bool
+    {
+        return in_array(Str::upper($this->country_alpha2), config('core.tiers.1'), true);
     }
 
     /**

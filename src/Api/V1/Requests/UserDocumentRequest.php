@@ -22,11 +22,11 @@ class UserDocumentRequest extends BaseFormRequest
             'file' => ['required', 'file'],
             'type' => [
                 'required',
-                Rule::in([UserDocumentType::ID_CARD->value, UserDocumentType::SELFIE->value]),
+                Rule::in([UserDocumentType::ID_CARD->value, UserDocumentType::VIDEO_SELFIE->value]),
             ],
         ];
 
-        if ((int) $this->type === UserDocumentType::SELFIE->value) {
+        if ((int) $this->type === UserDocumentType::VIDEO_SELFIE->value) {
             $this->maxInMb = 200;
             $rules['file'] = [
                'required',
