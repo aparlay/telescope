@@ -57,7 +57,7 @@ class UserDocumentController extends Controller
     public function sendToVerification(): Response
     {
         $this->injectAuthUser($this->userDocumentService);
-        $user = $this->userDocumentService->changeToPending();
+        $this->userDocumentService->changeToPending();
 
         return $this->response('', '', Response::HTTP_NO_CONTENT);
     }

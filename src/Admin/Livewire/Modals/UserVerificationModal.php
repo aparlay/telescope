@@ -67,7 +67,7 @@ class UserVerificationModal extends Component
     {
         $user = $this->user;
         $selfie = $user->userDocumentObjs()
-            ->type(UserDocumentType::SELFIE->value)
+            ->type(UserDocumentType::VIDEO_SELFIE->value)
             ->latest()
             ->first();
 

@@ -3,9 +3,13 @@
 namespace Aparlay\Core\Api\V1\Resources;
 
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
+use Aparlay\Core\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin User
+ */
 class MeResource extends JsonResource
 {
     use SimpleUserTrait;
@@ -110,6 +114,8 @@ class MeResource extends JsonResource
             'country_alpha2' => $this->country_alpha2,
             'country_label' => $this->country_label,
             'country_flags' => $this->country_flags,
+            $this->mergeWhen($this->is_tier1, fn () => ['is_tier1' => true]),
+            $this->mergeWhen($this->is_tier3, fn () => ['is_tier3' => true]),
         ];
     }
 }
