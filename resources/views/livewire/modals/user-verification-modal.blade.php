@@ -75,7 +75,7 @@
                                                         1. Photo Id
                                                     @endif
                                                     @if ($document->type === UserDocumentType::SELFIE->value)
-                                                        2. Video Selfie
+                                                        2. Selfie Photo
                                                     @endif
                                                 </h6>
 
