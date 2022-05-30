@@ -28,6 +28,7 @@ class UserDocumentRequest extends BaseFormRequest
                 Rule::in([UserDocumentType::ID_CARD->value, UserDocumentType::SELFIE->value]),
             ],
         ];
+
         return  $rules;
     }
 
