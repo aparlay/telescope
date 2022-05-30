@@ -53,39 +53,17 @@
                             <div class="col-md-12 pb-3">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            @if ($document->type === UserDocumentType::ID_CARD->value)
-                                                <a class="d-block" target="_blank" href="{{ $document->temporaryUrl() }}"
-                                                   title="{{$document->file}}">
-                                                    <img class="img-thumbnail" src="{{$document->temporaryUrl()}}" alt="">
-                                                    {{ $document->file }}
-                                                </a>
+                                            <a class="d-block" target="_blank" href="{{ $document->temporaryUrl() }}"
+                                               title="{{$document->file}}">
+                                                <img class="img-thumbnail" src="{{$document->temporaryUrl()}}" alt="">
+                                                {{ $document->file }}
+                                            </a>
 
-                                                <span
-                                                    class="badge badge-{{ UserDocumentStatus::from($document->status)->badgeColor()}}">
-                                                        {{ $document->status_label }}
-                                                    </span>
-                                            @endif
+                                            <span
+                                                class="badge badge-{{ UserDocumentStatus::from($document->status)->badgeColor()}}">
+                                                    {{ $document->status_label }}
+                                            </span>
 
-                                            @if ($document->type === UserDocumentType::SELFIE->value)
-                                                <video width="100%" controls poster="{{ '' }}" style="max-height:400px">
-                                                    @if ($document->temporaryUrl())
-                                                        <source src="{{ $document->temporaryUrl() }}">
-                                                    @endif
-                                                    Your browser does not support the video tag.
-                                                </video>
-
-                                                <div>
-                                                    <a target="_blank" href="{{ $document->temporaryUrl() }}">
-                                                        {{ $document->file }}
-                                                    </a>
-                                                </div>
-                                                <div>
-                                                    <span
-                                                        class="badge badge-{{ UserDocumentStatus::from($document->status)->badgeColor()}}">
-                                                        {{ $document->status_label }}
-                                                    </span>
-                                                </div>
-                                            @endif
                                             <div class="text-sm" title="{{ $document->created_at }}">
                                                 Uploaded at: {{ $document->created_at->diffForHumans() }}
                                             </div>
@@ -97,7 +75,7 @@
                                                         1. Photo Id
                                                     @endif
                                                     @if ($document->type === UserDocumentType::SELFIE->value)
-                                                        2. Video Selfie
+                                                        2. Selfie Photo
                                                     @endif
                                                 </h6>
 
@@ -105,10 +83,11 @@
                                                     <input class="form-check-input"
                                                            type="radio"
                                                            wire:model="documentsData.{{$document->_id}}.status"
-                                                           name="{{ 'document_radio_reject_' . $document->_id }}"
+                                                           name="{{ 'document_radio_reject_' . $document->_id  }}"
+                                                           id="{{ 'document_radio_approve_' . $document->_id}}"
                                                            value="{{ UserDocumentStatus::APPROVED->value }}">
 
-                                                    <label class="form-check-label" for="{{ 'document_radio_reject_' . $document->_id }}">
+                                                    <label class="form-check-label" for="{{ 'document_radio_approve_' . $document->_id }}">
                                                         Approve
                                                     </label>
                                                 </div>
@@ -118,6 +97,7 @@
                                                         wire:model="documentsData.{{$document->_id}}.status"
                                                         value="{{ UserDocumentStatus::REJECTED->value }}"
                                                         name="{{ 'document_radio_reject_' . $document->_id }}"
+                                                        id="{{ 'document_radio_reject_' . $document->_id}}"
                                                         type="radio"
                                                         checked>
                                                     <label class="form-check-label" for="{{ 'document_radio_reject_' . $document->_id }}">
