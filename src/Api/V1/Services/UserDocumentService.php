@@ -58,16 +58,12 @@ class UserDocumentService extends AbstractService
 
         $videoSelfie = UserDocument::query()
             ->creator($this->getUser()->_id)
-            ->type(UserDocumentType::VIDEO_SELFIE->value)
+            ->type(UserDocumentType::SELFIE->value)
             ->status(UserDocumentStatus::CREATED->value)
             ->first();
 
-        if ($this->getUser()->is_tier3 && (! $videoSelfie || ! $idCard)) {
-            abort(423, __('You need to upload both documents: video selfie and id card photo at first'));
-        }
-
-        if (! $idCard) {
-            abort(423, __('You need to upload id card at first'));
+        if (! $videoSelfie || ! $idCard) {
+            abort(423, __('You need to upload both documents: selfie and id card photo at first'));
         }
 
         UserDocument::query()
@@ -117,7 +113,7 @@ class UserDocumentService extends AbstractService
     private function uploadDocument(UploadedFile $file, UserDocument $userDocument)
     {
         $filePrefix = match ($userDocument->type) {
-            UserDocumentType::VIDEO_SELFIE->value => 'selfie_',
+            UserDocumentType::SELFIE->value => 'selfie_',
             UserDocumentType::ID_CARD->value => 'id_card_',
         };
 
