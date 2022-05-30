@@ -53,39 +53,17 @@
                             <div class="col-md-12 pb-3">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            @if ($document->type === UserDocumentType::ID_CARD->value)
-                                                <a class="d-block" target="_blank" href="{{ $document->temporaryUrl() }}"
-                                                   title="{{$document->file}}">
-                                                    <img class="img-thumbnail" src="{{$document->temporaryUrl()}}" alt="">
-                                                    {{ $document->file }}
-                                                </a>
+                                            <a class="d-block" target="_blank" href="{{ $document->temporaryUrl() }}"
+                                               title="{{$document->file}}">
+                                                <img class="img-thumbnail" src="{{$document->temporaryUrl()}}" alt="">
+                                                {{ $document->file }}
+                                            </a>
 
-                                                <span
-                                                    class="badge badge-{{ UserDocumentStatus::from($document->status)->badgeColor()}}">
-                                                        {{ $document->status_label }}
-                                                    </span>
-                                            @endif
+                                            <span
+                                                class="badge badge-{{ UserDocumentStatus::from($document->status)->badgeColor()}}">
+                                                    {{ $document->status_label }}
+                                            </span>
 
-                                            @if ($document->type === UserDocumentType::SELFIE->value)
-                                                <video width="100%" controls poster="{{ '' }}" style="max-height:400px">
-                                                    @if ($document->temporaryUrl())
-                                                        <source src="{{ $document->temporaryUrl() }}">
-                                                    @endif
-                                                    Your browser does not support the video tag.
-                                                </video>
-
-                                                <div>
-                                                    <a target="_blank" href="{{ $document->temporaryUrl() }}">
-                                                        {{ $document->file }}
-                                                    </a>
-                                                </div>
-                                                <div>
-                                                    <span
-                                                        class="badge badge-{{ UserDocumentStatus::from($document->status)->badgeColor()}}">
-                                                        {{ $document->status_label }}
-                                                    </span>
-                                                </div>
-                                            @endif
                                             <div class="text-sm" title="{{ $document->created_at }}">
                                                 Uploaded at: {{ $document->created_at->diffForHumans() }}
                                             </div>

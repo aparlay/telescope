@@ -82,12 +82,12 @@ class UserDocumentTest extends ApiTestCase
     {
         $user = User::factory()->create();
 
-        $idCardFile = UploadedFile::fake()->create('fakefile.jpg', 100);
-        $selfie = UploadedFile::fake()->create('fakefile.mp4', 100);
+        $idCardFile = UploadedFile::fake()->create('id_card.jpg', 100);
+        $selfie = UploadedFile::fake()->create('selfie.jpg', 100);
 
         $documentTypes = [
             UserDocumentType::ID_CARD->value => $idCardFile,
-            UserDocumentType::VIDEO_SELFIE->value => $selfie,
+            UserDocumentType::SELFIE->value => $selfie,
         ];
 
         foreach ($documentTypes as $documentType => $uploadedFile) {

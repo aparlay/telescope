@@ -26,11 +26,11 @@ class UserDocumentFactory extends Factory
     {
         $type = $this->faker->randomElement([
             UserDocumentType::ID_CARD->value,
-            UserDocumentType::VIDEO_SELFIE->value,
+            UserDocumentType::SELFIE->value,
         ]);
 
         $docPrefix = match ($type) {
-            UserDocumentType::VIDEO_SELFIE->value => 'selfie_',
+            UserDocumentType::SELFIE->value => 'selfie_',
             UserDocumentType::ID_CARD->value => 'id_card_',
         };
 
