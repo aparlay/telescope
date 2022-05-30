@@ -83,10 +83,11 @@
                                                     <input class="form-check-input"
                                                            type="radio"
                                                            wire:model="documentsData.{{$document->_id}}.status"
-                                                           name="{{ 'document_radio_reject_' . $document->_id }}"
+                                                           name="{{ 'document_radio_reject_' . $document->_id  }}"
+                                                           id="{{ 'document_radio_approve_' . $document->_id}}"
                                                            value="{{ UserDocumentStatus::APPROVED->value }}">
 
-                                                    <label class="form-check-label" for="{{ 'document_radio_reject_' . $document->_id }}">
+                                                    <label class="form-check-label" for="{{ 'document_radio_approve_' . $document->_id }}">
                                                         Approve
                                                     </label>
                                                 </div>
@@ -96,6 +97,7 @@
                                                         wire:model="documentsData.{{$document->_id}}.status"
                                                         value="{{ UserDocumentStatus::REJECTED->value }}"
                                                         name="{{ 'document_radio_reject_' . $document->_id }}"
+                                                        id="{{ 'document_radio_reject_' . $document->_id}}"
                                                         type="radio"
                                                         checked>
                                                     <label class="form-check-label" for="{{ 'document_radio_reject_' . $document->_id }}">
