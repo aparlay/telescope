@@ -9,8 +9,6 @@ trait CurrentUserTrait
     public function currentUser()
     {
         $currentUserId = auth()->guard('admin')->id();
-        $currentUser = User::find($currentUserId);
-
-        return $currentUser;
+        return User::findOrFail($currentUserId);
     }
 }
