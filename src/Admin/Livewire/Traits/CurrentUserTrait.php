@@ -8,7 +8,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 trait CurrentUserTrait
 {
-
     use AuthorizesRequests;
 
     public function currentUser()
