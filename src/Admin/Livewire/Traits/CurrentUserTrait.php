@@ -3,13 +3,14 @@
 namespace Aparlay\Core\Admin\Livewire\Traits;
 
 use Aparlay\Core\Admin\Models\User;
+use Auth;
 
 trait CurrentUserTrait
 {
     public function currentUser()
     {
-        $currentUserId = auth()->guard('admin')->id();
+        //$currentUserId = Auth::guard('admin')->user()->id();
 
-        return User::findOrFail($currentUserId);
+        return Auth::guard('admin')->user();
     }
 }
