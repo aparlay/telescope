@@ -1,5 +1,7 @@
 <?php
 
+use Aparlay\Chat\Models\Enums\ChatCategory;
+use Aparlay\Chat\Models\Enums\ChatStatus;
 use Aparlay\Chat\Models\Message;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\User;
@@ -124,7 +126,33 @@ return new class extends Migration {
             ]);
         }
 
-        Message::query()->where('created_by', null)->delete();
+        foreach (Message::query()->where('created_by', null)->lazy() as $message) {
+            $message->update(['created_by' => new ObjectId($aluaSupport->_id), 'created_at' => DT::utcNow()]);
+
+            $lastMessage = $message->chatObj->last_message;
+            if ((string)$lastMessage['_id'] === (string)$message->_id) {
+                $participants = $message->chatObj->participants;
+                $participants[] = [
+                    '_id' => new ObjectId($aluaSupport->_id),
+                    'username' => $aluaSupport->username,
+                    'avatar' => $aluaSupport->avatar,
+                    'is_verified' => $aluaSupport->is_verified,
+                    'categories' => [ChatCategory::SUPPORT->value],
+                    'status' => [ChatStatus::ACTIVE->value],
+                    'has_unread_message' => false,
+                    'joined_at' => DT::utcNow(),
+                    'last_visited_at' => DT::utcNow(),
+                ];
+
+                $lastMessage['created_by'] = new ObjectId($aluaSupport->_id);
+                $lastMessage['created_at'] = DT::utcNow();
+
+                $message->chatObj->update([
+                    'participants' => $participants,
+                    'last_message' => $lastMessage
+                ]);
+            }
+        }
     }
 
     /**
