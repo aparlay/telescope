@@ -53,11 +53,13 @@ class UserDocumentService extends AbstractService
         $idCard = UserDocument::query()
             ->creator($this->getUser()->_id)
             ->type(UserDocumentType::ID_CARD->value)
+            ->latest()
             ->first();
 
         $videoSelfie = UserDocument::query()
             ->creator($this->getUser()->_id)
             ->type(UserDocumentType::SELFIE->value)
+            ->latest()
             ->first();
 
         $user = $this->getUser();
