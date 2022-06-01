@@ -53,17 +53,33 @@ class UserDocumentService extends AbstractService
         $idCard = UserDocument::query()
             ->creator($this->getUser()->_id)
             ->type(UserDocumentType::ID_CARD->value)
-            ->status(UserDocumentStatus::CREATED->value)
             ->first();
 
         $videoSelfie = UserDocument::query()
             ->creator($this->getUser()->_id)
             ->type(UserDocumentType::SELFIE->value)
-            ->status(UserDocumentStatus::CREATED->value)
             ->first();
 
-        if (! $videoSelfie || ! $idCard) {
-            abort(423, __('You need to upload both documents: selfie and id card photo at first'));
+        $user = $this->getUser();
+
+        if ($user->verification_status === UserVerificationStatus::PENDING->value) {
+            abort(423, __('Your application is already under review'));
+        }
+
+        if (! $videoSelfie) {
+            abort(423, __('You need to upload selfie at first'));
+        }
+
+        if ($videoSelfie->status === UserDocumentStatus::REJECTED->value) {
+            abort(423, __('Your selfie was rejected by support team, please upload another one'));
+        }
+
+        if (! $idCard) {
+            abort(423, __('You need to upload id card at first'));
+        }
+
+        if ($idCard->status === UserDocumentStatus::REJECTED->value) {
+            abort(423, __('Your id card photo was rejected by support team, please upload another one'));
         }
 
         UserDocument::query()
