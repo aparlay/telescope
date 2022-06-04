@@ -15,6 +15,7 @@ use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\Traits\CountryFields;
+use Aparlay\Payment\Models\Enums\CreditCardStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -198,7 +199,7 @@ class User extends Authenticatable implements JWTSubject
                 'allow_unverified_cc' => false,
                 'block_unverified_cc' => false,
                 'block_cc_payments' => false,
-                'spent_amount' => 0,
+                'unverified_cc_spent_amount' => 0,
             ],
         ],
         'features' => [
@@ -800,7 +801,7 @@ class User extends Authenticatable implements JWTSubject
     public function unverifiedCCSpentAmount(int $amount): bool
     {
         $setting = $this->setting;
-        $setting['payment']['spent_amount'] += $amount;
+        $setting['payment']['unverified_cc_spent_amount'] += $amount;
 
         return $this->update(['setting' => $setting]);
     }

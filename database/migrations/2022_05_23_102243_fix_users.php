@@ -24,7 +24,7 @@ return new class() extends Migration {
                 'allow_unverified_cc' => false,
                 'block_unverified_cc' => false,
                 'block_cc_payments' => false,
-                'spent_amount' => 0,
+                'unverified_cc_spent_amount' => 0,
             ],
             'block_unverified_cc' => false,
         ];
@@ -42,7 +42,7 @@ return new class() extends Migration {
                     'allow_unverified_cc' => false,
                     'block_unverified_cc' => false,
                     'block_cc_payments' => false,
-                    'spent_amount' => 0,
+                    'unverified_cc_spent_amount' => 0,
                 ];
             }
             if (empty($user->setting['otp'])) {

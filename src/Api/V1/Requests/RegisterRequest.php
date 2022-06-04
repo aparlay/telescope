@@ -140,7 +140,7 @@ class RegisterRequest extends FormRequest
                     'allow_unverified_cc' => false,
                     'block_unverified_cc' => true,
                     'block_payments' => true,
-                    'spent_amount' => 0,
+                    'unverified_cc_spent_amount' => 0,
                 ],
             ],
             'referral_id' => $this->referral_id,
