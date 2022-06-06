@@ -9,7 +9,6 @@ trait CountryScope
 {
     use BaseScope;
 
-
     public function scopeAlpha2(Builder $query, string $alpha2): Builder
     {
         return $query->where('alpha2', Str::lower($alpha2));
