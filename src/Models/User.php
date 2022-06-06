@@ -423,7 +423,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getIsTier3Attribute(): bool
     {
-        return in_array(Str::upper($this->country_alpha2), config('core.tiers.3') ?? [] , true);
+        return in_array(Str::upper($this->country_alpha2), config('core.tiers.3') ?? [], true);
     }
 
     /**
