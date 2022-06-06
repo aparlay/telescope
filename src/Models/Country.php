@@ -2,13 +2,8 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Database\Factories\OtpFactory;
 use Aparlay\Core\Models\Scopes\CountryScope;
-use Aparlay\Core\Models\Scopes\OtpScope;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
 use MongoDB\BSON\ObjectId;
 
 /**
