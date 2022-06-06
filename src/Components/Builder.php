@@ -1,8 +1,8 @@
 <?php
 
-namespace Jenssegers\Mongodb\Eloquent;
+namespace Aparlay\Core\Components;
 
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Jenssegers\Mongodb\Eloquent\Builder as EloquentBuilder;
 use Jenssegers\Mongodb\Helpers\QueriesRelationships;
 use MongoDB\Driver\Cursor;
 use MongoDB\Model\BSONDocument;

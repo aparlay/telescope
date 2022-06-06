@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Models\Queries;
 
-use Jenssegers\Mongodb\Eloquent\Builder;
+use Aparlay\Core\Components\Builder;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;

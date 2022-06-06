@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Livewire;
 
 use Aparlay\Core\Admin\Filters\QueryBuilder;
 use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
-use Jenssegers\Mongodb\Eloquent\Builder;
+use Illuminate\Contracts\Database\Query\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 
