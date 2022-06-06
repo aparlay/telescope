@@ -52,7 +52,6 @@ class Country extends BaseModel
         'location',
         'created_at',
         'updated_at',
-        'is_enabled',
     ];
 
     /**

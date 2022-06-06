@@ -9,10 +9,6 @@ trait CountryScope
 {
     use BaseScope;
 
-    public function scopeEnabled(Builder $query): Builder
-    {
-        return $query->where('is_enabled', true);
-    }
 
     public function scopeAlpha2(Builder $query, string $alpha2): Builder
     {
