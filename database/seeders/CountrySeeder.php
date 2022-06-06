@@ -296,7 +296,9 @@ class CountrySeeder extends Seeder
             if (! $countryExist) {
                 $country['is_enabled'] = true;
                 Country::create($country);
-                echo 'Country was created '.$country['name']."\n\r";
+                if (! \App::environment('testing')) {
+                    echo 'Country was created '.$country['name']."\n\r";
+                }
             }
         }
     }

@@ -72,7 +72,6 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
             $this->storages->each(function ($storageName) use ($storageFilePath) {
                 $storage = Storage::disk($storageName);
 
-                Log::debug($storageName.': store file in path '.$storageFilePath);
                 if ($storage->fileMissing($storageFilePath)) {
                     $storage->writeStream($storageFilePath, Storage::disk($this->fileDisk)->readStream($this->fileName));
                 } else {
