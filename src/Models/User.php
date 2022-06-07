@@ -189,11 +189,13 @@ class User extends Authenticatable implements JWTSubject
         'setting' => [
             'otp' => false,
             'notifications' => [
-                'unread_message_alerts' => false,
-                'new_followers' => false,
-                'news_and_updates' => false,
-                'tips' => false,
-                'new_subscribers' => false,
+                'unread_message_alerts' => true,
+                'news_and_updates' => true,
+                'new_followers' => true,
+                'new_subscribers' => true,
+                'tips' => true,
+                'likes' => true,
+                'comments' => true,
             ],
             'payment' => [
                 'allow_unverified_cc' => false,

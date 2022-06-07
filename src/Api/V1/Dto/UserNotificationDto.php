@@ -7,6 +7,7 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class UserNotificationDto extends DataTransferObject
 {
+    public $entity;
     public $entity_type;
     public $entity_id;
     public $category;
@@ -40,5 +41,21 @@ class UserNotificationDto extends DataTransferObject
     public function setUser($user): void
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
+    /**
+     * @param mixed $entity
+     */
+    public function setEntity($entity): void
+    {
+        $this->entity = $entity;
     }
 }

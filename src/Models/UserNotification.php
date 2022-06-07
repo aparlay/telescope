@@ -2,11 +2,10 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Database\Factories\AlertFactory;
 use Aparlay\Core\Database\Factories\UserNotificationFactory;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
-use Aparlay\Core\Models\Scopes\UserNotificationScope;
+use Aparlay\Core\Models\Queries\UserNotificationQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,14 +33,10 @@ use MongoDB\BSON\ObjectId;
  * @property-read string $status_label
  * @property-read User $userObj
  *
- * @method static |self|Builder visited()                       get visited alerts
- * @method static |self|Builder notVisited()                    get not visited alerts
- * @method static |self|Builder user(ObjectId|string $userId)   get user and media alerts
  */
 class UserNotification extends BaseModel
 {
     use HasFactory;
-    use UserNotificationScope;
 
     /**
      * The collection associated with the model.
@@ -99,6 +94,25 @@ class UserNotification extends BaseModel
     protected static function newFactory(): Factory
     {
         return UserNotificationFactory::new();
+    }
+
+    /**
+     * @return UserNotificationQueryBuilder|Builder
+     */
+    public static function query(): UserNotificationQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return UserNotificationQueryBuilder
+     */
+    public function newEloquentBuilder($query): UserNotificationQueryBuilder
+    {
+        return new UserNotificationQueryBuilder($query);
     }
 
     /**

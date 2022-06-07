@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Resources\UserNotificationCollection;
 use Aparlay\Core\Api\V1\Resources\UserNotificationResource;
 use Aparlay\Core\Api\V1\Services\UserNotificationService;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class UserNotificationController extends Controller
@@ -22,15 +23,17 @@ class UserNotificationController extends Controller
     }
 
     /**
+     * @param  Request  $request
      * @return Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         if (auth()->check()) {
             $this->userNotificationService->setUser(auth()->user());
         }
-        $userNotifications = $this->userNotificationService->index();
+        $userNotifications = $this->userNotificationService->index($request->input('category'));
         $collection = new UserNotificationCollection($userNotifications);
+        $this->userNotificationService->readAll($userNotifications->items());
 
         return $this->response($collection, '', Response::HTTP_OK);
     }
