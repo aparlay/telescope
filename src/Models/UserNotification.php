@@ -32,7 +32,6 @@ use MongoDB\BSON\ObjectId;
  * @property-read string $category_label
  * @property-read string $status_label
  * @property-read User $userObj
- *
  */
 class UserNotification extends BaseModel
 {

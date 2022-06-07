@@ -1,4 +1,5 @@
 <?php
+
 namespace Aparlay\Core\Models\Queries;
 
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
@@ -31,7 +32,7 @@ class UserNotificationQueryBuilder extends EloquentQueryBuilder
 
     public function comments(): self
     {
-        return $this->category( UserNotificationCategory::COMMENTS->value);
+        return $this->category(UserNotificationCategory::COMMENTS->value);
     }
 
     public function tips(): self
@@ -51,7 +52,7 @@ class UserNotificationQueryBuilder extends EloquentQueryBuilder
 
     public function category(int|string $category): self
     {
-        if (is_string($category) && !empty($category)) {
+        if (is_string($category) && ! empty($category)) {
             $category = array_search($category, UserNotificationCategory::getAllCases());
         }
 
@@ -75,6 +76,7 @@ class UserNotificationQueryBuilder extends EloquentQueryBuilder
     public function entity(ObjectId|string $entityId, string $entityType): self
     {
         $entityId = $entityId instanceof ObjectId ? $entityId : new ObjectId($entityId);
+
         return $this->where('entity._id', $entityId)->where('entity._type', $entityType);
     }
 }

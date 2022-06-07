@@ -26,11 +26,11 @@ class UserNotificationService
     public function index($filteredCategory = null): LengthAwarePaginator
     {
         $query = UserNotification::query()->with('entityObj')->user($this->getUser()->_id);
-        
-        if (!empty($filteredCategory)) {
+
+        if (! empty($filteredCategory)) {
             $query->category($filteredCategory);
         }
-        
+
         return $query->latest('updated_at')->paginate();
     }
 

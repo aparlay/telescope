@@ -25,9 +25,9 @@ final class UserNotificationChannel
     {
         $user = User::user($notification->user_id)->first();
 
-        if ($user->setting['notifications'])
-
-        $notificationDTO = UserNotificationDto::fromArray($notification->toArray($notifiable));
+        if ($user->setting['notifications']) {
+            $notificationDTO = UserNotificationDto::fromArray($notification->toArray($notifiable));
+        }
 
         $notificationService = app()->make(UserNotificationService::class);
         $notificationService->setUser($user);
