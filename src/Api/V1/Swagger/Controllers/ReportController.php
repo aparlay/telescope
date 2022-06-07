@@ -87,7 +87,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Post(
  *     path="/v1/media/{id}/report",
- *     tags={"media"},
+ *     tags={"Core | Media"},
  *     summary="report a media",
  *     description="To report media you need to call this endpoint.",
  *     operationId="reportMedia",
