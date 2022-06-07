@@ -89,6 +89,7 @@ class UserNotificationService
         $notificationIds = collect($notifications)->pluck('_id')->toArray();
         UserNotification::query()
             ->whereIn('_id', $notificationIds)
+            ->notVisited()
             ->update(['status' => UserNotificationStatus::VISITED->value]);
     }
 
