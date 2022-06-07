@@ -31,7 +31,12 @@ class UserNotificationService
             $query->category($filteredCategory);
         }
 
-        return $query->latest('updated_at')->paginate();
+        $notifications = $query->latest('updated_at')->paginate();
+
+        $notificationIds = collect($notifications)->pluck('_id')->toArray();
+        $this->readAll($notificationIds);
+
+        return $notifications;
     }
 
     /**
@@ -84,13 +89,14 @@ class UserNotificationService
      *
      * @param  array  $notifications
      */
-    public function readAll(array $notifications): void
+    public function readAll(array $notificationIds): void
     {
-        $notificationIds = collect($notifications)->pluck('_id')->toArray();
-        UserNotification::query()
-            ->whereIn('_id', $notificationIds)
-            ->notVisited()
-            ->update(['status' => UserNotificationStatus::VISITED->value]);
+        dispatch(function () use ($notificationIds) {
+            UserNotification::query()
+                ->whereIn('_id', $notificationIds)
+                ->notVisited()
+                ->update(['status' => UserNotificationStatus::VISITED->value]);
+        });
     }
 
     /**

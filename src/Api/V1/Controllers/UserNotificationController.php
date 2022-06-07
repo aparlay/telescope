@@ -33,7 +33,6 @@ class UserNotificationController extends Controller
         }
         $userNotifications = $this->userNotificationService->index($request->input('category'));
         $collection = new UserNotificationCollection($userNotifications);
-        $this->userNotificationService->readAll($userNotifications->items());
 
         return $this->response($collection, '', Response::HTTP_OK);
     }
