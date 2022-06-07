@@ -9,6 +9,7 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserFeature;
 use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
+use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
@@ -806,5 +807,18 @@ class User extends Authenticatable implements JWTSubject
         $setting['payment']['unverified_cc_spent_amount'] += $amount;
 
         return $this->update(['setting' => $setting]);
+    }
+
+    public function shouldNotify($category)
+    {
+        return match ($category) {
+            UserNotificationCategory::LIKES->value => $this->setting['notifications']['likes'],
+            UserNotificationCategory::COMMENTS->value => $this->setting['notifications']['comments'],
+            UserNotificationCategory::TIPS->value => $this->setting['notifications']['tips'],
+            UserNotificationCategory::SUBSCRIPTIONS->value => $this->setting['notifications']['new_subscribers'],
+            UserNotificationCategory::FOLLOWS->value => $this->setting['notifications']['new_followers'],
+            UserNotificationCategory::SYSTEM->value => $this->setting['notifications']['news_and_updates'],
+            default => false
+        };
     }
 }

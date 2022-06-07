@@ -25,20 +25,20 @@ final class UserNotificationChannel
     {
         $user = User::user($notification->user_id)->first();
 
-        if ($user->setting['notifications']) {
-            $notificationDTO = UserNotificationDto::fromArray($notification->toArray($notifiable));
+        $notificationDTO = UserNotificationDto::fromArray($notification->toArray($notifiable));
+
+        if ($user->shouldNotify($notificationDTO['category'])) {
+            $notificationService = app()->make(UserNotificationService::class);
+            $notificationService->setUser($user);
+            $userNotification = $notificationService->create($notificationDTO);
+
+            UserNotificationEvent::dispatch(
+                (string) $userNotification->_id,
+                (string) $userNotification->user_id,
+                $notification->message ?? '',
+                $notification->payload ?? [],
+                $notification->eventType ?? '',
+            );
         }
-
-        $notificationService = app()->make(UserNotificationService::class);
-        $notificationService->setUser($user);
-        $userNotification = $notificationService->create($notificationDTO);
-
-        UserNotificationEvent::dispatch(
-            (string) $userNotification->_id,
-            (string) $userNotification->user_id,
-            $notification->message ?? '',
-            $notification->payload ?? [],
-            $notification->eventType ?? '',
-        );
     }
 }
