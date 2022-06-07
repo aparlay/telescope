@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Put(
  *     path="/v1/alert/{id}",
- *     tags={"alert"},
+ *     tags={"Core | Alert"},
  *     summary="update an alert",
  *     description="To alert you need to call this endpoint.",
  *     operationId="updateAlert",

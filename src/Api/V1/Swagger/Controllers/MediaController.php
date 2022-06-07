@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Get (
  *     path="/v1/media",
- *     tags={"media"},
+ *     tags={"Core | Media"},
  *     summary="list of media sorted by ML",
  *     description="To get a list of uploaded media by current user you need to call this endpoint.",
  *     operationId="mediaList",
@@ -166,7 +166,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Post(
  *     path="/v1/media",
- *     tags={"media"},
+ *     tags={"Core | Media"},
  *     summary="create new media",
  *     description="To upload and create new media you need to call this endpoint.",
  *     operationId="createMedia",
@@ -260,7 +260,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Get (
  *     path="/v1/media/{id}",
- *     tags={"media"},
+ *     tags={"Core | Media"},
  *     summary="view media",
  *     description="To view a media description you need to call this endpoint.",
  *     operationId="viewMedia",
@@ -336,7 +336,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Patch (
  *     path="/v1/media/{id}",
- *     tags={"media"},
+ *     tags={"Core | Media"},
  *     summary="update media",
  *     description="To update a media description you need to call this endpoint.",
  *     operationId="updateMedia",
@@ -431,7 +431,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Delete (
  *     path="/v1/media/{id}",
- *     tags={"media"},
+ *     tags={"Core | Media"},
  *     summary="delete media",
  *     description="To delete a media description you need to call this endpoint.",
  *     operationId="deleteMedia",
@@ -501,7 +501,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Post(
  *     path="/v1/media/upload/stream",
- *     tags={"media"},
+ *     tags={"Core | Media"},
  *     summary="upload a new movie",
  *     description="To upload a new media file you need to call this endpoint.",
  *     operationId="uploadMediaFileStream",
@@ -601,7 +601,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Get(
  *     path="/v1/media/upload/split",
- *     tags={"media"},
+ *     tags={"Core | Media"},
  *     summary="upload a new movie",
  *     description="To upload a new media file you need to call this endpoint.",
  *     operationId="uploadMediaFile",

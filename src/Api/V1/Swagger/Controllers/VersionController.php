@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Get(
  *     path="/v1/version/{os}/{version}",
- *     tags={"site"},
+ *     tags={"Core | App"},
  *     summary="Get latest version of the application for the givven os",
  *     description="To Login an alreadyregistered user you need to call this endpoint.",
  *     operationId="version",

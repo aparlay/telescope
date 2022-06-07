@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Post(
  *     path="/v1/user-document",
- *     tags={"user-document"},
+ *     tags={"Core | User Document"},
  *     summary="create new user document for verification: id card or selfie",
  *     description="To upload and create new user verication document you need to call this endpoint.",
  *     operationId="createUserDocument",
@@ -93,7 +93,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Get(
  *     path="/v1/user-document/{document_id}",
- *     tags={"user-document"},
+ *     tags={"Core | User Document"},
  *     summary="Fetch a signle user documents for current user",
  *     description="Fetch a single user documents for current user",
  *     operationId="fetchUsserDocument",
@@ -161,7 +161,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Get(
  *     path="/v1/user-document",
- *     tags={"user-document"},
+ *     tags={"Core | User Document"},
  *     summary="Fetch all user documents for current user",
  *     description="Fetch all user documents for current user",
  *     operationId="fetchUserDocumentList",
@@ -227,7 +227,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Put (
  *     path="/v1/user-document/send-to-verification",
- *     tags={"user-document"},
+ *     tags={"Core | User Document"},
  *     summary="Submit documents to admin user to make them verified or rejected",
  *     description="This endpoint simply change user verification status and user document statuses to pending. Must be triggered only once when need to submit docs to admin, second call without uploading any new stuff will give validation error",
  *     operationId="userDocumentSendToVerfy",

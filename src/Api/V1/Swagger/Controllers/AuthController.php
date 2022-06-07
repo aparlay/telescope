@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Put(
  *     path="/v1/change-password",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="Change user password",
  *     description="To Change/Reset Password endpoint help users to reset their forgotten password. if scenario is reset password then user have to send a request-otp request first. after that you have an otp and you will send your reset password request with password, otp and either email or phone_number based on the selected approach in request-otp request. this means otp which is send to email is not valid for phone_number and vice versa. to change password user doesn't need to have an otp just send password and old_password. remember that this request will set a cookies for login too!",
  *     operationId="changePassword",
@@ -104,7 +104,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Patch (
  *     path="/v1/validate-otp",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="validate user otp",
  *     description="on reset password we need to validate otp first you need to send otp with either email or phone number. this endpoint is designed to validate recently sent OTP to your given identity (email/phone_number).",
  *     operationId="validateOtp",
@@ -192,7 +192,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Post(
  *     path="/v1/request-otp",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="Get current user data",
  *     description="sometime (in reset password or resend otp) you need to send otp to either email or phone number. this endpoint is designed to send OTP to your given identity.",
  *     operationId="requestOtp",
@@ -271,7 +271,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Post(
  *     path="/v1/login",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="Logs user into system",
  *     description="To Login an already registered user you need to call this endpoint. If it's first time login or if user enalbe otp login in their setting you need to send otp together with username/password otherwise a new OTP will send to the user with 418 as response. remember that this request will set a cookies for login too!",
  *     operationId="loginUser",
@@ -357,7 +357,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Post(
  *     path="/v1/register",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="Register new user",
  *     description="to register a new users you need to call this endpoint. the flow is according to the screens. user will fill the username/password field with email or phone number as username and a password. after sending request an otp will send to eighter email or phone number via sms. next user will login for the first time with same username/password combination together with otp.",
  *     operationId="registerUser",
@@ -445,7 +445,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Delete (
  *     path="/v1/logout",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="remove cookie token",
  *     description="To remove cookied loged in users need to call this endpoint it only remove browser cookies.",
  *     operationId="logout",
@@ -517,7 +517,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Put(
  *     path="/v1/refresh-token",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="refresh a token",
  *     description="To refresh a token after expiration time",
  *     operationId="refreshToken",

@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Put(
  *     path="/v1/user/{id}/follow",
- *     tags={"connect"},
+ *     tags={"Core | Connect"},
  *     summary="follow a user",
  *     description="To followe a user you need to call this endpoint.",
  *     operationId="follow",
@@ -78,7 +78,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Delete (
  *     path="/v1/user/{id}/follow",
- *     tags={"connect"},
+ *     tags={"Core | Connect"},
  *     summary="unfollow a user",
  *     description="To unfollow a user you need to call this endpoint.",
  *     operationId="unfollow",

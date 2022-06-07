@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Get(
  *     path="/v1/user-notification",
- *     tags={"user-notification"},
+ *     tags={"Core | Notification"},
  *     summary="Fetch all user notifications for current user",
  *     description="Fetch all user notifications for current user",
  *     operationId="fetchUserNotificationList",
@@ -77,7 +77,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Put (
  *     path="/v1/user-notification/{ID}",
- *     tags={"user-notification"},
+ *     tags={"Core | Notification"},
  *     summary="mark a notication as readed",
  *     description="This endpoint simply change user notification status to visited",
  *     operationId="userNotificationRead",

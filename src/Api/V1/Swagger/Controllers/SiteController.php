@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Get(
  *     path="/v1/cache",
- *     tags={"site"},
+ *     tags={"Core | App"},
  *     summary="Get current user data",
  *     description="To Login an alreadyregistered user you need to call this endpoint.",
  *     operationId="cache",
@@ -45,7 +45,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Get(
  *     path="/v1/health",
- *     tags={"site"},
+ *     tags={"Core | App"},
  *     summary="Get current user data",
  *     description="To Login an alreadyregistered user you need to call this endpoint.",
  *     operationId="health",

@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Post(
  *     path="/v1/user/{id}/report",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="report a user",
  *     description="To report user you need to call this endpoint.",
  *     operationId="reportUser",

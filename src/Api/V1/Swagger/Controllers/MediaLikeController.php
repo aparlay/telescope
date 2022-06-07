@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Put(
  *     path="/v1/media/{id}/like",
- *     tags={"media"},
+ *     tags={"Core | Media"},
  *     summary="like a media",
  *     description="To like media you need to call this endpoint.",
  *     operationId="likeMedia",
@@ -78,7 +78,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Delete (
  *     path="/v1/media/{id}/like",
- *     tags={"media"},
+ *     tags={"Core | Media"},
  *     summary="un-like a media",
  *     description="To unlike media you need to call this endpoint.",
  *     operationId="unlikeMedia",

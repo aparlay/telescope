@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Put(
  *     path="/v1/user/{id}/block",
- *     tags={"connect"},
+ *     tags={"Core | Connect"},
  *     summary="block a user",
  *     description="To block user you need to call this endpoint.",
  *     operationId="blockUser",
@@ -78,7 +78,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Delete (
  *     path="/v1/user/{id}/block",
- *     tags={"connect"},
+ *     tags={"Core | Connect"},
  *     summary="un-block a user",
  *     description="To unblock user you need to call this endpoint.",
  *     operationId="unblockUser",

@@ -7,7 +7,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Get(
  *     path="/v1/me",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="Get current user data",
  *     description="Fetch current login user information.",
  *     operationId="me",
@@ -85,7 +85,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Post (
  *     path="/v1/me/delete",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="deactive a user",
  *     description="To deactive a user you need to call this endpoint.",
  *     operationId="deactiveUser",
@@ -159,7 +159,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Patch(
  *     path="/v1/me",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="update current user profile",
  *     description="To update user profile you can send your request to this endpoint.",
  *     operationId="updateProfile",
@@ -255,7 +255,7 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Get(
  *     path="/v1/user/{user_id}",
- *     tags={"user"},
+ *     tags={"Core | User"},
  *     summary="Get the user data",
  *     description="Fetch the user information.",
  *     operationId="userView",
