@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Models\Queries\BaseQueryBuilder;
 use Illuminate\Contracts\Auth\Authenticatable;
 use MongoDB\BSON\ObjectId;
 
