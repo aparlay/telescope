@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
+use Aparlay\Chat\Api\V1\Models\Chat;
 use Aparlay\Core\Api\V1\Dto\UserNotificationDto;
 use Aparlay\Core\Api\V1\Models\UserDocument;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
+
+use function Clue\StreamFilter\fun;
 
 class UserNotificationService
 {
@@ -66,6 +69,8 @@ class UserNotificationService
             $model->update(['status' => UserNotificationStatus::NOT_VISITED->value]);
         }
 
+        $this->getUser()->increaseStatCounter('notifications');
+
         return $model;
     }
 
@@ -79,6 +84,11 @@ class UserNotificationService
     {
         if ($notification->status === UserNotificationStatus::NOT_VISITED->value) {
             $notification->update(['status' => UserNotificationStatus::VISITED->value]);
+            $userId = $this->getUser()->_id;
+            dispatch(function () use ($userId) {
+                $unreadNotificationCount = UserNotification::query()->user($userId)->notVisited()->count();
+                $this->getUser()->setStatCounter('notifications', $unreadNotificationCount);
+            });
         }
 
         return $notification;

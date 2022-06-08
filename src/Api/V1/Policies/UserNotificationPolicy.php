@@ -12,7 +12,7 @@ class UserNotificationPolicy
 {
     use HandlesAuthorization;
 
-    public function update(User | Authenticatable $user, UserNotification $userNotification)
+    public function view(User | Authenticatable $user, UserNotification $userNotification)
     {
         $userId = $user?->_id;
 

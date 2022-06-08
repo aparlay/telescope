@@ -26,12 +26,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $visibility
  * @property int         $show_online_status
  * @property int         $interested_in
- * @property int         $block_count
- * @property int         $follower_count
- * @property int         $following_count
- * @property int         $like_count
- * @property int         $followed_hashtag_count
- * @property int         $media_count
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
  * @property array       $setting

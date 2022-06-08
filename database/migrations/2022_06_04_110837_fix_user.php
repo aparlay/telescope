@@ -23,7 +23,7 @@ return new class() extends Migration {
                     'unverified_cc_spent_amount' => 0,
                 ];
             } else {
-                $setting['payment']['unverified_cc_spent_amount'] = $setting['payment']['spent_amount'];
+                $setting['payment']['unverified_cc_spent_amount'] = $setting['payment']['spent_amount'] ?? 0;
                 unset($setting['payment']['spent_amount']);
             }
             $user->setting = $setting;

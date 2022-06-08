@@ -28,9 +28,9 @@ class UsersTable extends BaseIndexComponent
             'status',
             'visibility',
             'country',
-            'media_count',
-            'likes_count',
-            'follower_count',
+            'stats.counters.medias',
+            'stats.counters.likes',
+            'stats.counters.followrs',
             'created_at',
             'email_verified',
         ];

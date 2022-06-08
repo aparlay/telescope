@@ -105,6 +105,16 @@ class Me
     public $following_count;
 
     /**
+     * @OA\Property(property="has_unread_chat", type="bool", example=true)
+     */
+    public $has_unread_chat;
+
+    /**
+     * @OA\Property(property="has_unread_notification", type="bool", example=true)
+     */
+    public $has_unread_notification;
+
+    /**
      * @OA\Property(property="is_followed", type="boolean", example=false)
      */
     public $is_followed;

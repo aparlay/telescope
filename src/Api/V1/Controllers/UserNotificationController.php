@@ -42,13 +42,13 @@ class UserNotificationController extends Controller
      * @return Response
      * @throws AuthorizationException
      */
-    public function update(UserNotification $userNotification): Response
+    public function view(UserNotification $userNotification): Response
     {
         if (auth()->check()) {
             $this->userNotificationService->setUser(auth()->user());
         }
 
-        $this->authorize('update', [UserNotification::class, $userNotification]);
+        $this->authorize('view', [UserNotification::class, $userNotification]);
         $userNotification = $this->userNotificationService->read($userNotification);
 
         return $this->response(new UserNotificationResource($userNotification), '', Response::HTTP_ACCEPTED);

@@ -52,23 +52,17 @@ return new class() extends Migration {
                 ],
                 'created_at' => DT::utcNow(),
                 'updated_at' => DT::utcNow(),
-                'block_count' => 0,
                 'blocks' => [],
                 'deleted_at' => null,
                 'email' => 'support@aparlay.com',
                 'email_verified' => true,
-                'followed_hashtag_count' => 0,
                 'followed_hashtags' => [],
-                'follower_count' => 0,
                 'followers' => [],
-                'following_count' => 0,
                 'followings' => [],
                 'full_name' => 'Alua Support',
                 'gender' => 1,
                 'interested_in' => 1,
-                'like_count' => 0,
                 'likes' => [],
-                'media_count' => 0,
                 'medias' => [],
                 'phone_number' => null,
                 'phone_number_verified' => false,
@@ -105,6 +99,8 @@ return new class() extends Migration {
                         'medias' => 0,
                         'subscriptions' => 0,
                         'subscribers' => 0,
+                        'chat' => 0,
+                        'notifications' => 0,
                     ],
                 ],
                 'user_agents' => [],
@@ -125,11 +121,12 @@ return new class() extends Migration {
             ]);
         }
 
+        $aluaSupport = User::username('aluasupport')->first();
         foreach (Message::query()->where('created_by', null)->lazy() as $message) {
             $message->update(['created_by' => new ObjectId($aluaSupport->_id), 'created_at' => DT::utcNow()]);
 
             $lastMessage = $message->chatObj->last_message;
-            if ((string) $lastMessage['_id'] === (string) $message->_id) {
+            if (!empty($lastMessage) && (string) $lastMessage['_id'] === (string) $message->_id) {
                 $participants = $message->chatObj->participants;
                 $participants[] = [
                     '_id' => new ObjectId($aluaSupport->_id),

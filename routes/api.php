@@ -85,7 +85,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
         ->controller(UserNotificationController::class)->group(function () {
             /* Authentication Group with user prefix */
             Route::get('/', 'index')->name('index');
-            Route::put('/{userNotification}', 'update')->name('update');
+            Route::get('/{userNotification}', 'view')->name('view');
         });
 
     /* Authentication Group with me prefix */

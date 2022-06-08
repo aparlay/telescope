@@ -59,19 +59,19 @@
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
                                     <b>Medias</b>
-                                    <a class="float-right">{{ $user->media_count }}</a>
+                                    <a class="float-right">{{ $user->stats['counters']['medias'] }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Followers</b>
-                                    <a class="float-right">{{ $user->follower_count }}</a>
+                                    <a class="float-right">{{ $user->stats['counters']['followers'] }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Following</b>
-                                    <a class="float-right">{{ $user->following_count }}</a>
+                                    <a class="float-right">{{ $user->stats['counters']['followings'] }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Blocks</b>
-                                    <a class="float-right">{{ $user->block_count }}</a>
+                                    <a class="float-right">{{ $user->stats['counters']['blocks'] }}</a>
                                 </li>
                             </ul>
                             <div class="row">

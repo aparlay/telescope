@@ -54,12 +54,6 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property int         $visibility
  * @property int         $show_online_status
  * @property int         $interested_in
- * @property int         $block_count
- * @property int         $follower_count
- * @property int         $following_count
- * @property int         $like_count
- * @property int         $followed_hashtag_count
- * @property int         $media_count
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
  * @property array       $setting
@@ -155,12 +149,6 @@ class User extends Authenticatable implements JWTSubject
         'status',
         'visibility',
         'show_online_status',
-        'follower_count',
-        'following_count',
-        'block_count',
-        'followed_hashtag_count',
-        'like_count',
-        'media_count',
         'count_fields_updated_at',
         'blocks',
         'likes',
@@ -215,12 +203,6 @@ class User extends Authenticatable implements JWTSubject
         ],
         'email_verified' => false,
         'phone_number_verified' => false,
-        'follower_count' => 0,
-        'following_count' => 0,
-        'like_count' => 0,
-        'block_count' => 0,
-        'followed_hashtag_count' => 0,
-        'media_count' => 0,
         'scores' => [
             'sort' => 0,
             'risk' => 0,
@@ -246,6 +228,8 @@ class User extends Authenticatable implements JWTSubject
                 'medias' => 0,
                 'subscriptions' => 0,
                 'subscribers' => 0,
+                'chats' => 0,
+                'notifications' => 0,
             ],
         ],
     ];
@@ -267,12 +251,16 @@ class User extends Authenticatable implements JWTSubject
         'avatar' => 'string',
         'interested_in' => 'integer',
         'visibility' => 'integer',
-        'follower_count' => 'integer',
-        'following_count' => 'integer',
-        'like_count' => 'integer',
-        'block_count' => 'integer',
-        'followed_hashtag_count' => 'integer',
-        'media_count' => 'integer',
+        'stats.counters.followers' => 'integer',
+        'stats.counters.followings' => 'integer',
+        'stats.counters.likes' => 'integer',
+        'stats.counters.blocks' => 'integer',
+        'stats.counters.followed_hashtags' => 'integer',
+        'stats.counters.medias' => 'integer',
+        'stats.counters.subscriptions' => 'integer',
+        'stats.counters.subscribers' => 'integer',
+        'stats.counters.chats' => 'integer',
+        'stats.counters.notifications' => 'integer',
         'type' => 'integer',
         'verification_status' => 'integer',
     ];
@@ -333,8 +321,8 @@ class User extends Authenticatable implements JWTSubject
             'hashtags' => [],
             'score' => $this->scores['sort'],
             'country' => $this->country_alpha2,
-            'like_count' => $this->like_count,
             'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
+            'like_count' => $this->like_count,
             'visit_count' => 0,
             'comment_count' => 0,
             '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
@@ -820,5 +808,25 @@ class User extends Authenticatable implements JWTSubject
             UserNotificationCategory::SYSTEM->value => $this->setting['notifications']['news_and_updates'],
             default => false
         };
+    }
+
+    public function increaseStatCounter($type, $incr = 1)
+    {
+        $stats = $this->stats;
+        if (isset($stats['counters'][$type])) {
+            $stats['counters'][$type] += $incr;
+            $stats['counters'][$type] = max($stats['counters'][$type], 0);
+            $this->update(['stats' => $stats]);
+        }
+    }
+
+    public function setStatCounter($type, $count)
+    {
+        $stats = $this->stats;
+        if (isset($stats['counters'][$type])) {
+            $stats['counters'][$type] = $count;
+            $stats['counters'][$type] = max($stats['counters'][$type], 0);
+            $this->update(['stats' => $stats]);
+        }
     }
 }

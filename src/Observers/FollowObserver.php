@@ -45,7 +45,6 @@ class FollowObserver extends BaseModelObserver
     public function created($model): void
     {
         $followersCount = Follow::user($model->user['_id'])->count();
-        $model->userObj->follower_count = $followersCount;
         $model->userObj->addToSet('followers', [
             '_id' => new ObjectId($model->creator['_id']),
             'username' => $model->creator['username'],
@@ -55,10 +54,13 @@ class FollowObserver extends BaseModelObserver
             $model->userObj->count_fields_updated_at,
             ['followers' => DT::utcNow()]
         );
+
+        $stats = $model->userObj->stats;
+        $stats['counters']['followers'] = $followersCount;
+        $model->userObj->stats = $stats;
         $model->userObj->save();
 
         $followingCount = Follow::creator($model->creator['_id'])->count();
-        $model->creatorObj->following_count = $followingCount;
         $model->creatorObj->addToSet('followings', [
             '_id' => new ObjectId($model->user['_id']),
             'username' => $model->user['username'],
@@ -68,6 +70,10 @@ class FollowObserver extends BaseModelObserver
             $model->creatorObj->count_fields_updated_at,
             ['followings' => DT::utcNow()]
         );
+
+        $stats = $model->creatorObj->stats;
+        $stats['counters']['followings'] = $followingCount;
+        $model->creatorObj->stats = $stats;
         $model->creatorObj->save();
 
         // Reset the Redis cache
@@ -83,7 +89,6 @@ class FollowObserver extends BaseModelObserver
     public function deleted($model): void
     {
         $followersCount = Follow::user($model->user['_id'])->count();
-        $model->userObj->follower_count = $followersCount;
         $model->userObj->removeFromSet('followers', [
             '_id' => new ObjectId($model->creator['_id']),
             'username' => $model->creator['username'],
@@ -98,11 +103,9 @@ class FollowObserver extends BaseModelObserver
         $stats = $model->userObj->stats;
         $stats['counters']['followers'] = $followersCount;
         $model->userObj->stats = $stats;
-
         $model->userObj->save();
 
         $followingCount = Follow::creator($model->creator['_id'])->count();
-        $model->creatorObj->following_count = $followingCount;
         $model->creatorObj->removeFromSet('followings', [
             '_id' => new ObjectId($model->user['_id']),
             'username' => $model->user['username'],
