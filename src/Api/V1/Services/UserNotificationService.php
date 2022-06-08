@@ -54,7 +54,7 @@ class UserNotificationService
 
         if (in_array($data['category'], [UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value])) {
             $model = UserNotification::query()
-                ->entity($data['entity_id'], $data['entity_type'])
+                ->entity($data['entity._id'], $data['entity._type'])
                 ->user($this->getUser()->_id)
                 ->category($data['category'])
                 ->first();

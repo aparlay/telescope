@@ -8,6 +8,7 @@ use Aparlay\Core\Events\UserNotificationEvent;
 use Aparlay\Core\Models\User;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 final class UserNotificationChannel
@@ -24,10 +25,12 @@ final class UserNotificationChannel
     public function send(mixed $notifiable, Notification $notification)
     {
         $user = User::user($notification->user_id)->first();
+        Log::debug('UserNotificationChannel: send');
 
         $notificationDTO = UserNotificationDto::fromArray($notification->toArray($notifiable));
 
         if ($user->shouldNotify($notificationDTO->category)) {
+            Log::debug('UserNotificationChannel: should notify');
             $notificationService = app()->make(UserNotificationService::class);
             $notificationService->setUser($user);
             $userNotification = $notificationService->create($notificationDTO);
