@@ -114,7 +114,7 @@ class UserDocumentService extends AbstractService
             ],
         ]);
 
-        if (\App::environment('testing')) {
+        if (config('app.is_testing')) {
             return $userDocument;
         }
 
