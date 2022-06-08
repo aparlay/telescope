@@ -79,4 +79,31 @@ class UserNotificationQueryBuilder extends EloquentQueryBuilder
 
         return $this->where('entity._id', $entityId)->where('entity._type', $entityType);
     }
+
+    /**
+     * @param  string|ObjectId  $tipId
+     * @return self
+     */
+    public function tipEntity(ObjectId|string $tipId): self
+    {
+        return $this->entity($tipId, 'Tip');
+    }
+
+    /**
+     * @param  string|ObjectId  $mediaId
+     * @return self
+     */
+    public function mediaEntity(ObjectId|string $mediaId): self
+    {
+        return $this->entity($mediaId, 'Media');
+    }
+
+    /**
+     * @param  string|ObjectId  $userId
+     * @return self
+     */
+    public function userEntity(ObjectId|string $userId): self
+    {
+        return $this->entity($userId, 'User');
+    }
 }
