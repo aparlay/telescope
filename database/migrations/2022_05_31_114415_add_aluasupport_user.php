@@ -126,7 +126,7 @@ return new class() extends Migration {
             $message->update(['created_by' => new ObjectId($aluaSupport->_id), 'created_at' => DT::utcNow()]);
 
             $lastMessage = $message->chatObj->last_message;
-            if (!empty($lastMessage) && (string) $lastMessage['_id'] === (string) $message->_id) {
+            if (! empty($lastMessage) && (string) $lastMessage['_id'] === (string) $message->_id) {
                 $participants = $message->chatObj->participants;
                 $participants[] = [
                     '_id' => new ObjectId($aluaSupport->_id),

@@ -10,13 +10,12 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\UserNotification;
+use function Clue\StreamFilter\fun;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
-
-use function Clue\StreamFilter\fun;
 
 class UserNotificationService
 {
