@@ -155,6 +155,9 @@ class UserVerificationModal extends Component
             }
         }
 
+        \Log::error($newVerificationStatus);
+        \Log::error($user->verification_status);
+        \Log::error($shouldSendNotification);
         if ($shouldSendNotification) {
             $message = match ((int) $newVerificationStatus) {
                 UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
