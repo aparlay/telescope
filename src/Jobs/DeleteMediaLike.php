@@ -54,7 +54,6 @@ class DeleteMediaLike implements ShouldQueue
     {
         $this->onQueue('low');
         $this->mediaId = $mediaId;
-        Media::findOrFail(new ObjectId($mediaId));
     }
 
     /**
@@ -63,24 +62,26 @@ class DeleteMediaLike implements ShouldQueue
     public function handle(): void
     {
         MediaLike::media($this->mediaId)->delete();
-        $media = Media::findOrFail(new ObjectId($this->mediaId));
-        $user = $media->userObj;
+        if (($media = Media::find(new ObjectId($this->mediaId))) !== null) {
+            $user = $media->userObj;
 
-        $likeCount = MediaLike::user($media->creator['_id'])->count();
-        $user->like_count = $likeCount;
-        $user->removeFromSet('likes', [
-            '_id' => new ObjectId($media->creator['_id']),
-            'username' => $media->creator['username'],
-            'avatar' => $media->creator['avatar'],
-        ]);
-        $user->count_fields_updated_at = array_merge(
-            $user->count_fields_updated_at,
-            ['likes' => DT::utcNow()]
-        );
-        $user->save();
+            $likeCount = MediaLike::user($media->creator['_id'])->count();
+            $user->like_count = $likeCount;
+            $user->removeFromSet('likes', [
+                '_id' => new ObjectId($media->creator['_id']),
+                'username' => $media->creator['username'],
+                'avatar' => $media->creator['avatar'],
+            ]);
+            $user->count_fields_updated_at = array_merge(
+                $user->count_fields_updated_at,
+                ['likes' => DT::utcNow()]
+            );
+            $user->save();
 
-        // Reset the Redis cache
-        MediaLike::cacheByUserId((string) $media->creator['_id'], true);
+            // Reset the Redis cache
+            MediaLike::cacheByUserId((string) $media->creator['_id'], true);
+        }
+
     }
 
     public function failed(Throwable $exception): void

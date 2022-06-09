@@ -20,9 +20,6 @@ use Aparlay\Core\Admin\Livewire\NotesTable;
 use Aparlay\Core\Admin\Livewire\SettingsTable;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
-use Aparlay\Core\Admin\Providers\AdminServiceProvider;
-use Aparlay\Core\Admin\Providers\EventServiceProvider;
-use Aparlay\Core\Api\V1\Providers\AuthServiceProvider;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
 use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CleanupCommand;
@@ -63,9 +60,11 @@ class CoreServiceProvider extends ServiceProvider
         if ($this->app->isLocal()) {
             $this->app->register(IdeHelperServiceProvider::class);
         }
-        $this->app->register(AuthServiceProvider::class);
-        $this->app->register(AdminServiceProvider::class);
-        $this->app->register(EventServiceProvider::class);
+        $this->app->register(\Aparlay\Core\Api\V1\Providers\AuthServiceProvider::class);
+        $this->app->register(\Aparlay\Core\Api\V1\Providers\EventServiceProvider::class);
+        $this->app->register(\Aparlay\Core\Admin\Providers\AdminServiceProvider::class);
+        $this->app->register(\Aparlay\Core\Admin\Providers\AuthServiceProvider::class);
+        $this->app->register(\Aparlay\Core\Admin\Providers\EventServiceProvider::class);
 
         $this->mergeConfig();
     }
