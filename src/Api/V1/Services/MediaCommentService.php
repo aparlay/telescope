@@ -19,7 +19,7 @@ class MediaCommentService
     public function list(Media $media)
     {
         return MediaComment::query()
-            ->with('replies')
+            //->with('replies')
             ->media($media->_id)
             ->paginate();
     }

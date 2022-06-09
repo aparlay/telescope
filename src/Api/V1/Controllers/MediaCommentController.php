@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Requests\MediaCommentRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCommentCollection;
 use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Services\MediaCommentService;
@@ -23,7 +24,6 @@ class MediaCommentController extends Controller
      */
     public function list(Media $media)
     {
-
         $this->authorize('view', [MediaComment::class, $media]);
         $response = $this->mediaCommentService->list($media);
         return $this->response(new MediaCommentCollection($response), '',);
@@ -33,32 +33,52 @@ class MediaCommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Media $media): Response
+    public function store(MediaCommentRequest $request, Media $media): Response
     {
-        //$this->authorize('create', [MediaComment::class, $media]);
+        $this->authorize('create', [MediaComment::class, $media]);
 
         if (auth()->check()) {
             $this->mediaCommentService->setUser(auth()->user());
         }
 
-        $text = request()->input('text');
-        $parentId = request()->input('parent_id');
+        $text = $request->input('text');
+        $parentId = $request->input('parent_id');
 
         $response = $this->mediaCommentService->create($media, $text, $parentId);
         return $this->response(new MediaCommentResource($response), '',);
     }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function reply(MediaCommentRequest $request, MediaComment $mediaComment): Response
+    {
+        $this->authorize('create', [MediaComment::class, $mediaComment->mediaObj]);
+
+        if (auth()->check()) {
+            $this->mediaCommentService->setUser(auth()->user());
+        }
+
+        $text = $request->input('text');
+        $parentId = $request->input('parent_id');
+
+        $response = $this->mediaCommentService->create($mediaComment->mediaObj, $text, $parentId);
+        return $this->response(new MediaCommentResource($response), '',);
+    }
+
+
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(MediaComment $mediaComment): Response
     {
-        //$this->authorize('delete', [MediaComment::class, $mediaComment]);
+        $this->authorize('delete', [MediaComment::class, $mediaComment]);
 
         if (auth()->check()) {
             $this->mediaCommentService->setUser(auth()->user());
         }
 
-        // Unlike the media or throw exception if not liked
         $response = $this->mediaCommentService->delete($mediaComment);
 
         return $this->response($response, '', Response::HTTP_NO_CONTENT);
