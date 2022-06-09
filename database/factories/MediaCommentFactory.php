@@ -27,7 +27,7 @@ class MediaCommentFactory extends Factory
             'media_id' => function (array $attributes) {
                 return new ObjectId($attributes['media_id']);
             },
-            'user_id' => User::factory()->create()->_id,
+            'user_id' => new ObjectId(User::factory()->create()->_id),
             'text' => $this->faker->realText(rand(50, 200)),
             'creator' => function (array $attributes) {
                 $user = User::user($attributes['user_id'])->first();

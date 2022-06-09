@@ -23,8 +23,8 @@ class MediaCommentController extends Controller
      */
     public function list(Media $media)
     {
-        $this->authorize('view', [MediaComment::class, $media]);
 
+        $this->authorize('view', [MediaComment::class, $media]);
         $response = $this->mediaCommentService->list($media);
         return $this->response(new MediaCommentCollection($response), '',);
     }
@@ -35,7 +35,7 @@ class MediaCommentController extends Controller
      */
     public function store(Media $media): Response
     {
-        $this->authorize('create', [MediaComment::class, $media]);
+        //$this->authorize('create', [MediaComment::class, $media]);
 
         if (auth()->check()) {
             $this->mediaCommentService->setUser(auth()->user());
@@ -52,7 +52,7 @@ class MediaCommentController extends Controller
      */
     public function destroy(MediaComment $mediaComment): Response
     {
-        $this->authorize('delete', [MediaComment::class, $mediaComment]);
+        //$this->authorize('delete', [MediaComment::class, $mediaComment]);
 
         if (auth()->check()) {
             $this->mediaCommentService->setUser(auth()->user());

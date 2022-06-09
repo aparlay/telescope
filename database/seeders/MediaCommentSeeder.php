@@ -20,19 +20,27 @@ class MediaCommentSeeder extends Seeder
      */
     public function run(): void
     {
+
+        $users = User::query()->limit(5)->get();
+        $medias = User::query()->limit(10)->get();
+
         MediaComment::factory()
             ->count(50)
-            ->for(User::factory()->create(), 'userObj')
-            ->for(Media::factory()->for(User::factory()->create(), 'userObj')->create(), 'mediaObj')
+            ->state(function (array $attributes) use ($users, $medias) {
+                return [
+                    'media_id' => new ObjectId($medias->random()->_id),
+                    'user_id' => new ObjectId($users->random()->_id),
+                ];
+            })
             ->create();
 
         foreach (MediaComment::lazy() as $mediaComment) {
             MediaComment::factory()
                 ->count(rand(3, 5))
-                ->for(User::factory()->create(), 'userObj')
-                ->for(Media::factory()->for(User::factory()->create(), 'userObj')->create(), 'mediaObj')
-                ->state(function (array $attributes) use ($mediaComment) {
+                ->state(function (array $attributes) use ($mediaComment, $users, $medias) {
                     return [
+                        'media_id' => new ObjectId($medias->random()->_id),
+                        'user_id' => new ObjectId($users->random()->_id),
                         'parent_id' => new ObjectId($mediaComment->_id),
                     ];
                 })

@@ -9,5 +9,5 @@ use Aparlay\Core\Api\V1\Models\MediaComment;
  */
 class MediaCommentCollection extends AbstractResourceCollection
 {
-    public $collects = MediaComment::class;
+    public $collects = MediaCommentResource::class;
 }

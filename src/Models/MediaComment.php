@@ -4,6 +4,7 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaCommentFactory;
+use Aparlay\Core\Models\Queries\MediaCommentQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,10 +34,6 @@ use MongoDB\BSON\UTCDateTime;
 class MediaComment extends BaseModel
 {
     use HasFactory;
-
-    public $withCount = [
-        'replies'
-    ];
 
 
     /**
@@ -93,6 +90,16 @@ class MediaComment extends BaseModel
     protected static function newFactory(): Factory
     {
         return MediaCommentFactory::new();
+    }
+
+
+    /**
+     * @param $query
+     * @return MediaCommentQueryBuilder
+     */
+    public function newEloquentBuilder($query): MediaCommentQueryBuilder
+    {
+        return new MediaCommentQueryBuilder($query);
     }
 
     /**

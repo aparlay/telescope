@@ -19,7 +19,8 @@ class MediaCommentService
     public function list(Media $media)
     {
         return MediaComment::query()
-            ->where('media_id', $media->_id)
+            ->with('replies')
+            ->media($media->_id)
             ->paginate();
     }
 
@@ -45,7 +46,7 @@ class MediaCommentService
             ],
         ]);
 
-        if ($parent) {
+        if ($parentId) {
             $mediaComment->parent_id = new ObjectId($parent->_id);
         }
 
