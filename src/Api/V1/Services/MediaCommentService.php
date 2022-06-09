@@ -11,7 +11,6 @@ class MediaCommentService
 {
     use HasUserTrait;
 
-
     /**
      * @param Media $media
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -22,8 +21,6 @@ class MediaCommentService
             ->where('media_id', $media->_id)
             ->paginate();
     }
-
-
 
     /**
      * @param Media $media
@@ -50,8 +47,10 @@ class MediaCommentService
         }
 
         $mediaComment->save();
+
         return $mediaComment;
     }
+
     /**
      * @param MediaComment $mediaComment
      * @return mixed
@@ -60,5 +59,4 @@ class MediaCommentService
     {
         return $mediaComment->delete();
     }
-
 }

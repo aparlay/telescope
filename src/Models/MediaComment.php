@@ -35,9 +35,8 @@ class MediaComment extends BaseModel
     use HasFactory;
 
     public $withCount = [
-        'replies'
+        'replies',
     ];
-
 
     /**
      * The collection associated with the model.

@@ -31,6 +31,7 @@ class MediaCommentFactory extends Factory
             'text' => $this->faker->realText(rand(50, 200)),
             'creator' => function (array $attributes) {
                 $user = User::user($attributes['user_id'])->first();
+
                 return [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
