@@ -164,6 +164,7 @@ class UserVerificationModal extends Component
                 UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
                 default => ''
             };
+            \Log::error($message);
 
             if ($message) {
                 $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
