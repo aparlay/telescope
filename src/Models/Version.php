@@ -9,21 +9,13 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
-/**
- *
- */
 class Version extends BaseModel
 {
     use HasFactory;
     use Notifiable;
 
-    /**
-     *
-     */
     public const OS_ANDROID = 'android';
-    /**
-     *
-     */
+
     public const OS_IOS = 'ios';
 
     /**
