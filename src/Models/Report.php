@@ -5,7 +5,10 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Database\Factories\ReportFactory;
 use Aparlay\Core\Models\Enums\ReportStatus;
 use Aparlay\Core\Models\Enums\ReportType;
+use Aparlay\Core\Models\Queries\ReportQueryBuilder;
+use Aparlay\Core\Models\Queries\UserNotificationQueryBuilder;
 use Aparlay\Core\Models\Scopes\ReportScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -37,7 +40,6 @@ class Report extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use ReportScope;
 
     /**
      * The collection associated with the model.
@@ -90,6 +92,25 @@ class Report extends BaseModel
     protected static function newFactory(): Factory
     {
         return ReportFactory::new();
+    }
+
+    /**
+     * @return ReportQueryBuilder|Builder
+     */
+    public static function query(): ReportQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return ReportQueryBuilder
+     */
+    public function newEloquentBuilder($query): ReportQueryBuilder
+    {
+        return new ReportQueryBuilder($query);
     }
 
     /**

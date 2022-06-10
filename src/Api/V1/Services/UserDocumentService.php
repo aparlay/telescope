@@ -34,7 +34,8 @@ class UserDocumentService extends AbstractService
 
     public function index()
     {
-        $documents = UserDocument::creator($this->getUser()->_id)
+        $documents = UserDocument::query()
+            ->creator($this->getUser()->_id)
             ->with('alertObjs')
             ->oldest('created_at')
             ->get();

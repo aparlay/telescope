@@ -87,7 +87,8 @@ class ReportTest extends ApiTestCase
      */
     public function guestReportMedia()
     {
-        $media = Media::factory()->for(User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]), 'userObj')
+        $media = Media::factory()
+            ->for(User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]), 'userObj')
             ->create(['status'=> MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('POST', '/v1/media/'.$media->_id.'/report', [
