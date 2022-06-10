@@ -25,15 +25,15 @@ class MediaCommentResource extends JsonResource
      */
     public function toArray($request)
     {
-        $data =  [
+        $data = [
             '_id' => (string) $this->_id,
-            'parent_id' => $this->parent_id ? (string) $this->parent_id:  null,
+            'parent_id' => $this->parent_id ? (string) $this->parent_id : null,
             'media_id' => (string) $this->media_id,
             'text' => $this->text,
             $this->mergeWhen(
-                !$this->parent,
-                fn() => [
-                    'replies' => new MediaCommentReplyCollection($this->lastRepliesObjs)
+                ! $this->parent,
+                fn () => [
+                    'replies' => new MediaCommentReplyCollection($this->lastRepliesObjs),
                 ]
             ),
 

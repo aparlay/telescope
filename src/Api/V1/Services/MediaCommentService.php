@@ -25,15 +25,12 @@ class MediaCommentService
             ->paginate();
     }
 
-
     public function listReplies(MediaComment $mediaComment)
     {
         return MediaComment::query()
             ->parent($mediaComment->_id)
             ->paginate();
     }
-
-
 
     /**
      * @param Media $media
@@ -57,7 +54,7 @@ class MediaCommentService
 
         if ($parent) {
             $mediaComment->parent = [
-                '_id' => new ObjectId($parent->_id)
+                '_id' => new ObjectId($parent->_id),
             ];
         }
 

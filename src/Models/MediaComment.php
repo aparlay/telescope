@@ -35,7 +35,6 @@ class MediaComment extends BaseModel
 {
     use HasFactory;
 
-
     /**
      * The collection associated with the model.
      *
@@ -92,7 +91,6 @@ class MediaComment extends BaseModel
         return MediaCommentFactory::new();
     }
 
-
     /**
      * @param $query
      * @return MediaCommentQueryBuilder
@@ -104,7 +102,7 @@ class MediaComment extends BaseModel
 
     /**
      * // @todo rework with relation
-     * // @todo this relation doesn't work return $this->hasMany(self::class, 'parent_id');
+     * // @todo this relation doesn't work return $this->hasMany(self::class, 'parent_id');.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany|\Jenssegers\Mongodb\Relations\HasMany
      */

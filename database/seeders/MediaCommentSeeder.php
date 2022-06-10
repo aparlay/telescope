@@ -20,7 +20,6 @@ class MediaCommentSeeder extends Seeder
      */
     public function run(): void
     {
-
         $users = User::query()->limit(5)->get();
         $medias = User::query()->limit(10)->get();
 
