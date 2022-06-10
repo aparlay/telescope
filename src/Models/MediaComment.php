@@ -101,9 +101,6 @@ class MediaComment extends BaseModel
     }
 
     /**
-     * // @todo rework with relation
-     * // @todo this relation doesn't work return $this->hasMany(self::class, 'parent_id');.
-     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany|\Jenssegers\Mongodb\Relations\HasMany
      */
     public function lastRepliesObjs()
