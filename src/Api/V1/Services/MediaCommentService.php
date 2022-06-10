@@ -11,6 +11,7 @@ class MediaCommentService
 {
     use HasUserTrait;
 
+    const PER_PAGE = 10;
     /**
      * @param Media $media
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -22,14 +23,14 @@ class MediaCommentService
             ->whereNull('parent')
             ->media($media->_id)
             ->latest()
-            ->paginate();
+            ->paginate(self::PER_PAGE);
     }
 
     public function listReplies(MediaComment $mediaComment)
     {
         return MediaComment::query()
             ->parent($mediaComment->_id)
-            ->paginate();
+            ->paginate(self::PER_PAGE);
     }
 
     /**
