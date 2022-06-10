@@ -51,7 +51,7 @@ class MediaComment extends BaseModel
     protected $fillable = [
         '_id',
         'media_id',
-        'parent_id',
+        'parent',
         'text',
         'user_id',
         'creator',
@@ -103,11 +103,16 @@ class MediaComment extends BaseModel
     }
 
     /**
+     * // @todo rework with relation
+     * // @todo this relation doesn't work return $this->hasMany(self::class, 'parent_id');
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany|\Jenssegers\Mongodb\Relations\HasMany
      */
-    public function replies()
+    public function lastRepliesObjs()
     {
-        return $this->hasMany(self::class, 'parent_id');
+        return $this->hasMany(self::class, 'parent._id')
+            ->limit(10)
+            ->latest();
     }
 
     /**

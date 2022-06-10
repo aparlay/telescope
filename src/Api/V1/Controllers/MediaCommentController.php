@@ -30,6 +30,14 @@ class MediaCommentController extends Controller
     }
 
 
+    public function listReplies(MediaComment $mediaComment)
+    {
+        $this->authorize('view', [MediaComment::class, $mediaComment->mediaObj]);
+        $response = $this->mediaCommentService->listReplies($mediaComment);
+        return $this->response(new MediaCommentCollection($response), '',);
+    }
+
+
     /**
      * Store a newly created resource in storage.
      */
@@ -60,9 +68,8 @@ class MediaCommentController extends Controller
         }
 
         $text = $request->input('text');
-        $parentId = $request->input('parent_id');
 
-        $response = $this->mediaCommentService->create($mediaComment->mediaObj, $text, $parentId);
+        $response = $this->mediaCommentService->create($mediaComment->mediaObj, $text, $mediaComment);
         return $this->response(new MediaCommentResource($response), '',);
     }
 

@@ -42,9 +42,9 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
 
+            Route::get('{mediaComment}/replies', [MediaCommentController::class, 'listReplies'])->name('comment.replies');
             Route::post('{media}/comment', [MediaCommentController::class, 'store'])->name('comment.create');
             Route::post('{mediaComment}/reply', [MediaCommentController::class, 'reply'])->name('comment.reply');
-
             Route::delete('/comment/{mediaComment}', [MediaCommentController::class, 'destroy'])->name('comment.delete');
             Route::get('/{media}/comment', [MediaCommentController::class, 'list'])->name('comment.list');
         });

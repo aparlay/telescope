@@ -18,17 +18,29 @@ class MediaCommentService
     public function list(Media $media)
     {
         return MediaComment::query()
-            //->with('replies')
+            ->with('lastRepliesObjs')
+            ->whereNull('parent')
             ->media($media->_id)
+            ->latest()
             ->paginate();
     }
+
+
+    public function listReplies(MediaComment $mediaComment)
+    {
+        return MediaComment::query()
+            ->parent($mediaComment->_id)
+            ->paginate();
+    }
+
+
 
     /**
      * @param Media $media
      * @param $text
      * @return MediaComment
      */
-    public function create(Media $media, $text, MediaComment $parentId = null): MediaComment
+    public function create(Media $media, $text, MediaComment $parent = null): MediaComment
     {
         $creator = $this->getUser();
 
@@ -43,8 +55,10 @@ class MediaCommentService
             ],
         ]);
 
-        if ($parentId) {
-            $mediaComment->parent_id = new ObjectId($parent->_id);
+        if ($parent) {
+            $mediaComment->parent = [
+                '_id' => new ObjectId($parent->_id)
+            ];
         }
 
         $mediaComment->save();

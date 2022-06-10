@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Aparlay\Core\Admin\Resources\UserResource;
 use Aparlay\Core\Api\V1\Models\MediaComment;
+use Aparlay\Core\Api\V1\Traits\FilterableResourceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,6 +13,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class MediaCommentResource extends JsonResource
 {
+    use FilterableResourceTrait;
+
     /**
      * Transform the resource into an array.
      *
@@ -21,15 +25,23 @@ class MediaCommentResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data =  [
             '_id' => (string) $this->_id,
             'parent_id' => $this->parent_id ? (string) $this->parent_id:  null,
             'media_id' => (string) $this->media_id,
-            'replies' => $this->mergeWhen(!$this->parent_id, new MediaCommentReplyCollection($this->replies)),
             'text' => $this->text,
+            $this->mergeWhen(
+                !$this->parent,
+                fn() => [
+                    'replies' => new MediaCommentReplyCollection($this->lastRepliesObjs)
+                ]
+            ),
+
             'user_id' => (string) $this->user_id,
             'creator' => $this->creator,
             'created_at' => $this->created_at->valueOf(),
         ];
+
+        return $this->filtrateFields($this->filter($data));
     }
 }
