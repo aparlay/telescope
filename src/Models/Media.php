@@ -198,7 +198,7 @@ class Media extends BaseModel
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->visibility == MediaVisibility::PUBLIC->value;
+        return $this->visibility == MediaVisibility::PUBLIC->value && $this->status === MediaStatus::CONFIRMED->value;
     }
 
     /**
