@@ -7,9 +7,6 @@ use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
 
-/**
- *
- */
 class UserDocumentQueryBuilder extends EloquentQueryBuilder
 {
     use SimpleUserCreatorQuery;

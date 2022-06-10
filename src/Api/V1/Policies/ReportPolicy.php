@@ -21,7 +21,7 @@ class ReportPolicy
      */
     public function user(User | Authenticatable $user, User $reportUser): Response
     {
-        if (!Gate::forUser($user)->denies('interact', $reportUser->_id)) {
+        if (! Gate::forUser($user)->denies('interact', $reportUser->_id)) {
             return Response::allow();
         }
 
@@ -37,7 +37,7 @@ class ReportPolicy
      */
     public function media(User | Authenticatable $user, User $mediaCreator): Response
     {
-        if (!Gate::forUser($user)->denies('interact', $mediaCreator->_id)) {
+        if (! Gate::forUser($user)->denies('interact', $mediaCreator->_id)) {
             return Response::allow();
         }
 

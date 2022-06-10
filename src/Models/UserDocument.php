@@ -35,7 +35,6 @@ use MongoDB\BSON\ObjectId;
  * @property ObjectId $updated_by
  * @property string $created_at
  * @property string $updated_at
- *
  */
 class UserDocument extends BaseModel
 {
