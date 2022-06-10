@@ -41,7 +41,7 @@ class MediaCommentSeeder extends Seeder
                         'media_id' => new ObjectId($medias->random()->_id),
                         'user_id' => new ObjectId($users->random()->_id),
                         'parent' => [
-                            '_id' => new ObjectId($mediaComment->_id)
+                            '_id' => new ObjectId($mediaComment->_id),
                         ],
                     ];
                 })

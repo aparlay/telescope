@@ -14,8 +14,7 @@ class MediaCommentController extends Controller
 {
     public function __construct(
         private MediaCommentService $mediaCommentService
-    )
-    {
+    ) {
     }
 
     /**
