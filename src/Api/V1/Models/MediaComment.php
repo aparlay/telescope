@@ -11,7 +11,6 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  */
 class MediaComment extends MediaCommentBase
 {
-
     /**
      * Get the media associated with the alert.
      */

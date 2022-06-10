@@ -3,19 +3,20 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Requests\MediaCommentRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCommentCollection;
 use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Services\MediaCommentService;
-use Aparlay\Core\Api\V1\Models\MediaComment;
 use Illuminate\Http\Response;
 
 class MediaCommentController extends Controller
 {
-
     public function __construct(
-        private MediaCommentService $mediaCommentService)
-    {}
+        private MediaCommentService $mediaCommentService
+    )
+    {
+    }
 
     /**
      * @param Media $media
@@ -26,17 +27,17 @@ class MediaCommentController extends Controller
     {
         $this->authorize('view', [MediaComment::class, $media]);
         $response = $this->mediaCommentService->list($media);
-        return $this->response(new MediaCommentCollection($response), '',);
-    }
 
+        return $this->response(new MediaCommentCollection($response), '', );
+    }
 
     public function listReplies(MediaComment $mediaComment)
     {
         $this->authorize('view', [MediaComment::class, $mediaComment->mediaObj]);
         $response = $this->mediaCommentService->listReplies($mediaComment);
-        return $this->response(new MediaCommentCollection($response), '',);
-    }
 
+        return $this->response(new MediaCommentCollection($response), '', );
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -53,7 +54,8 @@ class MediaCommentController extends Controller
         $parentId = $request->input('parent_id');
 
         $response = $this->mediaCommentService->create($media, $text, $parentId);
-        return $this->response(new MediaCommentResource($response), '',);
+
+        return $this->response(new MediaCommentResource($response), '', );
     }
 
     /**
@@ -70,10 +72,9 @@ class MediaCommentController extends Controller
         $text = $request->input('text');
 
         $response = $this->mediaCommentService->create($mediaComment->mediaObj, $text, $mediaComment);
-        return $this->response(new MediaCommentResource($response), '',);
+
+        return $this->response(new MediaCommentResource($response), '', );
     }
-
-
 
     /**
      * Remove the specified resource from storage.
