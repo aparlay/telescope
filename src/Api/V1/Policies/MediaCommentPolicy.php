@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Policies;
 
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
@@ -51,14 +52,15 @@ class MediaCommentPolicy
      * @param  Media  $media
      * @return Response
      */
-    public function delete(User | Authenticatable $user, Media $media)
+    public function delete(User | Authenticatable $user, MediaComment $mediaComment)
     {
         $userId = $user?->_id;
 
-        if ($userId === null || (string) $media->creator['_id'] !== (string) $userId) {
-            return Response::deny(__('You can only delete media that you\'ve created.'));
+        if ($userId === null || (string) $mediaComment->creator['_id'] !== (string) $userId) {
+            return Response::deny(__('You can only delete comment that you\'ve created.'));
         }
 
+        $media = $mediaComment->mediaObj;
         $isBlocked = Block::select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
         if ($isBlocked) {
             return Response::deny(__('You cannot delete comment for this video at the moment.'));

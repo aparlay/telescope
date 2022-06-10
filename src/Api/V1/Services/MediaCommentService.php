@@ -73,6 +73,11 @@ class MediaCommentService
      */
     public function delete(MediaComment $mediaComment)
     {
+        if ($mediaComment->parentObj) {
+            $mediaComment->parentObj->replies_count--;
+            $mediaComment->parentObj->save();
+        }
+
         return $mediaComment->delete();
     }
 }

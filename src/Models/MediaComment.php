@@ -113,6 +113,11 @@ class MediaComment extends BaseModel
             ->latest();
     }
 
+    public function parentObj()
+    {
+        return $this->belongsTo(self::class, 'parent._id');
+    }
+
     /**
      * Get the user associated with the alert.
      */
