@@ -12,6 +12,7 @@ class MediaCommentService
     use HasUserTrait;
 
     const PER_PAGE = 10;
+
     /**
      * @param Media $media
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
