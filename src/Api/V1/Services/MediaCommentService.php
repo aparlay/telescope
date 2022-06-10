@@ -58,6 +58,8 @@ class MediaCommentService
             $mediaComment->parent = [
                 '_id' => new ObjectId($parent->_id),
             ];
+            $parent->replies_count++;
+            $parent->save();
         }
 
         $mediaComment->save();

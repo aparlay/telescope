@@ -30,13 +30,14 @@ class MediaCommentResource extends JsonResource
             'parent_id' => $this->parent_id ? (string) $this->parent_id : null,
             'media_id' => (string) $this->media_id,
             'text' => $this->text,
+            'likes_count' => $this->likes_count ?? 0,
             $this->mergeWhen(
                 ! $this->parent,
                 fn () => [
+                    'replies_count' => $this->replies_count,
                     'replies' => new MediaCommentReplyCollection($this->lastRepliesObjs),
                 ]
             ),
-
             'user_id' => (string) $this->user_id,
             'creator' => $this->creator,
             'created_at' => $this->created_at->valueOf(),
