@@ -57,7 +57,6 @@ class MediaCommentController extends Controller
         return $this->response(new MediaCommentResource($response), '', );
     }
 
-
     /**
      * @param MediaCommentRequest $request
      * @param MediaComment $mediaComment
