@@ -19,7 +19,7 @@ class WebhookController extends Controller
         $appSecret = config('broadcasting.broadcaster.secret');
 
         $webhookSignature = $request->header('X-PUSHER-SIGNATURE', 'default');
-        $expectedSignature = hash_hmac( 'sha256', $request->getContent(), $appSecret, false );
+        $expectedSignature = hash_hmac('sha256', $request->getContent(), $appSecret, false);
 
         abort_unless($webhookSignature === $expectedSignature, 401);
 
@@ -27,7 +27,7 @@ class WebhookController extends Controller
             if (isset($event->name, $event->user_id, $event->chat_id, $event->message_id)) {
                 PusherClientEvent::dispatch($event->name, $event);
             } else {
-                \Log::debug('New Pusher Client Event delivered with: ' . json_encode($event));
+                \Log::debug('New Pusher Client Event delivered with: '.json_encode($event));
             }
         }
 
