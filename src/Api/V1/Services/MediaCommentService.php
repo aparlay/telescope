@@ -56,7 +56,7 @@ class MediaCommentService
 
         if ($replyTo) {
             $mediaComment->reply_to = [
-                '_id' => new ObjectId($replyTo->_id)
+                '_id' => new ObjectId($replyTo->_id),
             ];
 
             if ($replyTo->parentObj) {
