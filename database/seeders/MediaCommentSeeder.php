@@ -20,7 +20,7 @@ class MediaCommentSeeder extends Seeder
      */
     public function run(): void
     {
-        MediaComment::truncate();;
+        MediaComment::truncate();
 
         $users = User::query()->limit(5)->get();
         $medias = User::query()->limit(10)->get();
@@ -56,6 +56,5 @@ class MediaCommentSeeder extends Seeder
             $mediaComment->replies_count = $rand;
             $mediaComment->save();
         }
-
     }
 }
