@@ -23,15 +23,16 @@ class MediaCommentService
             ->with(['lastRepliesObjs', 'parentObj', 'replyToObj'])
             ->whereNull('parent')
             ->media($media->_id)
-            ->latest()
-            ->paginate(self::PER_PAGE);
+            ->latest('_id')
+            ->cursorPaginate(self::PER_PAGE);
     }
 
     public function listReplies(MediaComment $mediaComment)
     {
         return MediaComment::query()
             ->parent($mediaComment->_id)
-            ->paginate(self::PER_PAGE);
+            ->latest('_id')
+            ->cursorPaginate(self::PER_PAGE);
     }
 
     /**
