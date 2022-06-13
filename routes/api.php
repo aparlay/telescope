@@ -13,6 +13,7 @@ use Aparlay\Core\Api\V1\Controllers\UserController;
 use Aparlay\Core\Api\V1\Controllers\UserDocumentController;
 use Aparlay\Core\Api\V1\Controllers\UserNotificationController;
 use Aparlay\Core\Api\V1\Controllers\VersionController;
+use Aparlay\Core\Api\V1\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -135,3 +136,5 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
 Route::get('/metrics', [SiteController::class, 'metrics'])
     ->name('site.metrics')
     ->withoutMiddleware(['device-id']);
+
+Route::post('/v1/webhook/pusher', [WebhookController::class, 'pusher'])->name('webhook-pusher');
