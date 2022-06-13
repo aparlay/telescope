@@ -11,8 +11,9 @@ use Illuminate\Http\Response;
 class WebhookController extends Controller
 {
     const PUSHER_CLIENT_EVENTS = [
-        'chat-message-read'
+        'chat-message-read',
     ];
+
     /**
      * Display a listing of the resource.
      */
