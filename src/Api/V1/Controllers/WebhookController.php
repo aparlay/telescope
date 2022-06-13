@@ -10,6 +10,9 @@ use Illuminate\Http\Response;
 
 class WebhookController extends Controller
 {
+    const PUSHER_CLIENT_EVENTS = [
+        'chat-message-read'
+    ];
     /**
      * Display a listing of the resource.
      */
@@ -24,9 +27,8 @@ class WebhookController extends Controller
         abort_unless($webhookSignature === $expectedSignature, 401);
 
         foreach ($request->input('events') as $event) {
-            if (isset($event->name, $event->user_id, $event->chat_id, $event->message_id)) {
-                PusherClientEvent::dispatch($event->name, $event);
-            } else {
+            if (in_array($event->name, self::PUSHER_CLIENT_EVENTS, true)) {
+                PusherClientEvent::dispatch($event);
                 \Log::debug('New Pusher Client Event delivered with: '.json_encode($event));
             }
         }
