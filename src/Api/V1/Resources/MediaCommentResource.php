@@ -40,7 +40,7 @@ class MediaCommentResource extends JsonResource
                 ]
             ),
             $this->mergeWhen(
-                !empty($this->parentObj),
+                ! empty($this->parentObj),
                 fn () => [
                     'reply_to_user' => $this->replyToObj->creator,
                 ]
