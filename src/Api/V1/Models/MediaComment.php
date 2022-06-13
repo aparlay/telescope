@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Models;
 
-use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Models\MediaComment as MediaCommentBase;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 

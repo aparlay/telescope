@@ -20,7 +20,7 @@ class MediaCommentService
     public function list(Media $media)
     {
         return MediaComment::query()
-            ->with('lastRepliesObjs')
+            ->with(['lastRepliesObjs', 'parentObj', 'replyToObj'])
             ->whereNull('parent')
             ->media($media->_id)
             ->latest()

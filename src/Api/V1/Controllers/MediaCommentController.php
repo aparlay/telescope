@@ -57,8 +57,12 @@ class MediaCommentController extends Controller
         return $this->response(new MediaCommentResource($response), '', );
     }
 
+
     /**
-     * Store a newly created resource in storage.
+     * @param MediaCommentRequest $request
+     * @param MediaComment $mediaComment
+     * @return Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function reply(MediaCommentRequest $request, MediaComment $mediaComment): Response
     {
@@ -70,7 +74,9 @@ class MediaCommentController extends Controller
 
         $text = $request->input('text');
 
-        $response = $this->mediaCommentService->create($mediaComment->mediaObj, $text, $mediaComment);
+        /** @var Media $mediaObj */
+        $mediaObj = $mediaComment->mediaObj;
+        $response = $this->mediaCommentService->create($mediaObj, $text, $mediaComment);
 
         return $this->response(new MediaCommentResource($response), '', );
     }

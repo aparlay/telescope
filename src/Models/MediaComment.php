@@ -24,6 +24,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property User       $creatorObj
  * @property mixed|null $creator_id
  * @property Media      $mediaObj
+ * @property MediaComment $parentObj
+ * @property MediaComment $replyToObj
  * @property User       $userObj
  *
  * @method static |self|Builder media(ObjectId|string $mediaId)            get liked media
@@ -116,6 +118,9 @@ class MediaComment extends BaseModel
         return $this->belongsTo(self::class, 'parent._id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
+     */
     public function replyToObj()
     {
         return $this->belongsTo(self::class, 'reply_to._id');

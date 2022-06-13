@@ -25,9 +25,10 @@ class MediaCommentResource extends JsonResource
      */
     public function toArray($request)
     {
+        $parentId = ($this->parent['_id'] ?? null);
         $data = [
             '_id' => (string) $this->_id,
-            'parent_id' => (string) $this->parent['_id'] ?? null,
+            'parent_id' =>  $parentId ? (string) $parentId : null,
             'media_id' => (string) $this->media_id,
             'text' => $this->text,
             'likes_count' => $this->likes_count ?? 0,
