@@ -31,6 +31,6 @@ class WebhookController extends Controller
             }
         }
 
-        return response();
+        return response('', 200, []);
     }
 }
