@@ -39,7 +39,7 @@ class MediaCommentService
      * @param $text
      * @return MediaComment
      */
-    public function create(Media $media, $text, MediaComment $parent = null): MediaComment
+    public function create(Media $media, $text, MediaComment $replyTo = null): MediaComment
     {
         $creator = $this->getUser();
 
@@ -54,14 +54,26 @@ class MediaCommentService
             ],
         ]);
 
-        if ($parent) {
-            $mediaComment->parent = [
-                '_id' => new ObjectId($parent->_id),
+        if ($replyTo) {
+            $mediaComment->reply_to = [
+                '_id' => new ObjectId($replyTo->_id)
             ];
-            $parent->replies_count++;
-            $parent->save();
+
+            if ($replyTo->parentObj) {
+                $mediaComment->parent = [
+                    '_id' => new ObjectId($replyTo->parentObj->_id),
+                ];
+            } else {
+                $mediaComment->parent = [
+                    '_id' => new ObjectId($replyTo->_id),
+                ];
+            }
+
+            $mediaComment->replies_count++;
+            $mediaComment->save();
         }
 
+        $mediaComment->load('parentObj');
         $mediaComment->save();
 
         return $mediaComment;
