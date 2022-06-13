@@ -13,6 +13,12 @@ use MongoDB\BSON\ObjectId;
 
 class MediaCommentSeeder extends Seeder
 {
+
+    public function __construct()
+    {
+        MediaComment::truncate();
+    }
+
     /**
      * Run the database seeds.
      *
@@ -20,14 +26,16 @@ class MediaCommentSeeder extends Seeder
      */
     public function run(): void
     {
-        MediaComment::truncate();;
-
         $users = User::query()->limit(5)->get();
         $medias = User::query()->limit(10)->get();
 
+        $this->command->getOutput()->block('Creating media comments' . "\n\r");
+        $mediaCommentBar = $this->command->getOutput()->createProgressBar(50);
+
         MediaComment::factory()
             ->count(50)
-            ->state(function (array $attributes) use ($users, $medias) {
+            ->state(function (array $attributes) use ($users, $medias, $mediaCommentBar) {
+                $mediaCommentBar->advance();
                 return [
                     'media_id' => new ObjectId($medias->random()->_id),
                     'user_id' => new ObjectId($users->random()->_id),
@@ -35,8 +43,14 @@ class MediaCommentSeeder extends Seeder
             })
             ->create();
 
+        $mediaCommentBar->finish();
+
+        $this->command->getOutput()->block(  "\n\r");
+        $this->command->getOutput()->block( 'Creating media comments replies' . "\n\r");
+        $mediaCommentRepliesBar = $this->command->getOutput()->createProgressBar(50);
+
         foreach (MediaComment::lazy() as $mediaComment) {
-            $rand = rand(3, 5);
+            $rand = rand(3, 11);
             MediaComment::factory()
                 ->count($rand)
                 ->state(function (array $attributes) use ($mediaComment, $users, $medias) {
@@ -53,9 +67,12 @@ class MediaCommentSeeder extends Seeder
                 })
                 ->create();
 
+            $mediaCommentRepliesBar->advance();
             $mediaComment->replies_count = $rand;
             $mediaComment->save();
         }
 
+        $mediaCommentRepliesBar->finish();
+        $this->command->getOutput()->block(  "\n\r");
     }
 }
