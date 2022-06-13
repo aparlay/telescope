@@ -13,7 +13,6 @@ use MongoDB\BSON\ObjectId;
 
 class MediaCommentSeeder extends Seeder
 {
-
     public function __construct()
     {
         MediaComment::truncate();
@@ -29,13 +28,14 @@ class MediaCommentSeeder extends Seeder
         $users = User::query()->limit(5)->get();
         $medias = User::query()->limit(10)->get();
 
-        $this->command->getOutput()->block('Creating media comments' . "\n\r");
+        $this->command->getOutput()->block('Creating media comments'."\n\r");
         $mediaCommentBar = $this->command->getOutput()->createProgressBar(50);
 
         MediaComment::factory()
             ->count(50)
             ->state(function (array $attributes) use ($users, $medias, $mediaCommentBar) {
                 $mediaCommentBar->advance();
+
                 return [
                     'media_id' => new ObjectId($medias->random()->_id),
                     'user_id' => new ObjectId($users->random()->_id),
@@ -45,8 +45,8 @@ class MediaCommentSeeder extends Seeder
 
         $mediaCommentBar->finish();
 
-        $this->command->getOutput()->block(  "\n\r");
-        $this->command->getOutput()->block( 'Creating media comments replies' . "\n\r");
+        $this->command->getOutput()->block("\n\r");
+        $this->command->getOutput()->block('Creating media comments replies'."\n\r");
         $mediaCommentRepliesBar = $this->command->getOutput()->createProgressBar(50);
 
         foreach (MediaComment::lazy() as $mediaComment) {
@@ -73,6 +73,6 @@ class MediaCommentSeeder extends Seeder
         }
 
         $mediaCommentRepliesBar->finish();
-        $this->command->getOutput()->block(  "\n\r");
+        $this->command->getOutput()->block("\n\r");
     }
 }
