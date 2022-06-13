@@ -20,6 +20,8 @@ class MediaCommentSeeder extends Seeder
      */
     public function run(): void
     {
+        MediaComment::truncate();;
+
         $users = User::query()->limit(5)->get();
         $medias = User::query()->limit(10)->get();
 
@@ -34,18 +36,26 @@ class MediaCommentSeeder extends Seeder
             ->create();
 
         foreach (MediaComment::lazy() as $mediaComment) {
+            $rand = rand(3, 5);
             MediaComment::factory()
-                ->count(rand(3, 5))
+                ->count($rand)
                 ->state(function (array $attributes) use ($mediaComment, $users, $medias) {
                     return [
                         'media_id' => new ObjectId($medias->random()->_id),
                         'user_id' => new ObjectId($users->random()->_id),
+                        'reply_to' => [
+                            '_id' => new ObjectId($mediaComment->_id),
+                        ],
                         'parent' => [
                             '_id' => new ObjectId($mediaComment->_id),
                         ],
                     ];
                 })
                 ->create();
+
+            $mediaComment->replies_count = $rand;
+            $mediaComment->save();
         }
+
     }
 }
