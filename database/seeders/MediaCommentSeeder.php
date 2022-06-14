@@ -15,7 +15,9 @@ class MediaCommentSeeder extends Seeder
 {
     public function __construct()
     {
-        MediaComment::truncate();
+        if (!\App::environment('production')) {
+            MediaComment::truncate();
+        }
     }
 
     /**
@@ -54,11 +56,15 @@ class MediaCommentSeeder extends Seeder
             MediaComment::factory()
                 ->count($rand)
                 ->state(function (array $attributes) use ($mediaComment, $users, $medias) {
+                    $replyToUser = $mediaComment->creatorObj;
+
                     return [
                         'media_id' => new ObjectId($medias->random()->_id),
                         'user_id' => new ObjectId($users->random()->_id),
-                        'reply_to' => [
-                            '_id' => new ObjectId($mediaComment->_id),
+                        'reply_to_user' => [
+                            '_id' => new ObjectId($replyToUser->_id),
+                            'username' => $replyToUser->username,
+                            'avatar' => $replyToUser->avatar,
                         ],
                         'parent' => [
                             '_id' => new ObjectId($mediaComment->_id),

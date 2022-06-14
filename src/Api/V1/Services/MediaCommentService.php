@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaComment;
+use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use MongoDB\BSON\ObjectId;
 
@@ -20,7 +21,7 @@ class MediaCommentService
     public function list(Media $media)
     {
         return MediaComment::query()
-            ->with(['lastRepliesObjs', 'parentObj'])
+            ->with(['parentObj'])
             ->whereNull('parent')
             ->media($media->_id)
             ->latest('_id')
@@ -40,11 +41,10 @@ class MediaCommentService
      * @param $text
      * @return MediaComment
      */
-    public function create(Media $media, $text, MediaComment $replyTo = null): MediaComment
+    public function create(Media $media, $text, $additionalData = []): MediaComment
     {
         $creator = $this->getUser();
-
-        $mediaComment = MediaComment::make([
+        $defaultData = [
             'text' => $text,
             'media_id' => new ObjectId($media->_id),
             'user_id' => new ObjectId($creator->_id),
@@ -52,36 +52,37 @@ class MediaCommentService
                 '_id' => new ObjectId($creator->_id),
                 'username' => $creator->username,
                 'avatar' => $creator->avatar,
-            ],
+            ]
+        ];
+        return MediaComment::create([
+            ...$defaultData, ...$additionalData
         ]);
+    }
 
-        if ($replyTo) {
-            $replyToUser = $replyTo->creatorObj;
+    public function createReply(MediaComment $replyTo, $text)
+    {
+        /** @var Media $mediaObj */
+        $mediaObj = $replyTo->mediaObj;
+        $replyToUser = $replyTo->creatorObj;
+        $parent = $replyTo->parentObj ?? $replyTo;
 
-            $mediaComment->reply_to_user =  [
+        $additionalData = [
+            'reply_to_user' => [
                 '_id' => new ObjectId($replyToUser->_id),
                 'username' => $replyToUser->username,
                 'avatar' => $replyToUser->avatar,
-            ];
+            ],
+            'parent' => [
+                '_id' => new ObjectId($parent->_id),
+            ]
+        ];
 
-            if ($replyTo->parentObj) {
-                $mediaComment->parent = [
-                    '_id' => new ObjectId($replyTo->parentObj->_id),
-                ];
-            } else {
-                $mediaComment->parent = [
-                    '_id' => new ObjectId($replyTo->_id),
-                ];
-            }
+        $mediaCommentReply = $this->create($mediaObj, $text,  $additionalData);
+        $parent->replies_count++;
+        $parent->last_reply = (new MediaCommentResource($mediaCommentReply))->resolve();
+        $parent->save();
 
-            $mediaComment->replies_count++;
-            $mediaComment->save();
-        }
-
-        $mediaComment->load('parentObj');
-        $mediaComment->save();
-
-        return $mediaComment;
+        return $mediaCommentReply;
     }
 
     /**

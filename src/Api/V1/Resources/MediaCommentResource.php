@@ -37,7 +37,7 @@ class MediaCommentResource extends JsonResource
                 ! $this->parentObj,
                 fn () => [
                     'replies_count' => $this->replies_count ?? 0,
-                    'replies' => new MediaCommentReplyCollection($this->lastRepliesObjs),
+                    'last_reply' => $this->last_reply,
                 ]
             ),
             $this->mergeWhen(
