@@ -20,7 +20,7 @@ class MediaCommentService
     public function list(Media $media)
     {
         return MediaComment::query()
-            ->with(['lastRepliesObjs', 'parentObj', 'replyToObj'])
+            ->with(['lastRepliesObjs', 'parentObj'])
             ->whereNull('parent')
             ->media($media->_id)
             ->latest('_id')
@@ -56,8 +56,12 @@ class MediaCommentService
         ]);
 
         if ($replyTo) {
-            $mediaComment->reply_to = [
-                '_id' => new ObjectId($replyTo->_id),
+            $replyToUser = $replyTo->creatorObj;
+
+            $mediaComment->reply_to_user =  [
+                '_id' => new ObjectId($replyToUser->_id),
+                'username' => $replyToUser->username,
+                'avatar' => $replyToUser->avatar,
             ];
 
             if ($replyTo->parentObj) {

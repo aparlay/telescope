@@ -52,7 +52,7 @@ class MediaComment extends BaseModel
     protected $fillable = [
         '_id',
         'media_id',
-        'reply_to',
+        'reply_to_user',
         'parent',
         'text',
         'user_id',
@@ -118,13 +118,7 @@ class MediaComment extends BaseModel
         return $this->belongsTo(self::class, 'parent._id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
-     */
-    public function replyToObj()
-    {
-        return $this->belongsTo(self::class, 'reply_to._id');
-    }
+
 
     /**
      * Get the user associated with the alert.
@@ -139,7 +133,7 @@ class MediaComment extends BaseModel
      */
     public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'creator._id');
     }
 
     /**
