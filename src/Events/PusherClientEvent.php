@@ -17,7 +17,7 @@ class PusherClientEvent
      *
      * @return void
      */
-    public function __construct(public array $eventPayload)
+    public function __construct(public array $payload)
     {
     }
 }
