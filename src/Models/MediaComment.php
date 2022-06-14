@@ -104,12 +104,10 @@ class MediaComment extends BaseModel
         return new MediaCommentQueryBuilder($query);
     }
 
-
     public function parentObj()
     {
         return $this->belongsTo(self::class, 'parent._id');
     }
-
 
     /**
      * Get the user associated with the alert.

@@ -15,7 +15,7 @@ class MediaCommentSeeder extends Seeder
 {
     public function __construct()
     {
-        if (!\App::environment('production')) {
+        if (! \App::environment('production')) {
             MediaComment::truncate();
         }
     }

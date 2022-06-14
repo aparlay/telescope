@@ -52,10 +52,11 @@ class MediaCommentService
                 '_id' => new ObjectId($creator->_id),
                 'username' => $creator->username,
                 'avatar' => $creator->avatar,
-            ]
+            ],
         ];
+
         return MediaComment::create([
-            ...$defaultData, ...$additionalData
+            ...$defaultData, ...$additionalData,
         ]);
     }
 
@@ -74,10 +75,10 @@ class MediaCommentService
             ],
             'parent' => [
                 '_id' => new ObjectId($parent->_id),
-            ]
+            ],
         ];
 
-        $mediaCommentReply = $this->create($mediaObj, $text,  $additionalData);
+        $mediaCommentReply = $this->create($mediaObj, $text, $additionalData);
         $parent->replies_count++;
         $parent->last_reply = (new MediaCommentResource($mediaCommentReply))->resolve();
         $parent->save();
