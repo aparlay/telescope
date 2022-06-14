@@ -12,7 +12,12 @@ class WebhookController extends Controller
 {
     const PUSHER_EVENTS = [
         'member_added',
+        'client_event',
+    ];
+
+    const PUSHER_CLIENT_EVENTS = [
         'client-message-read',
+        'client-message-received',
     ];
 
     /**
@@ -30,7 +35,11 @@ class WebhookController extends Controller
 
         foreach ($request->input('events') as $event) {
             if (in_array($event['name'], self::PUSHER_EVENTS, true)) {
-                PusherClientEvent::dispatch($event);
+                PusherClientEvent::dispatchIf(
+                    (
+                        !isset($event['event']) ||
+                        in_array($event['event'], self::PUSHER_CLIENT_EVENTS, true)
+                    ), $event);
             }
         }
 
