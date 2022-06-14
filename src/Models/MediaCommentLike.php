@@ -108,7 +108,7 @@ class MediaCommentLike extends BaseModel
     }
 
     /**
-     * Get the media associated with the
+     * Get the media associated with the.
      */
     public function mediaCommentObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {

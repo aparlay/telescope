@@ -10,5 +10,4 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  */
 class MediaCommentLike extends MediaCommentLikeBase
 {
-
 }

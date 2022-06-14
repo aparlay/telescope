@@ -73,7 +73,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::put('{mediaComment}/like', [MediaCommentController::class, 'like'])->name('like');
             Route::put('{mediaComment}/unlike', [MediaCommentController::class, 'like'])->name('unlike');
         });
-
     });
 
     Route::prefix('user')->name('user.')->group(function () {

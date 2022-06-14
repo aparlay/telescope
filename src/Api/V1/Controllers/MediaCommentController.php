@@ -45,10 +45,9 @@ class MediaCommentController extends Controller
 
         $isLiked = $this->mediaCommentService->like($mediaComment);
         $mediaCommentResource = (new MediaCommentResource($mediaComment))->setIsLiked($isLiked);
+
         return $this->response($mediaCommentResource, '', );
-
     }
-
 
     public function listReplies(MediaComment $mediaComment)
     {

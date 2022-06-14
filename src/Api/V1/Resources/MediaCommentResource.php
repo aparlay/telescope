@@ -59,6 +59,7 @@ class MediaCommentResource extends JsonResource
     public function setIsLiked($value)
     {
         $this->isLiked = $value;
+
         return $this;
     }
 }

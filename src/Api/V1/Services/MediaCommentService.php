@@ -25,6 +25,7 @@ class MediaCommentService
 
         if ($mediaCommentLike) {
             $mediaCommentLike->delete();
+
             return false;
         }
 
@@ -39,6 +40,7 @@ class MediaCommentService
 
         return true;
     }
+
     /**
      * @param Media $media
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -46,7 +48,7 @@ class MediaCommentService
     public function list(Media $media)
     {
         \DB::enableQueryLog();
-        $query =  MediaComment::query()
+        $query = MediaComment::query()
             ->with(['lastRepliesObjs', 'parentObj', 'replyToObj'])
             ->whereNull('parent')
             ->media($media->_id)
@@ -54,6 +56,7 @@ class MediaCommentService
             ->cursorPaginate(self::PER_PAGE);
 
         \Log::debug(DB::getQueryLog());
+
         return $query;
     }
 
