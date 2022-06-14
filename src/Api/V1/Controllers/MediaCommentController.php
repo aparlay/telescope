@@ -30,6 +30,26 @@ class MediaCommentController extends Controller
         return $this->response(new MediaCommentCollection($response), '', );
     }
 
+    /**
+     * @param MediaComment $mediaComment
+     * @return Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function like(MediaComment $mediaComment)
+    {
+        $this->authorize('create', [MediaComment::class, $mediaComment->mediaObj]);
+
+        if (auth()->check()) {
+            $this->mediaCommentService->setUser(auth()->user());
+        }
+
+        $isLiked = $this->mediaCommentService->like($mediaComment);
+        $mediaCommentResource = (new MediaCommentResource($mediaComment))->setIsLiked($isLiked);
+        return $this->response($mediaCommentResource, '', );
+
+    }
+
+
     public function listReplies(MediaComment $mediaComment)
     {
         $this->authorize('view', [MediaComment::class, $mediaComment->mediaObj]);

@@ -4,7 +4,9 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaComment;
+use Aparlay\Core\Api\V1\Models\MediaCommentLike;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
+use Illuminate\Support\Facades\DB;
 use MongoDB\BSON\ObjectId;
 
 class MediaCommentService
@@ -13,18 +15,46 @@ class MediaCommentService
 
     const PER_PAGE = 10;
 
+    public function like(MediaComment $mediaComment)
+    {
+        $creator = $this->getUser();
+
+        $mediaCommentLike = MediaCommentLike::mediaComment($mediaComment->_id)
+            ->creator($creator->_id)
+            ->first();
+
+        if ($mediaCommentLike) {
+            $mediaCommentLike->delete();
+            return false;
+        }
+
+        MediaCommentLike::create([
+            'media_comment_id' => new ObjectId($mediaComment->_id),
+            'creator' => [
+                '_id' => new ObjectId($creator->_id),
+                'username' => $creator->username,
+                'avatar' => $creator->avatar,
+            ],
+        ]);
+
+        return true;
+    }
     /**
      * @param Media $media
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function list(Media $media)
     {
-        return MediaComment::query()
+        \DB::enableQueryLog();
+        $query =  MediaComment::query()
             ->with(['lastRepliesObjs', 'parentObj', 'replyToObj'])
             ->whereNull('parent')
             ->media($media->_id)
             ->latest('_id')
             ->cursorPaginate(self::PER_PAGE);
+
+        \Log::debug(DB::getQueryLog());
+        return $query;
     }
 
     public function listReplies(MediaComment $mediaComment)

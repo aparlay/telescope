@@ -15,6 +15,8 @@ class MediaCommentResource extends JsonResource
 {
     use FilterableResourceTrait;
 
+    private $isLiked = false;
+
     /**
      * Transform the resource into an array.
      *
@@ -31,6 +33,7 @@ class MediaCommentResource extends JsonResource
             'parent_id' =>  $parentId ? (string) $parentId : null,
             'media_id' => (string) $this->media_id,
             'text' => $this->text,
+            'is_liked' => $this->isLiked,
             'likes_count' => $this->likes_count ?? 0,
             $this->mergeWhen(
                 ! $this->parentObj,
@@ -45,12 +48,17 @@ class MediaCommentResource extends JsonResource
                     'reply_to_user' => $this->replyToObj->creator,
                 ]
             ),
-
             'user_id' => (string) $this->user_id,
             'creator' => $this->creator,
             'created_at' => $this->created_at->valueOf(),
         ];
 
         return $this->filtrateFields($this->filter($data));
+    }
+
+    public function setIsLiked($value)
+    {
+        $this->isLiked = $value;
+        return $this;
     }
 }
