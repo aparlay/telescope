@@ -12,8 +12,9 @@ class WebhookController extends Controller
 {
     const PUSHER_EVENTS = [
         'member_added',
-        'client-message-read'
+        'client-message-read',
     ];
+
     /**
      * Display a listing of the resource.
      */
