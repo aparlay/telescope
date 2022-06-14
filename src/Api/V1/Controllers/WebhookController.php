@@ -29,7 +29,7 @@ class WebhookController extends Controller
         abort_unless($webhookSignature === $expectedSignature, 401);
 
         foreach ($request->input('events') as $event) {
-            if (in_array($event->name, self::PUSHER_EVENTS, true)) {
+            if (in_array($event['name'], self::PUSHER_EVENTS, true)) {
                 PusherClientEvent::dispatch($event);
             }
         }
