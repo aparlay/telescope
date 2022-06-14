@@ -58,7 +58,7 @@ class MediaCommentService
         if ($replyTo) {
             $replyToUser = $replyTo->creatorObj;
 
-            $mediaComment->reply_to_user =  [
+            $mediaComment->reply_to_user = [
                 '_id' => new ObjectId($replyToUser->_id),
                 'username' => $replyToUser->username,
                 'avatar' => $replyToUser->avatar,
