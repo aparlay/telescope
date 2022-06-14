@@ -37,9 +37,11 @@ class WebhookController extends Controller
             if (in_array($event['name'], self::PUSHER_EVENTS, true)) {
                 PusherClientEvent::dispatchIf(
                     (
-                        !isset($event['event']) ||
+                        ! isset($event['event']) ||
                         in_array($event['event'], self::PUSHER_CLIENT_EVENTS, true)
-                    ), $event);
+                    ),
+                    $event
+                );
             }
         }
 
