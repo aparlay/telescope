@@ -24,6 +24,8 @@ class MediaCommentService
             ->first();
 
         if ($mediaCommentLike) {
+            $mediaComment->likes_count--;
+            $mediaComment->save();
             $mediaCommentLike->delete();
 
             return false;
@@ -37,6 +39,9 @@ class MediaCommentService
                 'avatar' => $creator->avatar,
             ],
         ]);
+
+        $mediaComment->likes_count++;
+        $mediaComment->save();
 
         return true;
     }
