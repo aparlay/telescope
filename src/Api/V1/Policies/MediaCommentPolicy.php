@@ -56,14 +56,12 @@ class MediaCommentPolicy
     {
         $userId = $user?->_id;
 
-        if ($userId === null || (string) $mediaComment->creator['_id'] !== (string) $userId) {
-            return Response::deny(__('You can only delete comment that you\'ve created.'));
+        if ((string) $mediaComment->mediaObj->created_by === (string) $userId) {
+            return Response::allow();
         }
 
-        $media = $mediaComment->mediaObj;
-        $isBlocked = Block::select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
-        if ($isBlocked) {
-            return Response::deny(__('You cannot delete comment for this video at the moment.'));
+        if ($userId === null || (string) $mediaComment->creator['_id'] !== (string) $userId) {
+            return Response::deny(__('You can only delete comment that you\'ve created.'));
         }
 
         return Response::allow();
