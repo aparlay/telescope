@@ -24,7 +24,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property User       $creatorObj
  * @property mixed|null $creator_id
  * @property Media      $mediaObj
- * @property boolean $is_first
+ * @property bool $is_first
  * @property array|null $first_reply
  * @property MediaComment $parentObj
  *
