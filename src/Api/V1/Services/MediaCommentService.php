@@ -81,13 +81,14 @@ class MediaCommentService
         $mediaCommentReply = $this->create($mediaObj, $text, $additionalData);
 
         $parent->replies_count++;
-        if (!$parent->first_reply) {
+        if (! $parent->first_reply) {
             $parent->first_reply = (new MediaCommentResource($mediaCommentReply))->resolve();
             $mediaCommentReply->is_first = true;
             $mediaCommentReply->save();
         }
 
         $parent->save();
+
         return $mediaCommentReply;
     }
 
@@ -120,6 +121,7 @@ class MediaCommentService
             if ($parentObj->replies_count > 0) {
                 $parentObj->replies_count--;
             }
+
             return $parentObj->save();
         } else {
             return $mediaComment->delete();
