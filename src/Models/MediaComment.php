@@ -8,15 +8,15 @@ use Aparlay\Core\Models\Queries\MediaCommentQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class MediaLike.
+ * Class MediaComment.
  *
  * @property ObjectId   $_id
- * @property string     $hashtag
  * @property ObjectId   $media_id
  * @property ObjectId   $user_id
  * @property array      $creator
@@ -24,18 +24,17 @@ use MongoDB\BSON\UTCDateTime;
  * @property User       $creatorObj
  * @property mixed|null $creator_id
  * @property Media      $mediaObj
+ * @property bool $is_first
+ * @property array|null $first_reply
  * @property MediaComment $parentObj
- * @property MediaComment $replyToObj
- * @property User       $userObj
  *
- * @method static |self|Builder media(ObjectId|string $mediaId)            get liked media
- * @method static |self|Builder user(ObjectId|string $userId)              get user who liked media
+ * @method static |self|Builder media(ObjectId|string $mediaId)            get commented media
  * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
- * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
  */
 class MediaComment extends BaseModel
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The collection associated with the model.
@@ -53,7 +52,7 @@ class MediaComment extends BaseModel
         '_id',
         'media_id',
         'reply_to_user',
-        'last_reply',
+        'first_reply',
         'parent',
         'text',
         'user_id',
