@@ -4,8 +4,8 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaComment;
-use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Models\MediaCommentLike;
+use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use MongoDB\BSON\ObjectId;
 
