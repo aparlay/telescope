@@ -17,7 +17,6 @@ use MongoDB\BSON\UTCDateTime;
  * Class MediaLike.
  *
  * @property ObjectId   $_id
- * @property string     $hashtag
  * @property ObjectId   $media_id
  * @property ObjectId   $user_id
  * @property array      $creator
@@ -26,13 +25,9 @@ use MongoDB\BSON\UTCDateTime;
  * @property mixed|null $creator_id
  * @property Media      $mediaObj
  * @property MediaComment $parentObj
- * @property MediaComment $replyToObj
- * @property User       $userObj
  *
- * @method static |self|Builder media(ObjectId|string $mediaId)            get liked media
- * @method static |self|Builder user(ObjectId|string $userId)              get user who liked media
+ * @method static |self|Builder media(ObjectId|string $mediaId)            get commented media
  * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
- * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
  */
 class MediaComment extends BaseModel
 {
