@@ -70,7 +70,6 @@ class MediaCommentSeeder extends Seeder
                 })
                 ->create();
 
-
             $firstReply = $mediaReplies[0];
             $firstReply->is_first = true;
             $firstReply->save();
