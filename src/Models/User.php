@@ -829,4 +829,9 @@ class User extends Authenticatable implements JWTSubject
             $this->update(['stats' => $stats]);
         }
     }
+
+    public static function notify(Notification $notification)
+    {
+        User::admin()->first()->notify($notification);
+    }
 }
