@@ -14,7 +14,7 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class MediaLike.
+ * Class MediaComment.
  *
  * @property ObjectId   $_id
  * @property ObjectId   $media_id
