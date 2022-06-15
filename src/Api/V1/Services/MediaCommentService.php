@@ -15,35 +15,46 @@ class MediaCommentService
 
     const PER_PAGE = 10;
 
+    /**
+     * @param MediaComment $mediaComment
+     * @return bool
+     */
     public function like(MediaComment $mediaComment)
     {
         $creator = $this->getUser();
 
-        $mediaCommentLike = MediaCommentLike::mediaComment($mediaComment->_id)
+        $mediaCommentLike = MediaCommentLike::comment($mediaComment->_id)
             ->creator($creator->_id)
             ->first();
 
+        $liked = true;
+
         if ($mediaCommentLike) {
             $mediaComment->likes_count--;
-            $mediaComment->save();
             $mediaCommentLike->delete();
-
-            return false;
+            $liked = false;
+        } else {
+            MediaCommentLike::create([
+                'media_comment_id' => new ObjectId($mediaComment->_id),
+                'creator' => [
+                    '_id' => new ObjectId($creator->_id),
+                    'username' => $creator->username,
+                    'avatar' => $creator->avatar,
+                ],
+            ]);
+            $mediaComment->likes_count++;
         }
 
-        MediaCommentLike::create([
-            'media_comment_id' => new ObjectId($mediaComment->_id),
-            'creator' => [
-                '_id' => new ObjectId($creator->_id),
-                'username' => $creator->username,
-                'avatar' => $creator->avatar,
-            ],
-        ]);
-
-        $mediaComment->likes_count++;
         $mediaComment->save();
 
-        return true;
+        if ($mediaComment->is_first && $mediaComment->parentObj) {
+            $firstReply = $mediaComment->parentObj->first_reply;
+            $firstReply['likes_count'] = $mediaComment->likes_count;
+            $mediaComment->parentObj->first_reply = $firstReply;
+            $mediaComment->parentObj->save();
+        }
+
+        return $liked;
     }
 
     /**
@@ -130,6 +141,8 @@ class MediaCommentService
      */
     public function delete(MediaComment $mediaComment)
     {
+        MediaCommentLike::query()->comment($mediaComment->_id)->delete();
+
         if ($mediaComment->parentObj) {
             $parentObj = $mediaComment->parentObj;
             $mediaComment->delete();
@@ -155,8 +168,8 @@ class MediaCommentService
             }
 
             return $parentObj->save();
-        } else {
-            return $mediaComment->delete();
         }
+
+        return $mediaComment->delete();
     }
 }

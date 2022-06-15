@@ -34,7 +34,6 @@ use MongoDB\BSON\UTCDateTime;
 class MediaComment extends BaseModel
 {
     use HasFactory;
-    use SoftDeletes;
 
     /**
      * The collection associated with the model.
