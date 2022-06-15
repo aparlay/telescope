@@ -8,6 +8,7 @@ use Aparlay\Core\Models\Queries\MediaCommentQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -36,6 +37,7 @@ use MongoDB\BSON\UTCDateTime;
 class MediaComment extends BaseModel
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The collection associated with the model.
@@ -53,7 +55,7 @@ class MediaComment extends BaseModel
         '_id',
         'media_id',
         'reply_to_user',
-        'last_reply',
+        'first_reply',
         'parent',
         'text',
         'user_id',

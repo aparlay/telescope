@@ -24,7 +24,7 @@ class MediaCommentService
             ->with(['parentObj'])
             ->whereNull('parent')
             ->media($media->_id)
-            ->latest('_id')
+            ->oldest('_id')
             ->cursorPaginate(self::PER_PAGE);
     }
 
@@ -32,7 +32,7 @@ class MediaCommentService
     {
         return MediaComment::query()
             ->parent($mediaComment->_id)
-            ->latest('_id')
+            ->oldest('_id')
             ->cursorPaginate(self::PER_PAGE);
     }
 
@@ -79,10 +79,15 @@ class MediaCommentService
         ];
 
         $mediaCommentReply = $this->create($mediaObj, $text, $additionalData);
-        $parent->replies_count++;
-        $parent->last_reply = (new MediaCommentResource($mediaCommentReply))->resolve();
-        $parent->save();
 
+        $parent->replies_count++;
+        if (!$parent->first_reply) {
+            $parent->first_reply = (new MediaCommentResource($mediaCommentReply))->resolve();
+            $mediaCommentReply->is_first = true;
+            $mediaCommentReply->save();
+        }
+
+        $parent->save();
         return $mediaCommentReply;
     }
 
@@ -93,10 +98,31 @@ class MediaCommentService
     public function delete(MediaComment $mediaComment)
     {
         if ($mediaComment->parentObj) {
-            $mediaComment->parentObj->replies_count--;
-            $mediaComment->parentObj->save();
-        }
+            $parentObj = $mediaComment->parentObj;
+            $mediaComment->delete();
 
-        return $mediaComment->delete();
+            if ($mediaComment->is_first) {
+                $newFirstReply = MediaComment::query()
+                    ->parent($parentObj->_id)
+                    ->oldest('_id')
+                    ->limit(1)
+                    ->first();
+
+                $parentObj->first_reply = null;
+
+                if ($newFirstReply) {
+                    $newFirstReply->is_first = true;
+                    $newFirstReply->save();
+                    $parentObj->first_reply = (new MediaCommentResource($newFirstReply))->resolve();
+                }
+            }
+
+            if ($parentObj->replies_count > 0) {
+                $parentObj->replies_count--;
+            }
+            return $parentObj->save();
+        } else {
+            return $mediaComment->delete();
+        }
     }
 }
