@@ -2,13 +2,10 @@
 
 namespace Aparlay\Core\Database\Seeders;
 
-use Aparlay\Core\Models\Media;
+use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Models\MediaComment;
-use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
-use Aparlay\Payout\Models\Enums\PayerType;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 use MongoDB\BSON\ObjectId;
 
 class MediaCommentSeeder extends Seeder
@@ -53,7 +50,7 @@ class MediaCommentSeeder extends Seeder
 
         foreach (MediaComment::lazy() as $mediaComment) {
             $rand = rand(3, 11);
-            MediaComment::factory()
+            $mediaReplies = MediaComment::factory()
                 ->count($rand)
                 ->state(function (array $attributes) use ($mediaComment, $users, $medias) {
                     $replyToUser = $mediaComment->creatorObj;
@@ -73,6 +70,12 @@ class MediaCommentSeeder extends Seeder
                 })
                 ->create();
 
+
+            $firstReply = $mediaReplies[0];
+            $firstReply->is_first = true;
+            $firstReply->save();
+
+            $mediaComment->first_reply = (new MediaCommentResource($firstReply))->resolve();
             $mediaCommentRepliesBar->advance();
             $mediaComment->replies_count = $rand;
             $mediaComment->save();
