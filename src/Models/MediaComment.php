@@ -52,7 +52,8 @@ class MediaComment extends BaseModel
     protected $fillable = [
         '_id',
         'media_id',
-        'reply_to',
+        'reply_to_user',
+        'last_reply',
         'parent',
         'text',
         'user_id',
@@ -103,27 +104,9 @@ class MediaComment extends BaseModel
         return new MediaCommentQueryBuilder($query);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|\Jenssegers\Mongodb\Relations\HasMany
-     */
-    public function lastRepliesObjs()
-    {
-        return $this->hasMany(self::class, 'parent._id')
-            ->limit(10)
-            ->latest();
-    }
-
     public function parentObj()
     {
         return $this->belongsTo(self::class, 'parent._id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
-     */
-    public function replyToObj()
-    {
-        return $this->belongsTo(self::class, 'reply_to._id');
     }
 
     /**
@@ -139,7 +122,7 @@ class MediaComment extends BaseModel
      */
     public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'creator._id');
     }
 
     /**
