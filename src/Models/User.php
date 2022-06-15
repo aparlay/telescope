@@ -829,9 +829,4 @@ class User extends Authenticatable implements JWTSubject
             $this->update(['stats' => $stats]);
         }
     }
-
-    public static function notifyInSlackByAdminUser(Notification $notification)
-    {
-        User::admin()->first()->notify($notification);
-    }
 }
