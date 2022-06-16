@@ -13,19 +13,16 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class MediaLike.
+ * Class MediaCommentLike.
  *
  * @property ObjectId   $_id
- * @property string     $hashtag
  * @property ObjectId   $media_id
  * @property ObjectId   $user_id
  * @property array      $creator
  * @property string     $created_at
  * @property User       $creatorObj
  * @property mixed|null $creator_id
- * @property Media      $mediaObj
- * @property MediaComment $parentObj
- * @property MediaComment $replyToObj
+ * @property Media      $mediaCommentObj
  * @property User       $userObj
  *
  * @method static |self|Builder media(ObjectId|string $mediaId)            get liked media
