@@ -47,6 +47,7 @@ class MediaCommentController extends Controller
 
         $this->mediaCommentLikeService->like($mediaComment);
         $mediaCommentResource = (new MediaCommentResource($mediaComment));
+
         return $this->response($mediaCommentResource, '', );
     }
 
@@ -68,7 +69,6 @@ class MediaCommentController extends Controller
 
         return $this->response($mediaCommentResource, '', );
     }
-
 
     public function listReplies(MediaComment $mediaComment)
     {
