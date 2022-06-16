@@ -22,11 +22,7 @@ class MediaCommentService
     public function like(MediaComment $mediaComment)
     {
         $creator = $this->getUser();
-
-        $mediaCommentLike = MediaCommentLike::comment($mediaComment->_id)
-            ->creator($creator->_id)
-            ->first();
-
+        $mediaCommentLike = MediaCommentLike::comment($mediaComment->_id)->creator($creator->_id)->first();
         $liked = true;
 
         if ($mediaCommentLike) {

@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
-
 /**
  * Class MediaCommentLike.
  *
@@ -28,7 +26,6 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder media(ObjectId|string $mediaId)            get liked media
  * @method static |self|Builder user(ObjectId|string $userId)              get user who liked media
  * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
- * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
  */
 class MediaCommentLike extends BaseModel
 {
