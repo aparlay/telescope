@@ -7,13 +7,15 @@ use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Requests\MediaCommentRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCommentCollection;
 use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
+use Aparlay\Core\Api\V1\Services\MediaCommentLikeService;
 use Aparlay\Core\Api\V1\Services\MediaCommentService;
 use Illuminate\Http\Response;
 
 class MediaCommentController extends Controller
 {
     public function __construct(
-        private MediaCommentService $mediaCommentService
+        private MediaCommentService $mediaCommentService,
+        private MediaCommentLikeService $mediaCommentLikeService
     ) {
     }
 
@@ -40,14 +42,33 @@ class MediaCommentController extends Controller
         $this->authorize('create', [MediaComment::class, $mediaComment->mediaObj]);
 
         if (auth()->check()) {
-            $this->mediaCommentService->setUser(auth()->user());
+            $this->mediaCommentLikeService->setUser(auth()->user());
         }
 
-        $isLiked = $this->mediaCommentService->like($mediaComment);
-        $mediaCommentResource = (new MediaCommentResource($mediaComment))->setIsLiked($isLiked);
+        $this->mediaCommentLikeService->like($mediaComment);
+        $mediaCommentResource = (new MediaCommentResource($mediaComment));
+        return $this->response($mediaCommentResource, '', );
+    }
+
+    /**
+     * @param MediaComment $mediaComment
+     * @return Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function unlike(MediaComment $mediaComment)
+    {
+        $this->authorize('create', [MediaComment::class, $mediaComment->mediaObj]);
+
+        if (auth()->check()) {
+            $this->mediaCommentLikeService->setUser(auth()->user());
+        }
+
+        $this->mediaCommentLikeService->unlike($mediaComment);
+        $mediaCommentResource = (new MediaCommentResource($mediaComment));
 
         return $this->response($mediaCommentResource, '', );
     }
+
 
     public function listReplies(MediaComment $mediaComment)
     {

@@ -49,7 +49,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::get('/{media}/comment', [MediaCommentController::class, 'list'])->name('comment.list');
 
             Route::put('{mediaComment}/like', [MediaCommentController::class, 'like'])->name('comment.like');
-            Route::put('{mediaComment}/unlike', [MediaCommentController::class, 'like'])->name('comment.unlike');
+            Route::put('{mediaComment}/unlike', [MediaCommentController::class, 'unlike'])->name('comment.unlike');
         });
 
         /* Optional Auth Group */
