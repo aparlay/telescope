@@ -8,8 +8,10 @@ use Aparlay\Core\Admin\Models\Setting;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Observers\AlertObserver;
 use Aparlay\Core\Admin\Observers\SettingObserver;
+use Aparlay\Core\Listeners\CreateTipMediaComment;
 use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\UserObserver;
+use Aparlay\Payment\Events\TipCreatedEvent;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 
@@ -23,6 +25,10 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        TipCreatedEvent::class => [
+            CreateTipMediaComment::class,
         ],
     ];
 
