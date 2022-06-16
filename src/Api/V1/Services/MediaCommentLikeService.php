@@ -91,12 +91,10 @@ class MediaCommentLikeService
                 ],
             ]);
             $mediaComment->likes_count++;
-            $this->refreshFirstReplyLike($mediaComment);
+            $this->refreshFirstReplyLikes($mediaComment);
             $mediaComment->save();
+            $this->cacheByUserId(true);
         }
-
-        $this->cacheByUserId(true);
-
         return $mediaComment;
     }
 
@@ -108,15 +106,15 @@ class MediaCommentLikeService
         if ($mediaCommentLike) {
             $mediaComment->likes_count--;
             $mediaCommentLike->delete();
-            $this->refreshFirstReplyLike($mediaComment);
+            $this->refreshFirstReplyLikes($mediaComment);
+            $this->cacheByUserId(true);
         }
 
-        $this->cacheByUserId(true);
 
         return $mediaComment;
     }
 
-    private function refreshFirstReplyLike(MediaComment $mediaComment)
+    private function refreshFirstReplyLikes(MediaComment $mediaComment)
     {
         if ($mediaComment->is_first && $mediaComment->parentObj) {
             $firstReply = $mediaComment->parentObj->first_reply;
