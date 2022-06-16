@@ -15,7 +15,6 @@ class MediaCommentLikeService
 {
     use HasUserTrait;
 
-
     /**
      * @param $mediaCommentId
      * @return bool
