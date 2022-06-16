@@ -3,18 +3,16 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Casts\SimpleUserCast;
-use Aparlay\Core\Database\Factories\MediaCommentFactory;
-use Aparlay\Core\Models\Queries\MediaCommentQueryBuilder;
+use Aparlay\Core\Database\Factories\MediaCommentLikeFactory;
+use Aparlay\Core\Models\Queries\MediaCommentLikeQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
 
 /**
- * Class MediaComment.
+ * Class MediaCommentLike.
  *
  * @property ObjectId   $_id
  * @property ObjectId   $media_id
@@ -23,15 +21,14 @@ use MongoDB\BSON\UTCDateTime;
  * @property string     $created_at
  * @property User       $creatorObj
  * @property mixed|null $creator_id
- * @property Media      $mediaObj
- * @property bool $is_first
- * @property array|null $first_reply
- * @property MediaComment $parentObj
+ * @property Media      $mediaCommentObj
+ * @property User       $userObj
  *
- * @method static |self|Builder media(ObjectId|string $mediaId)            get commented media
+ * @method static |self|Builder media(ObjectId|string $mediaId)            get liked media
+ * @method static |self|Builder user(ObjectId|string $userId)              get user who liked media
  * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
  */
-class MediaComment extends BaseModel
+class MediaCommentLike extends BaseModel
 {
     use HasFactory;
 
@@ -40,7 +37,7 @@ class MediaComment extends BaseModel
      *
      * @var string
      */
-    protected $collection = 'media_comment';
+    protected $collection = 'media_comment_likes';
 
     /**
      * The attributes that are mass assignable.
@@ -49,12 +46,7 @@ class MediaComment extends BaseModel
      */
     protected $fillable = [
         '_id',
-        'media_id',
-        'reply_to_user',
-        'first_reply',
-        'parent',
-        'text',
-        'user_id',
+        'media_comment_id',
         'creator',
         'created_at',
         'created_by',
@@ -90,29 +82,16 @@ class MediaComment extends BaseModel
      */
     protected static function newFactory(): Factory
     {
-        return MediaCommentFactory::new();
+        return MediaCommentLikeFactory::new();
     }
 
     /**
      * @param $query
-     * @return MediaCommentQueryBuilder
+     * @return MediaCommentLikeQueryBuilder
      */
-    public function newEloquentBuilder($query): MediaCommentQueryBuilder
+    public function newEloquentBuilder($query)
     {
-        return new MediaCommentQueryBuilder($query);
-    }
-
-    public function parentObj()
-    {
-        return $this->belongsTo(self::class, 'parent._id');
-    }
-
-    /**
-     * Get the user associated with the alert.
-     */
-    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
+        return new MediaCommentLikeQueryBuilder($query);
     }
 
     /**
@@ -120,14 +99,14 @@ class MediaComment extends BaseModel
      */
     public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
-        return $this->belongsTo(User::class, 'creator._id');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**
-     * Get the media associated with the alert.
+     * Get the media associated with the.
      */
-    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function mediaCommentObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
-        return $this->belongsTo(Media::class, 'media_id');
+        return $this->belongsTo(MediaComment::class, 'media_comment_id');
     }
 }

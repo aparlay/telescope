@@ -48,12 +48,31 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::post('{mediaComment}/reply', [MediaCommentController::class, 'reply'])->name('comment.reply');
             Route::delete('/comment/{mediaComment}', [MediaCommentController::class, 'destroy'])->name('comment.delete');
             Route::get('/{media}/comment', [MediaCommentController::class, 'list'])->name('comment.list');
+
+            Route::put('{mediaComment}/like', [MediaCommentController::class, 'like'])->name('comment.like');
+            Route::put('{mediaComment}/unlike', [MediaCommentController::class, 'unlike'])->name('comment.unlike');
         });
 
         /* Optional Auth Group */
         Route::middleware(['cookies-auth', 'optional-auth'])->group(function () {
             Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
             Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
+        });
+    });
+
+    /* Media Prefix Group */
+    Route::prefix('media-comment')->name('media-comment.')->group(function () {
+
+        /* Authentication Group */
+        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
+            Route::get('/{media}', [MediaCommentController::class, 'list'])->name('list');
+            Route::get('{mediaComment}/replies', [MediaCommentController::class, 'listReplies'])->name('replies');
+
+            Route::post('{media}', [MediaCommentController::class, 'store'])->name('create');
+            Route::post('{mediaComment}/reply', [MediaCommentController::class, 'reply'])->name('reply');
+            Route::delete('/{mediaComment}', [MediaCommentController::class, 'destroy'])->name('delete');
+            Route::put('{mediaComment}/like', [MediaCommentController::class, 'like'])->name('like');
+            Route::put('{mediaComment}/unlike', [MediaCommentController::class, 'like'])->name('unlike');
         });
     });
 
