@@ -15,7 +15,6 @@ class MediaCommentLikeService
 {
     use HasUserTrait;
 
-    const PER_PAGE = 10;
 
     /**
      * @param $mediaCommentId
