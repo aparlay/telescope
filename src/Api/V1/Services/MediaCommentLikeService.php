@@ -94,6 +94,7 @@ class MediaCommentLikeService
             $mediaComment->save();
             $this->cacheByUserId(true);
         }
+
         return $mediaComment;
     }
 
@@ -108,7 +109,6 @@ class MediaCommentLikeService
             $this->refreshFirstReplyLikes($mediaComment);
             $this->cacheByUserId(true);
         }
-
 
         return $mediaComment;
     }
