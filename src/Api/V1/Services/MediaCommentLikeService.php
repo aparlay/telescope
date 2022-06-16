@@ -7,8 +7,8 @@ use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Models\MediaCommentLike;
 use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
 class MediaCommentLikeService
@@ -82,7 +82,7 @@ class MediaCommentLikeService
         $creator = $this->getUser();
         $mediaCommentLike = MediaCommentLike::comment($mediaComment->_id)->creator($creator->_id)->first();
 
-        if (!$mediaCommentLike) {
+        if (! $mediaCommentLike) {
             MediaCommentLike::create([
                 'media_comment_id' => new ObjectId($mediaComment->_id),
                 'creator' => [
@@ -117,7 +117,6 @@ class MediaCommentLikeService
         return $mediaComment;
     }
 
-
     private function refreshFirstReplyLike(MediaComment $mediaComment)
     {
         if ($mediaComment->is_first && $mediaComment->parentObj) {
@@ -126,7 +125,7 @@ class MediaCommentLikeService
             $mediaComment->parentObj->first_reply = $firstReply;
             $mediaComment->parentObj->save();
         }
+
         return $mediaComment;
     }
-
 }

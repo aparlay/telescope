@@ -18,7 +18,6 @@ class MediaCommentResource extends JsonResource
 {
     use FilterableResourceTrait;
 
-
     private MediaCommentLikeService $mediaCommentLikeService;
 
     public function __construct($resource)
