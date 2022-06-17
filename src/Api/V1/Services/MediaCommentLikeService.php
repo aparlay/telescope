@@ -105,6 +105,7 @@ class MediaCommentLikeService
 
         if ($mediaCommentLike) {
             $mediaComment->likes_count--;
+            $mediaComment->save();
             $mediaCommentLike->delete();
             $this->refreshFirstReplyLikes($mediaComment);
             $this->cacheByUserId(true);
