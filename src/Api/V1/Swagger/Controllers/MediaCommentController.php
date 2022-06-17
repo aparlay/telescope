@@ -5,7 +5,6 @@ namespace Aparlay\Core\Api\V1\Swagger\Controllers;
 use OpenApi\Annotations as OA;
 
 /**
- *
  * @OA\Get(
  *     path="/v1/media-comment/{mediaId}",
  *     tags={"Core | Media Comment"},

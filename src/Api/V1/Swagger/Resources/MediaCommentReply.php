@@ -44,7 +44,6 @@ class MediaCommentReply
      */
     public $parent_id;
 
-
     /**
      * @OA\Property(property="created_at", type="string", example="1612850111566")
      */
