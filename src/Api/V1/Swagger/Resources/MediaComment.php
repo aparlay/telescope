@@ -44,12 +44,10 @@ class MediaComment
      */
     public $parent_id;
 
-
     /**
-    * @OA\Property(property="first_reply", ref="#/components/schemas/MediaCommentReply"),
+     * @OA\Property(property="first_reply", ref="#/components/schemas/MediaCommentReply"),
      */
     public $first_reply;
-
 
     /**
      * @OA\Property(property="created_at", type="string", example="1612850111566")
