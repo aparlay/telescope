@@ -66,12 +66,11 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::get('/{media}', [MediaCommentController::class, 'list'])->name('list');
             Route::get('{mediaComment}/replies', [MediaCommentController::class, 'listReplies'])->name('replies');
-
             Route::post('{media}', [MediaCommentController::class, 'store'])->name('create');
             Route::post('{mediaComment}/reply', [MediaCommentController::class, 'reply'])->name('reply');
             Route::delete('/{mediaComment}', [MediaCommentController::class, 'destroy'])->name('delete');
             Route::put('{mediaComment}/like', [MediaCommentController::class, 'like'])->name('like');
-            Route::put('{mediaComment}/unlike', [MediaCommentController::class, 'like'])->name('unlike');
+            Route::put('{mediaComment}/unlike', [MediaCommentController::class, 'unlike'])->name('unlike');
         });
     });
 
