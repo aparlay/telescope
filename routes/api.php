@@ -61,7 +61,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
 
     /* Media Prefix Group */
     Route::prefix('media-comment')->name('media-comment.')->group(function () {
-
         /* Authentication Group */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::get('/{media}', [MediaCommentController::class, 'list'])->name('list');

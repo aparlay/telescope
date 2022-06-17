@@ -40,7 +40,7 @@ class MediaComment
     public $replies_count;
 
     /**
-     * @OA\Property(property="parent_id", type="string", example="60237caf5e41025e1e3c80b1", description="Only replies have parent_id")
+     * @OA\Property(property="parent_id", type="string", example="null", description="Only replies have parent_id")
      */
     public $parent_id;
 
