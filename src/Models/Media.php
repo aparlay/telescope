@@ -164,7 +164,7 @@ class Media extends BaseModel
         'visit_count' => 'integer',
         'comment_count' => 'integer',
         'tips' => 'integer',
-        'is_comments_enabled' => 'boolean'
+        'is_comments_enabled' => 'boolean',
     ];
 
     /**
