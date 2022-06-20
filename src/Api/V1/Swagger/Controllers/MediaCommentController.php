@@ -525,7 +525,7 @@ use OpenApi\Annotations as OA;
  * @OA\Post(
  *     path="/v1/media-comment/{mediaCommentId}/report",
  *     tags={"Core | Media Comment"},
- *     summary="report a user",
+ *     summary="report a comment",
  *     description="To report media comment you need to call this endpoint.",
  *     operationId="reportMediaComment",
  *     security={{"bearerAuth": {}}},
