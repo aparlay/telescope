@@ -29,6 +29,7 @@ class MediaCommentFactory extends Factory
             },
             'user_id' => new ObjectId(User::factory()->create()->_id),
             'text' => $this->faker->realText(rand(50, 200)),
+            'likes_count' => 0,
             'creator' => function (array $attributes) {
                 $user = User::user($attributes['user_id'])->first();
 

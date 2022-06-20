@@ -83,6 +83,7 @@ class MediaCommentLikeService
         if (! $mediaCommentLike) {
             MediaCommentLike::create([
                 'media_comment_id' => new ObjectId($mediaComment->_id),
+                'created_by' => new ObjectId($creator->_id),
                 'creator' => [
                     '_id' => new ObjectId($creator->_id),
                     'username' => $creator->username,
@@ -105,6 +106,7 @@ class MediaCommentLikeService
 
         if ($mediaCommentLike) {
             $mediaComment->likes_count--;
+            $mediaComment->save();
             $mediaCommentLike->delete();
             $this->refreshFirstReplyLikes($mediaComment);
             $this->cacheByUserId(true);

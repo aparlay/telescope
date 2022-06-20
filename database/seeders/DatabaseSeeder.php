@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
         DB::collection('user_documents')->truncate();
         DB::collection('user_notifications')->truncate();
         DB::collection('notes')->truncate();
+        DB::collection('media_comments')->truncate();
+        DB::collection('media_comment_likes')->truncate();
 
         $this->call([
             AlertSeeder::class,
@@ -36,14 +38,15 @@ class DatabaseSeeder extends Seeder
             BlockSeeder::class,
             EmailSeeder::class,
             FollowSeeder::class,
+            UserSeeder::class,
             MediaSeeder::class,
             MediaLikeSeeder::class,
             MediaVisitSeeder::class,
-            UserSeeder::class,
             UserDocumentSeeder::class,
             UserNotificationSeeder::class,
             VersionSeeder::class,
             NoteSeeder::class,
+            MediaCommentSeeder::class,
         ]);
     }
 }

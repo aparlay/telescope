@@ -92,7 +92,7 @@ class MediaCommentController extends Controller
         $text = $request->input('text');
         $response = $this->mediaCommentService->create($media, $text);
 
-        return $this->response(new MediaCommentResource($response), '', );
+        return $this->response(new MediaCommentResource($response), '', 201);
     }
 
     /**
@@ -115,7 +115,7 @@ class MediaCommentController extends Controller
         $mediaObj = $mediaComment->mediaObj;
         $response = $this->mediaCommentService->createReply($mediaComment, $text);
 
-        return $this->response(new MediaCommentResource($response), '', );
+        return $this->response(new MediaCommentResource($response), '', 201);
     }
 
     /**
