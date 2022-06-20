@@ -119,6 +119,14 @@ class Media
      */
     public $is_adult;
 
+
+    /**
+     * @OA\Property(property="is_comments_enabled", type="boolean", example=true)
+     */
+    public $is_comments_enabled;
+
+
+
     /**
      * @OA\Property(property="slug", type="string", example="weER34")
      */
