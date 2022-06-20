@@ -3,12 +3,11 @@
 namespace Aparlay\Core\Api\V1\Dto;
 
 use Aparlay\Core\Api\V1\Requests\UpdateMediaRequest;
-use Illuminate\Http\Request;
 use Spatie\DataTransferObject\DataTransferObject;
 
 class MediaDTO extends DataTransferObject
 {
-    public string $reason;
+    public bool $is_comments_enabled;
 
     public static function fromRequest(UpdateMediaRequest $request): self
     {
