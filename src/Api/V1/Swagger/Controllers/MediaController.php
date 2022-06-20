@@ -351,6 +351,15 @@ use OpenApi\Annotations as OA;
  *         )
  *     ),
  *     @OA\Parameter(
+ *         name="is_comments_enabled",
+ *         in="query",
+ *         description="Is comments enabled for this video",
+ *         required=false,
+ *         @OA\Schema(
+ *             type="boolean"
+ *         )
+ *     ),
+ *     @OA\Parameter(
  *         name="visibility",
  *         in="query",
  *         description="the visibility of the media it can be 1 for public which is set by default or 0 for private",
