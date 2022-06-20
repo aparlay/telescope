@@ -601,7 +601,6 @@ use OpenApi\Annotations as OA;
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     )
  * )
- *
  */
 class MediaCommentController
 {
