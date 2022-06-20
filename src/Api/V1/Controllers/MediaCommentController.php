@@ -39,8 +39,6 @@ class MediaCommentController extends Controller
      */
     public function like(MediaComment $mediaComment)
     {
-        $this->authorize('create', [MediaComment::class, $mediaComment->mediaObj]);
-
         if (auth()->check()) {
             $this->mediaCommentLikeService->setUser(auth()->user());
         }
@@ -58,8 +56,6 @@ class MediaCommentController extends Controller
      */
     public function unlike(MediaComment $mediaComment)
     {
-        $this->authorize('create', [MediaComment::class, $mediaComment->mediaObj]);
-
         if (auth()->check()) {
             $this->mediaCommentLikeService->setUser(auth()->user());
         }
@@ -110,9 +106,6 @@ class MediaCommentController extends Controller
         }
 
         $text = $request->input('text');
-
-        /** @var Media $mediaObj */
-        $mediaObj = $mediaComment->mediaObj;
         $response = $this->mediaCommentService->createReply($mediaComment, $text);
 
         return $this->response(new MediaCommentResource($response), '', 201);

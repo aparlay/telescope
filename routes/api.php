@@ -71,6 +71,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::delete('/{mediaComment}', [MediaCommentController::class, 'destroy'])->name('delete');
             Route::put('{mediaComment}/like', [MediaCommentController::class, 'like'])->name('like');
             Route::put('{mediaComment}/unlike', [MediaCommentController::class, 'unlike'])->name('unlike');
+            Route::post('/{mediaComment}/report', [ReportController::class, 'comment'])->name('report');
         });
     });
 
