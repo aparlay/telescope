@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Dto\ReportDTO;
 use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\ReportRequest;
@@ -40,6 +41,23 @@ class ReportController extends Controller
 
         return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
     }
+
+    /**
+     * Store a newly created resource in storage.
+     * @throws AuthorizationException
+     */
+    public function comment(MediaComment $mediaComment, ReportRequest $request): Response
+    {
+        if (auth()->check()) {
+            $this->authorize('comment', [Report::class, $mediaComment->mediaObj->creatorObj]);
+        }
+
+        $this->injectAuthUser($this->reportService);
+        $report = $this->reportService->createCommentReport($mediaComment, ReportDTO::fromRequest($request));
+
+        return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
+    }
+
 
     /**
      * Store a newly created resource in storage.

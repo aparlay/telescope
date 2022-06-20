@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Dto\ReportDTO;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\ReportRepository;
@@ -38,6 +39,25 @@ class ReportService extends AbstractService
             return null;
         }
     }
+
+
+     public function createCommentReport(MediaComment $comment, ReportDTO $reportDTO): Model|Report|null
+    {
+        try {
+            return Report::create([
+                'reason' => $reportDTO->reason,
+                'type' => ReportType::COMMENT->value,
+                'status' => ReportStatus::REPORTED->value,
+                'comment_id' => new ObjectId($comment->_id),
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return null;
+        }
+    }
+
+
 
     /**
      * Responsible to create report for given media.

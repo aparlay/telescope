@@ -10,6 +10,7 @@ enum ReportType: int implements Enum
     case MEDIA = 1;
     case COMMENT = 2;
 
+
     public function label(): string
     {
         return match ($this) {

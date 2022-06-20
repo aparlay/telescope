@@ -35,6 +35,23 @@ class ReportPolicy
      * @param  User  $mediaCreator
      * @return Response
      */
+    public function comment(User | Authenticatable $user, User $mediaCreator): Response
+    {
+        if (! Gate::forUser($user)->denies('interact', $mediaCreator->_id)) {
+            return Response::allow();
+        }
+
+        return Response::deny(__('You cannot report this video at the moment.'));
+    }
+
+
+    /**
+     * Responsible for check the user can delete the model.
+     *
+     * @param  User|Authenticatable  $user
+     * @param  User  $mediaCreator
+     * @return Response
+     */
     public function media(User | Authenticatable $user, User $mediaCreator): Response
     {
         if (! Gate::forUser($user)->denies('interact', $mediaCreator->_id)) {

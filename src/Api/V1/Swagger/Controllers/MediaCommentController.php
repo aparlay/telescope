@@ -521,6 +521,87 @@ use OpenApi\Annotations as OA;
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     )
  * )
+ *
+ * @OA\Post(
+ *     path="/v1/media-comment/{mediaCommentId}/report",
+ *     tags={"Core | Media Comment"},
+ *     summary="report a user",
+ *     description="To report media comment you need to call this endpoint.",
+ *     operationId="reportMediaComment",
+ *     security={{"bearerAuth": {}}},
+ *     @OA\Parameter(
+ *         name="mediaCommentId",
+ *         in="path",
+ *         description="media comment id to report.",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="string"
+ *         )
+ *     ),
+ *     @OA\Parameter(
+ *         name="reason",
+ *         in="query",
+ *         description="reason of the comment that is going to be reported.",
+ *         required=false,
+ *         @OA\Schema(
+ *             type="string"
+ *         )
+ *     ),
+ *     @OA\Parameter(
+ *         name="X-DEVICE-ID",
+ *         in="header",
+ *         description="unique id of the device user is going to send this request it can be segment.com anonymousId.",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="string"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="successful operation",
+ *         @OA\Header(
+ *             header="X-Rate-Limit-Limit",
+ *             description="the maximum number of allowed requests during a period",
+ *             @OA\Schema(
+ *                 type="integer",
+ *                 format="int32"
+ *             )
+ *         ),
+ *         @OA\Header(
+ *             header="X-Rate-Limit-Remaining",
+ *             description="the remaining number of allowed requests within the current period",
+ *             @OA\Schema(
+ *                 type="integer",
+ *                 format="int32"
+ *             )
+ *         ),
+ *         @OA\Header(
+ *             header="X-Rate-Limit-Reset",
+ *             description="the number of seconds to wait before having maximum number of allowed requests again",
+ *             @OA\Schema(
+ *                 type="integer",
+ *                 format="int32"
+ *             )
+ *         ),
+ *         @OA\JsonContent(ref="#/components/schemas/Report"),
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Unauthorized",
+ *         @OA\JsonContent(ref="#/components/schemas/401"),
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="DATA VALIDATION FAILED",
+ *         @OA\JsonContent(ref="#/components/schemas/422"),
+ *     ),
+ *     @OA\Response(
+ *         response=429,
+ *         description="TOO MANY REQUESTS",
+ *         @OA\JsonContent(ref="#/components/schemas/429"),
+ *     )
+ * )
+ *
  */
 class MediaCommentController
 {
