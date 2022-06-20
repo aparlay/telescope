@@ -25,7 +25,10 @@ class MediaCommentResource extends JsonResource
         parent::__construct($resource);
 
         $this->mediaCommentLikeService = app()->get(MediaCommentLikeService::class);
-        $this->mediaCommentLikeService->setUser(auth()->user());
+
+        if (auth()->check()) {
+            $this->mediaCommentLikeService->setUser(auth()->user());
+        }
     }
 
     /**
@@ -39,7 +42,11 @@ class MediaCommentResource extends JsonResource
     public function toArray($request)
     {
         $parentId = ($this->parent['_id'] ?? null);
-        $isLiked = $this->mediaCommentLikeService->isLikedByUser($this->_id);
+
+        $isLiked = false;
+        if (auth()->check()) {
+            $isLiked = $this->mediaCommentLikeService->isLikedByUser($this->_id);
+        }
 
         $data = [
             '_id' => (string) $this->_id,

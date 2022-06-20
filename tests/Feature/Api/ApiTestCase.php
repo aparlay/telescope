@@ -8,7 +8,7 @@ use Artisan;
 
 class ApiTestCase extends TestCase
 {
-    protected static $isSeeded = false;
+    protected static $isCoreSeeded = false;
 
     public function setUp(): void
     {
@@ -21,9 +21,9 @@ class ApiTestCase extends TestCase
             DeviceIdThrottle::class
         );
 
-        if (! static::$isSeeded) {
+        if (! static::$isCoreSeeded) {
             Artisan::call('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
-            static::$isSeeded = true;
+            static::$isCoreSeeded = true;
         }
     }
 }

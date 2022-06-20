@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Database\Seeders;
 
 use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Seeder;
@@ -12,9 +13,7 @@ class MediaCommentSeeder extends Seeder
 {
     public function __construct()
     {
-        if (! \App::environment('production')) {
-            MediaComment::truncate();
-        }
+        MediaComment::query()->truncate();
     }
 
     /**
@@ -25,7 +24,7 @@ class MediaCommentSeeder extends Seeder
     public function run(): void
     {
         $users = User::query()->limit(5)->get();
-        $medias = User::query()->limit(10)->get();
+        $medias = Media::query()->limit(10)->get();
 
         $this->command->getOutput()->block('Creating media comments'."\n\r");
         $mediaCommentBar = $this->command->getOutput()->createProgressBar(50);
@@ -53,6 +52,7 @@ class MediaCommentSeeder extends Seeder
             $mediaReplies = MediaComment::factory()
                 ->count($rand)
                 ->state(function (array $attributes) use ($mediaComment, $users, $medias) {
+                    $mediaComment->load('creatorObj');
                     $replyToUser = $mediaComment->creatorObj;
 
                     return [
