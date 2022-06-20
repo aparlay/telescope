@@ -2,13 +2,6 @@
 
 namespace Aparlay\Core\Listeners;
 
-use Aparlay\Core\Admin\Services\NoteService;
-use Aparlay\Core\Events\UserReceiveAlertEvent;
-use Aparlay\Core\Events\UserStatusChangedEvent;
-use Aparlay\Core\Events\UserVerificationStatusChangedEvent;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
-use Aparlay\Payment\Events\RiskyCreditCardDetectedEvent;
-use Aparlay\Payment\Events\RiskyOrderDetectedEvent;
 use Aparlay\Payment\Events\RiskyUserDetectedEvent;
 
 class RiskyUserDetectorListener

@@ -21,7 +21,6 @@ class ApiTestCase extends TestCase
             DeviceIdThrottle::class
         );
 
-
         if (! static::$isCoreSeeded) {
             Artisan::call('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
             static::$isCoreSeeded = true;

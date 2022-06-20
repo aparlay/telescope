@@ -3,7 +3,8 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\VersionFactory;
-use Aparlay\Core\Models\Scopes\VersionScope;
+use Aparlay\Core\Models\Queries\VersionQueryBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -12,9 +13,9 @@ class Version extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use VersionScope;
 
     public const OS_ANDROID = 'android';
+
     public const OS_IOS = 'ios';
 
     /**
@@ -67,5 +68,24 @@ class Version extends BaseModel
     protected static function newFactory(): Factory
     {
         return VersionFactory::new();
+    }
+
+    /**
+     * @return VersionQueryBuilder|Builder
+     */
+    public static function query(): VersionQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return VersionQueryBuilder
+     */
+    public function newEloquentBuilder($query): VersionQueryBuilder
+    {
+        return new VersionQueryBuilder($query);
     }
 }

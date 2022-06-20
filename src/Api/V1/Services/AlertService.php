@@ -6,16 +6,11 @@ use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Repositories\AlertRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Models\Enums\AlertStatus;
+use MongoDB\BSON\ObjectId;
 
 class AlertService extends AbstractService
 {
     use HasUserTrait;
-    protected AlertRepository $AlertRepository;
-
-    public function __construct()
-    {
-        $this->AlertRepository = new AlertRepository(new Alert());
-    }
 
     /**
      * Responsible to create Alert for given user.
@@ -25,6 +20,9 @@ class AlertService extends AbstractService
      */
     public function visited(Alert $alert): Alert
     {
-        return $this->AlertRepository->update(['status' => AlertStatus::VISITED->value], $alert->_id);
+        $alert = Alert::find($alert->_id);
+        $alert->update(['status' => AlertStatus::VISITED->value]);
+
+        return $alert;
     }
 }

@@ -8,7 +8,7 @@ use Aparlay\Core\Constants\StorageType;
 use Aparlay\Core\Database\Factories\UserDocumentFactory;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
-use Aparlay\Core\Models\Scopes\UserDocumentScope;
+use Aparlay\Core\Models\Queries\UserDocumentQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,15 +35,11 @@ use MongoDB\BSON\ObjectId;
  * @property ObjectId $updated_by
  * @property string $created_at
  * @property string $updated_at
- *
- * @method static |self|Builder user(ObjectId|string $userId)              get user who liked media
- * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
  */
 class UserDocument extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use UserDocumentScope;
     use HasFileTrait;
 
     /**
@@ -96,6 +92,25 @@ class UserDocument extends BaseModel
     protected static function newFactory(): Factory
     {
         return UserDocumentFactory::new();
+    }
+
+    /**
+     * @return UserDocumentQueryBuilder|Builder
+     */
+    public static function query(): UserDocumentQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return UserDocumentQueryBuilder
+     */
+    public function newEloquentBuilder($query): UserDocumentQueryBuilder
+    {
+        return new UserDocumentQueryBuilder($query);
     }
 
     /**

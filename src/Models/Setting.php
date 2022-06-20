@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\SettingFactory;
-use Aparlay\Core\Models\Scopes\VersionScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -12,7 +11,6 @@ class Setting extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use VersionScope;
 
     /**
      * The collection associated with the model.

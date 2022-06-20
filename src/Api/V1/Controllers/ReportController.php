@@ -3,11 +3,14 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Dto\ReportDTO;
+use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\ReportRequest;
 use Aparlay\Core\Api\V1\Resources\ReportResource;
 use Aparlay\Core\Api\V1\Services\ReportService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -23,12 +26,15 @@ class ReportController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @throws AuthorizationException
      */
     public function user(User $user, ReportRequest $request): Response
     {
-        if (($loggedInUser = Auth::user()) && Gate::forUser($loggedInUser)->denies('interact', $user->_id)) {
-            return $this->error('You cannot report this user at the moment.', [], Response::HTTP_FORBIDDEN);
+        if (auth()->check()) {
+            $this->authorize('user', [Report::class, $user]);
         }
+
+        $this->injectAuthUser($this->reportService);
 
         $report = $this->reportService->createUserReport($user, ReportDTO::fromRequest($request));
 
@@ -37,12 +43,15 @@ class ReportController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @throws AuthorizationException
      */
     public function media(Media $media, ReportRequest $request): Response
     {
-        if (($loggedInUser = Auth::user()) && Gate::forUser($loggedInUser)->denies('interact', $media->created_by)) {
-            return $this->error('You cannot report this video at the moment.', [], Response::HTTP_FORBIDDEN);
+        if (auth()->check()) {
+            $this->authorize('media', [Report::class, $media->creatorObj]);
         }
+
+        $this->injectAuthUser($this->reportService);
 
         $report = $this->reportService->createMediaReport($media, ReportDTO::fromRequest($request));
 

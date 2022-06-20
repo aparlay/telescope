@@ -11,11 +11,11 @@ use MongoDB\BSON\ObjectId;
 
 class MediaCommentSeeder extends Seeder
 {
-
     public function __construct()
     {
         MediaComment::query()->truncate();
     }
+
     /**
      * Run the database seeds.
      *
