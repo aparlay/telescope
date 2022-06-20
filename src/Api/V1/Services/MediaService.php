@@ -45,15 +45,14 @@ class MediaService
      */
     public function update(Media $media, MediaDTO $mediaDto): Media
     {
-        if (!empty($mediaDto->is_comments_enabled)) {
+        if (! empty($mediaDto->is_comments_enabled)) {
             $media->is_comments_enabled = $mediaDto->is_comments_enabled;
         }
 
         $media->save();
+
         return $media;
     }
-
-
 
     /**
      * @param  int  $length

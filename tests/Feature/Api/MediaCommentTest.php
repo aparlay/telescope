@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaCommentLike;
-use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
@@ -82,7 +82,6 @@ class MediaCommentTest extends ApiTestCase
         $r->assertStatus(200)->assertJsonPath('status', 'OK');
         $r->assertJsonPath('code', 200);
 
-
         $r->assertJsonStructure([
             'data' => self::MEDIA_COMMENT_STRUCTURE,
         ])->assertJson(
@@ -109,7 +108,7 @@ class MediaCommentTest extends ApiTestCase
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post("/v1/media-comment/{$media->_id}", [
-                'text' => $this->faker->realText()
+                'text' => $this->faker->realText(),
             ]);
 
         $r->assertStatus(201)->assertJsonPath('status', 'OK');
@@ -130,7 +129,7 @@ class MediaCommentTest extends ApiTestCase
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post("/v1/media-comment/{$mediaComment->_id}/reply", [
-                'text' => $this->faker->realText()
+                'text' => $this->faker->realText(),
             ]);
 
         $r->assertStatus(201)->assertJsonPath('status', 'OK');
@@ -162,7 +161,8 @@ class MediaCommentTest extends ApiTestCase
                 'is_liked',
                 'media_id',
                 'user_id',
-            ]])->assertJson(fn (AssertableJson $json) => $json->whereAllType($types)
-        );
+            ], ])->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType($types)
+            );
     }
 }
