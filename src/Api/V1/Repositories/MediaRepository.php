@@ -41,6 +41,7 @@ class MediaRepository
                 'file' => $request->input('file', ''),
                 'description' => $request->input('description', ''),
                 'slug' => MediaService::generateSlug(6),
+                'is_comments_enabled' => true,
                 'count_fields_updated_at' => [],
                 'visibility' => $request->input('visibility', $user->visibility),
                 'creator' => [
