@@ -39,6 +39,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property mixed       $filename
  * @property array       $links
  * @property bool        $is_protected
+ * @property bool        $is_comments_enabled
+ *
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url

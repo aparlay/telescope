@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
+use Aparlay\Core\Api\V1\Dto\MediaDTO;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
@@ -35,6 +36,22 @@ class MediaService
     public function create(MediaRequest $request): Media
     {
         return $this->mediaRepository->store($request);
+    }
+
+    /**
+     * @param Media $media
+     * @param MediaDTO $mediaDto
+     * @return Media
+     */
+    public function update(Media $media, MediaDTO $mediaDto): Media
+    {
+        if (! empty($mediaDto->is_comments_enabled)) {
+            $media->is_comments_enabled = $mediaDto->is_comments_enabled;
+        }
+
+        $media->save();
+
+        return $media;
     }
 
     /**

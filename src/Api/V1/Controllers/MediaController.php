@@ -2,9 +2,11 @@
 
 namespace Aparlay\Core\Api\V1\Controllers;
 
+use Aparlay\Core\Api\V1\Dto\MediaDTO;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Requests\UpdateMediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
@@ -71,8 +73,13 @@ class MediaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Media $media): Response
+    public function update(UpdateMediaRequest $request, Media $media): Response
     {
+        return $this->response(
+            new MediaResource($this->mediaService->update($media, MediaDTO::fromRequest($request))),
+            '',
+            Response::HTTP_CREATED
+        );
     }
 
     /**

@@ -39,10 +39,14 @@ class MediaCommentPolicy
 
         $isBlocked = Block::select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
         if (! $isBlocked) {
-            return Response::allow();
+            return Response::deny(__('You cannot create comment for this video at the moment.'));
         }
 
-        return Response::deny(__('You cannot create comment for this video at the moment.'));
+        if (! $media->is_comments_enabled) {
+            return Response::deny(__('Comments are disabled for this video.'));
+        }
+
+        return Response::allow();
     }
 
     /**

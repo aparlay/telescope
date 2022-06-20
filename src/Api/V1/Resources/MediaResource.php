@@ -60,6 +60,7 @@ class MediaResource extends JsonResource
             'is_liked' => $this->is_liked,
             'is_visited' => $this->is_visited,
             'is_adult' => $this->is_adult,
+            'is_comments_enabled' => $this->is_comments_enabled ?? false,
             'like_count' => $this->like_count,
             'likes' => $likes,
             'visit_count' => $this->visit_count,
