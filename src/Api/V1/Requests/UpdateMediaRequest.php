@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class UpdateMediaRequest extends FormRequest
+class UpdateMediaRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +23,6 @@ class UpdateMediaRequest extends FormRequest
     {
         return [
             'is_comments_enabled' => ['sometimes', 'boolean'],
-            'description' => ['sometimes', 'string'],
-            'visibility' => ['sometimes', 'integer'],
         ];
     }
 }

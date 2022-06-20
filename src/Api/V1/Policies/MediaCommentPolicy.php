@@ -42,7 +42,7 @@ class MediaCommentPolicy
             return Response::deny(__('You cannot create comment for this video at the moment.'));
         }
 
-        if (!$media->is_comments_enabled) {
+        if (! $media->is_comments_enabled) {
             return Response::deny(__('Comments are disabled for this video.'));
         }
 
