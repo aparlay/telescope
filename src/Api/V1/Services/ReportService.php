@@ -40,8 +40,7 @@ class ReportService extends AbstractService
         }
     }
 
-
-     public function createCommentReport(MediaComment $comment, ReportDTO $reportDTO): Model|Report|null
+    public function createCommentReport(MediaComment $comment, ReportDTO $reportDTO): Model|Report|null
     {
         try {
             return Report::create([
@@ -56,8 +55,6 @@ class ReportService extends AbstractService
             return null;
         }
     }
-
-
 
     /**
      * Responsible to create report for given media.

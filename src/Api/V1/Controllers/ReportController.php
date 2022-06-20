@@ -58,7 +58,6 @@ class ReportController extends Controller
         return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
     }
 
-
     /**
      * Store a newly created resource in storage.
      * @throws AuthorizationException

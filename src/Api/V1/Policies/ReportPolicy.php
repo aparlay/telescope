@@ -44,7 +44,6 @@ class ReportPolicy
         return Response::deny(__('You cannot report this video at the moment.'));
     }
 
-
     /**
      * Responsible for check the user can delete the model.
      *
