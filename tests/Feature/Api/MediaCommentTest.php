@@ -209,6 +209,22 @@ class MediaCommentTest extends ApiTestCase
         );
     }
 
+    public function testCreateMediaCommentReplyFailed()
+    {
+        $user = User::query()->first();
+        $media = Media::query()->first();
+        $media->is_comments_enabled = false;
+        $media->save();
+
+        $r = $this->actingAs($user)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->post("/v1/media-comment/{$media->_id}", [
+                'text' => $this->faker->realText(),
+            ]);
+
+        $r->assertStatus(403);
+    }
+
     public function testCreateMediaCommentReply()
     {
         $user = User::query()->first();
