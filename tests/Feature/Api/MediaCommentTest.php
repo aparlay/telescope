@@ -189,6 +189,7 @@ class MediaCommentTest extends ApiTestCase
     {
         $user = User::query()->first();
         $media = Media::query()->first();
+        $media->is_comments_enabled = true;
         $media->save();
 
         $r = $this->actingAs($user)
