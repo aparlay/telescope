@@ -5,6 +5,7 @@ namespace Aparlay\Core\Tests\Feature\Api;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaCommentLike;
+use Aparlay\Core\Models\Report;
 use Aparlay\Core\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
@@ -42,6 +43,37 @@ class MediaCommentTest extends ApiTestCase
         'user_id',
     ];
 
+    public function testReportComment()
+    {
+        $user = User::query()->first();
+        $mediaComment = MediaComment::query()->first();
+
+        $r = $this->actingAs($user)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->post("/v1/media-comment/{$mediaComment->_id}/report", [
+                'reason' => 'This comment contains something weird..'
+            ]);
+
+        $r->assertStatus(201);
+
+        $r->assertJsonStructure([
+            'data' => [
+                '_id',
+                'comment_id',
+                'reason',
+                'created_at',
+                'updated_at'
+            ]
+        ]);
+
+        $data = $r->decodeResponseJson()['data'];
+
+        $this->assertDatabaseHas((new Report())->getCollection(), [
+            '_id' => new ObjectId($data['_id']),
+            'reason' => $data['reason']
+        ]);
+    }
+
     /**
      * @test
      */
@@ -54,7 +86,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->put("/v1/media-comment/{$mediaComment->_id}/like");
+            ->patch("/v1/media-comment/{$mediaComment->_id}/like");
 
         $r->assertStatus(200)->assertJsonPath('status', 'OK');
         $r->assertJsonPath('code', 200);
@@ -77,7 +109,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->put("/v1/media-comment/{$mediaComment->_id}/unlike");
+            ->patch("/v1/media-comment/{$mediaComment->_id}/unlike");
 
         $r->assertStatus(200)->assertJsonPath('status', 'OK');
         $r->assertJsonPath('code', 200);

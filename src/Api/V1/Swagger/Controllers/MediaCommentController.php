@@ -295,7 +295,7 @@ use OpenApi\Annotations as OA;
  *     ),
  * )
  *
- * @OA\Put(
+ * @OA\PATCH(
  *     path="/v1/media-comment/:mediaComment/like",
  *     tags={"Core | Media Comment"},
  *     summary="To create like for media comment you need to call this endpoint.",
@@ -373,7 +373,7 @@ use OpenApi\Annotations as OA;
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     ),
  * )
- * @OA\Put(
+ * @OA\PATCH(
  *     path="/v1/media-comment/{mediaCommentId}/unlike",
  *     tags={"Core | Media Comment"},
  *     summary="To remove like from media comment you need to call this endpoint.",
