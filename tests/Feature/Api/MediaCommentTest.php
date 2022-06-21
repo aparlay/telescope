@@ -107,7 +107,7 @@ class MediaCommentTest extends ApiTestCase
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post("/v1/media-comment/{$mediaComment->_id}/report", [
-                'reason' => 'This comment contains something weird..'
+                'reason' => 'This comment contains something weird..',
             ]);
 
         $r->assertStatus(201);
@@ -118,15 +118,15 @@ class MediaCommentTest extends ApiTestCase
                 'comment_id',
                 'reason',
                 'created_at',
-                'updated_at'
-            ]
+                'updated_at',
+            ],
         ]);
 
         $data = $r->decodeResponseJson()['data'];
 
         $this->assertDatabaseHas((new Report())->getCollection(), [
             '_id' => new ObjectId($data['_id']),
-            'reason' => $data['reason']
+            'reason' => $data['reason'],
         ]);
     }
 
