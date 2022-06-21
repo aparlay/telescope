@@ -26,6 +26,24 @@ class MediaCommentTest extends ApiTestCase
         'data.creator.avatar' => 'string',
     ];
 
+    const MEDIA_COMMENT_REPLY_STRUCTURE = [
+        [
+            '_id',
+            'created_at',
+            'parent_id',
+            'text',
+            'creator' => [
+                '_id',
+                'username',
+                'avatar',
+            ],
+            'is_liked',
+            'media_id',
+            'user_id',
+        ]
+    ];
+
+
     const MEDIA_COMMENT_STRUCTURE = [
         '_id',
         'created_at',
@@ -42,6 +60,44 @@ class MediaCommentTest extends ApiTestCase
         'media_id',
         'user_id',
     ];
+
+    public function testFetchMediaComments()
+    {
+        $user = User::query()->first();
+        $mediaComment = MediaComment::query()->first();
+        $media = $mediaComment->mediaObj;
+
+        $r = $this->actingAs($user)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get("/v1/media-comment/{$media->_id}");
+
+        $r->assertStatus(200);
+
+        $r->assertJsonStructure([
+            'data' => [
+                'items' => [self::MEDIA_COMMENT_STRUCTURE]
+            ]
+        ]);
+    }
+
+    public function testFetchMediaCommentReplies()
+    {
+        $user = User::query()->first();
+        $mediaComment = MediaComment::query()->whereNotNull('parent')->first();
+        $parentId = $mediaComment->parent['_id'];
+
+        $r = $this->actingAs($user)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get("/v1/media-comment/{$parentId}/replies");
+
+        $r->assertStatus(200);
+
+        $r->assertJsonStructure([
+            'data' => [
+                'items' => self::MEDIA_COMMENT_REPLY_STRUCTURE
+            ]
+        ]);
+    }
 
     public function testReportComment()
     {
@@ -180,20 +236,7 @@ class MediaCommentTest extends ApiTestCase
             'data.creator.avatar' => 'string',
         ];
         $r->assertJsonStructure([
-            'data' => [
-                '_id',
-                'created_at',
-                'parent_id',
-                'text',
-                'creator' => [
-                    '_id',
-                    'username',
-                    'avatar',
-                ],
-                'is_liked',
-                'media_id',
-                'user_id',
-            ], ])->assertJson(
+            'data' => self::MEDIA_COMMENT_REPLY_STRUCTURE])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType($types)
             );
     }
