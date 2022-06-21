@@ -69,8 +69,8 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::post('{media}', [MediaCommentController::class, 'store'])->name('create');
             Route::post('{mediaComment}/reply', [MediaCommentController::class, 'reply'])->name('reply');
             Route::delete('/{mediaComment}', [MediaCommentController::class, 'destroy'])->name('delete');
-            Route::put('{mediaComment}/like', [MediaCommentController::class, 'like'])->name('like');
-            Route::put('{mediaComment}/unlike', [MediaCommentController::class, 'unlike'])->name('unlike');
+            Route::match(['put', 'patch'], '{mediaComment}/like', [MediaCommentController::class, 'like'])->name('like');
+            Route::match(['put', 'patch'], '{mediaComment}/unlike', [MediaCommentController::class, 'unlike'])->name('unlike');
             Route::post('/{mediaComment}/report', [ReportController::class, 'comment'])->name('report');
         });
     });
