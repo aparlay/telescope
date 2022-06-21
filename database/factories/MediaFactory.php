@@ -60,6 +60,7 @@ class MediaFactory extends Factory
             'visibility' => $this->faker->randomElement(array_keys(Media::getVisibilities())),
             'status' => $this->faker->randomElement(array_keys(Media::getStatuses())),
             'is_music_licensed' => $this->faker->boolean(),
+            'is_comments_enabled' => true,
             'hashtags' => [],
             'people' => [],
             'processing_log' => [],

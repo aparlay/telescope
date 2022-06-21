@@ -26,7 +26,7 @@ class MediaCommentTest extends ApiTestCase
         'data.creator.avatar' => 'string',
     ];
 
-    const MEDIA_COMMENT_REPLY_STRUCTURE = [
+    const MEDIA_COMMENT_REPLY_STRUCTURE =
         [
             '_id',
             'created_at',
@@ -41,7 +41,7 @@ class MediaCommentTest extends ApiTestCase
             'media_id',
             'user_id',
         ]
-    ];
+    ;
 
 
     const MEDIA_COMMENT_STRUCTURE = [
@@ -94,7 +94,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r->assertJsonStructure([
             'data' => [
-                'items' => self::MEDIA_COMMENT_REPLY_STRUCTURE
+                'items' => [self::MEDIA_COMMENT_REPLY_STRUCTURE]
             ]
         ]);
     }
@@ -235,9 +235,13 @@ class MediaCommentTest extends ApiTestCase
             'data.creator.username' => 'string',
             'data.creator.avatar' => 'string',
         ];
+
         $r->assertJsonStructure([
-            'data' => self::MEDIA_COMMENT_REPLY_STRUCTURE])->assertJson(
-                fn (AssertableJson $json) => $json->whereAllType($types)
-            );
+            'data' => self::MEDIA_COMMENT_REPLY_STRUCTURE
+        ]);
+
+        $r->assertJson(
+            fn (AssertableJson $json) => $json->whereAllType($types)
+        );
     }
 }
