@@ -831,7 +831,7 @@ class User extends Authenticatable implements JWTSubject
 
     public static function SendSlackNotification(Notification $notification)
     {
-        if (($user = User::admin()->first()) !== null) {
+        if (($user = self::admin()->first()) !== null) {
             $user->notify($notification);
         }
     }
