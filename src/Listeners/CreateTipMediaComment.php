@@ -26,7 +26,7 @@ class CreateTipMediaComment
         ]);
 
         /** @var Media $media */
-        $media = Media::query()->findOrFail($tip->mediaObj->_id);
+        $media = Media::findOrFail($tip->media_id);
         $mediaCommentService->setUser($tip->creatorObj);
         $mediaCommentService->create($media, $text);
     }
