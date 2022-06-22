@@ -16,7 +16,6 @@ use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\Traits\CountryFields;
-use Aparlay\Payment\Models\Enums\CreditCardStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -827,6 +826,13 @@ class User extends Authenticatable implements JWTSubject
             $stats['counters'][$type] = $count;
             $stats['counters'][$type] = max($stats['counters'][$type], 0);
             $this->update(['stats' => $stats]);
+        }
+    }
+
+    public static function SendSlackNotification(Notification $notification)
+    {
+        if (($user = User::admin()->first()) !== null) {
+            $user->notify($notification);
         }
     }
 }
