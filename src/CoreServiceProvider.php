@@ -36,10 +36,12 @@ use Aparlay\Core\Commands\VideoScoreHourlyCommand;
 use Aparlay\Core\Commands\VideoUpdateInfoCommand;
 use Aparlay\Core\Commands\WarmupCacheCommand;
 use Aparlay\Core\Commands\WsCommand;
+use Aparlay\Core\Components\PersonalAccessToken;
 use Aparlay\Core\Helpers\ConfigHelper;
 use Aparlay\Core\Helpers\IP;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
@@ -126,6 +128,11 @@ class CoreServiceProvider extends ServiceProvider
         $this->publishMigrations();
 
         $this->registerLivewireComponents();
+
+        // Loader Alias
+        // SANCTUM CUSTOM PERSONAL-ACCESS-TOKEN
+        $loader = AliasLoader::getInstance();
+        $loader->alias(\Laravel\Sanctum\PersonalAccessToken::class, PersonalAccessToken::class);
 
         ConfigHelper::loadDbConfig();
     }
