@@ -7,7 +7,7 @@ use Exception;
 class Base58Check
 {
     /**
-     * Encode Base58Check
+     * Encode Base58Check.
      *
      * @param string $string
      * @param int $prefix
@@ -19,14 +19,14 @@ class Base58Check
         $string = hex2bin($string);
 
         if ($prefix) {
-            $string = chr($prefix) . $string;
+            $string = chr($prefix).$string;
         }
 
         if ($compressed) {
             $string .= chr(0x01);
         }
 
-        $string = $string . substr(Hash::SHA256(Hash::SHA256($string)), 0, 4);
+        $string = $string.substr(Hash::SHA256(Hash::SHA256($string)), 0, 4);
 
         $base58 = Base58::encode(Crypto::bin2bc($string));
         for ($i = 0; $i < strlen($string); $i++) {
@@ -34,13 +34,14 @@ class Base58Check
                 break;
             }
 
-            $base58 = '1' . $base58;
+            $base58 = '1'.$base58;
         }
+
         return $base58;
     }
 
     /**
-     * Decoding from Base58Check
+     * Decoding from Base58Check.
      *
      * @param string $string
      * @param int $removeLeadingBytes

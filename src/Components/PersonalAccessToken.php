@@ -8,7 +8,6 @@ use Laravel\Sanctum\Contracts\HasAbilities;
 
 class PersonalAccessToken extends Model implements HasAbilities
 {
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -57,7 +56,7 @@ class PersonalAccessToken extends Model implements HasAbilities
      */
     public static function findToken(string $token): ?static
     {
-        if (!str_contains($token, '|')) {
+        if (! str_contains($token, '|')) {
             return static::where('token', hash('sha256', $token))->first();
         }
 
@@ -89,6 +88,6 @@ class PersonalAccessToken extends Model implements HasAbilities
      */
     public function cant($ability): bool
     {
-        return !$this->can($ability);
+        return ! $this->can($ability);
     }
 }
