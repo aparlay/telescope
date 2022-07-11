@@ -33,12 +33,7 @@ class UserNotificationService
             $query->category($filteredCategory);
         }
 
-        $notifications = $query->latest('updated_at')->paginate();
-
-        $notificationIds = collect($notifications->items())->pluck('_id')->toArray();
-        $this->readAll($notificationIds);
-
-        return $notifications;
+        return $query->latest('updated_at')->paginate();
     }
 
     /**
