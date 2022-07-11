@@ -38,6 +38,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         BaseModel::observe(BaseModelObserver::class);
+        /*
         Follow::observe(FollowObserver::class);
         Block::observe(BlockObserver::class);
         MediaLike::observe(MediaLikeObserver::class);
@@ -45,6 +46,7 @@ class EventServiceProvider extends ServiceProvider
         MediaVisit::observe(MediaVisitObserver::class);
         User::observe(UserObserver::class);
         Report::observe(ReportObserver::class);
+        */
         parent::boot();
     }
 }
