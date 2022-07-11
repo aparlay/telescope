@@ -30,6 +30,17 @@ class UserFollowedNotification extends Notification
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;
         $this->eventType = 'UserFollowed';
-        $this->payload = [];
+        $this->payload = [
+            'follower' => [
+                '_id' => (string) $follower->_id,
+                'username' => $follower->username,
+                'avatar' => $follower->avatar,
+            ],
+            'followee' => [
+                '_id' => (string) $followee->_id,
+                'username' => $followee->username,
+                'cover' => $followee->avatar,
+            ]
+        ];
     }
 }
