@@ -2,19 +2,14 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
-use Aparlay\Chat\Api\V1\Models\Chat;
 use Aparlay\Core\Api\V1\Dto\UserNotificationDto;
-use Aparlay\Core\Api\V1\Models\UserDocument;
+use Aparlay\Core\Api\V1\Models\UserNotification;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
-use Aparlay\Core\Models\UserNotification;
-use function Clue\StreamFilter\fun;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
+use Jenssegers\Mongodb\Relations\MorphTo;
 use MongoDB\BSON\ObjectId;
 
 class UserNotificationService
@@ -27,7 +22,13 @@ class UserNotificationService
      */
     public function index($filteredCategory = null): LengthAwarePaginator
     {
-        $query = UserNotification::query()->with('entityObj')->user($this->getUser()->_id);
+        $query = UserNotification::query()->with(['entityObj' => function (MorphTo $morphTo) {
+            $morphTo->morphWith([
+                'Media',
+                'User',
+                'Tip',
+            ]);
+        }])->user($this->getUser()->_id);
 
         if (! empty($filteredCategory)) {
             $query->category($filteredCategory);

@@ -32,10 +32,10 @@ class UserNotificationController extends Controller
         if (auth()->check()) {
             $this->userNotificationService->setUser(auth()->user());
         }
-        $userNotifications = $this->userNotificationService->index($request->input('category'));
-        $collection = new UserNotificationCollection($userNotifications);
 
-        return $this->response($collection, '', Response::HTTP_OK);
+        $userNotifications = $this->userNotificationService->index($request->input('category'));
+
+        return $this->response(new UserNotificationCollection($userNotifications), '', Response::HTTP_OK);
     }
 
     /**

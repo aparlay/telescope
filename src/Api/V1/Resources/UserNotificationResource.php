@@ -8,9 +8,6 @@ use Aparlay\Payment\Api\V1\Resources\TipResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- * @mixin UserDocument
- */
 class UserNotificationResource extends JsonResource
 {
     /**
@@ -27,7 +24,7 @@ class UserNotificationResource extends JsonResource
             UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value => new MediaResource($this->entityObj),
             UserNotificationCategory::FOLLOWS->value => new FollowResource($this->entityObj),
             UserNotificationCategory::TIPS->value => new TipResource($this->entityObj),
-            default => [],
+            default => new UserResource($this->entityObj),
         };
 
         return [
