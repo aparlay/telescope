@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Providers;
 
-
 class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
 {
     /**
