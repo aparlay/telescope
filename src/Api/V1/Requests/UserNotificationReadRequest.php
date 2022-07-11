@@ -39,7 +39,7 @@ class UserNotificationReadRequest extends FormRequest
     public function prepareForValidation()
     {
         foreach ($this->user_notification_ids as $index => $notificationId) {
-            if (!empty($notificationId) && strlen($notificationId) === 24 && strspn($notificationId,'0123456789ABCDEFabcdef') === 24) {
+            if (! empty($notificationId) && strlen($notificationId) === 24 && strspn($notificationId, '0123456789ABCDEFabcdef') === 24) {
                 $this->user_notification_ids[$index] = new ObjectId($notificationId);
             } else {
                 unset($this->user_notification_ids[$index]);
