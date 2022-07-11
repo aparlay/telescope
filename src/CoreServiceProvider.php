@@ -131,8 +131,8 @@ class CoreServiceProvider extends ServiceProvider
 
         // Loader Alias
         // SANCTUM CUSTOM PERSONAL-ACCESS-TOKEN
-        $loader = AliasLoader::getInstance();
-        $loader->alias(\Laravel\Sanctum\PersonalAccessToken::class, PersonalAccessToken::class);
+        //$loader = AliasLoader::getInstance();
+        //$loader->alias(\Laravel\Sanctum\PersonalAccessToken::class, PersonalAccessToken::class);
 
         ConfigHelper::loadDbConfig();
     }
