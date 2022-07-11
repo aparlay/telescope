@@ -40,7 +40,7 @@ class UserFollowedNotification extends Notification
                 '_id' => (string) $followee->_id,
                 'username' => $followee->username,
                 'cover' => $followee->avatar,
-            ]
+            ],
         ];
     }
 }
