@@ -91,12 +91,14 @@ class UserNotificationService
     /**
      * Responsible to unlike the given media.
      *
-     * @param  array  $notifications
+     * @param  ObjectId  $userId
+     * @param  array  $notificationIds
      */
-    public function readAll(array $notificationIds): void
+    public function readAll(ObjectId $userId, array $notificationIds): void
     {
-        dispatch(function () use ($notificationIds) {
+        dispatch(function () use ($userId, $notificationIds) {
             UserNotification::query()
+                ->user($userId)
                 ->whereIn('_id', $notificationIds)
                 ->notVisited()
                 ->update(['status' => UserNotificationStatus::VISITED->value]);

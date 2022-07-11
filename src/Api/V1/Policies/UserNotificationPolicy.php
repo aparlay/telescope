@@ -12,14 +12,8 @@ class UserNotificationPolicy
 {
     use HandlesAuthorization;
 
-    public function view(User | Authenticatable $user, UserNotification $userNotification)
+    public function read(User | Authenticatable $user)
     {
-        $userId = $user?->_id;
-
-        if ((string) $userId === (string) $userNotification->user_id) {
-            return Response::allow();
-        }
-
-        return Response::deny(__('You cannot read this notification'));
+        return Response::allow();
     }
 }

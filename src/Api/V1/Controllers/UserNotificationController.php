@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\UserNotification;
+use Aparlay\Core\Api\V1\Requests\UserNotificationReadRequest;
 use Aparlay\Core\Api\V1\Resources\UserNotificationCollection;
 use Aparlay\Core\Api\V1\Resources\UserNotificationResource;
 use Aparlay\Core\Api\V1\Services\UserNotificationService;
@@ -38,19 +39,19 @@ class UserNotificationController extends Controller
     }
 
     /**
-     * @param  UserNotification  $userNotification
+     * @param  UserNotificationReadRequest  $request
      * @return Response
      * @throws AuthorizationException
      */
-    public function view(UserNotification $userNotification): Response
+    public function read(UserNotificationReadRequest $request): Response
     {
         if (auth()->check()) {
             $this->userNotificationService->setUser(auth()->user());
         }
 
-        $this->authorize('view', [UserNotification::class, $userNotification]);
-        $userNotification = $this->userNotificationService->read($userNotification);
+        $this->authorize('read', [UserNotification::class]);
+        $this->userNotificationService->readAll(auth()->user()->_id, $request->user_notification_ids);
 
-        return $this->response(new UserNotificationResource($userNotification), '', Response::HTTP_ACCEPTED);
+        return $this->response([], '', Response::HTTP_ACCEPTED);
     }
 }

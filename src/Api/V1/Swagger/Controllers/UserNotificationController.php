@@ -76,7 +76,7 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Put (
- *     path="/v1/user-notification/{ID}",
+ *     path="/v1/user-notification/read",
  *     tags={"Core | Notification"},
  *     summary="mark a notication as readed",
  *     description="This endpoint simply change user notification status to visited",
@@ -90,7 +90,21 @@ use OpenApi\Annotations as OA;
  *         @OA\Schema(
  *             type="string"
  *         )
- *     ),     *
+ *     ),
+ *     @OA\Parameter(
+ *         name="user_notification_ids",
+ *         in="query",
+ *         description="array of user notifications to mark as readed",
+ *         required=false,
+ *         @OA\Schema(
+ *             type="array",
+ *              @OA\Items(
+ *                 type="string",
+ *                 format="string",
+ *                 example="62cbc0f38ba7f35c90196d35"
+ *             )
+ *         )
+ *     ),
  *     @OA\Response(
  *         response=202,
  *         description="successful operation",

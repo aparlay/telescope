@@ -20,7 +20,7 @@ use OpenApi\Annotations as OA;
  *         @OA\Schema(
  *             type="string"
  *         )
- *     ),     *
+ *     ),
  *     @OA\Response(
  *         response=201,
  *         description="successful operation",
@@ -86,7 +86,7 @@ use OpenApi\Annotations as OA;
  *         @OA\Schema(
  *             type="string"
  *         )
- *     ),     *
+ *     ),
  *     @OA\Response(
  *         response=201,
  *         description="successful operation",
