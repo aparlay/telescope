@@ -91,6 +91,21 @@ use OpenApi\Annotations as OA;
  *             type="string"
  *         )
  *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"user_notification_ids"},
+ *             @OA\Property(
+ *                  property="user_notification_ids",
+ *                  type="array",
+ *                  @OA\Items(
+ *                      type="string",
+ *                      format="string",
+ *                      example="62cbc0f38ba7f35c90196d35"
+ *                  )
+ *              ),
+ *          ),
+ *     ),
  *     @OA\Parameter(
  *         name="user_notification_ids",
  *         in="query",
