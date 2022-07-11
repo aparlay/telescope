@@ -20,6 +20,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property ObjectId   $media_id
  * @property ObjectId   $user_id
  * @property array      $creator
+ * @property string      $text
  * @property string     $created_at
  * @property User       $creatorObj
  * @property mixed|null $creator_id

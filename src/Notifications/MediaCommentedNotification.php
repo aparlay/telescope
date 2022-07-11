@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Notifications;
 
+use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\Media;
@@ -21,7 +22,7 @@ class MediaCommentedNotification extends Notification
      *
      * @return void
      */
-    public function __construct(User|Authenticatable $user, Media $media, $message)
+    public function __construct(User|Authenticatable $user, Media $media, MediaComment $comment, $message)
     {
         $this->entity_type = Media::shortClassName();
         $this->entity_id = new ObjectId($media->_id);
@@ -30,6 +31,20 @@ class MediaCommentedNotification extends Notification
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;
         $this->eventType = 'MediaComment';
-        $this->payload = [];
+        $this->payload = [
+            'user' => [
+                '_id' => (string) $user->_id,
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ],
+            'media' => [
+                '_id' => (string) $media->_id,
+                'cover' => $media->cover_url,
+            ],
+            'comment' => [
+                '_id' => (string) $comment->_id,
+                'message' => $comment->text,
+            ]
+        ];
     }
 }
