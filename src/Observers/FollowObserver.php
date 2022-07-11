@@ -5,6 +5,8 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Notifications\MediaLikedNotification;
+use Aparlay\Core\Notifications\UserFollowedNotification;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
@@ -75,6 +77,10 @@ class FollowObserver extends BaseModelObserver
         $stats['counters']['followings'] = $followingCount;
         $model->creatorObj->stats = $stats;
         $model->creatorObj->save();
+
+        $model->userObj->notify(
+            new UserFollowedNotification($model->creatorObj, $model->userObj, '')
+        );
 
         // Reset the Redis cache
         Follow::cacheByUserId($model->creator['_id'], true);
