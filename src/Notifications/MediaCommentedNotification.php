@@ -2,10 +2,10 @@
 
 namespace Aparlay\Core\Notifications;
 
-use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -44,7 +44,7 @@ class MediaCommentedNotification extends Notification
             'comment' => [
                 '_id' => (string) $comment->_id,
                 'message' => $comment->text,
-            ]
+            ],
         ];
     }
 }
