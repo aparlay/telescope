@@ -76,7 +76,7 @@ class UserNotificationEvent implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'user_notification_id' => (string)$this->userNotification->_id,
+            'user_notification_id' => (string) $this->userNotification->_id,
             'category' => $this->userNotification->category,
             'category_label' => $this->userNotification->category_label,
             'status' => $this->userNotification->status,
