@@ -95,11 +95,12 @@ class UserNotificationService
     /**
      * Responsible to unlike the given media.
      *
-     * @param  ObjectId  $userId
+     * @param  ObjectId|string  $userId
      * @param  array  $notificationIds
      */
-    public function readAll(ObjectId $userId, array $notificationIds): void
+    public function readAll(ObjectId|string $userId, array $notificationIds): void
     {
+        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
         dispatch(function () use ($userId, $notificationIds) {
             UserNotification::query()
                 ->user($userId)
