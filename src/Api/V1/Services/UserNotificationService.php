@@ -23,15 +23,15 @@ class UserNotificationService
     public function index($filteredCategory = null): LengthAwarePaginator
     {
         $query = UserNotification::query()->user($this->getUser()->_id);
-            /*
-             ->with(['entityObj' => function (MorphTo $morphTo) {
-                $morphTo->morphWith([
-                    'Media',
-                    'User',
-                    'Tip',
-                ]);
-            }])
-            */
+        /*
+         ->with(['entityObj' => function (MorphTo $morphTo) {
+            $morphTo->morphWith([
+                'Media',
+                'User',
+                'Tip',
+            ]);
+        }])
+        */
 
         if (! empty($filteredCategory)) {
             $query->category($filteredCategory);
