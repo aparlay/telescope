@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Services;
 use Aparlay\Core\Api\V1\Dto\UserNotificationDto;
 use Aparlay\Core\Api\V1\Models\UserNotification;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -64,7 +65,7 @@ class UserNotificationService
         if (empty($model)) {
             $model = UserNotification::create($data);
         } else {
-            $model->update(['status' => UserNotificationStatus::NOT_VISITED->value]);
+            $model->update(['status' => UserNotificationStatus::NOT_VISITED->value, 'updated_at' => DT::utcNow()]);
         }
 
         $this->getUser()->increaseStatCounter('notifications');
