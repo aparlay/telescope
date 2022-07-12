@@ -799,12 +799,12 @@ class User extends Authenticatable implements JWTSubject
     public function shouldNotify($category)
     {
         return match ($category) {
-            UserNotificationCategory::LIKES->value => $this->setting['notifications']['likes'],
-            UserNotificationCategory::COMMENTS->value => $this->setting['notifications']['comments'],
-            UserNotificationCategory::TIPS->value => $this->setting['notifications']['tips'],
-            UserNotificationCategory::SUBSCRIPTIONS->value => $this->setting['notifications']['new_subscribers'],
-            UserNotificationCategory::FOLLOWS->value => $this->setting['notifications']['new_followers'],
-            UserNotificationCategory::SYSTEM->value => true, //$this->setting['notifications']['news_and_updates'],
+            UserNotificationCategory::LIKES->value => $this->setting['notifications']['likes'] ?? true,
+            UserNotificationCategory::COMMENTS->value => $this->setting['notifications']['comments'] ?? true,
+            UserNotificationCategory::TIPS->value => $this->setting['notifications']['tips'] ?? true,
+            UserNotificationCategory::SUBSCRIPTIONS->value => $this->setting['notifications']['new_subscribers'] ?? true,
+            UserNotificationCategory::FOLLOWS->value => $this->setting['notifications']['new_followers'] ?? true,
+            UserNotificationCategory::SYSTEM->value => true, //$this->setting['notifications']['news_and_updates'] ?? true,
             default => false
         };
     }

@@ -75,13 +75,6 @@ class UserNotificationEvent implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
-        $entity = match ($this->userNotification->category) {
-            UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value => new MediaResource($this->userNotification->entityObj),
-            UserNotificationCategory::FOLLOWS->value => new FollowResource($this->userNotification->entityObj),
-            UserNotificationCategory::TIPS->value => new TipResource($this->userNotification->entityObj),
-            default => new UserResource($this->userNotification->entityObj),
-        };
-
         return [
             'category' => $this->userNotification->category,
             'category_label' => $this->userNotification->category_label,
@@ -91,7 +84,6 @@ class UserNotificationEvent implements ShouldBroadcast
             'payload' => $this->payload,
             'created_at' => $this->userNotification->created_at->valueOf(),
             'updated_at' => $this->userNotification->updated_at->valueOf(),
-            'entity' => $entity,
         ];
     }
 }
