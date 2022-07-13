@@ -22,7 +22,7 @@ class CoreCommand extends Command
 
         if ($response->successful() && ! empty($response['data'])) {
             foreach ($response['data'] as $flight) {
-                if ((int) substr($flight['takeoffTime'], 0, 2) >= 5 && (int) $flight['num'] > 1) {
+                if ((int) substr($flight['takeoffTime'], 0, 2) >= 18 && (int) $flight['num'] > 1) {
                     $flight['name'] = 'New Flight Detected';
                     $flight['email'] = 'New Flight Detected';
                     $flight['topic'] = 'New Flight Detected';
