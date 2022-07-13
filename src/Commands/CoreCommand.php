@@ -2,11 +2,8 @@
 
 namespace Aparlay\Core\Commands;
 
-use Aparlay\Core\Mail\EmailEnvelope;
 use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Email as EmailModel;
-use Aparlay\Core\Models\User;
-use Aparlay\Core\Notifications\ThirdPartyLogger;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -25,7 +22,10 @@ class CoreCommand extends Command
 
         if ($response->successful() && ! empty($response['data'])) {
             foreach ($response['data'] as $flight) {
-                if ((int) substr($flight['takeoffTime'], 0, 2) >= 18 && (int) $flight['num'] > 1) {
+                if ((int) substr($flight['takeoffTime'], 0, 2) >= 5 && (int) $flight['num'] > 1) {
+                    $flight['name'] = 'New Flight Detected';
+                    $flight['email'] = 'New Flight Detected';
+                    $flight['topic'] = 'New Flight Detected';
                     $flight['msg'] = json_encode($flight, JSON_PRETTY_PRINT);
 
                     \Aparlay\Core\Jobs\Email::dispatch('ramin.farmani@gmail.com', 'New Flight Detected', EmailModel::TEMPLATE_EMAIL_CONTACTUS, $flight);
