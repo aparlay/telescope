@@ -23,9 +23,9 @@ class CoreCommand extends Command
             ->retry(5, 60000)
             ->get('https://respina24.info/flight/getFlightAjax?source[]=MHD&destination[]=THR&DepartureGo=2022-07-22&type=&version=1657689802');
 
-        if ($response->successful() && !empty($response['data'])) {
+        if ($response->successful() && ! empty($response['data'])) {
             foreach ($response['data'] as $flight) {
-                if ((int)substr($flight['takeoffTime'], 0, 2) >= 5 && (int)$flight['num'] > 1) {
+                if ((int) substr($flight['takeoffTime'], 0, 2) >= 5 && (int) $flight['num'] > 1) {
                     $flight['msg'] = json_encode($flight, JSON_PRETTY_PRINT);
 
                     \Aparlay\Core\Jobs\Email::dispatch('ramin.farmani@gmail.com', 'New Flight Detected', EmailModel::TEMPLATE_EMAIL_CONTACTUS, $flight);
