@@ -16,7 +16,7 @@ class CoreCommand extends Command
     public function handle()
     {
         // https://respina24.info/flight/getFlightAjax?source[]=MHD&destination[]=THR&DepartureGo=2022-07-22&type=&version=1657689802
-        $response = Http::timeout(180)
+        /*$response = Http::timeout(180)
             ->retry(5, 60000)
             ->get('https://respina24.info/flight/getFlightAjax?source[]=MHD&destination[]=THR&DepartureGo=2022-07-22&type=&version=1657689802');
 
@@ -31,7 +31,7 @@ class CoreCommand extends Command
                     \Aparlay\Core\Jobs\Email::dispatch('ramin.farmani@gmail.com', 'New Flight Detected', EmailModel::TEMPLATE_EMAIL_CONTACTUS, $flight);
                 }
             }
-        }
+        }*/
 
         $this->comment('All done');
 
