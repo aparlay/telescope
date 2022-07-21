@@ -31,7 +31,7 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
         Follow::observe(FollowObserver::class);
         Block::observe(BlockObserver::class);
         MediaLike::observe(MediaLikeObserver::class);
-        //MediaComment::observe(MediaCommentObserver::class);
+        MediaComment::observe(MediaCommentObserver::class);
         Media::observe(MediaObserver::class);
         MediaVisit::observe(MediaVisitObserver::class);
         User::observe(UserObserver::class);
