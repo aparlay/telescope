@@ -24,8 +24,8 @@ class UserFollowedNotification extends Notification
     public function __construct(User|Authenticatable $follower, User|Authenticatable $followee, $message)
     {
         $this->entity_type = User::shortClassName();
-        $this->entity_id = new ObjectId($followee->_id);
-        $this->user_id = new ObjectId($follower->_id);
+        $this->entity_id = new ObjectId($follower->_id);
+        $this->user_id = new ObjectId($followee->_id);
         $this->category = UserNotificationCategory::FOLLOWS->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;

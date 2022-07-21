@@ -43,7 +43,7 @@ class MediaCommentedNotification extends Notification
             ],
             'comment' => [
                 '_id' => (string) $comment->_id,
-                'message' => $comment->text,
+                'text' => $comment->text,
             ],
         ];
     }
