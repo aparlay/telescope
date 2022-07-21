@@ -26,8 +26,12 @@ class MediaCommentQueryBuilder extends EloquentQueryBuilder
         return $this->whereId($parentId, 'parent._id');
     }
 
-    public function media(ObjectId | string $userId): self
+    /**
+     * @param  ObjectId|string  $mediaId
+     * @return $this
+     */
+    public function media(ObjectId | string $mediaId): self
     {
-        return $this->whereId($userId, 'media_id');
+        return $this->whereId($mediaId, 'media_id');
     }
 }

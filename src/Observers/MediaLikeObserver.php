@@ -12,25 +12,6 @@ use Psr\SimpleCache\InvalidArgumentException;
 class MediaLikeObserver extends BaseModelObserver
 {
     /**
-     * Handle the MediaLike "creating" event.
-     *
-     * @param  MediaLike  $model
-     * @return void
-     */
-    public function creating($model): void
-    {
-        $creator = User::user($model->creator['_id'])->first();
-
-        $model->creator = [
-            '_id' => new ObjectId($creator->_id),
-            'username' => $creator->username,
-            'avatar' => $creator->avatar,
-        ];
-
-        parent::creating($model);
-    }
-
-    /**
      * Handle the MediaLike "created" event.
      *
      * @param  MediaLike  $model

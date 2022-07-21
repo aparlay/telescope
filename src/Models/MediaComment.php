@@ -8,10 +8,8 @@ use Aparlay\Core\Models\Queries\MediaCommentQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class MediaComment.
@@ -92,6 +90,14 @@ class MediaComment extends BaseModel
     protected static function newFactory(): Factory
     {
         return MediaCommentFactory::new();
+    }
+
+    /**
+     * @return MediaCommentQueryBuilder|Builder
+     */
+    public static function query(): MediaCommentQueryBuilder|Builder
+    {
+        return parent::query();
     }
 
     /**
