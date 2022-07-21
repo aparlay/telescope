@@ -30,8 +30,8 @@ class Kernel extends HttpKernel
      * @var string[]
      */
     protected $middlewarePriority = [
-        \Aparlay\Core\Api\V1\Http\Middleware\DeviceId::class,
         \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
+        \Aparlay\Core\Api\V1\Http\Middleware\DeviceId::class,
         \Aparlay\Core\Api\V1\Http\Middleware\OptionalAuthenticate::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Aparlay\Core\Api\V1\Http\Middleware\DispatchAuthenticatedEndpointEvent::class,
