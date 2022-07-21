@@ -38,7 +38,7 @@ class UserNotificationService
             $query->category($filteredCategory);
         }
 
-        return $query->latest('updated_at')->paginate();
+        return $query->latest('created_at')->paginate();
     }
 
     /**
