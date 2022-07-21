@@ -79,7 +79,11 @@ class FollowObserver extends BaseModelObserver
         $model->creatorObj->save();
 
         $model->userObj->notify(
-            new UserFollowedNotification($model->creatorObj, $model->userObj, '')
+            new UserFollowedNotification(
+                $model->creatorObj,
+                $model->userObj,
+                __(':username start to following you.', ['username' => $model->creator['username']])
+            )
         );
 
         // Reset the Redis cache
