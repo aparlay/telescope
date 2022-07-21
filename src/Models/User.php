@@ -102,7 +102,13 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  */
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, UserScope, HasRoles, Searchable, CountryFields;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use UserScope;
+    use HasRoles;
+    use Searchable;
+    use CountryFields;
 
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
