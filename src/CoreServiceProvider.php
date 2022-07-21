@@ -38,8 +38,10 @@ use Aparlay\Core\Commands\WarmupCacheCommand;
 use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Helpers\ConfigHelper;
 use Aparlay\Core\Helpers\IP;
+use Aparlay\Core\Models\PersonalAccessToken;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
@@ -127,6 +129,9 @@ class CoreServiceProvider extends ServiceProvider
 
         $this->registerLivewireComponents();
 
+        //Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+        //$loader = AliasLoader::getInstance();
+        //$loader->alias(\Laravel\Sanctum\PersonalAccessToken::class, PersonalAccessToken::class);
         ConfigHelper::loadDbConfig();
     }
 

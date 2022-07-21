@@ -244,7 +244,7 @@ class AuthController extends Controller
         return [
             'token' => $token,
             'token_expired_at' => auth()->factory()->getTTL() * 60,
-            'refresh_token' => $token,
+            'refresh_token' => $token, // auth()->user()->createToken('web-app')->plainTextToken,
             'refresh_token_expired_at' => auth()->factory()->getTTL() * 60,
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Aparlay\Core\Components;
+namespace Aparlay\Core\Models;
 
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Jenssegers\Mongodb\Eloquent\Model;

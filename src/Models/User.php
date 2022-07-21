@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use JetBrains\PhpStorm\ArrayShape;
+use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
@@ -101,12 +102,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  */
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
-    use Notifiable;
-    use UserScope;
-    use HasRoles;
-    use Searchable;
-    use CountryFields;
+    use HasApiTokens, HasFactory, Notifiable, UserScope, HasRoles, Searchable, CountryFields;
 
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
