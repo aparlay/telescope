@@ -63,7 +63,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
     /* Media Prefix Group */
     Route::prefix('media-comment')->name('media-comment.')->group(function () {
         /* Authentication Group */
-        Route::middleware(['cookies-auth', 'auth:api'])->group(function () {
+        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::get('/{media}', [MediaCommentController::class, 'list'])->name('list');
             Route::get('{mediaComment}/replies', [MediaCommentController::class, 'listReplies'])->name('replies');
             Route::post('{media}', [MediaCommentController::class, 'store'])->name('create');
@@ -85,7 +85,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             ->name('media.list');
 
         /* Authentication Group with user prifix */
-        Route::middleware(['cookies-auth', 'auth:api'])->group(function () {
+        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
             Route::put('/{user}/block', [BlockController::class, 'store'])->name('block');
             Route::delete('/{user}/block', [BlockController::class, 'destroy'])->name('unblock');
             Route::put('/{user}/follow', [FollowController::class, 'store'])->name('follow');
@@ -105,7 +105,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::get('/{userDocument}', 'view')->name('view');
         });
 
-    Route::middleware(['cookies-auth', 'auth:api'])
+    Route::middleware(['auth:api', 'cookies-auth'])
         ->prefix('user-notification')
         ->name('user-notification.')
         ->controller(UserNotificationController::class)->group(function () {
@@ -115,7 +115,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
         });
 
     /* Authentication Group with me prefix */
-    Route::middleware(['cookies-auth', 'auth:api'])->name('profile.')->group(function () {
+    Route::middleware(['auth:api', 'cookies-auth'])->name('profile.')->group(function () {
         Route::delete('/logout', [AuthController::class, 'logout'])->name('user.logout');
         Route::prefix('me')->controller(UserController::class)->group(function () {
             Route::get('/', 'me')->name('user.me');
@@ -126,7 +126,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
     });
 
     /* Authentication Group */
-    Route::middleware(['cookies-auth', 'auth:api'])->group(function () {
+    Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
         Route::match(['put', 'patch'], '/alert/{alert}', [AlertController::class, 'update'])
             ->name('alert.update');
     });
