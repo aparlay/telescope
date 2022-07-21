@@ -21,7 +21,9 @@ class CookiesAuthenticate
         if ($request->header('Authorization') == null && Cookie::has('__Secure_token')) {
             try {
                 $rawToken = Cookie::get('__Secure_token');
+                \Log::error($rawToken);
                 $token = new Token($rawToken);
+                \Log::error($token);
             } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException $e) {
             }
             $request->headers->set('Authorization', 'Bearer '.$token);
