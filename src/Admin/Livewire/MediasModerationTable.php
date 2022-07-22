@@ -10,6 +10,7 @@ use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use App\Models\Media;
 use Jenssegers\Mongodb\Eloquent\Builder;
+
 use function view;
 
 class MediasModerationTable extends BaseIndexComponent
