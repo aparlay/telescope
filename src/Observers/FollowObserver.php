@@ -82,7 +82,7 @@ class FollowObserver extends BaseModelObserver
             new UserFollowedNotification(
                 $model->creatorObj,
                 $model->userObj,
-                __(':username start to following you.', ['username' => $model->creator['username']])
+                __(':username started following you.', ['username' => $model->creator['username']])
             )
         );
 

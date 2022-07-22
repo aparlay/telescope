@@ -4,6 +4,7 @@ namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaComment;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\MediaCommentedNotification;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -26,14 +27,25 @@ class MediaCommentObserver extends BaseModelObserver
             ['comments' => DT::utcNow()]
         );
         $media->save();
-        $media->notify(
-            new MediaCommentedNotification(
-                $media->creatorObj,
-                $media,
-                $model,
-                __(':username write a comment on your media.', ['username' => $model->creator['username']])
-            )
-        );
+        if (empty($model->reply_to_user['_id'])) {
+            $media->notify(
+                new MediaCommentedNotification(
+                    $media->creatorObj,
+                    $media,
+                    $model,
+                    __(':username commented on your video.', ['username' => $model->creator['username']])
+                )
+            );
+        } else {
+            $media->notify(
+                new MediaCommentedNotification(
+                    User::find($model->reply_to_user['_id']),
+                    $media,
+                    $model,
+                    __(':username replied to your commented.', ['username' => $model->creator['username']])
+                )
+            );
+        }
     }
 
     /**
