@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Aparlay\Core\Api\V1\Models\UserNotification;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\User;
 use Illuminate\Http\Request;
@@ -93,8 +94,8 @@ class MeResource extends JsonResource
             'block_count' => $this->stats['counters']['blocks'],
             'followed_hashtag_count' => $this->stats['counters']['followed_hashtags'],
             'media_count' => $this->stats['counters']['medias'],
-            'has_unread_chat' => $this->stats['counters']['chats'] > 0,
-            'has_unread_notification' => $this->stats['counters']['notifications'] > 0,
+            'has_unread_chat' => $this->has_unread_chat,
+            'has_unread_notification' => $this->has_unread_notification,
             'is_followed' => false,
             'is_blocked' => false,
             'is_online' => true,

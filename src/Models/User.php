@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Chat\Models\Chat;
 use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Services\OnlineUserService;
 use Aparlay\Core\Database\Factories\UserFactory;
@@ -82,7 +83,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property array       $scores
  * @property string      $deactivation_reason
  * @property bool        $has_unread_chat
- * @property bool        $has_notification
+ * @property bool        $has_unread_notification
  * @property UTCDateTime $last_online_at
  *
  * @property-read string $admin_url
@@ -484,6 +485,51 @@ class User extends Authenticatable implements JWTSubject
         return $attributeValue;
     }
 
+    public function getIsVerifiedAttribute()
+    {
+        return $this->verification_status === UserVerificationStatus::VERIFIED->value;
+    }
+
+    public function getCountryAlpha3Attribute()
+    {
+        return $this->country_alpha2 ? \Aparlay\Core\Helpers\Country::getAlpha3ByAlpha2($this->country_alpha2) : '';
+    }
+
+    public function getVerificationStatusLabelAttribute(): string
+    {
+        return UserVerificationStatus::from($this->verification_status)->label();
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return UserStatus::from($this->status)->label();
+    }
+
+    public function getIsOnlineAttribute(): bool
+    {
+        return self::isOnline($this->_id);
+    }
+
+    public function getIsOnlineForFollowersAttribute(): bool
+    {
+        return self::isOnlineForFollowers($this->_id);
+    }
+
+    public function getIsOnlineForAllAttribute(): bool
+    {
+        return self::isOnlineForAll($this->_id);
+    }
+
+    public function getHasUnreadChatAttribute(): bool
+    {
+        return (bool) Chat::query()->participants($this->_id)->unreadFor($this->_id)->one();
+    }
+
+    public function getHasUnreadNotificationAttribute(): bool
+    {
+        return (bool) UserNotification::query()->user($this->_id)->notVisited()->one();
+    }
+
     /**
      * @param $attributeValue
      * @return void
@@ -711,41 +757,6 @@ class User extends Authenticatable implements JWTSubject
         $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
 
         return Redis::sismember($cacheKey, (string) $userId);
-    }
-
-    public function getIsVerifiedAttribute()
-    {
-        return $this->verification_status === UserVerificationStatus::VERIFIED->value;
-    }
-
-    public function getCountryAlpha3Attribute()
-    {
-        return $this->country_alpha2 ? \Aparlay\Core\Helpers\Country::getAlpha3ByAlpha2($this->country_alpha2) : '';
-    }
-
-    public function getVerificationStatusLabelAttribute(): string
-    {
-        return UserVerificationStatus::from($this->verification_status)->label();
-    }
-
-    public function getStatusLabelAttribute()
-    {
-        return UserStatus::from($this->status)->label();
-    }
-
-    public function getIsOnlineAttribute(): bool
-    {
-        return self::isOnline($this->_id);
-    }
-
-    public function getIsOnlineForFollowersAttribute(): bool
-    {
-        return self::isOnlineForFollowers($this->_id);
-    }
-
-    public function getIsOnlineForAllAttribute(): bool
-    {
-        return self::isOnlineForAll($this->_id);
     }
 
     /**
