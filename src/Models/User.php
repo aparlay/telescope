@@ -522,12 +522,12 @@ class User extends Authenticatable implements JWTSubject
 
     public function getHasUnreadChatAttribute(): bool
     {
-        return (bool) Chat::query()->participants($this->_id)->unreadFor($this->_id)->one();
+        return (bool) Chat::query()->participants($this->_id)->unreadFor($this->_id)->first();
     }
 
     public function getHasUnreadNotificationAttribute(): bool
     {
-        return (bool) UserNotification::query()->user($this->_id)->notVisited()->one();
+        return (bool) UserNotification::query()->user($this->_id)->notVisited()->first();
     }
 
     /**
