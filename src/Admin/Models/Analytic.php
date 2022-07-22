@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Admin\Models;
 
- use Aparlay\Core\Models\Analytic as AnalyticBase;
+use Aparlay\Core\Models\Analytic as AnalyticBase;
 
- class Analytic extends AnalyticBase
- {
- }
+class Analytic extends AnalyticBase
+{
+}

@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Requests\AuthRequest;
 use Aparlay\Core\Models\Enums\UserType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use function redirect;
 
 class AuthController extends Controller

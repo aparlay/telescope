@@ -7,6 +7,7 @@ use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use App\Models\Media;
 use Jenssegers\Mongodb\Eloquent\Builder;
+
 use function view;
 
 class MediasTable extends BaseIndexComponent
