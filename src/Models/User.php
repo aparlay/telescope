@@ -331,6 +331,24 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Qualify the given column name by the model's table.
+     *
+     * @param  string  $column
+     * @return string
+     */
+    public function qualifyColumn($column)
+    {
+        return $column;
+        /*
+        if (str_contains($column, '.')) {
+            return $column;
+        }
+
+        return $this->getTable().'.'.$column;
+        */
+    }
+
+    /**
      * Create a new factory instance for the model.
      */
     protected static function newFactory(): Factory

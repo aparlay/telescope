@@ -13,6 +13,24 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
     ];
 
     /**
+     * Qualify the given column name by the model's table.
+     *
+     * @param  string  $column
+     * @return string
+     */
+    public function qualifyColumn($column)
+    {
+        return $column;
+        /*
+        if (str_contains($column, '.')) {
+            return $column;
+        }
+
+        return $this->getTable().'.'.$column;
+        */
+    }
+
+    /**
      * Get only class name without namespace.
      * @return bool|string
      */
