@@ -30,6 +30,7 @@ class MediaCommentObserver extends BaseModelObserver
         if (empty($model->reply_to_user['_id'])) {
             $media->notify(
                 new MediaCommentedNotification(
+                    $model->creatorObj,
                     $media->creatorObj,
                     $media,
                     $model,
@@ -39,6 +40,7 @@ class MediaCommentObserver extends BaseModelObserver
         } else {
             $media->notify(
                 new MediaCommentedNotification(
+                    $model->creatorObj,
                     User::find($model->reply_to_user['_id']),
                     $media,
                     $model,

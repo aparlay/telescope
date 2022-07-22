@@ -35,6 +35,7 @@ class MediaLikeObserver extends BaseModelObserver
         $media->save();
         $media->notify(
             new MediaLikedNotification(
+                $model->creatorObj,
                 $media->creatorObj,
                 $media,
                 __(':username liked your video.', ['username' => $model->creator['username']])

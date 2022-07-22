@@ -22,26 +22,21 @@ class UserFollowedNotification extends Notification
      *
      * @return void
      */
-    public function __construct(User|Authenticatable $follower, User|Authenticatable $followee, $message)
+    public function __construct(User|Authenticatable $actor, User|Authenticatable $receiver,  $message)
     {
         $this->entity_type = User::shortClassName();
-        $this->entity_id = new ObjectId($follower->_id);
-        $this->user_id = new ObjectId($followee->_id);
+        $this->entity_id = new ObjectId($actor->_id);
+        $this->user_id = new ObjectId($receiver->_id);
         $this->category = UserNotificationCategory::FOLLOWS->value;
         $this->status = UserNotificationStatus::NOT_VISITED->value;
         $this->message = $message;
         $this->eventType = 'UserFollowed';
         $this->payload = [
-            'follower' => [
-                '_id' => (string) $follower->_id,
-                'username' => $follower->username,
-                'avatar' => $follower->avatar,
-            ],
-            'followee' => [
-                '_id' => (string) $followee->_id,
-                'username' => $followee->username,
-                'cover' => $followee->avatar,
-            ],
+            'user' => [
+                '_id' => (string) $actor->_id,
+                'username' => $actor->username,
+                'avatar' => $actor->avatar,
+            ]
         ];
     }
 }
