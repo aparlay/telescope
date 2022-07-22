@@ -28,7 +28,7 @@ class MediaCommentObserver extends BaseModelObserver
         $media->save();
         $media->notify(
             new MediaCommentedNotification(
-                $model->creatorObj,
+                $media->creatorObj,
                 $media,
                 $model,
                 __(':username write a comment on your media.', ['username' => $model->creator['username']])
