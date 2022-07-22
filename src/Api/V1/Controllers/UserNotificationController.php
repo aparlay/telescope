@@ -52,6 +52,6 @@ class UserNotificationController extends Controller
         $this->authorize('read', [UserNotification::class]);
         $this->userNotificationService->readAll(auth()->user()->_id, $request->user_notification_ids);
 
-        return $this->response([], '', Response::HTTP_ACCEPTED);
+        return $this->response(['has_unread_notification' => auth()->user()->has_unread_notification], '', Response::HTTP_ACCEPTED);
     }
 }
