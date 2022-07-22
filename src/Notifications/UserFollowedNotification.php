@@ -22,7 +22,7 @@ class UserFollowedNotification extends Notification
      *
      * @return void
      */
-    public function __construct(User|Authenticatable $actor, User|Authenticatable $receiver,  $message)
+    public function __construct(User|Authenticatable $actor, User|Authenticatable $receiver, $message)
     {
         $this->entity_type = User::shortClassName();
         $this->entity_id = new ObjectId($actor->_id);
@@ -36,7 +36,7 @@ class UserFollowedNotification extends Notification
                 '_id' => (string) $actor->_id,
                 'username' => $actor->username,
                 'avatar' => $actor->avatar,
-            ]
+            ],
         ];
     }
 }
