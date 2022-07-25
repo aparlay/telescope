@@ -102,13 +102,11 @@ class UserNotificationService
     public function readAll(ObjectId|string $userId, array $notificationIds): void
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
-        dispatch(function () use ($userId, $notificationIds) {
-            UserNotification::query()
-                ->user($userId)
-                ->whereIn('_id', $notificationIds)
-                ->notVisited()
-                ->update(['status' => UserNotificationStatus::VISITED->value]);
-        });
+        UserNotification::query()
+            ->user($userId)
+            ->whereIn('_id', $notificationIds)
+            ->notVisited()
+            ->update(['status' => UserNotificationStatus::VISITED->value]);
     }
 
     /**
