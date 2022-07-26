@@ -44,7 +44,7 @@ class MediaCommentObserver extends BaseModelObserver
                     User::find($model->reply_to_user['_id']),
                     $media,
                     $model,
-                    __(':username replied to your commented.', ['username' => $model->creator['username']])
+                    __(':username replied to your comment.', ['username' => $model->creator['username']])
                 )
             );
         }
