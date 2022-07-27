@@ -27,8 +27,8 @@ use MongoDB\BSON\ObjectId;
  * @property array|null $first_reply
  * @property MediaComment $parentObj
  *
- * @method static |self|Builder media(ObjectId|string $mediaId)            get commented media
- * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
+ * @property-read string $slack_admin_url
+ * @property-read string $admin_url
  */
 class MediaComment extends BaseModel
 {
@@ -136,5 +136,21 @@ class MediaComment extends BaseModel
     public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlackAdminUrlAttribute(): string
+    {
+        return "<{$this->admin_url}|comment> By {$this->userObj->slack_admin_url}";
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdminUrlAttribute(): string
+    {
+        return route('core.admin.media.view', ['media' => $this->_id]);
     }
 }
