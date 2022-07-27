@@ -34,7 +34,10 @@ use MongoDB\BSON\ObjectId;
  * @property array    $links
  *
  * @property User $userObj
+ * @property MediaComment $mediaCommentObj
  * @property Media $mediaObj
+ *
+ * @property-read string slack_subject_admin_url
  */
 class Report extends BaseModel
 {
@@ -130,6 +133,14 @@ class Report extends BaseModel
     }
 
     /**
+     * Get the phone associated with the user.
+     */
+    public function mediaCommentObj()
+    {
+        return $this->belongsTo(MediaComment::class, 'comment_id');
+    }
+
+    /**
      * Get the user associated with the report.
      */
     public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
@@ -143,6 +154,7 @@ class Report extends BaseModel
     public function getSlackSubjectAdminUrlAttribute(): string
     {
         return match ($this->type) {
+            ReportType::COMMENT->value => $this->mediaCommentObj->slack_admin_url ?? '',
             ReportType::USER->value => $this->userObj->slack_admin_url ?? '',
             ReportType::MEDIA->value => $this->mediaObj->slack_admin_url ?? '',
             default => '',
