@@ -53,7 +53,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::match(['put', 'patch'], '/{media}/comment/{mediaComment}/like', [MediaCommentController::class, 'like'])->name('comment.like');
             Route::delete('/{media}/comment/{mediaComment}/like', [MediaCommentController::class, 'unlike'])->name('comment.unlike');
 
-            Route::post('/{media}/comment/{mediaComment}/report', [ReportController::class, 'comment'])->name('report');
+            Route::post('/{media}/comment/{mediaComment}/report', [ReportController::class, 'comment'])->name('comment.report');
         });
 
         /* Optional Auth Group */
