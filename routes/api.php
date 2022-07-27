@@ -48,7 +48,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::get('/{media}/comment/{mediaComment}/reply', [MediaCommentController::class, 'listReplies'])->name('comment.reply.list');
             Route::delete('/{media}/comment/{mediaComment}', [MediaCommentController::class, 'destroy'])->name('comment.delete');
             Route::get('/{media}/comment', [MediaCommentController::class, 'list'])->name('comment.list');
-            Route::get('/{media}/comment/{mediaComment}/replies', [MediaCommentController::class, 'listReplies'])->name('replies');
 
             Route::match(['put', 'patch'], '/{media}/comment/{mediaComment}/like', [MediaCommentController::class, 'like'])->name('comment.like');
             Route::delete('/{media}/comment/{mediaComment}/like', [MediaCommentController::class, 'unlike'])->name('comment.unlike');

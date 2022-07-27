@@ -75,7 +75,7 @@ class MediaCommentController extends Controller
      */
     public function listReplies(Media $media, MediaComment $mediaComment)
     {
-        $this->authorize('view', [MediaComment::class, $mediaComment->mediaObj]);
+        $this->authorize('view', [MediaComment::class, $media]);
         $response = $this->mediaCommentService->listReplies($mediaComment);
 
         return $this->response(new MediaCommentCollection($response), '', );
@@ -110,7 +110,7 @@ class MediaCommentController extends Controller
      */
     public function reply(Media $media, MediaCommentRequest $request, MediaComment $mediaComment): Response
     {
-        $this->authorize('create', [MediaComment::class, $mediaComment->mediaObj]);
+        $this->authorize('create', [MediaComment::class, $media]);
 
         if (auth()->check()) {
             $this->mediaCommentService->setUser(auth()->user());
