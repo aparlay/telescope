@@ -50,7 +50,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::get('/{media}/comment', [MediaCommentController::class, 'list'])->name('comment.list');
             Route::get('/{media}/comment/{mediaComment}/replies', [MediaCommentController::class, 'listReplies'])->name('replies');
 
-            Route::match(['put', 'patch'],'/{media}/comment/{mediaComment}/like', [MediaCommentController::class, 'like'])->name('comment.like');
+            Route::match(['put', 'patch'], '/{media}/comment/{mediaComment}/like', [MediaCommentController::class, 'like'])->name('comment.like');
             Route::delete('/{media}/comment/{mediaComment}/like', [MediaCommentController::class, 'unlike'])->name('comment.unlike');
 
             Route::post('/{media}/comment/{mediaComment}/report', [ReportController::class, 'comment'])->name('report');
