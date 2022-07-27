@@ -26,7 +26,9 @@ class ReportController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param  User  $user
+     * @param  ReportRequest  $request
+     * @return Response
      * @throws AuthorizationException
      */
     public function user(User $user, ReportRequest $request): Response
@@ -43,10 +45,13 @@ class ReportController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param  Media  $media
+     * @param  MediaComment  $mediaComment
+     * @param  ReportRequest  $request
+     * @return Response
      * @throws AuthorizationException
      */
-    public function comment(MediaComment $mediaComment, ReportRequest $request): Response
+    public function comment(Media $media, MediaComment $mediaComment, ReportRequest $request): Response
     {
         if (auth()->check()) {
             $this->authorize('comment', [Report::class, $mediaComment->mediaObj->creatorObj]);
@@ -59,7 +64,9 @@ class ReportController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param  Media  $media
+     * @param  ReportRequest  $request
+     * @return Response
      * @throws AuthorizationException
      */
     public function media(Media $media, ReportRequest $request): Response
