@@ -6,7 +6,7 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Get(
- *     path="/v1/media-comment/{mediaId}",
+ *     path="/v1/media/{mediaId}/comment",
  *     tags={"Core | Media Comment"},
  *     summary="Fetch media comments for given media",
  *     description="Fetch media comments for given media",
@@ -72,7 +72,7 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Get(
- *     path="/v1/media-comment/{mediaCommentId}/replies",
+ *     path="/v1/media/{mediaId}/comment/{mediaCommentId}/reply",
  *     tags={"Core | Media Comment"},
  *     summary="Fetch media replies for given media comment",
  *     description="Fetch replies comments for given media comment",
@@ -138,7 +138,7 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Post(
- *     path="/v1/media-comment/{mediaId}",
+ *     path="/v1/media/{mediaId}/comment",
  *     tags={"Core | Media Comment"},
  *     summary="Create media comment",
  *     description="To create a reply for media comment you need to call this endpoint.",
@@ -217,7 +217,7 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Post(
- *     path="/v1/media-comment/{mediaCommentId}/reply",
+ *     path="/v1/media/{mediaId}/comment/{mediaCommentId}/reply",
  *     tags={"Core | Media Comment"},
  *     summary="Create reply to media comment",
  *     description="To create a reply to media comment you need to call this endpoint.",
@@ -296,7 +296,7 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\PATCH(
- *     path="/v1/media-comment/:mediaComment/like",
+ *     path="/v1/media/{mediaId}/comment/{mediaCommentId}/like",
  *     tags={"Core | Media Comment"},
  *     summary="To create like for media comment you need to call this endpoint.",
  *     description="To create like for media comment you need to call this endpoint.",
@@ -373,8 +373,8 @@ use OpenApi\Annotations as OA;
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     ),
  * )
- * @OA\PATCH(
- *     path="/v1/media-comment/{mediaCommentId}/unlike",
+ * @OA\DELETE(
+ *     path="/v1/media/{mediaId}/comment/{mediaCommentId}/like",
  *     tags={"Core | Media Comment"},
  *     summary="To remove like from media comment you need to call this endpoint.",
  *     description="To remove like from media comment you need to call this endpoint.",
@@ -453,7 +453,7 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Delete (
- *     path="/v1/media-comment/{id}",
+ *     path="/v1/media/{mediaId}/comment/{mediaCommentId}",
  *     tags={"Core | Media Comment"},
  *     summary="Delete media comment by id",
  *     description="To delete media comment call this endpoint",
@@ -523,7 +523,7 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Post(
- *     path="/v1/media-comment/{mediaCommentId}/report",
+ *     path="/v1/media/{mediaId}/comment/{mediaCommentId}/report",
  *     tags={"Core | Media Comment"},
  *     summary="report a comment",
  *     description="To report media comment you need to call this endpoint.",

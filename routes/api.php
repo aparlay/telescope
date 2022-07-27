@@ -43,35 +43,23 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 
             Route::put('/{media}/like', [MediaLikeController::class, 'store'])->name('like');
             Route::delete('/{media}/like', [MediaLikeController::class, 'destroy'])->name('unlike');
 
-            Route::get('{mediaComment}/replies', [MediaCommentController::class, 'listReplies'])->name('comment.replies');
-            Route::post('{media}/comment', [MediaCommentController::class, 'store'])->name('comment.create');
-            Route::post('{mediaComment}/reply', [MediaCommentController::class, 'reply'])->name('comment.reply');
-            Route::delete('/comment/{mediaComment}', [MediaCommentController::class, 'destroy'])->name('comment.delete');
+            Route::post('/{media}/comment', [MediaCommentController::class, 'store'])->name('comment.create');
+            Route::post('/{media}/comment/{mediaComment}/reply', [MediaCommentController::class, 'reply'])->name('comment.reply.create');
+            Route::get('/{media}/comment/{mediaComment}/reply', [MediaCommentController::class, 'listReplies'])->name('comment.reply.list');
+            Route::delete('/{media}/comment/{mediaComment}', [MediaCommentController::class, 'destroy'])->name('comment.delete');
             Route::get('/{media}/comment', [MediaCommentController::class, 'list'])->name('comment.list');
+            Route::get('/{media}/comment/{mediaComment}/replies', [MediaCommentController::class, 'listReplies'])->name('replies');
 
-            Route::put('{mediaComment}/like', [MediaCommentController::class, 'like'])->name('comment.like');
-            Route::put('{mediaComment}/unlike', [MediaCommentController::class, 'unlike'])->name('comment.unlike');
+            Route::match(['put', 'patch'],'/{media}/comment/{mediaComment}/like', [MediaCommentController::class, 'like'])->name('comment.like');
+            Route::delete('/{media}/comment/{mediaComment}/like', [MediaCommentController::class, 'unlike'])->name('comment.unlike');
+
+            Route::post('/{media}/comment/{mediaComment}/report', [ReportController::class, 'comment'])->name('report');
         });
 
         /* Optional Auth Group */
         Route::middleware(['cookies-auth', 'optional-auth'])->group(function () {
             Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
             Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
-        });
-    });
-
-    /* Media Prefix Group */
-    Route::prefix('media-comment')->name('media-comment.')->group(function () {
-        /* Authentication Group */
-        Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
-            Route::get('/{media}', [MediaCommentController::class, 'list'])->name('list');
-            Route::get('{mediaComment}/replies', [MediaCommentController::class, 'listReplies'])->name('replies');
-            Route::post('{media}', [MediaCommentController::class, 'store'])->name('create');
-            Route::post('{mediaComment}/reply', [MediaCommentController::class, 'reply'])->name('reply');
-            Route::delete('/{mediaComment}', [MediaCommentController::class, 'destroy'])->name('delete');
-            Route::match(['put', 'patch'], '{mediaComment}/like', [MediaCommentController::class, 'like'])->name('like');
-            Route::match(['put', 'patch'], '{mediaComment}/unlike', [MediaCommentController::class, 'unlike'])->name('unlike');
-            Route::post('/{mediaComment}/report', [ReportController::class, 'comment'])->name('report');
         });
     });
 
