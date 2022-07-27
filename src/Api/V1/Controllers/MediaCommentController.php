@@ -9,6 +9,7 @@ use Aparlay\Core\Api\V1\Resources\MediaCommentCollection;
 use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Services\MediaCommentLikeService;
 use Aparlay\Core\Api\V1\Services\MediaCommentService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Response;
 
 class MediaCommentController extends Controller
@@ -22,7 +23,7 @@ class MediaCommentController extends Controller
     /**
      * @param Media $media
      * @return Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function list(Media $media)
     {
@@ -33,11 +34,11 @@ class MediaCommentController extends Controller
     }
 
     /**
-     * @param MediaComment $mediaComment
+     * @param  Media  $media
+     * @param  MediaComment  $mediaComment
      * @return Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function like(MediaComment $mediaComment)
+    public function like(Media $media, MediaComment $mediaComment)
     {
         if (auth()->check()) {
             $this->mediaCommentLikeService->setUser(auth()->user());
@@ -50,11 +51,11 @@ class MediaCommentController extends Controller
     }
 
     /**
-     * @param MediaComment $mediaComment
+     * @param  Media  $media
+     * @param  MediaComment  $mediaComment
      * @return Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function unlike(MediaComment $mediaComment)
+    public function unlike(Media $media, MediaComment $mediaComment)
     {
         if (auth()->check()) {
             $this->mediaCommentLikeService->setUser(auth()->user());
@@ -66,7 +67,13 @@ class MediaCommentController extends Controller
         return $this->response($mediaCommentResource, '', );
     }
 
-    public function listReplies(MediaComment $mediaComment)
+    /**
+     * @param  Media  $media
+     * @param  MediaComment  $mediaComment
+     * @return Response
+     * @throws AuthorizationException
+     */
+    public function listReplies(Media $media, MediaComment $mediaComment)
     {
         $this->authorize('view', [MediaComment::class, $mediaComment->mediaObj]);
         $response = $this->mediaCommentService->listReplies($mediaComment);
@@ -75,7 +82,10 @@ class MediaCommentController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param  MediaCommentRequest  $request
+     * @param  Media  $media
+     * @return Response
+     * @throws AuthorizationException
      */
     public function store(MediaCommentRequest $request, Media $media): Response
     {
@@ -92,12 +102,13 @@ class MediaCommentController extends Controller
     }
 
     /**
-     * @param MediaCommentRequest $request
-     * @param MediaComment $mediaComment
+     * @param  Media  $media
+     * @param  MediaCommentRequest  $request
+     * @param  MediaComment  $mediaComment
      * @return Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
-    public function reply(MediaCommentRequest $request, MediaComment $mediaComment): Response
+    public function reply(Media $media, MediaCommentRequest $request, MediaComment $mediaComment): Response
     {
         $this->authorize('create', [MediaComment::class, $mediaComment->mediaObj]);
 
@@ -112,9 +123,12 @@ class MediaCommentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @param  Media  $media
+     * @param  MediaComment  $mediaComment
+     * @return Response
+     * @throws AuthorizationException
      */
-    public function destroy(MediaComment $mediaComment): Response
+    public function destroy(Media $media, MediaComment $mediaComment): Response
     {
         $this->authorize('delete', [MediaComment::class, $mediaComment]);
 
