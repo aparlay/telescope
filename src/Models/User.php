@@ -101,7 +101,11 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property-read bool $is_tier1
  * @property-read bool $is_risky
  * @property-read int $tip_commission_percentage
- * @property-read int $referral_commission_percentage
+ * @property-read int $tip_referral_commission_percentage
+ * @property-read int $subscription_commission_percentage
+ * @property-read int $subscription_referral_commission_percentage
+ * @property-read int $exclusive_content_commission_percentage
+ * @property-read int $exclusive_content_referral_commission_percentage
  *
  * @method static |self|Builder username(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
@@ -222,10 +226,23 @@ class User extends Authenticatable implements JWTSubject
         'subscribed_to' => [],
         'stats' => [
             'amounts' => [
-                'sent_tips' => 0,
-                'received_tips' => 0,
-                'subscriptions' => 0,
-                'subscribers' => 0,
+                'spent' => [
+                    'tips' => 0,
+                    'subscriptions' => 0,
+                    'exclusive_contents' => 0,
+                ],
+                'earned' => [
+                    'commissions' => [
+                        'tips' => 0,
+                        'subscriptions' => 0,
+                        'exclusive_contents' => 0,
+                    ],
+                    'referral' => [
+                        'tips' => 0,
+                        'subscriptions' => 0,
+                        'exclusive_contents' => 0,
+                    ],
+                ],
             ],
             'counters' => [
                 'followers' => 0,
@@ -309,7 +326,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->visibility == UserVisibility::PUBLIC->value && ! config('app.is_testing');
+        return $this->visibility == UserVisibility::PUBLIC->value && $this->status == UserStatus::VERIFIED->value && ! config('app.is_testing');
     }
 
     /**
@@ -546,12 +563,32 @@ class User extends Authenticatable implements JWTSubject
 
     public function getTipCommissionPercentageAttribute(): int
     {
-        return 80;
+        return config('payment.earnings.tip_commission_percentage', 0);
     }
 
     public function getReferralCommissionPercentageAttribute(): int
     {
-        return 5;
+        return config('payment.earnings.tip_referral_commission_percentage', 0);
+    }
+
+    public function getSubscriptionCommissionPercentageAttribute(): int
+    {
+        return config('payment.earnings.subscription_commission_percentage', 0);
+    }
+
+    public function getSubscriptionReferralCommissionPercentageAttribute(): int
+    {
+        return config('payment.earnings.subscription_referral_commission_percentage', 0);
+    }
+
+    public function getExclusiveContentCommissionPercentageAttribute(): int
+    {
+        return config('payment.earnings.exclusive_content_commission_percentage', 0);
+    }
+
+    public function getExclusiveContentReferralCommissionPercentageAttribute(): int
+    {
+        return config('payment.earnings.exclusive_content_referral_commission_percentage', 0);
     }
 
     /**

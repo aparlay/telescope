@@ -67,7 +67,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get("/v1/media-comment/{$media->_id}");
+            ->get("/v1/media/{$media->_id}/comment");
 
         $r->assertStatus(200);
 
@@ -86,7 +86,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get("/v1/media-comment/{$parentId}/replies");
+            ->get("/v1/media/{$mediaComment->media_id}/comment/{$parentId}/reply");
 
         $r->assertStatus(200);
 
@@ -104,7 +104,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->post("/v1/media-comment/{$mediaComment->_id}/report", [
+            ->post("/v1/media/{$mediaComment->media_id}/comment/{$mediaComment->_id}/report", [
                 'reason' => 'This comment contains something weird..',
             ]);
 
@@ -140,7 +140,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->patch("/v1/media-comment/{$mediaComment->_id}/like");
+            ->patch("/v1/media/{$mediaComment->media_id}/comment/{$mediaComment->_id}/like");
 
         $r->assertStatus(200)->assertJsonPath('status', 'OK');
         $r->assertJsonPath('code', 200);
@@ -163,7 +163,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->patch("/v1/media-comment/{$mediaComment->_id}/unlike");
+            ->delete("/v1/media/{$mediaComment->media_id}/comment/{$mediaComment->_id}/like");
 
         $r->assertStatus(200)->assertJsonPath('status', 'OK');
         $r->assertJsonPath('code', 200);
@@ -194,7 +194,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->post("/v1/media-comment/{$media->_id}", [
+            ->post("/v1/media/{$media->_id}/comment", [
                 'text' => $this->faker->realText(),
             ]);
 
@@ -217,7 +217,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->post("/v1/media-comment/{$media->_id}", [
+            ->post("/v1/media/{$media->_id}/comment", [
                 'text' => $this->faker->realText(),
             ]);
 
@@ -231,7 +231,7 @@ class MediaCommentTest extends ApiTestCase
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->post("/v1/media-comment/{$mediaComment->_id}/reply", [
+            ->post("/v1/media/{$mediaComment->media_id}/comment/{$mediaComment->_id}/reply", [
                 'text' => $this->faker->realText(),
             ]);
 
