@@ -33,7 +33,7 @@ class SimpleUserCast implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        if (!isset($value['_id'])) {
+        if (! isset($value['_id'])) {
             return [];
         }
 
@@ -41,12 +41,14 @@ class SimpleUserCast implements CastsAttributes
 
         if (in_array('is_followed', $this->fields, true)) {
             $isFollowed = false;
-            if (!auth()->guest()) {
+            if (! auth()->guest()) {
                 $loggedInUserId = auth()->user()->_id;
                 Follow::cacheByUserId((string) $loggedInUserId);
 
-                $isFollowed = Follow::checkCreatorIsFollowedByUser((string) $userArray['_id'],
-                    (string) $loggedInUserId);
+                $isFollowed = Follow::checkCreatorIsFollowedByUser(
+                    (string) $userArray['_id'],
+                    (string) $loggedInUserId
+                );
             }
 
             $userArray['is_followed'] = $isFollowed;
@@ -66,7 +68,7 @@ class SimpleUserCast implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        if (!isset($value['_id'])) {
+        if (! isset($value['_id'])) {
             return null;
         }
 

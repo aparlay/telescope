@@ -392,7 +392,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function referralObj(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'referral_id');
+        return $this->belongsTo(self::class, 'referral_id');
     }
 
     /**
