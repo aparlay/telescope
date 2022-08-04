@@ -33,15 +33,20 @@ class SimpleUserCast implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
+        if (!isset($value['_id'])) {
+            return [];
+        }
+
         $userArray = self::cacheByUserId($value['_id']);
 
         if (in_array('is_followed', $this->fields, true)) {
             $isFollowed = false;
-            if (! auth()->guest()) {
+            if (!auth()->guest()) {
                 $loggedInUserId = auth()->user()->_id;
                 Follow::cacheByUserId((string) $loggedInUserId);
 
-                $isFollowed = Follow::checkCreatorIsFollowedByUser((string) $userArray['_id'], (string) $loggedInUserId);
+                $isFollowed = Follow::checkCreatorIsFollowedByUser((string) $userArray['_id'],
+                    (string) $loggedInUserId);
             }
 
             $userArray['is_followed'] = $isFollowed;
@@ -61,19 +66,25 @@ class SimpleUserCast implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes)
     {
+        if (!isset($value['_id'])) {
+            return null;
+        }
+
         $user = User::user($value['_id'])->first();
 
-        return [$key => [
-            '_id' => new ObjectId($user->_id),
-            'username' => $user->username,
-            'avatar' => $user->avatar,
-        ]];
+        return [
+            $key => [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ],
+        ];
     }
 
     /**
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public static function cacheByUserId(ObjectId | string $userId): array
+    public static function cacheByUserId(ObjectId|string $userId): array
     {
         $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
         $cacheKey = 'SimpleUserCast:'.$userId;

@@ -27,6 +27,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
+use Jenssegers\Mongodb\Relations\BelongsTo;
 use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
@@ -86,6 +87,9 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property bool        $has_unread_notification
  * @property UTCDateTime $last_online_at
  *
+ * @property User $referralObj
+ * @property Media[] $mediaObjs
+ *
  * @property-read string $admin_url
  * @property-read string $note_admin_url
  * @property-read string $slack_admin_url
@@ -96,6 +100,8 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @property-read bool $is_tier3
  * @property-read bool $is_tier1
  * @property-read bool $is_risky
+ * @property-read int $tip_commission_percentage
+ * @property-read int $referral_commission_percentage
  *
  * @method static |self|Builder username(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
@@ -382,6 +388,14 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get the referral user associated with the user.
+     */
+    public function referralObj(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'referral_id');
+    }
+
+    /**
      * @return string
      */
     public function getSlackAdminUrlAttribute(): string
@@ -528,6 +542,16 @@ class User extends Authenticatable implements JWTSubject
     public function getHasUnreadNotificationAttribute(): bool
     {
         return (bool) UserNotification::query()->user($this->_id)->notVisited()->first();
+    }
+
+    public function getTipCommissionPercentageAttribute(): int
+    {
+        return 80;
+    }
+
+    public function getReferralCommissionPercentageAttribute(): int
+    {
+        return 5;
     }
 
     /**
