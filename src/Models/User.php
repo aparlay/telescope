@@ -563,32 +563,32 @@ class User extends Authenticatable implements JWTSubject
 
     public function getTipCommissionPercentageAttribute(): int
     {
-        return config('payment.earnings.tip_commission_percentage', 0);
+        return config('payment.earnings.tip_commission_percentage', 80);
     }
 
     public function getReferralCommissionPercentageAttribute(): int
     {
-        return config('payment.earnings.tip_referral_commission_percentage', 0);
+        return config('payment.earnings.tip_referral_commission_percentage', 5);
     }
 
     public function getSubscriptionCommissionPercentageAttribute(): int
     {
-        return config('payment.earnings.subscription_commission_percentage', 0);
+        return config('payment.earnings.subscription_commission_percentage', 80);
     }
 
     public function getSubscriptionReferralCommissionPercentageAttribute(): int
     {
-        return config('payment.earnings.subscription_referral_commission_percentage', 0);
+        return config('payment.earnings.subscription_referral_commission_percentage', 5);
     }
 
     public function getExclusiveContentCommissionPercentageAttribute(): int
     {
-        return config('payment.earnings.exclusive_content_commission_percentage', 0);
+        return config('payment.earnings.exclusive_content_commission_percentage', 80);
     }
 
     public function getExclusiveContentReferralCommissionPercentageAttribute(): int
     {
-        return config('payment.earnings.exclusive_content_referral_commission_percentage', 0);
+        return config('payment.earnings.exclusive_content_referral_commission_percentage', 5);
     }
 
     /**

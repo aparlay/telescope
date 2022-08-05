@@ -32,8 +32,8 @@ class ReportService extends AbstractService
                 'type' => ReportType::USER->value,
                 'status' => ReportStatus::REPORTED->value,
                 'user_id' => new ObjectId($user->_id),
-                'created_by' => new ObjectId($this->getUser()->_id),
-                'updated_by' => new ObjectId($this->getUser()->_id),
+                'created_by' => $reportDTO->created_by ? new ObjectId($reportDTO->created_by) : null,
+                'updated_by' => $reportDTO->updated_by ? new ObjectId($reportDTO->updated_by) : null,
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -50,8 +50,8 @@ class ReportService extends AbstractService
                 'type' => ReportType::COMMENT->value,
                 'status' => ReportStatus::REPORTED->value,
                 'comment_id' => new ObjectId($comment->_id),
-                'created_by' => new ObjectId($this->getUser()->_id),
-                'updated_by' => new ObjectId($this->getUser()->_id),
+                'created_by' => $reportDTO->created_by ? new ObjectId($reportDTO->created_by) : null,
+                'updated_by' => $reportDTO->updated_by ? new ObjectId($reportDTO->updated_by) : null,
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -75,8 +75,8 @@ class ReportService extends AbstractService
                 'type' => ReportType::MEDIA->value,
                 'status' => ReportStatus::REPORTED->value,
                 'media_id' => new ObjectId($media->_id),
-                'created_by' => new ObjectId($this->getUser()->_id),
-                'updated_by' => new ObjectId($this->getUser()->_id),
+                'created_by' => $reportDTO->created_by ? new ObjectId($reportDTO->created_by) : null,
+                'updated_by' => $reportDTO->updated_by ? new ObjectId($reportDTO->updated_by) : null,
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

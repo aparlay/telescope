@@ -9,6 +9,9 @@ class ReportDTO extends DataTransferObject
 {
     public string $reason;
 
+    public $created_by;
+    public $updated_by;
+
     public static function fromRequest(ReportRequest $reportRequest): self
     {
         return new self(

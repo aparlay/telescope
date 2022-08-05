@@ -40,7 +40,7 @@ class UserNotificationTest extends ApiTestCase
                             'category',
                             'category_label',
                             'message',
-                            'entity',
+                            'payload',
                             'created_at',
                             'updated_at',
                         ],
@@ -60,7 +60,7 @@ class UserNotificationTest extends ApiTestCase
                     'data.items.0.category' => 'integer',
                     'data.items.0.category_label' => 'string',
                     'data.items.0.message' => 'string',
-                    'data.items.0.entity' => 'array',
+                    'data.items.0.payload' => 'array|null',
                     'data.items.0.created_at' => 'integer',
                     'data.items.0.updated_at' => 'integer',
                 ])

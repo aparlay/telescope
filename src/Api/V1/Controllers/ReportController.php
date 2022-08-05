@@ -33,13 +33,15 @@ class ReportController extends Controller
      */
     public function user(User $user, ReportRequest $request): Response
     {
+        $reportDTO = ReportDTO::fromRequest($request);
         if (auth()->check()) {
             $this->authorize('user', [Report::class, $user]);
+            $reportDTO->created_by = $reportDTO->updated_by = auth()->user()->_id;
         }
 
         $this->injectAuthUser($this->reportService);
 
-        $report = $this->reportService->createUserReport($user, ReportDTO::fromRequest($request));
+        $report = $this->reportService->createUserReport($user, $reportDTO);
 
         return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
     }
@@ -53,12 +55,14 @@ class ReportController extends Controller
      */
     public function comment(Media $media, MediaComment $mediaComment, ReportRequest $request): Response
     {
+        $reportDTO = ReportDTO::fromRequest($request);
         if (auth()->check()) {
             $this->authorize('comment', [Report::class, $mediaComment->mediaObj->creatorObj]);
+            $reportDTO->created_by = $reportDTO->updated_by = auth()->user()->_id;
         }
 
         $this->injectAuthUser($this->reportService);
-        $report = $this->reportService->createCommentReport($mediaComment, ReportDTO::fromRequest($request));
+        $report = $this->reportService->createCommentReport($mediaComment, $reportDTO);
 
         return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
     }
@@ -71,13 +75,15 @@ class ReportController extends Controller
      */
     public function media(Media $media, ReportRequest $request): Response
     {
+        $reportDTO = ReportDTO::fromRequest($request);
         if (auth()->check()) {
             $this->authorize('media', [Report::class, $media->creatorObj]);
+            $reportDTO->created_by = $reportDTO->updated_by = auth()->user()->_id;
         }
 
         $this->injectAuthUser($this->reportService);
 
-        $report = $this->reportService->createMediaReport($media, ReportDTO::fromRequest($request));
+        $report = $this->reportService->createMediaReport($media, $reportDTO);
 
         return $this->response(new ReportResource($report), '', Response::HTTP_CREATED);
     }
