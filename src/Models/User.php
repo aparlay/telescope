@@ -409,7 +409,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function referralObj(): BelongsTo
     {
-        return $this->belongsTo(self::class, 'referral_id');
+        return $this->belongsTo(User::class, 'referral_id');
     }
 
     /**
@@ -566,7 +566,7 @@ class User extends Authenticatable implements JWTSubject
         return config('payment.earnings.tip_commission_percentage', 80);
     }
 
-    public function getReferralCommissionPercentageAttribute(): int
+    public function getTipReferralCommissionPercentageAttribute(): int
     {
         return config('payment.earnings.tip_referral_commission_percentage', 5);
     }
