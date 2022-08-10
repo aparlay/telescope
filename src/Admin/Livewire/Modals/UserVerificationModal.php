@@ -148,7 +148,6 @@ class UserVerificationModal extends Component
             $shouldSendNotification = true;
         }
 
-
         // remove approved types document from payload and send payload only if there is not any approved doc
         foreach ($approvedTypes as $type => $isApproved) {
             if ($isApproved && isset($payload[$type])) {
