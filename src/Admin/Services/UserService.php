@@ -141,12 +141,13 @@ class UserService extends AdminBaseService
             'type',
             'status',
             'visibility',
-            'referral_id',
             'promo_link',
             'country_alpha2',
             'verification_status',
             'payout_country_alpha2',
         ]);
+
+        $data['referral_id'] = request()->input('referral_id') ? new ObjectId(request()->input('referral_id')) : null;
 
         $dataBooleans = [
             'email_verified' => request()->boolean('email_verified'),
