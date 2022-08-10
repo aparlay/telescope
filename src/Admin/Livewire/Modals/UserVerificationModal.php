@@ -124,6 +124,7 @@ class UserVerificationModal extends Component
                 'reason' => $reason,
                 'type' => $document->type,
                 'type_label' => $document->type_label,
+                'verification_status' => $user->verification_status,
             ];
 
             $document->save();
