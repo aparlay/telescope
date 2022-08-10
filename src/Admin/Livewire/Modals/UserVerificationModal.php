@@ -124,7 +124,6 @@ class UserVerificationModal extends Component
                 'reason' => $reason,
                 'type' => $document->type,
                 'type_label' => $document->type_label,
-                'verification_status' => $user->verification_status,
             ];
 
             $document->save();
@@ -149,6 +148,7 @@ class UserVerificationModal extends Component
             $shouldSendNotification = true;
         }
 
+
         // remove approved types document from payload and send payload only if there is not any approved doc
         foreach ($approvedTypes as $type => $isApproved) {
             if ($isApproved && isset($payload[$type])) {
@@ -156,12 +156,14 @@ class UserVerificationModal extends Component
             }
         }
 
+        $payload['verification_status'] = $user->verification_status;
         if ($shouldSendNotification) {
             $message = match ((int) $newVerificationStatus) {
                 UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
                 UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
                 default => ''
             };
+            $payload['verification_status'] = $newVerificationStatus;
 
             if ($message) {
                 $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
