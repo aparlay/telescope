@@ -326,7 +326,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->visibility == UserVisibility::PUBLIC->value && $this->status == UserStatus::VERIFIED->value && ! config('app.is_testing');
+        return $this->visibility == UserVisibility::PUBLIC->value && $this->verification_status == UserVerificationStatus::VERIFIED->value && ! config('app.is_testing');
     }
 
     /**
