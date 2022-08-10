@@ -10,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use Maklad\Permission\Models\Role;
+use MongoDB\BSON\ObjectId;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -74,5 +75,12 @@ class UserUpdateRequest extends FormRequest
         throw new HttpResponseException(
             redirect()->back()->withErrors($errors)
         );
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'referral_id' => $this->referral_id ? new ObjectId($this->referral_id) : null,
+        ]);
     }
 }
