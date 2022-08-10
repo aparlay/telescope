@@ -46,10 +46,10 @@ class UserUpdateRequest extends FormRequest
                 'nullable', Rule::in(UserVerificationStatus::getAllValues()),
             ],
             'payout_country_alpha2' => [
-                'required', Rule::in(array_keys(Country::getAlpha2AndNames())),
+                Rule::in(array_keys(Country::getAlpha2AndNames())),
             ],
             'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
-            'country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
+            'country_alpha2' => ['nullable', Rule::in(array_keys(Country::getAlpha2AndNames()))],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
             'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
             'status' => [Rule::in(array_keys(User::getStatuses()))],
