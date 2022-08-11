@@ -47,7 +47,7 @@ class CriticalPaymentErrorLogger extends Notification
                 $attachment->title('Open Admin area', $this->ref)
                     ->fields([
                         'Service' => $this->service,
-                        'URL' => '`'.$this->url.'`',
+                        'URL' => '`'.$this->ref.'`',
                         'Request' => '```'.json_encode($this->req ?? []).'```',
                         'Response' => '```'.json_encode($this->res ?? []).'```',
                     ]);
