@@ -4,10 +4,11 @@ namespace Aparlay\Core\Admin\Models;
 
 use Aparlay\Core\Models\Scopes\SettingScope;
 use Aparlay\Core\Models\Setting as BaseModel;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Setting extends BaseModel
+class Setting extends BaseModel implements Auditable
 {
-    use SettingScope;
+    use SettingScope, \OwenIt\Auditing\Auditable;
 
     public const VALUE_TYPE_STRING = 0;
     public const VALUE_TYPE_BOOLEAN = 1;

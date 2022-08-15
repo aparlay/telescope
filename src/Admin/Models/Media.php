@@ -5,10 +5,11 @@ namespace Aparlay\Core\Admin\Models;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media as MediaBase;
 use Aparlay\Core\Models\Scopes\MediaScope;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Media extends MediaBase
+class Media extends MediaBase implements Auditable
 {
-    use MediaScope;
+    use MediaScope, \OwenIt\Auditing\Auditable;
 
     /**
      * @return string

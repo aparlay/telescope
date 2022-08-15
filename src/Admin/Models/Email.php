@@ -5,14 +5,14 @@ namespace Aparlay\Core\Admin\Models;
 use Aparlay\Core\Models\Email as EmailBase;
 use Aparlay\Core\Models\Scopes\BaseScope;
 use Aparlay\Core\Models\Scopes\DateScope;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /**
  * Class Email.
  */
-class Email extends EmailBase
+class Email extends EmailBase implements Auditable
 {
-    use BaseScope;
-    use DateScope;
+    use BaseScope, DateScope, \OwenIt\Auditing\Auditable;
 
     /**
      * @return string

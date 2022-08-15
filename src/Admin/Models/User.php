@@ -7,14 +7,24 @@ use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\User as UserBase;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends UserBase
+class User extends UserBase implements Auditable
 {
-    use UserScope;
+    use UserScope, \OwenIt\Auditing\Auditable;
 
     public string $guard_name = 'admin';
 
     protected $hidden = ['password_hash'];
+
+    /**
+     * Attributes to exclude from the Audit.
+     *
+     * @var array
+     */
+    protected $auditExclude = [
+        'password_hash',
+    ];
 
     protected $fillable = [
         'username',
