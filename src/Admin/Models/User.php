@@ -60,6 +60,17 @@ class User extends UserBase implements Auditable
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    public function generateTags(): array
+    {
+        return [
+            $this->username,
+            $this->_id,
+        ];
+    }
+
+    /**
      * @return string
      */
     public function getStatusColorAttribute(): string
