@@ -8,5 +8,6 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Permission extends BasePermission implements Auditable
 {
-    use PermissionScope, \OwenIt\Auditing\Auditable;
+    use PermissionScope;
+    use \OwenIt\Auditing\Auditable;
 }
