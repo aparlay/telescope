@@ -12,7 +12,9 @@ use OwenIt\Auditing\Contracts\Auditable;
  */
 class Email extends EmailBase implements Auditable
 {
-    use BaseScope, DateScope, \OwenIt\Auditing\Auditable;
+    use BaseScope;
+    use DateScope;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * @return string

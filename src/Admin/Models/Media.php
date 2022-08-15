@@ -9,7 +9,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Media extends MediaBase implements Auditable
 {
-    use MediaScope, \OwenIt\Auditing\Auditable;
+    use MediaScope;
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * @return string

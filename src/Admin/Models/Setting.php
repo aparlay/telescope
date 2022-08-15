@@ -8,7 +8,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Setting extends BaseModel implements Auditable
 {
-    use SettingScope, \OwenIt\Auditing\Auditable;
+    use SettingScope;
+    use \OwenIt\Auditing\Auditable;
 
     public const VALUE_TYPE_STRING = 0;
     public const VALUE_TYPE_BOOLEAN = 1;
