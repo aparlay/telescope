@@ -6,12 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use MongoDB\BSON\ObjectId;
 use OwenIt\Auditing\Contracts\Auditable;
 
-/**
- *
- */
 class SimpleUser implements \OwenIt\Auditing\Contracts\Resolver
 {
-
     /**
      * @param  Auditable  $auditable
      * @return null
