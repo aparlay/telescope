@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Components;
 
-use Aparlay\Core\Models\BaseModel;
+use Jenssegers\Mongodb\Eloquent\Model;
 
-class MongoAudit extends BaseModel implements \OwenIt\Auditing\Contracts\Audit
+class MongoAudit extends Model implements \OwenIt\Auditing\Contracts\Audit
 {
     use \OwenIt\Auditing\Audit;
 
