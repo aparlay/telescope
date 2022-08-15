@@ -27,7 +27,7 @@ class MongoAudit extends Model implements \OwenIt\Auditing\Contracts\Audit
      */
     public function auditable()
     {
-        return $this->morphTo('auditable.');
+        return $this->morphTo();
     }
 
     /**
@@ -35,6 +35,6 @@ class MongoAudit extends Model implements \OwenIt\Auditing\Contracts\Audit
      */
     public function user()
     {
-        return $this->morphTo('user.');
+        return $this->morphTo();
     }
 }
