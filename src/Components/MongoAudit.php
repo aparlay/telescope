@@ -19,7 +19,6 @@ class MongoAudit extends BaseModel implements \OwenIt\Auditing\Contracts\Audit
     protected $casts = [
         'old_values'   => 'json',
         'new_values'   => 'json',
-        'auditable_id' => 'integer',
     ];
 
     /**
