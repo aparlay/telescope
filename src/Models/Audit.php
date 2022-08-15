@@ -1,10 +1,10 @@
 <?php
 
-namespace Aparlay\Core\Components;
+namespace Aparlay\Core\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class MongoAudit extends Model implements \OwenIt\Auditing\Contracts\Audit
+class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
 {
     use \OwenIt\Auditing\Audit;
 

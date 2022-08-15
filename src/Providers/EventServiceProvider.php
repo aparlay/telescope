@@ -4,6 +4,7 @@ namespace Aparlay\Core\Providers;
 
 use Aparlay\Core\Events\UserOtpRequestedEvent;
 use Aparlay\Core\Listeners\SendOtpToUserListener;
+use Aparlay\Core\Models\Audit;
 use Aparlay\Core\Models\BaseModel;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;
@@ -13,6 +14,7 @@ use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\Report;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Observers\AuditObserver;
 use Aparlay\Core\Observers\BaseModelObserver;
 use Aparlay\Core\Observers\BlockObserver;
 use Aparlay\Core\Observers\FollowObserver;
@@ -49,6 +51,7 @@ class EventServiceProvider extends ServiceProvider
         MediaVisit::observe(MediaVisitObserver::class);
         User::observe(UserObserver::class);
         Report::observe(ReportObserver::class);
+        Audit::observe(AuditObserver::class);
 
         parent::boot();
     }
