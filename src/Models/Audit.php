@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Casts\ObjectIdCast;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
@@ -19,7 +20,8 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
     protected $casts = [
         'old_values'   => 'json',
         'new_values'   => 'json',
-        'auditable_id' => 'integer',
+        'auditable_id' => ObjectIdCast::class,
+        'user_id' => ObjectIdCast::class,
     ];
 
     /**

@@ -19,7 +19,7 @@ class ObjectIdCast implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        return $value instanceof ObjectId ? $value : new ObjectId($value);
+        return ($value instanceof ObjectId || empty($value)) ? $value : new ObjectId($value);
     }
 
     /**
@@ -29,14 +29,10 @@ class ObjectIdCast implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return array
+     * @return ObjectId
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        if (! empty($value)) {
-            $value = is_string($value) ? new ObjectId($value) : $value;
-        }
-
-        return $value;
+        return (is_string($value) && !empty($value)) ? new ObjectId($value) : $value;
     }
 }
