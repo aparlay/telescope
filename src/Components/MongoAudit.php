@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Components;
 
-class MongoAudit extends \Jenssegers\Mongodb\Eloquent\Model implements \OwenIt\Auditing\Contracts\Audit
+use Aparlay\Core\Models\BaseModel;
+
+class MongoAudit extends BaseModel implements \OwenIt\Auditing\Contracts\Audit
 {
     use \OwenIt\Auditing\Audit;
 
@@ -25,7 +27,7 @@ class MongoAudit extends \Jenssegers\Mongodb\Eloquent\Model implements \OwenIt\A
      */
     public function auditable()
     {
-        return $this->morphTo();
+        return $this->morphTo('auditable.');
     }
 
     /**
@@ -33,6 +35,6 @@ class MongoAudit extends \Jenssegers\Mongodb\Eloquent\Model implements \OwenIt\A
      */
     public function user()
     {
-        return $this->morphTo();
+        return $this->morphTo('user.');
     }
 }
