@@ -8,6 +8,7 @@ use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\Cdn;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use MongoDB\BSON\ObjectId;
@@ -184,7 +185,14 @@ class MediaService extends AdminBaseService
             'file' => request()->input('file'),
             'description' => request()->input('description', ''),
             'slug' => self::generateSlug(6),
-            'count_fields_updated_at' => [],
+            'count_fields_updated_at' => [
+                'followers' => DT::utcNow(),
+                'followings' => DT::utcNow(),
+                'blocks' => DT::utcNow(),
+                'likes' => DT::utcNow(),
+                'medias' => DT::utcNow(),
+                'followed_hashtags' => DT::utcNow(),
+            ],
             'visibility' => $user->visibility,
             'status' => MediaStatus::QUEUED->value,
             'creator' => [

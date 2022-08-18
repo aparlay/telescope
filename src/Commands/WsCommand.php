@@ -76,7 +76,7 @@ class WsCommand extends Command
                     if (($frame = $client->recv()) instanceof Frame) {
                         $this->info('New WS message arrived!');
                         $this->info($frame->data);
-                        $data = json_decode($frame->data, true);
+                        $data = json_decode($frame->data, true, 512, JSON_THROW_ON_ERROR);
                         if (isset($data['event'], $data['properties'])) {
                             $properties = $data['properties'];
                             $properties['deviceId'] = $data['deviceId'] ?? null;
