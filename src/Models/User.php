@@ -179,6 +179,8 @@ class User extends Authenticatable implements JWTSubject
         'scores',
         'verification_status',
         'deactivation_reason',
+        'oauth',
+        'two_factor',
         'created_at',
         'updated_at',
         'deleted_at',
