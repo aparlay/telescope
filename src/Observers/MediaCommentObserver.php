@@ -38,7 +38,7 @@ class MediaCommentObserver extends BaseModelObserver
         $media->save();
 
         // do not create a separate notification for tip comment
-        if (!empty($mediaComment->tip_id)) {
+        if (! empty($mediaComment->tip_id)) {
             return;
         }
 
