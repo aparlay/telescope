@@ -21,6 +21,9 @@ class MediaCommentObserver extends BaseModelObserver
     public function created(MediaComment $mediaComment): void
     {
         $media = $mediaComment->mediaObj;
+        if ($media === null) {
+            return;
+        }
         $commentCount = MediaComment::query()->media($media->_id)->count();
         $media->comment_count = $commentCount;
         $media->addToSet('comments', [
@@ -74,6 +77,9 @@ class MediaCommentObserver extends BaseModelObserver
     public function deleted($model): void
     {
         $media = $model->mediaObj;
+        if ($media === null) {
+            return;
+        }
         $commentCount = MediaComment::query()->media($media->_id)->count();
         $media->comment_count = $commentCount;
         $media->count_fields_updated_at = array_merge(

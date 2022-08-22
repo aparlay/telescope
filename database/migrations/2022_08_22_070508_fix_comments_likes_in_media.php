@@ -20,6 +20,7 @@ return new class() extends Migration {
             $media = $mediaComment->mediaObj;
             if (empty($media)) {
                 $mediaComment->delete();
+                continue;
             }
             $commentCount = MediaComment::query()->media($media->_id)->count();
             $media->comment_count = $commentCount;
@@ -38,6 +39,7 @@ return new class() extends Migration {
             $media = $mediaLike->mediaObj;
             if (empty($media)) {
                 $mediaLike->delete();
+                continue;
             }
             $commentCount = MediaComment::query()->media($media->_id)->count();
             $media->like_count = $commentCount;

@@ -21,6 +21,9 @@ class MediaLikeObserver extends BaseModelObserver
     public function created($mediaLike): void
     {
         $media = $mediaLike->mediaObj;
+        if ($media === null) {
+            return;
+        }
         $likeCount = MediaLike::media($media->_id)->count();
         $media->like_count = $likeCount;
         $media->addToSet('likes', [
@@ -82,6 +85,9 @@ class MediaLikeObserver extends BaseModelObserver
     public function deleted($mediaLike): void
     {
         $media = $mediaLike->mediaObj;
+        if ($media === null) {
+            return;
+        }
         $likeCount = MediaLike::media($media->_id)->count();
         $media->like_count = $likeCount;
         $media->removeFromSet('likes', [
