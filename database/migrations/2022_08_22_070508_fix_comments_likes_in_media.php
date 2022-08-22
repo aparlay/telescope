@@ -18,7 +18,7 @@ return new class() extends Migration {
     {
         foreach (MediaComment::lazy() as $mediaComment) {
             $media = $mediaComment->mediaObj;
-            if (empty($media)) {
+            if (empty($media) || empty($mediaLike->creator)) {
                 $mediaComment->delete();
                 continue;
             }
@@ -37,12 +37,12 @@ return new class() extends Migration {
         }
         foreach (MediaLike::lazy() as $mediaLike) {
             $media = $mediaLike->mediaObj;
-            if (empty($media)) {
+            if (empty($media) || empty($mediaLike->creator)) {
                 $mediaLike->delete();
                 continue;
             }
-            $commentCount = MediaComment::query()->media($media->_id)->count();
-            $media->like_count = $commentCount;
+            $likeCount = MediaLike::media($media->_id)->count();
+            $media->like_count = $likeCount;
             $media->addToSet('likes', [
                 '_id' => new ObjectId($mediaLike->creator['_id']),
                 'username' => $mediaLike->creator['username'],
