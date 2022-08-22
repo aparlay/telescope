@@ -18,7 +18,8 @@ return new class() extends Migration {
     {
         foreach (MediaComment::lazy() as $mediaComment) {
             $media = $mediaComment->mediaObj;
-            if (empty($media) || empty($mediaLike->creator)) {
+            $creatorObj = $mediaComment->creatorObj;
+            if (empty($media) || empty($creatorObj)) {
                 $mediaComment->delete();
                 continue;
             }
@@ -37,7 +38,8 @@ return new class() extends Migration {
         }
         foreach (MediaLike::lazy() as $mediaLike) {
             $media = $mediaLike->mediaObj;
-            if (empty($media) || empty($mediaLike->creator)) {
+            $creatorObj = $mediaLike->creatorObj;
+            if (empty($media) || empty($creatorObj)) {
                 $mediaLike->delete();
                 continue;
             }
