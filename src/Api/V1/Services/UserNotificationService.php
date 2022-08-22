@@ -11,7 +11,6 @@ use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
-use Jenssegers\Mongodb\Relations\MorphTo;
 use MongoDB\BSON\ObjectId;
 
 class UserNotificationService
