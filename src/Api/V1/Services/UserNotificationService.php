@@ -23,7 +23,8 @@ class UserNotificationService
      */
     public function index($filteredCategory = null): LengthAwarePaginator
     {
-        $query = UserNotification::query()->user($this->getUser()->_id);
+        $userId = $this->getUser()->_id;
+        $query = UserNotification::query()->user($userId);
         /*
          ->with(['entityObj' => function (MorphTo $morphTo) {
             $morphTo->morphWith([
@@ -38,7 +39,12 @@ class UserNotificationService
             $query->category($filteredCategory);
         }
 
-        return $query->latest('created_at')->paginate();
+        $notifications = $query->latest('created_at')->paginate();
+
+        $notificationIds = collect($notifications->items())->pluck('_id')->toArray();
+        $this->readAll($userId, $notificationIds);
+
+        return $notifications;
     }
 
     /**
@@ -104,8 +110,8 @@ class UserNotificationService
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
         UserNotification::query()
             ->user($userId)
-            ->whereIn('_id', $notificationIds)
             ->notVisited()
+            ->whereInIds('_id', $notificationIds)
             ->update(['status' => UserNotificationStatus::VISITED->value]);
     }
 
