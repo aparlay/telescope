@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Dto\UserNotificationDto;
+use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\UserNotification;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\DT;
@@ -66,12 +67,31 @@ class UserNotificationService
                 ->user($this->getUser()->_id)
                 ->category($data['category'])
                 ->first();
+
+            $media = Media::media($data['entity._id'])->first();
+            if ($data['category'] === UserNotificationCategory::LIKES->value) {
+                $message = match (true) {
+                    $media->like_count > 2 => __(':username1, :username2 and :count others liked your video.', ['username' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username'], 'count' => $media->like_count]),
+                    ($media->like_count === 2 && ! empty($media->likes[1]['username'])) => __(':username1 and :username2 liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username']]),
+                    default => __(':username liked your video.', ['username' => $media->likes[0]['username']])
+                };
+            } else {
+                $message = match (true) {
+                    $media->comment_count > 2 => __(':username1, :username2 and :count others commented on your video.', ['username' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comment_count]),
+                    ($media->comment_count === 2 && ! empty($media->comments[1]['username'])) => __(':username1 and :username2 commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username']]),
+                    default => __(':username liked your video.', ['username' => $media->comments[0]['username']])
+                };
+            }
         }
 
         if (empty($model)) {
             $model = UserNotification::create($data);
         } else {
-            $model->update(['status' => UserNotificationStatus::NOT_VISITED->value, 'updated_at' => DT::utcNow()]);
+            $model->update([
+                'status' => UserNotificationStatus::NOT_VISITED->value,
+                'updated_at' => DT::utcNow(),
+                'message' => $message ?? $model->message
+            ]);
         }
 
         $this->getUser()->increaseStatCounter('notifications');

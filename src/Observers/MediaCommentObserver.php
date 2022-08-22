@@ -6,6 +6,7 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\MediaCommentedNotification;
+use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaCommentObserver extends BaseModelObserver
@@ -13,38 +14,51 @@ class MediaCommentObserver extends BaseModelObserver
     /**
      * Handle the MediaComment "created" event.
      *
-     * @param  MediaComment  $model
+     * @param  MediaComment  $mediaComment
      * @return void
      * @throws InvalidArgumentException
      */
-    public function created($model): void
+    public function created(MediaComment $mediaComment): void
     {
-        $media = $model->mediaObj;
+        $media = $mediaComment->mediaObj;
         $commentCount = MediaComment::query()->media($media->_id)->count();
         $media->comment_count = $commentCount;
+        $media->addToSet('comments', [
+            '_id' => new ObjectId($mediaComment->creator['_id']),
+            'username' => $mediaComment->creator['username'],
+            'avatar' => $mediaComment->creator['avatar'],
+        ], 10);
         $media->count_fields_updated_at = array_merge(
             $media->count_fields_updated_at,
             ['comments' => DT::utcNow()]
         );
         $media->save();
-        if (empty($model->reply_to_user['_id'])) {
+        if (empty($mediaComment->reply_to_user['_id'])) {
+            if ($media->comment_count > 2) {
+                $message = __(':username1, :username2 and :count others commented on your video.', ['username' => $mediaComment->creator['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comments]);
+            } elseif ($media->comment_count == 2 && ! empty($media->comments[1]['username'])) {
+                $message = __(':username1 and :username2 commented on your video.', ['username1' => $mediaComment->creator['username'], 'username2' => $media->comments[1]['username']]);
+            } else {
+                $message = __(':username commented on your video.', ['username' => $mediaComment->creator['username']]);
+            }
+
             $media->notify(
                 new MediaCommentedNotification(
-                    $model->creatorObj,
+                    $mediaComment->creatorObj,
                     $media->creatorObj,
                     $media,
-                    $model,
-                    __(':username commented on your video.', ['username' => $model->creator['username']])
+                    $mediaComment,
+                    $message
                 )
             );
         } else {
             $media->notify(
                 new MediaCommentedNotification(
-                    $model->creatorObj,
-                    User::find($model->reply_to_user['_id']),
+                    $mediaComment->creatorObj,
+                    User::find($mediaComment->reply_to_user['_id']),
                     $media,
-                    $model,
-                    __(':username replied to your comment.', ['username' => $model->creator['username']])
+                    $mediaComment,
+                    __(':username replied to your comment.', ['username' => $mediaComment->creator['username']])
                 )
             );
         }

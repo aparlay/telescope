@@ -14,19 +14,19 @@ class MediaLikeObserver extends BaseModelObserver
     /**
      * Handle the MediaLike "created" event.
      *
-     * @param  MediaLike  $model
+     * @param  MediaLike  $mediaLike
      * @return void
      * @throws InvalidArgumentException
      */
-    public function created($model): void
+    public function created($mediaLike): void
     {
-        $media = $model->mediaObj;
+        $media = $mediaLike->mediaObj;
         $likeCount = MediaLike::media($media->_id)->count();
         $media->like_count = $likeCount;
         $media->addToSet('likes', [
-            '_id' => new ObjectId($model->creator['_id']),
-            'username' => $model->creator['username'],
-            'avatar' => $model->creator['avatar'],
+            '_id' => new ObjectId($mediaLike->creator['_id']),
+            'username' => $mediaLike->creator['username'],
+            'avatar' => $mediaLike->creator['avatar'],
         ], 10);
         $media->count_fields_updated_at = array_merge(
             $media->count_fields_updated_at,
@@ -34,15 +34,15 @@ class MediaLikeObserver extends BaseModelObserver
         );
         $media->save();
         if ($media->like_count > 2) {
-            $message = __(':username1, :username2 and :count others liked your video.', ['username' => $model->creator['username'], 'username2' => $media->likes[1]['username'], 'count' => $media->like_count]);
+            $message = __(':username1, :username2 and :count others liked your video.', ['username' => $mediaLike->creator['username'], 'username2' => $media->likes[1]['username'], 'count' => $media->like_count]);
         } elseif ($media->like_count == 2 && ! empty($media->likes[1]['username'])) {
-            $message = __(':username1 and :username2 liked your video.', ['username1' => $model->creator['username'], 'username2' => $media->likes[1]['username']]);
+            $message = __(':username1 and :username2 liked your video.', ['username1' => $mediaLike->creator['username'], 'username2' => $media->likes[1]['username']]);
         } else {
-            $message = __(':username liked your video.', ['username' => $model->creator['username']]);
+            $message = __(':username liked your video.', ['username' => $mediaLike->creator['username']]);
         }
         $media->notify(
             new MediaLikedNotification(
-                $model->creatorObj,
+                $mediaLike->creatorObj,
                 $media->creatorObj,
                 $media,
                 $message
@@ -53,9 +53,9 @@ class MediaLikeObserver extends BaseModelObserver
         $likeCount = MediaLike::user($user->_id)->count();
         $user->like_count = $likeCount;
         $user->addToSet('likes', [
-            '_id' => new ObjectId($model->creator['_id']),
-            'username' => $model->creator['username'],
-            'avatar' => $model->creator['avatar'],
+            '_id' => new ObjectId($mediaLike->creator['_id']),
+            'username' => $mediaLike->creator['username'],
+            'avatar' => $mediaLike->creator['avatar'],
         ], 10);
         $user->count_fields_updated_at = array_merge(
             $user->count_fields_updated_at,
@@ -69,25 +69,25 @@ class MediaLikeObserver extends BaseModelObserver
         $user->save();
 
         // Reset the Redis cache
-        MediaLike::cacheByUserId($model->creator['_id'], true);
+        MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
     }
 
     /**
      * Handle the MediaLike "deleted" event.
      *
-     * @param  MediaLike  $model
+     * @param  MediaLike  $mediaLike
      * @return void
      * @throws InvalidArgumentException
      */
-    public function deleted($model): void
+    public function deleted($mediaLike): void
     {
-        $media = $model->mediaObj;
+        $media = $mediaLike->mediaObj;
         $likeCount = MediaLike::media($media->_id)->count();
         $media->like_count = $likeCount;
         $media->removeFromSet('likes', [
-            '_id' => new ObjectId($model->creator['_id']),
-            'username' => $model->creator['username'],
-            'avatar' => $model->creator['avatar'],
+            '_id' => new ObjectId($mediaLike->creator['_id']),
+            'username' => $mediaLike->creator['username'],
+            'avatar' => $mediaLike->creator['avatar'],
         ]);
         $media->count_fields_updated_at = array_merge(
             $media->count_fields_updated_at,
@@ -99,9 +99,9 @@ class MediaLikeObserver extends BaseModelObserver
         $likeCount = MediaLike::user($user->_id)->count();
         $user->like_count = $likeCount;
         $user->removeFromSet('likes', [
-            '_id' => new ObjectId($model->creator['_id']),
-            'username' => $model->creator['username'],
-            'avatar' => $model->creator['avatar'],
+            '_id' => new ObjectId($mediaLike->creator['_id']),
+            'username' => $mediaLike->creator['username'],
+            'avatar' => $mediaLike->creator['avatar'],
         ]);
         $user->count_fields_updated_at = array_merge(
             $user->count_fields_updated_at,
@@ -114,6 +114,6 @@ class MediaLikeObserver extends BaseModelObserver
         $user->save();
 
         // Reset the Redis cache
-        MediaLike::cacheByUserId($model->creator['_id'], true);
+        MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
     }
 }
