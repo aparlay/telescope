@@ -70,13 +70,13 @@ class UserNotificationService
             $media = Media::media($data['entity._id'])->first();
             if ($data['category'] === UserNotificationCategory::LIKES->value) {
                 $message = match (true) {
-                    $media->like_count > 2 => __(':username1, :username2 and :count others liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username'], 'count' => $media->like_count]),
+                    $media->like_count > 2 => __(':username1, :username2 and :count others liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username'], 'count' => $media->like_count - 2]),
                     ($media->like_count === 2 && ! empty($media->likes[0]['username']) && ! empty($media->likes[1]['username'])) => __(':username1 and :username2 liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username']]),
                     default => __(':username liked your video.', ['username' => $media->likes[0]['username']])
                 };
             } else {
                 $message = match (true) {
-                    $media->comment_count > 2 => __(':username1, :username2 and :count others commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comment_count]),
+                    $media->comment_count > 2 => __(':username1, :username2 and :count others commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comment_count - 2]),
                     ($media->comment_count === 2 && ! empty($media->comments[0]['username']) && ! empty($media->comments[1]['username'])) => __(':username1 and :username2 commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username']]),
                     default => __(':username liked your video.', ['username' => $media->comments[0]['username']])
                 };

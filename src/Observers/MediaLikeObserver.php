@@ -37,7 +37,7 @@ class MediaLikeObserver extends BaseModelObserver
         );
         $media->save();
         if (isset($media->likes[0]['username'], $media->likes[1]['username']) && $media->like_count > 2) {
-            $message = __(':username1, :username2 and :count others liked your video.', ['username' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username'], 'count' => $media->like_count]);
+            $message = __(':username1, :username2 and :count others liked your video.', ['username' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username'], 'count' => $media->like_count - 2]);
         } elseif (isset($media->likes[0]['username'], $media->likes[1]['username']) && $media->like_count == 2) {
             $message = __(':username1 and :username2 liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username']]);
         } else {
