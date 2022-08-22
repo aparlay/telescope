@@ -39,7 +39,7 @@ class MediaComment extends BaseModel
      *
      * @var string
      */
-    protected $collection = 'media_comment';
+    protected $collection = 'media_comments';
 
     /**
      * The attributes that are mass assignable.
