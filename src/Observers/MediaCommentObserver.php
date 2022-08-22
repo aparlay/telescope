@@ -37,7 +37,7 @@ class MediaCommentObserver extends BaseModelObserver
         );
         $media->save();
         if (empty($mediaComment->reply_to_user['_id'])) {
-            if ($media->comment_count > 2) {
+            if ($media->comment_count > 2 && ! isset($media->comments[1]['username'])) {
                 $message = __(':username1, :username2 and :count others commented on your video.', ['username1' => $mediaComment->creator['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comments]);
             } elseif ($media->comment_count == 2 && ! isset($media->comments[1]['username'])) {
                 $message = __(':username1 and :username2 commented on your video.', ['username1' => $mediaComment->creator['username'], 'username2' => $media->comments[1]['username']]);
