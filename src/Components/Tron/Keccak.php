@@ -26,7 +26,6 @@ final class Keccak
 
         $bc = [];
         for ($round = 0; $round < $rounds; $round++) {
-
             // Theta
             for ($i = 0; $i < 5; $i++) {
                 $bc[$i] = [
@@ -160,7 +159,6 @@ final class Keccak
 
         $bc = [];
         for ($round = 0; $round < $rounds; $round++) {
-
             // Theta
             for ($i = 0; $i < 5; $i++) {
                 $bc[$i] = [
