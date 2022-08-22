@@ -97,15 +97,17 @@ class SimpleUserCast implements CastsAttributes
 
         if (empty($userArray = Cache::store('redis')->get($cacheKey, []))) {
             $user = User::user($userId)->first();
-            $userArray = [
-                '_id' => (string) $user->_id,
-                'username' => $user->username,
-                'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
-                'is_verified' => $user->is_verified,
-            ];
+            if ($user !== null) {
+                $userArray = [
+                    '_id' => (string) $user->_id,
+                    'username' => $user->username,
+                    'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
+                    'is_verified' => $user->is_verified,
+                ];
 
-            Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);
-            Cache::store('redis')->set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
+                Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);
+                Cache::store('redis')->set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
+            }
         }
 
         if (Cache::store('octane')->get($cacheKey, false) === false) {
