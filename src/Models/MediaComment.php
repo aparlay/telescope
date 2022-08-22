@@ -16,6 +16,7 @@ use MongoDB\BSON\ObjectId;
  *
  * @property ObjectId   $_id
  * @property ObjectId   $media_id
+ * @property ObjectId   $tip_id
  * @property ObjectId   $user_id
  * @property array      $creator
  * @property string      $text
@@ -49,6 +50,7 @@ class MediaComment extends BaseModel
     protected $fillable = [
         '_id',
         'media_id',
+        'tip_id',
         'reply_to_user',
         'first_reply',
         'parent',

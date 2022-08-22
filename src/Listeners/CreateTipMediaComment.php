@@ -7,6 +7,7 @@ use Akaunting\Money\Money;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Services\MediaCommentService;
 use Aparlay\Payment\Events\TipCreatedEvent;
+use MongoDB\BSON\ObjectId;
 
 class CreateTipMediaComment
 {
@@ -28,6 +29,6 @@ class CreateTipMediaComment
         /** @var Media $media */
         $media = Media::findOrFail($tip->media_id);
         $mediaCommentService->setUser($tip->creatorObj);
-        $mediaCommentService->create($media, $text);
+        $mediaCommentService->create($media, $text, ['tip_id' => new ObjectId($tip->_id)]);
     }
 }

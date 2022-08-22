@@ -36,6 +36,12 @@ class MediaCommentObserver extends BaseModelObserver
             ['comments' => DT::utcNow()]
         );
         $media->save();
+
+        // do not create a separate notification for tip comment
+        if (!empty($mediaComment->tip_id)) {
+            return;
+        }
+
         if (empty($mediaComment->reply_to_user['_id'])) {
             if (isset($media->comments[0]['username'], $media->comments[1]['username']) && $media->comment_count > 2) {
                 $message = __(':username1, :username2 and :count others commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comment_count - 2]);
