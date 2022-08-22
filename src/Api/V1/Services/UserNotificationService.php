@@ -90,7 +90,7 @@ class UserNotificationService
             $model->update([
                 'status' => UserNotificationStatus::NOT_VISITED->value,
                 'updated_at' => DT::utcNow(),
-                'message' => $message ?? $model->message
+                'message' => $message ?? $model->message,
             ]);
         }
 
