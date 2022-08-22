@@ -91,6 +91,7 @@ class UserNotificationService
                 'status' => UserNotificationStatus::NOT_VISITED->value,
                 'updated_at' => DT::utcNow(),
                 'message' => $message ?? $model->message,
+                'payload' => $notificationDto->payload ?? $model->payload,
             ]);
         }
 
