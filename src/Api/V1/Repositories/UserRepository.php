@@ -159,6 +159,7 @@ class UserRepository
         $this->model->deactivation_reason = $reason;
         if ($this->model->save()) {
             $this->model->unsearchable();
+
             return true;
         }
 
