@@ -137,7 +137,7 @@ class MediaService
             $userId = auth()->user()->_id;
             $query->notVisitedByUserAndDevice($userId, $deviceId);
         } else {
-            $query->notVisitedByDevice($deviceId);
+            $query->confirmed()->public()->notVisitedByDevice($deviceId);
         }
 
         $data = $query->paginate(5)->withQueryString();
