@@ -169,9 +169,9 @@ class UserService
      * @return bool
      * @throws Exception
      */
-    public function deleteAccount(User|Authenticatable $user, UserDeleteDTO $userDeleteDTO): bool
+    public function deleteAccount(UserDeleteDTO $userDeleteDTO): bool
     {
-        $this->userRepository = new UserRepository($user);
+        $this->userRepository = new UserRepository($this->getUser());
 
         return $this->userRepository->deleteAccount($userDeleteDTO->reason);
     }

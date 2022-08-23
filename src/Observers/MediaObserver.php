@@ -5,7 +5,9 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Api\V1\Notifications\UserDeleteMedia;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Jobs\DeleteMediaLike;
+use Aparlay\Core\Jobs\DeleteMediaComments;
+use Aparlay\Core\Jobs\DeleteMediaLikes;
+use Aparlay\Core\Jobs\DeleteMediaUserNotifications;
 use Aparlay\Core\Jobs\RecalculateHashtag;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
@@ -123,7 +125,10 @@ class MediaObserver extends BaseModelObserver
             );
             $media->userObj->save();
 
-            DeleteMediaLike::dispatch((string) $media->_id)->onQueue('low');
+            DeleteMediaLikes::dispatch((string) $media->_id)->onQueue('low');
+            DeleteMediaComments::dispatch((string) $media->_id)->onQueue('low');
+            DeleteMediaUserNotifications::dispatch((string) $media->_id)->onQueue('low');
+            $media->unsearchable();
         }
 
         if ($media->wasChanged(['visit_count', 'sort_score', 'like_count'])) {
@@ -154,7 +159,7 @@ class MediaObserver extends BaseModelObserver
         );
         $creatorUser->save();
 
-        DeleteMediaLike::dispatch((string) $media->_id)->onQueue('low');
+        DeleteMediaLikes::dispatch((string) $media->_id)->onQueue('low');
 
         $creatorUser->notify(new UserDeleteMedia());
     }

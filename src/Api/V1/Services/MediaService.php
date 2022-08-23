@@ -116,6 +116,20 @@ class MediaService
     }
 
     /**
+     * @param  Media  $media
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function deleteAllMediasBelongToUser(): void
+    {
+        foreach (Media::user($this->getUser()->_id)->lazy() as $media) {
+            if ($media->status !== MediaStatus::USER_DELETED->value) {
+                $this->mediaRepository->update(['status' => MediaStatus::USER_DELETED->value], $media->_id);
+            }
+        }
+    }
+
+    /**
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
      */
@@ -124,10 +138,6 @@ class MediaService
         $query = Media::query();
         $query->public()->confirmed()->sort();
 
-        if (! auth()->guest()) {
-            $query->notBlockedFor(auth()->user()->_id);
-        }
-
         $deviceId = request()->header('X-DEVICE-ID', '');
         $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
         $originalQuery = $query;
@@ -135,9 +145,9 @@ class MediaService
 
         if (! auth()->guest()) {
             $userId = auth()->user()->_id;
-            $query->notVisitedByUserAndDevice($userId, $deviceId);
+            $query->notBlockedFor(auth()->user()->_id)->notVisitedByUserAndDevice($userId, $deviceId);
         } else {
-            $query->confirmed()->public()->notVisitedByDevice($deviceId);
+            $query->notVisitedByDevice($deviceId);
         }
 
         $data = $query->paginate(5)->withQueryString();

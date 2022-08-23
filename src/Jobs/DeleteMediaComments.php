@@ -4,6 +4,7 @@ namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
-class DeleteMediaLike implements ShouldQueue
+class DeleteMediaComments implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -61,25 +62,22 @@ class DeleteMediaLike implements ShouldQueue
      */
     public function handle(): void
     {
-        MediaLike::media($this->mediaId)->delete();
-        if (($media = Media::find(new ObjectId($this->mediaId))) !== null) {
+        MediaComment::query()->media($this->mediaId)->delete();
+        if (($media = Media::media($this->mediaId)->first()) !== null) {
             $user = $media->userObj;
 
-            $likeCount = MediaLike::user($media->creator['_id'])->count();
-            $user->like_count = $likeCount;
-            $user->removeFromSet('likes', [
+            $commentCount = MediaComment::query()->user($media->creator['_id'])->count();
+            $user->comment_count = $commentCount;
+            $user->removeFromSet('comments', [
                 '_id' => new ObjectId($media->creator['_id']),
                 'username' => $media->creator['username'],
                 'avatar' => $media->creator['avatar'],
             ]);
             $user->count_fields_updated_at = array_merge(
                 $user->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
+                ['comments' => DT::utcNow()]
             );
             $user->save();
-
-            // Reset the Redis cache
-            MediaLike::cacheByUserId((string) $media->creator['_id'], true);
         }
     }
 

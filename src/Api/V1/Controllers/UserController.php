@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MeRequest;
 use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
+use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UserService;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -61,8 +62,12 @@ class UserController extends Controller
         $this->authorize('delete', User::class);
 
         $user = auth()->user();
+        $this->userService->setUser($user);
+        if ($this->userService->deleteAccount(UserDeleteDTO::fromRequest($request))) {
+            $mediaService = app()->make(MediaService::class);
+            $mediaService->setUser($user);
+            $mediaService->deleteAllMediasBelongToUser();
 
-        if ($this->userService->deleteAccount($user, UserDeleteDTO::fromRequest($request))) {
             if (auth()->user()->getRememberToken()) {
                 auth()->logout();
             }
