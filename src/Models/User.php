@@ -28,13 +28,11 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Jenssegers\Mongodb\Relations\BelongsTo;
-use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 /**
  * User model.
@@ -111,7 +109,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
  * @method static |self|Builder user(ObjectId|string $userId)    get user
  * @method static |self|Builder availableForFollower()    get available content for followers
  */
-class User extends Authenticatable implements JWTSubject
+class User extends \App\Models\User
 {
     use HasApiTokens;
     use HasFactory;
@@ -622,25 +620,6 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return parent::setAttribute($key, $value);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJWTIdentifier(): mixed
-    {
-        return $this->getKey();
-    }
-
-    /**
-     * @return null[]
-     */
-    #[ArrayShape(['device_id' => 'array|null|string'])]
-    public function getJWTCustomClaims(): array
-    {
-        return [
-            'device_id' => request()?->header('x-device-id'),
-        ];
     }
 
     /**

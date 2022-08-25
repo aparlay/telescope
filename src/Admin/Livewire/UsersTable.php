@@ -6,8 +6,7 @@ use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Filters\FilterScope;
-use App\Models\User;
-use Jenssegers\Mongodb\Eloquent\Builder;
+use Aparlay\Core\Admin\Models\User;
 
 class UsersTable extends BaseIndexComponent
 {
