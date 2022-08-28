@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Facades;
 
-use Illuminate\Pagination\PaginationState;
 use JKocik\Laravel\Profiler\Events\ResetTrackers;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTFactory;
