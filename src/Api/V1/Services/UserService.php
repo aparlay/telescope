@@ -17,6 +17,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Jenssegers\Agent\Agent;
 
 class UserService
@@ -105,7 +106,7 @@ class UserService
      *
      * @param  User|Authenticatable  $user
      * @return bool
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function isVerified(User|Authenticatable $user): bool
     {
@@ -164,7 +165,6 @@ class UserService
     /**
      * Responsible for delete user account.
      *
-     * @param  User|Authenticatable  $user
      * @param  UserDeleteDTO  $userDeleteDTO
      * @return bool
      * @throws Exception
@@ -214,7 +214,7 @@ class UserService
     /**
      * Verifying the user.
      *
-     * @param  User|Authenticatable  $user
+     * @param  User|Authenticatable|null  $user
      * @param  $userAgent
      * @param  $deviceId
      * @param  $ip
