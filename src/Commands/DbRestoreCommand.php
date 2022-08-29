@@ -44,11 +44,12 @@ class DbRestoreCommand extends Command
         ]);
         $process->run();
 
-        if (!$process->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
 
         echo $process->getOutput();
+
         return self::SUCCESS;
     }
 }
