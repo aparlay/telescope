@@ -9,13 +9,13 @@ use Symfony\Component\Process\Process;
 class DbBackupCommand extends Command
 {
     public $signature = 'db:backup 
-                         {--host=localhost : Database server IP address} 
-                         {--port=27017 : Database mongodb port number} 
-                         {--username= : Mongodb user account username} 
-                         {--password= : Mongodb user account password} 
-                         {--authSource=admin : Authentication Database} 
-                         {--database= : Database schema name} 
-                         {--output=data/dump : Output folder} 
+                         {--h|host=localhost : Database server IP address} 
+                         {--P|port=27017 : Database mongodb port number} 
+                         {--u|username= : Mongodb user account username} 
+                         {--p|password= : Mongodb user account password} 
+                         {--authenticationDatabase=admin : Authentication Database} 
+                         {--d|db= : Database schema name} 
+                         {--o|out=data/dump : Output folder} 
                          {--gzip : Compress output}';
 
     public $description = 'This command is responsible to create backup from db';
@@ -24,18 +24,18 @@ class DbBackupCommand extends Command
     {
         $host = $this->option('host');
         $port = $this->option('port');
-        $database = $this->option('database');
+        $database = $this->option('db');
         $username = $this->option('username');
         $password = $this->option('password');
-        $authSource = $this->option('authSource');
-        $output = $this->option('output');
+        $authSource = $this->option('authenticationDatabase');
+        $output = $this->option('out');
         $gzip = $this->option('gzip');
 
         $process = new Process([
             'mongodump',
             '--host='.$host,
             '--port='.$port,
-            '--database='.$database,
+            '--db='.$database,
             '--authenticationDatabase='.($authSource ?? 'admin'),
             '--username='.$username,
             '--password='.$password,
