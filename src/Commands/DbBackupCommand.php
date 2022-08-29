@@ -9,7 +9,7 @@ use Symfony\Component\Process\Process;
 class DbBackupCommand extends Command
 {
     public $signature = 'db:backup 
-                         {--h|host=localhost : Database server IP address} 
+                         {--H|host=localhost : Database server IP address} 
                          {--P|port=27017 : Database mongodb port number} 
                          {--u|username= : Mongodb user account username} 
                          {--p|password= : Mongodb user account password} 
