@@ -19,8 +19,6 @@ class DbRestoreCommand extends Command
 
     public function handle()
     {
-
-
         return self::SUCCESS;
     }
 }
