@@ -24,7 +24,7 @@ trait SimpleUserTrait
         array $userArray,
         array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked', 'is_verified']
     ): array {
-        if (!isset($userArray['_id'])) {
+        if (! isset($userArray['_id'])) {
             return [];
         }
 
