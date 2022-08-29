@@ -56,7 +56,7 @@ class MediaResource extends JsonResource
             'people' => $people,
             'file' => $this->file_url,
             'cover' => $this->cover_url,
-            'creator' => $this->createSimpleUser($this->creator, ['_id', 'username', 'avatar', 'is_followed', 'is_verified']),
+            'creator' => empty($this->creator) ? [] : $this->createSimpleUser($this->creator, ['_id', 'username', 'avatar', 'is_followed', 'is_verified']),
             'is_liked' => $this->is_liked,
             'is_visited' => $this->is_visited,
             'is_adult' => $this->is_adult,
