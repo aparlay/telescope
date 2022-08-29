@@ -79,7 +79,7 @@ class MediaResource extends JsonResource
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [
                 'self' => ['href' => route('core.api.v1.media.show', ['media' => $this])],
-                'index' => ['href' => route('core.api.v1.user.media.list', ['user' => $this->creator['_id']])],
+                'index' => ['href' => route('core.api.v1.user.media.list', ['user' => $this->creator['_id'] ?? ''])],
             ],
         ];
     }
