@@ -24,6 +24,8 @@ use Aparlay\Core\Commands\AnalyticsDailyCommand;
 use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
 use Aparlay\Core\Commands\CleanupCommand;
 use Aparlay\Core\Commands\CoreCommand;
+use Aparlay\Core\Commands\DbBackupCommand;
+use Aparlay\Core\Commands\DbRestoreCommand;
 use Aparlay\Core\Commands\HashtagScoreCommand;
 use Aparlay\Core\Commands\MeilisearchSettingCommand;
 use Aparlay\Core\Commands\RoleCommand;
@@ -38,7 +40,6 @@ use Aparlay\Core\Commands\WarmupCacheCommand;
 use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Helpers\ConfigHelper;
 use Aparlay\Core\Helpers\IP;
-use Aparlay\Core\Models\PersonalAccessToken;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\AliasLoader;
@@ -105,6 +106,8 @@ class CoreServiceProvider extends ServiceProvider
                 AnalyticsTwoMonthCommand::class,
                 AnalyticsDailyCommand::class,
                 CleanupCommand::class,
+                DbRestoreCommand::class,
+                DbBackupCommand::class,
             ]);
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
@@ -129,9 +132,6 @@ class CoreServiceProvider extends ServiceProvider
 
         $this->registerLivewireComponents();
 
-        //Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
-        //$loader = AliasLoader::getInstance();
-        //$loader->alias(\Laravel\Sanctum\PersonalAccessToken::class, PersonalAccessToken::class);
         ConfigHelper::loadDbConfig();
     }
 
