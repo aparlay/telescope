@@ -2,23 +2,53 @@
 
 namespace Aparlay\Core\Commands;
 
-use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Analytic;
-use Aparlay\Core\Models\Email;
-use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaLike;
-use Aparlay\Core\Models\MediaVisit;
 use Illuminate\Console\Command;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class DbRestoreCommand extends Command
 {
-    public $signature = 'db:restore {host=localhost : Database server IP address} {port=27017 : Database mongodb port number} {username?} {password?} {authSource=admin : Authentication Database} {database?} {--C|compress}';
+    public $signature = 'db:restore 
+                         {--host=localhost : Database server IP address} 
+                         {--port=27017 : Database mongodb port number} 
+                         {--username= : Mongodb user account username} 
+                         {--password= : Mongodb user account password} 
+                         {--authSource=admin : Authentication Database} 
+                         {--database= : Database schema name} 
+                         {--output=data/dump : Output folder} 
+                         {--gzip : Compress output}';
 
     public $description = 'This command is responsible to restore backup from db';
 
     public function handle()
     {
+        $host = $this->option('host');
+        $port = $this->option('port');
+        $database = $this->option('database');
+        $username = $this->option('username');
+        $password = $this->option('password');
+        $authSource = $this->option('authSource');
+        $output = $this->option('output');
+        $gzip = $this->option('gzip');
+
+        $process = new Process([
+            'mongorestore',
+            '--host='.$host,
+            '--port='.$port,
+            '--database='.$database,
+            '--authenticationDatabase='.($authSource ?? 'admin'),
+            '--username='.$username,
+            '--password='.$password,
+            '--out='.$output,
+            $gzip ? '--gzip' : '',
+        ]);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        echo $process->getOutput();
         return self::SUCCESS;
     }
 }
