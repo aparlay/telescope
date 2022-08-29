@@ -1,9 +1,9 @@
 @php
-    use App\Models\User;
+    use Aparlay\Core\Models\User;
     use Aparlay\Core\Models\Enums\UserGender;
     use Aparlay\Core\Models\Enums\UserStatus;
     use Aparlay\Core\Models\Enums\UserVerificationStatus;
-    use \Aparlay\Core\Models\Country;
+    use Aparlay\Core\Models\Country;
 @endphp
 
 <div class="user-table">
