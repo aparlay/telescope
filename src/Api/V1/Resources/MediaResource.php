@@ -21,7 +21,7 @@ class MediaResource extends JsonResource
      */
     public function toArray($request)
     {
-        if (!isset($this->creator['_id'])) {
+        if (! isset($this->creator['_id'])) {
             \Log::error(json_encode($this->creator));
             \Log::error("Bad media {$this->_id}");
         }
