@@ -52,7 +52,7 @@ class MediaLikeObserver extends BaseModelObserver
             )
         );
 
-        $user = $media->userObj;
+        $user = $media->creatorObj;
         $likeCount = MediaLike::user($user->_id)->count();
         $user->like_count = $likeCount;
         $user->addToSet('likes', [

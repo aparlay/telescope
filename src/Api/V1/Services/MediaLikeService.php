@@ -35,7 +35,7 @@ class MediaLikeService
         if (($like = $this->mediaLikeRepository->isLiked($creator, $media)) === null) {
             $like = $this->mediaLikeRepository->create([
                 'media_id' => new ObjectId($media->_id),
-                'user_id' => new ObjectId($media->user_id),
+                'user_id' => new ObjectId($media->creator['_id']),
             ]);
 
             $statusCode = $like ? Response::HTTP_CREATED : Response::HTTP_UNPROCESSABLE_ENTITY;
