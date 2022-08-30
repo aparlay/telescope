@@ -11,7 +11,6 @@ use Illuminate\Notifications\Notifiable;
 use MongoDB\BSON\ObjectId;
 
 /**
- *
  * @method static |self|Builder identity(string $identity)    get user
  */
 class Otp extends BaseModel
