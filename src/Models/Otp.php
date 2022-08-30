@@ -12,7 +12,11 @@ use MongoDB\BSON\ObjectId;
 
 /**
  *
- * @method static |self|Builder identity(string $identity)    get user
+ * @method static |self|Builder identity(string $identity)    get otp
+ * @method static |self|Builder otp(string $otp)    get otp
+ * @method static |self|Builder validated(bool $checkValidated)    get otp
+ * @method static |self|Builder recentFirst()    sort otp
+ * @method static |self|Builder remainingAttempt(int $limit)    get otp
  */
 class Otp extends BaseModel
 {

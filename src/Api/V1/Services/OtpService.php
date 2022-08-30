@@ -113,12 +113,13 @@ class OtpService
     }
 
     /**
-     * @param string $otp
-     * @param string $identity
+     * @param  string  $otp
+     * @param  string  $identity
+     * @param  bool  $validateOnly
+     * @param  bool  $checkValidated
      * @return bool
-     * @throws ValidationException
      */
-    public function validateOtp(string $otp, string $identity, bool $validateOnly = false, bool $checkValidated = false)
+    public function validateOtp(string $otp, string $identity, bool $validateOnly = false, bool $checkValidated = false): bool
     {
         // Validate the otp for the given user
         $limit = config('app.otp.invalid_attempt_limit');
@@ -142,7 +143,7 @@ class OtpService
         // Increment the incorrect otp attempt by 1 then through the error
         Otp::identity($identity)
             ->recentFirst()
-            ->first()
+            ->firstOrFail()
             ->increment('incorrect', 1);
 
         $previousOTP = Otp::identity($identity)
