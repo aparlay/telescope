@@ -185,7 +185,7 @@ class AuthController extends Controller
         /** Prepare Credentials and attempt the login */
         $credentials = [$identityField => $request->username, 'password' => $request->password];
 
-        if (! ($token = auth()->attempt(['email' => $request->username, 'password' => $request->password]))) {
+        if (! ($token = auth()->attempt($credentials))) {
             throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
         }
 
