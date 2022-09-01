@@ -28,7 +28,6 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Jenssegers\Mongodb\Relations\BelongsTo;
-use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
@@ -111,7 +110,6 @@ use MongoDB\BSON\UTCDateTime;
  */
 class User extends \App\Models\User
 {
-    use HasApiTokens;
     use HasFactory;
     use Notifiable;
     use UserScope;
