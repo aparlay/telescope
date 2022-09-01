@@ -187,6 +187,7 @@ class User extends \App\Models\User
 
     protected $attributes = [
         'count_fields_updated_at' => [],
+        'verification_status' => 1,
         'setting' => [
             'otp' => false,
             'notifications' => [
@@ -528,7 +529,7 @@ class User extends \App\Models\User
 
     public function getVerificationStatusLabelAttribute(): string
     {
-        return UserVerificationStatus::from($this->verification_status)->label();
+        return $this->verification_status ? UserVerificationStatus::from($this->verification_status)->label() : '';
     }
 
     public function getStatusLabelAttribute()

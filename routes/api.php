@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle', 'dispatch-auth-event'])->name('core.api.v1.')->prefix('v1')->group(function () {
+Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])->name('core.api.v1.')->prefix('v1')->group(function () {
     /* Media Prefix Group */
     Route::prefix('media')->name('media.')->group(function () {
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');

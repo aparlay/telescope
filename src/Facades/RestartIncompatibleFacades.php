@@ -11,9 +11,6 @@ class RestartIncompatibleFacades
 {
     public function handle($event): void
     {
-        JWTAuth::clearResolvedInstances();
-        JWTFactory::clearResolvedInstances();
-        JWTProvider::clearResolvedInstances();
         event(ResetTrackers::class);
     }
 }

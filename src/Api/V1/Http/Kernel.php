@@ -18,7 +18,6 @@ class Kernel extends HttpKernel
         'cookies-auth' => \Aparlay\Core\Api\V1\Http\Middleware\CookiesAuthenticate::class,
         'optional-auth' => \Aparlay\Core\Api\V1\Http\Middleware\OptionalAuthenticate::class,
         'device-id-throttle' => \Aparlay\Core\Api\V1\Http\Middleware\DeviceIdThrottle::class,
-        'dispatch-auth-event' => \Aparlay\Core\Api\V1\Http\Middleware\DispatchAuthenticatedEndpointEvent::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
     ];
 
