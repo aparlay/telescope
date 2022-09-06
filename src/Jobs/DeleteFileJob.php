@@ -37,7 +37,7 @@ class DeleteFileJob implements ShouldQueue
     /**
      * The maximum number of unhandled exceptions to allow before failing.
      */
-    public int $maxExceptions = 1;
+    public int $maxExceptions = 3;
 
     /**
      * The number of seconds to wait before retrying the job.
