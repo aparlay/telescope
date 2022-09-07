@@ -121,7 +121,6 @@ class UserController extends Controller
                 $this->userService->getUser()->status = UserStatus::ACTIVE->value;
             }
             $this->userService->getUser()->save();
-
         }
         $this->userService->getUser()->refresh();
 
