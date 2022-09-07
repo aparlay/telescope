@@ -911,7 +911,6 @@ class User extends \App\Models\User
         }
     }*/
 
-
     /**
      * @param $fields
      * @return void
