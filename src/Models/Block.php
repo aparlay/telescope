@@ -6,7 +6,6 @@ use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\BlockFactory;
 use Aparlay\Core\Models\Queries\BlockQueryBuilder;
 use Aparlay\Core\Models\Queries\MediaCommentQueryBuilder;
-use Aparlay\Core\Models\Scopes\BlockScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
