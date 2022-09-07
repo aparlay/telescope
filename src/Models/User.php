@@ -349,7 +349,7 @@ class User extends \App\Models\User
             'score' => $this->scores['sort'],
             'country' => $this->country_alpha2,
             'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
-            'like_count' => $this->like_count,
+            'like_count' => $this->counters['likes'],
             'visit_count' => 0,
             'comment_count' => 0,
             '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
@@ -445,7 +445,7 @@ class User extends \App\Models\User
      */
     public function getAlertsAttribute(): array|Collection
     {
-        return Alert::user($this->_id)->userOnly()->notVisited()->get();
+        return Alert::query()->user($this->_id)->userOnly()->notVisited()->get();
     }
 
     /**
@@ -844,8 +844,8 @@ class User extends \App\Models\User
             $user = self::findOrFail($user);
         }
 
-        return Block::creator($user->_id)->user($this->_id)->exists() ||
-            Block::user($user->_id)->creator($this->_id)->exists() ||
+        return Block::query()->creator($user->_id)->user($this->_id)->exists() ||
+            Block::query()->user($user->_id)->creator($this->_id)->exists() ||
             $this->blockedCountry($user->country_alpha2);
     }
 
@@ -856,7 +856,7 @@ class User extends \App\Models\User
      */
     public function blockedCountry(string $countryAlpha2): bool
     {
-        return Block::creator($this->_id)->country($countryAlpha2)->exists();
+        return Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
     }
 
     /**
