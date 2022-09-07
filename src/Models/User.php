@@ -61,6 +61,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property mixed       $id
  * @property string      $password_hash_field
  * @property string      $authKey
+ * @property array       $followed_hashtags
  * @property array       $links
  * @property bool        $require_otp
  * @property bool        $is_protected
@@ -78,6 +79,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $country_flags
  * @property array       $text_search
  * @property int         $verification_status
+ * @property array       $likes
  * @property array       $scores
  * @property string      $deactivation_reason
  * @property bool        $has_unread_chat
@@ -103,6 +105,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read int $subscription_referral_commission_percentage
  * @property-read int $exclusive_content_commission_percentage
  * @property-read int $exclusive_content_referral_commission_percentage
+ * @property-read array $counters
  *
  * @method static |self|Builder username(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
@@ -488,7 +491,7 @@ class User extends \App\Models\User
         }
 
         $userId = auth()->user()->_id;
-        Follow::cacheByUserId(auth()->user()->_id);
+        Follow::cacheByUserId($userId);
 
         return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
     }
@@ -907,4 +910,55 @@ class User extends \App\Models\User
             $user->notify($notification);
         }
     }*/
+
+
+    /**
+     * @param $fields
+     * @return void
+     */
+    public function fillStatsCountersField($fields): void
+    {
+        $stats = $this->stats;
+        foreach ($fields as $type => $value) {
+            $stats['counters'][$type] = $value;
+
+            $this->count_fields_updated_at = array_merge(
+                $this->count_fields_updated_at,
+                [$type => DT::utcNow()]
+            );
+        }
+        $this->stats = $stats;
+    }
+
+    /**
+     * @param $fields
+     * @return void
+     */
+    public function fillStatsAmountsField($fields): void
+    {
+        $stats = $this->stats;
+        foreach ($fields as $type => $value) {
+            $stats['amount'][$type] = $value;
+        }
+        $this->stats = $stats;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCountersAttribute(): array
+    {
+        return $this->stats['counters'] ?? [
+            'followers' => 0,
+            'followings' => 0,
+            'likes' => 0,
+            'blocks' => 0,
+            'followed_hashtags' => 0,
+            'medias' => 0,
+            'subscriptions' => 0,
+            'subscribers' => 0,
+            'chats' => 0,
+            'notifications' => 0,
+        ];
+    }
 }
