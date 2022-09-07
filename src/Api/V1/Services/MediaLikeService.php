@@ -9,6 +9,8 @@ use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Illuminate\Http\Response;
 use MongoDB\BSON\ObjectId;
 
+use function Psy\debug;
+
 class MediaLikeService
 {
     use HasUserTrait;
@@ -36,6 +38,11 @@ class MediaLikeService
             $like = $this->mediaLikeRepository->create([
                 'media_id' => new ObjectId($media->_id),
                 'user_id' => new ObjectId($media->creator['_id']),
+                'creator' => [
+                    '_id' => new ObjectId($creator->_id),
+                    'username' => $creator->username,
+                    'avatar' => $creator->avatar,
+                ],
             ]);
 
             $statusCode = $like ? Response::HTTP_CREATED : Response::HTTP_UNPROCESSABLE_ENTITY;

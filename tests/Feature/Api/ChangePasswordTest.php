@@ -39,7 +39,7 @@ class ChangePasswordTest extends ApiTestCase
     {
         $user = User::factory()->create([
             'status' => UserStatus::PENDING->value,
-            'email' => uniqid('alua_').'@aparlay.com',
+            'email' => uniqid('alua+').'@aparlay.com',
             'password_hash' => Hash::make('Demo@12345'),
         ]);
         $this->actingAs($user)
@@ -71,7 +71,7 @@ class ChangePasswordTest extends ApiTestCase
     {
         $user = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua_').'@aparlay.com',
+            'email' => uniqid('alua+').'@aparlay.com',
             'password_hash' => Hash::make('Demo@12345'),
         ]);
 
@@ -101,7 +101,7 @@ class ChangePasswordTest extends ApiTestCase
     {
         $user = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua_').'@aparlay.com',
+            'email' => uniqid('alua+').'@aparlay.com',
         ]);
         $otp = Otp::factory()->create([
             'identity' => $user->email,
@@ -218,7 +218,7 @@ class ChangePasswordTest extends ApiTestCase
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->putJson('/v1/change-password', [
                 'password' => 'Any@12345',
-                'email' => uniqid('alua_').'@aparly.com',
+                'email' => uniqid('alua+').'@aparlay.com',
                 'otp' => '',
             ])
             ->assertStatus(422)
@@ -245,7 +245,7 @@ class ChangePasswordTest extends ApiTestCase
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->putJson('/v1/change-password', [
                 'password' => '',
-                'email' => uniqid('alua_').'@aparly.com',
+                'email' => uniqid('alua+').'@aparlay.com',
                 'otp' => '123456',
             ])
             ->assertStatus(422)
@@ -271,7 +271,7 @@ class ChangePasswordTest extends ApiTestCase
     {
         $user = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua_').'@aparlay.com',
+            'email' => uniqid('alua+').'@aparlay.com',
         ]);
         Otp::factory()->create([
             'identity' => $user->email,

@@ -30,17 +30,11 @@ class MediaLikeRepository
      */
     public function create(array $data)
     {
-        $creator = auth()->user();
-
         try {
             return MediaLike::create([
                 'media_id' => $data['media_id'],
                 'user_id' => $data['user_id'],
-                'creator' => [
-                    '_id' => new ObjectId($creator->_id),
-                    'username' => $creator->username,
-                    'avatar' => $creator->avatar,
-                ],
+                'creator' => $data['creator'],
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

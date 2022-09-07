@@ -143,6 +143,7 @@ class Media extends BaseModel
         'people' => [],
         'likes' => [],
         'visits' => [],
+        'hashtags' => [],
         'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]],
         'is_protected' => false,
         'like_count' => 0,
