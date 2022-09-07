@@ -9,7 +9,10 @@ use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UserService;
+use Aparlay\Core\Jobs\UpdateUserMediaSearchability;
+use Aparlay\Core\Jobs\ProcessMedia;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -114,12 +117,19 @@ class UserController extends Controller
             if ($user->payout_country_alpha2) {
                 $requestData = $request->except('payout_country_alpha2');
             }
+
+            if (isset($requestData->visibility) &&
+                $requestData->visibility !== $user->visibility) {
+                UpdateUserMediaSearchability::dispatch($user->_id, $requestData->visibility === UserVisibility::PRIVATE->value);
+            }
+
             /* Update User Profile Information */
             $this->userService->getUser()->fill($requestData);
             if ($this->userService->getUser()->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
                 $this->userService->getUser()->status = UserStatus::ACTIVE->value;
             }
             $this->userService->getUser()->save();
+
         }
         $this->userService->getUser()->refresh();
 
