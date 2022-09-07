@@ -67,6 +67,7 @@ class RecalculateHashtag implements ShouldQueue
 
         if ($count === 0) {
             $hashtag->delete();
+
             return;
         }
 
