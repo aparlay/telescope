@@ -48,7 +48,7 @@ class BlockQueryBuilder extends EloquentQueryBuilder
     {
         return $this->where('country_alpha2', $countryAlpha2);
     }
-    
+
     /**
      * @return self
      */

@@ -27,7 +27,6 @@ use MongoDB\BSON\ObjectId;
  * @property mixed|null $creator_id
  * @property mixed|null $user_id
  * @property string     $aliasModel
- *
  */
 class Block extends BaseModel
 {
