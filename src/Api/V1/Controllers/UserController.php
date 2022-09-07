@@ -9,8 +9,8 @@ use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UserService;
-use Aparlay\Core\Jobs\UpdateUserMediaSearchability;
 use Aparlay\Core\Jobs\ProcessMedia;
+use Aparlay\Core\Jobs\UpdateUserMediaSearchability;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -129,7 +129,6 @@ class UserController extends Controller
                 $this->userService->getUser()->status = UserStatus::ACTIVE->value;
             }
             $this->userService->getUser()->save();
-
         }
         $this->userService->getUser()->refresh();
 

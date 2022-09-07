@@ -51,7 +51,7 @@ class UpdateUserMediaSearchability implements ShouldQueue
     {
         $this->onQueue('low');
 
-        $this->userId = (string)$userId;
+        $this->userId = (string) $userId;
         $this->searchable = $searchable;
     }
 
