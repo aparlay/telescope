@@ -32,9 +32,9 @@ class MediaObserver extends BaseModelObserver
         $creatorUser = $media->userObj;
 
         if ($media->isDirty('status')) {
-            $creatorUser->media_count = Media::creator($creatorUser->_id)->count();
+            $creatorUser->media_count = Media::query()->creator($creatorUser->_id)->count();
             $medias = [];
-            foreach (Media::creator($creatorUser->_id)->completed()->recentFirst()->limit(30)->get() as $completedMedia) {
+            foreach (Media::query()->creator($creatorUser->_id)->completed()->recentFirst()->limit(30)->get() as $completedMedia) {
                 $basename = basename(
                     $completedMedia['file'],
                     '.'.pathinfo($completedMedia['file'], PATHINFO_EXTENSION)
@@ -111,7 +111,7 @@ class MediaObserver extends BaseModelObserver
     public function saved($media): void
     {
         if ($media->status === MediaStatus::USER_DELETED->value && $media->isDirty('status')) {
-            $media->userObj->media_count = Media::creator($media->creator['_id'])->availableForOwner()->count();
+            $media->userObj->media_count = Media::query()->creator($media->creator['_id'])->availableForOwner()->count();
 
             $file = config('app.cdn.videos').$media->file;
             $cover = config('app.cdn.covers').$media->filename.'.jpg';
@@ -131,7 +131,7 @@ class MediaObserver extends BaseModelObserver
             $media->unsearchable();
         }
 
-        if ($media->wasChanged(['visit_count', 'sort_score', 'like_count'])) {
+        if ($media->wasChanged(['status', 'visibility'])) {
             foreach ($media->hashtags as $tag) {
                 RecalculateHashtag::dispatch($tag);
             }
@@ -148,7 +148,7 @@ class MediaObserver extends BaseModelObserver
     public function deleted($media): void
     {
         $creatorUser = $media->userObj;
-        $creatorUser->media_count = Media::creator($media->creator['_id'])->availableForOwner()->count();
+        $creatorUser->media_count = Media::query()->creator($media->creator['_id'])->availableForOwner()->count();
 
         $file = config('app.cdn.videos').$media->file;
         $cover = config('app.cdn.covers').$media->filename.'.jpg';
