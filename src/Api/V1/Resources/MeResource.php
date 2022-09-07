@@ -51,11 +51,6 @@ class MeResource extends JsonResource
             $medias[] = $this->createSimpleMedia($media);
         }
 
-        $alerts = [];
-        if (auth()->guest() || ((string) $this->_id !== (string) auth()->user()->_id)) {
-            $alerts = $this->alerts;
-        }
-
         return [
             '_id' => (string) $this->_id,
             'referral_id' => (string) $this->referral_id,
@@ -88,12 +83,12 @@ class MeResource extends JsonResource
             'verification_status_label' => $this->verification_status_label,
             'visibility' => $this->visibility,
             'promo_link' => $this->promo_link,
-            'follower_count' => $this->stats['counters']['followers'] ?? 0,
-            'following_count' => $this->stats['counters']['followings'] ?? 0,
-            'like_count' => $this->stats['counters']['likes'] ?? 0,
-            'block_count' => $this->stats['counters']['blocks'] ?? 0,
-            'followed_hashtag_count' => $this->stats['counters']['followed_hashtags'] ?? 0,
-            'media_count' => $this->stats['counters']['medias'] ?? 0,
+            'follower_count' => $this->counters['followers'] ?? 0,
+            'following_count' => $this->counters['followings'] ?? 0,
+            'like_count' => $this->counters['likes'] ?? 0,
+            'block_count' => $this->counters['blocks'] ?? 0,
+            'followed_hashtag_count' => $this->counters['followed_hashtags'] ?? 0,
+            'media_count' => $this->counters['medias'] ?? 0,
             'has_unread_chat' => $this->has_unread_chat,
             'has_unread_notification' => $this->has_unread_notification,
             'is_followed' => false,
@@ -104,7 +99,7 @@ class MeResource extends JsonResource
             'followers' => $followers,
             'followings' => $followings,
             'medias' => $medias,
-            'alerts' => AlertResource::collection($alerts),
+            'alerts' => AlertResource::collection($this->alerts),
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [
