@@ -4,22 +4,17 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaLike;
-use Aparlay\Core\Api\V1\Repositories\MediaLikeRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Illuminate\Http\Response;
 use MongoDB\BSON\ObjectId;
-
-use function Psy\debug;
 
 class MediaLikeService
 {
     use HasUserTrait;
 
-    protected MediaLikeRepository $mediaLikeRepository;
 
     public function __construct()
     {
-        $this->mediaLikeRepository = new MediaLikeRepository(new MediaLike());
     }
 
     /**
@@ -34,8 +29,8 @@ class MediaLikeService
         $statusCode = Response::HTTP_OK;
 
         $creator = $this->getUser();
-        if (($like = $this->mediaLikeRepository->isLiked($creator, $media)) === null) {
-            $like = $this->mediaLikeRepository->create([
+        if (($like = MediaLike::query()->media($media->_id)->creator($creator->_id)->first()) === null) {
+            $like = MediaLike::create([
                 'media_id' => new ObjectId($media->_id),
                 'user_id' => new ObjectId($media->creator['_id']),
                 'creator' => [
@@ -61,8 +56,8 @@ class MediaLikeService
     {
         $creator = $this->getUser();
 
-        if (($like = $this->mediaLikeRepository->isLiked($creator, $media)) !== null) {
-            $this->mediaLikeRepository->delete($like->_id);
+        if (($like = MediaLike::query()->media($media->_id)->creator($creator->_id)->first()) !== null) {
+            $like->delete();
         }
 
         return [];

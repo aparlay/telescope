@@ -4,7 +4,7 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaLikeFactory;
-use Aparlay\Core\Models\Scopes\MediaLikeScope;
+use Aparlay\Core\Models\Queries\MediaLikeQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,16 +29,11 @@ use MongoDB\BSON\UTCDateTime;
  * @property Media      $mediaObj
  * @property User       $userObj
  *
- * @method static |self|Builder media(ObjectId|string $mediaId)            get liked media
- * @method static |self|Builder user(ObjectId|string $userId)              get user who liked media
- * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
- * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get date of like
  */
 class MediaLike extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use MediaLikeScope;
 
     /**
      * The collection associated with the model.
@@ -92,6 +87,23 @@ class MediaLike extends BaseModel
     protected static function newFactory(): Factory
     {
         return MediaLikeFactory::new();
+    }
+
+    /**
+     * @return MediaLikeQueryBuilder|Builder
+     */
+    public static function query(): MediaLikeQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * @param $query
+     * @return MediaLikeQueryBuilder
+     */
+    public function newEloquentBuilder($query): MediaLikeQueryBuilder
+    {
+        return new MediaLikeQueryBuilder($query);
     }
 
     /**

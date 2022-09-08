@@ -114,8 +114,26 @@ class EloquentQueryBuilder extends Builder
         return $this->whereIn($field, $castedIds);
     }
 
-    public function date(UTCDateTime $start, UTCDateTime $end, string $field = 'created_at'): self
+    /**
+     * @param  UTCDateTime|null  $start
+     * @param  UTCDateTime|null  $end
+     * @param  string  $field
+     * @return $this
+     */
+    public function date(UTCDateTime $start = null, UTCDateTime $end = null, string $field = 'created_at'): self
     {
-        return $this->whereBetween($field, [$start, $end]);
+        if (null !== $start && null !== $end) {
+            return $this->whereBetween($field, [$start, $end]);
+        }
+
+        if (null !== $start) {
+            return $this->where($field, '$gte', $start);
+        }
+
+        if (null !== $end) {
+            return $this->where($field, '$lte', $end);
+        }
+
+        return $this;
     }
 }

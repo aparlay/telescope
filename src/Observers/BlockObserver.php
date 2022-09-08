@@ -79,11 +79,11 @@ class BlockObserver extends BaseModelObserver
             $media->save();
         }
 
-        foreach (MediaLike::creator($model->user['_id'])->user($model->creator['_id'])->get() as $mediaLike) {
+        foreach (MediaLike::query()->creator($model->user['_id'])->user($model->creator['_id'])->get() as $mediaLike) {
             $mediaLike->delete();
         }
 
-        foreach (MediaLike::creator($model->creator['_id'])->user($model->user['_id'])->get() as $mediaLike) {
+        foreach (MediaLike::query()->creator($model->creator['_id'])->user($model->user['_id'])->get() as $mediaLike) {
             $mediaLike->delete();
         }
     }

@@ -44,7 +44,7 @@ return new class() extends Migration {
                 $mediaLike->deleteQuietly();
                 continue;
             }
-            $likeCount = MediaLike::media($media->_id)->count();
+            $likeCount = MediaLike::query()->media($media->_id)->count();
             $media->like_count = $likeCount;
             $media->addToSet('likes', [
                 '_id' => new ObjectId($mediaLike->creator['_id']),

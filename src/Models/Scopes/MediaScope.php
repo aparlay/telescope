@@ -152,7 +152,7 @@ trait MediaScope
     public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId | string $userId, string $deviceId): Builder
     {
         $visitedIds = [];
-        foreach (MediaVisit::select('media_ids')->user($userId)->get()->toArray() as $mediaVisit) {
+        foreach (MediaVisit::query()->select('media_ids')->user($userId)->get()->toArray() as $mediaVisit) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $mediaVisit), SORT_REGULAR));
         }
 

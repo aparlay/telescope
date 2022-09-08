@@ -81,7 +81,7 @@ class Watch implements WsEventDispatcher
      */
     private function userVisit(): void
     {
-        if (($model = MediaVisit::user($this->userId)->date(date('Y-m-d'))->first()) === null) {
+        if (($model = MediaVisit::query()->user($this->userId)->dateString(date('Y-m-d'))->first()) === null) {
             $model = new MediaVisit();
             $model->date = date('Y-m-d');
             $model->user_id = $this->userId;

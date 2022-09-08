@@ -24,7 +24,7 @@ class MediaLikeObserver extends BaseModelObserver
         if ($media === null) {
             return;
         }
-        $likeCount = MediaLike::media($media->_id)->count();
+        $likeCount = MediaLike::query()->media($media->_id)->count();
         $media->like_count = $likeCount;
         $media->addToSet('likes', [
             '_id' => new ObjectId($mediaLike->creator['_id']),
@@ -53,7 +53,7 @@ class MediaLikeObserver extends BaseModelObserver
         );
 
         $user = $media->creatorObj;
-        $likeCount = MediaLike::user($user->_id)->count();
+        $likeCount = MediaLike::query()->user($user->_id)->count();
         $user->like_count = $likeCount;
         $user->addToSet('likes', [
             '_id' => new ObjectId($mediaLike->creator['_id']),
@@ -88,7 +88,7 @@ class MediaLikeObserver extends BaseModelObserver
         if ($media === null) {
             return;
         }
-        $likeCount = MediaLike::media($media->_id)->count();
+        $likeCount = MediaLike::query()->media($media->_id)->count();
         $media->like_count = $likeCount;
         $media->removeFromSet('likes', [
             '_id' => new ObjectId($mediaLike->creator['_id']),
@@ -102,7 +102,7 @@ class MediaLikeObserver extends BaseModelObserver
         $media->save();
 
         $user = $media->userObj;
-        $likeCount = MediaLike::user($user->_id)->count();
+        $likeCount = MediaLike::query()->user($user->_id)->count();
         $user->like_count = $likeCount;
         $user->removeFromSet('likes', [
             '_id' => new ObjectId($mediaLike->creator['_id']),

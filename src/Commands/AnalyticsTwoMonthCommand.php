@@ -28,7 +28,7 @@ class AnalyticsTwoMonthCommand extends Command
             $date = date('Y-m-d', $timestamp + 20000);
             $mediaVisitCounts = 0;
 
-            foreach (MediaVisit::date($date)->get() as $mediaVisits) {
+            foreach (MediaVisit::query()->dateString($date)->get() as $mediaVisits) {
                 $mediaVisitCounts += count($mediaVisits->media_ids);
             }
 
@@ -44,8 +44,8 @@ class AnalyticsTwoMonthCommand extends Command
                     'deleted'       => Media::date($startUtc, $endUtc)->isDeleted()->count(),
                     'public'        => Media::date($startUtc, $endUtc)->public()->count(),
                     'private'       => Media::date($startUtc, $endUtc)->private()->count(),
-                    'likes'         => MediaLike::date($startUtc, $endUtc)->count(),
-                    'mean_likes'    => $availableMedia ? MediaLike::date($startUtc, $endUtc)->count() / $availableMedia : 0,
+                    'likes'         => MediaLike::query()->date($startUtc, $endUtc)->count(),
+                    'mean_likes'    => $availableMedia ? MediaLike::query()->date($startUtc, $endUtc)->count() / $availableMedia : 0,
                     'visits'        => $mediaVisitCounts,
                     'mean_visits'   => $availableMedia ? $mediaVisitCounts / $availableMedia : 0,
                 ],

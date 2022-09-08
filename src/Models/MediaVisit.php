@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\MediaVisitFactory;
-use Aparlay\Core\Models\Scopes\MediaVisitScope;
+use Aparlay\Core\Models\Queries\MediaVisitQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,15 +27,11 @@ use MongoDB\BSON\ObjectId;
  * @property-read Media $mediaObj
  * @property string $aliasModel
  *
- * @method static |self|Builder media(ObjectId $mediaId)    get media visits for thew given media
- * @method static |self|Builder user(ObjectId $userId)      get media visits for thew given user
- * @method static |self|Builder date(string $date)          get media visits for thew given date
  */
 class MediaVisit extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use MediaVisitScope;
 
     public $media_id;
     public $duration;
@@ -84,6 +80,23 @@ class MediaVisit extends BaseModel
     protected static function newFactory(): Factory
     {
         return MediaVisitFactory::new();
+    }
+
+    /**
+     * @return MediaVisitQueryBuilder|Builder
+     */
+    public static function query(): MediaVisitQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * @param $query
+     * @return MediaVisitQueryBuilder
+     */
+    public function newEloquentBuilder($query): MediaVisitQueryBuilder
+    {
+        return new MediaVisitQueryBuilder($query);
     }
 
     /**

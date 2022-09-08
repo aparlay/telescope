@@ -77,7 +77,7 @@ class UpdateAvatar implements ShouldQueue
         Follow::user($user->_id)->update(['user.avatar' => $avatar]);
         Block::query()->creator($user->_id)->update(['creator.avatar' => $avatar]);
         Block::query()->user($user->_id)->update(['user.avatar' => $avatar]);
-        MediaLike::creator($user->_id)->update(['creator.avatar' => $avatar]);
+        MediaLike::query()->creator($user->_id)->update(['creator.avatar' => $avatar]);
 
         $cacheKey = 'SimpleUserCast:'.$user->_id;
         $userArray = [

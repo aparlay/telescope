@@ -61,11 +61,11 @@ class DeleteMediaLikes implements ShouldQueue
      */
     public function handle(): void
     {
-        MediaLike::media($this->mediaId)->delete();
+        MediaLike::query()->media($this->mediaId)->delete();
         if (($media = Media::find(new ObjectId($this->mediaId))) !== null) {
             $user = $media->userObj;
 
-            $likeCount = MediaLike::user($media->creator['_id'])->count();
+            $likeCount = MediaLike::query()->user($media->creator['_id'])->count();
             $user->like_count = $likeCount;
             $user->removeFromSet('likes', [
                 '_id' => new ObjectId($media->creator['_id']),

@@ -154,7 +154,7 @@ class MediaService
 
         if ($data->isEmpty() || $data->total() <= 5) {
             if (! auth()->guest()) {
-                MediaVisit::user(auth()->user()->_id)->delete();
+                MediaVisit::query()->user(auth()->user()->_id)->delete();
             }
             Cache::store('redis')->delete($cacheKey);
 
