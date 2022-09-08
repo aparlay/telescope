@@ -32,7 +32,6 @@ use MongoDB\BSON\ObjectId;
  * @property User $creator
  * @property string $slack_subject_admin_url
  * @property string $aliasModel
- *
  */
 class Alert extends BaseModel
 {

@@ -43,5 +43,4 @@ class EmailQueryBuilder extends EloquentQueryBuilder
     {
         return $this->whereId($userId, 'user._id');
     }
-
 }

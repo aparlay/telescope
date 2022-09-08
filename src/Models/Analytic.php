@@ -14,7 +14,6 @@ use Illuminate\Notifications\Notifiable;
  *
  * @property null $user_id
  * @property User $userObj
- *
  */
 class Analytic extends BaseModel
 {

@@ -18,7 +18,6 @@ use Jenssegers\Mongodb\Relations\BelongsTo;
  * @property int  $status
  * @property null $user_id
  * @property User $userObj
- *
  */
 class Email extends BaseModel
 {
