@@ -28,7 +28,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property mixed|null $creator_id
  * @property Media      $mediaObj
  * @property User       $userObj
- *
  */
 class MediaLike extends BaseModel
 {
