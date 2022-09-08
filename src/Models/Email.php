@@ -5,13 +5,12 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Database\Factories\EmailFactory;
 use Aparlay\Core\Models\Enums\EmailStatus;
 use Aparlay\Core\Models\Enums\EmailType;
-use Aparlay\Core\Models\Scopes\EmailScope;
+use Aparlay\Core\Models\Queries\EmailQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\BelongsTo;
-use MongoDB\BSON\ObjectId;
 
 /**
  * Class Email.
@@ -20,16 +19,11 @@ use MongoDB\BSON\ObjectId;
  * @property null $user_id
  * @property User $userObj
  *
- * @method static |self|Builder visited()                       get visited alerts
- * @method static |self|Builder notVisited()                    get not visited alerts
- * @method static |self|Builder media(ObjectId|string $mediaId) get media alerts
- * @method static |self|Builder user(ObjectId|string $userId)   get user alerts
  */
 class Email extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use EmailScope;
 
     public const TEMPLATE_EMAIL_VERIFICATION = 'email_verification';
     public const TEMPLATE_EMAIL_CONTACTUS = 'email_contactus';
@@ -91,6 +85,23 @@ class Email extends BaseModel
     protected static function newFactory(): Factory
     {
         return EmailFactory::new();
+    }
+
+    /**
+     * @return EmailQueryBuilder|Builder
+     */
+    public static function query(): EmailQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * @param $query
+     * @return EmailQueryBuilder
+     */
+    public function newEloquentBuilder($query): EmailQueryBuilder
+    {
+        return new EmailQueryBuilder($query);
     }
 
     /**

@@ -12,11 +12,9 @@ use MongoDB\BSON\ObjectId;
 class FollowService
 {
     use HasUserTrait;
-    protected FollowRepository $followRepository;
 
     public function __construct()
     {
-        $this->followRepository = new FollowRepository(new Follow());
     }
 
     /**
@@ -29,8 +27,12 @@ class FollowService
     {
         $statusCode = Response::HTTP_OK;
         $creator = $this->getUser();
-        if (($follow = $this->followRepository->getFollow($creator->_id, $user->_id)) === null) {
-            $follow = $this->followRepository->create(['user' => ['_id' => new ObjectId($user->_id)]]);
+        if (($follow = Follow::query()->creator($creator->_id)->user($user->_id)->first()) === null) {
+            $follow = Follow::create([
+                'user' => ['_id' => new ObjectId($user->_id)],
+                'creator' => ['_id' => new ObjectId($creator->_id)],
+            ]);
+
             $statusCode = Response::HTTP_CREATED;
         }
 
@@ -46,8 +48,8 @@ class FollowService
     public function unfollow(User $user): array
     {
         $creator = $this->getUser();
-        if (($follow = $this->followRepository->getFollow($creator->_id, $user->_id)) !== null) {
-            $this->followRepository->delete($follow->_id);
+        if (($follow = Follow::query()->creator($creator->_id)->user($user->_id)->first()) !== null) {
+            $follow->delete();
         }
 
         return [];

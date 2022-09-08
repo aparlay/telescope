@@ -3,12 +3,11 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\AnalyticFactory;
-use Aparlay\Core\Models\Scopes\AnalyticScope;
+use Aparlay\Core\Models\Queries\AnalyticQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class Analytic.
@@ -16,14 +15,11 @@ use MongoDB\BSON\UTCDateTime;
  * @property null $user_id
  * @property User $userObj
  *
- * @method static |self|Builder days(int $days)                            get days of analytics
- * @method static |self|Builder date(UTCDateTime $start, UTCDateTime $end) get analytics by date
  */
 class Analytic extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use AnalyticScope;
 
     /**
      * The collection associated with the model.
@@ -73,6 +69,23 @@ class Analytic extends BaseModel
     protected static function newFactory(): Factory
     {
         return AnalyticFactory::new();
+    }
+
+    /**
+     * @return AnalyticQueryBuilder|Builder
+     */
+    public static function query(): AnalyticQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * @param $query
+     * @return AnalyticQueryBuilder
+     */
+    public function newEloquentBuilder($query): AnalyticQueryBuilder
+    {
+        return new AnalyticQueryBuilder($query);
     }
 
     /**

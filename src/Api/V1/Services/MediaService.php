@@ -220,7 +220,8 @@ class MediaService
                 $query->where('status', AlertStatus::NOT_VISITED->value);
             }])->availableForOwner();
         } else {
-            $isFollowed = Follow::select(['user._id', '_id'])
+            $isFollowed = Follow::query()
+                ->select(['user._id', '_id'])
                 ->creator(auth()->user()->_id)
                 ->user($userId)
                 ->accepted()

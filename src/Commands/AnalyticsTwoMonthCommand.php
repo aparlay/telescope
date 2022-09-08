@@ -57,13 +57,13 @@ class AnalyticsTwoMonthCommand extends Command
                     'watched'       => 0,
                 ],
                 'email' => [
-                    'sent'          => Email::date($startUtc, $endUtc)->count(),
-                    'failed'        => Email::date($startUtc, $endUtc)->failed()->count(),
-                    'opened'        => Email::date($startUtc, $endUtc)->opened()->count(),
+                    'sent'          => Email::query()->date($startUtc, $endUtc)->count(),
+                    'failed'        => Email::query()->date($startUtc, $endUtc)->failed()->count(),
+                    'opened'        => Email::query()->date($startUtc, $endUtc)->opened()->count(),
                 ],
             ];
 
-            if (($model = Analytic::Where(['date' => $analytics['date']])->first()) === null) {
+            if (($model = Analytic::query()->where('date', $analytics['date'])->first()) === null) {
                 $model = new Analytic();
             }
             $model->fill($analytics)->save();

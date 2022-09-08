@@ -46,7 +46,7 @@ class FollowObserver extends BaseModelObserver
      */
     public function created($model): void
     {
-        $followersCount = Follow::user($model->user['_id'])->count();
+        $followersCount = Follow::query()->user($model->user['_id'])->count();
         $model->userObj->addToSet('followers', [
             '_id' => new ObjectId($model->creator['_id']),
             'username' => $model->creator['username'],
@@ -62,7 +62,7 @@ class FollowObserver extends BaseModelObserver
         $model->userObj->stats = $stats;
         $model->userObj->save();
 
-        $followingCount = Follow::creator($model->creator['_id'])->count();
+        $followingCount = Follow::query()->creator($model->creator['_id'])->count();
         $model->creatorObj->addToSet('followings', [
             '_id' => new ObjectId($model->user['_id']),
             'username' => $model->user['username'],
@@ -98,7 +98,7 @@ class FollowObserver extends BaseModelObserver
      */
     public function deleted($model): void
     {
-        $followersCount = Follow::user($model->user['_id'])->count();
+        $followersCount = Follow::query()->user($model->user['_id'])->count();
         $model->userObj->removeFromSet('followers', [
             '_id' => new ObjectId($model->creator['_id']),
             'username' => $model->creator['username'],
@@ -115,7 +115,7 @@ class FollowObserver extends BaseModelObserver
         $model->userObj->stats = $stats;
         $model->userObj->save();
 
-        $followingCount = Follow::creator($model->creator['_id'])->count();
+        $followingCount = Follow::query()->creator($model->creator['_id'])->count();
         $model->creatorObj->removeFromSet('followings', [
             '_id' => new ObjectId($model->user['_id']),
             'username' => $model->user['username'],

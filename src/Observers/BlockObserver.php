@@ -61,11 +61,11 @@ class BlockObserver extends BaseModelObserver
         $model->creatorObj->stats = $stats;
         $model->creatorObj->save();
 
-        if (($follow = Follow::creator($model->creator['_id'])->user($model->user['_id'])->first()) !== null) {
+        if (($follow = Follow::query()->creator($model->creator['_id'])->user($model->user['_id'])->first()) !== null) {
             $follow->delete();
         }
 
-        if (($follow = Follow::creator($model->user['_id'])->user($model->creator['_id'])->first()) !== null) {
+        if (($follow = Follow::query()->creator($model->user['_id'])->user($model->creator['_id'])->first()) !== null) {
             $follow->delete();
         }
 

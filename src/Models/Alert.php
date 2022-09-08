@@ -5,7 +5,7 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Database\Factories\AlertFactory;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
-use Aparlay\Core\Models\Scopes\AlertScope;
+use Aparlay\Core\Models\Queries\AlertQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,17 +33,11 @@ use MongoDB\BSON\ObjectId;
  * @property string $slack_subject_admin_url
  * @property string $aliasModel
  *
- * @method static |self|Builder visited()                       get visited alerts
- * @method static |self|Builder notVisited()                    get not visited alerts
- * @method static |self|Builder userOnly() get user only alerts
- * @method static |self|Builder media(ObjectId|string $mediaId) get media alerts
- * @method static |self|Builder user(ObjectId|string $userId)   get user and medeia alerts
  */
 class Alert extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use AlertScope;
 
     /**
      * The collection associated with the model.
@@ -89,6 +83,23 @@ class Alert extends BaseModel
     protected static function newFactory(): Factory
     {
         return AlertFactory::new();
+    }
+
+    /**
+     * @return AlertQueryBuilder|Builder
+     */
+    public static function query(): AlertQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * @param $query
+     * @return AlertQueryBuilder
+     */
+    public function newEloquentBuilder($query): AlertQueryBuilder
+    {
+        return new AlertQueryBuilder($query);
     }
 
     /**

@@ -320,7 +320,7 @@ class Media extends BaseModel
      */
     public function getAlertsAttribute(): array|Collection
     {
-        return Alert::media($this->_id)->notVisited()->get();
+        return Alert::query()->media($this->_id)->notVisited()->get();
     }
 
     /**
@@ -357,7 +357,7 @@ class Media extends BaseModel
         $startTime = DT::timestampToUtc($timestamp - $windowDuration);
         $endTime = DT::timestampToUtc($timestamp + $windowDuration);
         $meanLikes = [];
-        foreach (Analytic::date($startTime, $endTime)->get() as $analytic) {
+        foreach (Analytic::query()->date($startTime, $endTime)->get() as $analytic) {
             if (isset($analytic['media']['mean_likes']) && 0 !== $analytic['media']['mean_likes']) {
                 $meanLikes[] = $analytic['media']['mean_likes'];
             }

@@ -5,7 +5,7 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\FollowFactory;
 use Aparlay\Core\Models\Enums\FollowStatus;
-use Aparlay\Core\Models\Scopes\FollowScope;
+use Aparlay\Core\Models\Queries\FollowQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,15 +29,11 @@ use MongoDB\BSON\ObjectId;
  * @property mixed|null $user_id
  * @property string     $aliasModel
  *
- * @method static |self|Builder creator(ObjectId|string $userId) get creator user
- * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
- * @method static |self|Builder accepted()    get blocked user
  */
 class Follow extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use FollowScope;
 
     /**
      * The collection associated with the model.
@@ -86,6 +82,23 @@ class Follow extends BaseModel
     protected static function newFactory(): Factory
     {
         return FollowFactory::new();
+    }
+
+    /**
+     * @return FollowQueryBuilder|Builder
+     */
+    public static function query(): FollowQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * @param $query
+     * @return FollowQueryBuilder
+     */
+    public function newEloquentBuilder($query): FollowQueryBuilder
+    {
+        return new FollowQueryBuilder($query);
     }
 
     /**

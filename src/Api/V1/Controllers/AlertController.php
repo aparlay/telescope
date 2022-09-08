@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\Alert;
 use Aparlay\Core\Api\V1\Resources\AlertResource;
 use Aparlay\Core\Api\V1\Services\AlertService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -23,7 +24,7 @@ class AlertController extends Controller
      * @param  Alert  $alert
      * @param  Request  $request
      * @return Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function update(Alert $alert, Request $request): Response
     {

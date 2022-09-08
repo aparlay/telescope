@@ -73,8 +73,8 @@ class UpdateAvatar implements ShouldQueue
         $user = User::findOrFail(new ObjectId($this->userId));
         $avatar = $user->avatar;
         Media::creator($user->_id)->update(['creator.avatar' => $avatar]);
-        Follow::creator($user->_id)->update(['creator.avatar' => $avatar]);
-        Follow::user($user->_id)->update(['user.avatar' => $avatar]);
+        Follow::query()->creator($user->_id)->update(['creator.avatar' => $avatar]);
+        Follow::query()->user($user->_id)->update(['user.avatar' => $avatar]);
         Block::query()->creator($user->_id)->update(['creator.avatar' => $avatar]);
         Block::query()->user($user->_id)->update(['user.avatar' => $avatar]);
         MediaLike::query()->creator($user->_id)->update(['creator.avatar' => $avatar]);

@@ -18,8 +18,8 @@ class UpdateCoreAvatarListener implements ShouldQueue
     {
         $avatar = $event->user->avatar;
         Media::creator($event->user->_id)->update(['creator.avatar' => $avatar]);
-        Follow::creator($event->user->_id)->update(['creator.avatar' => $avatar]);
-        Follow::user($event->user->_id)->update(['user.avatar' => $avatar]);
+        Follow::query()->creator($event->user->_id)->update(['creator.avatar' => $avatar]);
+        Follow::query()->user($event->user->_id)->update(['user.avatar' => $avatar]);
         Block::query()->creator($event->user->_id)->update(['creator.avatar' => $avatar]);
         Block::query()->user($event->user->_id)->update(['user.avatar' => $avatar]);
         MediaLike::query()->creator($event->user->_id)->update(['creator.avatar' => $avatar]);

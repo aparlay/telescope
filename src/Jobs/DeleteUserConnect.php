@@ -62,13 +62,13 @@ class DeleteUserConnect implements ShouldQueue
      */
     public function handle()
     {
-        Follow::creator($this->userId)->chunk(200, function ($models) {
+        Follow::query()->creator($this->userId)->chunk(200, function ($models) {
             foreach ($models as $model) {
                 $model->delete();
             }
         });
 
-        Follow::user($this->userId)->chunk(200, function ($models) {
+        Follow::query()->user($this->userId)->chunk(200, function ($models) {
             foreach ($models as $model) {
                 $model->delete();
             }
