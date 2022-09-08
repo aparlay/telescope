@@ -26,7 +26,6 @@ use MongoDB\BSON\ObjectId;
  * @property-read User $userObj
  * @property-read Media $mediaObj
  * @property string $aliasModel
- *
  */
 class MediaVisit extends BaseModel
 {

@@ -6,7 +6,6 @@ use MongoDB\BSON\ObjectId;
 
 class MediaLikeQueryBuilder extends EloquentQueryBuilder
 {
-
     /**
      * @param  ObjectId|string  $mediaId
      * @return self

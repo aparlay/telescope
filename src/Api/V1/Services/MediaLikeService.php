@@ -12,7 +12,6 @@ class MediaLikeService
 {
     use HasUserTrait;
 
-
     public function __construct()
     {
     }
