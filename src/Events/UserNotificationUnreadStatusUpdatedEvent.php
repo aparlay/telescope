@@ -11,8 +11,7 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
         private string $userId,
         private bool $oldStatus,
         private bool $newStatus
-    )
-    {
+    ) {
     }
 
     /**
@@ -33,14 +32,13 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
         return 'User.NotificationUnreadStatusUpdated';
     }
 
-
     /**
      * @return array
      */
     public function broadcastWith(): array
     {
         return [
-            'has_unread_notification' => $this->newStatus
+            'has_unread_notification' => $this->newStatus,
         ];
     }
 
