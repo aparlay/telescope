@@ -11,8 +11,7 @@ class UserChatUnreadStatusUpdatedEvent implements ShouldBroadcast
         private string $userId,
         private bool $oldStatus,
         private bool $newStatus
-    )
-    {
+    ) {
     }
 
     /**
@@ -39,7 +38,7 @@ class UserChatUnreadStatusUpdatedEvent implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'has_unread_chat' => $this->newStatus
+            'has_unread_chat' => $this->newStatus,
         ];
     }
 
