@@ -70,9 +70,13 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read int $sent_tips
  *
  *
- * @method static |self|Builder creator(ObjectId|string $userId) get creator user
- * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
- * @method static |self|Builder availableForFollower()    get available content for followers
+ * @method static |self|Builder creator(ObjectId|string $userId)
+ * @method static |self|Builder user(ObjectId|string $userId)
+ * @method static |self|Builder availableForFollower()
+ * @method static |self|Builder confirmed()
+ * @method static |self|Builder hashtag(string $tag)
+ * @method static |self|Builder public()
+ * @method static |self|Builder private()
  */
 class Media extends BaseModel
 {
@@ -143,6 +147,7 @@ class Media extends BaseModel
         'people' => [],
         'likes' => [],
         'visits' => [],
+        'hashtags' => [],
         'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]],
         'is_protected' => false,
         'like_count' => 0,

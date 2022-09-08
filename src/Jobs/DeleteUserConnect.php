@@ -74,13 +74,13 @@ class DeleteUserConnect implements ShouldQueue
             }
         });
 
-        Block::creator($this->userId)->chunk(200, function ($models) {
+        Block::query()->creator($this->userId)->chunk(200, function ($models) {
             foreach ($models as $model) {
                 $model->delete();
             }
         });
 
-        Block::user($this->userId)->chunk(200, function ($models) {
+        Block::query()->user($this->userId)->chunk(200, function ($models) {
             foreach ($models as $model) {
                 $model->delete();
             }

@@ -52,7 +52,7 @@ class MediaResource extends JsonResource
             'mime_type' => $this->mime_type,
             'visibility' => $this->visibility,
             'status' => $this->status,
-            'hashtags' => $this->hashtags,
+            'hashtags' => $this->hashtags ?? [],
             'people' => $people,
             'file' => $this->file_url,
             'cover' => $this->cover_url,

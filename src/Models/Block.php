@@ -4,7 +4,8 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\BlockFactory;
-use Aparlay\Core\Models\Scopes\BlockScope;
+use Aparlay\Core\Models\Queries\BlockQueryBuilder;
+use Aparlay\Core\Models\Queries\MediaCommentQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,19 +27,11 @@ use MongoDB\BSON\ObjectId;
  * @property mixed|null $creator_id
  * @property mixed|null $user_id
  * @property string     $aliasModel
- *
- * @method static |self|Builder isDeleted()                      get deleted blocks
- * @method static |self|Builder isNotDeleted()                   get not deleted blocks
- * @method static |self|Builder creator(ObjectId|string $userId) get creator user
- * @method static |self|Builder user(ObjectId|string $userId)    get blocked user
- * @method static |self|Builder country(string $countryAlpha2)   get blocked country
- * @method static |self|Builder countryType()   get blocked countries
  */
 class Block extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use BlockScope;
 
     /**
      * The collection associated with the model.
@@ -85,6 +78,23 @@ class Block extends BaseModel
     protected static function newFactory(): Factory
     {
         return BlockFactory::new();
+    }
+
+    /**
+     * @return BlockQueryBuilder|Builder
+     */
+    public static function query(): BlockQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * @param $query
+     * @return BlockQueryBuilder
+     */
+    public function newEloquentBuilder($query): BlockQueryBuilder
+    {
+        return new BlockQueryBuilder($query);
     }
 
     /**

@@ -28,7 +28,7 @@ class MediaLikePolicy
     {
         $userId = $user?->_id;
 
-        $isBlocked = Block::select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
+        $isBlocked = Block::query()->select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
         if (! $isBlocked) {
             return Response::allow();
         }
@@ -51,7 +51,7 @@ class MediaLikePolicy
     {
         $userId = $user?->_id;
 
-        $isBlocked = Block::select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
+        $isBlocked = Block::query()->select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
         if ($isBlocked) {
             return Response::deny(__('You cannot unlike this video at the moment.'));
         }
