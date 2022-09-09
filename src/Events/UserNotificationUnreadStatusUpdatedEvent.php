@@ -14,11 +14,10 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
     use InteractsWithSockets;
 
     public function __construct(
-        private string    $userId,
-        private bool      $previousHasUnreadNotification,
+        private string $userId,
+        private bool $previousHasUnreadNotification,
         private bool|null $hasUnreadNotification = null,
-    )
-    {
+    ) {
     }
 
     /**
@@ -26,7 +25,7 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
      */
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('users.' . $this->userId);
+        return new PrivateChannel('users.'.$this->userId);
     }
 
     /**
