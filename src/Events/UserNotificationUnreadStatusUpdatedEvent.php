@@ -2,16 +2,23 @@
 
 namespace Aparlay\Core\Events;
 
+use Aparlay\Core\Admin\Models\User;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
 
 class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
 {
+    use Dispatchable;
+    use InteractsWithSockets;
+
     public function __construct(
-        private string $userId,
-        private bool $oldStatus,
-        private bool $newStatus
-    ) {
+        private string    $userId,
+        private bool      $previousHasUnreadNotification,
+        private bool|null $hasUnreadNotification = null,
+    )
+    {
     }
 
     /**
@@ -19,7 +26,7 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
      */
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('users.'.$this->userId);
+        return new PrivateChannel('users.' . $this->userId);
     }
 
     /**
@@ -38,7 +45,7 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'has_unread_notification' => $this->newStatus,
+            'has_unread_notification' => $this->hasUnreadNotification(),
         ];
     }
 
@@ -47,6 +54,16 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
      */
     public function broadcastWhen(): bool
     {
-        return $this->newStatus !== $this->oldStatus;
+        return $this->hasUnreadNotification() !== $this->previousHasUnreadNotification;
+    }
+
+    private function hasUnreadNotification(): bool
+    {
+        if (is_null($this->hasUnreadNotification)) {
+            $user = User::find($this->userId);
+            $this->hasUnreadNotification = $user->has_unread_notification;
+        }
+
+        return $this->hasUnreadNotification;
     }
 }

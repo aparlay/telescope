@@ -118,7 +118,10 @@ class UserNotificationService
                 $this->getUser()->setStatCounter('notifications', $unreadNotificationCount);
             });
 
-            dispatch(new UserNotificationUnreadStatusUpdatedEvent($userId, $hasUnreadNotifications, $this->getUser()->has_unread_notification));
+            UserNotificationUnreadStatusUpdatedEvent::dispatch(
+                $userId,
+                $hasUnreadNotifications
+            );
         }
 
         return $notification;
@@ -141,7 +144,11 @@ class UserNotificationService
             ->whereInIds('_id', $notificationIds)
             ->update(['status' => UserNotificationStatus::VISITED->value]);
 
-        dispatch(new UserNotificationUnreadStatusUpdatedEvent($userId, $hasUnreadNotifications, false));
+        UserNotificationUnreadStatusUpdatedEvent::dispatch(
+            $userId,
+            $hasUnreadNotifications,
+            false
+        );
     }
 
     /**
@@ -158,7 +165,11 @@ class UserNotificationService
             $notification->update(['status' => UserNotificationStatus::NOT_VISITED->value]);
         }
 
-        dispatch(new UserNotificationUnreadStatusUpdatedEvent($this->getUser()->_id, $hasUnreadNotifications, true));
+        UserNotificationUnreadStatusUpdatedEvent::dispatch(
+            $this->getUser()->_id,
+            $hasUnreadNotifications,
+            true
+        );
 
         return $notification;
     }
