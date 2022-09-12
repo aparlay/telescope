@@ -22,5 +22,4 @@ class NoteQueryBuilder extends EloquentQueryBuilder
     {
         return $this->where('deleted_at', null);
     }
-
 }

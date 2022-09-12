@@ -27,5 +27,4 @@ class CountryQueryBuilder extends EloquentQueryBuilder
     {
         return $this->where('alpha3', Str::lower($alpha3));
     }
-
 }

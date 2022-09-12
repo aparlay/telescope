@@ -18,11 +18,9 @@ use MongoDB\BSON\ObjectId;
  * @property array      $location
  * @property string     $created_at
  * @property string     $updated_at
- *
  */
 class Country extends BaseModel
 {
-
     /**
      * The collection associated with the model.
      *

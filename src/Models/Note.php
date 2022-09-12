@@ -15,7 +15,6 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- *
  * Class Note.
  *
  * @property ObjectId           $_id

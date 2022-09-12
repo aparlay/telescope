@@ -12,8 +12,6 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- *
- *
  * Class Otp.
  *
  * @property ObjectId    $_id
@@ -26,7 +24,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property string      $device_id
  * @property string      $identity
  * @property string      $otp
- *
  */
 class Otp extends BaseModel
 {
