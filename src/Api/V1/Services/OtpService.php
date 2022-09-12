@@ -17,7 +17,6 @@ use Illuminate\Validation\ValidationException;
 
 class OtpService
 {
-
     public function __construct()
     {
     }
@@ -68,9 +67,9 @@ class OtpService
             foreach ($previousOTP as $model) {
                 if (strpos($model->otp, 'expired_') === false) {
                     $model->otp = 'expired_'.random_int(
-                            config('app.otp.length.min'),
-                            config('app.otp.length.max')
-                        );
+                        config('app.otp.length.min'),
+                        config('app.otp.length.max')
+                    );
                     $model->save();
                 }
             }

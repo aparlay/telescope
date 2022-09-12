@@ -47,5 +47,4 @@ class OtpQueryBuilder extends EloquentQueryBuilder
     {
         return $this->orderBy('created_at', 'desc');
     }
-
 }
