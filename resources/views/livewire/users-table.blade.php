@@ -66,7 +66,7 @@
 
                     <x-wire-dropdown-list
                         :wire-model="'filter.country'"
-                        :options="Country::get()->pluck('name', 'alpha2')->all()"
+                        :options="\Aparlay\Core\Models\Country::query()->get()->pluck('name', 'alpha2')->all()"
                     />
                 </div>
             </th>

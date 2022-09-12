@@ -58,14 +58,14 @@
 
                     <x-wire-dropdown-list
                         :wire-model="'filter.country'"
-                        :options="Country::get()->pluck('name', 'alpha2')->all()"
+                        :options="\Aparlay\Core\Models\Country::query()->get()->pluck('name', 'alpha2')->all()"
                     />
                 </div>
             </th>
             <th class="col-md-1">
                 <div>
                     <label for="">Gender</label>
-                    <x-wire-dropdown-list :wire-model="'filter.gender'" :options="User::getGenders()"/>
+                    <x-wire-dropdown-list :wire-model="'filter.gender'" :options="\Aparlay\Core\Models\User::getGenders()"/>
                 </div>
             </th>
             <th class="col-md-1">

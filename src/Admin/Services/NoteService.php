@@ -11,31 +11,27 @@ use MongoDB\BSON\ObjectId;
 
 class NoteService
 {
-    protected NoteRepository $noteRepository;
-
     public function __construct()
     {
-        $this->noteRepository = new NoteRepository(new Note());
     }
 
     public function create($userId, $type)
     {
         $user = User::findOrFail($userId);
-        $createData = [
+
+        return Note::create([
             'user' => [
                 '_id' => new ObjectId($user->_id),
                 'username' => $user->username,
                 'avatar' => $user->avatar,
             ],
             'type' => $type,
-        ];
-
-        return $this->noteRepository->store($createData);
+        ]);
     }
 
     public function delete($id)
     {
-        return $this->noteRepository->delete($id);
+        return Note::findOrFail($id)->delete();
     }
 
     /**
@@ -49,7 +45,7 @@ class NoteService
         $formattedMessage = NoteType::from($type)->message($creator, $user);
         $data = $this->prepareNoteData($creator, $user, $type, $formattedMessage);
 
-        return $this->noteRepository->store($data);
+        return Note::create($data);
     }
 
     /**
@@ -63,7 +59,7 @@ class NoteService
         $formattedMessage = NoteType::from(NoteType::WARNING_MESSAGE->value)->warningMessage($creator, $user, $message);
         $data = $this->prepareNoteData($creator, $user, NoteType::WARNING_MESSAGE->value, $formattedMessage);
 
-        return $this->noteRepository->store($data);
+        return Note::create($data);
     }
 
     /**
@@ -77,7 +73,7 @@ class NoteService
         $formattedMessage = NoteType::from(NoteType::OTHER->value)->otherMessage($creator, $user, $message);
         $data = $this->prepareNoteData($creator, $user, NoteType::OTHER->value, $formattedMessage);
 
-        return $this->noteRepository->store($data);
+        return Note::create($data);
     }
 
     private function prepareNoteData(User|Authenticatable $creator, User $user, $type, string $message): array

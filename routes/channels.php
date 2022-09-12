@@ -2,6 +2,7 @@
 
 use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +16,6 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 Broadcast::channel('users.{user}', function ($loginUser, User $user) {
+    Log::error((string) $loginUser->_id);
     return (string) $loginUser->_id === (string) $user->_id;
 });

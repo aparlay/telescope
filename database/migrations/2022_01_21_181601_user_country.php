@@ -13,7 +13,7 @@ class UserCountry extends Migration
     {
         $alpha2 = [];
 
-        foreach (\Aparlay\Core\Models\Country::get() as $country) {
+        foreach (\Aparlay\Core\Models\Country::query()->get() as $country) {
             $alpha2[] = $country->alpha2;
         }
 

@@ -3,25 +3,35 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\OtpFactory;
-use Aparlay\Core\Models\Scopes\OtpScope;
+use Aparlay\Core\Models\Queries\OtpQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
 
 /**
- * @method static |self|Builder identity(string $identity)    get otp
- * @method static |self|Builder otp(string $otp)    get otp
- * @method static |self|Builder validated(bool $checkValidated)    get otp
- * @method static |self|Builder recentFirst()    sort otp
- * @method static |self|Builder remainingAttempt(int $limit)    get otp
+ *
+ *
+ * Class Otp.
+ *
+ * @property ObjectId    $_id
+ * @property UTCDateTime $created_at
+ * @property UTCDateTime $updated_at
+ * @property UTCDateTime $expired_at
+ * @property int         $incorrect
+ * @property int         $type
+ * @property int         $validation
+ * @property string      $device_id
+ * @property string      $identity
+ * @property string      $otp
+ *
  */
 class Otp extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-    use OtpScope;
 
     /**
      * The collection associated with the model.
@@ -77,5 +87,23 @@ class Otp extends BaseModel
     protected static function newFactory(): Factory
     {
         return OtpFactory::new();
+    }
+
+    /**
+     * @return OtpQueryBuilder|Builder
+     */
+    public static function query(): OtpQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * @param $query
+     *
+     * @return OtpQueryBuilder
+     */
+    public function newEloquentBuilder($query): OtpQueryBuilder
+    {
+        return new OtpQueryBuilder($query);
     }
 }

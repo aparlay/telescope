@@ -6,22 +6,20 @@ use Aparlay\Core\Api\V1\Models\Email;
 use Aparlay\Core\Api\V1\Models\Otp;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\EmailRepository;
-use Aparlay\Core\Api\V1\Repositories\OtpRepository;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\Email as EmailJob;
+use Aparlay\Core\Models\Enums\OtpType;
 use App\Exceptions\BlockedException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class OtpService
 {
-    protected OtpRepository $otpRepository;
 
     public function __construct()
     {
-        $this->otpRepository = new OtpRepository(new Otp());
     }
 
     /**
@@ -50,9 +48,7 @@ class OtpService
     {
         $lastMinute = DT::timestampToUtc(now()->subMinutes(1)->timestamp);
 
-        $previousOTP = Otp::identity($identity)
-            ->whereDate('created_at', '>=', $lastMinute)
-            ->get();
+        $previousOTP = Otp::query()->identity($identity)->whereDate('created_at', '>=', $lastMinute)->get();
 
         $minOtpCreatedAt = $previousOTP->pluck('created_at')->min();
 
@@ -68,15 +64,31 @@ class OtpService
         }
 
         // Expire all the Previous OTPs of the given user
-        $this->otpRepository->expire($previousOTP);
+        if (count($previousOTP) > 0) {
+            foreach ($previousOTP as $model) {
+                if (strpos($model->otp, 'expired_') === false) {
+                    $model->otp = 'expired_'.random_int(
+                            config('app.otp.length.min'),
+                            config('app.otp.length.max')
+                        );
+                    $model->save();
+                }
+            }
+        }
 
         /** Prepare request params for new OTP request */
-        $request = [
-            'identity' => $identity,
-            'device_id' => $device_id,
-        ];
-
-        return $this->otpRepository->create($request);
+        return Otp::create([
+            'identity'      => $identity,
+            'otp'           => (string) random_int(
+                config('app.otp.length.min'),
+                config('app.otp.length.max')
+            ),
+            'expired_at'    => DT::utcDateTime(['s' => config('app.otp.duration')]),
+            'type'          => Str::contains($identity, '@') ? OtpType::EMAIL->value : OtpType::SMS->value,
+            'device_id'     => $device_id,
+            'incorrect'     => 0,
+            'validated'     => false,
+        ]);
     }
 
     /**
@@ -124,31 +136,21 @@ class OtpService
         // Validate the otp for the given user
         $limit = config('app.otp.invalid_attempt_limit');
         $limit--;
-        $model = Otp::identity($identity)
-            ->otp($otp)
-            ->validated($checkValidated)
-            ->remainingAttempt($limit)
-            ->first();
+        $model = Otp::query()->identity($identity)->otp($otp)->validated($checkValidated)->remainingAttempt($limit)->first();
 
         if ($model) {
-            $this->otpRepository = new OtpRepository($model);
             if ($validateOnly) {
-                $this->otpRepository->validatedOtp(true);
+                $model->update(['validated' => true]);
             } else {
-                $this->otpRepository->delete($model->_id);
+                $model->delete();
             }
 
             return true;
         }
         // Increment the incorrect otp attempt by 1 then through the error
-        Otp::identity($identity)
-            ->recentFirst()
-            ->firstOrFail()
-            ->increment('incorrect', 1);
+        Otp::query()->identity($identity)->recentFirst()->firstOrFail()->increment('incorrect', 1);
 
-        $previousOTP = Otp::identity($identity)
-            ->recentFirst()
-            ->first();
+        $previousOTP = Otp::query()->identity($identity)->recentFirst()->first();
 
         if ($previousOTP->incorrect > 3) {
             throw ValidationException::withMessages([

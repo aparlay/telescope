@@ -10,7 +10,7 @@ class Country
     {
         if (($countries = Cache::store('octane')->get('countries', false)) === false) {
             $countries = [];
-            foreach (\Aparlay\Core\Models\Country::get() as $country) {
+            foreach (\Aparlay\Core\Models\Country::query()->get() as $country) {
                 $countries[$country->alpha2] = $country->name;
             }
 
@@ -60,7 +60,7 @@ class Country
      */
     private static function load()
     {
-        foreach (\Aparlay\Core\Models\Country::get() as $country) {
+        foreach (\Aparlay\Core\Models\Country::query()->get() as $country) {
             Cache::store('octane')->put('countries:'.$country->alpha2.':alpha2', $country->alpha2, 300);
             Cache::store('octane')->put('countries:'.$country->alpha2.':alpha3', $country->alpha3, 300);
             Cache::store('octane')->put('countries:'.$country->alpha2.':name', $country->name, 300);

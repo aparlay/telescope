@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Models\Scopes\CountryScope;
+use Aparlay\Core\Models\Queries\CountryQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
 
@@ -19,11 +19,9 @@ use MongoDB\BSON\ObjectId;
  * @property string     $created_at
  * @property string     $updated_at
  *
- * @method static|self|Builder alpha2(ObjectId|string $alpha2) get country by alpha2
  */
 class Country extends BaseModel
 {
-    use CountryScope;
 
     /**
      * The collection associated with the model.
@@ -83,4 +81,21 @@ class Country extends BaseModel
             '128' => '',
         ],
     ];
+
+    /**
+     * @return CountryQueryBuilder|Builder
+     */
+    public static function query(): CountryQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    /**
+     * @param $query
+     * @return CountryQueryBuilder
+     */
+    public function newEloquentBuilder($query): CountryQueryBuilder
+    {
+        return new CountryQueryBuilder($query);
+    }
 }
