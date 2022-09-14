@@ -116,7 +116,7 @@ class CoreServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'default_view');
 
-        // $this->configureRateLimiting();
+        $this->configureRateLimiting();
 
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
