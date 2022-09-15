@@ -27,7 +27,7 @@ class ResetUserCountersCommand extends Command
                 'followings' => Follow::query()->creator($user->_id)->accepted()->count() ?? 0,
                 'likes' => MediaLike::query()->user($user->_id)->count() ?? 0,
                 'blocks' => Block::query()->creator($user->_id)->count() ?? 0,
-                'followed_hashtags' => count($user->followed_hashtags),
+                'followed_hashtags' => count($user->followed_hashtags ?? []),
                 'medias' => MediaLike::query()->user($user->_id)->count() ?? 0,
                 'subscriptions' => 0,
                 'subscribers' => 0,
