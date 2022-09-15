@@ -922,7 +922,7 @@ class User extends \App\Models\User
             $stats['counters'][$type] = $value;
 
             $this->count_fields_updated_at = array_merge(
-                $this->count_fields_updated_at,
+                $this->count_fields_updated_at ?? [],
                 [$type => DT::utcNow()]
             );
         }
