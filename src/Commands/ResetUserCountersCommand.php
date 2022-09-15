@@ -44,6 +44,7 @@ class ResetUserCountersCommand extends Command
             }
             $user->likes = $likes;
             $user->saveQuietly();
+            $this->info('User ' . $user->_id . ' has been updated');
         }
         $this->comment('All done');
 

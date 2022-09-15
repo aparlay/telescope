@@ -43,6 +43,7 @@ class ResetMediaCountersCommand extends Command
                 'comments' => $comments,
             ]);
             $media->saveQuietly();
+            $this->info('Media ' . $media->_id . ' has been updated');
         }
         $this->comment('All done');
 
