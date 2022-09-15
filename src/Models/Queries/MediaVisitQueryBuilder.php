@@ -12,7 +12,7 @@ class MediaVisitQueryBuilder extends EloquentQueryBuilder
      */
     public function media(ObjectId | string $mediaId): self
     {
-        return $this->whereId($mediaId, 'media_id');
+        return $this->whereId($mediaId, 'media_ids');
     }
 
     /**
