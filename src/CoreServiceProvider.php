@@ -28,6 +28,8 @@ use Aparlay\Core\Commands\DbBackupCommand;
 use Aparlay\Core\Commands\DbRestoreCommand;
 use Aparlay\Core\Commands\HashtagScoreCommand;
 use Aparlay\Core\Commands\MeilisearchSettingCommand;
+use Aparlay\Core\Commands\ResetMediaCountersCommand;
+use Aparlay\Core\Commands\ResetUserCountersCommand;
 use Aparlay\Core\Commands\RoleCommand;
 use Aparlay\Core\Commands\UserScoreCommand;
 use Aparlay\Core\Commands\UserScoreDailyCommand;
@@ -108,6 +110,8 @@ class CoreServiceProvider extends ServiceProvider
                 CleanupCommand::class,
                 DbRestoreCommand::class,
                 DbBackupCommand::class,
+                ResetMediaCountersCommand::class,
+                ResetUserCountersCommand::class,
             ]);
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
