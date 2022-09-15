@@ -55,7 +55,7 @@ class MediaResource extends JsonResource
             'hashtags' => $this->hashtags ?? [],
             'people' => $people,
             'file' => $this->file_url,
-            'cover' => $this->cover_url . '?aspect_ratio=9:16&sharpen=true&gamma=-10&auto_optimize=low',
+            'cover' => $this->cover_url,
             'creator' => $this->createSimpleUser($this->creator, ['_id', 'username', 'avatar', 'is_followed', 'is_verified']),
             'is_liked' => $this->is_liked,
             'is_visited' => $this->is_visited,
