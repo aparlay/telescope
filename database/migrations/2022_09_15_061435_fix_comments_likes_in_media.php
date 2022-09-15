@@ -17,12 +17,6 @@ return new class extends Migration
             $mediaLike->user_id = new \MongoDB\BSON\ObjectId($media->creator['_id']);
             $mediaLike->save();
         }
-        foreach (\Aparlay\Core\Models\MediaVisit::lazy() as $mediaVisit) {
-            /** @var \Aparlay\Core\Models\MediaVisit $mediaVisit */
-            $media = $mediaVisit->mediaObj;
-            $mediaVisit->user_id = new \MongoDB\BSON\ObjectId($media->creator['_id']);
-            $mediaVisit->save();
-        }
     }
 
     /**
