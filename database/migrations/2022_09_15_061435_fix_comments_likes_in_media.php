@@ -2,8 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        return;
+
     }
 };
