@@ -18,6 +18,8 @@ class HashtagScoreCommand extends Command
         $tags = [];
         Media::where('is_fake', ['$exists' => false])
             ->where('hashtags', ['$type' => 'array'])
+            ->confirmed()
+            ->public()
             ->each(function ($media) use (&$tags) {
                 foreach ($media->hashtags as $tag) {
                     if (! isset($tags[$tag])) {
