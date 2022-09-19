@@ -328,7 +328,10 @@ class User extends \App\Models\User
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->visibility == UserVisibility::PUBLIC->value && $this->verification_status == UserVerificationStatus::VERIFIED->value && ! config('app.is_testing');
+        return $this->visibility == UserVisibility::PUBLIC->value &&
+            $this->status == UserStatus::VERIFIED->value &&
+            $this->verification_status == UserVerificationStatus::VERIFIED->value &&
+            ! config('app.is_testing');
     }
 
     /**
