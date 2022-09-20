@@ -55,7 +55,7 @@ class UserRepository
                 // no break
             case UserStatus::DEACTIVATED->value:
 
-                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'User account not found or does not match with password.');
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'User account not found.');
 
                 // no break
             default:
