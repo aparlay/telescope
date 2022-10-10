@@ -22,7 +22,6 @@ class MediaWatched implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-
     /**
      * The number of times the job may be attempted.
      */
@@ -57,11 +56,10 @@ class MediaWatched implements ShouldQueue
     public function handle(): void
     {
         $mediaService = app()->make(MediaService::class);
-        $this->userId = !empty($this->userId) ? new ObjectId($this->userId) : null;
+        $this->userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
         foreach (Media::query()->whereIn('_id', $this->mediaIds)->get() as $media) {
             $mediaService->watched($media, $this->duration, $this->userId);
         }
-
     }
 
     public function failed(Throwable $exception): void
