@@ -29,7 +29,7 @@ class UsersTable extends BaseIndexComponent
             'country',
             'stats.counters.medias',
             'stats.counters.likes',
-            'stats.counters.followrs',
+            'stats.counters.followers',
             'created_at',
             'email_verified',
         ];

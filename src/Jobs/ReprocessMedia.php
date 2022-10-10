@@ -35,7 +35,7 @@ class ReprocessMedia implements ShouldQueue
     public function __construct(string $mediaId, string $file)
     {
         if (($this->media = Media::media($mediaId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$userId);
+            throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$mediaId);
         }
 
         $this->file = $file;
