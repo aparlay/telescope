@@ -37,7 +37,7 @@ class MediaWatched implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [60, 300, 1800, 3600];
+    public $backoff = [5, 10, 15];
 
     /**
      * Create a new job instance.
