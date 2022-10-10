@@ -56,9 +56,9 @@ class MediaWatched implements ShouldQueue
     public function handle(): void
     {
         $mediaService = app()->make(MediaService::class);
-        $this->userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
+        $userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
         foreach (Media::query()->whereIn('_id', $this->mediaIds)->get() as $media) {
-            $mediaService->watched($media, $this->duration, $this->userId);
+            $mediaService->watched($media, $this->duration, $userId);
         }
     }
 
