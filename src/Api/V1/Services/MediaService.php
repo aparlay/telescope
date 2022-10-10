@@ -214,6 +214,7 @@ class MediaService
         $userId = auth()->guest() ? null : auth()->user()->_id;
 
         MediaWatched::dispatch($visitCounts, 60, $userId);
+
         return $data;
     }
 
@@ -260,7 +261,6 @@ class MediaService
      */
     public function watched($media, int $duration = 60, ObjectId|null $userId = null): void
     {
-
         if ($userId !== null) {
             $this->userWatched($userId, $media, $duration);
         } else {
