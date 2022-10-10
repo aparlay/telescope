@@ -10,12 +10,14 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\MediaRepository;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
+use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Jobs\MediaWatched;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaStatus;
-use BeyondCode\ServerTiming\Facades\ServerTiming;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Str;
 
@@ -143,6 +145,7 @@ class MediaService
         $originalQuery = $query;
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
+        $userId = null;
         if (! auth()->guest()) {
             $userId = auth()->user()->_id;
             $query->notBlockedFor(auth()->user()->_id)->notVisitedByUserAndDevice($userId, $deviceId);
@@ -164,9 +167,12 @@ class MediaService
         }
 
         $visited = Cache::store('redis')->get($cacheKey, []);
+        $visitCounts = [];
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
+            $visitCounts[] = new ObjectId($model->_id);
         }
+        MediaWatched::dispatch($visitCounts, 60, $userId);
         Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
         return $data;
@@ -179,7 +185,7 @@ class MediaService
      */
     public function getFeedByType(string $type): LengthAwarePaginator
     {
-        return match ($this) {
+        return match ($type) {
             'following' => $this->getFollowingFeed(),
             default => $this->getFollowingFeed(),
         };
@@ -200,7 +206,15 @@ class MediaService
                 ->recentFirst();
         }
 
-        return $query->paginate(5)->withQueryString();
+        $data = $query->paginate(5)->withQueryString();
+        $visitCounts = [];
+        foreach ($data->items() as $model) {
+            $visitCounts[] = new ObjectId($model->_id);
+        }
+        $userId = auth()->guest() ? null : auth()->user()->_id;
+
+        MediaWatched::dispatch($visitCounts, 60, $userId);
+        return $data;
     }
 
     /**
@@ -234,5 +248,83 @@ class MediaService
         }
 
         return $query->paginate(15);
+    }
+
+    /**
+     * @param  Media          $media
+     * @param  int            $duration
+     * @param  ObjectId|null  $userId
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function watched(Media $media, int $duration = 60, ObjectId|null $userId = null): void
+    {
+
+        if ($userId !== null) {
+            $this->userWatched($userId, $media, $duration);
+        } else {
+            $this->anonymousWatched($media, $duration);
+        }
+    }
+
+    /**
+     * @param  Media  $media
+     * @param  int    $duration
+     *
+     * @return void
+     */
+    public function anonymousWatched(Media $media, int $duration = 60): void
+    {
+        if ($duration > 3) {
+            $multiplier = config('app.media.visit_multiplier', 7);
+            $media->length_watched += ((($duration > $media->length) ? $media->length : $duration) * $multiplier);
+            $media->visit_count += $multiplier;
+            $media->count_fields_updated_at = array_merge(
+                $media->count_fields_updated_at,
+                ['visits' => DT::utcNow()]
+            );
+            $media->save();
+        }
+    }
+
+    /**
+     * @param  ObjectId  $userId
+     * @param  Media     $media
+     * @param  int       $duration
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function userWatched(ObjectId $userId, Media $media, int $duration = 60): void
+    {
+        if (($mediaVisit = MediaVisit::query()->user($userId)->dateString(date('Y-m-d'))->first()) === null) {
+            $mediaVisit = new MediaVisit();
+            $mediaVisit->date = date('Y-m-d');
+            $mediaVisit->user_id = $userId;
+        }
+
+        $mediaVisit->media_id = new ObjectId($media->_id);
+        $mediaVisit->duration = $duration;
+
+        if ($duration > ($media->length / 4)) {
+            $multiplier = config('app.media.visit_multiplier', 7);
+            $media->length_watched += ((($duration > $media->length) ? $media->length : $duration) * $multiplier);
+            $media->visit_count += $multiplier;
+            $media->addToSet('visits', [
+                '_id' => $mediaVisit->userObj->_id,
+                'username' => $mediaVisit->userObj->username,
+                'avatar' => $mediaVisit->userObj->avatar,
+            ], 10);
+            $media->count_fields_updated_at = array_merge(
+                $media->count_fields_updated_at,
+                ['visits' => DT::utcNow()]
+            );
+            $media->save();
+        }
+
+        if (! $mediaVisit->save()) {
+            throw new Exception('Cannot save media visit data.');
+        }
     }
 }

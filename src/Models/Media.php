@@ -36,6 +36,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property string      $mime_type
  * @property int         $size
  * @property int         $length
+ * @property int         $length_watched
  * @property int         $visibility
  * @property int         $like_count
  * @property int         $comment_count
