@@ -48,6 +48,7 @@ class MediaWatched implements ShouldQueue
      */
     public function __construct(public array $mediaIds, public int $duration = 60, public string|null $userId = null)
     {
+        $this->onQueue('low');
     }
 
     /**
