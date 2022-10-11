@@ -15,7 +15,7 @@ class UserStatsTipsUpdater
         if ($order->is_tip && $order->is_successful && ! empty($order->entityObj->mediaObj)) {
             Tip::cacheByCreatorId($order->entityObj->creator['_id'], true);
 
-            if ($order->entityObj->user['_id']) {
+            if (isset($order->entityObj->user['_id'])) {
                 $receiver = User::user($order->entityObj->user['_id'])->first();
                 $receiverStats = $receiver->stats;
                 $receiverStats['amounts']['received_tips'] = Tip::query()->user(
@@ -24,14 +24,14 @@ class UserStatsTipsUpdater
                 $receiver->fill(['stats' => $receiverStats])->save();
             }
 
-            if ($order->entityObj->referral['_id']) {
+            if (isset($order->entityObj->referral['_id'])) {
                 $receiver = User::user($order->entityObj->referral['_id'])->first();
                 $receiverStats = $receiver->stats;
                 $receiverStats['amounts']['received_tips_commission'] = Tip::query()->referral($order->entityObj->referralObj->_id)->successful()->sum('referral_commission_amount');
                 $receiver->fill(['stats' => $receiverStats])->save();
             }
 
-            if ($order->entityObj->creator['_id']) {
+            if (isset($order->entityObj->creator['_id'])) {
                 $sender = User::user($order->entityObj->creator['_id'])->first();
                 $senderStats = $sender->stats;
                 $senderStats['amounts']['sent_tips'] = Tip::query()->creator(
