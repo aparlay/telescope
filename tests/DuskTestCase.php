@@ -30,6 +30,8 @@ abstract class DuskTestCase extends BaseTestCase
 
             $this->artisan('migrate', ['--path' => 'packages/Aparlay/Core/database/migrations', '--database' => 'testing']);
             $this->artisan('migrate', ['--path' => 'packages/Aparlay/Payment/database/migrations', '--database' => 'testing']);
+            $this->artisan('migrate', ['--path' => 'packages/Aparlay/Payout/database/migrations', '--database' => 'testing']);
+            $this->artisan('migrate', ['--path' => 'packages/Aparlay/Chat/database/migrations', '--database' => 'testing']);
 
             static::$isSeeded = true;
         }
