@@ -787,7 +787,7 @@ class User extends \App\Models\User
         if ($lastOnlineAt === false) {
             $user = self::user($userId)->firstOrFail();
             $lastOnlineAt = $user->last_online_at ?: $user->created_at;
-            Cache::store('octane')->put('countries', $lastOnlineAt->valueOf(), 300);
+            Cache::store('octane')->put('countries', $lastOnlineAt->toDateTime()->getTimestamp(), 300);
         }
 
         return $lastOnlineAt;
