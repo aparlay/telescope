@@ -34,7 +34,7 @@ class UserResource extends JsonResource
 
             $isOnline = $this->is_online; //$isFollowed ? $this->is_online_for_followers : $this->is_online_for_all;
 
-            $chat = Chat::query()->participants([$this->_id, $user->_id])->first();
+            $chat = Chat::query()->participants($this->_id, $user->_id)->first();
             $chatId = $chat !== null ? (string) $chat->_id : null;
         }
 
