@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Aparlay\Chat\Models\Chat;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -19,6 +20,7 @@ class UserResource extends JsonResource
     {
         $user = auth()->user() ?: false;
         $isFollowed = $isBlocked = $isOnline = false;
+        $chatId = null;
         if ($user) {
             // TODO: $followingIds = collect($user->followings)->pluck('_id')
             $followingIds = array_column($user->followings, '_id');
@@ -31,10 +33,14 @@ class UserResource extends JsonResource
             $isBlocked = in_array((string) $this->_id, $blockedIds);
 
             $isOnline = $this->is_online; //$isFollowed ? $this->is_online_for_followers : $this->is_online_for_all;
+
+            $chat = Chat::query()->participants([$this->_id, $user->_id])->first();
+            $chatId = $chat !== null ? (string)$chat->_id : null;
         }
 
         return [
             '_id' => (string) $this->_id,
+            'chat_id' => $chatId,
             'username' => $this->username,
             'bio' => $this->bio,
             'full_name' => $this->full_name,
