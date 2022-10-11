@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
@@ -777,6 +778,19 @@ class User extends \App\Models\User
             UserVerificationStatus::REJECTED->value => UserVerificationStatus::REJECTED->label(),
             UserVerificationStatus::UNVERIFIED->value => UserVerificationStatus::UNVERIFIED->label(),
         ];
+    }
+
+    public static function lastOnlineAtTimestamp($userId): int
+    {
+        $cacheKey = 'User:last_online_at:'.$userId;
+        $lastOnlineAt = Cache::store('octane')->get($cacheKey, false);
+        if ($lastOnlineAt === false) {
+            $user = self::user($userId)->firstOrFail();
+            $lastOnlineAt = $user->last_online_at ?: $user->created_at;
+            Cache::store('octane')->put('countries', $lastOnlineAt->valueOf(), 300);
+        }
+
+        return $lastOnlineAt;
     }
 
     public static function isOnline($userId): bool
