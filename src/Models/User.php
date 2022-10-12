@@ -189,7 +189,7 @@ class User extends \App\Models\User
 
     protected $attributes = [
         'count_fields_updated_at' => [],
-        'verification_status' => 1,
+        'verification_status' => 3, // unverified
         'setting' => [
             'otp' => false,
             'notifications' => [
