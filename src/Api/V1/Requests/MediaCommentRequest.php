@@ -12,7 +12,7 @@ class MediaCommentRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            'text' => ['required', 'string', 'min:1', 'max:700'],
+            'text' => ['required', 'string', 'min:1', 'max:500'],
         ];
     }
 }
