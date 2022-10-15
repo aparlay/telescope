@@ -9,6 +9,7 @@ use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
 use Aparlay\Core\Admin\Components\UtcFormatter;
 use Aparlay\Core\Admin\Components\WireDropDownList;
+use Aparlay\Core\Admin\Livewire\Components\DateRangePicker;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\EmailsTable;
 use Aparlay\Core\Admin\Livewire\MediasModerationTable;
@@ -195,6 +196,7 @@ class CoreServiceProvider extends ServiceProvider
             'modals' => Modals::class,
             'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,
             'modals.user-notes-create-modal' => UserNoteCreateModal::class,
+            'components.date-range-picker' => DateRangePicker::class
         ];
 
         foreach ($components as $name => $class) {
