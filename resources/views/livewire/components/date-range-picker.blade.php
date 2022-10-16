@@ -38,6 +38,9 @@
     <span class="col-sm-12 col-md-4">
         <input type="text" class="form-control-sm border-secondary" id="date-range"/>
     </span>
+    @push('css')
+        <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.css') }}" >
+    @endpush
     @push('js')
         <script src="{{ asset('vendor/adminlte/plugins/moment/moment.min.js') }}"></script>
         <script src="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
