@@ -9,9 +9,15 @@ trait HasDateRangeFilter
 {
     public array $dateInterval = [];
 
+    public bool $showAllDates = true;
+
     public function dateIntervalChanged($dateInterval): void
     {
         $this->dateInterval = $dateInterval;
+
+        if (!empty($this->dateInterval)){
+            $this->showAllDates = false;
+        }
 
         $this->emit('updateParent');
     }
