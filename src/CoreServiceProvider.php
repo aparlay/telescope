@@ -196,7 +196,7 @@ class CoreServiceProvider extends ServiceProvider
             'modals' => Modals::class,
             'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,
             'modals.user-notes-create-modal' => UserNoteCreateModal::class,
-            'components.date-range-picker' => DateRangePicker::class
+            'components.date-range-picker' => DateRangePicker::class,
         ];
 
         foreach ($components as $name => $class) {
