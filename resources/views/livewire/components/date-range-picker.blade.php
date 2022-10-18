@@ -1,6 +1,10 @@
 <div class="form-inline">
     <div class="col-6 col-md-1 pb-2 pb-md-0">
-        <button type="button" class="col-12 btn btn-sm btn-default" data-interval="all">
+        <button type="button"
+                class="btn btn-sm @if($showAllDates) btn-secondary @else btn-default @endif"
+                data-interval="all"
+                wire:click="$emit('showAllDates-changed')"
+        >
             {{__('All')}}
         </button>
     </div>
