@@ -7,7 +7,7 @@ use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use MongoDB\BSON\ObjectId;
 
-return new class extends Migration {
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -34,6 +34,5 @@ return new class extends Migration {
      */
     public function down()
     {
-
     }
 };
