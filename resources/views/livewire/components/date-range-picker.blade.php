@@ -41,7 +41,7 @@
         <input type="text" class="form-control-sm border-secondary col-12" id="date-range"/>
     </span>
     @push('css')
-        <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.css') }}" >
+        <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.css') }}">
     @endpush
     @push('js')
         <script src="{{ asset('vendor/adminlte/plugins/moment/moment.min.js') }}"></script>
@@ -117,10 +117,10 @@
                         datePicker.data('daterangepicker').setEndDate(endDate);
                     }
 
-                @this.set('dateInterval', [
-                    startDate.format('YYYY-MM-DD'),
-                    endDate.format('YYYY-MM-DD')
-                ]);
+                    @this.set('dateInterval', [
+                        startDate.format('YYYY-MM-DD'),
+                        endDate.format('YYYY-MM-DD')
+                    ]);
                 }
 
             });
