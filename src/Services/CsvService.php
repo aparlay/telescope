@@ -9,10 +9,9 @@ final class CsvService
     private array $data = [];
 
     public function __construct(
-        private string $separator = ",",
+        private string $separator = ',',
         private string $eol = "\n"
-    )
-    {
+    ) {
     }
 
     public function setHeaders(array $headers): self
@@ -45,7 +44,7 @@ final class CsvService
     {
         $data = array_merge([$this->headers], $this->data);
 
-        $rows = array_map(function($row){
+        $rows = array_map(function ($row) {
             return implode($this->separator, $row);
         }, $data);
 
@@ -54,7 +53,7 @@ final class CsvService
 
     public function downloadCsv(string $name)
     {
-        return response()->streamDownload(function(){
+        return response()->streamDownload(function () {
             echo $this->generate();
         }, $name);
     }
