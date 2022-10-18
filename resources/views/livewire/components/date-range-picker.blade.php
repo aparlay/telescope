@@ -1,8 +1,10 @@
 <div class="form-inline">
-    <button type="button" class="btn btn-sm btn-default" data-interval="all">
-        {{__('All')}}
-    </button>
-    <div class="btn-group col-sm-6 col-md-3">
+    <div class="col-6 col-md-1 pb-2 pb-md-0">
+        <button type="button" class="col-12 btn btn-sm btn-default" data-interval="all">
+            {{__('All')}}
+        </button>
+    </div>
+    <div class="btn-group col-6 col-md-2 pb-2 pb-md-0">
         <button type="button" class="btn btn-sm btn-default" data-interval="days" data-interval-add="-1">
             <i class="fa fa-angle-double-left"></i>
         </button>
@@ -13,7 +15,7 @@
             <i class="fa fa-angle-double-right"></i>
         </button>
     </div>
-    <div class="btn-group col-sm-6 col-md-3">
+    <div class="btn-group col-6 col-md-2 pb-2 pb-md-0">
         <button type="button" class="btn btn-sm btn-default" data-interval="weeks" data-interval-add="-1">
             <i class="fa fa-angle-double-left"></i>
         </button>
@@ -24,7 +26,7 @@
             <i class="fa fa-angle-double-right"></i>
         </button>
     </div>
-    <div class="btn-group col-sm-6 col-md-3">
+    <div class="btn-group col-6 col-md-2 pb-2 pb-md-0">
         <button type="button" class="btn btn-sm btn-default" data-interval="months" data-interval-add="-1">
             <i class="fa fa-angle-double-left"></i>
         </button>
@@ -35,8 +37,8 @@
             <i class="fa fa-angle-double-right"></i>
         </button>
     </div>
-    <span class="col-sm-12 col-md-4">
-        <input type="text" class="form-control-sm border-secondary" id="date-range"/>
+    <span class="col-12 col-md-5">
+        <input type="text" class="form-control-sm border-secondary col-12" id="date-range"/>
     </span>
     @push('css')
         <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.css') }}" >
