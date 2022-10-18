@@ -5,7 +5,7 @@ namespace Aparlay\Core\Admin\Livewire;
 use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
-use App\Models\Media;
+use Aparlay\Core\Admin\Models\Media;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
 use function view;

@@ -141,11 +141,13 @@ class MediaService extends AdminBaseService
             'status',
             'skin_score',
             'visibility',
+            'is_protected',
             'is_music_licensed',
         ]);
 
         $dataModified = [
             'visibility' => request()->boolean('visibility'),
+            'is_protected' => request()->boolean('is_protected'),
             'is_music_licensed' => request()->boolean('is_music_licensed'),
             'scores' => [
                 [
