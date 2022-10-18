@@ -15,7 +15,7 @@ trait HasDateRangeFilter
     {
         $this->dateInterval = $dateInterval;
 
-        if (!empty($this->dateInterval)){
+        if (! empty($this->dateInterval)) {
             $this->showAllDates = false;
         }
 
