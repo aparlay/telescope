@@ -11,7 +11,7 @@ final class DateRangePicker extends Component
     public bool $showAllDates = true;
 
     protected $listeners = [
-        'showAllDates-changed' => 'showAllDatesChanged'
+        'showAllDates-changed' => 'showAllDatesChanged',
     ];
 
     public function render()
@@ -23,7 +23,7 @@ final class DateRangePicker extends Component
     {
         if ($field == 'dateInterval') {
             $this->emit('dateInterval-changed', $value);
-            if (!empty($value)){
+            if (! empty($value)) {
                 $this->showAllDates = false;
             }
         }
@@ -31,7 +31,7 @@ final class DateRangePicker extends Component
 
     public function showAllDatesChanged()
     {
-        $this->showAllDates = !($this->showAllDates);
+        $this->showAllDates = ! ($this->showAllDates);
         $this->dateInterval = [];
         $this->emit('dateInterval-changed', []);
     }
