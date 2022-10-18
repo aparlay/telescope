@@ -1,45 +1,45 @@
-<div class="form-inline">
-    <button type="button" class="btn btn-sm btn-default" data-interval="all">
+<div class="form-inline col-md-8 row no-gutters">
+    <button type="button" class="pb-1 col-6 mx-auto col-md-1 btn btn-sm btn-default mt-2 mt-md-0" data-interval="all">
         {{__('All')}}
     </button>
-    <div class="btn-group col-sm-6 col-md-3">
-        <button type="button" class="btn btn-sm btn-default" data-interval="days" data-interval-add="-1">
-            <i class="fa fa-angle-double-left"></i>
-        </button>
-        <button type="button" class="btn btn-sm btn-default" data-interval="days" data-interval-add="0">
-            {{__('Today')}}
-        </button>
-        <button type="button" class="btn btn-sm btn-default" data-interval="days" data-interval-add="1">
-            <i class="fa fa-angle-double-right"></i>
-        </button>
+    <div class="row col-12 col-md-8 mx-auto">
+        <div class="py-1 py-md-0 btn-group col-sm-6 col-md-4">
+            <button type="button" class="btn btn-sm btn-default" data-interval="days" data-interval-add="-1">
+                <i class="fa fa-angle-double-left"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-default" data-interval="days" data-interval-add="0">
+                {{__('Today')}}
+            </button>
+            <button type="button" class="btn btn-sm btn-default" data-interval="days" data-interval-add="1">
+                <i class="fa fa-angle-double-right"></i>
+            </button>
+        </div>
+        <div class="py-1 py-md-0 btn-group col-sm-6 col-md-4">
+            <button type="button" class="btn btn-sm btn-default" data-interval="weeks" data-interval-add="-1">
+                <i class="fa fa-angle-double-left"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-default" data-interval="weeks" data-interval-add="0">
+                {{__('This Week')}}
+            </button>
+            <button type="button" class="btn btn-sm btn-default" data-interval="weeks" data-interval-add="1">
+                <i class="fa fa-angle-double-right"></i>
+            </button>
+        </div>
+        <div class="py-1 py-md-0 btn-group col-sm-6 col-md-4">
+            <button type="button" class="btn btn-sm btn-default" data-interval="months" data-interval-add="-1">
+                <i class="fa fa-angle-double-left"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-default p-1" data-interval="months" data-interval-add="0">
+                {{__('This Month')}}
+            </button>
+            <button type="button" class="btn btn-sm btn-default" data-interval="months" data-interval-add="1">
+                <i class="fa fa-angle-double-right"></i>
+            </button>
+        </div>
     </div>
-    <div class="btn-group col-sm-6 col-md-3">
-        <button type="button" class="btn btn-sm btn-default" data-interval="weeks" data-interval-add="-1">
-            <i class="fa fa-angle-double-left"></i>
-        </button>
-        <button type="button" class="btn btn-sm btn-default" data-interval="weeks" data-interval-add="0">
-            {{__('This Week')}}
-        </button>
-        <button type="button" class="btn btn-sm btn-default" data-interval="weeks" data-interval-add="1">
-            <i class="fa fa-angle-double-right"></i>
-        </button>
-    </div>
-    <div class="btn-group col-sm-6 col-md-3">
-        <button type="button" class="btn btn-sm btn-default" data-interval="months" data-interval-add="-1">
-            <i class="fa fa-angle-double-left"></i>
-        </button>
-        <button type="button" class="btn btn-sm btn-default" data-interval="months" data-interval-add="0">
-            {{__('This Month')}}
-        </button>
-        <button type="button" class="btn btn-sm btn-default" data-interval="months" data-interval-add="1">
-            <i class="fa fa-angle-double-right"></i>
-        </button>
-    </div>
-    <span class="col-sm-12 col-md-4">
-        <input type="text" class="form-control-sm border-secondary" id="date-range"/>
-    </span>
+    <input type="text" class="pt-1 col-sm-12 col-md-3 text-center form-control-sm border-secondary" id="date-range"/>
     @push('css')
-        <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.css') }}" >
+        <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.css') }}">
     @endpush
     @push('js')
         <script src="{{ asset('vendor/adminlte/plugins/moment/moment.min.js') }}"></script>
