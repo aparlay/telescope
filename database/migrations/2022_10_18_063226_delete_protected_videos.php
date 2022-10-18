@@ -25,6 +25,11 @@ return new class() extends Migration {
                 }
             }
         }
+        foreach (Media::where('is_protected', null)->get() as $media) {
+            $media->is_protected = false;
+            $media->is_music_licensed = false;
+            $media->save();
+        }
     }
 
     /**
