@@ -44,7 +44,7 @@ class LoginRequest extends FormRequest
 
     /**
      * This function is responsible to perform pre-validation tasks like
-     * Set username to lower case
+     * Set username to lower case.
      *
      * @throws Exception
      */
