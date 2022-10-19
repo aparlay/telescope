@@ -8,7 +8,7 @@
                             <i class="fas fa-exclamation-triangle"></i>
                             Reprocess
                         </button>
-                        <button class="btn btn-sm btn-warning col-md-2 ml-2" id="mediaAlert" data-toggle="modal" data-target="#alert-modal" >
+                        <button class="btn btn-sm btn-warning col-md-2" id="mediaAlert" data-toggle="modal" data-target="#alert-modal" >
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
