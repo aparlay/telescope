@@ -9,6 +9,7 @@ use Aparlay\Core\Admin\Resources\MediaResource;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Jobs\ReprocessMedia;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Session;
@@ -192,9 +193,9 @@ class MediaController extends Controller
         return redirect()->back()->with(['success' => 'Video uploaded successfully']);
     }
 
-    public function recalculateSortScore(Media $media)
+    public function recalculateSortScore(Media $media, Request $request)
     {
-        $this->mediaService->calculateSortScore($media);
+        $this->mediaService->calculateSortScore($media, $request->integer('promote', 0));
 
         return redirect()->back()->with(['success' => 'Video sort score updated successfully']);
     }
