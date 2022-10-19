@@ -13,7 +13,7 @@ trait HasDateRangeFilter
 
     public function showAllDatesChanged()
     {
-        $this->showAllDates = !$this->showAllDates;
+        $this->showAllDates = ! $this->showAllDates;
         $this->dateInterval = [];
     }
 
@@ -21,7 +21,7 @@ trait HasDateRangeFilter
     {
         $this->dateInterval = $dateInterval;
 
-        if (!empty($this->dateInterval)) {
+        if (! empty($this->dateInterval)) {
             $this->showAllDates = false;
         }
 
