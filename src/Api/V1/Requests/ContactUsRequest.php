@@ -42,6 +42,6 @@ class ContactUsRequest extends BaseFormRequest
     public function prepareForValidation()
     {
         /* Convert uppercase email charecter into lowercase */
-        $this->email = Str::of($this->email)->trim()->lower();
+        $this->email = Str::of($this->email)->trim()->lower()->toString();
     }
 }

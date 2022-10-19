@@ -51,7 +51,7 @@ class LoginRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'username' => strtolower(trim($this->username)),
+            'username' => Str::of($this->username)->trim()->lower()->toString(),
         ]);
     }
 }
