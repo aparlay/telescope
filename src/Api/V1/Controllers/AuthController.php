@@ -198,7 +198,9 @@ class AuthController extends Controller
             if ($request->otp) {
                 $this->otpService->validateOtp($request->otp, $request->username);
                 $this->userService->verify();
-            } else {
+            }
+            /*
+            else {
                 $this->otpService->sendOtp($user, $deviceId);
                 $response = [];
                 if ($identityField === Login::IDENTITY_PHONE_NUMBER) {
@@ -214,6 +216,7 @@ class AuthController extends Controller
 
                 return $this->response($response, 'OTP has been sent.', Response::HTTP_I_AM_A_TEAPOT);
             }
+            */
         }
 
         /** Prepare and return the json response */
