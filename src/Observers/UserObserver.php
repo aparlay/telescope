@@ -118,7 +118,7 @@ class UserObserver extends BaseModelObserver
             UserAvatarChangedEvent::dispatch($model, $model->avatar);
         }
 
-        if ($model->wasChanged('status')) {
+        if ($model->wasChanged('status') && $model->status != $model->getOriginal('status')) {
             switch ($model->status) {
                 case UserStatus::DEACTIVATED->value:
                     $model->notify(new UserDeactivateAccount());
