@@ -121,11 +121,12 @@ class MediaController extends Controller
     {
         $media = $this->mediaService->find($media->_id);
 
-        if (is_array($media->files_history) && !empty($media->files_history)) {
+        if (is_array($media->files_history) && ! empty($media->files_history)) {
             $lastMediaFile = end($media->files_history);
             if (isset($lastMediaFile['file'])) {
                 ReprocessMedia::dispatch($media->_id, $lastMediaFile['file'])->onQueue('low');
-                return redirect()->route('core.admin.media.view', ['media' => (string)$media->_id])->with(
+
+                return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with(
                     'success',
                     'Video is placed in queue for reprocessing.'
                 );
