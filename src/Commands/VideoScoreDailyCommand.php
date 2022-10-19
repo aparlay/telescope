@@ -25,7 +25,7 @@ class VideoScoreDailyCommand extends Command
                     $sortScore += ($media->like_score / 3);
                     $sortScore += ($media->visit_score / 3);
 
-                    if (((int)$media->sort_score - 1) < $sortScore) {
+                    if (((int) $media->sort_score - 1) < $sortScore) {
                         $msg = '<fg=yellow;options=bold>';
                         $msg .= $media->_id.' score set to '.$media->sort_score.'</>';
                         $msg .= PHP_EOL;
@@ -33,7 +33,6 @@ class VideoScoreDailyCommand extends Command
 
                         $media->save();
                     }
-
                 }
             });
 
