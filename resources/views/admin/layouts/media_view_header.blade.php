@@ -15,7 +15,7 @@
                         <div class="dropdown btn-group col-md-1 mr-2 show">
                             <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuScore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-cloud-download-alt"></i>
-                                <strong>Score Promotion</strong>
+                                <strong>Promote</strong>
                                 <b class="caret"></b>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuScore">
