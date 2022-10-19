@@ -125,7 +125,13 @@ class AuthController extends Controller
         $this->userService->isUserEligible($user);
 
         /* Validate the OTP or Throw exception if OTP is incorrect */
-        $this->otpService->validateOtp($request->otp, $request->username, true);
+        if ($this->userService->requireOtp()) {
+            $this->otpService->validateOtp($request->otp, $request->username);
+            $this->userService->verify();
+        } else {
+            $this->otpService->validateOtp($request->otp, $request->username, true);
+        }
+
 
         /* Find the identityField (Email/Phone Number/Username) based on username and return the response*/
         return $this->response([
