@@ -121,7 +121,7 @@ class MediaController extends Controller
     {
         $media = $this->mediaService->find($media->_id);
 
-        ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('low');
+        ReprocessMedia::dispatch($media->_id, $media->files_history[0]['file'])->onQueue('low');
 
         return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with('success', 'Video is placed in queue for reprocessing.');
     }

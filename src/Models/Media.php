@@ -62,6 +62,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property User        $userObj
  * @property Alert[]     $alertObjs
  * @property UserNotification[]     $userNotificationObjs
+ * @property array       $files_history
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
