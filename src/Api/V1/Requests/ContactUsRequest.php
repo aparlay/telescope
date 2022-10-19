@@ -35,7 +35,6 @@ class ContactUsRequest extends BaseFormRequest
         ];
     }
 
-
     /**
      * This function is responsible to perform pre-validation.
      */
