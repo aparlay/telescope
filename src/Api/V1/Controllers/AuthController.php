@@ -132,7 +132,6 @@ class AuthController extends Controller
             $this->otpService->validateOtp($request->otp, $request->username, true);
         }
 
-
         /* Find the identityField (Email/Phone Number/Username) based on username and return the response*/
         return $this->response([
             'message' => 'OTP is matched with your '.ucfirst(str_replace('_', ' ', $this->userService->getIdentityType($request->username))),
