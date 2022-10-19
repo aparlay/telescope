@@ -64,7 +64,7 @@ class ChangePasswordRequest extends FormRequest
         /* Convert uppercase email charecter into lowercase */
         $this->email = Str::of($this->email)->trim()->lower();
         $this->phone_number = Str::of($this->phone_number)->trim()->lower();
-        $this->username = !empty($this->email) ? $this->email : $this->phone_number;
+        $this->username = ! empty($this->email) ? $this->email : $this->phone_number;
 
         /* Responsible to match old password */
         if ($this->old_password && auth()->user()) {
