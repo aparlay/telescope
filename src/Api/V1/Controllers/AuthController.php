@@ -260,11 +260,9 @@ class AuthController extends Controller
 
         $this->otpService->sendOtp($user, $deviceId);
 
-        return $this->response(
-            new RegisterResource($user),
-            'Entity has been created successfully!',
-            Response::HTTP_CREATED
-        );
+        $loginRequest = new LoginRequest(['username' => $user->username, 'password' => $request->password]);
+        $loginRequest->headers = $request->headers;
+        return $this->login($loginRequest);
     }
 
     /**

@@ -121,19 +121,22 @@ class UserObserver extends BaseModelObserver
         if ($model->wasChanged('status')) {
             switch ($model->status) {
                 case UserStatus::DEACTIVATED->value:
+                    $model->notify(new UserDeactivateAccount());
+                    DeleteUserMedia::dispatch((string) $model->_id);
+                    DeleteUserConnect::dispatch((string) $model->_id);
+                    break;
                 case UserStatus::BLOCKED->value:
                     DeleteUserMedia::dispatch((string) $model->_id);
                     DeleteUserConnect::dispatch((string) $model->_id);
                     break;
-            }
-            if ($model->status === UserStatus::DEACTIVATED->value) {
-                $model->notify(new UserDeactivateAccount());
             }
         }
 
         if ($model->wasChanged('visibility')) {
             UpdateMedia::dispatch((string) $model->_id, ['visibility' => $model->visibility]);
         }
+
+        $model->refresh();
     }
 
     public function saved($model)
