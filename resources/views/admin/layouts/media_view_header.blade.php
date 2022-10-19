@@ -12,7 +12,7 @@
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
-                        <div class="dropdown btn-group col-md-2 show">
+                        <div class="dropdown btn-group col-md-2 pl-0 show">
                             <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuScore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-cloud-download-alt"></i>
                                 <strong>Promote ({{$media->sort_score}})</strong>
