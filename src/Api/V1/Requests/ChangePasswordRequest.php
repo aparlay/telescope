@@ -62,9 +62,11 @@ class ChangePasswordRequest extends FormRequest
     public function prepareForValidation()
     {
         /* Convert uppercase email charecter into lowercase */
-        $this->username = $this->email ? Str::lower($this->email) : $this->phone_number;
+        $this->email = Str::of($this->email)->trim()->lower();
+        $this->phone_number = Str::of($this->phone_number)->trim()->lower();
+        $this->username = !empty($this->email) ? $this->email : $this->phone_number;
 
-        /* Resposible to match old password */
+        /* Responsible to match old password */
         if ($this->old_password && auth()->user()) {
             if (! Hash::check($this->old_password, auth()->user()->password_hash)) {
                 throw ValidationException::withMessages([
