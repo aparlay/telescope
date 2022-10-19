@@ -100,7 +100,7 @@ class MediaEditTest extends DuskTestCase
     /**
      * @test
      */
-    public function mediaSkinAwesomenessTest()
+    public function mediaSkinAwesomenessBeautyTest()
     {
         $media = Media::factory()->create(['status' => MediaStatus::COMPLETED->value]);
 
@@ -108,6 +108,7 @@ class MediaEditTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($media) {
             $browser->visit(route('core.admin.media.view', ['media' => $media]))
                 ->clickAtXPath('//*[@id="skin_score_1"]/label')
+                ->clickAtXPath('//*[@id="beauty_score_1"]/label')
                 ->clickAtXPath('//*[@id="awesomeness_score_1"]/label');
             if ($browser->element('#mediaSave')) {
                 $browser->press('Save')

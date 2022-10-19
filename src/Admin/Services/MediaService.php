@@ -11,6 +11,7 @@ use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
+use Illuminate\Support\Carbon;
 use MongoDB\BSON\ObjectId;
 
 class MediaService extends AdminBaseService
@@ -158,12 +159,17 @@ class MediaService extends AdminBaseService
                     'type' => 'awesomeness',
                     'score' => request()->awesomeness_score,
                 ],
+                [
+                    'type' => 'beauty',
+                    'score' => request()->beauty_score,
+                ],
             ],
         ];
 
         $data = array_merge($data, $dataModified);
 
-        return $this->mediaRepository->update($data, $id);
+        $media = $this->mediaRepository->update($data, $id);
+        return $this->calculateSortScore($media, 0);
     }
 
     public function reupload($media)
@@ -174,7 +180,12 @@ class MediaService extends AdminBaseService
 
     public function calculateSortScore($media, $promote)
     {
-        $media->sort_score = $media->awesomeness_score + $promote;
+        if ($media->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
+            $media->sort_score = Media::orderBy('sort_score', 'desc')->first()->sort_score + $media->awesomeness_score + $media->beauty_score + $promote;
+        } else {
+            $media->sort_score = $media->awesomeness_score + $media->beauty_score + $promote;
+        }
+
         $media->sort_score += ($media->time_score / 2);
         $media->sort_score += ($media->like_score / 3);
         $media->sort_score += ($media->visit_score / 3);

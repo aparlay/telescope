@@ -20,7 +20,7 @@ class VideoScoreDailyCommand extends Command
             ->availableForFollower()
             ->chunk(200, function ($models) {
                 foreach ($models as $media) {
-                    $sortScore = $media->awesomeness_score;
+                    $sortScore = $media->awesomeness_score + $media->beauty_score;
                     $sortScore += ($media->time_score / 2);
                     $sortScore += ($media->like_score / 3);
                     $sortScore += ($media->visit_score / 3);
