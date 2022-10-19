@@ -12,7 +12,7 @@
                             <i class="fas fa-minus-circle"></i>
                             Alert
                         </button>
-                        <a class="btn btn-sm btn-info col-md-2" href="{{ route('core.admin.media.recalculateSortScore', ['media' => $media->_id]) }}">Sort Score ({{ substr($media->sort_score, 0, 5) }})</a>
+                        <a class="btn btn-sm btn-info col-md-2" href="{{ route('core.admin.media.recalculateSortScore', ['media' => $media->_id]) }}">Score ({{ substr($media->sort_score, 0, 5) }})</a>
                         <div class="dropdown btn-group col-md-1 mr-2 show">
                             <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-cloud-download-alt"></i>
