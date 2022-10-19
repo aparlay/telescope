@@ -121,9 +121,19 @@ class MediaController extends Controller
     {
         $media = $this->mediaService->find($media->_id);
 
-        ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('low');
+        if (is_array($media->files_history) && ! empty($media->files_history)) {
+            $lastMediaFile = end($media->files_history);
+            if (isset($lastMediaFile['file'])) {
+                ReprocessMedia::dispatch($media->_id, $lastMediaFile['file'])->onQueue('low');
 
-        return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with('success', 'Video is placed in queue for reprocessing.');
+                return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with(
+                    'success',
+                    'Video is placed in queue for reprocessing.'
+                );
+            }
+        }
+
+        return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with('danger', 'Original video not found.');
     }
 
     public function pending($page = 1)
@@ -180,5 +190,12 @@ class MediaController extends Controller
         $this->mediaService->reupload($media);
 
         return redirect()->back()->with(['success' => 'Video uploaded successfully']);
+    }
+
+    public function recalculateSortScore(Media $media)
+    {
+        $this->mediaService->calculateSortScore($media);
+
+        return redirect()->back()->with(['success' => 'Video sort score updated successfully']);
     }
 }

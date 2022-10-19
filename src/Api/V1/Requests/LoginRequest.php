@@ -2,19 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
-use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Helpers\Cdn;
-use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Enums\UserGender;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
-use Aparlay\Core\Models\Enums\UserStatus;
-use Aparlay\Core\Models\Enums\UserType;
-use Aparlay\Core\Models\Enums\UserVisibility;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use MongoDB\BSON\ObjectId;
 
 class LoginRequest extends FormRequest
 {
@@ -44,15 +34,14 @@ class LoginRequest extends FormRequest
 
     /**
      * This function is responsible to perform pre-validation tasks like
-     * Set the email or phone, based on username
-     * Set the avatar, based on gender.
+     * Set username to lower case.
      *
      * @throws Exception
      */
     public function prepareForValidation()
     {
         $this->merge([
-            'username' => strtolower(trim($this->username)),
+            'username' => Str::of($this->username)->trim()->lower()->toString(),
         ]);
     }
 }

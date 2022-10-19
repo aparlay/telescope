@@ -172,6 +172,18 @@ class MediaService extends AdminBaseService
         UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'))->onQueue('low');
     }
 
+    public function calculateSortScore($media)
+    {
+        $media->sort_score = $media->awesomeness_score;
+        $media->sort_score += ($media->time_score / 2);
+        $media->sort_score += ($media->like_score / 3);
+        $media->sort_score += ($media->visit_score / 3);
+
+        $media->save();
+
+        return $media;
+    }
+
     public function generateSlug($length)
     {
         $slug = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, $length);
