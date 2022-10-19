@@ -191,4 +191,11 @@ class MediaController extends Controller
 
         return redirect()->back()->with(['success' => 'Video uploaded successfully']);
     }
+
+    public function recalculateSortScore(Media $media)
+    {
+        $this->mediaService->calculateSortScore($media);
+
+        return redirect()->back()->with(['success' => 'Video sort score updated successfully']);
+    }
 }

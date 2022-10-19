@@ -26,6 +26,9 @@
                                 @endif
                             </div>
                         </div>
+
+                        <a class="btn btn-sm btn-info col-md-2" href="{{ route('core.admin.media.recalculateScore', ['media' => $media->_id]) }}">Sort Score {{ $media->sort_score }}</a>
+
                     </h1>
                 </div><!-- /.col -->
                 <div class="col-sm-4">
