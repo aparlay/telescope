@@ -80,7 +80,7 @@ class MediaFactory extends Factory
             'scores' => [
                 ['type' => 'skin', 'score' => $this->faker->randomNumber(1)],
                 ['type' => 'awesomeness', 'score' => $this->faker->randomNumber(1)],
-                ['type' => 'beauty', 'score' => $this->faker->randomNumber(1)]
+                ['type' => 'beauty', 'score' => $this->faker->randomNumber(1)],
             ],
             'sort_score' => $this->faker->randomNumber(4),
             'slug' => Str::random(6),
