@@ -182,7 +182,8 @@ class MediaService extends AdminBaseService
     public function calculateSortScore($media, $promote)
     {
         if ($media->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
-            $media->sort_score = Media::orderBy('sort_score', 'desc')->first()->sort_score + $media->awesomeness_score + $media->beauty_score + $promote;
+            $highestScore = Media::date(null, DT::utcDateTime(['d' => -1]))->orderBy('sort_score', 'desc')->first()->sort_score;
+            $media->sort_score = $highestScore + $media->awesomeness_score + $media->beauty_score + $promote;
         } else {
             $media->sort_score = $media->awesomeness_score + $media->beauty_score + $promote;
         }
