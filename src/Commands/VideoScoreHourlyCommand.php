@@ -15,7 +15,11 @@ class VideoScoreHourlyCommand extends Command
 
     public function handle()
     {
-        $highestScore = Media::date(null, DT::utcDateTime(['d' => -1]))->orderBy('sort_score', 'desc')->first()->sort_score;
+        $highestScore = Media::where('sort_score', ['$exists' => true])
+            ->date(null, DT::utcDateTime(['d' => -1]))
+            ->orderBy('sort_score', 'desc')
+            ->first()
+            ->sort_score;
         $mediaQuery = Media::where('is_fake', ['$exists' => false])
             ->date(DT::utcDateTime(['d' => -1]), DT::utcNow())
             ->availableForFollower();
