@@ -16,7 +16,7 @@ class VideoScoreCommand extends Command
     public function handle()
     {
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower();
-
+        $highestScore = Media::orderBy('sort_score', 'desc')->first()->sort_score;
         foreach ($mediaQuery->get() as $media) {
             $msg = '<fg=blue;options=bold>';
             $msg .= '--------------------------------'.'</>';
@@ -24,7 +24,7 @@ class VideoScoreCommand extends Command
             $this->line($msg);
 
             if ($media->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
-                $media->sort_score = Media::orderBy('sort_score', 'desc')->first()->sort_score + $media->awesomeness_score + $media->beauty_score;
+                $media->sort_score = $highestScore + $media->awesomeness_score + $media->beauty_score;
             } else {
                 $media->sort_score = $media->awesomeness_score + $media->beauty_score;
             }
@@ -75,6 +75,7 @@ class VideoScoreCommand extends Command
             $rows[] = [
                 $media->_id,
                 $media->sort_score,
+                $highestScore,
                 $media->awesomeness_score,
                 $media->beauty_score,
                 $media->time_score,
@@ -85,7 +86,7 @@ class VideoScoreCommand extends Command
             $media->save();
         }
 
-        $headers = ['id', 'total', 'awesomeness', 'beauty', 'time', 'like', 'watch', 'link'];
+        $headers = ['id', 'total', 'highest', 'awesomeness', 'beauty', 'time', 'like', 'watch', 'link'];
         $this->table($headers, $rows);
 
         return self::SUCCESS;
