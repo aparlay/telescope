@@ -169,6 +169,7 @@ class MediaService extends AdminBaseService
         $data = array_merge($data, $dataModified);
 
         $media = $this->mediaRepository->update($data, $id);
+
         return $this->calculateSortScore($media, 0);
     }
 
