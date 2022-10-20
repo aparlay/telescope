@@ -15,11 +15,12 @@ class VideoScoreHourlyCommand extends Command
 
     public function handle()
     {
+        $highestScore = Media::date(null, DT::utcDateTime(['d' => -1]))->orderBy('sort_score', 'desc')->first()->sort_score;
         $mediaQuery = Media::where('is_fake', ['$exists' => false])
             ->date(DT::utcDateTime(['d' => -1]), DT::utcNow())
             ->availableForFollower();
         foreach ($mediaQuery->get() as $media) {
-            $media->sort_score = $media->awesomeness_score + $media->beauty_score;
+            $media->sort_score = $highestScore + $media->awesomeness_score + $media->beauty_score;
             $media->sort_score += ($media->time_score / 2);
             $media->sort_score += ($media->like_score / 3);
             $media->sort_score += ($media->visit_score / 3);

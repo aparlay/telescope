@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Commands;
 
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
 use Illuminate\Http\Response;
@@ -16,7 +17,7 @@ class VideoScoreCommand extends Command
     public function handle()
     {
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower();
-        $highestScore = Media::orderBy('sort_score', 'desc')->first()->sort_score;
+        $highestScore = Media::date(null, DT::utcDateTime(['d' => -1]))->orderBy('sort_score', 'desc')->first()->sort_score;
         foreach ($mediaQuery->get() as $media) {
             $msg = '<fg=blue;options=bold>';
             $msg .= '--------------------------------'.'</>';
