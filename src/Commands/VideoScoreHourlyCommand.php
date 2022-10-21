@@ -16,7 +16,7 @@ class VideoScoreHourlyCommand extends Command
     public function handle()
     {
         $highestScore = Media::where('sort_score', ['$exists' => true])
-            ->date(null, DT::utcDateTime(['d' => -1]))
+            ->where('created_at', ['$lt' => DT::utcDateTime(['d' => -1])])
             ->orderBy('sort_score', 'desc')
             ->first()
             ->sort_score;
