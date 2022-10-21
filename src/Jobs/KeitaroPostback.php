@@ -70,13 +70,13 @@ class KeitaroPostback implements ShouldQueue
         try {
             $url = $this->trackerUrl.$this->postbackCode.'/postback';
             $params = [
-                "subid" => $this->subId,
-                "status" => "lead",
-                "payout" => 0
+                'subid' => $this->subId,
+                'status' => 'lead',
+                'payout' => 0,
             ];
             $response = Http::timeout(240)
                 ->retry(5, 60000, function ($exception, $request) use ($url, $params) {
-                    if (!Str::startsWith($exception->response->status(), '2')) {
+                    if (! Str::startsWith($exception->response->status(), '2')) {
                         User::admin()->first()->notify(
                             new ThirdPartyLogger(
                                 '',
