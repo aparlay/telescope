@@ -11,6 +11,7 @@ use Aparlay\Core\Api\V1\Requests\ValidateOtpRequest;
 use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Api\V1\Services\OtpService;
 use Aparlay\Core\Api\V1\Services\UserService;
+use Aparlay\Core\Jobs\KeitaroPostback;
 use Aparlay\Core\Models\Login;
 use App\Exceptions\BlockedException;
 use Illuminate\Http\Response;
@@ -264,6 +265,13 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): Response
     {
         $user = User::create($request->all());
+
+        $trackerSubId = $request->cookie('__Secure_tracker_subid');
+        $trackerToken = $request->cookie('__Secure_tracker_token');
+        if ($trackerSubId && $trackerToken) {
+            KeitaroPostback::dispatch($trackerSubId, $trackerToken);
+        }
+
         $deviceId = $request->header('X-DEVICE-ID');
 
         $this->otpService->sendOtp($user, $deviceId);
