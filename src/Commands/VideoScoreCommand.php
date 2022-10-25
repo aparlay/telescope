@@ -15,7 +15,6 @@ class VideoScoreCommand extends Command
     public function handle()
     {
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower();
-        $highestScore = Media::date(null, DT::utcDateTime(['d' => -1]))->orderBy('sort_score', 'desc')->first()->sort_score;
         foreach ($mediaQuery->get() as $media) {
             $msg = '<fg=blue;options=bold>';
             $msg .= '--------------------------------'.'</>';
@@ -63,6 +62,7 @@ class VideoScoreCommand extends Command
         }
 
         $rows = [];
+        $highestScore = Media::date(null, DT::utcDateTime(['d' => -1]))->orderBy('sort_score', 'desc')->first()->sort_score;
         foreach ($mediaQuery->orderBy('sort_score', 'DESC')->get() as $media) {
             $rows[] = [
                 $media->_id,
