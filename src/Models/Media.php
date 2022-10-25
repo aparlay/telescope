@@ -639,18 +639,18 @@ class Media extends BaseModel
                 ->first()
                 ->sort_score;
             $this->sort_score = $highestScore +
-                ($this->awesomeness_score * (int)config('app.media.awesomeness_score_weight', 0.3)) +
-                ($this->beauty_score * (int)config('app.media.beauty_score_weight', 0.3)) +
+                ($this->awesomeness_score * (float)config('app.media.awesomeness_score_weight', 0.3)) +
+                ($this->beauty_score * (float)config('app.media.beauty_score_weight', 0.3)) +
                 $promote;
         } else {
-            $this->sort_score = ($this->awesomeness_score * (int)config('app.media.awesomeness_score_weight', 0.3)) +
-                ($this->beauty_score * (int)config('app.media.beauty_score_weight', 0.3)) +
+            $this->sort_score = ($this->awesomeness_score * (float)config('app.media.awesomeness_score_weight', 0.3)) +
+                ($this->beauty_score * (float)config('app.media.beauty_score_weight', 0.3)) +
                 $promote;
         }
 
-        $this->sort_score += ($this->time_score * (int)config('app.media.time_score_weight', 0.2));
-        $this->sort_score += ($this->like_score * (int)config('app.media.like_score_weight', 0.1));
-        $this->sort_score += ($this->visit_score * (int)config('app.media.visit_score_weight', 0.1));
+        $this->sort_score += ($this->time_score * (float)config('app.media.time_score_weight', 0.2));
+        $this->sort_score += ($this->like_score * (float)config('app.media.like_score_weight', 0.1));
+        $this->sort_score += ($this->visit_score * (float)config('app.media.visit_score_weight', 0.1));
 
         $this->save();
 
