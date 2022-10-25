@@ -24,7 +24,6 @@ class VideoScoreCommand extends Command
             $msg .= PHP_EOL;
             $this->line($msg);
 
-
             $media->recalculateSortScore();
 
             $msg1 = '<fg=yellow;options=bold>';
