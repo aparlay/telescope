@@ -11,7 +11,7 @@ use Aparlay\Core\Admin\Components\UtcFormatter;
 use Aparlay\Core\Admin\Components\WireDropDownList;
 use Aparlay\Core\Admin\Livewire\Components\DateRangePicker;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
-use Aparlay\Core\Admin\Livewire\Dashboard\CreditRateChanges;
+use Aparlay\Core\Admin\Livewire\Dashboard\TopCreditBalance;
 use Aparlay\Core\Admin\Livewire\Dashboard\Funnel;
 use Aparlay\Core\Admin\Livewire\Dashboard\Index;
 use Aparlay\Core\Admin\Livewire\Dashboard\Stats;
@@ -205,7 +205,7 @@ class CoreServiceProvider extends ServiceProvider
             'dashboard.stats' => Stats::class,
             'dashboard.funnel' => Funnel::class,
             'dashboard.table' => Table::class,
-            'dashboard.credit-rate-changes' => CreditRateChanges::class,
+            'dashboard.top-credit-balance' => TopCreditBalance::class,
         ];
 
         foreach ($components as $name => $class) {

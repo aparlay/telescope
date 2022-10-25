@@ -1,12 +1,12 @@
 <div class="container bg-white">
     @if($showsDateFilter)
         <div class="py-1 row">
-            <div class="col-3">
+            <div class="col-1 my-auto">
                 <button type="button" class="btn btn-sm btn-default">
                     .xls
                 </button>
             </div>
-            <div class="col-12">
+            <div class="col-11">
                 <livewire:components.date-range-picker/>
             </div>
         </div>
@@ -25,9 +25,16 @@
             </select>
         </div>
     </div>
-    <livewire:dashboard.stats/>
-    <livewire:dashboard.funnel/>
-    <livewire:dashboard.credit-rate-changes/>
-    {{--            <livewire:admin.dashboard.top-credit-balance/>--}}
+    <div>
+        <livewire:dashboard.stats/>
+    </div>
+{{--    <hr>--}}
+    {{--    <div>--}}
+    {{--        <livewire:dashboard.funnel/>--}}
+    {{--    </div>--}}
+    {{--    <hr>--}}
+    {{--    <div>--}}
+    {{--        <livewire:dashboard.top-credit-balance/>--}}
+    {{--    </div>--}}
     {{--            <livewire:admin.dashboard.table/>--}}
 </div>
