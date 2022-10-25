@@ -123,7 +123,7 @@ class MediaController extends Controller
         $media = $this->mediaService->find($media->_id);
 
         if (is_array($media->files_history) && ! empty($media->files_history)) {
-            $lastMediaFile = end($media->files_history);
+            $lastMediaFile = $media->files_history[array_key_last($media->files_history)];
             if (isset($lastMediaFile['file'])) {
                 ReprocessMedia::dispatch($media->_id, $lastMediaFile['file'])->onQueue('low');
 
