@@ -278,7 +278,7 @@ class MediaService
     public function anonymousWatched($media, int $duration = 60): void
     {
         if ($duration > 3) {
-            $multiplier = random_int(1, config('app.media.visit_multiplier', 1));
+            $multiplier = config('app.media.visit_multiplier', 1);
             $media->length_watched += ((($duration > $media->length) ? $media->length : $duration) * $multiplier);
             $media->visit_count += $multiplier;
             $media->count_fields_updated_at = array_merge(
@@ -309,7 +309,7 @@ class MediaService
         $mediaVisit->duration = $duration;
 
         if ($duration > ($media->length / 4)) {
-            $multiplier = random_int(1, config('app.media.visit_multiplier', 1));
+            $multiplier = config('app.media.visit_multiplier', 1);
             $media->length_watched += ((($duration > $media->length) ? $media->length : $duration) * $multiplier);
             $media->visit_count += $multiplier;
             $media->addToSet('visits', [
