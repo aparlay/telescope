@@ -631,21 +631,26 @@ class Media extends BaseModel
     public function recalculateSortScore(): self
     {
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
-        $promote = Cache::store('redis')->get($cacheKey, 0);
+        $promote = (int)Cache::store('redis')->get($cacheKey, 0);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
             $highestScore = self::where('sort_score', ['$exists' => true])
                 ->where('created_at', ['$lt' => DT::utcDateTime(['d' => -1])])
                 ->orderBy('sort_score', 'desc')
                 ->first()
                 ->sort_score;
-            $this->sort_score = $highestScore + $this->awesomeness_score + $this->beauty_score + $promote;
+            $this->sort_score = $highestScore +
+                ($this->awesomeness_score * (int)config('app.media.awesomeness_score_weight', 0.3)) +
+                ($this->beauty_score * (int)config('app.media.beauty_score_weight', 0.3)) +
+                $promote;
         } else {
-            $this->sort_score = $this->awesomeness_score + $this->beauty_score + $promote;
+            $this->sort_score = ($this->awesomeness_score * (int)config('app.media.awesomeness_score_weight', 0.3)) +
+                ($this->beauty_score * (int)config('app.media.beauty_score_weight', 0.3)) +
+                $promote;
         }
 
-        $this->sort_score += ($this->time_score / 1.5);
-        $this->sort_score += ($this->like_score / 3);
-        $this->sort_score += ($this->visit_score / 3);
+        $this->sort_score += ($this->time_score * (int)config('app.media.time_score_weight', 0.2));
+        $this->sort_score += ($this->like_score * (int)config('app.media.like_score_weight', 0.1));
+        $this->sort_score += ($this->visit_score * (int)config('app.media.visit_score_weight', 0.1));
 
         $this->save();
 

@@ -5,8 +5,6 @@ namespace Aparlay\Core\Commands;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
-use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
 
 class VideoScoreCommand extends Command
 {
