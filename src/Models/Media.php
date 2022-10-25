@@ -633,7 +633,7 @@ class Media extends BaseModel
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
         $promote = Cache::store('redis')->get($cacheKey, 0);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
-            $highestScore = Media::where('sort_score', ['$exists' => true])
+            $highestScore = self::where('sort_score', ['$exists' => true])
                 ->where('created_at', ['$lt' => DT::utcDateTime(['d' => -1])])
                 ->orderBy('sort_score', 'desc')
                 ->first()
