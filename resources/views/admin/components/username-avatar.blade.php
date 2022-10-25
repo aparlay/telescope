@@ -3,7 +3,7 @@
 @endphp
 
 @if ($user)
-    <div class="x-username-avatar float-left mr-2 {{$class}}">
+    <div class="x-username-avatar float-left {{$class}}" @class(['mr-2' => empty($class)])>
         <a href="{{$user->admin_url}}"
            title="{{$user->username}} [{{$user->is_online ? 'online' : 'offline'}}] [{{User::getVerificationStatuses()[$user->verification_status] ?? 'none'}}]">
             <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-circle img-size-50 mr-2">
