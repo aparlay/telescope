@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -23,6 +25,7 @@ use MathPHP\Statistics\Descriptive;
 use MathPHP\Statistics\Significance;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class Media.
@@ -52,8 +55,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property string      $cover
  * @property string      $slug
  * @property ObjectId    $created_by
- * @property UTCDateTime $created_at
- * @property UTCDateTime $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property mixed       $filename
  * @property array       $links
  * @property bool        $is_protected
@@ -71,6 +74,10 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read int $beauty_score
  * @property-read int $awesomeness_score
  * @property-read int $skin_score
+ * @property-read int $time_score
+ * @property-read int $like_score
+ * @property-read int $visit_score
+ * @property-read int $comment_score
  * @property-read int $sent_tips
  *
  *
@@ -615,5 +622,33 @@ class Media extends BaseModel
     public function getCoverUrlAttribute()
     {
         return Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg');
+    }
+
+    /**
+     * @return Media
+     * @throws InvalidArgumentException
+     */
+    public function recalculateSortScore(): self
+    {
+        $cacheKey = $this->getCollection().':promote:'.$this->_id;
+        $promote = Cache::store('redis')->get($cacheKey, 0);
+        if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
+            $highestScore = Media::where('sort_score', ['$exists' => true])
+                ->where('created_at', ['$lt' => DT::utcDateTime(['d' => -1])])
+                ->orderBy('sort_score', 'desc')
+                ->first()
+                ->sort_score;
+            $this->sort_score = $highestScore + $this->awesomeness_score + $this->beauty_score + $promote;
+        } else {
+            $this->sort_score = $this->awesomeness_score + $this->beauty_score + $promote;
+        }
+
+        $this->sort_score += ($this->time_score / 1.5);
+        $this->sort_score += ($this->like_score / 3);
+        $this->sort_score += ($this->visit_score / 3);
+
+        $this->save();
+
+        return $this;
     }
 }

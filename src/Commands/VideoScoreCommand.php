@@ -24,14 +24,8 @@ class VideoScoreCommand extends Command
             $msg .= PHP_EOL;
             $this->line($msg);
 
-            if ($media->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
-                $media->sort_score = $highestScore + $media->awesomeness_score + $media->beauty_score;
-            } else {
-                $media->sort_score = $media->awesomeness_score + $media->beauty_score;
-            }
-            $media->sort_score += ($media->time_score / 2);
-            $media->sort_score += ($media->like_score / 3);
-            $media->sort_score += ($media->visit_score / 3);
+
+            $media->recalculateSortScore();
 
             $msg1 = '<fg=yellow;options=bold>';
             $msg1 .= '  - awesomeness_score set to '.$media->awesomeness_score.'</>';
@@ -68,7 +62,7 @@ class VideoScoreCommand extends Command
             $msg6 .= PHP_EOL;
             $this->line($msg6);
 
-            $media->save();
+            $media->refresh();
         }
 
         $rows = [];
