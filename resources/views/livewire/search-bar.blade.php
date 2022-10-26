@@ -17,7 +17,7 @@
                     </a>
                 @endforeach
 
-                @if(count($results) == 0)
+                @if(count($results) == 0 && strlen($searchQuery) > 3)
                     <a href="#" class="list-group-item">
                         <div class="search-title">No results</div>
                         <div class="search-path"></div>
