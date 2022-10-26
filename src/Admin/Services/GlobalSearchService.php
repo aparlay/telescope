@@ -13,10 +13,33 @@ class GlobalSearchService
 
     private static function searchUsers(string $searchQuery)
     {
-        return User::query()
-            ->textSearch($searchQuery)
-            ->get()
-            ->map(function (User $user) {
+        if (str_starts_with('@', $searchQuery)) {
+            $users = User::query()->username($searchQuery)->get();
+        }
+
+        if (strpos('@', $searchQuery) > 0) {
+            $users = User::query()->email($searchQuery)->get();
+        }
+
+        if (!str_contains('@', $searchQuery)) {
+            $users = User::query()->textSearch($searchQuery)->get();
+        }
+
+        if(filter_var($searchQuery, FILTER_VALIDATE_IP) !== false) {
+            $users = User::query()->textSearch($searchQuery)->get();
+        }
+
+        if (!empty($users)) {
+            $result['users'] = $users->map(function (User $user) {
+                return [
+                    'category' => 'User',
+                    'link' => $user->admin_url,
+                    'title' => $user->full_name ?? $user->username,
+                ];
+            });
+        }
+
+        return $users->map(function (User $user) {
                 return [
                     'category' => 'User',
                     'link' => $user->admin_url,
