@@ -21,7 +21,15 @@ trait UserScope
     public function scopeTextSearch(Builder $query, string $text): Builder
     {
         return empty($text) ? $query :
-            $query->where('text_search', 'regex', new Regex('.*'.$text.'.*', 'i'));
+            $query->where('text_search', 'regex', new Regex($text.'.*', 'i'));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function scopeIp(Builder $query, string $ip): Builder
+    {
+        return $query->where('user_agents.ip', $ip);
     }
 
     /**
