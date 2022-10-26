@@ -13,10 +13,16 @@ final class SearchBar extends Component
 
     public function render()
     {
-        $this->results = GlobalSearchService::search($this->searchQuery);
-
-        $this->dispatchBrowserEvent('search-results-updated');
+        $this->refreshResults();
 
         return view('default_view::livewire.search-bar');
+    }
+
+    private function refreshResults()
+    {
+        if (strlen($this->searchQuery) > 3) {
+            $this->results = GlobalSearchService::search($this->searchQuery);
+            $this->dispatchBrowserEvent('search-results-updated');
+        }
     }
 }

@@ -9,7 +9,7 @@
                    wire:model.debounce.300ms="searchQuery">
         </div>
         <div class="sidebar-search-results d-none" id="searchResults">
-            <div class="list-group">
+            <div class="list-group bg-white">
                 @foreach($results as $result)
                     <a href="{{$result['link']}}" class="list-group-item">
                         <div class="search-title">{{$result['title']}}</div>
@@ -17,7 +17,7 @@
                     </a>
                 @endforeach
 
-                @if(count($results) == 0)
+                @if(count($results) == 0 && strlen($searchQuery) > 3)
                     <a href="#" class="list-group-item">
                         <div class="search-title">No results</div>
                         <div class="search-path"></div>
