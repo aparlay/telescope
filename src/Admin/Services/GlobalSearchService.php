@@ -20,7 +20,7 @@ class GlobalSearchService
                 return [
                     'category' => 'User',
                     'link' => $user->admin_url,
-                    'title' => $user->full_name
+                    'title' => $user->full_name,
                 ];
             });
     }

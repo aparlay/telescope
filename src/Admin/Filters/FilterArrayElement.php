@@ -5,13 +5,12 @@ namespace Aparlay\Core\Admin\Filters;
 final class FilterArrayElement extends AbstractBaseFilter
 {
     public function __construct(
-        protected string  $fieldName,
-        protected string  $fieldType,
-        protected string  $elementFieldName,
+        protected string $fieldName,
+        protected string $fieldType,
+        protected string $elementFieldName,
         protected ?string $internalFieldName,
-        protected bool    $partial = true
-    )
-    {
+        protected bool $partial = true
+    ) {
     }
 
     public function __invoke($query)
@@ -23,17 +22,17 @@ final class FilterArrayElement extends AbstractBaseFilter
                 if ($this->partial) {
                     return [
                         $this->elementFieldName => [
-                            '$regex' => $value
-                        ]
+                            '$regex' => $value,
+                        ],
                     ];
                 } else {
                     return [
                         $this->elementFieldName => [
-                            '$eq' => $value
-                        ]
+                            '$eq' => $value,
+                        ],
                     ];
                 }
-            }, explode(',', $this->fieldValue))
+            }, explode(',', $this->fieldValue)),
         ];
 
         $query->where($this->getInternalFieldName(), ['$elemMatch' => $matches]);
