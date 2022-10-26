@@ -201,7 +201,7 @@ class MediaService
         $query = Media::query();
         $userId = auth()->guest() ? null : auth()->user()->_id;
 
-        if ($userId) {
+        if ($userId === null) {
             return new \Illuminate\Pagination\LengthAwarePaginator([], 0, 5, 0);
         }
 
