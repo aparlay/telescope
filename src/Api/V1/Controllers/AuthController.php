@@ -270,6 +270,12 @@ class AuthController extends Controller
         $trackerToken = $request->cookie('__Secure_tracker_token');
         if ($trackerSubId && $trackerToken) {
             KeitaroPostback::dispatch($trackerSubId, $trackerToken);
+            $user->tracking = [
+                'keitaro' => [
+                    '_subid' => $trackerSubId,
+                    '_token' => $trackerToken,
+                ],
+            ];
         }
 
         $deviceId = $request->header('X-DEVICE-ID');
