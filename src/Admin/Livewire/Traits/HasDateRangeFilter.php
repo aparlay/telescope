@@ -24,8 +24,6 @@ trait HasDateRangeFilter
         if (! empty($this->dateInterval)) {
             $this->showAllDates = false;
         }
-
-        $this->emit('updateParent');
     }
 
     /**
