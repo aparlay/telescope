@@ -54,7 +54,7 @@ class UploadAvatar implements ShouldQueue
      */
     public function __construct(string $userId, string $file)
     {
-        $this->onQueue('low');
+        $this->onQueue(config('app.server_specific_queue'));
         $this->file = $file;
         $this->user_id = $userId;
         if (($this->user = User::user($userId)->first()) === null) {
