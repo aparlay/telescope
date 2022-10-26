@@ -6,11 +6,10 @@ use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
-use Aparlay\Core\Helpers\ActionButtonBladeComponent;
-use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
+use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
 
 class MediaService extends AdminBaseService
@@ -141,11 +140,13 @@ class MediaService extends AdminBaseService
             'status',
             'skin_score',
             'visibility',
+            'is_protected',
             'is_music_licensed',
         ]);
 
         $dataModified = [
             'visibility' => request()->boolean('visibility'),
+            'is_protected' => request()->boolean('is_protected'),
             'is_music_licensed' => request()->boolean('is_music_licensed'),
             'scores' => [
                 [
@@ -156,18 +157,43 @@ class MediaService extends AdminBaseService
                     'type' => 'awesomeness',
                     'score' => request()->awesomeness_score,
                 ],
+                [
+                    'type' => 'beauty',
+                    'score' => request()->beauty_score,
+                ],
             ],
         ];
 
         $data = array_merge($data, $dataModified);
 
-        return $this->mediaRepository->update($data, $id);
+        $media = $this->mediaRepository->update($data, $id);
+
+        return $this->calculateSortScore($media, 0);
     }
 
     public function reupload($media)
     {
         $this->mediaRepository->update(['file' => request()->input('file')], $media->_id);
         UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'))->onQueue('low');
+    }
+
+    /**
+     * @param Media $media
+     * @param $promote
+     *
+     * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function calculateSortScore($media, $promote)
+    {
+        $cacheKey = (new Media())->getCollection().':promote:'.$media->_id;
+        if ($promote > 0) {
+            Cache::store('redis')->set($cacheKey, $promote, 86400);
+        }
+
+        $media->recalculateSortScore();
+
+        return $media;
     }
 
     public function generateSlug($length)

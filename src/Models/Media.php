@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -23,6 +25,7 @@ use MathPHP\Statistics\Descriptive;
 use MathPHP\Statistics\Significance;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class Media.
@@ -52,8 +55,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property string      $cover
  * @property string      $slug
  * @property ObjectId    $created_by
- * @property UTCDateTime $created_at
- * @property UTCDateTime $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property mixed       $filename
  * @property array       $links
  * @property bool        $is_protected
@@ -62,12 +65,19 @@ use MongoDB\BSON\UTCDateTime;
  * @property User        $userObj
  * @property Alert[]     $alertObjs
  * @property UserNotification[]     $userNotificationObjs
+ * @property array       $files_history
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
  * @property-read string $cover_url
  * @property-read string $file_url
+ * @property-read int $beauty_score
+ * @property-read int $awesomeness_score
  * @property-read int $skin_score
+ * @property-read int $time_score
+ * @property-read int $like_score
+ * @property-read int $visit_score
+ * @property-read int $comment_score
  * @property-read int $sent_tips
  *
  *
@@ -149,12 +159,13 @@ class Media extends BaseModel
         'likes' => [],
         'visits' => [],
         'hashtags' => [],
-        'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]],
+        'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]],
         'is_protected' => false,
         'like_count' => 0,
         'visit_count' => 0,
         'comment_count' => 0,
         'tips' => 0,
+        'sort_score' => 0,
     ];
 
     /**
@@ -306,6 +317,22 @@ class Media extends BaseModel
         if (! empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ('awesomeness' === $score['type']) {
+                    return (int) $score['score'];
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get the media's skin score.
+     */
+    public function getBeautyScoreAttribute(): int
+    {
+        if (! empty($this->scores)) {
+            foreach ($this->scores as $score) {
+                if ('beauty' === $score['type']) {
                     return (int) $score['score'];
                 }
             }
@@ -595,5 +622,38 @@ class Media extends BaseModel
     public function getCoverUrlAttribute()
     {
         return Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg');
+    }
+
+    /**
+     * @return Media
+     * @throws InvalidArgumentException
+     */
+    public function recalculateSortScore(): self
+    {
+        $cacheKey = $this->getCollection().':promote:'.$this->_id;
+        $promote = (int) Cache::store('redis')->get($cacheKey, 0);
+        if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
+            $highestScore = self::where('sort_score', ['$exists' => true])
+                ->where('created_at', ['$lt' => DT::utcDateTime(['d' => -1])])
+                ->orderBy('sort_score', 'desc')
+                ->first()
+                ->sort_score;
+            $this->sort_score = $highestScore +
+                ($this->awesomeness_score * (float) config('app.media.awesomeness_score_weight', 0.3)) +
+                ($this->beauty_score * (float) config('app.media.beauty_score_weight', 0.3)) +
+                $promote;
+        } else {
+            $this->sort_score = ($this->awesomeness_score * (float) config('app.media.awesomeness_score_weight', 0.3)) +
+                ($this->beauty_score * (float) config('app.media.beauty_score_weight', 0.3)) +
+                $promote;
+        }
+
+        $this->sort_score += ($this->time_score * (float) config('app.media.time_score_weight', 0.2));
+        $this->sort_score += ($this->like_score * (float) config('app.media.like_score_weight', 0.1));
+        $this->sort_score += ($this->visit_score * (float) config('app.media.visit_score_weight', 0.1));
+
+        $this->save();
+
+        return $this;
     }
 }

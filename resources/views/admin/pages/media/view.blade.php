@@ -65,6 +65,23 @@
                                                     @endforeach
                                                 </div>
                                             </li>
+                                            <li class="list-group-item">
+                                                <b>Beauty Score</b>
+                                                <div>
+                                                    @foreach($scoreTypes as $scoreType)
+                                                        @foreach (\Aparlay\Core\Admin\Models\Media::getBeautyScores() as $score)
+                                                            @if($scoreType['type'] == 'beauty')
+                                                                <div id="beauty_score_{{$score}}" class="btn-group btn-group-toggle beauty_score_div" data-toggle="buttons" role="radiogroup">
+                                                                    <label class="btn btn-outline-secondary beauty_score_label">
+                                                                        <input type="radio" id="media_beauty_score_{{$score}}" name="beauty_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                        {{ $score }}
+                                                                    </label>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                </div>
+                                            </li>
                                         </ul>
 
                                         <div class="row">
@@ -195,7 +212,11 @@
                                         <div class="form-group row m-0">
                                             <label for="status" class="col-sm-2 col-form-label">Status</label>
                                             <div class="col-sm-10">
-                                                <p>{{ \App\Models\Media::getStatuses()[$media->status] }}</p>
+                                                <select name="verification_status" id="verification_status" class="form-control">
+                                                    @foreach(\App\Models\Media::getStatuses() as $key => $label)
+                                                        <option value="{{ $key }}" {!! $media->status == $key ? 'selected' : '' !!}>{{ $label }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
@@ -208,7 +229,16 @@
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="feature_demo" class="col-sm-2 col-form-label">Music Licensed</label>
+                                            <label for="is_protected" class="col-sm-2 col-form-label">Delete Protected</label>
+                                            <div class="col-sm-10">
+                                                <div class="custom-control custom-switch mt-2">
+                                                    <input type="checkbox" class="custom-control-input" name="is_protected" id="is_protected" {!! ($media->is_protected == true) ? 'checked' : '' !!}>
+                                                    <label class="custom-control-label" for="is_protected"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row m-0">
+                                            <label for="is_music_licensed" class="col-sm-2 col-form-label">Music Licensed</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
                                                     <input type="checkbox" class="custom-control-input" name="is_music_licensed" id="is_music_licensed" {!! ($media->is_music_licensed == true) ? 'checked' : '' !!}>

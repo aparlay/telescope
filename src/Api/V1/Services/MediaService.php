@@ -167,12 +167,12 @@ class MediaService
         }
 
         $visited = Cache::store('redis')->get($cacheKey, []);
-        $visitCounts = [];
+        $visitedVideos = [];
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
-            $visitCounts[] = new ObjectId($model->_id);
+            $visitedVideos[] = new ObjectId($model->_id);
         }
-        MediaWatched::dispatch($visitCounts, 60, $userId);
+        MediaWatched::dispatch($visitedVideos, 60, $userId);
         Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
         return $data;
@@ -187,6 +187,7 @@ class MediaService
     {
         return match ($type) {
             'following' => $this->getFollowingFeed(),
+            'new' => $this->getNewFeed(),
             default => $this->getFollowingFeed(),
         };
     }
@@ -198,22 +199,38 @@ class MediaService
     public function getFollowingFeed(): LengthAwarePaginator
     {
         $query = Media::query();
+        $userId = auth()->guest() ? null : auth()->user()->_id;
 
-        if (! auth()->guest()) {
-            $query->availableForFollower()
-                ->following(auth()->user()->_id)
-                ->notBlockedFor(auth()->user()->_id)
-                ->recentFirst();
+        if ($userId === null) {
+            return new \Illuminate\Pagination\LengthAwarePaginator([], 0, 5, 0);
         }
 
-        $data = $query->paginate(5)->withQueryString();
-        $visitCounts = [];
+        $data = $query->availableForFollower()->following(auth()->user()->_id)->recentFirst()->paginate(5)->withQueryString();
+        $visitedVideos = [];
         foreach ($data->items() as $model) {
-            $visitCounts[] = new ObjectId($model->_id);
+            $visitedVideos[] = new ObjectId($model->_id);
+        }
+
+        MediaWatched::dispatch($visitedVideos, 60, $userId);
+
+        return $data;
+    }
+
+    /**
+     * @return LengthAwarePaginator
+     * @throws Exception
+     */
+    public function getNewFeed(): LengthAwarePaginator
+    {
+        $query = Media::query();
+        $data = $query->public()->confirmed()->recentFirst()->paginate(5)->withQueryString();
+        $visitedVideos = [];
+        foreach ($data->items() as $model) {
+            $visitedVideos[] = new ObjectId($model->_id);
         }
         $userId = auth()->guest() ? null : auth()->user()->_id;
 
-        MediaWatched::dispatch($visitCounts, 60, $userId);
+        MediaWatched::dispatch($visitedVideos, 60, $userId);
 
         return $data;
     }
@@ -278,7 +295,7 @@ class MediaService
     public function anonymousWatched($media, int $duration = 60): void
     {
         if ($duration > 3) {
-            $multiplier = random_int(1, config('app.media.visit_multiplier', 7));
+            $multiplier = config('app.media.visit_multiplier', 1);
             $media->length_watched += ((($duration > $media->length) ? $media->length : $duration) * $multiplier);
             $media->visit_count += $multiplier;
             $media->count_fields_updated_at = array_merge(
@@ -309,7 +326,7 @@ class MediaService
         $mediaVisit->duration = $duration;
 
         if ($duration > ($media->length / 4)) {
-            $multiplier = random_int(1, config('app.media.visit_multiplier', 7));
+            $multiplier = config('app.media.visit_multiplier', 1);
             $media->length_watched += ((($duration > $media->length) ? $media->length : $duration) * $multiplier);
             $media->visit_count += $multiplier;
             $media->addToSet('visits', [

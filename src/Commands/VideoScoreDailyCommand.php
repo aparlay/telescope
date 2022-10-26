@@ -20,17 +20,11 @@ class VideoScoreDailyCommand extends Command
             ->availableForFollower()
             ->chunk(200, function ($models) {
                 foreach ($models as $media) {
-                    $media->sort_score = $media->awesomeness_score;
-                    $media->sort_score += ($media->time_score / 2);
-                    $media->sort_score += ($media->like_score / 3);
-                    $media->sort_score += ($media->visit_score / 3);
-
+                    $media->recalculateSortScore();
                     $msg = '<fg=yellow;options=bold>';
                     $msg .= $media->_id.' score set to '.$media->sort_score.'</>';
                     $msg .= PHP_EOL;
                     $this->line($msg);
-
-                    $media->save();
                 }
             });
 
