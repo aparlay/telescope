@@ -18,10 +18,9 @@ final class DashboardStatsService
     public function getAnalyticStats()
     {
         $value = Analytic::query()->raw(function (Collection $collection) {
-
             $aggregations = [];
 
-            if (isset($this->from) && isset($this->until)){
+            if (isset($this->from) && isset($this->until)) {
                 $aggregations[] = [
                     '$match' => [
                         'date' => [
@@ -59,7 +58,7 @@ final class DashboardStatsService
                         'user_watched' => ['$sum' => '$user.watched'],
 
                         'payment_orders' => ['$sum' => '$payment.orders'],
-                    ]
+                    ],
             ];
 
             return $collection->aggregate($aggregations);

@@ -33,7 +33,7 @@ final class Stats extends BaseDashboardComponent
     {
         $start = $end = null;
 
-        if (!empty($this->dateInterval) && !$this->showAllDates){
+        if (! empty($this->dateInterval) && ! $this->showAllDates) {
             $start = $this->startDate();
             $end = $this->endDate();
         }

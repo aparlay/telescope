@@ -19,7 +19,7 @@ final class Index extends Component
     ];
 
     protected $listeners = [
-        'dateInterval-changed' => 'dateIntervalChanged'
+        'dateInterval-changed' => 'dateIntervalChanged',
     ];
 
     public function updated($field, $value)
