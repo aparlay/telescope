@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
+use Exception;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class LoginRequest extends FormRequest
 {
@@ -28,5 +30,18 @@ class LoginRequest extends FormRequest
             'password' => 'required',
             'otp' => 'nullable',
         ];
+    }
+
+    /**
+     * This function is responsible to perform pre-validation tasks like
+     * Set username to lower case.
+     *
+     * @throws Exception
+     */
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'username' => Str::of($this->username)->trim()->lower()->toString(),
+        ]);
     }
 }

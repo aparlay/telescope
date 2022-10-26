@@ -9,6 +9,7 @@ use Aparlay\Core\Admin\Resources\MediaResource;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Jobs\ReprocessMedia;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Session;
@@ -87,7 +88,7 @@ class MediaController extends Controller
     public function view(Media $media)
     {
         $media = new MediaResource($this->mediaService->find($media->_id));
-        $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
+        $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]];
 
         $moderationQueueNotEmpty = $this->mediaService->isModerationQueueNotEmpty();
 
@@ -121,9 +122,19 @@ class MediaController extends Controller
     {
         $media = $this->mediaService->find($media->_id);
 
-        ReprocessMedia::dispatch($media->_id, $media->file)->onQueue('low');
+        if (is_array($media->files_history) && ! empty($media->files_history)) {
+            $lastMediaFile = end($media->files_history);
+            if (isset($lastMediaFile['file'])) {
+                ReprocessMedia::dispatch($media->_id, $lastMediaFile['file'])->onQueue('low');
 
-        return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with('success', 'Video is placed in queue for reprocessing.');
+                return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with(
+                    'success',
+                    'Video is placed in queue for reprocessing.'
+                );
+            }
+        }
+
+        return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with('danger', 'Original video not found.');
     }
 
     public function pending($page = 1)
@@ -180,5 +191,12 @@ class MediaController extends Controller
         $this->mediaService->reupload($media);
 
         return redirect()->back()->with(['success' => 'Video uploaded successfully']);
+    }
+
+    public function recalculateSortScore(Media $media, Request $request)
+    {
+        $this->mediaService->calculateSortScore($media, $request->integer('promote', 0));
+
+        return redirect()->back()->with(['success' => 'Video sort score updated successfully']);
     }
 }

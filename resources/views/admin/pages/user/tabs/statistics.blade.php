@@ -7,7 +7,7 @@
                         <span class="mb-0 text-danger d-block">
                             <i class="fas fa-chevron-down"></i>
                             <span class="h2 font-weight-bold">
-                                {{ money((int)$user->stats['amounts']['spent']['tips'], 'USD') }}
+                                {{ money((int)($user->stats['amounts']['spent']['tips'] ?? 0), 'USD') }}
                             </span>
                         </span>
                         <h5 class="card-title text-uppercase text-muted mb-0 d-block">Sent Tips</h5>
@@ -24,7 +24,7 @@
                         <span class="mb-0 text-success d-block">
                             <i class="fas fa-chevron-up"></i>
                             <span class="h2 font-weight-bold">
-                                {{ money((int)$user->stats['amounts']['earned']['commissions']['tips'], 'USD') }}
+                                {{ money((int)($user->stats['amounts']['earned']['commissions']['tips'] ?? 0), 'USD') }}
                             </span>
                         </span>
                         <h5 class="card-title text-uppercase text-muted mb-0 d-block">Rec. Tips</h5>
@@ -41,7 +41,7 @@
                         <span class="mb-0 text-danger d-block">
                             <i class="fas fa-chevron-down"></i>
                             <span class="h2 font-weight-bold">
-                                {{ money((int)$user->stats['amounts']['spent']['subscriptions'], 'USD') }}
+                                {{ money((int)($user->stats['amounts']['spent']['subscriptions'] ?? 0), 'USD') }}
                             </span>
                         </span>
                         <h5 class="card-title text-uppercase text-muted mb-0 d-block">Subscriptions</h5>
@@ -58,7 +58,7 @@
                         <span class="mb-0 text-success d-block">
                             <i class="fas fa-chevron-up"></i>
                             <span class="h2 font-weight-bold">
-                                {{ money((int)$user->stats['amounts']['earned']['commissions']['subscriptions'], 'USD') }}
+                                {{ money((int)($user->stats['amounts']['earned']['commissions']['subscriptions'] ?? 0), 'USD') }}
                             </span>
                         </span>
                         <h5 class="card-title text-uppercase text-muted mb-0 d-block">Subscribers</h5>
@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class="col">
                         <span class="d-block text-primary h2 font-weight-bold">
-                            {{ money((int)$user->stats['amounts']['earned']['referral']['subscriptions'], 'USD') }}
+                            {{ money((int)($user->stats['amounts']['earned']['referral']['subscriptions'] ?? 0), 'USD') }}
                         </span>
                         <h5 class="card-title text-uppercase text-muted d-block">Ref. Earning</h5>
                     </div>
@@ -87,7 +87,7 @@
                 <div class="row">
                     <div class="col">
                         <span class="d-block text-primary h2 font-weight-bold">
-                            {{ money((int)$user->stats['amounts']['earned']['referral']['subscriptions'], 'USD') }}
+                            {{ money((int)($user->stats['amounts']['earned']['referral']['subscriptions'] ?? 0), 'USD') }}
                         </span>
                         <h5 class="card-title text-uppercase text-muted d-block">Ref. Commission</h5>
                     </div>
@@ -101,7 +101,7 @@
                 <div class="row">
                     <div class="col">
                         <span class="d-block text-primary h2 font-weight-bold">
-                            {{ money((int)$user->stats['amounts']['earned']['referral']['subscriptions'], 'USD') }}
+                            {{ money((int)($user->stats['amounts']['earned']['referral']['subscriptions'] ?? 0), 'USD') }}
                         </span>
                         <h5 class="card-title text-uppercase text-muted d-block">Downline Users</h5>
                     </div>
@@ -115,7 +115,7 @@
                 <div class="row">
                     <div class="col">
                         <span class="d-block text-primary h2 font-weight-bold">
-                            {{ money((int)$user->stats['amounts']['earned']['referral']['subscriptions'], 'USD') }}
+                            {{ money((int)($user->stats['amounts']['earned']['referral']['subscriptions'] ?? 0), 'USD') }}
                         </span>
                         <h5 class="card-title text-uppercase text-muted d-block">Payouts</h5>
                     </div>

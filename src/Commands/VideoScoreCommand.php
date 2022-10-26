@@ -2,9 +2,11 @@
 
 namespace Aparlay\Core\Commands;
 
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 
 class VideoScoreCommand extends Command
 {
@@ -15,20 +17,29 @@ class VideoScoreCommand extends Command
     public function handle()
     {
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower();
-
+        $highestScore = Media::date(null, DT::utcDateTime(['d' => -1]))->orderBy('sort_score', 'desc')->first()->sort_score;
         foreach ($mediaQuery->get() as $media) {
             $msg = '<fg=blue;options=bold>';
             $msg .= '--------------------------------'.'</>';
             $msg .= PHP_EOL;
             $this->line($msg);
 
-            $media->sort_score = $media->awesomeness_score;
+            if ($media->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
+                $media->sort_score = $highestScore + $media->awesomeness_score + $media->beauty_score;
+            } else {
+                $media->sort_score = $media->awesomeness_score + $media->beauty_score;
+            }
             $media->sort_score += ($media->time_score / 2);
             $media->sort_score += ($media->like_score / 3);
             $media->sort_score += ($media->visit_score / 3);
 
             $msg1 = '<fg=yellow;options=bold>';
             $msg1 .= '  - awesomeness_score set to '.$media->awesomeness_score.'</>';
+            $msg1 .= PHP_EOL;
+            $this->line($msg1);
+
+            $msg1 = '<fg=yellow;options=bold>';
+            $msg1 .= '  - beauty_score set to '.$media->beauty_score.'</>';
             $msg1 .= PHP_EOL;
             $this->line($msg1);
 
@@ -65,7 +76,9 @@ class VideoScoreCommand extends Command
             $rows[] = [
                 $media->_id,
                 $media->sort_score,
+                $highestScore,
                 $media->awesomeness_score,
+                $media->beauty_score,
                 $media->time_score,
                 $media->like_score,
                 $media->visit_score,
@@ -74,7 +87,7 @@ class VideoScoreCommand extends Command
             $media->save();
         }
 
-        $headers = ['id', 'total', 'awesomeness', 'time', 'like', 'watch', 'link'];
+        $headers = ['id', 'total', 'highest', 'awesomeness', 'beauty', 'time', 'like', 'watch', 'link'];
         $this->table($headers, $rows);
 
         return self::SUCCESS;

@@ -62,11 +62,14 @@ use MongoDB\BSON\UTCDateTime;
  * @property User        $userObj
  * @property Alert[]     $alertObjs
  * @property UserNotification[]     $userNotificationObjs
+ * @property array       $files_history
  *
  * @property-read string $slack_subject_admin_url
  * @property-read string $slack_admin_url
  * @property-read string $cover_url
  * @property-read string $file_url
+ * @property-read int $beauty_score
+ * @property-read int $awesomeness_score
  * @property-read int $skin_score
  * @property-read int $sent_tips
  *
@@ -149,12 +152,13 @@ class Media extends BaseModel
         'likes' => [],
         'visits' => [],
         'hashtags' => [],
-        'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]],
+        'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]],
         'is_protected' => false,
         'like_count' => 0,
         'visit_count' => 0,
         'comment_count' => 0,
         'tips' => 0,
+        'sort_score' => 0,
     ];
 
     /**
@@ -306,6 +310,22 @@ class Media extends BaseModel
         if (! empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ('awesomeness' === $score['type']) {
+                    return (int) $score['score'];
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get the media's skin score.
+     */
+    public function getBeautyScoreAttribute(): int
+    {
+        if (! empty($this->scores)) {
+            foreach ($this->scores as $score) {
+                if ('beauty' === $score['type']) {
                     return (int) $score['score'];
                 }
             }

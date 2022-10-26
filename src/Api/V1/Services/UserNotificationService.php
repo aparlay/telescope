@@ -77,8 +77,8 @@ class UserNotificationService
                 };
             } else {
                 $message = match (true) {
-                    ($media->comment_count > 2 && isset($media->likes[0]['username'], $media->likes[1]['username'])) => __(':username1, :username2 and :count others commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comment_count - 2]),
-                    ($media->comment_count === 2 && isset($media->likes[0]['username'], $media->likes[1]['username'])) => __(':username1 and :username2 commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username']]),
+                    ($media->comment_count > 2 && isset($media->comments[0]['username'], $media->comments[1]['username'])) => __(':username1, :username2 and :count others commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comment_count - 2]),
+                    ($media->comment_count === 2 && isset($media->comments[0]['username'], $media->comments[1]['username'])) => __(':username1 and :username2 commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username']]),
                     default => __(':username liked your video.', ['username' => $media->comments[0]['username']])
                 };
             }

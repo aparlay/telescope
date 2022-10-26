@@ -11,6 +11,7 @@ use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
+use Illuminate\Support\Carbon;
 use MongoDB\BSON\ObjectId;
 
 class MediaService extends AdminBaseService
@@ -141,11 +142,13 @@ class MediaService extends AdminBaseService
             'status',
             'skin_score',
             'visibility',
+            'is_protected',
             'is_music_licensed',
         ]);
 
         $dataModified = [
             'visibility' => request()->boolean('visibility'),
+            'is_protected' => request()->boolean('is_protected'),
             'is_music_licensed' => request()->boolean('is_music_licensed'),
             'scores' => [
                 [
@@ -156,18 +159,42 @@ class MediaService extends AdminBaseService
                     'type' => 'awesomeness',
                     'score' => request()->awesomeness_score,
                 ],
+                [
+                    'type' => 'beauty',
+                    'score' => request()->beauty_score,
+                ],
             ],
         ];
 
         $data = array_merge($data, $dataModified);
 
-        return $this->mediaRepository->update($data, $id);
+        $media = $this->mediaRepository->update($data, $id);
+
+        return $this->calculateSortScore($media, 0);
     }
 
     public function reupload($media)
     {
         $this->mediaRepository->update(['file' => request()->input('file')], $media->_id);
         UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'))->onQueue('low');
+    }
+
+    public function calculateSortScore($media, $promote)
+    {
+        if ($media->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
+            $highestScore = Media::date(null, DT::utcDateTime(['d' => -1]))->orderBy('sort_score', 'desc')->first()->sort_score;
+            $media->sort_score = $highestScore + $media->awesomeness_score + $media->beauty_score + $promote;
+        } else {
+            $media->sort_score = $media->awesomeness_score + $media->beauty_score + $promote;
+        }
+
+        $media->sort_score += ($media->time_score / 2);
+        $media->sort_score += ($media->like_score / 3);
+        $media->sort_score += ($media->visit_score / 3);
+
+        $media->save();
+
+        return $media;
     }
 
     public function generateSlug($length)

@@ -189,6 +189,11 @@ class MediaRepository
         return $this->model->getAwesomenessScores();
     }
 
+    public function beautyScore()
+    {
+        return $this->model->getBeautyScores();
+    }
+
     public function pending($page)
     {
         return $this->model->completed()->recentFirst()->paginate(1, ['*'], 'page', $page);
