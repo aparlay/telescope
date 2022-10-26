@@ -266,7 +266,7 @@ class AuthController extends Controller
                 'keitaro' => [
                     '_subid' => $trackerSubId,
                     '_token' => $trackerToken,
-                ]
+                ],
             ];
         }
 
