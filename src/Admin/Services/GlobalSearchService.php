@@ -13,7 +13,6 @@ class GlobalSearchService
 
     private static function searchUsers(string $searchQuery)
     {
-
         return User::query()
             ->textSearch($searchQuery)
             ->get()
