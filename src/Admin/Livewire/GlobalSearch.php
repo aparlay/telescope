@@ -5,7 +5,7 @@ namespace Aparlay\Core\Admin\Livewire;
 use Aparlay\Core\Admin\Services\GlobalSearchService;
 use Livewire\Component;
 
-final class SearchBar extends Component
+final class GlobalSearch extends Component
 {
     public string $searchQuery = '';
 
@@ -15,7 +15,7 @@ final class SearchBar extends Component
     {
         $this->refreshResults();
 
-        return view('default_view::livewire.search-bar');
+        return view('default_view::livewire.global-search');
     }
 
     private function refreshResults()

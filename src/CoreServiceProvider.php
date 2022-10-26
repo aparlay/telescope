@@ -17,13 +17,13 @@ use Aparlay\Core\Admin\Livewire\Dashboard\Stats;
 use Aparlay\Core\Admin\Livewire\Dashboard\Table;
 use Aparlay\Core\Admin\Livewire\Dashboard\TopCreditBalance;
 use Aparlay\Core\Admin\Livewire\EmailsTable;
+use Aparlay\Core\Admin\Livewire\GlobalSearch;
 use Aparlay\Core\Admin\Livewire\MediasModerationTable;
 use Aparlay\Core\Admin\Livewire\MediasTable;
 use Aparlay\Core\Admin\Livewire\Modals\UserNoteCreateModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserNoteDeleteModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\NotesTable;
-use Aparlay\Core\Admin\Livewire\SearchBar;
 use Aparlay\Core\Admin\Livewire\SettingsTable;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
@@ -202,7 +202,7 @@ class CoreServiceProvider extends ServiceProvider
             'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,
             'modals.user-notes-create-modal' => UserNoteCreateModal::class,
             'components.date-range-picker' => DateRangePicker::class,
-            'search-bar' => SearchBar::class,
+            'global-search' => GlobalSearch::class,
             'dashboard' => Index::class,
             'dashboard.stats' => Stats::class,
             'dashboard.funnel' => Funnel::class,

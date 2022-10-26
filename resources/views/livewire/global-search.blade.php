@@ -1,10 +1,10 @@
 <li class="nav-item form-inline">
-    <label for="searchBar"><i class="fa fa-search"></i></label>
+    <label for="globalSearch"><i class="fa fa-search"></i></label>
 
     <div class="form-inline sidebar-search-open">
 
         <div class="input-group">
-            <input class="form-control form-control-sidebar mx-2" id="searchBar" type="search"
+            <input class="form-control form-control-sidebar mx-2" id="globalSearch" type="search"
                    placeholder="Search anything"
                    wire:model.debounce.300ms="searchQuery">
         </div>
@@ -35,7 +35,7 @@
             });
 
             $(window).click((e) => {
-                if (e.target.id !== 'searchBar') {
+                if (e.target.id !== 'globalSearch') {
                     results.addClass('d-none');
                 } else {
                     results.removeClass('d-none');
