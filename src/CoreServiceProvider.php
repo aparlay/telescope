@@ -18,6 +18,7 @@ use Aparlay\Core\Admin\Livewire\Modals\UserNoteCreateModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserNoteDeleteModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\NotesTable;
+use Aparlay\Core\Admin\Livewire\SearchBar;
 use Aparlay\Core\Admin\Livewire\SettingsTable;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
@@ -197,6 +198,7 @@ class CoreServiceProvider extends ServiceProvider
             'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,
             'modals.user-notes-create-modal' => UserNoteCreateModal::class,
             'components.date-range-picker' => DateRangePicker::class,
+            'search-bar' => SearchBar::class,
         ];
 
         foreach ($components as $name => $class) {
