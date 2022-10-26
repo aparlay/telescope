@@ -9,7 +9,7 @@
                    wire:model.debounce.300ms="searchQuery">
         </div>
         <div class="sidebar-search-results d-none" id="searchResults">
-            <div class="list-group">
+            <div class="list-group bg-white">
                 @foreach($results as $result)
                     <a href="{{$result['link']}}" class="list-group-item">
                         <div class="search-title">{{$result['title']}}</div>
