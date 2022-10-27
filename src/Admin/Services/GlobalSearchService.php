@@ -42,12 +42,7 @@ class GlobalSearchService
 
         $result = [];
 
-        $result[] = $users->map(function (User $user) {
-            return [
-                'category' => 'User',
-                'model' => $user,
-            ];
-        });
+        $result['User'] = $users;
         $result[] = $orders->map(function (Order $order) {
             return [
                 'category' => 'Order',
