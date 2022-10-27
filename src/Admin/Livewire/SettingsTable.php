@@ -34,6 +34,11 @@ class SettingsTable extends BaseIndexComponent
         ];
     }
 
+    public function getDefaultSort(): array
+    {
+        return ['created_at', 'DESC'];
+    }
+
     public function getAllowedSorts()
     {
         return [

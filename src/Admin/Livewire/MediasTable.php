@@ -50,6 +50,11 @@ class MediasTable extends BaseIndexComponent
         return $query;
     }
 
+    public function getDefaultSort(): array
+    {
+        return ['created_at', 'DESC'];
+    }
+
     public function getAllowedSorts()
     {
         return [
