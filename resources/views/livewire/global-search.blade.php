@@ -10,9 +10,15 @@
         </div>
         <div class="sidebar-search-results d-none" id="searchResults">
             <div class="list-group" style="background: white">
-                @foreach($results as $category => $model)
+                @foreach($results as $category => $models)
                     @if($category == 'User')
-                        <x-username-avatar :user="$model"/>
+                        @foreach($models as $model)
+                            <a href="{{$model->admin_url}}" class="list-group-item">
+                                <div class="search-title">{{$models->username}}</div>
+                                <div class="search-path"></div>
+
+                            </a>
+                        @endforeach
                     @endif
                 @endforeach
 
