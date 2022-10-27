@@ -12,7 +12,7 @@
             <div class="list-group" style="background: white">
                 @foreach($results as $category => $model)
                     @if($category == 'User')
-                        <x-username-avatar :user="$user"/>
+                        <x-username-avatar :user="$model"/>
                     @endif
                 @endforeach
 
