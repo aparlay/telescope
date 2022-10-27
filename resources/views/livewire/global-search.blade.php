@@ -10,11 +10,10 @@
         </div>
         <div class="sidebar-search-results d-none" id="searchResults">
             <div class="list-group" style="background: white">
-                @foreach($results as $result)
-                    <a href="{{$result['link']}}" class="list-group-item">
-                        <div class="search-title">{{$result['title']}}</div>
-                        <div class="search-path"> {{$result['category']}} </div>
-                    </a>
+                @foreach($results as $category => $model)
+                    @if($category == 'User')
+                        <x-username-avatar :user="$user"/>
+                    @endif
                 @endforeach
 
                 @if(count($results) == 0 && strlen($searchQuery) > 3)

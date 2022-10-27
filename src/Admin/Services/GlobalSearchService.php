@@ -42,30 +42,10 @@ class GlobalSearchService
 
         $result = [];
 
-        $result[] = $users->map(function (User $user) {
-            return [
-                'category' => 'User',
-                'model' => $user,
-            ];
-        });
-        $result[] = $orders->map(function (Order $order) {
-            return [
-                'category' => 'Order',
-                'model' => $order,
-            ];
-        });
-        $result[] = $payouts->map(function (UserPayout $userPayout) {
-            return [
-                'category' => 'Payout',
-                'model' => $userPayout,
-            ];
-        });
-        $result[] = $chats->map(function (Chat $chat) {
-            return [
-                'category' => 'Chat',
-                'model' => $chat,
-            ];
-        });
+        $result['User'] = $users;
+        $result['Order'] = $orders;
+        $result['Payout'] = $payouts;
+        $result['Chat'] = $chats;
 
         return $result;
     }
