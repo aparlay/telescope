@@ -60,6 +60,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $scores
  * @property float       $sort_score
  * @property User        $userObj
+ * @property User        $creatorObj
  * @property Alert[]     $alertObjs
  * @property UserNotification[]     $userNotificationObjs
  * @property array       $files_history
@@ -596,5 +597,44 @@ class Media extends BaseModel
     public function getCoverUrlAttribute()
     {
         return Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg');
+    }
+
+    public function updateLikes()
+    {
+        $likeCount = MediaLike::query()->media($this->_id)->count();
+        $this->like_count = $likeCount;
+        $this->likes = MediaLike::query()->media($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaLike $like) {
+            return [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ];
+        });
+        $this->count_fields_updated_at = array_merge(
+            $this->count_fields_updated_at,
+            ['likes' => DT::utcNow()]
+        );
+        $this->save();
+
+        $this->refresh();
+    }
+
+    public function updateComments()
+    {
+        $commentCount = MediaComment::query()->media($this->_id)->count();
+        $this->comment_count = $commentCount;
+        $this->comments = MediaComment::query()->media($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaComment $comment) {
+            return [
+                '_id' => new ObjectId($comment->creator['_id']),
+                'username' => $comment->creator['username'],
+                'avatar' => $comment->creator['avatar'],
+            ];
+        });
+        $this->count_fields_updated_at = array_merge(
+            $this->count_fields_updated_at,
+            ['comments' => DT::utcNow()]
+        );
+
+        $this->refresh();
     }
 }

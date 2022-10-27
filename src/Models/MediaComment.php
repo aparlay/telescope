@@ -14,22 +14,22 @@ use MongoDB\BSON\ObjectId;
 /**
  * Class MediaComment.
  *
- * @property ObjectId   $_id
- * @property ObjectId   $media_id
- * @property ObjectId   $tip_id
- * @property ObjectId   $user_id
- * @property array      $creator
- * @property string      $text
- * @property string     $created_at
- * @property User       $creatorObj
- * @property mixed|null $creator_id
- * @property Media      $mediaObj
- * @property bool $is_first
- * @property array|null $first_reply
+ * @property ObjectId     $_id
+ * @property ObjectId     $media_id
+ * @property ObjectId     $tip_id
+ * @property ObjectId     $user_id
+ * @property array        $creator
+ * @property string       $text
+ * @property string       $created_at
+ * @property User         $creatorObj
+ * @property mixed|null   $creator_id
+ * @property Media        $mediaObj
+ * @property bool         $is_first
+ * @property array|null   $first_reply
  * @property MediaComment $parentObj
  *
- * @property-read string $slack_admin_url
- * @property-read string $admin_url
+ * @property-read string  $slack_admin_url
+ * @property-read string  $admin_url
  */
 class MediaComment extends BaseModel
 {
@@ -104,6 +104,7 @@ class MediaComment extends BaseModel
 
     /**
      * @param $query
+     *
      * @return MediaCommentQueryBuilder
      */
     public function newEloquentBuilder($query): MediaCommentQueryBuilder
@@ -119,7 +120,7 @@ class MediaComment extends BaseModel
     /**
      * Get the user associated with the alert.
      */
-    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -127,7 +128,7 @@ class MediaComment extends BaseModel
     /**
      * Get the user associated with the alert.
      */
-    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(User::class, 'creator._id');
     }
@@ -135,7 +136,7 @@ class MediaComment extends BaseModel
     /**
      * Get the media associated with the alert.
      */
-    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
     }
