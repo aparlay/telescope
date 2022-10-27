@@ -12,10 +12,10 @@ class GlobalSearchService
     public static function search(string $searchQuery): array
     {
         $orders = $payouts = $chats = [];
-        $users = User::textSearch($searchQuery)->limit(5)->get();
+        $users = User::query()->textSearch($searchQuery)->limit(5)->get();
 
         if (filter_var($searchQuery, FILTER_VALIDATE_IP) !== false) {
-            $users = User::ip($searchQuery)->limit(5)->get()->merge(
+            $users = User::query()->ip($searchQuery)->limit(5)->get()->merge(
                 $users
             );
         }
@@ -30,7 +30,7 @@ class GlobalSearchService
             $chats = Chat::query()->participants($searchQuery)->limit(5)->get()->merge(
                 Chat::query()->chat($searchQuery)->get()
             );
-            $users = User::user($searchQuery)->limit(5)->get()->merge(
+            $users = User::query()->user($searchQuery)->limit(5)->get()->merge(
                 $users
             );
         }

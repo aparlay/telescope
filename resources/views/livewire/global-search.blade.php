@@ -13,11 +13,7 @@
                 @foreach($results as $category => $models)
                     @if($category == 'User')
                         @foreach($models as $model)
-                            <a href="{{$model->admin_url}}" class="list-group-item">
-                                <div class="search-title">{{$models->username}}</div>
-                                <div class="search-path"></div>
-
-                            </a>
+                            <x-username-avatar :user="$model"/>
                         @endforeach
                     @endif
                 @endforeach
