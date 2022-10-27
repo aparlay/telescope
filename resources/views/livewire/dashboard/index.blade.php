@@ -12,7 +12,7 @@
         </div>
         <hr>
     @endif
-    <div class="py-1 row">
+    <div class="py-1 row d-none">
         <div class="px-4 col-md-3">
             <select name="layout"
                     class="form-select"
