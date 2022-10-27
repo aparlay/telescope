@@ -9,12 +9,7 @@ use Aparlay\Payout\Models\UserPayout;
 
 class GlobalSearchService
 {
-    public static function search(string $query): array
-    {
-        return self::searchUsers($query)->take(10)->toArray();
-    }
-
-    private static function searchUsers(string $searchQuery)
+    public static function search(string $searchQuery): array
     {
         $orders = $payouts = $chats = [];
         $users = User::query()->textSearch($searchQuery)->limit(5)->get();
