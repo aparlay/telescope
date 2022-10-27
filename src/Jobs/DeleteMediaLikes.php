@@ -63,20 +63,7 @@ class DeleteMediaLikes implements ShouldQueue
     {
         MediaLike::query()->media($this->mediaId)->delete();
         if (($media = Media::find(new ObjectId($this->mediaId))) !== null) {
-            $user = $media->userObj;
-
-            $likeCount = MediaLike::query()->user($media->creator['_id'])->count();
-            $user->like_count = $likeCount;
-            $user->removeFromSet('likes', [
-                '_id' => new ObjectId($media->creator['_id']),
-                'username' => $media->creator['username'],
-                'avatar' => $media->creator['avatar'],
-            ]);
-            $user->count_fields_updated_at = array_merge(
-                $user->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
-            );
-            $user->save();
+            $media->creatorObj->updateLikes();
 
             // Reset the Redis cache
             MediaLike::cacheByUserId((string) $media->creator['_id'], true);

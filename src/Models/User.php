@@ -980,4 +980,28 @@ class User extends \App\Models\User
             'notifications' => 0,
         ];
     }
+
+    public function updateLikes()
+    {
+        $likeCount = MediaLike::query()->user($this->_id)->count();
+        $this->like_count = $likeCount;
+        $this->likes = MediaLike::query()->user($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaLike $like) {
+            return [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ];
+        });
+        $this->count_fields_updated_at = array_merge(
+            $this->count_fields_updated_at,
+            ['likes' => DT::utcNow()]
+        );
+
+        $stats = $this->stats;
+        $stats['counters']['likes'] = $likeCount;
+        $this->stats = $stats;
+        $this->save();
+
+        $this->refresh();
+    }
 }
