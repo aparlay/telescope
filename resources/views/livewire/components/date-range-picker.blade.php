@@ -42,7 +42,7 @@
         </button>
     </div>
     <span class="col-12 col-md-5">
-        <input type="text" class="form-control form-control-sm border-secondary text-center col-12" id="date-range"/>
+        <input type="text" class="form-control w-100 form-control-sm border-secondary text-center col-12" id="date-range"/>
     </span>
     @push('css')
         <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.css') }}">
