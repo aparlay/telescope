@@ -8,15 +8,15 @@
                    placeholder="Search anything"
                    wire:model.debounce.300ms="searchQuery">
         </div>
-        <div class="sidebar-search-results d-none" id="searchResults">
-            <div class="list-group bg-white">
+        <div class="sidebar-search-results global-search d-none" id="searchResults">
+            <div class="list-group bg-white border-left border-right border-bottom">
                 @foreach($results as $category => $models)
                     @if($category == 'User')
                         <div class="float-left p-1 pl-2 text-bold text-gray-800">
                             {{$category}}
                         </div>
                         @foreach($models as $model)
-                            <x-username-avatar :user="$model" :class="'pl-3 py-1'"/>
+                            <x-username-avatar :user="$model" :class="'pl-3 py-1 result-item'"/>
                         @endforeach
                     @endif
                 @endforeach
