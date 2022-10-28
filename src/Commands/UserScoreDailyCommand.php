@@ -22,7 +22,7 @@ class UserScoreDailyCommand extends Command
             ->each(function ($media) {
                 $user = $media->creatorObj;
                 $count = Media::creator($user->_id)->count();
-                $score = Media::creator($user->_id)->sum('sort_score');
+                $score = Media::creator($user->_id)->sum('sort_scores.default');
 
                 $scores = $user->scores;
                 $scores['sort'] = $score / $count;

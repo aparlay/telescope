@@ -88,7 +88,7 @@ trait UserScope
     public function scopePendingSince(Builder $query, UTCDateTime $since): Builder
     {
         return $query->where('status', UserStatus::PENDING->value)
-            ->where('hide_moderation_till', '$gte', $since);
+            ->where('hide_moderation_till', '>=', $since);
     }
 
     public function scopeEnable(Builder $query): Builder

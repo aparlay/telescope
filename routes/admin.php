@@ -50,6 +50,10 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:list medias-moderation'])
                 ->name('moderation');
 
+            Route::get('media/algorithms', [MediaController::class, 'algorithms'])
+                ->middleware(['permission:list medias-algorithms'])
+                ->name('algorithms');
+
             Route::get('media/moderation-queue', [MediaController::class, 'moderationQueue'])
                 ->middleware(['permission:queue medias-moderation'])
                 ->name('moderation-queue');

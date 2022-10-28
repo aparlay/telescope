@@ -182,8 +182,6 @@ class MediaController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with('danger', 'Video file download failed.');
         }
-
-        return redirect()->route('core.admin.media.view', ['media' => $media->_id]);
     }
 
     public function reupload(Media $media, MediaUploadRequest $request)
@@ -196,6 +194,13 @@ class MediaController extends Controller
     public function recalculateSortScore(Media $media, Request $request)
     {
         $this->mediaService->calculateSortScore($media, $request->integer('promote', 0));
+
+        return redirect()->back()->with(['success' => 'Video sort score updated successfully']);
+    }
+
+    public function algorithms(Request $request)
+    {
+        //$this->mediaService->storeAlgorithmSettings($media, $request->integer('promote', 0));
 
         return redirect()->back()->with(['success' => 'Video sort score updated successfully']);
     }

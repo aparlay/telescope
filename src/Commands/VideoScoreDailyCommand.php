@@ -21,10 +21,6 @@ class VideoScoreDailyCommand extends Command
             ->chunk(200, function ($models) {
                 foreach ($models as $media) {
                     $media->recalculateSortScore();
-                    $msg = '<fg=yellow;options=bold>';
-                    $msg .= $media->_id.' score set to '.$media->sort_score.'</>';
-                    $msg .= PHP_EOL;
-                    $this->line($msg);
                 }
             });
 
