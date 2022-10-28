@@ -28,7 +28,7 @@ final class Stats extends BaseDashboardComponent
     {
         $start = $end = null;
 
-        if (!empty($this->dateInterval) && !$this->showAllDates) {
+        if (! empty($this->dateInterval) && ! $this->showAllDates) {
             $start = $this->startDate();
             $end = $this->endDate();
         }
@@ -42,36 +42,36 @@ final class Stats extends BaseDashboardComponent
     {
         return [
             [
-                'label' => 'Daily Active Users'
+                'label' => 'Daily Active Users',
             ],
             [
-                'label' => 'Monthly Active Users'
+                'label' => 'Monthly Active Users',
             ],
             [
-                'label' => 'Unique Visitors'
+                'label' => 'Unique Visitors',
             ],
             [
-                'label' => 'Registrations'
+                'label' => 'Registrations',
             ],
             [
                 'label' => 'Verifications',
-                'value' => Arr::get($results, 'user_verified')
+                'value' => Arr::get($results, 'user_verified'),
             ],
             [
                 'label' => 'New Registered',
-                'value' => Arr::get($results, 'user_registered')
+                'value' => Arr::get($results, 'user_registered'),
             ],
             [
                 'label' => 'Subscriptions',
-                'value' => Arr::get($results, 'payment_subscriptions')
+                'value' => Arr::get($results, 'payment_subscriptions'),
             ],
             [
                 'label' => 'Renewals',
-                'value' => Arr::get($results, 'payment_orders')
+                'value' => Arr::get($results, 'payment_orders'),
             ],
             [
                 'label' => 'Tips',
-                'value' => Arr::get($results, 'payment_tips')
+                'value' => Arr::get($results, 'payment_tips'),
             ],
             [
                 'label' => 'Total Billed (subs/rebill/tips)',
@@ -79,31 +79,30 @@ final class Stats extends BaseDashboardComponent
                     Arr::get($results, 'payment_subscriptions_amount', 0) +
                     Arr::get($results, 'payment_orders_amount', 0) +
                     Arr::get($results, 'payment_tips_amount', 0)
-                )
+                ),
             ],
             [
                 'label' => 'Videos Uploaded',
-                'value' => Arr::get($results, 'media_uploaded_videos')
+                'value' => Arr::get($results, 'media_uploaded_videos'),
             ],
             [
                 'label' => 'Likes',
-                'value' => Arr::get($results, 'media_likes')
+                'value' => Arr::get($results, 'media_likes'),
             ],
             [
                 'label' => 'Comments',
-                'value' => Arr::get($results, 'media_comments')
+                'value' => Arr::get($results, 'media_comments'),
             ],
             [
                 'label' => 'Emails Sent',
-                'value' => Arr::get($results, 'email_sent')
+                'value' => Arr::get($results, 'email_sent'),
             ],
             [
-                'label' => 'Email Bounced'
+                'label' => 'Email Bounced',
             ],
             [
-                'label' => 'Email Bounced Ratio'
+                'label' => 'Email Bounced Ratio',
             ],
         ];
-
     }
 }
