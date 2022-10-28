@@ -1,10 +1,10 @@
-<div class="nav-item form-inline d-md-flex" style="display: contents">
-    <label for="globalSearch" class="m-auto"><i class="fa fa-search"></i></label>
+<div class="nav-item form-inline flex-fill mx-2">
+    <label for="globalSearch"></label>
 
-    <div class="form-inline sidebar-search-open">
+    <div class="form-inline sidebar-search-open flex-fill">
 
-        <div class="input-group">
-            <input class="form-control form-control-sidebar mx-2" id="globalSearch" type="search"
+        <div class="input-group flex-fill">
+            <input class="form-control form-control-sidebar flex-fill" id="globalSearch" type="search"
                    placeholder="Search anything"
                    wire:model.debounce.300ms="searchQuery">
         </div>
