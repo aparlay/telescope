@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
+use Illuminate\Support\Str;
+
 class ContactUsRequest extends BaseFormRequest
 {
     /**
@@ -31,5 +33,14 @@ class ContactUsRequest extends BaseFormRequest
         return [
             'g-recaptcha-response.recaptcha' => 'reCaptcha validation failed',
         ];
+    }
+
+    /**
+     * This function is responsible to perform pre-validation.
+     */
+    public function prepareForValidation()
+    {
+        /* Convert uppercase email charecter into lowercase */
+        $this->email = Str::of($this->email)->trim()->lower()->toString();
     }
 }

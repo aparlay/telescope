@@ -43,7 +43,7 @@ class MediaUpdateRequest extends FormRequest
             ],
             'description' => ['nullable', 'string'],
             'status' => [
-                'required',
+                'nullable',
                 Rule::in(array_keys(Media::getStatuses())),
             ],
         ];

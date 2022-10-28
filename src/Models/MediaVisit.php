@@ -126,11 +126,6 @@ class MediaVisit extends BaseModel
 
         if ($refresh) {
             Redis::del($cacheKey);
-            Cache::store('octane')->forget($cacheKey);
-        }
-
-        if (Cache::store('octane')->get($cacheKey, false) !== false) {
-            return; // cache already exists
         }
 
         if (! Redis::exists($cacheKey)) {
@@ -145,16 +140,8 @@ class MediaVisit extends BaseModel
             $visitedMediaIds = Arr::flatten($visitedMediaIds);
             $visitedMediaIds = array_map('strval', $visitedMediaIds);
 
-            Cache::store('octane')->put($cacheKey, implode(',', $visitedMediaIds), 300);
-
             Redis::sAdd($cacheKey, ...$visitedMediaIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
-        }
-
-        if (Cache::store('octane')->get($cacheKey, false) === false) {
-            $visitedMediaIds = Redis::sMembers($cacheKey);
-
-            Cache::store('octane')->put($cacheKey, implode(',', $visitedMediaIds), 300);
         }
     }
 
@@ -167,9 +154,7 @@ class MediaVisit extends BaseModel
     public static function checkMediaIsVisitedByUser(string $mediaId, string $userId): bool
     {
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
-        $visitedMediaIds = Cache::store('octane')->get($cacheKey, false);
 
-        return ($visitedMediaIds !== false) ? in_array($mediaId, explode(',', $visitedMediaIds)) :
-            Redis::sismember($cacheKey, $mediaId);
+        return Redis::sismember($cacheKey, $mediaId);
     }
 }
