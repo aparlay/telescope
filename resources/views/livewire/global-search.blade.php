@@ -9,13 +9,11 @@
                    wire:model.debounce.300ms="searchQuery">
         </div>
         <div class="sidebar-search-results d-none" id="searchResults">
-            <div class="list-group" style="background: white">
+            <div class="list-group bg-white">
                 @foreach($results as $category => $models)
                     @if($category == 'User')
-                        <div class="float-left p-1">
-                            <h4>
-                                {{$category}}}
-                            </h4>
+                        <div class="float-left p-1 pl-2 text-bold text-gray-800">
+                            {{$category}}
                         </div>
                         @foreach($models as $model)
                             <x-username-avatar :user="$model" :class="'pl-3 py-1'"/>
