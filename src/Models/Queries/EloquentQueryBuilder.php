@@ -61,7 +61,7 @@ class EloquentQueryBuilder extends Builder
      */
     public function since(UTCDateTime $date): self
     {
-        return $this->where('created_at', ['$gte' => $date]);
+        return $this->where('created_at', '>=', $date);
     }
 
     /**
@@ -127,11 +127,11 @@ class EloquentQueryBuilder extends Builder
         }
 
         if (null !== $start) {
-            return $this->where($field, '$gte', $start);
+            return $this->where($field, '>=', $start);
         }
 
         if (null !== $end) {
-            return $this->where($field, '$lte', $end);
+            return $this->where($field, '<=', $end);
         }
 
         return $this;

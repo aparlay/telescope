@@ -74,7 +74,7 @@ class RecalculateHashtag implements ShouldQueue
         $hashtag->media_count = $count;
         $hashtag->like_count = Media::hashtag($this->tag)->public()->confirmed()->sum('like_count');
         $hashtag->visit_count = Media::hashtag($this->tag)->public()->confirmed()->sum('visit_count');
-        $hashtag->sort_score = (Media::hashtag($this->tag)->public()->confirmed()->sum('sort_score') / $count);
+        $hashtag->sort_score = (Media::hashtag($this->tag)->public()->confirmed()->sum('sort_scores.default') / $count);
         $hashtag->save();
     }
 
