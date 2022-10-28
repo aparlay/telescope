@@ -634,7 +634,7 @@ class Media extends BaseModel
 
     public function getSequentialIdAttribute()
     {
-        return Media::query()->where('_id', '<=', $this->_id)->count();
+        return self::query()->where('_id', '<=', $this->_id)->count();
     }
 
     /**
@@ -651,14 +651,15 @@ class Media extends BaseModel
             'paid' => 0,
         ];
         foreach (MediaSortCategories::getAllValues() as $category) {
-            $score = (string)round($this->recalculateSortScoreByCategory($category)+PHP_FLOAT_MIN, 2);
+            $score = (string) round($this->recalculateSortScoreByCategory($category) + PHP_FLOAT_MIN, 2);
             $score .= str_pad($this->sequential_id, 12, '0', STR_PAD_LEFT);
-            $sortScores[$category] = (double)$score;
+            $sortScores[$category] = (float) $score;
         }
 
         $this->sort_scores = $sortScores;
         $this->save();
         $this->refresh();
+
         return $this;
     }
 
@@ -680,18 +681,18 @@ class Media extends BaseModel
                 ->first()
                 ->sort_scores[$category];
             $sortScore = $highestScore +
-                ($this->awesomeness_score * (float)$config['awesomeness']) +
-                ($this->beauty_score * (float)$config['beauty']) +
+                ($this->awesomeness_score * (float) $config['awesomeness']) +
+                ($this->beauty_score * (float) $config['beauty']) +
                 $promote;
         } else {
-            $sortScore = ($this->awesomeness_score * (float)$config['awesomeness']) +
-                ($this->beauty_score * (float)$config['beauty']) +
+            $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
+                ($this->beauty_score * (float) $config['beauty']) +
                 $promote;
         }
 
-        $sortScore += ($this->time_score * (float)$config['time']);
-        $sortScore += ($this->like_score * (float)$config['like']);
-        $sortScore += ($this->visit_score * (float)$config['visit']);
+        $sortScore += ($this->time_score * (float) $config['time']);
+        $sortScore += ($this->like_score * (float) $config['like']);
+        $sortScore += ($this->visit_score * (float) $config['visit']);
 
         return $sortScore;
     }
