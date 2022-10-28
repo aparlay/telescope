@@ -635,7 +635,7 @@ class Media extends BaseModel
 
     public function getSequentialIdAttribute()
     {
-        return Media::query()->where('_id', '<=', $this->_id)->count();
+        return self::query()->where('_id', '<=', $this->_id)->count();
     }
 
     /**
@@ -652,14 +652,15 @@ class Media extends BaseModel
             'paid' => 0,
         ];
         foreach (MediaSortCategories::getAllValues() as $category) {
-            $score = (string)round($this->recalculateSortScoreByCategory($category)+PHP_FLOAT_MIN, 2);
+            $score = (string) round($this->recalculateSortScoreByCategory($category) + PHP_FLOAT_MIN, 2);
             $score .= str_pad($this->sequential_id, 12, '0', STR_PAD_LEFT);
-            $sortScores[$category] = (double)$score;
+            $sortScores[$category] = (float) $score;
         }
 
         $this->sort_scores = $sortScores;
         $this->save();
         $this->refresh();
+
         return $this;
     }
 
