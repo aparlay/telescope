@@ -4,7 +4,7 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Chat\Admin\Models\Chat;
 use Aparlay\Core\Admin\Models\User;
-use Aparlay\Payout\Models\Order;
+use Aparlay\Payment\Models\Order;
 use Aparlay\Payout\Models\UserPayout;
 
 class GlobalSearchService
