@@ -50,12 +50,6 @@
             </th>
             <th class="col-md-2">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'full_name'" :fieldLabel="'Full name'" />
-                    <input class="form-control" type="text" wire:model="filter.full_name"/>
-                </div>
-            </th>
-            <th class="col-md-2">
-                <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'email'" :fieldLabel="'Email'" />
                     <input class="form-control" type="text" wire:model="filter.email"/>
                 </div>
@@ -104,9 +98,6 @@
             <tr>
                 <td>
                     <x-username-avatar :user="$user"/>
-                </td>
-                <td>
-                    {{ $user->full_name }}
                 </td>
                 <td>
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
