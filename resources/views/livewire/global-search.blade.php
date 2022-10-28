@@ -12,8 +12,13 @@
             <div class="list-group" style="background: white">
                 @foreach($results as $category => $models)
                     @if($category == 'User')
+                        <div class="float-left p-1">
+                            <h4>
+                                {{$category}}}
+                            </h4>
+                        </div>
                         @foreach($models as $model)
-                            <x-username-avatar :user="$model"/>
+                            <x-username-avatar :user="$model" :class="'pl-3 py-1'"/>
                         @endforeach
                     @endif
                 @endforeach
