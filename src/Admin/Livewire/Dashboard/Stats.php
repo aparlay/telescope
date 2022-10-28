@@ -21,13 +21,7 @@ final class Stats extends BaseDashboardComponent
     {
         $stats = $this->getStats();
 
-        if (count($stats) > 8) {
-            $cardClass = 'col-md-2';
-        } else {
-            $cardClass = 'col-md-3';
-        }
-
-        return view('default_view::livewire.dashboard.stats', compact('stats', 'cardClass'));
+        return view('default_view::livewire.dashboard.stats', compact('stats'));
     }
 
     private function getStats(): array

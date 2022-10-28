@@ -1,17 +1,15 @@
 <div class="container bg-white">
-    @if($showsDateFilter)
-        <div class="py-1 row">
-            <div class="col-1 my-auto">
-                <button type="button" class="btn btn-sm btn-default">
-                    .xls
-                </button>
-            </div>
-            <div class="col-11">
-                <livewire:components.date-range-picker/>
-            </div>
+    <div class="py-2 row">
+        <div class="col-12 col-md-1 py-1 py-md-0 text-center text-left">
+            <button type="button" class="btn btn-sm btn-default">
+                .xls
+            </button>
         </div>
-        <hr>
-    @endif
+        <div class="col-12 col-md-11">
+            <livewire:components.date-range-picker/>
+        </div>
+    </div>
+    <hr>
     <div class="py-1 row d-none">
         <div class="px-4 col-md-3">
             <select name="layout"
@@ -28,7 +26,7 @@
     <div>
         <livewire:dashboard.stats/>
     </div>
-{{--    <hr>--}}
+    {{--    <hr>--}}
     {{--    <div>--}}
     {{--        <livewire:dashboard.funnel/>--}}
     {{--    </div>--}}
