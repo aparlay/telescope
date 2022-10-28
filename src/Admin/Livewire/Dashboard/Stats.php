@@ -54,12 +54,12 @@ final class Stats extends BaseDashboardComponent
                 'label' => 'Registrations',
             ],
             [
-                'label' => 'Verifications',
-                'value' => Arr::get($results, 'user_verified'),
+                'label' => 'New Videos',
+                'value' => Arr::get($results, 'media_uploaded_videos'),
             ],
             [
-                'label' => 'New Registered',
-                'value' => Arr::get($results, 'user_registered'),
+                'label' => 'Verifications',
+                'value' => Arr::get($results, 'user_verified'),
             ],
             [
                 'label' => 'Subscriptions',
@@ -67,7 +67,6 @@ final class Stats extends BaseDashboardComponent
             ],
             [
                 'label' => 'Renewals',
-                'value' => Arr::get($results, 'payment_orders'),
             ],
             [
                 'label' => 'Tips',
@@ -77,13 +76,8 @@ final class Stats extends BaseDashboardComponent
                 'label' => 'Total Billed (subs/rebill/tips)',
                 'value' => (
                     Arr::get($results, 'payment_subscriptions_amount', 0) +
-                    Arr::get($results, 'payment_orders_amount', 0) +
                     Arr::get($results, 'payment_tips_amount', 0)
                 ),
-            ],
-            [
-                'label' => 'Videos Uploaded',
-                'value' => Arr::get($results, 'media_uploaded_videos'),
             ],
             [
                 'label' => 'Likes',
