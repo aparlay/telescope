@@ -13,14 +13,10 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">User Profile
-                    </h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('core.admin.dashboard') }}">Home</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('core.admin.user.index') }}">Users</a></li>
-                        <li class="breadcrumb-item">Details</li>
+                        <li class="breadcrumb-item">{{ $user->username }}</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -31,6 +27,17 @@
     @include('default_view::admin.parts.messages')
     <div class="content">
         <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="row text-center">
+                        <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt=""
+                            class="profile-user-img img-fluid img-circle">
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    @include('default_view::admin.pages.user.tabs.statisticsnew')
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-3">
                     <div class="card card-primary card-outline row">
