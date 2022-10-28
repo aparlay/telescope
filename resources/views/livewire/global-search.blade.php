@@ -1,5 +1,5 @@
-<li class="nav-item form-inline">
-    <label for="globalSearch"><i class="fa fa-search"></i></label>
+<div class="nav-item form-inline d-md-flex" style="display: contents">
+    <label for="globalSearch" class="m-auto"><i class="fa fa-search"></i></label>
 
     <div class="form-inline sidebar-search-open">
 
@@ -44,4 +44,4 @@
             })
         });
     </script>
-</li>
+</div>

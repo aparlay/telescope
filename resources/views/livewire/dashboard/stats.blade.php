@@ -1,7 +1,7 @@
 <section class="container-fluid">
     <div class="row">
         @foreach($stats as $stat)
-            <div class="my-2 {{$cardClass}}">
+            <div @class(['my-2', 'col-6', 'col-md-2' => (count($stats) > 8), 'col-md-3' => (count($stats) <= 8)])>
                 <div class="m-1 card h-100 rounded-lg border border-gray-200 shadow-md">
                     <div class="card-body align-middle p-0 text-center">
                         @if(isset($stat['value']))

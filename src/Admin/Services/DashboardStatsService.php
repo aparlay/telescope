@@ -35,6 +35,7 @@ final class DashboardStatsService
                     '$group' => [
                         '_id' => 0,
                         'media_uploaded' => ['$sum' => '$media.uploaded'],
+                        'media_uploaded_videos' => ['$sum' => '$media.uploaded_videos'],
                         'media_failed' => ['$sum' => '$media.failed'],
                         'media_completed' => ['$sum' => '$media.completed'],
                         'media_confirmed' => ['$sum' => '$media.confirmed'],
@@ -43,6 +44,7 @@ final class DashboardStatsService
                         'media_public' => ['$sum' => '$media.public'],
                         'media_private' => ['$sum' => '$media.private'],
                         'media_likes' => ['$sum' => '$media.likes'],
+                        'media_comments' => ['$sum' => '$media.comments'],
                         'media_mean_likes' => ['$sum' => '$media.mean_likes'],
                         'media_visits' => ['$sum' => '$media.visits'],
                         'media_mean_visits' => ['$sum' => '$media.mean_visits'],
@@ -58,6 +60,11 @@ final class DashboardStatsService
                         'user_watched' => ['$sum' => '$user.watched'],
 
                         'payment_orders' => ['$sum' => '$payment.orders'],
+                        'payment_orders_amount' => ['$sum' => '$payment.orders_amount'],
+                        'payment_subscriptions' => ['$sum' => '$payment.subscriptions'],
+                        'payment_subscriptions_amount' => ['$sum' => '$payment.subscriptions_amount'],
+                        'payment_tips' => ['$sum' => '$payment.tips'],
+                        'payment_tips_amount' => ['$sum' => '$payment.tips_amount'],
                     ],
             ];
 

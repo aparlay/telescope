@@ -1,7 +1,7 @@
 <div class="form-inline">
     <div class="col-6 col-md-1 pb-2 pb-md-0">
         <button type="button"
-                class="btn btn-sm @if($showAllDates) btn-secondary @else btn-default @endif"
+                class="w-100 btn btn-sm @if($showAllDates) btn-secondary @else btn-default @endif"
                 data-interval="all"
                 wire:click="$emit('showAllDates-changed')"
         >
@@ -42,7 +42,7 @@
         </button>
     </div>
     <span class="col-12 col-md-5">
-        <input type="text" class="form-control-sm border-secondary col-12" id="date-range"/>
+        <input type="text" class="form-control form-control-sm border-secondary text-center col-12" id="date-range"/>
     </span>
     @push('css')
         <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.css') }}">
