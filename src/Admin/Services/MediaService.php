@@ -22,7 +22,7 @@ class MediaService extends AdminBaseService
         $this->mediaRepository = new MediaRepository(new Media());
         $this->userRepository = new UserRepository(new User());
         $this->filterableField = ['creator.username', 'status', 'created_at'];
-        $this->sorterableField = ['creator.username', 'description', 'status', 'like_count', 'sort_score', 'visit_count', 'created_at'];
+        $this->sorterableField = ['creator.username', 'description', 'status', 'like_count', 'visit_count', 'created_at'];
     }
 
     /**
@@ -174,7 +174,7 @@ class MediaService extends AdminBaseService
     public function reupload($media)
     {
         $this->mediaRepository->update(['file' => request()->input('file')], $media->_id);
-        UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'))->onQueue('low');
+        UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'));
     }
 
     /**
@@ -191,7 +191,7 @@ class MediaService extends AdminBaseService
             Cache::store('redis')->set($cacheKey, $promote, 86400);
         }
 
-        $media->recalculateSortScore();
+        $media->recalculateSortScores();
 
         return $media;
     }

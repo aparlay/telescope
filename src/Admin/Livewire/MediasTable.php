@@ -34,7 +34,6 @@ class MediasTable extends BaseIndexComponent
             new FilterExact('status', 'int'),
             new FilterExact('like_count', 'int'),
             new FilterExact('visit_count', 'int'),
-            new FilterExact('sort_score', 'int'),
             new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];
     }
@@ -50,6 +49,11 @@ class MediasTable extends BaseIndexComponent
         return $query;
     }
 
+    public function getDefaultSort(): array
+    {
+        return ['created_at', 'DESC'];
+    }
+
     public function getAllowedSorts()
     {
         return [
@@ -57,7 +61,6 @@ class MediasTable extends BaseIndexComponent
             'status',
             'like_count',
             'visit_count',
-            'sort_score',
             'created_at',
         ];
     }

@@ -1,20 +1,24 @@
-<div class="nav-item form-inline d-md-flex" style="display: contents">
-    <label for="globalSearch" class="m-auto"><i class="fa fa-search"></i></label>
+<div class="nav-item form-inline flex-fill mx-2">
+    <label for="globalSearch"></label>
 
-    <div class="form-inline sidebar-search-open">
+    <div class="form-inline sidebar-search-open flex-fill">
 
-        <div class="input-group">
-            <input class="form-control form-control-sidebar mx-2" id="globalSearch" type="search"
+        <div class="input-group flex-fill">
+            <input class="form-control form-control-sidebar flex-fill" id="globalSearch" type="search"
                    placeholder="Search anything"
                    wire:model.debounce.300ms="searchQuery">
         </div>
-        <div class="sidebar-search-results d-none" id="searchResults">
-            <div class="list-group" style="background: white">
-                @foreach($results as $result)
-                    <a href="{{$result['link']}}" class="list-group-item">
-                        <div class="search-title">{{$result['title']}}</div>
-                        <div class="search-path"> {{$result['category']}} </div>
-                    </a>
+        <div class="sidebar-search-results global-search d-none" id="searchResults">
+            <div class="list-group bg-white border-left border-right border-bottom">
+                @foreach($results as $category => $models)
+                    @if($category == 'User')
+                        <div class="float-left p-1 pl-2 text-bold text-gray-800">
+                            {{$category}}
+                        </div>
+                        @foreach($models as $model)
+                            <x-username-avatar :user="$model" :class="'pl-3 py-1 result-item'"/>
+                        @endforeach
+                    @endif
                 @endforeach
 
                 @if(count($results) == 0 && strlen($searchQuery) > 3)

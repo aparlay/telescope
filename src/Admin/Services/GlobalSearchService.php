@@ -4,17 +4,12 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Chat\Admin\Models\Chat;
 use Aparlay\Core\Admin\Models\User;
-use Aparlay\Payout\Models\Order;
+use Aparlay\Payment\Models\Order;
 use Aparlay\Payout\Models\UserPayout;
 
 class GlobalSearchService
 {
-    public static function search(string $query): array
-    {
-        return self::searchUsers($query)->take(10)->toArray();
-    }
-
-    private static function searchUsers(string $searchQuery)
+    public static function search(string $searchQuery): array
     {
         $orders = $payouts = $chats = [];
         $users = User::query()->textSearch($searchQuery)->limit(5)->get();
@@ -30,10 +25,10 @@ class GlobalSearchService
                 Order::query()->order($searchQuery)->get()
             );
             $payouts = UserPayout::query()->user($searchQuery)->limit(5)->get()->merge(
-                Order::query()->order($searchQuery)->get()
+                UserPayout::query()->userPayout($searchQuery)->get()
             );
             $chats = Chat::query()->participants($searchQuery)->limit(5)->get()->merge(
-                Order::query()->order($searchQuery)->get()
+                Chat::query()->chat($searchQuery)->get()
             );
             $users = User::query()->user($searchQuery)->limit(5)->get()->merge(
                 $users
@@ -42,30 +37,10 @@ class GlobalSearchService
 
         $result = [];
 
-        $result[] = $users->map(function (User $user) {
-            return [
-                'category' => 'User',
-                'model' => $user,
-            ];
-        });
-        $result[] = $orders->map(function (Order $order) {
-            return [
-                'category' => 'Order',
-                'model' => $order,
-            ];
-        });
-        $result[] = $payouts->map(function (UserPayout $userPayout) {
-            return [
-                'category' => 'Payout',
-                'model' => $userPayout,
-            ];
-        });
-        $result[] = $chats->map(function (Chat $chat) {
-            return [
-                'category' => 'Chat',
-                'model' => $chat,
-            ];
-        });
+        $result['User'] = $users;
+        $result['Order'] = $orders;
+        $result['Payout'] = $payouts;
+        $result['Chat'] = $chats;
 
         return $result;
     }

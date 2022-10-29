@@ -7,6 +7,7 @@ use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Queries\MediaQueryBuilder;
@@ -31,55 +32,57 @@ use Psr\SimpleCache\InvalidArgumentException;
 /**
  * Class Media.
  *
- * @property ObjectId    $_id
- * @property ObjectId    $user_id
- * @property string      $description
- * @property string      $location
- * @property string      $hash
- * @property string      $file
- * @property string      $mime_type
- * @property int         $size
- * @property int         $length
- * @property int         $length_watched
- * @property int         $visibility
- * @property int         $like_count
- * @property int         $comment_count
- * @property int         $visit_count
- * @property array       $count_fields_updated_at
- * @property array       $likes
- * @property array       $comments
- * @property int         $status
- * @property int         $tips
- * @property array       $hashtags
- * @property array       $people
- * @property array       $creator
- * @property string      $cover
- * @property string      $slug
- * @property ObjectId    $created_by
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property mixed       $filename
- * @property array       $links
- * @property bool        $is_protected
- * @property array       $scores
- * @property float       $sort_score
- * @property User        $userObj
- * @property Alert[]     $alertObjs
- * @property UserNotification[]     $userNotificationObjs
- * @property array       $files_history
+ * @property ObjectId           $_id
+ * @property ObjectId           $user_id
+ * @property string             $description
+ * @property string             $location
+ * @property string             $hash
+ * @property string             $file
+ * @property string             $mime_type
+ * @property int                $size
+ * @property int                $length
+ * @property int                $length_watched
+ * @property int                $visibility
+ * @property int                $like_count
+ * @property int                $comment_count
+ * @property int                $visit_count
+ * @property array              $count_fields_updated_at
+ * @property array              $likes
+ * @property array              $comments
+ * @property int                $status
+ * @property int                $tips
+ * @property array              $hashtags
+ * @property array              $people
+ * @property array              $creator
+ * @property string             $cover
+ * @property string             $slug
+ * @property ObjectId           $created_by
+ * @property Carbon             $created_at
+ * @property Carbon             $updated_at
+ * @property mixed              $filename
+ * @property array              $links
+ * @property bool               $is_protected
+ * @property array              $scores
+ * @property array              $sort_scores
+ * @property User               $userObj
+ * @property User        $creatorObj
+ * @property Alert[]            $alertObjs
+ * @property UserNotification[] $userNotificationObjs
+ * @property array              $files_history
  *
- * @property-read string $slack_subject_admin_url
- * @property-read string $slack_admin_url
- * @property-read string $cover_url
- * @property-read string $file_url
- * @property-read int $beauty_score
- * @property-read int $awesomeness_score
- * @property-read int $skin_score
- * @property-read int $time_score
- * @property-read int $like_score
- * @property-read int $visit_score
- * @property-read int $comment_score
- * @property-read int $sent_tips
+ * @property-read string        $slack_subject_admin_url
+ * @property-read string        $slack_admin_url
+ * @property-read string        $cover_url
+ * @property-read string        $file_url
+ * @property-read int           $beauty_score
+ * @property-read int           $awesomeness_score
+ * @property-read int           $skin_score
+ * @property-read int           $time_score
+ * @property-read int           $like_score
+ * @property-read int           $visit_score
+ * @property-read int           $comment_score
+ * @property-read int           $sent_tips
+ * @property-read int           $sequential_id
  *
  *
  * @method static |self|Builder creator(ObjectId|string $userId)
@@ -146,7 +149,7 @@ class Media extends BaseModel
         'blocked_user_ids',
         'creator',
         'scores',
-        'sort_score',
+        'sort_scores',
         'slug',
         'tips',
         'created_by',
@@ -166,7 +169,13 @@ class Media extends BaseModel
         'visit_count' => 0,
         'comment_count' => 0,
         'tips' => 0,
-        'sort_score' => 0,
+        'sort_scores' => [
+            'default' => 0,
+            'guest' => 0,
+            'returned' => 0,
+            'registered' => 0,
+            'paid' => 0,
+        ],
     ];
 
     /**
@@ -239,7 +248,7 @@ class Media extends BaseModel
             'visit_count' => $this->visit_count,
             'comment_count' => $this->comment_count,
             'hashtags' => $this->hashtags,
-            'score' => $this->sort_score,
+            'score' => $this->sort_scores['default'],
             'country' => $this->userObj->country_alpha2 ?? '',
             'last_online_at' => 0,
             '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
@@ -625,37 +634,108 @@ class Media extends BaseModel
         return Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg');
     }
 
+    public function getSequentialIdAttribute()
+    {
+        return self::query()->where('_id', '<=', $this->_id)->count();
+    }
+
     /**
      * @return Media
      * @throws InvalidArgumentException
      */
-    public function recalculateSortScore(): self
+    public function recalculateSortScores(): self
     {
+        $sortScores = [
+            'default' => 0,
+            'guest' => 0,
+            'returned' => 0,
+            'registered' => 0,
+            'paid' => 0,
+        ];
+        foreach (MediaSortCategories::getAllValues() as $category) {
+            $score = (string) round($this->recalculateSortScoreByCategory($category) + PHP_FLOAT_MIN, 2);
+            $score .= str_pad($this->sequential_id, 12, '0', STR_PAD_LEFT);
+            $sortScores[$category] = (float) $score;
+        }
+
+        $this->sort_scores = $sortScores;
+        $this->save();
+        $this->refresh();
+
+        return $this;
+    }
+
+    /**
+     * @param  string  $category
+     *
+     * @return float
+     * @throws InvalidArgumentException
+     */
+    public function recalculateSortScoreByCategory(string $category): float
+    {
+        $config = config('app.media.score_weights.'.$category);
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
         $promote = (int) Cache::store('redis')->get($cacheKey, 0);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
-            $highestScore = self::where('sort_score', ['$exists' => true])
-                ->where('created_at', ['$lt' => DT::utcDateTime(['d' => -1])])
-                ->orderBy('sort_score', 'desc')
+            $highestScore = self::where('sort_scores', ['$exists' => true])
+                ->where('created_at', '<', DT::utcDateTime(['d' => -1]))
+                ->orderBy('sort_scores.'.$category, 'desc')
                 ->first()
-                ->sort_score;
-            $this->sort_score = $highestScore +
-                ($this->awesomeness_score * (float) config('app.media.awesomeness_score_weight', 0.3)) +
-                ($this->beauty_score * (float) config('app.media.beauty_score_weight', 0.3)) +
+                ->sort_scores[$category];
+            $sortScore = $highestScore +
+                ($this->awesomeness_score * (float) $config['awesomeness']) +
+                ($this->beauty_score * (float) $config['beauty']) +
                 $promote;
         } else {
-            $this->sort_score = ($this->awesomeness_score * (float) config('app.media.awesomeness_score_weight', 0.3)) +
-                ($this->beauty_score * (float) config('app.media.beauty_score_weight', 0.3)) +
+            $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
+                ($this->beauty_score * (float) $config['beauty']) +
                 $promote;
         }
 
-        $this->sort_score += ($this->time_score * (float) config('app.media.time_score_weight', 0.2));
-        $this->sort_score += ($this->like_score * (float) config('app.media.like_score_weight', 0.1));
-        $this->sort_score += ($this->visit_score * (float) config('app.media.visit_score_weight', 0.1));
+        $sortScore += ($this->time_score * (float) $config['time']);
+        $sortScore += ($this->like_score * (float) $config['like']);
+        $sortScore += ($this->visit_score * (float) $config['visit']);
 
+        return $sortScore;
+    }
+
+    public function updateLikes()
+    {
+        $likeCount = MediaLike::query()->media($this->_id)->count();
+        $this->like_count = $likeCount;
+        $this->likes = MediaLike::query()->media($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaLike $like) {
+            return [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ];
+        });
+        $this->count_fields_updated_at = array_merge(
+            $this->count_fields_updated_at,
+            ['likes' => DT::utcNow()]
+        );
         $this->save();
 
-        return $this;
+        $this->refresh();
+    }
+
+    public function updateComments()
+    {
+        $commentCount = MediaComment::query()->media($this->_id)->count();
+        $this->comment_count = $commentCount;
+        $this->comments = MediaComment::query()->media($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaComment $comment) {
+            return [
+                '_id' => new ObjectId($comment->creator['_id']),
+                'username' => $comment->creator['username'],
+                'avatar' => $comment->creator['avatar'],
+            ];
+        });
+        $this->count_fields_updated_at = array_merge(
+            $this->count_fields_updated_at,
+            ['comments' => DT::utcNow()]
+        );
+
+        $this->refresh();
     }
 
     public static function query(): MediaQueryBuilder|Builder

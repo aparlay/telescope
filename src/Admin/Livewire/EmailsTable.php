@@ -23,6 +23,11 @@ class EmailsTable extends BaseIndexComponent
         $this->render();
     }
 
+    public function getDefaultSort(): array
+    {
+        return ['created_at', 'DESC'];
+    }
+
     public function getAllowedSorts()
     {
         return [
