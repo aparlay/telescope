@@ -10,7 +10,6 @@ use Maklad\Permission\Models\Role;
 use MongoDB\BSON\ObjectId;
 
 return new class() extends Migration {
-
     const PERMISSION_UPDATE_MEDIA_ALGORITHMS = 'update medias-algorithms';
 
     const PERMISSIONS_LIST = [
@@ -74,7 +73,7 @@ return new class() extends Migration {
                             'visit' => 0.1,
                             'time' => 0.25,
                         ],
-                    ]
+                    ],
                 ],
             ],
         ];
@@ -100,7 +99,7 @@ return new class() extends Migration {
                 'returned' => 0,
                 'registered' => 0,
                 'paid' => 0,
-            ]
+            ],
         ]);
 
         Artisan::call('config:clear', []);
@@ -117,7 +116,6 @@ return new class() extends Migration {
             $table->index(['status', 'sort_scores.returned', 'visibility'], null, ['background' => true]);
             $table->index(['status', 'sort_scores.registered', 'visibility'], null, ['background' => true]);
             $table->index(['status', 'sort_scores.paid', 'visibility'], null, ['background' => true]);
-
         });
     }
 
