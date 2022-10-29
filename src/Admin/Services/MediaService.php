@@ -168,7 +168,7 @@ class MediaService extends AdminBaseService
 
         $media = $this->mediaRepository->update($data, $id);
 
-        return $this->calculateSortScore($media, 0);
+        return $this->calculateSortScores($media, 0);
     }
 
     public function reupload($media)
@@ -184,7 +184,7 @@ class MediaService extends AdminBaseService
      * @return mixed
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function calculateSortScore($media, $promote)
+    public function calculateSortScores($media, $promote)
     {
         $cacheKey = (new Media())->getCollection().':promote:'.$media->_id;
         if ($promote > 0) {
