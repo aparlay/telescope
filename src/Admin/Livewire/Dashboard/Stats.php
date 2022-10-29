@@ -49,7 +49,7 @@ final class Stats extends BaseDashboardComponent
             ],
             [
                 'label' => 'Registrations',
-                'value' => Arr::get($results, 'user_registered')
+                'value' => Arr::get($results, 'user_registered'),
             ],
             [
                 'label' => 'Video Uploads',
