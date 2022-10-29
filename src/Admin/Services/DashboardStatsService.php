@@ -36,6 +36,7 @@ final class DashboardStatsService
                         '_id' => 0,
                         'media_uploaded' => ['$sum' => '$media.uploaded'],
                         'media_uploaded_videos' => ['$sum' => '$media.uploaded_videos'],
+                        'media_confirmed_videos' => ['$sum' => '$media.confirmed_videos'],
                         'media_failed' => ['$sum' => '$media.failed'],
                         'media_completed' => ['$sum' => '$media.completed'],
                         'media_confirmed' => ['$sum' => '$media.confirmed'],

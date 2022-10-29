@@ -9,6 +9,7 @@ use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
+use Aparlay\Core\Models\Queries\MediaQueryBuilder;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -655,5 +656,15 @@ class Media extends BaseModel
         $this->save();
 
         return $this;
+    }
+
+    public static function query(): MediaQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    public function newEloquentBuilder($query): MediaQueryBuilder
+    {
+        return new MediaQueryBuilder($query);
     }
 }

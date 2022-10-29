@@ -39,7 +39,8 @@ final class AnalyticsCalculatorService
             'date' => $date,
             'media' => [
                 'uploaded' => Media::date($startAt, $endAt)->count(),
-                'uploaded_videos' => Media::where('type', 'video')->date($startAt, $endAt)->count(),
+                'uploaded_videos' => Media::video()->date($startAt, $endAt)->count(),
+                'confirmed_videos' => Media::video()->confirmed()->date($startAt, $endAt)->count(),
                 'failed' => Media::date($startAt, $endAt)->failed()->count(),
                 'completed' => Media::date($startAt, $endAt)->completed()->count(),
                 'confirmed' => Media::date($startAt, $endAt)->confirmed()->count(),
