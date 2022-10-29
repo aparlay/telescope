@@ -42,20 +42,22 @@ final class Stats extends BaseDashboardComponent
     {
         return [
             [
-                'label' => 'Daily Active Users',
-            ],
-            [
-                'label' => 'Monthly Active Users',
-            ],
-            [
                 'label' => 'Unique Visitors',
             ],
             [
-                'label' => 'Registrations',
+                'label' => 'Active Users',
             ],
             [
-                'label' => 'New Videos',
+                'label' => 'Registrations',
+                'value' => Arr::get($results, 'user_registered'),
+            ],
+            [
+                'label' => 'Video Uploads',
                 'value' => Arr::get($results, 'media_uploaded_videos'),
+            ],
+            [
+                'label' => 'Video Approvals',
+                'value' => Arr::get($results, 'media_confirmed_videos'),
             ],
             [
                 'label' => 'Verifications',
