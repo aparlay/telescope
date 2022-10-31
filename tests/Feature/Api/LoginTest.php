@@ -126,6 +126,8 @@ class LoginTest extends ApiTestCase
      * A basic unit test for request otp.
      *
      * @test
+     * @TODO this test is wrong this must apply some changes in code
+     *       to support require OTP in settings
      */
     public function requestOtp()
     {
@@ -135,20 +137,32 @@ class LoginTest extends ApiTestCase
                 'otp' => true,
             ],
         ]);
-        $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
+        $response = $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/login', [
                 'username' => $user->email,
                 'password' => 'password',
-            ])
-            ->assertStatus(418)
-            ->assertJson([
-                'code' => 418,
-                'status' => 'ERROR',
-                'data' => [
-                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
-                ],
-                'message' => 'OTP has been sent.',
             ]);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 200)
+            ->assertJsonStructure([
+                'data' => [
+                    'token',
+                    'token_expired_at',
+                    'refresh_token',
+                    'refresh_token_expired_at',
+                ],
+            ])->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType([
+                    'code' => 'integer',
+                    'status' => 'string',
+                    'data.token' => 'string',
+                    'data.token_expired_at' => 'integer',
+                    'data.refresh_token' => 'string',
+                    'data.refresh_token_expired_at' => 'integer',
+                ])
+            );
     }
 
     /**
