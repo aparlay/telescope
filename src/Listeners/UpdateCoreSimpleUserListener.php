@@ -29,7 +29,6 @@ class UpdateCoreSimpleUserListener implements ShouldQueue
         MediaComment::query()->creator($user->_id)->update(['creator.avatar' => $user->avatar, 'creator.username' => $user->username]);
         MediaCommentLike::query()->creator($user->_id)->update(['creator.avatar' => $user->avatar, 'creator.username' => $user->username]);
 
-
         $cacheKey = 'SimpleUserCast:'.$user->_id;
         $userArray = [
             '_id' => (string) $user->_id,
