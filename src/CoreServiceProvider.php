@@ -2,9 +2,12 @@
 
 namespace Aparlay\Core;
 
+use Aparlay\Core\Admin\Components\ChatSearchResult;
 use Aparlay\Core\Admin\Components\DatePicker;
 use Aparlay\Core\Admin\Components\MediaCover;
 use Aparlay\Core\Admin\Components\Modals;
+use Aparlay\Core\Admin\Components\OrderSearchResult;
+use Aparlay\Core\Admin\Components\PayoutSearchResult;
 use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
 use Aparlay\Core\Admin\Components\UtcFormatter;
@@ -220,5 +223,8 @@ class CoreServiceProvider extends ServiceProvider
         Blade::component('username-avatar', UserNameAvatar::class);
         Blade::component('media-cover', MediaCover::class);
         Blade::component('utc-formatter', UtcFormatter::class);
+        Blade::component('chat-search-result', ChatSearchResult::class);
+        Blade::component('order-search-result', OrderSearchResult::class);
+        Blade::component('payout-search-result', PayoutSearchResult::class);
     }
 }
