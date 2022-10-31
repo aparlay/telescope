@@ -82,7 +82,6 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property-read int           $visit_score
  * @property-read int           $comment_score
  * @property-read int           $sent_tips
- * @property-read int           $sequential_id
  *
  *
  * @method static |self|Builder creator(ObjectId|string $userId)
@@ -634,11 +633,6 @@ class Media extends BaseModel
         return Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg');
     }
 
-    public function getSequentialIdAttribute()
-    {
-        return self::query()->where('_id', '<=', $this->_id)->count();
-    }
-
     /**
      * @return Media
      * @throws InvalidArgumentException
@@ -653,9 +647,7 @@ class Media extends BaseModel
             'paid' => 0,
         ];
         foreach (MediaSortCategories::getAllValues() as $category) {
-            $score = (string) round($this->recalculateSortScoreByCategory($category) + PHP_FLOAT_MIN, 2);
-            $score .= str_pad($this->sequential_id, 12, '0', STR_PAD_LEFT);
-            $sortScores[$category] = (float) $score;
+            $sortScores[$category] = $this->recalculateSortScoreByCategory($category);
         }
 
         $this->sort_scores = $sortScores;
