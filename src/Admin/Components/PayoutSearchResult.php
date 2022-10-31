@@ -9,8 +9,7 @@ class PayoutSearchResult extends Component
 {
     public function __construct(
         public UserPayout $payout
-    )
-    {
+    ) {
     }
 
     public function render()

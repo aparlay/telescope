@@ -11,12 +11,12 @@ class GlobalSearchService
 {
     public static function search(string $searchQuery): array
     {
-        if ($searchQuery == 'test'){
+        if ($searchQuery == 'test') {
             return [
               'User' => User::query()->take(3)->get(),
               'Order' => Order::query()->take(3)->get(),
               'Payout' => UserPayout::query()->take(3)->get(),
-              'Chat' => Chat::query()->take(3)->get()
+              'Chat' => Chat::query()->take(3)->get(),
             ];
         }
 
