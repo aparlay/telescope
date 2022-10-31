@@ -8,6 +8,8 @@ use Illuminate\Support\Arr;
 
 final class Stats extends BaseDashboardComponent
 {
+    public array $stats = [];
+
     public function mount()
     {
         $today = now()->format('Y-m-d');
@@ -19,18 +21,22 @@ final class Stats extends BaseDashboardComponent
 
     public function render(): View
     {
-        $stats = $this->getStats();
+        $this->stats = $this->getStats();
 
-        return view('default_view::livewire.dashboard.stats', compact('stats'));
+        return view('default_view::livewire.dashboard.stats');
     }
 
     private function getStats(): array
     {
-        $start = $end = null;
-
-        if (! empty($this->dateInterval) && ! $this->showAllDates) {
-            $start = $this->startDate();
-            $end = $this->endDate();
+        if ($this->showAllDates) {
+            $start = $end = null;
+        } else {
+            if (!empty($this->dateInterval)){
+                $start = $this->startDate();
+                $end = $this->endDate();
+            } else {
+                $start = $end = today();
+            }
         }
 
         $statsService = new DashboardStatsService($start, $end);

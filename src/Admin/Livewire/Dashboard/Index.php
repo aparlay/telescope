@@ -20,7 +20,13 @@ final class Index extends Component
 
     protected $listeners = [
         'dateInterval-changed' => 'dateIntervalChanged',
+        'showAllDates-changed' => 'showAllDatesChanged'
     ];
+
+    public function mount()
+    {
+        $this->showAllDates = false;
+    }
 
     public function updated($field, $value)
     {

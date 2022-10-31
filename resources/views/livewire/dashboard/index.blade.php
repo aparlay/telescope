@@ -6,7 +6,7 @@
             </button>
         </div>
         <div class="col-12 col-md-11">
-            <livewire:components.date-range-picker/>
+            <livewire:components.date-range-picker :showAllDates="$showAllDates" :dateInterval="$dateInterval"/>
         </div>
     </div>
     <hr>
@@ -24,7 +24,7 @@
         </div>
     </div>
     <div>
-        <livewire:dashboard.stats/>
+        <livewire:dashboard.stats :showAllDates="$showAllDates" :dateInterval="$dateInterval"/>
     </div>
     {{--    <hr>--}}
     {{--    <div>--}}
