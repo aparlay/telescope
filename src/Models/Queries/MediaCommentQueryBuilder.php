@@ -18,6 +18,15 @@ class MediaCommentQueryBuilder extends EloquentQueryBuilder
     }
 
     /**
+     * @param  ObjectId|string  $userId
+     * @return self
+     */
+    public function creator(ObjectId | string $userId): self
+    {
+        return $this->whereId($userId, 'creator._id');
+    }
+
+    /**
      * @param ObjectId|string $parentId
      * @return $this
      */

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserAvatarChangedEvent
+class SimpleUserChangedEvent
 {
     use Dispatchable;
     use SerializesModels;
@@ -18,8 +18,7 @@ class UserAvatarChangedEvent
      * @return void
      */
     public function __construct(
-        public Authenticatable|User $user,
-        public string $avatar
+        public Authenticatable|User $user
     ) {
     }
 }

@@ -85,6 +85,15 @@ class MediaCommentLike extends BaseModel
         return MediaCommentLikeFactory::new();
     }
 
+
+    /**
+     * @return MediaCommentLikeQueryBuilder|Builder
+     */
+    public static function query(): MediaCommentLikeQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
     /**
      * @param $query
      * @return MediaCommentLikeQueryBuilder
@@ -103,7 +112,7 @@ class MediaCommentLike extends BaseModel
     }
 
     /**
-     * Get the media associated with the.
+     * Get the media comment associated with the media comment like.
      */
     public function mediaCommentObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
     {

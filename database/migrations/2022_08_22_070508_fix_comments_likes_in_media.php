@@ -17,24 +17,15 @@ return new class() extends Migration {
     public function up()
     {
         foreach (MediaComment::lazy() as $mediaComment) {
+            /** @var MediaComment $mediaComment */
             $media = $mediaComment->mediaObj;
             $creatorObj = $mediaComment->creatorObj;
             if (empty($media) || empty($creatorObj)) {
                 $mediaComment->deleteQuietly();
                 continue;
             }
-            $commentCount = MediaComment::query()->media($media->_id)->count();
-            $media->comment_count = $commentCount;
-            $media->addToSet('comments', [
-                '_id' => new ObjectId($mediaComment->creator['_id']),
-                'username' => $mediaComment->creator['username'],
-                'avatar' => $mediaComment->creator['avatar'],
-            ], 10);
-            $media->count_fields_updated_at = array_merge(
-                $media->count_fields_updated_at,
-                ['comments' => DT::utcNow()]
-            );
-            $media->save();
+
+            $media->updateComments();
         }
         foreach (MediaLike::lazy() as $mediaLike) {
             /** @var MediaLike $mediaLike */
@@ -44,18 +35,7 @@ return new class() extends Migration {
                 $mediaLike->deleteQuietly();
                 continue;
             }
-            $likeCount = MediaLike::query()->media($media->_id)->count();
-            $media->like_count = $likeCount;
-            $media->addToSet('likes', [
-                '_id' => new ObjectId($mediaLike->creator['_id']),
-                'username' => $mediaLike->creator['username'],
-                'avatar' => $mediaLike->creator['avatar'],
-            ], 10);
-            $media->count_fields_updated_at = array_merge(
-                $media->count_fields_updated_at,
-                ['likes' => DT::utcNow()]
-            );
-            $media->save();
+            $media->updateLikes();
         }
     }
 
