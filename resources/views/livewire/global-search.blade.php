@@ -11,14 +11,22 @@
         <div class="sidebar-search-results global-search d-none" id="searchResults">
             <div class="list-group bg-white border-left border-right border-bottom">
                 @foreach($results as $category => $models)
-                    @if($category == 'User')
+                    @if(count($models) > 0)
                         <div class="float-left p-1 pl-2 text-bold text-gray-800">
                             {{$category}}
                         </div>
-                        @foreach($models as $model)
-                            <x-username-avatar :user="$model" :class="'pl-3 py-1 result-item'"/>
-                        @endforeach
                     @endif
+                    @foreach($models as $model)
+                        @if($category == 'User')
+                            <x-username-avatar :user="$model" :class="'pl-3 py-1 result-item'"/>
+                        @elseif($category == 'Payout')
+                            <x-payout-search-result :payout="$model"/>
+                        @elseif($category == 'Order')
+                            <x-order-search-result :order="$model"/>
+                        @elseif($category == 'Chat')
+                            <x-chat-search-result :chat="$model"/>
+                        @endif
+                    @endforeach
                 @endforeach
 
                 @if(count($results) == 0 && strlen($searchQuery) > 3)
