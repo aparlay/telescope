@@ -3,7 +3,6 @@
 @section('plugins.Datatables', true)
 @section('plugins.Select2', true)
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}">
     <link rel="stylesheet" href="/css/admin.css">
     @livewireStyles
 @stop
@@ -36,8 +35,52 @@
                 </div>
                 <div class="col-md-10">
                     @include('default_view::admin.pages.user.tabs.statisticsnew')
+
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Notes</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-up"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @include('default_view::admin.pages.user.tabs.notes', ['user' => $user])
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Info</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Profile</h3>
+                                    <div class="card-tools">
+                                        <button
+                                            type="button"
+                                            class="btn btn-tool"
+                                            data-card-widget="collapse"
+                                            data-expand-icon="fa-chevron-down"
+                                            data-collapse-icon="fa-chevron-up"
+                                        ><i class="fas fa-chevron-up"></i></button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <hr>
             <div class="row">
                 <div class="col-md-3">
                     <div class="card card-primary card-outline row">
