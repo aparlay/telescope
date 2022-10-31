@@ -27,7 +27,7 @@ final class DateRangePicker extends Component
         $date = today()->format('Y-m-d');
         $this->today = [$date, $date];
 
-        if (today()->isMonday()){
+        if (today()->isMonday()) {
             $this->thisWeek = [today()->format('Y-m-d'), today()->next(0)->format('Y-m-d')];
         } else {
             $this->thisWeek = [today()->previous(1)->format('Y-m-d'), today()->next(0)->format('Y-m-d')];
@@ -35,7 +35,7 @@ final class DateRangePicker extends Component
 
         $this->thisMonth = [today()->firstOfMonth()->format('Y-m-d'), today()->lastOfMonth()->format('Y-m-d')];
 
-        if (!$this->showAllDates && empty($this->dateInterval)){
+        if (! $this->showAllDates && empty($this->dateInterval)) {
             $this->dateInterval = $this->today;
         }
     }
@@ -59,16 +59,16 @@ final class DateRangePicker extends Component
 
     public function showAllDatesChanged()
     {
-        $this->showAllDates = !($this->showAllDates);
+        $this->showAllDates = ! ($this->showAllDates);
     }
 
     private function getSelectedPeriod(array $value)
     {
-        if ($value == $this->today){
+        if ($value == $this->today) {
             $this->selected = 'today';
-        } else if ($value == $this->thisWeek) {
+        } elseif ($value == $this->thisWeek) {
             $this->selected = 'this-week';
-        } else if ($value == $this->thisMonth) {
+        } elseif ($value == $this->thisMonth) {
             $this->selected = 'this-month';
         } else {
             $this->selected = '';
