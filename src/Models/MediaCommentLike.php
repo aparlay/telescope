@@ -85,7 +85,6 @@ class MediaCommentLike extends BaseModel
         return MediaCommentLikeFactory::new();
     }
 
-
     /**
      * @return MediaCommentLikeQueryBuilder|Builder
      */
