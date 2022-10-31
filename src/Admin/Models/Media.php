@@ -37,4 +37,9 @@ class Media extends MediaBase implements Auditable
     {
         return range(0, 10);
     }
+
+    public static function getBeautyScores()
+    {
+        return range(0, 10);
+    }
 }

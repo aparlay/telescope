@@ -72,12 +72,6 @@
                     <input class="form-control" type="text" wire:model="filter.visit_count"/>
                 </div>
             </td>
-            <td class="col-md-1">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'sort_score'" :fieldLabel="'Scores'" />
-                    <input class="form-control" type="text" wire:model="filter.sort_score"/>
-                </div>
-            </td>
             <td class="col-md-2">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
@@ -109,9 +103,6 @@
                 </td>
                 <td>
                      {{$media->visit_count}}
-                </td>
-                <td>
-                     {{$media->sort_score}}
                 </td>
                 <td>
                      {{$media->created_at}}

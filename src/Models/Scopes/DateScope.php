@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
+use Aparlay\Core\Helpers\DT;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\UTCDateTime;
 
@@ -14,11 +15,11 @@ trait DateScope
         }
 
         if (null !== $start) {
-            return $query->where('created_at', '$gte', $start);
+            return $query->where('created_at', '>=', $start);
         }
 
         if (null !== $end) {
-            return $query->where('created_at', '$lte', $end);
+            return $query->where('created_at', '<=', $end);
         }
 
         return $query;

@@ -216,12 +216,14 @@ trait MediaScope
     }
 
     /**
-     * @param $query
+     * @param  Builder  $query
+     * @param  string   $category
+     *
      * @return mixed
      */
-    public function scopeSort($query): mixed
+    public function scopeSort(Builder $query, string $category = 'default'): Builder
     {
-        return $query->orderBy('sort_score', 'desc');
+        return $query->orderBy('sort_scores.'.$category, 'desc');
     }
 
     /**

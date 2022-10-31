@@ -65,6 +65,23 @@
                                                     @endforeach
                                                 </div>
                                             </li>
+                                            <li class="list-group-item">
+                                                <b>Beauty Score</b>
+                                                <div>
+                                                    @foreach($scoreTypes as $scoreType)
+                                                        @foreach (\Aparlay\Core\Admin\Models\Media::getBeautyScores() as $score)
+                                                            @if($scoreType['type'] == 'beauty')
+                                                                <div id="beauty_score_{{$score}}" class="btn-group btn-group-toggle beauty_score_div" data-toggle="buttons" role="radiogroup">
+                                                                    <label class="btn btn-outline-secondary beauty_score_label">
+                                                                        <input type="radio" id="media_beauty_score_{{$score}}" name="beauty_score" value="{{ $score }}" data-index="{{ $score }}" autocomplete="off" @if($scoreType['score'] == $score) checked @endif>
+                                                                        {{ $score }}
+                                                                    </label>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                </div>
+                                            </li>
                                         </ul>
 
                                         <div class="row">

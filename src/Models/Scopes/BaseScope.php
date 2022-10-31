@@ -53,6 +53,6 @@ trait BaseScope
      */
     public function scopeSince($query, UTCDateTime $date): mixed
     {
-        return $query->where('created_at', ['$gte' => $date]);
+        return $query->where('created_at', '>=', $date);
     }
 }
