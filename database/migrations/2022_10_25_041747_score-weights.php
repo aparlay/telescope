@@ -26,6 +26,8 @@ return new class() extends Migration {
         $settings = [
             'app' => [
                 'media' => [
+                    'grpc' => config('app.media.grpc'),
+                    'path' => config('app.media.path'),
                     'visit_multiplier' => 7,
                     'score_weights' => [
                         'default' => [
