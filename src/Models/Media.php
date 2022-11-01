@@ -732,7 +732,7 @@ class Media extends BaseModel
             ->recentFirst()
             ->get()
             ->filter(function (MediaVisit $visit) {
-                return !empty($visit->userObj);
+                return ! empty($visit->userObj);
             })
             ->map(function (MediaVisit $visit) {
                 return [
