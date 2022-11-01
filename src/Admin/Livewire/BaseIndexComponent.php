@@ -63,7 +63,7 @@ abstract class BaseIndexComponent extends Component
     public function buildQuery(): Builder
     {
         $queryBuilder = (new QueryBuilder())
-            ->for($this->model, $this->filter, $this->sort)
+            ->for($this->model, $this->filter(), $this->sort)
             ->applyDefaultSort($this->getDefaultSort())
             ->applyFilters($this->getFilters())
             ->applySorts($this->getAllowedSorts());
@@ -101,5 +101,10 @@ abstract class BaseIndexComponent extends Component
     public function loadMore()
     {
         $this->perPage += 10;
+    }
+
+    protected function filter(): array
+    {
+        return $this->filter;
     }
 }
