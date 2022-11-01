@@ -701,7 +701,7 @@ class Media extends BaseModel
             ->recentFirst()
             ->get()
             ->filter(function (MediaLike $like) {
-                return ! empty($like->creator['_id']);
+                return isset($comment->creator) && ! empty($comment->creator['_id']);
             })
             ->map(function (MediaLike $like) {
                 return [
@@ -760,7 +760,7 @@ class Media extends BaseModel
             ->recentFirst()
             ->get()
             ->filter(function (MediaComment $comment) {
-                return ! empty($comment->creator);
+                return isset($comment->creator) && ! empty($comment->creator['_id']);
             })
             ->map(function (MediaComment $comment) {
                 return [
@@ -774,6 +774,7 @@ class Media extends BaseModel
             ['comments' => DT::utcNow()]
         );
 
+        $this->save();
         $this->refresh();
     }
 }
