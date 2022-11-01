@@ -19,6 +19,7 @@ class ResetMediaCountersCommand extends Command
             $media->updateVisits();
             $media->updateComments();
 
+            $media->creatorObj->updateLikes();
             $this->info('Media '.$media->_id.' has been updated');
         }
         $this->comment('All done');
