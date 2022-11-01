@@ -97,7 +97,7 @@ class Watch implements WsEventDispatcher
             }
             $media->visit_count++;
             $media->addToSet('visits', [
-                '_id' => $model->userObj->_id,
+                '_id' => new ObjectId($model->userObj->_id),
                 'username' => $model->userObj->username,
                 'avatar' => $model->userObj->avatar,
             ], 10);

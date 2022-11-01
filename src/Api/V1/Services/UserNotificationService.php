@@ -73,7 +73,7 @@ class UserNotificationService
                 $message = match (true) {
                     ($media->like_count > 2 && isset($media->likes[0]['username'], $media->likes[1]['username'])) => __(':username1, :username2 and :count others liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username'], 'count' => $media->like_count - 2]),
                     ($media->like_count === 2 && isset($media->likes[0]['username'], $media->likes[1]['username'])) => __(':username1 and :username2 liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username']]),
-                    default => __(':username liked your video.', ['username' => $media->likes[0]['username'] ?? ''])
+                    default => __(':username liked your video.', ['username' => $media->likes[0]['username']])
                 };
             } else {
                 $message = match (true) {

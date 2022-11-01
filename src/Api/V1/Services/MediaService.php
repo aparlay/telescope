@@ -326,19 +326,7 @@ class MediaService
         $mediaVisit->duration = $duration;
 
         if ($duration > ($media->length / 4)) {
-            $multiplier = config('app.media.visit_multiplier', 1);
-            $media->length_watched += ((($duration > $media->length) ? $media->length : $duration) * $multiplier);
-            $media->visit_count += $multiplier;
-            $media->addToSet('visits', [
-                '_id' => $mediaVisit->userObj->_id,
-                'username' => $mediaVisit->userObj->username,
-                'avatar' => $mediaVisit->userObj->avatar,
-            ], 10);
-            $media->count_fields_updated_at = array_merge(
-                $media->count_fields_updated_at,
-                ['visits' => DT::utcNow()]
-            );
-            $media->save();
+            $media->updateVisits($duration);
         }
 
         if (! $mediaVisit->save()) {
