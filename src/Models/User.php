@@ -989,7 +989,7 @@ class User extends \App\Models\User
                 'username' => $like->creator['username'],
                 'avatar' => $like->creator['avatar'],
             ];
-        });
+        })->values();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['likes' => DT::utcNow()]

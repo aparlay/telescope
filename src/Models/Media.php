@@ -47,6 +47,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property int                $visit_count
  * @property array              $count_fields_updated_at
  * @property array              $likes
+ * @property array              $visits
  * @property array              $comments
  * @property int                $status
  * @property int                $tips
@@ -700,10 +701,32 @@ class Media extends BaseModel
                 'username' => $like->creator['username'],
                 'avatar' => $like->creator['avatar'],
             ];
-        });
+        })->values();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['likes' => DT::utcNow()]
+        );
+        $this->save();
+
+        $this->refresh();
+    }
+
+    public function updateVisits($duration = 0)
+    {
+        $visitCount = MediaVisit::query()->media($this->_id)->count();
+        $multiplier = config('app.media.visit_multiplier', 1);
+        $this->length_watched += ((($duration > $this->length) ? $this->length : $duration) * $multiplier);
+        $this->visit_count = $visitCount + $multiplier;
+        $this->visits = MediaVisit::query()->media($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaVisit $like) {
+            return [
+                '_id' => new ObjectId($like->creator['_id']),
+                'username' => $like->creator['username'],
+                'avatar' => $like->creator['avatar'],
+            ];
+        })->values();
+        $this->count_fields_updated_at = array_merge(
+            $this->count_fields_updated_at,
+            ['visits' => DT::utcNow()]
         );
         $this->save();
 
@@ -720,7 +743,7 @@ class Media extends BaseModel
                 'username' => $comment->creator['username'],
                 'avatar' => $comment->creator['avatar'],
             ];
-        });
+        })->values();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['comments' => DT::utcNow()]

@@ -20,6 +20,7 @@ class VideoScoreHourlyCommand extends Command
             ->availableForFollower()
             ->chunk(200, function ($models) {
                 foreach ($models as $media) {
+                    /** @var Media $media */
                     $media->recalculateSortScores();
                 }
             });

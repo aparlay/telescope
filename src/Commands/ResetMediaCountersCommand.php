@@ -3,11 +3,7 @@
 namespace Aparlay\Core\Commands;
 
 use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaComment;
-use Aparlay\Core\Models\MediaLike;
-use Aparlay\Core\Models\MediaVisit;
 use Illuminate\Console\Command;
-use MongoDB\BSON\ObjectId;
 
 class ResetMediaCountersCommand extends Command
 {
@@ -17,32 +13,12 @@ class ResetMediaCountersCommand extends Command
 
     public function handle()
     {
-        foreach (Media::lazy() as $media) {
+        foreach (Media::where('is_fake', ['$exists' => false])->lazy() as $media) {
             /** @var Media $media */
-            $likes = [];
-            foreach (MediaLike::query()->media($media->_id)->recentFirst()->limit(10)->get() as $mediaLike) {
-                $likes[] = [
-                    '_id' => new ObjectId($mediaLike->creator['_id']),
-                    'username' => $mediaLike->creator['username'],
-                    'avatar' => $mediaLike->creator['avatar'],
-                ];
-            }
-            $comments = [];
-            foreach (MediaComment::query()->media($media->_id)->recentFirst()->limit(10)->get() as $mediaComment) {
-                $comments[] = [
-                    '_id' => new ObjectId($mediaComment->creator['_id']),
-                    'username' => $mediaComment->creator['username'],
-                    'avatar' => $mediaComment->creator['avatar'],
-                ];
-            }
-            $media->fill([
-                'like_count' => MediaLike::query()->media($media->_id)->count(),
-                'visit_count' => MediaVisit::query()->media($media->_id)->count(),
-                'comment_count' => MediaComment::query()->media($media->_id)->count(),
-                'likes' => $likes,
-                'comments' => $comments,
-            ]);
-            $media->saveQuietly();
+            $media->updateLikes();
+            $media->updateVisits();
+            $media->updateComments();
+
             $this->info('Media '.$media->_id.' has been updated');
         }
         $this->comment('All done');

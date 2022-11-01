@@ -24,18 +24,7 @@ class MediaCommentObserver extends BaseModelObserver
         if ($media === null) {
             return;
         }
-        $commentCount = MediaComment::query()->media($media->_id)->count();
-        $media->comment_count = $commentCount;
-        $media->addToSet('comments', [
-            '_id' => new ObjectId($mediaComment->creator['_id']),
-            'username' => $mediaComment->creator['username'],
-            'avatar' => $mediaComment->creator['avatar'],
-        ], 10);
-        $media->count_fields_updated_at = array_merge(
-            $media->count_fields_updated_at,
-            ['comments' => DT::utcNow()]
-        );
-        $media->save();
+        $media->updateComments();
 
         // do not create a separate notification for tip comment
         if (! empty($mediaComment->tip_id)) {
