@@ -2,7 +2,7 @@
     use Aparlay\Core\Models\User;
 @endphp
 
-@if ($user)
+@if ($user instanceof User)
     <div class="x-username-avatar float-left {{$class}}" @class(['mr-2' => empty($class)])>
         <a href="{{$user->admin_url}}"
            title="{{$user->username}} [{{$user->is_online ? 'online' : 'offline'}}] [{{User::getVerificationStatuses()[$user->verification_status] ?? 'none'}}]">
