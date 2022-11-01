@@ -20,7 +20,7 @@ class ResetUserCountersCommand extends Command
 
     public function handle()
     {
-        foreach (User::lazy() as $user) {
+        foreach (User::where('is_fake', ['$exists' => false])->lazy() as $user) {
             /** @var User $user */
             $user->fillStatsCountersField([
                 'followers' => Follow::query()->user($user->_id)->accepted()->count() ?? 0,
