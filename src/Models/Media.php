@@ -701,13 +701,12 @@ class Media extends BaseModel
                 'username' => $like->creator['username'],
                 'avatar' => $like->creator['avatar'],
             ];
-        })->values();
+        })->toArray();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['likes' => DT::utcNow()]
         );
         $this->save();
-
         $this->refresh();
     }
 
@@ -723,13 +722,12 @@ class Media extends BaseModel
                 'username' => $like->creator['username'],
                 'avatar' => $like->creator['avatar'],
             ];
-        })->values();
+        })->toArray();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['visits' => DT::utcNow()]
         );
         $this->save();
-
         $this->refresh();
     }
 
@@ -743,7 +741,7 @@ class Media extends BaseModel
                 'username' => $comment->creator['username'],
                 'avatar' => $comment->creator['avatar'],
             ];
-        })->values();
+        })->toArray();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['comments' => DT::utcNow()]
