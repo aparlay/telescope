@@ -59,23 +59,9 @@
                             <h3 class="card-title">Info</h3>
                         </div>
                         <div class="card-body">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Profile</h3>
-                                    <div class="card-tools">
-                                        <button
-                                            type="button"
-                                            class="btn btn-tool"
-                                            data-card-widget="collapse"
-                                            data-expand-icon="fa-chevron-down"
-                                            data-collapse-icon="fa-chevron-up"
-                                        ><i class="fas fa-chevron-up"></i></button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    @include('default_view::admin.pages.user.tabs.user-info', ['user' => $user])
-                                </div>
-                            </div>
+                            @include('default_view::admin.pages.user.tabs.edit.profile', ['user' => $user])
+                            @include('default_view::admin.pages.user.tabs.edit.user-info', ['user' => $user])
+                            @include('default_view::admin.pages.user.tabs.edit.general', ['user' => $user])
                         </div>
                     </div>
                 </div>
