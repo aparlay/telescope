@@ -696,13 +696,22 @@ class Media extends BaseModel
     {
         $likeCount = MediaLike::query()->media($this->_id)->count();
         $this->like_count = $likeCount;
-        $this->likes = MediaLike::query()->media($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaLike $like) {
-            return [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ];
-        })->toArray();
+        $this->likes = MediaLike::query()
+            ->media($this->_id)
+            ->limit(10)
+            ->recentFirst()
+            ->get()
+            ->filter(function (MediaLike $like) {
+                return ! empty($like->creator['_id']);
+            })
+            ->map(function (MediaLike $like) {
+                return [
+                    '_id' => new ObjectId($like->creator['_id']),
+                    'username' => $like->creator['username'],
+                    'avatar' => $like->creator['avatar'],
+                ];
+            })
+            ->toArray();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['likes' => DT::utcNow()]
@@ -717,13 +726,23 @@ class Media extends BaseModel
         $multiplier = config('app.media.visit_multiplier', 1);
         $this->length_watched += ((($duration > $this->length) ? $this->length : $duration) * $multiplier);
         $this->visit_count = $visitCount + $multiplier;
-        $this->visits = MediaVisit::query()->media($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaVisit $like) {
-            return [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ];
-        })->toArray();
+        $this->visits = MediaVisit::query()
+            ->with('userObj')
+            ->media($this->_id)
+            ->limit(10)
+            ->recentFirst()
+            ->get()
+            ->filter(function (MediaVisit $visit) {
+                return ! empty($visit->userObj);
+            })
+            ->map(function (MediaVisit $visit) {
+                return [
+                    '_id' => new ObjectId($visit->userObj->_id),
+                    'username' => $visit->userObj->username,
+                    'avatar' => $visit->userObj->avatar,
+                ];
+            })
+            ->toArray();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['visits' => DT::utcNow()]
@@ -736,13 +755,21 @@ class Media extends BaseModel
     {
         $commentCount = MediaComment::query()->media($this->_id)->count();
         $this->comment_count = $commentCount;
-        $this->comments = MediaComment::query()->media($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaComment $comment) {
-            return [
-                '_id' => new ObjectId($comment->creator['_id']),
-                'username' => $comment->creator['username'],
-                'avatar' => $comment->creator['avatar'],
-            ];
-        })->toArray();
+        $this->comments = MediaComment::query()
+            ->media($this->_id)
+            ->limit(10)
+            ->recentFirst()
+            ->get()
+            ->filter(function (MediaComment $comment) {
+                return ! empty($comment->creator);
+            })
+            ->map(function (MediaComment $comment) {
+                return [
+                    '_id' => new ObjectId($comment->creator['_id']),
+                    'username' => $comment->creator['username'],
+                    'avatar' => $comment->creator['avatar'],
+                ];
+            })->toArray();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['comments' => DT::utcNow()]
