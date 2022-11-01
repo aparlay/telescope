@@ -701,7 +701,7 @@ class Media extends BaseModel
             ->recentFirst()
             ->get()
             ->filter(function (MediaLike $like) {
-                return !empty($like->creator);
+                return !empty($like->creator['_id']);
             })
             ->map(function (MediaLike $like) {
                 return [
