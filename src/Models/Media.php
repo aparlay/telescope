@@ -701,7 +701,7 @@ class Media extends BaseModel
             ->recentFirst()
             ->get()
             ->filter(function (MediaLike $like) {
-                return !empty($like->creator['_id']);
+                return ! empty($like->creator['_id']);
             })
             ->map(function (MediaLike $like) {
                 return [
@@ -760,7 +760,7 @@ class Media extends BaseModel
             ->recentFirst()
             ->get()
             ->filter(function (MediaComment $comment) {
-                return !empty($comment->creator);
+                return ! empty($comment->creator);
             })
             ->map(function (MediaComment $comment) {
                 return [
