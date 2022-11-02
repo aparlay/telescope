@@ -39,7 +39,7 @@ class UserObserver extends BaseModelObserver
             $model->gender = UserGender::MALE->value;
         }
         if (empty($model->interested_in)) {
-            $model->interested_in = UserInterestedIn::FEMALE->value;
+            $model->interested_in = [UserInterestedIn::FEMALE->value];
         }
         if (empty($model->visibility)) {
             $model->visibility = UserVisibility::PUBLIC->value;

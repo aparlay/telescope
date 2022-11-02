@@ -53,7 +53,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $gender
  * @property int         $visibility
  * @property int         $show_online_status
- * @property int         $interested_in
+ * @property array       $interested_in
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
  * @property array       $setting
@@ -259,6 +259,7 @@ class User extends \App\Models\User
                 'chats' => 0,
                 'notifications' => 0,
             ],
+            'interested_in' => [0],
         ],
     ];
 
@@ -277,7 +278,6 @@ class User extends \App\Models\User
         'phone_number_verified' => 'boolean',
         'gender' => 'integer',
         'avatar' => 'string',
-        'interested_in' => 'integer',
         'visibility' => 'integer',
         'stats.counters.followers' => 'integer',
         'stats.counters.followings' => 'integer',
@@ -725,7 +725,6 @@ class User extends \App\Models\User
             UserInterestedIn::FEMALE->value => UserInterestedIn::FEMALE->label(),
             UserInterestedIn::MALE->value => UserInterestedIn::MALE->label(),
             UserInterestedIn::TRANSGENDER->value => UserInterestedIn::TRANSGENDER->label(),
-            UserInterestedIn::COUPLE->value => UserInterestedIn::COUPLE->label(),
         ];
     }
 

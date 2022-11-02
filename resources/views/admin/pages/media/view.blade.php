@@ -82,6 +82,17 @@
                                                     @endforeach
                                                 </div>
                                             </li>
+                                            <li class="list-group-item">
+                                                <b>Content</b>
+                                                <div>
+                                                    @foreach(\Aparlay\Core\Models\Enums\UserInterestedIn::getAllCases() as $key => $label)
+                                                        <div>
+                                                            <input type="radio" value="{{ $key }}" id="{{$label}}" name="content_gender" {!! in_array($key, $media->content_gender) ? 'checked' : '' !!}>
+                                                            <label for="{{$label}}">{{$label}}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </li>
                                         </ul>
 
                                         <div class="row">

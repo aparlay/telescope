@@ -49,6 +49,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property array              $likes
  * @property array              $visits
  * @property array              $comments
+ * @property int                $content_gender
  * @property int                $status
  * @property int                $tips
  * @property array              $hashtags
@@ -86,9 +87,12 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @method static |self|Builder creator(ObjectId|string $userId)
  * @method static |self|Builder user(ObjectId|string $userId)
+ * @method static |self|Builder notBlockedFor(ObjectId|string $userId)
  * @method static |self|Builder availableForFollower()
  * @method static |self|Builder confirmed()
  * @method static |self|Builder hashtag(string $tag)
+ * @method static |self|Builder contentGender(array $gender)
+ * @method static |self|Builder sort(string $category)
  * @method static |self|Builder public()
  * @method static |self|Builder private()
  */
@@ -164,6 +168,7 @@ class Media extends BaseModel
         'hashtags' => [],
         'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]],
         'is_protected' => false,
+        'content_gender' => 0,
         'like_count' => 0,
         'visit_count' => 0,
         'comment_count' => 0,

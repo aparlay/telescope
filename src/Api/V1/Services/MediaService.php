@@ -14,6 +14,7 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\MediaWatched;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
@@ -147,10 +148,10 @@ class MediaService
 
         $userId = null;
         if (! auth()->guest()) {
-            $userId = auth()->user()->_id;
-            $query->notBlockedFor(auth()->user()->_id)->notVisitedByUserAndDevice($userId, $deviceId);
+            $user = auth()->user();
+            $query->contentGender($user->interested_in)->notBlockedFor($user->_id)->notVisitedByUserAndDevice($user->_id, $deviceId);
         } else {
-            $query->notVisitedByDevice($deviceId);
+            $query->contentGender([UserInterestedIn::FEMALE->value])->notVisitedByDevice($deviceId);
         }
 
         $data = $query->paginate(5)->withQueryString();
