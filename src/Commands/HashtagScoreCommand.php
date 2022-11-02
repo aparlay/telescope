@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Commands;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Hashtag;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
@@ -38,10 +39,11 @@ class HashtagScoreCommand extends Command
             $this->line($msg5);
 
             $hashtag = Hashtag::firstOrCreate(['tag' => $tag]);
+            $hashtag->recalculateScores();
+
             $hashtag->like_count = Media::hashtag($tag)->sum('like_count');
             $hashtag->visit_count = Media::hashtag($tag)->sum('visit_count');
-            $hashtag->media_count = $count = Media::hashtag($tag)->count();
-            $hashtag->sort_score = (Media::hashtag($tag)->sum('sort_scores.default') / $count);
+            $hashtag->media_count = Media::hashtag($tag)->count();
             $hashtag->save();
         }
 
