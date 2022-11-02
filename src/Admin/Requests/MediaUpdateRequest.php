@@ -44,7 +44,7 @@ class MediaUpdateRequest extends FormRequest
                 Rule::in(array_keys(Media::getBeautyScores())),
             ],
             'content_gender' => ['nullable', 'array'],
-            'content_gender.*' => [Rule::in(UserInterestedIn::getAllValues()),],
+            'content_gender.*' => [Rule::in(UserInterestedIn::getAllValues())],
             'description' => ['nullable', 'string'],
             'status' => [
                 'nullable',
@@ -52,7 +52,6 @@ class MediaUpdateRequest extends FormRequest
             ],
         ];
     }
-
 
     public function prepareForValidation()
     {

@@ -243,7 +243,7 @@ trait MediaScope
      */
     public function scopeContentGender(Builder $query, $gender): Builder
     {
-        if (!is_array($gender)) {
+        if (! is_array($gender)) {
             $gender = [$gender];
         }
 
