@@ -60,7 +60,7 @@ class RecalculateHashtag implements ShouldQueue
     public function handle(): void
     {
         $hashtag = Hashtag::firstOrCreate(['tag' => $this->tag]);
-        $count = Media::hashtag($this->tag)->public()->confirmed()->count();
+        $count = Media::hashtag($this->tag)->count();
 
         if ($count === 0) {
             $hashtag->delete();
@@ -70,9 +70,9 @@ class RecalculateHashtag implements ShouldQueue
 
         $hashtag->recalculateScores();
 
-        $hashtag->like_count = Media::hashtag($this->tag)->public()->confirmed()->sum('like_count');
-        $hashtag->visit_count = Media::hashtag($this->tag)->public()->confirmed()->sum('visit_count');
-        $hashtag->media_count = Media::hashtag($this->tag)->public()->confirmed()->count();
+        $hashtag->like_count = Media::hashtag($this->tag)->sum('like_count');
+        $hashtag->visit_count = Media::hashtag($this->tag)->sum('visit_count');
+        $hashtag->media_count = Media::hashtag($this->tag)->count();
         $hashtag->save();
         $hashtag->save();
     }
