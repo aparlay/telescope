@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Psr\SimpleCache\InvalidArgumentException;
 use Session;
 
 class MediaController extends Controller
@@ -107,13 +108,15 @@ class MediaController extends Controller
     }
 
     /**
-     * @param MediaUpdateRequest $request
-     * @param $id
+     * @param  Media               $media
+     * @param  MediaUpdateRequest  $request
+     *
      * @return RedirectResponse
+     * @throws InvalidArgumentException
      */
     public function update(Media $media, MediaUpdateRequest $request): RedirectResponse
     {
-        $this->mediaService->update($media->_id);
+        $this->mediaService->update($media->_id, $request);
 
         return redirect()->back()->with(['success' => 'Media updated successfully']);
     }

@@ -95,7 +95,7 @@ class User
     public $gender;
 
     /**
-     * @OA\Property(property="interested_in", type="integer", description="female=0, male=1, trans=2, couple=3", example=1)
+     * @OA\Property(property="interested_in", type="array", @OA\Items (), description="female=0, male=1, trans=2", example=[1])
      */
     public $interested_in;
 

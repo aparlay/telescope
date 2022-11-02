@@ -10,6 +10,8 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Queries\MediaQueryBuilder;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,6 +52,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property array              $likes
  * @property array              $visits
  * @property array              $comments
+ * @property array              $content_gender
  * @property int                $status
  * @property int                $tips
  * @property array              $hashtags
@@ -87,9 +90,12 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @method static |self|Builder creator(ObjectId|string $userId)
  * @method static |self|Builder user(ObjectId|string $userId)
+ * @method static |self|Builder notBlockedFor(ObjectId|string $userId)
  * @method static |self|Builder availableForFollower()
  * @method static |self|Builder confirmed()
  * @method static |self|Builder hashtag(string $tag)
+ * @method static |self|Builder contentGender(array $gender)
+ * @method static |self|Builder sort(string $category)
  * @method static |self|Builder public()
  * @method static |self|Builder private()
  */
@@ -149,6 +155,7 @@ class Media extends BaseModel
         'blocked_user_ids',
         'creator',
         'scores',
+        'content_gender',
         'sort_scores',
         'slug',
         'tips',
@@ -165,6 +172,7 @@ class Media extends BaseModel
         'hashtags' => [],
         'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]],
         'is_protected' => false,
+        'content_gender' => [0],
         'like_count' => 0,
         'visit_count' => 0,
         'comment_count' => 0,
@@ -227,7 +235,8 @@ class Media extends BaseModel
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->visibility == MediaVisibility::PUBLIC->value && $this->status === MediaStatus::CONFIRMED->value;
+        return $this->visibility == MediaVisibility::PUBLIC->value &&
+            in_array($this->status, [MediaStatus::DENIED->value, MediaStatus::CONFIRMED->value]);
     }
 
     /**
@@ -249,6 +258,10 @@ class Media extends BaseModel
             'comment_count' => $this->comment_count,
             'hashtags' => $this->hashtags,
             'score' => $this->sort_scores['default'],
+            'score_for_male' => $this->sort_scores['default'] * (in_array(UserInterestedIn::MALE->value, $this->content_gender) ? 1 : 0),
+            'score_for_female' => $this->sort_scores['default'] * (in_array(UserInterestedIn::FEMALE->value, $this->content_gender) ? 1 : 0),
+            'score_for_transgender' => $this->sort_scores['default'] * (in_array(UserInterestedIn::TRANSGENDER->value, $this->content_gender) ? 1 : 0),
+            'gender' => $this->content_gender,
             'country' => $this->userObj->country_alpha2 ?? '',
             'last_online_at' => 0,
             '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
