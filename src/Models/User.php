@@ -331,7 +331,7 @@ class User extends \App\Models\User
     {
         return $this->visibility == UserVisibility::PUBLIC->value &&
             in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
-            $this->verification_status == UserVerificationStatus::VERIFIED->value &&
+            //$this->verification_status == UserVerificationStatus::VERIFIED->value &&
             ! config('app.is_testing');
     }
 
@@ -351,6 +351,10 @@ class User extends \App\Models\User
             'description' => $this->bio,
             'hashtags' => [],
             'score' => $this->scores['sort'],
+            'score_for_male' => $this->scores['sort'] * (in_array($this->gender, [UserGender::MALE->value, UserGender::NOT_MENTION->value]) ? 1 : 0),
+            'score_for_female' => $this->scores['sort'] * (in_array($this->gender, [UserGender::FEMALE->value, UserGender::NOT_MENTION->value]) ? 1 : 0),
+            'score_for_transgender' => $this->scores['sort'] * (in_array($this->gender, [UserGender::TRANSGENDER->value, UserGender::NOT_MENTION->value]) ? 1 : 0),
+            'gender' => [$this->gender],
             'country' => $this->country_alpha2,
             'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
             'like_count' => $this->counters['likes'],

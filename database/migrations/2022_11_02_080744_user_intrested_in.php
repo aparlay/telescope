@@ -8,8 +8,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -24,9 +23,10 @@ return new class extends Migration
         foreach (Media::query()->with('userObj')->whereNull('is_fake')->lazy() as $media) {
             /** @var Media $media */
             $media->content_gender = match ($media->userObj->gender) {
-                UserGender::FEMALE->value, UserGender::NOT_MENTION->value => UserInterestedIn::FEMALE->value,
-                UserGender::MALE->value => UserInterestedIn::MALE->value,
-                UserGender::TRANSGENDER->value => UserInterestedIn::TRANSGENDER->value,
+                UserGender::FEMALE->value => [UserInterestedIn::FEMALE->value],
+                UserGender::MALE->value => [UserInterestedIn::MALE->value],
+                UserGender::TRANSGENDER->value => [UserInterestedIn::TRANSGENDER->value],
+                UserGender::NOT_MENTION->value => [UserInterestedIn::FEMALE->value, UserInterestedIn::MALE->value, UserInterestedIn::TRANSGENDER->value],
             };
             $media->recalculateSortScores();
             $media->drop('sort_score');
