@@ -9,8 +9,7 @@ class OrderSearchResult extends Component
 {
     public function __construct(
         public Order $order
-    )
-    {
+    ) {
     }
 
     public function render()

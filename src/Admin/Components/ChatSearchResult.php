@@ -9,8 +9,7 @@ class ChatSearchResult extends Component
 {
     public function __construct(
         public Chat $chat
-    )
-    {
+    ) {
     }
 
     public function render()
