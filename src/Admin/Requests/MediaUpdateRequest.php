@@ -46,6 +46,7 @@ class MediaUpdateRequest extends FormRequest
             'content_gender' => ['nullable', 'array'],
             'content_gender.*' => [Rule::in(UserInterestedIn::getAllValues())],
             'description' => ['nullable', 'string'],
+            'metadata' => ['nullable', 'string'],
             'status' => [
                 'nullable',
                 Rule::in(array_keys(Media::getStatuses())),

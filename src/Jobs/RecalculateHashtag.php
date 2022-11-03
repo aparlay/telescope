@@ -70,9 +70,9 @@ class RecalculateHashtag implements ShouldQueue
 
         $hashtag->recalculateScores();
 
-        $hashtag->like_count = Media::hashtag($this->tag)->sum('like_count');
-        $hashtag->visit_count = Media::hashtag($this->tag)->sum('visit_count');
-        $hashtag->media_count = Media::hashtag($this->tag)->count();
+        $hashtag->like_count = Media::metadataHashtag($this->tag)->sum('like_count') + Media::hashtag($this->tag)->sum('like_count');
+        $hashtag->visit_count = Media::metadataHashtag($this->tag)->sum('visit_count') + Media::hashtag($this->tag)->sum('visit_count');
+        $hashtag->media_count = Media::metadataHashtag($this->tag)->count() + Media::hashtag($this->tag)->count();
         $hashtag->save();
         $hashtag->save();
     }

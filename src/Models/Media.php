@@ -75,6 +75,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Alert[]            $alertObjs
  * @property UserNotification[] $userNotificationObjs
  * @property array              $files_history
+ * @property array              $metadata_hashtags
  *
  * @property-read string        $slack_subject_admin_url
  * @property-read string        $slack_admin_url
@@ -96,6 +97,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder availableForFollower()
  * @method static |self|Builder confirmed()
  * @method static |self|Builder hashtag(string $tag)
+ * @method static |self|Builder metadataHashtag(string $tag)
  * @method static |self|Builder contentGender(array $gender)
  * @method static |self|Builder sort(string $category)
  * @method static |self|Builder public()
@@ -153,6 +155,7 @@ class Media extends BaseModel
         'tips',
         'is_music_licensed',
         'hashtags',
+        'metadata_hashtags',
         'people',
         'processing_log',
         'blocked_user_ids',
@@ -173,6 +176,7 @@ class Media extends BaseModel
         'likes' => [],
         'visits' => [],
         'hashtags' => [],
+        'metadata_hashtags' => [],
         'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]],
         'is_protected' => false,
         'content_gender' => [0],
@@ -648,11 +652,6 @@ class Media extends BaseModel
     public function getCoverUrlAttribute()
     {
         return Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg');
-    }
-
-    public function getMetadataHashtagsAttribute()
-    {
-        return empty($this->metadata) ? [] : MediaService::extractHashtags($this->metadata);
     }
 
     /**
