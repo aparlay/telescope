@@ -263,7 +263,7 @@ class Media extends BaseModel
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
             'comment_count' => $this->comment_count,
-            'hashtags' => array_merge($this->hashtags, $this->metadata_hashtags),
+            'hashtags' => array_merge($this->hashtags, $this->metadata_hashtags ?? []),
             'score' => $this->sort_scores['default'],
             'score_for_male' => $this->sort_scores['default'] * (in_array(UserInterestedIn::MALE->value, $this->content_gender) ? 1 : 0),
             'score_for_female' => $this->sort_scores['default'] * (in_array(UserInterestedIn::FEMALE->value, $this->content_gender) ? 1 : 0),
