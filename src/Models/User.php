@@ -520,7 +520,7 @@ class User extends \App\Models\User
      */
     public function getCountFieldsUpdatedAtAttribute($attributeValue): mixed
     {
-        if (!is_array($attributeValue)) {
+        if (! is_array($attributeValue)) {
             return $attributeValue;
         }
 
