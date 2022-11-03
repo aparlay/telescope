@@ -651,7 +651,7 @@ class Media extends BaseModel
 
     public function getMetadataHashtagsAttribute()
     {
-        return MediaService::extractHashtags($this->metadata);
+        return empty($this->metadata) ? [] : MediaService::extractHashtags($this->metadata);
     }
 
     /**
