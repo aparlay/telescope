@@ -40,7 +40,7 @@ class MediaFeedRequest extends FormRequest
      */
     public function prepareForValidation()
     {
-        if (empty($this->gender_preferences)) {
+        if (empty($this->gender_preferences) || !is_string($this->gender_preferences)) {
             $this->gender_preferences = '';
         }
 
