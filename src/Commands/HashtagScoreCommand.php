@@ -20,7 +20,19 @@ class HashtagScoreCommand extends Command
         Media::where('is_fake', ['$exists' => false])
             ->where('hashtags', ['$type' => 'array'])
             ->each(function ($media) use (&$tags) {
+                /** @var Media $media */
                 foreach ($media->hashtags as $tag) {
+                    if (! isset($tags[$tag])) {
+                        $tags[$tag] = [
+                            'like_count' => 0,
+                            'visit_count' => 0,
+                            'media_count' => 0,
+                            'sort_score' => 0,
+                        ];
+                    }
+                }
+
+                foreach ($media->metadata_hashtags as $tag) {
                     if (! isset($tags[$tag])) {
                         $tags[$tag] = [
                             'like_count' => 0,
@@ -39,9 +51,9 @@ class HashtagScoreCommand extends Command
             $hashtag = Hashtag::firstOrCreate(['tag' => $tag]);
             $hashtag->recalculateScores();
 
-            $hashtag->like_count = Media::hashtag($tag)->sum('like_count');
-            $hashtag->visit_count = Media::hashtag($tag)->sum('visit_count');
-            $hashtag->media_count = Media::hashtag($tag)->count();
+            $hashtag->like_count = Media::metadataHashtag($tag)->sum('like_count') + Media::hashtag($tag)->sum('like_count');
+            $hashtag->visit_count = Media::metadataHashtag($tag)->sum('visit_count') + Media::hashtag($tag)->sum('visit_count');
+            $hashtag->media_count = Media::metadataHashtag($tag)->count() + Media::hashtag($tag)->count();
             $hashtag->save();
         }
 
