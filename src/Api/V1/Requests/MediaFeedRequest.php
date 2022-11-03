@@ -40,7 +40,7 @@ class MediaFeedRequest extends FormRequest
      */
     public function prepareForValidation()
     {
-        if (empty($this->gender_preferences)) {
+        if (empty($this->gender_preferences) || !is_string($this->gender_preferences)) {
             $this->gender_preferences = '';
         }
 
@@ -50,7 +50,7 @@ class MediaFeedRequest extends FormRequest
                 return in_array($value, UserInterestedIn::getAllValues()) || in_array($value, UserInterestedIn::getAllCases());
             })
             ->map(function ($value, $key) {
-                return (int)match ($value) {
+                return (int) match ($value) {
                     UserInterestedIn::FEMALE->label() => UserInterestedIn::FEMALE->value,
                     UserInterestedIn::MALE->label() => UserInterestedIn::MALE->value,
                     UserInterestedIn::TRANSGENDER->label() => UserInterestedIn::TRANSGENDER->value,
