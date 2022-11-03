@@ -96,7 +96,7 @@
                                             <li class="list-group-item">
                                                 <b>Metadata</b>
                                                 <div>
-                                                    <label for="metadata"></label>
+                                                    <label for="metadata" class="d-none"></label>
                                                     <textarea name="metadata" id="metadata" cols="30" rows="3" class="form-control">{{ $media->metadata }}</textarea>
                                                 </div>
                                             </li>
