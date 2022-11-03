@@ -143,16 +143,18 @@
                                     <livewire:user-moderation-button :userId="$user->_id"/>
                                 </div>
                             </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button class="btn btn-block btn-warning" data-toggle="modal"
-                                            data-target="#alertModal">
-                                        <i class="fas fa-exclamation-triangle"></i>
-                                        Send warning message
-                                    </button>
+                            @if(config('app.enabled-features.user.warning-message'))
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button class="btn btn-block btn-warning" data-toggle="modal"
+                                                data-target="#alertModal">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            Send warning message
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                     <livewire:direct-chat :userId="$user->_id"
@@ -299,7 +301,7 @@
                                 <div id="collapseMainTen" class="collapse" aria-labelledby="headingMainTen"
                                      data-parent="#accordion">
                                     <div class="card-body">
-                                        @include('default_view::admin.pages.user.tabs.chats', ['user' => $user])
+                                        <livewire:chats-table :userId="$user->_id"/>
                                     </div>
                                 </div>
                             </div>
