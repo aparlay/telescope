@@ -141,6 +141,7 @@ class MediaService extends AdminBaseService
     {
         $data = $request->only([
             'description',
+            'metadata',
             'status',
             'skin_score',
             'visibility',
