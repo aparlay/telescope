@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
+use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\Cdn;
@@ -36,6 +37,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property ObjectId           $_id
  * @property ObjectId           $user_id
  * @property string             $description
+ * @property string             $metadata
  * @property string             $location
  * @property string             $hash
  * @property string             $file
@@ -68,10 +70,11 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property array              $scores
  * @property array              $sort_scores
  * @property User               $userObj
- * @property User        $creatorObj
+ * @property User               $creatorObj
  * @property Alert[]            $alertObjs
  * @property UserNotification[] $userNotificationObjs
  * @property array              $files_history
+ * @property array              $metadata_hashtags
  *
  * @property-read string        $slack_subject_admin_url
  * @property-read string        $slack_admin_url
@@ -93,6 +96,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder availableForFollower()
  * @method static |self|Builder confirmed()
  * @method static |self|Builder hashtag(string $tag)
+ * @method static |self|Builder metadataHashtag(string $tag)
  * @method static |self|Builder contentGender(array $gender)
  * @method static |self|Builder sort(string $category)
  * @method static |self|Builder public()
@@ -125,6 +129,7 @@ class Media extends BaseModel
     protected $fillable = [
         '_id',
         'description',
+        'metadata',
         'notes',
         'location',
         'hash',
@@ -149,6 +154,7 @@ class Media extends BaseModel
         'tips',
         'is_music_licensed',
         'hashtags',
+        'metadata_hashtags',
         'people',
         'processing_log',
         'blocked_user_ids',
@@ -169,6 +175,7 @@ class Media extends BaseModel
         'likes' => [],
         'visits' => [],
         'hashtags' => [],
+        'metadata_hashtags' => [],
         'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]],
         'is_protected' => false,
         'content_gender' => [0],
@@ -255,7 +262,7 @@ class Media extends BaseModel
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
             'comment_count' => $this->comment_count,
-            'hashtags' => $this->hashtags,
+            'hashtags' => array_merge($this->hashtags, $this->metadata_hashtags),
             'score' => $this->sort_scores['default'],
             'score_for_male' => $this->sort_scores['default'] * (in_array(UserInterestedIn::MALE->value, $this->content_gender) ? 1 : 0),
             'score_for_female' => $this->sort_scores['default'] * (in_array(UserInterestedIn::FEMALE->value, $this->content_gender) ? 1 : 0),

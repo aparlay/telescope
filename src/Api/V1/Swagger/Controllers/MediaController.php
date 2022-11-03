@@ -31,6 +31,16 @@ use OpenApi\Annotations as OA;
  *             type="string"
  *         )
  *     ),
+ *     @OA\Parameter(
+ *         name="gender_preferences",
+ *         in="query",
+ *         example="male,female,transgender",
+ *         description="gender of feed video content.",
+ *         required=false,
+ *         @OA\Schema(
+ *             type="string"
+ *         )
+ *     ),
  *     @OA\Response(
  *         response=200,
  *         description="successful operation",

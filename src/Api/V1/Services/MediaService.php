@@ -133,10 +133,12 @@ class MediaService
     }
 
     /**
+     * @param  array  $genderPreferences
+     *
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
      */
-    public function getPublicFeeds(): LengthAwarePaginator
+    public function getPublicFeeds(array $genderPreferences = []): LengthAwarePaginator
     {
         $query = Media::query();
         $query->public()->confirmed()->sort();
@@ -149,9 +151,11 @@ class MediaService
         $userId = null;
         if (! auth()->guest()) {
             $user = auth()->user();
-            $query->contentGender($user->interested_in)->notBlockedFor($user->_id)->notVisitedByUserAndDevice($user->_id, $deviceId);
+            $genderPreferences = ! empty($genderPreferences) ? $genderPreferences : $user->interested_in;
+            $query->contentGender($genderPreferences)->notBlockedFor($user->_id)->notVisitedByUserAndDevice($user->_id, $deviceId);
         } else {
-            $query->contentGender([UserInterestedIn::FEMALE->value])->notVisitedByDevice($deviceId);
+            $genderPreferences = ! empty($genderPreferences) ? $genderPreferences : [UserInterestedIn::FEMALE->value];
+            $query->contentGender($genderPreferences)->notVisitedByDevice($deviceId);
         }
 
         $data = $query->paginate(5)->withQueryString();

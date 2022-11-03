@@ -83,7 +83,7 @@
                                                 </div>
                                             </li>
                                             <li class="list-group-item">
-                                                <b>Content</b>
+                                                <b>Content Gender</b>
                                                 <div>
                                                     @foreach(\Aparlay\Core\Models\Enums\UserInterestedIn::getAllCases() as $key => $label)
                                                         <div>
@@ -91,6 +91,13 @@
                                                             <label for="{{$label}}">{{$label}}</label>
                                                         </div>
                                                     @endforeach
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Metadata</b>
+                                                <div>
+                                                    <label for="metadata" class="d-none"></label>
+                                                    <textarea name="metadata" id="metadata" cols="30" rows="3" class="form-control">{{ $media->metadata }}</textarea>
                                                 </div>
                                             </li>
                                         </ul>
