@@ -58,7 +58,7 @@ class MediaFeedRequest extends FormRequest
                 };
             })
             ->map(function ($value, $key) {
-                return (int)$value;
+                return (int) $value;
             })->toArray();
     }
 }
