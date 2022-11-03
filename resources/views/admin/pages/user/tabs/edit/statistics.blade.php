@@ -1,5 +1,5 @@
-<div class="row">
-    <div class="col-md-2 mb-2">
+<div class="row mb-3">
+    <div class="col-md-2">
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-md-2">
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-md-2">
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
@@ -41,7 +41,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-md-2">
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
@@ -55,7 +55,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-md-2">
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2 mb-2">
+    <div class="col-md-2">
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">

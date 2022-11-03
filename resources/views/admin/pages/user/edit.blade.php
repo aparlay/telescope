@@ -28,17 +28,16 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-2">
-                    <div class="row text-center">
-                        <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt=""
-                            class="profile-user-img img-fluid img-circle">
-                    </div>
+                    @include('default_view::admin.pages.user.tabs.edit.menu')
                 </div>
-                <div class="col-md-10">
-                    @include('default_view::admin.pages.user.tabs.statisticsnew')
+                <div class="col-md-10 pl-4">
+                    <div class="">
+                        @include('default_view::admin.pages.user.tabs.edit.statistics')
+                    </div>
 
                     <div class="card card-default">
                         <div class="card-header">
-                            <h3 class="card-title">Notes</h3>
+                            <h3 class="card-title text-uppercase">Notes</h3>
                             <div class="card-tools">
                                 <button
                                     type="button"
@@ -56,12 +55,117 @@
 
                     <div class="card card-default">
                         <div class="card-header">
-                            <h3 class="card-title">Info</h3>
+                            <h3 class="card-title text-uppercase">Info</h3>
                         </div>
                         <div class="card-body">
                             @include('default_view::admin.pages.user.tabs.edit.profile', ['user' => $user])
                             @include('default_view::admin.pages.user.tabs.edit.user-info', ['user' => $user])
                             @include('default_view::admin.pages.user.tabs.edit.general', ['user' => $user])
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Devices</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-up"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @include('default_view::admin.pages.user.tabs.device', ['user' => $user])
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Cards</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-up"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Sales (0)</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-up"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Payouts</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-up"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @include('default_view::admin.pages.user.tabs.payouts', ['user' => $user])
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Emails</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-up"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @include('default_view::admin.pages.user.tabs.email', ['user' => $user])
+                        </div>
+                    </div>
+
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Two-Factor Authentication</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-up"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
                         </div>
                     </div>
                 </div>
