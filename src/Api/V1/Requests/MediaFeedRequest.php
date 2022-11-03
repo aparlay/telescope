@@ -47,7 +47,15 @@ class MediaFeedRequest extends FormRequest
         $genderPreferences = explode(',', $this->gender_preferences);
         $this->gender_preferences = collect($genderPreferences)
             ->filter(function ($value, $key) {
-                return in_array($value, UserInterestedIn::getAllValues());
+                return in_array($value, UserInterestedIn::getAllValues()) || in_array($value, UserInterestedIn::getAllCases());
+            })
+            ->map(function ($value, $key) {
+                return match ($value) {
+                    UserInterestedIn::FEMALE->label() => UserInterestedIn::FEMALE->value,
+                    UserInterestedIn::MALE->label() => UserInterestedIn::MALE->value,
+                    UserInterestedIn::TRANSGENDER->label() => UserInterestedIn::TRANSGENDER->value,
+                    default => $value
+                };
             })
             ->map(function ($value, $key) {
                 return (int)$value;
