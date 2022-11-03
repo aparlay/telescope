@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media as BaseMedia;
+use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
@@ -33,7 +34,7 @@ class MediaRepository
      */
     public function store(MediaRequest $request)
     {
-        $user = auth()->user();
+        $user = User::user(auth()->user()->_id)->firstOrFail();
         try {
             $model = Media::create([
                 'status' => MediaStatus::QUEUED->value,
