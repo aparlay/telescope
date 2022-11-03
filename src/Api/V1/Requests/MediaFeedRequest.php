@@ -50,15 +50,12 @@ class MediaFeedRequest extends FormRequest
                 return in_array($value, UserInterestedIn::getAllValues()) || in_array($value, UserInterestedIn::getAllCases());
             })
             ->map(function ($value, $key) {
-                return match ($value) {
+                return (int)match ($value) {
                     UserInterestedIn::FEMALE->label() => UserInterestedIn::FEMALE->value,
                     UserInterestedIn::MALE->label() => UserInterestedIn::MALE->value,
                     UserInterestedIn::TRANSGENDER->label() => UserInterestedIn::TRANSGENDER->value,
                     default => $value
                 };
-            })
-            ->map(function ($value, $key) {
-                return (int) $value;
             })->toArray();
     }
 }
