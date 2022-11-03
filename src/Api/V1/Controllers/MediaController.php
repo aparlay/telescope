@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Dto\MediaDTO;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Requests\MediaFeedRequest;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Requests\UpdateMediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
@@ -12,6 +13,7 @@ use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UploadService;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -28,12 +30,12 @@ class MediaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(MediaFeedRequest $request): Response
     {
-        if (($type = request()?->input('type')) !== null) {
-            $collection = new MediaCollection($this->mediaService->getFeedByType($type));
+        if ($request->type !== null) {
+            $collection = new MediaCollection($this->mediaService->getFeedByType($request->type));
         } else {
-            $collection = new MediaFeedsCollection($this->mediaService->getPublicFeeds());
+            $collection = new MediaFeedsCollection($this->mediaService->getPublicFeeds($request->gender_preferences));
         }
 
         return $this->response($collection, '', Response::HTTP_OK);
