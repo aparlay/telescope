@@ -31,7 +31,7 @@ class MediaFeedRequest extends FormRequest
     {
         return [
             'type' => ['nullable', 'string', 'max:100'],
-            'gender_preferences' => [Rule::in(UserInterestedIn::getAllValues())],
+            'gender_preferences.*' => [Rule::in(UserInterestedIn::getAllValues())],
         ];
     }
 
@@ -47,10 +47,15 @@ class MediaFeedRequest extends FormRequest
         $genderPreferences = explode(',', $this->gender_preferences);
         $this->gender_preferences = collect($genderPreferences)
             ->filter(function ($value, $key) {
-                return in_array($value, UserInterestedIn::getAllCases());
+                return in_array($value, UserInterestedIn::getAllValues()) || in_array($value, UserInterestedIn::getAllCases());
             })
             ->map(function ($value, $key) {
-                return array_search($value, UserInterestedIn::getAllCases());
+                return (int)match ($value) {
+                    UserInterestedIn::FEMALE->label() => UserInterestedIn::FEMALE->value,
+                    UserInterestedIn::MALE->label() => UserInterestedIn::MALE->value,
+                    UserInterestedIn::TRANSGENDER->label() => UserInterestedIn::TRANSGENDER->value,
+                    default => $value
+                };
             })->toArray();
     }
 }
