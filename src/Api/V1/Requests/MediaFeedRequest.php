@@ -2,17 +2,13 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
-use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
-use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 /**
  * @property string $type
- * @property string $gender_preferences
+ * @property array $gender_preferences
  */
 class MediaFeedRequest extends FormRequest
 {
