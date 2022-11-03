@@ -50,7 +50,7 @@ class MediaFeedRequest extends FormRequest
                 return in_array($value, UserInterestedIn::getAllValues());
             })
             ->map(function ($value, $key) {
-                return (int)$value;
+                return (int) $value;
             })->toArray();
     }
 }
