@@ -35,7 +35,6 @@ class MediasModerationTable extends BaseIndexComponent
             new FilterExact('status', 'int'),
             new FilterExact('like_count', 'int'),
             new FilterExact('visit_count', 'int'),
-            new FilterExact('sort_score', 'int'),
             new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];
     }
@@ -55,7 +54,6 @@ class MediasModerationTable extends BaseIndexComponent
             'status',
             'like_count',
             'visit_count',
-            'sort_score',
             'created_at',
         ];
     }

@@ -41,7 +41,7 @@ class HashtagScoreCommand extends Command
             $hashtag->like_count = Media::hashtag($tag)->sum('like_count');
             $hashtag->visit_count = Media::hashtag($tag)->sum('visit_count');
             $hashtag->media_count = $count = Media::hashtag($tag)->count();
-            $hashtag->sort_score = (Media::hashtag($tag)->sum('sort_score') / $count);
+            $hashtag->sort_score = (Media::hashtag($tag)->sum('sort_scores.default') / $count);
             $hashtag->save();
         }
 

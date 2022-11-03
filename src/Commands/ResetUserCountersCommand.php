@@ -34,16 +34,9 @@ class ResetUserCountersCommand extends Command
                 'chats' => Chat::query()->participants($user->_id)->count() ?? 0,
                 'notifications' => UserNotification::query()->user($user->_id)->count() ?? 0,
             ]);
-            $likes = [];
-            foreach (MediaLike::query()->user($user->_id)->recentFirst()->limit(10)->get() as $mediaLike) {
-                $likes[] = [
-                    '_id' => new ObjectId($mediaLike->creator['_id']),
-                    'username' => $mediaLike->creator['username'],
-                    'avatar' => $mediaLike->creator['avatar'],
-                ];
-            }
-            $user->likes = $likes;
+
             $user->saveQuietly();
+            $user->updateLikes();
             $this->info('User '.$user->_id.' has been updated');
         }
         $this->comment('All done');

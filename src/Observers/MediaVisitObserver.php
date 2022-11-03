@@ -4,6 +4,7 @@ namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Models\MediaVisit;
 use Exception;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaVisitObserver extends BaseModelObserver
 {

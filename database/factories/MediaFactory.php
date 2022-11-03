@@ -77,8 +77,18 @@ class MediaFactory extends Factory
             'user_id' => function (array $attributes) {
                 return (string) $attributes['creator']['_id'];
             },
-            'scores' => [],
-            'sort_score' => $this->faker->randomNumber(4),
+            'scores' => [
+                ['type' => 'skin', 'score' => $this->faker->randomNumber(1)],
+                ['type' => 'awesomeness', 'score' => $this->faker->randomNumber(1)],
+                ['type' => 'beauty', 'score' => $this->faker->randomNumber(1)],
+            ],
+            'sort_scores' => [
+                'default' => $this->faker->randomFloat(3),
+                'guest' => $this->faker->randomFloat(3),
+                'returned' => $this->faker->randomFloat(3),
+                'registered' => $this->faker->randomFloat(3),
+                'paid' => $this->faker->randomFloat(3),
+            ],
             'slug' => Str::random(6),
             'created_by' => function (array $attributes) {
                 return $attributes['creator']['_id'];

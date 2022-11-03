@@ -37,9 +37,13 @@ class MediaUpdateRequest extends FormRequest
                 'integer',
                 Rule::in(array_keys(Media::getAwesomenessScores())),
             ],
+            'beauty_score' => ['nullable',
+                'integer',
+                Rule::in(array_keys(Media::getBeautyScores())),
+            ],
             'description' => ['nullable', 'string'],
             'status' => [
-                'required',
+                'nullable',
                 Rule::in(array_keys(Media::getStatuses())),
             ],
         ];

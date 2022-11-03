@@ -88,7 +88,7 @@ class MediaController extends Controller
     public function view(Media $media)
     {
         $media = new MediaResource($this->mediaService->find($media->_id));
-        $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0]];
+        $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]];
 
         $moderationQueueNotEmpty = $this->mediaService->isModerationQueueNotEmpty();
 
@@ -182,8 +182,6 @@ class MediaController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with('danger', 'Video file download failed.');
         }
-
-        return redirect()->route('core.admin.media.view', ['media' => $media->_id]);
     }
 
     public function reupload(Media $media, MediaUploadRequest $request)
@@ -193,9 +191,16 @@ class MediaController extends Controller
         return redirect()->back()->with(['success' => 'Video uploaded successfully']);
     }
 
-    public function recalculateSortScore(Media $media, Request $request)
+    public function recalculateSortScores(Media $media, Request $request)
     {
-        $this->mediaService->calculateSortScore($media, $request->integer('promote', 0));
+        $this->mediaService->calculateSortScores($media, $request->integer('promote', 0));
+
+        return redirect()->back()->with(['success' => 'Video sort score updated successfully']);
+    }
+
+    public function algorithms(Request $request)
+    {
+        //$this->mediaService->storeAlgorithmSettings($media, $request->integer('promote', 0));
 
         return redirect()->back()->with(['success' => 'Video sort score updated successfully']);
     }

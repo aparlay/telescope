@@ -72,7 +72,7 @@ class MediaLikeTest extends ApiTestCase
             );
 
         $this->assertDatabaseHas((new MediaLike())->getCollection(), [
-            'created_by' => new ObjectId($likeCreator->_id),
+            'creator._id' => new ObjectId($likeCreator->_id),
             'media_id' => new ObjectId($media->_id),
         ]);
 

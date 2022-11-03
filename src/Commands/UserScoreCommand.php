@@ -20,7 +20,7 @@ class UserScoreCommand extends Command
             ->each(function ($user) {
                 $count = Media::creator($user->_id)->count();
                 if ($count > 0) {
-                    $score = Media::creator($user->_id)->sum('sort_score');
+                    $score = Media::creator($user->_id)->sum('sort_scores.default');
                     $scores = $user->scores;
                     $scores['sort'] = $score / $count;
 

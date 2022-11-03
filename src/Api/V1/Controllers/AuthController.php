@@ -125,7 +125,12 @@ class AuthController extends Controller
         $this->userService->isUserEligible($user);
 
         /* Validate the OTP or Throw exception if OTP is incorrect */
-        $this->otpService->validateOtp($request->otp, $request->username, true);
+        if ($this->userService->requireOtp()) {
+            $this->otpService->validateOtp($request->otp, $request->username);
+            $this->userService->verify();
+        } else {
+            $this->otpService->validateOtp($request->otp, $request->username, true);
+        }
 
         /* Find the identityField (Email/Phone Number/Username) based on username and return the response*/
         return $this->response([
@@ -198,7 +203,9 @@ class AuthController extends Controller
             if ($request->otp) {
                 $this->otpService->validateOtp($request->otp, $request->username);
                 $this->userService->verify();
-            } else {
+            }
+            /*
+            else {
                 $this->otpService->sendOtp($user, $deviceId);
                 $response = [];
                 if ($identityField === Login::IDENTITY_PHONE_NUMBER) {
@@ -214,6 +221,7 @@ class AuthController extends Controller
 
                 return $this->response($response, 'OTP has been sent.', Response::HTTP_I_AM_A_TEAPOT);
             }
+            */
         }
 
         /** Prepare and return the json response */
@@ -260,11 +268,10 @@ class AuthController extends Controller
 
         $this->otpService->sendOtp($user, $deviceId);
 
-        return $this->response(
-            new RegisterResource($user),
-            'Entity has been created successfully!',
-            Response::HTTP_CREATED
-        );
+        $loginRequest = new LoginRequest(['username' => $user->username, 'password' => $request->password]);
+        $loginRequest->headers = $request->headers;
+
+        return $this->login($loginRequest);
     }
 
     /**

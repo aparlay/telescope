@@ -23,111 +23,24 @@ class RegistrationTest extends ApiTestCase
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', $payload)
-            ->assertStatus(201)
+            ->assertStatus(200)
             ->assertJsonPath('status', 'OK')
-            ->assertJsonPath('code', 201)
+            ->assertJsonPath('code', 200)
             ->assertJsonStructure([
                 'data' => [
-                    '_id',
-                    'referral_id',
-                    'username',
-                    'full_name',
-                    'email',
-                    'email_verified',
-                    'phone_number',
-                    'phone_number_verified',
-                    'status',
-                    'bio',
-                    'avatar',
-                    'setting' => [
-                        'otp',
-                        'notifications' => [
-                            'unread_message_alerts',
-                            'new_followers',
-                            'news_and_updates',
-                            'tips',
-                            'new_subscribers',
-                        ],
-                    ],
-                    'features' => [
-                        'tips',
-                        'demo',
-                    ],
-                    'gender',
-                    'interested_in',
-                    'visibility',
-                    'block_count',
-                    'follower_count',
-                    'following_count',
-                    'like_count',
-                    'followed_hashtag_count',
-                    'media_count',
-                    'is_followed',
-                    'is_blocked',
-                    'promo_link',
-                    'blocks',
-                    'likes',
-                    'followers',
-                    'followings',
-                    'medias',
-                    'created_at',
-                    'updated_at',
-                    '_links' => [
-                        'self' => [
-                            'href',
-                        ],
-                    ],
+                    'token',
+                    'token_expired_at',
+                    'refresh_token',
+                    'refresh_token_expired_at',
                 ],
-                'message',
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
-                    'data._id' => 'string',
-                    'data.referral_id' => 'string',
-                    'data.username' => 'string',
-                    'data.full_name' => 'null|string',
-                    'data.email' => 'string',
-                    'data.email_verified' => 'boolean',
-                    'data.phone_number' => 'null|string',
-                    'data.phone_number_verified' => 'boolean',
-                    'data.status' => 'integer',
-                    'data.bio' => 'null|string',
-                    'data.avatar' => 'string',
-                    'data.setting' => 'array',
-                    'data.setting.otp' => 'boolean',
-                    'data.setting.notifications' => 'array',
-                    'data.setting.notifications.unread_message_alerts' => 'boolean',
-                    'data.setting.notifications.new_followers' => 'boolean',
-                    'data.setting.notifications.news_and_updates' => 'boolean',
-                    'data.setting.notifications.tips' => 'boolean',
-                    'data.setting.notifications.new_subscribers' => 'boolean',
-                    'data.features' => 'array',
-                    'data.features.tips' => 'boolean',
-                    'data.features.demo' => 'boolean',
-                    'data.gender' => 'integer',
-                    'data.interested_in' => 'integer',
-                    'data.visibility' => 'integer',
-                    'data.block_count' => 'integer',
-                    'data.follower_count' => 'integer',
-                    'data.following_count' => 'integer',
-                    'data.like_count' => 'integer',
-                    'data.followed_hashtag_count' => 'integer',
-                    'data.media_count' => 'integer',
-                    'data.is_followed' => 'boolean',
-                    'data.is_blocked' => 'boolean',
-                    'data.promo_link' => 'null|string',
-                    'data.blocks' => 'array',
-                    'data.likes' => 'array',
-                    'data.followers' => 'array',
-                    'data.followings' => 'array',
-                    'data.medias' => 'array',
-                    'data.created_at' => 'integer',
-                    'data.updated_at' => 'integer',
-                    'data._links' => 'array',
-                    'data._links.self' => 'array',
-                    'data._links.self.href' => 'string',
-                    'message' => 'string',
+                    'data.token' => 'string',
+                    'data.token_expired_at' => 'integer',
+                    'data.refresh_token' => 'string',
+                    'data.refresh_token_expired_at' => 'integer',
                 ])
             );
         $this->assertDatabaseHas('users', ['email' => $payload['email']]);
@@ -151,13 +64,26 @@ class RegistrationTest extends ApiTestCase
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', $payload)
-            ->assertStatus(201)
-            ->assertJson([
-                'code' => 201,
-                'status' => 'OK',
-                'data' => [],
-                'message' => 'Entity has been created successfully!',
-            ]);
+            ->assertStatus(200)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 200)
+            ->assertJsonStructure([
+                'data' => [
+                    'token',
+                    'token_expired_at',
+                    'refresh_token',
+                    'refresh_token_expired_at',
+                ],
+            ])->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType([
+                    'code' => 'integer',
+                    'status' => 'string',
+                    'data.token' => 'string',
+                    'data.token_expired_at' => 'integer',
+                    'data.refresh_token' => 'string',
+                    'data.refresh_token_expired_at' => 'integer',
+                ])
+            );
 
         $this->assertDatabaseHas('users', ['email' => $payload['username']]);
     }
