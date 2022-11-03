@@ -151,10 +151,10 @@ class MediaService
         $userId = null;
         if (! auth()->guest()) {
             $user = auth()->user();
-            $genderPreferences = !empty($genderPreferences) ? $genderPreferences : $user->interested_in;
+            $genderPreferences = ! empty($genderPreferences) ? $genderPreferences : $user->interested_in;
             $query->contentGender($genderPreferences)->notBlockedFor($user->_id)->notVisitedByUserAndDevice($user->_id, $deviceId);
         } else {
-            $genderPreferences = !empty($genderPreferences) ? $genderPreferences : [UserInterestedIn::FEMALE->value];
+            $genderPreferences = ! empty($genderPreferences) ? $genderPreferences : [UserInterestedIn::FEMALE->value];
             $query->contentGender($genderPreferences)->notVisitedByDevice($deviceId);
         }
 
