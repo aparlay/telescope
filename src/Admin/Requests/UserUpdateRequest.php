@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Helpers\Country;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -39,7 +40,7 @@ class UserUpdateRequest extends FormRequest
                 'max:255',
             ],
             'username' => [
-                'required',
+                'nullable',
                 Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
                 'max:255',
             ],
@@ -52,7 +53,7 @@ class UserUpdateRequest extends FormRequest
             'gender' => [Rule::in(array_keys(User::getGenders()))],
             'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
             'status' => [Rule::in(array_keys(User::getStatuses()))],
-            'interested_in.*' => [Rule::in(array_keys(User::getInterestedIns()))],
+            'interested_in.*' => [Rule::in(UserInterestedIn::getAllValues())],
             'visibility' => [Rule::in(array_keys(User::getVisibilities()))],
             'role' => ['nullable', Rule::in(Role::where('guard_name', 'admin')->pluck('name'))],
             'email_verified' => ['nullable', 'boolean'],
