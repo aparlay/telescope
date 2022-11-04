@@ -72,7 +72,7 @@ class MeRequest extends FormRequest
         if (empty($this->interested_in)) {
             $this->interested_in = [UserInterestedIn::FEMALE->value];
         }
-        if (! is_array($this->interested_in) || empty($this->interested_in)) {
+        if (! is_array($this->interested_in)) {
             throw ValidationException::withMessages([
                 'interested_in' => 'interested_in must be an array of interested choices.',
             ]);
