@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Models\Enums\MediaStatus;
