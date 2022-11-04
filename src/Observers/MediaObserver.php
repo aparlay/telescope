@@ -4,7 +4,6 @@ namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Api\V1\Notifications\UserDeleteMedia;
 use Aparlay\Core\Api\V1\Services\MediaService;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteMediaComments;
 use Aparlay\Core\Jobs\DeleteMediaLikes;
 use Aparlay\Core\Jobs\DeleteMediaUserNotifications;
@@ -12,11 +11,9 @@ use Aparlay\Core\Jobs\RecalculateHashtag;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
-use Aparlay\Core\Models\Hashtag;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Exception;
-use MongoDB\BSON\ObjectId;
 
 class MediaObserver extends BaseModelObserver
 {
@@ -32,28 +29,7 @@ class MediaObserver extends BaseModelObserver
         $creatorUser = $media->userObj;
 
         if ($media->isDirty('status')) {
-            $creatorUser->media_count = Media::query()->creator($creatorUser->_id)->count();
-            $medias = [];
-            foreach (Media::query()->creator($creatorUser->_id)->completed()->recentFirst()->limit(30)->get() as $completedMedia) {
-                $basename = basename(
-                    $completedMedia['file'],
-                    '.'.pathinfo($completedMedia['file'], PATHINFO_EXTENSION)
-                );
-                $file = config('app.cdn.videos').$completedMedia['file'];
-                $cover = config('app.cdn.covers').$basename.'.jpg';
-                $medias[] = [
-                    '_id' => new ObjectId($completedMedia['_id']),
-                    'file' => $file,
-                    'cover' => $cover,
-                    'status' => $completedMedia['status'],
-                ];
-            }
-            $creatorUser->medias = $medias;
-            $creatorUser->count_fields_updated_at = array_merge(
-                $creatorUser->count_fields_updated_at,
-                ['medias' => DT::utcNow()]
-            );
-            $creatorUser->save();
+            $creatorUser->updateMedias();
         }
 
         if (! config('app.is_testing')) {
@@ -113,19 +89,7 @@ class MediaObserver extends BaseModelObserver
     public function saved($media): void
     {
         if ($media->status === MediaStatus::USER_DELETED->value && $media->isDirty('status')) {
-            $media->userObj->media_count = Media::query()->creator($media->creator['_id'])->availableForOwner()->count();
-
-            $file = config('app.cdn.videos').$media->file;
-            $cover = config('app.cdn.covers').$media->filename.'.jpg';
-            $media->userObj->removeFromSet(
-                'medias',
-                ['_id' => $media->_id, 'file' => $file, 'cover' => $cover, 'status' => $media->status]
-            );
-            $media->userObj->count_fields_updated_at = array_merge(
-                $media->userObj->count_fields_updated_at,
-                ['medias' => DT::utcNow()]
-            );
-            $media->userObj->save();
+            $media->userObj->updateMedias();
 
             DeleteMediaLikes::dispatch((string) $media->_id)->onQueue('low');
             DeleteMediaComments::dispatch((string) $media->_id)->onQueue('low');
@@ -149,20 +113,11 @@ class MediaObserver extends BaseModelObserver
      */
     public function deleted($media): void
     {
-        $creatorUser = $media->userObj;
-        $creatorUser->media_count = Media::query()->creator($media->creator['_id'])->availableForOwner()->count();
-
-        $file = config('app.cdn.videos').$media->file;
-        $cover = config('app.cdn.covers').$media->filename.'.jpg';
-        $creatorUser->removeFromSet('medias', ['_id' => $media->_id, 'file' => $file, 'cover' => $cover, 'status' => $media->status]);
-        $creatorUser->count_fields_updated_at = array_merge(
-            $creatorUser->count_fields_updated_at,
-            ['medias' => DT::utcNow()]
-        );
-        $creatorUser->save();
+        $creator = $media->userObj;
+        $creator->updateMedias();
 
         DeleteMediaLikes::dispatch((string) $media->_id)->onQueue('low');
 
-        $creatorUser->notify(new UserDeleteMedia());
+        $creator->notify(new UserDeleteMedia());
     }
 }
