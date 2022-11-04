@@ -52,7 +52,7 @@ class UserUpdateRequest extends FormRequest
             'gender' => [Rule::in(array_keys(User::getGenders()))],
             'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
             'status' => [Rule::in(array_keys(User::getStatuses()))],
-            'interested_in' => [Rule::in(array_keys(User::getInterestedIns()))],
+            'interested_in.*' => [Rule::in(array_keys(User::getInterestedIns()))],
             'visibility' => [Rule::in(array_keys(User::getVisibilities()))],
             'role' => ['nullable', Rule::in(Role::where('guard_name', 'admin')->pluck('name'))],
             'email_verified' => ['nullable', 'boolean'],
