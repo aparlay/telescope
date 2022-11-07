@@ -134,7 +134,7 @@ class UserService extends AdminBaseService
         $data = $request->only([
             'username',
             'bio',
-            'promo_link'
+            'promo_link',
         ]);
 
         $role = $request->input('role');
