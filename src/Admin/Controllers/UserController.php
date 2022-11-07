@@ -4,8 +4,10 @@ namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Requests\MediaUploadRequest;
+use Aparlay\Core\Admin\Requests\UserGeneralUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
-use Aparlay\Core\Admin\Requests\UserUpdateRequest;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Admin\Services\UploadService;
 use Aparlay\Core\Admin\Services\UserService;
@@ -109,14 +111,38 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @param UserUpdateRequest $request
+     * @param UserProfileUpdateRequest $request
      * @return RedirectResponse
      */
-    public function update(User $user, UserUpdateRequest $request): RedirectResponse
+    public function updateProfile(User $user, UserProfileUpdateRequest $request): RedirectResponse
     {
-        $this->userService->update($user);
+        $this->userService->updateProfile($user, $request);
+
+        return back()->with('success', 'User profile updated successfully.');
+    }
+
+    /**
+     * @param User $user
+     * @param UserInfoUpdateRequest $request
+     * @return RedirectResponse
+     */
+    public function updateInfo(User $user, UserInfoUpdateRequest $request): RedirectResponse
+    {
+        $this->userService->updateInfo($user, $request);
 
         return back()->with('success', 'User updated successfully.');
+    }
+
+    /**
+     * @param User $user
+     * @param UserGeneralUpdateRequest $request
+     * @return RedirectResponse
+     */
+    public function updateGeneral(User $user, UserGeneralUpdateRequest $request): RedirectResponse
+    {
+        $this->userService->updateGeneral($user, $request);
+
+        return back()->with('success', 'User profile updated successfully.');
     }
 
     /**
