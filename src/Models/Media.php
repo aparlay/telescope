@@ -692,8 +692,8 @@ class Media extends BaseModel
         $promote = (int) Cache::store('redis')->get($cacheKey, 0);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
             $promote += match (true) {
-                ($this->skin_score > 9) => 1,
-                ($this->skin_score > 7) => 3,
+                ($this->skin_score >= 9) => 1,
+                ($this->skin_score >= 7) => 3,
                 ($this->skin_score > 5) => 4,
                 default => 2,
             };
