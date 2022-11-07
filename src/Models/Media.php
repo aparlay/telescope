@@ -88,7 +88,11 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder user(ObjectId|string $userId)
  * @method static |self|Builder availableForFollower()
  * @method static |self|Builder confirmed()
+ * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
+ * @method static |self|Builder notBlockedFor(ObjectId|string $user)
+ * @method static |self|Builder notVisitedByDevice(string $deviceId)
  * @method static |self|Builder hashtag(string $tag)
+ * @method static |self|Builder sort(string $category)
  * @method static |self|Builder public()
  * @method static |self|Builder private()
  */
