@@ -4,23 +4,23 @@
 @endphp
 
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Profile</h3>
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool">Edit <i class="fas fa-pen"></i></button>
-            <button
-                type="button"
-                class="btn btn-tool"
-                data-card-widget="collapse"
-                data-expand-icon="fa-chevron-down"
-                data-collapse-icon="fa-chevron-up"
-            ><i class="fas fa-chevron-up"></i></button>
+    <form action="{{ route('core.admin.user.updateProfile', ['user' => $user->id]) }}" class="form-horizontal" method="post">
+        @csrf()
+        @method('PUT')
+        <div class="card-header">
+            <h3 class="card-title">Profile</h3>
+            <div class="card-tools">
+                <button type="submit" class="btn btn-tool">Edit <i class="fas fa-pen"></i></button>
+                <button
+                    type="button"
+                    class="btn btn-tool"
+                    data-card-widget="collapse"
+                    data-expand-icon="fa-chevron-down"
+                    data-collapse-icon="fa-chevron-up"
+                ><i class="fas fa-chevron-up"></i></button>
+            </div>
         </div>
-    </div>
-    <div class="card-body">
-        <form action="" class="form-horizontal" enctype="multipart/form-data">
-            @csrf()
-            @method('PUT')
+        <div class="card-body">
             <div class="tab-pane active" id="user-info">
                 <div class="form-group row">
                     <label for="username" class="col-sm-2 col-form-label">Username</label>
@@ -31,7 +31,7 @@
                 <div class="form-group row">
                     <label for="bio" class="col-sm-2 col-form-label">Bio</label>
                     <div class="col-sm-10">
-                        <textarea name="bio" id="bio" cols="30" rows="3" class="form-control"></textarea>
+                        <textarea name="bio" id="bio" cols="30" rows="3" class="form-control">{{ $user->bio }}</textarea>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -41,6 +41,6 @@
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>

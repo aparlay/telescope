@@ -106,12 +106,18 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('user/{user}', [UserController::class, 'view'])
                 ->middleware(['permission:show users'])
                 ->name('view');
-            Route::put('user/{user}', [UserController::class, 'update'])
+            Route::put('user/profile/{user}', [UserController::class, 'updateProfile'])
                 ->middleware(['permission:edit users'])
-                ->name('update');
+                ->name('updateProfile');
+            Route::put('user/info/{user}', [UserController::class, 'updateInfo'])
+                ->middleware(['permission:edit users'])
+                ->name('updateInfo');
+            Route::put('user/general/{user}', [UserController::class, 'updateGeneral'])
+                ->middleware(['permission:edit users'])
+                ->name('updateGeneral');
             Route::match(['get', 'post'], 'user/upload-media', [UserController::class, 'uploadMedia'])
-                    ->middleware(['permission:upload medias'])
-                    ->name('media.upload');
+                ->middleware(['permission:upload medias'])
+                ->name('media.upload');
             Route::patch('user/{user}', [UserController::class, 'updateStatus'])
                 ->middleware(['permission:edit users'])
                 ->name('update.status');
