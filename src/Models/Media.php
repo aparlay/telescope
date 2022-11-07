@@ -673,15 +673,12 @@ class Media extends BaseModel
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
         $promote = (int) Cache::store('redis')->get($cacheKey, 0);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
-            $sortScore = 5 +
-                ($this->awesomeness_score * (float) $config['awesomeness']) +
-                ($this->beauty_score * (float) $config['beauty']) +
-                $promote;
-        } else {
-            $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
-                ($this->beauty_score * (float) $config['beauty']) +
-                $promote;
+            $promote += 5;
         }
+
+        $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
+            ($this->beauty_score * (float) $config['beauty']) +
+            $promote;
 
         $sortScore += ($this->time_score * (float) $config['time']);
         $sortScore += ($this->like_score * (float) $config['like']);
