@@ -96,6 +96,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder notBlockedFor(ObjectId|string $userId)
  * @method static |self|Builder availableForFollower()
  * @method static |self|Builder confirmed()
+ * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
+ * @method static |self|Builder notVisitedByDevice(string $deviceId)
  * @method static |self|Builder hashtag(string $tag)
  * @method static |self|Builder metadataHashtag(string $tag)
  * @method static |self|Builder contentGender(array $gender)
