@@ -42,7 +42,7 @@ class CommentSent extends Notification implements ShouldQueue
     public function toSlack($notifiable)
     {
         $message = "New {$notifiable->slack_admin_url} sent for {$notifiable->mediaObj->slack_admin_url} by {$notifiable->creatorObj->slack_admin_url}.";
-        $message .= PHP_EOL.'_*Log:*_ '.PHP_EOL.implode("\n", $notifiable->text);
+        $message .= PHP_EOL.'_*Content:*_ '.PHP_EOL.$notifiable->text;
 
         return (new SlackMessage())
             ->to(config('app.slack_comment_sent'))
