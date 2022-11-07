@@ -7,7 +7,6 @@ use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Models\MediaCommentLike;
 use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
-use Aparlay\Core\Events\MediaCommentCreatedEvent;
 use Aparlay\Core\Notifications\CommentSent;
 use MongoDB\BSON\ObjectId;
 
@@ -18,8 +17,9 @@ class MediaCommentService
     const PER_PAGE = 10;
 
     /**
-     * @param Media $media
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param  Media  $media
+     *
+     * @return \Illuminate\Contracts\Pagination\CursorPaginator
      */
     public function list(Media $media)
     {
