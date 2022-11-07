@@ -225,23 +225,39 @@ class UserService
         if ($user !== null) {
             $currentUserAgentKey = md5($userAgent);
             $userAgents = $user->user_agents;
-            $needUpdate = true;
+            $new = true;
 
-            if (isset($userAgents[$currentUserAgentKey])) {
-                $needUpdate = $userAgents[$currentUserAgentKey]['device_id'] !== $deviceId;
-                $needUpdate = $needUpdate || $userAgents[$currentUserAgentKey]['ip'] !== $ip;
-                $needUpdate = $needUpdate || now()->subMinutes(5)->isAfter(Carbon::createFromTimestampMsUTC($userAgents[$currentUserAgentKey]['created_at']));
+            foreach ($userAgents as $key => $item) {
+                if ($item['key'] === $currentUserAgentKey) {
+                    $needUpdate = $item['device_id'] !== $deviceId;
+                    $needUpdate = $needUpdate || $item['ip'] !== $ip;
+                    $needUpdate = $needUpdate || now()->subMinutes(5)->isAfter(Carbon::createFromTimestampMsUTC($item['created_at']));
+
+                    if ($needUpdate) {
+                        $userAgents[$key] = [
+                            'key' => $currentUserAgentKey,
+                            'device_id' => $deviceId,
+                            'user_agent' => $userAgent,
+                            'ip' => $ip,
+                            'created_at' => DT::utcNow(),
+                        ];
+                    }
+
+                    $new = false;
+                    break;
+                }
             }
-
-            if ($needUpdate) {
-                $userAgents[$currentUserAgentKey] = [
+            if ($new) {
+                $userAgents[] = [
+                    'key' => $currentUserAgentKey,
                     'device_id' => $deviceId,
                     'user_agent' => $userAgent,
                     'ip' => $ip,
                     'created_at' => DT::utcNow(),
                 ];
-                $this->userRepository->update(['user_agents' => $userAgents], $user->_id);
             }
+
+            $this->userRepository->update(['user_agents' => $userAgents], $user->_id);
         }
     }
 }

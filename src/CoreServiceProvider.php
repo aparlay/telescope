@@ -2,15 +2,25 @@
 
 namespace Aparlay\Core;
 
+use Aparlay\Core\Admin\Components\ChatSearchResult;
 use Aparlay\Core\Admin\Components\DatePicker;
 use Aparlay\Core\Admin\Components\MediaCover;
 use Aparlay\Core\Admin\Components\Modals;
+use Aparlay\Core\Admin\Components\OrderSearchResult;
+use Aparlay\Core\Admin\Components\PayoutSearchResult;
 use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
 use Aparlay\Core\Admin\Components\UtcFormatter;
 use Aparlay\Core\Admin\Components\WireDropDownList;
+use Aparlay\Core\Admin\Livewire\Components\DateRangePicker;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
+use Aparlay\Core\Admin\Livewire\Dashboard\Funnel;
+use Aparlay\Core\Admin\Livewire\Dashboard\Index;
+use Aparlay\Core\Admin\Livewire\Dashboard\Stats;
+use Aparlay\Core\Admin\Livewire\Dashboard\Table;
+use Aparlay\Core\Admin\Livewire\Dashboard\TopCreditBalance;
 use Aparlay\Core\Admin\Livewire\EmailsTable;
+use Aparlay\Core\Admin\Livewire\GlobalSearch;
 use Aparlay\Core\Admin\Livewire\MediasModerationTable;
 use Aparlay\Core\Admin\Livewire\MediasTable;
 use Aparlay\Core\Admin\Livewire\Modals\UserNoteCreateModal;
@@ -44,7 +54,6 @@ use Aparlay\Core\Helpers\ConfigHelper;
 use Aparlay\Core\Helpers\IP;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\AliasLoader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
@@ -195,6 +204,13 @@ class CoreServiceProvider extends ServiceProvider
             'modals' => Modals::class,
             'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,
             'modals.user-notes-create-modal' => UserNoteCreateModal::class,
+            'components.date-range-picker' => DateRangePicker::class,
+            'global-search' => GlobalSearch::class,
+            'dashboard' => Index::class,
+            'dashboard.stats' => Stats::class,
+            'dashboard.funnel' => Funnel::class,
+            'dashboard.table' => Table::class,
+            'dashboard.top-credit-balance' => TopCreditBalance::class,
         ];
 
         foreach ($components as $name => $class) {
@@ -207,5 +223,8 @@ class CoreServiceProvider extends ServiceProvider
         Blade::component('username-avatar', UserNameAvatar::class);
         Blade::component('media-cover', MediaCover::class);
         Blade::component('utc-formatter', UtcFormatter::class);
+        Blade::component('chat-search-result', ChatSearchResult::class);
+        Blade::component('order-search-result', OrderSearchResult::class);
+        Blade::component('payout-search-result', PayoutSearchResult::class);
     }
 }

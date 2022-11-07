@@ -186,10 +186,12 @@ class User extends \App\Models\User
         'updated_at',
         'deleted_at',
         'last_online_at',
+        'tracking',
     ];
 
     protected $attributes = [
         'count_fields_updated_at' => [],
+        'tracking' => [],
         'verification_status' => 1, // unverified
         'setting' => [
             'otp' => false,

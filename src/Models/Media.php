@@ -11,6 +11,7 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
+use Aparlay\Core\Models\Queries\MediaQueryBuilder;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Scopes\MediaScope;
@@ -795,5 +796,15 @@ class Media extends BaseModel
 
         $this->save();
         $this->refresh();
+    }
+
+    public static function query(): MediaQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    public function newEloquentBuilder($query): MediaQueryBuilder
+    {
+        return new MediaQueryBuilder($query);
     }
 }
