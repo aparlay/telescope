@@ -64,7 +64,7 @@ class MediaCommentService
 
         $mediaComment->notify(new CommentSent());
 
-        return $mediaComment->notify();
+        return $mediaComment;
     }
 
     public function createReply(MediaComment $replyTo, $text)
