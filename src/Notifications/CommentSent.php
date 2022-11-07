@@ -3,10 +3,11 @@
 namespace Aparlay\Core\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class CommentSent extends Notification
+class CommentSent extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -40,7 +41,7 @@ class CommentSent extends Notification
      */
     public function toSlack($notifiable)
     {
-        $message = "New comment sent for {$notifiable->mediaObj->slack_admin_url} by {$notifiable->creatorObj->slack_admin_url}.";
+        $message = "New {$notifiable->slack_admin_url} sent for {$notifiable->mediaObj->slack_admin_url} by {$notifiable->creatorObj->slack_admin_url}.";
         $message .= PHP_EOL.'_*Log:*_ '.PHP_EOL.implode("\n", $notifiable->text);
 
         return (new SlackMessage())
