@@ -673,7 +673,11 @@ class Media extends BaseModel
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
         $promote = (int) Cache::store('redis')->get($cacheKey, 0);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
-            $promote += 5;
+            $promote += match(true) {
+                ($this->skin_score > 9) => 1,
+                ($this->skin_score > 5) => 4,
+                default => 2,
+            };
         }
 
         $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
