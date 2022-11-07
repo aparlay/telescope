@@ -4,23 +4,23 @@
 @endphp
 
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">User Information</h3>
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool">Edit <i class="fas fa-pen"></i></button>
-            <button
-                type="button"
-                class="btn btn-tool"
-                data-card-widget="collapse"
-                data-expand-icon="fa-chevron-down"
-                data-collapse-icon="fa-chevron-up"
-            ><i class="fas fa-chevron-up"></i></button>
+    <form action="{{ route('core.admin.user.updateInfo', ['user' => $user->id]) }}" class="form-horizontal" method="post">
+        @csrf()
+        @method('PUT')
+        <div class="card-header">
+            <h3 class="card-title">User Information</h3>
+            <div class="card-tools">
+                <button type="submit" class="btn btn-tool">Edit <i class="fas fa-pen"></i></button>
+                <button
+                    type="button"
+                    class="btn btn-tool"
+                    data-card-widget="collapse"
+                    data-expand-icon="fa-chevron-down"
+                    data-collapse-icon="fa-chevron-up"
+                ><i class="fas fa-chevron-up"></i></button>
+            </div>
         </div>
-    </div>
-    <div class="card-body">
-        <form action="" class="form-horizontal" enctype="multipart/form-data">
-            @csrf()
-            @method('PUT')
+        <div class="card-body">
             <div class="tab-pane active" id="user-info">
                 <div class="form-group row">
                     <label for="id" class="col-sm-2 col-form-label">User ID</label>
@@ -154,14 +154,6 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="trans" class="col-sm-2 col-form-label">Trans</label>
-                    <div class="col-sm-10">
-                        <div class="custom-control custom-switch mt-2">
-                            <input type="checkbox" value="1" name="trans" class="custom-control-input" id="trans" {!! $user->trans ? 'checked' : '' !!}>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Blocked Users</label>
                     <div class="col-sm-10 mt-2">
                         <p>{{ $user->blocked_users }}</p>
@@ -170,14 +162,15 @@
                 <div class="form-group row">
                     <label for="interested_in" class="col-sm-2 col-form-label">Interested In</label>
                     <div class="col-sm-10">
-                        <select name="interested_in" id="interested_in" class="form-control">
-                            @foreach($user->getInterestedIns() as $key => $interested_in)
-                                <option value="{{ $key }}" {!! $user->interested_in == $key ? 'selected' : '' !!}>{{ $interested_in }}</option>
-                            @endforeach
-                        </select>
+                        @foreach($user->getInterestedIns() as $key => $interested_in)
+                            <div>
+                                <input type="checkbox" value="{{ $key }}" id="{{$interested_in}}" name="interested_in[]" {!! in_array($key, $user->interested_in) ? 'checked' : '' !!}>
+                                <label for="{{$interested_in}}">{{$interested_in}}</label>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
