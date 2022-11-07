@@ -8,6 +8,7 @@ use Aparlay\Core\Models\Queries\MediaCommentQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
@@ -34,6 +35,7 @@ use MongoDB\BSON\ObjectId;
 class MediaComment extends BaseModel
 {
     use HasFactory;
+    use Notifiable;
 
     /**
      * The collection associated with the model.

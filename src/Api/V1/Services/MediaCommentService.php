@@ -7,6 +7,8 @@ use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Models\MediaCommentLike;
 use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
+use Aparlay\Core\Events\MediaCommentCreatedEvent;
+use Aparlay\Core\Notifications\CommentSent;
 use MongoDB\BSON\ObjectId;
 
 class MediaCommentService
@@ -56,9 +58,13 @@ class MediaCommentService
             ],
         ];
 
-        return MediaComment::create([
+        $mediaComment = MediaComment::create([
             ...$defaultData, ...$additionalData,
         ]);
+
+        $mediaComment->notify(new CommentSent());
+
+        return $mediaComment->notify();
     }
 
     public function createReply(MediaComment $replyTo, $text)
