@@ -672,9 +672,10 @@ class Media extends BaseModel
         $config = config('app.media.score_weights.'.$category);
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
         $promote = (int) Cache::store('redis')->get($cacheKey, 0);
-        /*if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
+        if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
             $highestScore = self::where('sort_scores', ['$exists' => true])
                 ->where('created_at', '<', DT::utcDateTime(['d' => -1]))
+                ->availableForFollower()
                 ->orderBy('sort_scores.'.$category, 'desc')
                 ->first()
                 ->sort_scores[$category];
@@ -686,11 +687,8 @@ class Media extends BaseModel
             $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
                 ($this->beauty_score * (float) $config['beauty']) +
                 $promote;
-        }*/
+        }
 
-        $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
-            ($this->beauty_score * (float) $config['beauty']) +
-            $promote;
         $sortScore += ($this->time_score * (float) $config['time']);
         $sortScore += ($this->like_score * (float) $config['like']);
         $sortScore += ($this->visit_score * (float) $config['visit']);
