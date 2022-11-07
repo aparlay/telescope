@@ -156,7 +156,6 @@ class MediaComment extends BaseModel
         return config('app.slack_webhook_url');
     }
 
-
     /**
      * @return string
      */
