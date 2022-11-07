@@ -8,6 +8,8 @@ use Aparlay\Core\Models\Queries\MediaCommentQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
@@ -34,6 +36,7 @@ use MongoDB\BSON\ObjectId;
 class MediaComment extends BaseModel
 {
     use HasFactory;
+    use Notifiable;
 
     /**
      * The collection associated with the model.
@@ -139,6 +142,18 @@ class MediaComment extends BaseModel
     public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
+    }
+
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @param Notification $notification
+     *
+     * @return string
+     */
+    public function routeNotificationForSlack($notification): string
+    {
+        return config('app.slack_webhook_url');
     }
 
     /**

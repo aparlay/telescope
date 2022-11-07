@@ -11,6 +11,7 @@ use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaService extends AdminBaseService
 {
@@ -132,34 +133,39 @@ class MediaService extends AdminBaseService
 
     /**
      * @param $id
+     *
+     * @return Media|mixed
+     * @throws InvalidArgumentException
      */
-    public function update($id)
+    public function update($id, $request)
     {
-        $data = request()->only([
+        $data = $request->only([
             'description',
+            'metadata',
             'status',
             'skin_score',
             'visibility',
+            'content_gender',
             'is_protected',
             'is_music_licensed',
         ]);
 
         $dataModified = [
-            'visibility' => request()->boolean('visibility'),
-            'is_protected' => request()->boolean('is_protected'),
-            'is_music_licensed' => request()->boolean('is_music_licensed'),
+            'visibility' => $request->boolean('visibility'),
+            'is_protected' => $request->boolean('is_protected'),
+            'is_music_licensed' => $request->boolean('is_music_licensed'),
             'scores' => [
                 [
                     'type' => 'skin',
-                    'score' => request()->skin_score,
+                    'score' => $request->skin_score,
                 ],
                 [
                     'type' => 'awesomeness',
-                    'score' => request()->awesomeness_score,
+                    'score' => $request->awesomeness_score,
                 ],
                 [
                     'type' => 'beauty',
-                    'score' => request()->beauty_score,
+                    'score' => $request->beauty_score,
                 ],
             ],
         ];

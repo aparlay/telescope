@@ -16,7 +16,7 @@ class User extends UserBase implements Auditable
 
     public string $guard_name = 'admin';
 
-    protected $hidden = ['password_hash'];
+    protected $hidden = ['password_hash', 'search'];
 
     /**
      * Attributes to exclude from the Audit.
@@ -54,7 +54,6 @@ class User extends UserBase implements Auditable
         'type' => 'integer',
         'status' => 'integer',
         'gender' => 'integer',
-        'interested_in' => 'integer',
         'visibility' => 'integer',
         'verification_status' => 'integer',
     ];

@@ -82,6 +82,24 @@
                                                     @endforeach
                                                 </div>
                                             </li>
+                                            <li class="list-group-item">
+                                                <b>Content Gender</b>
+                                                <div>
+                                                    @foreach(\Aparlay\Core\Models\Enums\UserInterestedIn::getAllCases() as $key => $label)
+                                                        <div>
+                                                            <input type="checkbox" value="{{ $key }}" id="{{$label}}" name="content_gender[]" {!! in_array($key, $media->content_gender) ? 'checked' : '' !!}>
+                                                            <label for="{{$label}}">{{$label}}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Metadata</b>
+                                                <div>
+                                                    <label for="metadata" class="d-none"></label>
+                                                    <textarea name="metadata" id="metadata" cols="30" rows="3" class="form-control">{{ $media->metadata }}</textarea>
+                                                </div>
+                                            </li>
                                         </ul>
 
                                         <div class="row">

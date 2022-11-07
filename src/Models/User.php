@@ -53,7 +53,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $gender
  * @property int         $visibility
  * @property int         $show_online_status
- * @property int         $interested_in
+ * @property array       $interested_in
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
  * @property array       $setting
@@ -63,6 +63,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property string      $password_hash_field
  * @property string      $authKey
  * @property array       $followed_hashtags
+ * @property array       $medias
  * @property array       $links
  * @property bool        $require_otp
  * @property bool        $is_protected
@@ -261,6 +262,7 @@ class User extends \App\Models\User
                 'chats' => 0,
                 'notifications' => 0,
             ],
+            'interested_in' => [0],
         ],
     ];
 
@@ -279,7 +281,6 @@ class User extends \App\Models\User
         'phone_number_verified' => 'boolean',
         'gender' => 'integer',
         'avatar' => 'string',
-        'interested_in' => 'integer',
         'visibility' => 'integer',
         'stats.counters.followers' => 'integer',
         'stats.counters.followings' => 'integer',
@@ -333,7 +334,7 @@ class User extends \App\Models\User
     {
         return $this->visibility == UserVisibility::PUBLIC->value &&
             in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
-            $this->verification_status == UserVerificationStatus::VERIFIED->value &&
+            //$this->verification_status == UserVerificationStatus::VERIFIED->value &&
             ! config('app.is_testing');
     }
 
@@ -353,6 +354,10 @@ class User extends \App\Models\User
             'description' => $this->bio,
             'hashtags' => [],
             'score' => $this->scores['sort'],
+            'score_for_male' => $this->scores['sort'] * (in_array($this->gender, [UserGender::MALE->value, UserGender::NOT_MENTION->value]) ? 1 : 0),
+            'score_for_female' => $this->scores['sort'] * (in_array($this->gender, [UserGender::FEMALE->value, UserGender::NOT_MENTION->value]) ? 1 : 0),
+            'score_for_transgender' => $this->scores['sort'] * (in_array($this->gender, [UserGender::TRANSGENDER->value, UserGender::NOT_MENTION->value]) ? 1 : 0),
+            'gender' => [$this->gender],
             'country' => $this->country_alpha2,
             'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
             'like_count' => $this->counters['likes'],
@@ -727,7 +732,6 @@ class User extends \App\Models\User
             UserInterestedIn::FEMALE->value => UserInterestedIn::FEMALE->label(),
             UserInterestedIn::MALE->value => UserInterestedIn::MALE->label(),
             UserInterestedIn::TRANSGENDER->value => UserInterestedIn::TRANSGENDER->label(),
-            UserInterestedIn::COUPLE->value => UserInterestedIn::COUPLE->label(),
         ];
     }
 
@@ -1000,6 +1004,27 @@ class User extends \App\Models\User
         $stats = $this->stats;
         $stats['counters']['likes'] = $likeCount;
         $this->stats = $stats;
+        $this->save();
+
+        $this->refresh();
+    }
+
+    public function updateMedias()
+    {
+        $medias = [];
+        foreach (Media::query()->creator($this->_id)->completed()->recentFirst()->limit(30)->get() as $media) {
+            $basename = basename($media['file'], '.'.pathinfo($media['file'], PATHINFO_EXTENSION));
+            $file = config('app.cdn.videos').$media['file'];
+            $cover = config('app.cdn.covers').$basename.'.jpg';
+            $medias[] = [
+                '_id' => new ObjectId($media['_id']),
+                'file' => $file,
+                'cover' => $cover,
+                'status' => $media['status'],
+            ];
+        }
+        $this->medias = $medias;
+        $this->fillStatsCountersField(['medias' => Media::query()->creator($this->_id)->availableForOwner()->count()]);
         $this->save();
 
         $this->refresh();

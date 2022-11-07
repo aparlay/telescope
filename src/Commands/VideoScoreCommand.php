@@ -14,7 +14,7 @@ class VideoScoreCommand extends Command
 
     public function handle()
     {
-        $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower();
+        $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower()->orderBy('created_at', 'ASC');
         $highestScore = Media::date(null, DT::utcDateTime(['d' => -1]))->orderBy('sort_scores.default', 'DESC')->first()->sort_score;
         foreach ($mediaQuery->get() as $media) {
             $media->recalculateSortScores();

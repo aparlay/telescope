@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Commands;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Hashtag;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
@@ -18,10 +19,20 @@ class HashtagScoreCommand extends Command
         $tags = [];
         Media::where('is_fake', ['$exists' => false])
             ->where('hashtags', ['$type' => 'array'])
-            ->confirmed()
-            ->public()
             ->each(function ($media) use (&$tags) {
+                /** @var Media $media */
                 foreach ($media->hashtags as $tag) {
+                    if (! isset($tags[$tag])) {
+                        $tags[$tag] = [
+                            'like_count' => 0,
+                            'visit_count' => 0,
+                            'media_count' => 0,
+                            'sort_score' => 0,
+                        ];
+                    }
+                }
+
+                foreach ($media->metadata_hashtags as $tag) {
                     if (! isset($tags[$tag])) {
                         $tags[$tag] = [
                             'like_count' => 0,
@@ -38,10 +49,11 @@ class HashtagScoreCommand extends Command
             $this->line($msg5);
 
             $hashtag = Hashtag::firstOrCreate(['tag' => $tag]);
-            $hashtag->like_count = Media::hashtag($tag)->sum('like_count');
-            $hashtag->visit_count = Media::hashtag($tag)->sum('visit_count');
-            $hashtag->media_count = $count = Media::hashtag($tag)->count();
-            $hashtag->sort_score = (Media::hashtag($tag)->sum('sort_scores.default') / $count);
+            $hashtag->recalculateScores();
+
+            $hashtag->like_count = Media::metadataHashtag($tag)->sum('like_count') + Media::hashtag($tag)->sum('like_count');
+            $hashtag->visit_count = Media::metadataHashtag($tag)->sum('visit_count') + Media::hashtag($tag)->sum('visit_count');
+            $hashtag->media_count = Media::metadataHashtag($tag)->count() + Media::hashtag($tag)->count();
             $hashtag->save();
         }
 

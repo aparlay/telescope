@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
+use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\Cdn;
@@ -11,6 +12,8 @@ use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Queries\MediaQueryBuilder;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,6 +38,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property ObjectId           $_id
  * @property ObjectId           $user_id
  * @property string             $description
+ * @property string             $metadata
  * @property string             $location
  * @property string             $hash
  * @property string             $file
@@ -50,6 +54,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property array              $likes
  * @property array              $visits
  * @property array              $comments
+ * @property array              $content_gender
  * @property int                $status
  * @property int                $tips
  * @property array              $hashtags
@@ -66,10 +71,11 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property array              $scores
  * @property array              $sort_scores
  * @property User               $userObj
- * @property User        $creatorObj
+ * @property User               $creatorObj
  * @property Alert[]            $alertObjs
  * @property UserNotification[] $userNotificationObjs
  * @property array              $files_history
+ * @property array              $metadata_hashtags
  *
  * @property-read string        $slack_subject_admin_url
  * @property-read string        $slack_admin_url
@@ -87,9 +93,15 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @method static |self|Builder creator(ObjectId|string $userId)
  * @method static |self|Builder user(ObjectId|string $userId)
+ * @method static |self|Builder notBlockedFor(ObjectId|string $userId)
  * @method static |self|Builder availableForFollower()
  * @method static |self|Builder confirmed()
+ * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
+ * @method static |self|Builder notVisitedByDevice(string $deviceId)
  * @method static |self|Builder hashtag(string $tag)
+ * @method static |self|Builder metadataHashtag(string $tag)
+ * @method static |self|Builder contentGender(array $gender)
+ * @method static |self|Builder sort(string $category)
  * @method static |self|Builder public()
  * @method static |self|Builder private()
  */
@@ -120,6 +132,7 @@ class Media extends BaseModel
     protected $fillable = [
         '_id',
         'description',
+        'metadata',
         'notes',
         'location',
         'hash',
@@ -144,11 +157,13 @@ class Media extends BaseModel
         'tips',
         'is_music_licensed',
         'hashtags',
+        'metadata_hashtags',
         'people',
         'processing_log',
         'blocked_user_ids',
         'creator',
         'scores',
+        'content_gender',
         'sort_scores',
         'slug',
         'tips',
@@ -163,8 +178,10 @@ class Media extends BaseModel
         'likes' => [],
         'visits' => [],
         'hashtags' => [],
+        'metadata_hashtags' => [],
         'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]],
         'is_protected' => false,
+        'content_gender' => [0],
         'like_count' => 0,
         'visit_count' => 0,
         'comment_count' => 0,
@@ -227,7 +244,8 @@ class Media extends BaseModel
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->visibility == MediaVisibility::PUBLIC->value && $this->status === MediaStatus::CONFIRMED->value;
+        return $this->visibility == MediaVisibility::PUBLIC->value &&
+            in_array($this->status, [MediaStatus::DENIED->value, MediaStatus::CONFIRMED->value]);
     }
 
     /**
@@ -247,8 +265,12 @@ class Media extends BaseModel
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
             'comment_count' => $this->comment_count,
-            'hashtags' => $this->hashtags,
+            'hashtags' => array_merge($this->hashtags, $this->metadata_hashtags ?? []),
             'score' => $this->sort_scores['default'],
+            'score_for_male' => $this->sort_scores['default'] * (in_array(UserInterestedIn::MALE->value, $this->content_gender) ? 1 : 0),
+            'score_for_female' => $this->sort_scores['default'] * (in_array(UserInterestedIn::FEMALE->value, $this->content_gender) ? 1 : 0),
+            'score_for_transgender' => $this->sort_scores['default'] * (in_array(UserInterestedIn::TRANSGENDER->value, $this->content_gender) ? 1 : 0),
+            'gender' => $this->content_gender,
             'country' => $this->userObj->country_alpha2 ?? '',
             'last_online_at' => 0,
             '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
@@ -670,20 +692,17 @@ class Media extends BaseModel
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
         $promote = (int) Cache::store('redis')->get($cacheKey, 0);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
-            $highestScore = self::where('sort_scores', ['$exists' => true])
-                ->where('created_at', '<', DT::utcDateTime(['d' => -1]))
-                ->orderBy('sort_scores.'.$category, 'desc')
-                ->first()
-                ->sort_scores[$category];
-            $sortScore = $highestScore +
-                ($this->awesomeness_score * (float) $config['awesomeness']) +
-                ($this->beauty_score * (float) $config['beauty']) +
-                $promote;
-        } else {
-            $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
-                ($this->beauty_score * (float) $config['beauty']) +
-                $promote;
+            $promote += match (true) {
+                ($this->skin_score >= 9) => 1,
+                ($this->skin_score >= 7) => 3,
+                ($this->skin_score > 5) => 4,
+                default => 2,
+            };
         }
+
+        $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
+            ($this->beauty_score * (float) $config['beauty']) +
+            $promote;
 
         $sortScore += ($this->time_score * (float) $config['time']);
         $sortScore += ($this->like_score * (float) $config['like']);
