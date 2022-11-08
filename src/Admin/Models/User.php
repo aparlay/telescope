@@ -34,6 +34,7 @@ class User extends UserBase implements Auditable
         'bio',
         'features',
         'gender',
+        'interested_in',
         'type',
         'status',
         'visibility',
@@ -53,6 +54,7 @@ class User extends UserBase implements Auditable
         'type' => 'integer',
         'status' => 'integer',
         'gender' => 'integer',
+        'interested_in' => 'integer',
         'visibility' => 'integer',
         'verification_status' => 'integer',
     ];
