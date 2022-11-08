@@ -351,7 +351,6 @@ class User extends \App\Models\User
             'description' => $this->bio,
             'hashtags' => [],
             'score' => $this->scores['sort'],
-            'gender' => [$this->gender],
             'country' => $this->country_alpha2,
             'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
             'like_count' => $this->counters['likes'],
