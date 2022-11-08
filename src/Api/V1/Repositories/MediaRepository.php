@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Models\Enums\MediaStatus;
@@ -33,7 +34,7 @@ class MediaRepository
      */
     public function store(MediaRequest $request)
     {
-        $user = auth()->user();
+        $user = User::user(auth()->user()->_id)->firstOrFail();
         try {
             $model = Media::create([
                 'status' => MediaStatus::QUEUED->value,

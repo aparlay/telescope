@@ -95,6 +95,9 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder notBlockedFor(ObjectId|string $userId)
  * @method static |self|Builder availableForFollower()
  * @method static |self|Builder confirmed()
+ * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
+ * @method static |self|Builder notBlockedFor(ObjectId|string $user)
+ * @method static |self|Builder notVisitedByDevice(string $deviceId)
  * @method static |self|Builder hashtag(string $tag)
  * @method static |self|Builder metadataHashtag(string $tag)
  * @method static |self|Builder contentGender(array $gender)
@@ -689,20 +692,17 @@ class Media extends BaseModel
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
         $promote = (int) Cache::store('redis')->get($cacheKey, 0);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
-            $highestScore = self::where('sort_scores', ['$exists' => true])
-                ->where('created_at', '<', DT::utcDateTime(['d' => -1]))
-                ->orderBy('sort_scores.'.$category, 'desc')
-                ->first()
-                ->sort_scores[$category];
-            $sortScore = $highestScore +
-                ($this->awesomeness_score * (float) $config['awesomeness']) +
-                ($this->beauty_score * (float) $config['beauty']) +
-                $promote;
-        } else {
-            $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
-                ($this->beauty_score * (float) $config['beauty']) +
-                $promote;
+            $promote += match (true) {
+                ($this->skin_score > 9) => 1,
+                ($this->skin_score > 7) => 3,
+                ($this->skin_score > 5) => 4,
+                default => 2,
+            };
         }
+
+        $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
+            ($this->beauty_score * (float) $config['beauty']) +
+            $promote;
 
         $sortScore += ($this->time_score * (float) $config['time']);
         $sortScore += ($this->like_score * (float) $config['like']);
