@@ -9,7 +9,7 @@ use Jenssegers\Mongodb\Collection;
 
 final class DashboardStatsService
 {
-    public function getAnalyticStats(Carbon $from,Carbon $to)
+    public function getAnalyticStats(Carbon $from, Carbon $to)
     {
         $value = Analytic::query()->raw(function (Collection $collection) use ($from, $to) {
             $aggregations = [];
