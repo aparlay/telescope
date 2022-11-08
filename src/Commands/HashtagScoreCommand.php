@@ -21,7 +21,6 @@ class HashtagScoreCommand extends Command
             ->confirmed()
             ->public()
             ->each(function ($media) use (&$tags) {
-                /** @var Media $media */
                 foreach ($media->hashtags as $tag) {
                     if (! isset($tags[$tag])) {
                         $tags[$tag] = [
