@@ -34,7 +34,6 @@ class User extends UserBase implements Auditable
         'bio',
         'features',
         'gender',
-        'interested_in',
         'type',
         'status',
         'visibility',

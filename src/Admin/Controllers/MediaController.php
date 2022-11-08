@@ -109,7 +109,6 @@ class MediaController extends Controller
     /**
      * @param MediaUpdateRequest $request
      * @param $id
-     *
      * @return RedirectResponse
      */
     public function update(Media $media, MediaUpdateRequest $request): RedirectResponse
