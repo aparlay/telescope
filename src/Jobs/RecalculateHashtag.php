@@ -2,9 +2,10 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Models\Enums\UserInterestedIn;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Hashtag;
 use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
@@ -13,6 +14,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Redis;
+use MongoDB\BSON\ObjectId;
 use Throwable;
 
 class RecalculateHashtag implements ShouldQueue
@@ -60,7 +63,7 @@ class RecalculateHashtag implements ShouldQueue
     public function handle(): void
     {
         $hashtag = Hashtag::firstOrCreate(['tag' => $this->tag]);
-        $count = Media::hashtag($this->tag)->count();
+        $count = Media::hashtag($this->tag)->public()->confirmed()->count();
 
         if ($count === 0) {
             $hashtag->delete();
@@ -68,12 +71,10 @@ class RecalculateHashtag implements ShouldQueue
             return;
         }
 
-        $hashtag->recalculateScores();
-
-        $hashtag->like_count = Media::metadataHashtag($this->tag)->sum('like_count') + Media::hashtag($this->tag)->sum('like_count');
-        $hashtag->visit_count = Media::metadataHashtag($this->tag)->sum('visit_count') + Media::hashtag($this->tag)->sum('visit_count');
-        $hashtag->media_count = Media::metadataHashtag($this->tag)->count() + Media::hashtag($this->tag)->count();
-        $hashtag->save();
+        $hashtag->media_count = $count;
+        $hashtag->like_count = Media::hashtag($this->tag)->public()->confirmed()->sum('like_count');
+        $hashtag->visit_count = Media::hashtag($this->tag)->public()->confirmed()->sum('visit_count');
+        $hashtag->sort_score = (Media::hashtag($this->tag)->public()->confirmed()->sum('sort_scores.default') / $count);
         $hashtag->save();
     }
 
