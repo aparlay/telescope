@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Admin\Filters;
 
-use MongoDB\BSON\Regex;
-
 class FilterPartial extends AbstractBaseFilter
 {
     public function __construct(

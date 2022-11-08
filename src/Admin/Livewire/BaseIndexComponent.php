@@ -94,8 +94,14 @@ abstract class BaseIndexComponent extends Component
     public function index()
     {
         $query = $this->buildQuery();
+        $this->appendQuery($query);
 
         return $query->paginate($this->perPage);
+    }
+
+    public function appendQuery($query)
+    {
+        // apply other queries when overriding
     }
 
     public function loadMore()

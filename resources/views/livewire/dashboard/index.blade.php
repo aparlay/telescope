@@ -26,4 +26,13 @@
     <div>
         <livewire:dashboard.stats :showAllDates="$showAllDates" :dateInterval="$dateInterval"/>
     </div>
+    {{--    <hr>--}}
+    {{--    <div>--}}
+    {{--        <livewire:dashboard.funnel/>--}}
+    {{--    </div>--}}
+    {{--    <hr>--}}
+    {{--    <div>--}}
+    {{--        <livewire:dashboard.top-credit-balance/>--}}
+    {{--    </div>--}}
+    {{--            <livewire:admin.dashboard.table/>--}}
 </div>
