@@ -5,6 +5,7 @@ namespace Aparlay\Core\Jobs;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Hashtag;
 use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
