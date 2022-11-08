@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -16,7 +17,11 @@ use MongoDB\BSON\ObjectId;
  * @property int         $like_count
  * @property int         $media_count
  * @property int         $visit_count
+ * @property int         $comment_count
  * @property float       $sort_score
+ * @property float       $sort_score_for_male
+ * @property float       $sort_score_for_female
+ * @property float       $sort_score_for_transgender
  */
 class Hashtag extends BaseModel
 {
@@ -43,6 +48,7 @@ class Hashtag extends BaseModel
         'like_count',
         'media_count',
         'visit_count',
+        'comment_count',
         'sort_score',
         'created_at',
         'updated_at',
@@ -52,6 +58,7 @@ class Hashtag extends BaseModel
         'like_count' => 0,
         'visit_count' => 0,
         'media_count' => 0,
+        'comment_count' => 0,
         'sort_score' => 0,
     ];
 
@@ -99,7 +106,7 @@ class Hashtag extends BaseModel
      */
     public function toSearchableArray()
     {
-        $media = Media::hashtag($this->tag)->sort()->first();
+        $media = Media::hashtag($this->tag)->sort('default')->first();
 
         return [
             '_id' => (string) $this->_id,
@@ -110,11 +117,12 @@ class Hashtag extends BaseModel
             'description' => $this->tag,
             'hashtags' => [$this->tag],
             'score' => $this->sort_score,
+            'gender' => [],
             'country' => '',
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
             'last_online_at' => 0,
-            'comment_count' => 0,
+            'comment_count' => $this->comment_count,
             '_geo' => ['lat' => 0.0, 'lng' => 0.0],
         ];
     }

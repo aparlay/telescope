@@ -7,7 +7,8 @@ use Illuminate\View\Component;
 class UserNameAvatar extends Component
 {
     public function __construct(
-        public $user
+        public $user,
+        public $class = ''
     ) {
     }
 

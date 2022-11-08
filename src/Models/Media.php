@@ -65,7 +65,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property array              $scores
  * @property array              $sort_scores
  * @property User               $userObj
- * @property User        $creatorObj
+ * @property User               $creatorObj
  * @property Alert[]            $alertObjs
  * @property UserNotification[] $userNotificationObjs
  * @property array              $files_history
@@ -230,7 +230,8 @@ class Media extends BaseModel
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->visibility == MediaVisibility::PUBLIC->value && $this->status === MediaStatus::CONFIRMED->value;
+        return $this->visibility == MediaVisibility::PUBLIC->value &&
+            in_array($this->status, [MediaStatus::DENIED->value, MediaStatus::CONFIRMED->value]);
     }
 
     /**
@@ -674,8 +675,8 @@ class Media extends BaseModel
         $promote = (int) Cache::store('redis')->get($cacheKey, 0);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
             $promote += match (true) {
-                ($this->skin_score > 9) => 1,
-                ($this->skin_score > 7) => 3,
+                ($this->skin_score >= 9) => 1,
+                ($this->skin_score >= 7) => 3,
                 ($this->skin_score > 5) => 4,
                 default => 2,
             };

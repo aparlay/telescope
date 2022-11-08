@@ -27,6 +27,11 @@ trait MediaScope
         return $query->where('creator._id', $creatorId);
     }
 
+    public function scopeVideo(Builder $query): Builder
+    {
+        return $this->where('type', 'video');
+    }
+
     /**
      * @param  Builder  $query
      * @param  ObjectId|string  $userId

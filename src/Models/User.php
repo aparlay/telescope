@@ -63,6 +63,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property string      $password_hash_field
  * @property string      $authKey
  * @property array       $followed_hashtags
+ * @property array       $medias
  * @property array       $links
  * @property bool        $require_otp
  * @property bool        $is_protected
@@ -185,10 +186,12 @@ class User extends \App\Models\User
         'updated_at',
         'deleted_at',
         'last_online_at',
+        'tracking',
     ];
 
     protected $attributes = [
         'count_fields_updated_at' => [],
+        'tracking' => [],
         'verification_status' => 1, // unverified
         'setting' => [
             'otp' => false,
@@ -331,7 +334,7 @@ class User extends \App\Models\User
     {
         return $this->visibility == UserVisibility::PUBLIC->value &&
             in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
-            $this->verification_status == UserVerificationStatus::VERIFIED->value &&
+            //$this->verification_status == UserVerificationStatus::VERIFIED->value &&
             ! config('app.is_testing');
     }
 
@@ -998,6 +1001,27 @@ class User extends \App\Models\User
         $stats = $this->stats;
         $stats['counters']['likes'] = $likeCount;
         $this->stats = $stats;
+        $this->save();
+
+        $this->refresh();
+    }
+
+    public function updateMedias()
+    {
+        $medias = [];
+        foreach (Media::query()->creator($this->_id)->completed()->recentFirst()->limit(30)->get() as $media) {
+            $basename = basename($media['file'], '.'.pathinfo($media['file'], PATHINFO_EXTENSION));
+            $file = config('app.cdn.videos').$media['file'];
+            $cover = config('app.cdn.covers').$basename.'.jpg';
+            $medias[] = [
+                '_id' => new ObjectId($media['_id']),
+                'file' => $file,
+                'cover' => $cover,
+                'status' => $media['status'],
+            ];
+        }
+        $this->medias = $medias;
+        $this->fillStatsCountersField(['medias' => Media::query()->creator($this->_id)->availableForOwner()->count()]);
         $this->save();
 
         $this->refresh();

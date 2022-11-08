@@ -148,11 +148,13 @@ class MediaService
         $userId = null;
         if (! auth()->guest()) {
             $userId = auth()->user()->_id;
-            $sortCategory = MediaSortCategories::REGISTERED->value;
             $query->notBlockedFor(auth()->user()->_id)->notVisitedByUserAndDevice($userId, $deviceId);
+
+            $sortCategory = MediaSortCategories::REGISTERED->value;
         } else {
-            $sortCategory = MediaSortCategories::GUEST->value;
             $query->notVisitedByDevice($deviceId);
+
+            $sortCategory = MediaSortCategories::GUEST->value;
         }
 
         $data = $query->sort($sortCategory)->paginate(5)->withQueryString();
