@@ -44,7 +44,7 @@ class MediaResource extends JsonResource
         }
 
         // should hide adult content for guests or setting.show_adult_content = false or default is false
-        $hideAdultContent = auth()->guest() || !(auth()->user()->setting['show_adult_content'] ?? false);
+        $hideAdultContent = auth()->guest() || ! (auth()->user()->setting['show_adult_content'] ?? false);
 
         return [
             '_id' => (string) $this->_id,
