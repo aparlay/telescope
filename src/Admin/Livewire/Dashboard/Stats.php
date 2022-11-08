@@ -59,11 +59,11 @@ final class Stats extends BaseDashboardComponent
             ],
             [
                 'label' => 'Video Uploads',
-                'value' => Arr::get($results, 'media_uploaded_videos'),
+                'value' => Arr::get($results, 'media_uploaded'),
             ],
             [
                 'label' => 'Video Approvals',
-                'value' => Arr::get($results, 'media_confirmed_videos'),
+                'value' => Arr::get($results, 'media_confirmed'),
             ],
             [
                 'label' => 'Verifications',

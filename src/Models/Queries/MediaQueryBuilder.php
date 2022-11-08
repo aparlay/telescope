@@ -12,14 +12,6 @@ use MongoDB\BSON\ObjectId;
 final class MediaQueryBuilder extends EloquentQueryBuilder
 {
     /**
-     * @return $this
-     */
-    public function video(): self
-    {
-        return $this->where('type', 'video');
-    }
-
-    /**
      * @param  ObjectId|string  $creatorId
      * @return self
      */
