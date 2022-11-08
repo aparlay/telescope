@@ -4,7 +4,7 @@
 @endphp
 
 <div class="card">
-    <form action="{{ route('core.admin.user.updateInfo', ['user' => $user->id]) }}" class="form-horizontal" method="post">
+    <form action="{{ route('core.admin.user.updateInfo', ['user' => $user->_id]) }}" class="form-horizontal" method="post">
         @csrf()
         @method('PUT')
         <div class="card-header">
@@ -25,7 +25,7 @@
                 <div class="form-group row">
                     <label for="id" class="col-sm-2 col-form-label">User ID</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="id" name="id" disabled="disabled" readonly="readonly" value="{{ $user->id }}">
+                        <input type="text" class="form-control" id="id" name="id" disabled="disabled" readonly="readonly" value="{{ $user->_id }}">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -162,12 +162,11 @@
                 <div class="form-group row">
                     <label for="interested_in" class="col-sm-2 col-form-label">Interested In</label>
                     <div class="col-sm-10">
-                        @foreach($user->getInterestedIns() as $key => $interested_in)
-                            <div>
-                                <input type="checkbox" value="{{ $key }}" id="{{$interested_in}}" name="interested_in[]" {!! in_array($key, $user->interested_in) ? 'checked' : '' !!}>
-                                <label for="{{$interested_in}}">{{$interested_in}}</label>
-                            </div>
-                        @endforeach
+                        <select name="interested_in" id="interested_in" class="form-control">
+                            @foreach($user->getInterestedIns() as $key => $interested_in)
+                                <option value="{{ $key }}" {!! $user->interested_in == $key ? 'selected' : '' !!}>{{ $interested_in }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
