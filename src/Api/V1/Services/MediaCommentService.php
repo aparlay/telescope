@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Models\MediaCommentLike;
 use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Notifications\CommentSent;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use MongoDB\BSON\ObjectId;
 
 class MediaCommentService
@@ -18,7 +19,8 @@ class MediaCommentService
 
     /**
      * @param Media $media
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     *
+     * @return CursorPaginator
      */
     public function list(Media $media)
     {
