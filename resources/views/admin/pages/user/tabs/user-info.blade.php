@@ -105,12 +105,11 @@
         <div class="form-group row">
             <label for="interested_in" class="col-sm-2 col-form-label">Interested In</label>
             <div class="col-sm-10">
-                @foreach($user->getInterestedIns() as $key => $interested_in)
-                    <div>
-                        <input type="checkbox" value="{{ $key }}" id="{{$interested_in}}" name="interested_in[]" {!! in_array($key, $user->interested_in) ? 'checked' : '' !!}>
-                        <label for="{{$interested_in}}">{{$interested_in}}</label>
-                    </div>
-                @endforeach
+                <select name="interested_in" id="interested_in" class="form-control">
+                    @foreach($user->getInterestedIns() as $key => $interested_in)
+                        <option value="{{ $key }}" {!! $user->interested_in == $key ? 'selected' : '' !!}>{{ $interested_in }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
         <div class="form-group row">
