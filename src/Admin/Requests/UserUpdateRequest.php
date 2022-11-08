@@ -4,13 +4,11 @@ namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Helpers\Country;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 use Maklad\Permission\Models\Role;
 use MongoDB\BSON\ObjectId;
 
@@ -54,8 +52,7 @@ class UserUpdateRequest extends FormRequest
             'gender' => [Rule::in(array_keys(User::getGenders()))],
             'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
             'status' => [Rule::in(array_keys(User::getStatuses()))],
-            'interested_in' => ['nullable', 'array'],
-            'interested_in.*' => [Rule::in(UserInterestedIn::getAllValues())],
+            'interested_in' => [Rule::in(array_keys(User::getInterestedIns()))],
             'visibility' => [Rule::in(array_keys(User::getVisibilities()))],
             'role' => ['nullable', Rule::in(Role::where('guard_name', 'admin')->pluck('name'))],
             'email_verified' => ['nullable', 'boolean'],
@@ -82,11 +79,7 @@ class UserUpdateRequest extends FormRequest
 
     public function prepareForValidation()
     {
-        if (empty($this->interested_in)) {
-            $this->interested_in = [UserInterestedIn::FEMALE->value];
-        }
         $this->merge([
-            'interested_in' => array_map('intval', $this->interested_in),
             'referral_id' => $this->referral_id ? new ObjectId($this->referral_id) : null,
         ]);
     }
