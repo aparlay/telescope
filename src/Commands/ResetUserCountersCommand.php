@@ -6,6 +6,7 @@ use Aparlay\Chat\Models\Chat;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Hashtag;
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\UserNotification;
@@ -28,7 +29,7 @@ class ResetUserCountersCommand extends Command
                 'likes' => MediaLike::query()->user($user->_id)->count() ?? 0,
                 'blocks' => Block::query()->creator($user->_id)->count() ?? 0,
                 'followed_hashtags' => count($user->followed_hashtags ?? []),
-                'medias' => MediaLike::query()->user($user->_id)->count() ?? 0,
+                'medias' => Media::query()->creator($user->_id)->availableForOwner()->count(),
                 'subscriptions' => 0,
                 'subscribers' => 0,
                 'chats' => Chat::query()->participants($user->_id)->count() ?? 0,
