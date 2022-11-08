@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Api\V1\Requests;
 
 use Aparlay\Core\Helpers\Country;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -40,8 +39,6 @@ class MeRequest extends FormRequest
             'username' => ['unique:users', 'min:2', 'max:255', 'alpha_dash'],
             'country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
             'payout_country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
-            'interested_in' => ['nullable', 'array'],
-            'interested_in.*' => [Rule::in(UserInterestedIn::getAllValues())],
         ];
     }
 
@@ -69,13 +66,5 @@ class MeRequest extends FormRequest
                 'avatar' => 'You can upload only one image file.',
             ]);
         }
-        if (! is_array($this->interested_in) || empty($this->interested_in)) {
-            throw ValidationException::withMessages([
-                'interested_in' => 'interested_in must be an array of interested choices.',
-            ]);
-        }
-        $this->merge([
-            'interested_in' => array_map('intval', $this->interested_in),
-        ]);
     }
 }
