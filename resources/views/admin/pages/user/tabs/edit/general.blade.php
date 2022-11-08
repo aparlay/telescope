@@ -10,7 +10,7 @@
         <div class="card-header">
             <h3 class="card-title">General</h3>
             <div class="card-tools">
-                <button type="submit" class="btn btn-tool">Edit <i class="fas fa-pen"></i></button>
+                <button type="submit" class="btn text-blue">Edit <i class="fas fa-pen"></i></button>
                 <button
                     type="button"
                     class="btn btn-tool"
