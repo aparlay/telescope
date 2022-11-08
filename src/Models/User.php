@@ -1009,7 +1009,7 @@ class User extends \App\Models\User
     public function updateMedias()
     {
         $medias = [];
-        foreach (Media::query()->creator($this->_id)->completed()->recentFirst()->limit(30)->get() as $media) {
+        foreach (Media::query()->creator($this->_id)->availableForOwner()->recentFirst()->limit(30)->get() as $media) {
             $basename = basename($media['file'], '.'.pathinfo($media['file'], PATHINFO_EXTENSION));
             $file = config('app.cdn.videos').$media['file'];
             $cover = config('app.cdn.covers').$basename.'.jpg';
