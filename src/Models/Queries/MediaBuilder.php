@@ -15,9 +15,6 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use Str;
 
-/**
- *
- */
 class MediaBuilder extends EloquentQueryBuilder
 {
     /**
