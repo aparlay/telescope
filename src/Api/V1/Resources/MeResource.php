@@ -78,7 +78,7 @@ class MeResource extends JsonResource
                 'demo' => $this->features['demo'] ?? false,
             ],
             'gender' => $this->gender,
-            'interested_in' => $this->interested_in,
+            'interested_in' => [$this->interested_in],
             'status' => $this->status,
             'verification_status' => $this->verification_status,
             'verification_status_label' => $this->verification_status_label,
@@ -103,9 +103,6 @@ class MeResource extends JsonResource
             'alerts' => AlertResource::collection($this->alerts),
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
-            '_links' => [
-                'self' => ['href' => url("/v1/user/view?id={$this->_id}")],
-            ],
             'is_verified' => $this->is_verified,
             'country_alpha3' => $this->country_alpha3,
             'payout_country_label' => $this->payout_country_label,
@@ -115,6 +112,9 @@ class MeResource extends JsonResource
             'country_flags' => $this->country_flags,
             $this->mergeWhen($this->is_tier1, fn () => ['is_tier1' => true]),
             $this->mergeWhen($this->is_tier3, fn () => ['is_tier3' => true]),
+            '_links' => [
+                'self' => ['href' => url("/v1/user/view?id={$this->_id}")],
+            ],
         ];
     }
 }
