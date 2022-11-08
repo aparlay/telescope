@@ -235,28 +235,4 @@ trait MediaScope
     {
         return $query->where('hashtags', $tag);
     }
-
-    /**
-     * @param  Builder  $query
-     * @param  string  $tag
-     * @return mixed
-     */
-    public function scopeMetadataHashtag(Builder $query, string $tag): Builder
-    {
-        return $query->where('metadata_hashtags', $tag);
-    }
-
-    /**
-     * @param  Builder  $query
-     * @param  array|int  $gender
-     * @return mixed
-     */
-    public function scopeContentGender(Builder $query, $gender): Builder
-    {
-        if (! is_array($gender)) {
-            $gender = [$gender];
-        }
-
-        return $query->whereIn('content_gender', $gender);
-    }
 }
