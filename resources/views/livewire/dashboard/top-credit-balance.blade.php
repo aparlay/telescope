@@ -1,0 +1,75 @@
+<section>
+    <h2>Top Credit Balance</h2>
+    <div class="row">
+        <div class="col-4">
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <td>17</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>1</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-2">
+            <table class="table table-striped">
+                <tr>
+                    <td>buzzalert</td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td>buzzalert</td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td>buzzalert</td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td>buzzalert</td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td>buzzalert</td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td>buzzalert</td>
+                    <td>*</td>
+                </tr>
+                <tr>
+                    <td>buzzalert</td>
+                    <td>*</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>

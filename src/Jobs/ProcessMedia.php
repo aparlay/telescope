@@ -234,6 +234,7 @@ class ProcessMedia implements ShouldQueue
             $media->addToSet('processing_log', 'Error: Cannot upload video');
             $media->save($withoutTouch);
             Log::error(__CLASS__.PHP_EOL.'Cannot upload video');
+            Log::error(__CLASS__.PHP_EOL.json_encode($response));
             throw new Exception(__CLASS__.PHP_EOL.'Cannot upload video');
         }
 

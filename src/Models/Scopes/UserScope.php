@@ -27,6 +27,14 @@ trait UserScope
     /**
      * @return mixed
      */
+    public function scopeIp(Builder $query, string $ip): Builder
+    {
+        return $query->where('user_agents.ip', $ip);
+    }
+
+    /**
+     * @return mixed
+     */
     public function scopeEmail(Builder $query, string $email): Builder
     {
         return $query->where('email', $email);

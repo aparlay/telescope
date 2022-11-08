@@ -564,7 +564,7 @@ class MediaTest extends ApiTestCase
 
         $this->assertDatabaseHas((new User())->getCollection(), [
             '_id' => $user->_id,
-            'media_count' => 2,
+            'stats.counters.medias' => 2,
         ]);
         $this->actingAs($otherUser)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('DELETE', '/v1/media/'.$media->_id)
@@ -582,7 +582,7 @@ class MediaTest extends ApiTestCase
         ]);
         $this->assertDatabaseHas((new User())->getCollection(), [
             '_id' => $user->_id,
-            'media_count' => 1,
+            'stats.counters.medias' => 1,
         ]);
     }
 

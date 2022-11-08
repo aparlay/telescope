@@ -114,7 +114,7 @@ class RegisterRequest extends FormRequest
             'password_hash' => Hash::make($this->password),
             'status' => UserStatus::PENDING->value,
             'visibility' => UserVisibility::PUBLIC->value,
-            'interested_in' => [UserInterestedIn::FEMALE->value],
+            'interested_in' => UserInterestedIn::FEMALE->value,
             'email_verified' => false,
             'phone_number_verified' => false,
             'type' => UserType::USER->value,

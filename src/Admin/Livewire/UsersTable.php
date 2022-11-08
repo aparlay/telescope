@@ -18,12 +18,16 @@ class UsersTable extends BaseIndexComponent
         $this->render();
     }
 
+    public function getDefaultSort(): array
+    {
+        return ['created_at', 'DESC'];
+    }
+
     public function getAllowedSorts()
     {
         return [
             'username',
             'email',
-            'full_name',
             'status',
             'visibility',
             'country',
@@ -41,7 +45,6 @@ class UsersTable extends BaseIndexComponent
             new FilterExact('email_verified', 'boolean'),
             new FilterPartial('username', 'string'),
             new FilterPartial('email', 'string'),
-            new FilterPartial('full_name', 'string'),
             new FilterScope('country', 'string', 'countryAlpha2'),
             new FilterExact('gender', 'int'),
             new FilterExact('status', 'int'),
