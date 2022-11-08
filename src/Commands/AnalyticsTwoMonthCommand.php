@@ -5,8 +5,9 @@ namespace Aparlay\Core\Commands;
 use Aparlay\Core\Admin\Services\AnalyticsCalculatorService;
 use Aparlay\Core\Helpers\DT;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\Isolatable;
 
-class AnalyticsTwoMonthCommand extends Command
+class AnalyticsTwoMonthCommand extends Command implements Isolatable
 {
     public $signature = 'analytics:two-months';
 

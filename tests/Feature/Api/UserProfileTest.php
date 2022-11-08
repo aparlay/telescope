@@ -329,7 +329,7 @@ class UserProfileTest extends ApiTestCase
                     'data.features.tips' => 'boolean',
                     'data.features.demo' => 'boolean',
                     'data.gender' => 'integer',
-                    'data.interested_in' => 'array',
+                    'data.interested_in' => 'integer',
                     'data.visibility' => 'integer',
                     'data.block_count' => 'integer',
                     'data.follower_count' => 'integer',

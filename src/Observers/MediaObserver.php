@@ -48,8 +48,6 @@ class MediaObserver extends BaseModelObserver
     {
         parent::saving($model);
         $model->description = (string) $model->description;
-        $model->metadata = (string) $model->metadata;
-        $model->metadata_hashtags = MediaService::extractHashtags($model->metadata);
         $model->hashtags = MediaService::extractHashtags($model->description);
         $extractedPeople = MediaService::extractPeople($model->description);
         if (! empty($extractedPeople)) {

@@ -53,7 +53,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $gender
  * @property int         $visibility
  * @property int         $show_online_status
- * @property array       $interested_in
+ * @property int         $interested_in
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
  * @property array       $setting
@@ -195,6 +195,7 @@ class User extends \App\Models\User
         'verification_status' => 1, // unverified
         'setting' => [
             'otp' => false,
+            'show_adult_content' => false,
             'notifications' => [
                 'unread_message_alerts' => true,
                 'news_and_updates' => true,
@@ -262,7 +263,6 @@ class User extends \App\Models\User
                 'chats' => 0,
                 'notifications' => 0,
             ],
-            'interested_in' => [0],
         ],
     ];
 
@@ -281,6 +281,7 @@ class User extends \App\Models\User
         'phone_number_verified' => 'boolean',
         'gender' => 'integer',
         'avatar' => 'string',
+        'interested_in' => 'integer',
         'visibility' => 'integer',
         'stats.counters.followers' => 'integer',
         'stats.counters.followings' => 'integer',
@@ -354,10 +355,6 @@ class User extends \App\Models\User
             'description' => $this->bio,
             'hashtags' => [],
             'score' => $this->scores['sort'],
-            'score_for_male' => $this->scores['sort'] * (in_array($this->gender, [UserGender::MALE->value, UserGender::NOT_MENTION->value]) ? 1 : 0),
-            'score_for_female' => $this->scores['sort'] * (in_array($this->gender, [UserGender::FEMALE->value, UserGender::NOT_MENTION->value]) ? 1 : 0),
-            'score_for_transgender' => $this->scores['sort'] * (in_array($this->gender, [UserGender::TRANSGENDER->value, UserGender::NOT_MENTION->value]) ? 1 : 0),
-            'gender' => [$this->gender],
             'country' => $this->country_alpha2,
             'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
             'like_count' => $this->counters['likes'],
@@ -736,6 +733,7 @@ class User extends \App\Models\User
             UserInterestedIn::FEMALE->value => UserInterestedIn::FEMALE->label(),
             UserInterestedIn::MALE->value => UserInterestedIn::MALE->label(),
             UserInterestedIn::TRANSGENDER->value => UserInterestedIn::TRANSGENDER->label(),
+            UserInterestedIn::COUPLE->value => UserInterestedIn::COUPLE->label(),
         ];
     }
 
@@ -1016,7 +1014,7 @@ class User extends \App\Models\User
     public function updateMedias()
     {
         $medias = [];
-        foreach (Media::query()->creator($this->_id)->completed()->recentFirst()->limit(30)->get() as $media) {
+        foreach (Media::query()->creator($this->_id)->availableForOwner()->recentFirst()->limit(30)->get() as $media) {
             $basename = basename($media['file'], '.'.pathinfo($media['file'], PATHINFO_EXTENSION));
             $file = config('app.cdn.videos').$media['file'];
             $cover = config('app.cdn.covers').$basename.'.jpg';

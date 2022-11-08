@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
+use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaCommentLike;
@@ -188,9 +190,20 @@ class MediaCommentTest extends ApiTestCase
     public function testCreateMediaComment()
     {
         $user = User::query()->first();
-        $media = Media::query()->first();
-        $media->is_comments_enabled = true;
-        $media->save();
+        $mediaCreator = User::factory()->create(['like_count' => 0]);
+        $media = \Aparlay\Core\Models\Media::factory()->for($mediaCreator, 'userObj')->create([
+            'is_comments_enabled' => true,
+            'is_protected' => false,
+            'created_by' => $mediaCreator->_id,
+            'like_count' => 0,
+            'status' => MediaStatus::COMPLETED->value,
+            'visibility' => MediaVisibility::PUBLIC->value,
+            'creator' => [
+                '_id' => $mediaCreator->_id,
+                'username' => $mediaCreator->username,
+                'avatar' => $mediaCreator->avatar,
+            ],
+        ]);
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -211,9 +224,20 @@ class MediaCommentTest extends ApiTestCase
     public function testCreateMediaCommentReplyFailed()
     {
         $user = User::query()->first();
-        $media = Media::query()->first();
-        $media->is_comments_enabled = false;
-        $media->save();
+        $mediaCreator = User::factory()->create(['like_count' => 0]);
+        $media = \Aparlay\Core\Models\Media::factory()->for($mediaCreator, 'userObj')->create([
+            'is_comments_enabled' => false,
+            'is_protected' => false,
+            'created_by' => $mediaCreator->_id,
+            'like_count' => 0,
+            'status' => MediaStatus::COMPLETED->value,
+            'visibility' => MediaVisibility::PUBLIC->value,
+            'creator' => [
+                '_id' => $mediaCreator->_id,
+                'username' => $mediaCreator->username,
+                'avatar' => $mediaCreator->avatar,
+            ],
+        ]);
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])

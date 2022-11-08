@@ -3,12 +3,10 @@
 namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\Media;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use MongoDB\BSON\ObjectId;
 
 class MediaUpdateRequest extends FormRequest
 {
@@ -43,22 +41,12 @@ class MediaUpdateRequest extends FormRequest
                 'integer',
                 Rule::in(array_keys(Media::getBeautyScores())),
             ],
-            'content_gender' => ['nullable', 'array'],
-            'content_gender.*' => [Rule::in(UserInterestedIn::getAllValues())],
             'description' => ['nullable', 'string'],
-            'metadata' => ['nullable', 'string'],
             'status' => [
                 'nullable',
                 Rule::in(array_keys(Media::getStatuses())),
             ],
         ];
-    }
-
-    public function prepareForValidation()
-    {
-        $this->merge([
-            'content_gender' => array_map('intval', $this->content_gender),
-        ]);
     }
 
     /**

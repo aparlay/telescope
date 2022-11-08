@@ -9,23 +9,17 @@ use Jenssegers\Mongodb\Collection;
 
 final class DashboardStatsService
 {
-    public function __construct(
-        private ?Carbon $from,
-        private ?Carbon $until
-    ) {
-    }
-
-    public function getAnalyticStats()
+    public function getAnalyticStats(Carbon $from, Carbon $to)
     {
-        $value = Analytic::query()->raw(function (Collection $collection) {
+        $value = Analytic::query()->raw(function (Collection $collection) use ($from, $to) {
             $aggregations = [];
 
             if (isset($this->from) && isset($this->until)) {
                 $aggregations[] = [
                     '$match' => [
                         'date' => [
-                            '$gte' => $this->from->format('Y-m-d'),
-                            '$lte' => $this->until->format('Y-m-d'),
+                            '$gte' => $from->format('Y-m-d'),
+                            '$lte' => $to->format('Y-m-d'),
                         ],
                     ],
                 ];
@@ -35,8 +29,6 @@ final class DashboardStatsService
                     '$group' => [
                         '_id' => 0,
                         'media_uploaded' => ['$sum' => '$media.uploaded'],
-                        'media_uploaded_videos' => ['$sum' => '$media.uploaded_videos'],
-                        'media_confirmed_videos' => ['$sum' => '$media.confirmed_videos'],
                         'media_failed' => ['$sum' => '$media.failed'],
                         'media_completed' => ['$sum' => '$media.completed'],
                         'media_confirmed' => ['$sum' => '$media.confirmed'],
