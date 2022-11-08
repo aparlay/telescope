@@ -57,7 +57,7 @@ class MediaUpdateRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'content_gender' => array_map('intval', $this->content_gender),
+            'content_gender' => array_map('intval', $this->content_gender ?? [UserInterestedIn::FEMALE->value]),
         ]);
     }
 

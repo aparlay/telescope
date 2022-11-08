@@ -13,6 +13,7 @@ use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Queries\MediaQueryBuilder;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -265,7 +266,7 @@ class Media extends BaseModel
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
             'comment_count' => $this->comment_count,
-            'hashtags' => array_merge($this->hashtags, $this->metadata_hashtags),
+            'hashtags' => array_merge($this->hashtags, $this->metadata_hashtags ?? []),
             'score' => $this->sort_scores['default'],
             'score_for_male' => $this->sort_scores['default'] * (in_array(UserInterestedIn::MALE->value, $this->content_gender) ? 1 : 0),
             'score_for_female' => $this->sort_scores['default'] * (in_array(UserInterestedIn::FEMALE->value, $this->content_gender) ? 1 : 0),
@@ -693,8 +694,8 @@ class Media extends BaseModel
         $promote = (int) Cache::store('redis')->get($cacheKey, 0);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
             $promote += match (true) {
-                ($this->skin_score > 9) => 1,
-                ($this->skin_score > 7) => 3,
+                ($this->skin_score >= 9) => 1,
+                ($this->skin_score >= 7) => 3,
                 ($this->skin_score > 5) => 4,
                 default => 2,
             };
@@ -796,5 +797,15 @@ class Media extends BaseModel
 
         $this->save();
         $this->refresh();
+    }
+
+    public static function query(): MediaQueryBuilder|Builder
+    {
+        return parent::query();
+    }
+
+    public function newEloquentBuilder($query): MediaQueryBuilder
+    {
+        return new MediaQueryBuilder($query);
     }
 }

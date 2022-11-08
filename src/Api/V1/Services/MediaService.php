@@ -153,9 +153,11 @@ class MediaService
             $user = auth()->user();
             $userId = auth()->user()->_id;
             $genderPreferences = ! empty($genderPreferences) ? $genderPreferences : $user->interested_in;
+            $sortCategory = MediaSortCategories::REGISTERED->value;
             $query->contentGender($genderPreferences)->notBlockedFor($user->_id)->notVisitedByUserAndDevice($user->_id, $deviceId);
             $sortCategory = MediaSortCategories::REGISTERED->value;
         } else {
+            $sortCategory = MediaSortCategories::GUEST->value;
             $genderPreferences = ! empty($genderPreferences) ? $genderPreferences : [UserInterestedIn::FEMALE->value];
             $query->contentGender($genderPreferences)->notVisitedByDevice($deviceId);
             $sortCategory = MediaSortCategories::GUEST->value;
