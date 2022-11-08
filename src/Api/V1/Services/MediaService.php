@@ -15,7 +15,6 @@ use Aparlay\Core\Jobs\MediaWatched;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
@@ -134,12 +133,10 @@ class MediaService
     }
 
     /**
-     * @param  array  $genderPreferences
-     *
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
      */
-    public function getPublicFeeds(array $genderPreferences = []): LengthAwarePaginator
+    public function getPublicFeeds(): LengthAwarePaginator
     {
         $query = Media::public()->confirmed();
 
@@ -150,14 +147,13 @@ class MediaService
 
         $userId = null;
         if (! auth()->guest()) {
-            $user = auth()->user();
             $userId = auth()->user()->_id;
-            $genderPreferences = ! empty($genderPreferences) ? $genderPreferences : $user->interested_in;
-            $query->contentGender($genderPreferences)->notBlockedFor($user->_id)->notVisitedByUserAndDevice($user->_id, $deviceId);
+            $query->notBlockedFor(auth()->user()->_id)->notVisitedByUserAndDevice($userId, $deviceId);
+
             $sortCategory = MediaSortCategories::REGISTERED->value;
         } else {
-            $genderPreferences = ! empty($genderPreferences) ? $genderPreferences : [UserInterestedIn::FEMALE->value];
-            $query->contentGender($genderPreferences)->notVisitedByDevice($deviceId);
+            $query->notVisitedByDevice($deviceId);
+
             $sortCategory = MediaSortCategories::GUEST->value;
         }
 
