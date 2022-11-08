@@ -39,9 +39,9 @@ final class Stats extends BaseDashboardComponent
             }
         }
 
-        $statsService = new DashboardStatsService($start, $end);
+        $statsService = new DashboardStatsService();
 
-        return $this->getDisplayedStats($statsService->getAnalyticStats());
+        return $this->getDisplayedStats($statsService->getAnalyticStats($start, $end));
     }
 
     private function getDisplayedStats(array $results): array
