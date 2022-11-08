@@ -779,14 +779,4 @@ class Media extends BaseModel
         $this->save();
         $this->refresh();
     }
-
-    public static function query(): MediaQueryBuilder|Builder
-    {
-        return parent::query();
-    }
-
-    public function newEloquentBuilder($query): MediaQueryBuilder
-    {
-        return new MediaQueryBuilder($query);
-    }
 }
