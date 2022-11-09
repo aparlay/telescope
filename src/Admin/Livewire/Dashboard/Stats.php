@@ -58,6 +58,23 @@ final class Stats extends BaseDashboardComponent
                 'value' => Arr::get($results, 'user_registered'),
             ],
             [
+                'label' => 'Verifications',
+            ],
+            [
+                'label' => 'Emails Sent',
+                'value' => Arr::get($results, 'email_sent'),
+            ],
+            [
+                'label' => 'Email Verifications',
+                'value' => Arr::get($results, 'user_verified') . '[' . (Arr::get($results, 'user_verified')/Arr::get($results, 'email_sent')) . '%]',
+            ],
+            [
+                'label' => 'Email Bounced',
+            ],
+            [
+                'label' => 'Email Bounced Ratio',
+            ],
+            [
                 'label' => 'Video Uploads',
                 'value' => Arr::get($results, 'media_uploaded'),
             ],
@@ -66,8 +83,12 @@ final class Stats extends BaseDashboardComponent
                 'value' => Arr::get($results, 'media_confirmed'),
             ],
             [
-                'label' => 'Verifications',
-                'value' => Arr::get($results, 'user_verified'),
+                'label' => 'Likes',
+                'value' => Arr::get($results, 'media_likes'),
+            ],
+            [
+                'label' => 'Comments',
+                'value' => Arr::get($results, 'media_comments'),
             ],
             [
                 'label' => 'Subscriptions',
@@ -86,24 +107,6 @@ final class Stats extends BaseDashboardComponent
                     Arr::get($results, 'payment_subscriptions_amount', 0) +
                     Arr::get($results, 'payment_tips_amount', 0)
                 ),
-            ],
-            [
-                'label' => 'Likes',
-                'value' => Arr::get($results, 'media_likes'),
-            ],
-            [
-                'label' => 'Comments',
-                'value' => Arr::get($results, 'media_comments'),
-            ],
-            [
-                'label' => 'Emails Sent',
-                'value' => Arr::get($results, 'email_sent'),
-            ],
-            [
-                'label' => 'Email Bounced',
-            ],
-            [
-                'label' => 'Email Bounced Ratio',
             ],
         ];
     }
