@@ -248,7 +248,6 @@ class MediaService
     {
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();
-        $visitorUserId = null;
         if (auth()->guest()) {
             $query->confirmed()->public();
         } elseif ((string) $userId === (string) auth()->user()->_id) {
@@ -256,7 +255,6 @@ class MediaService
                 $query->where('status', AlertStatus::NOT_VISITED->value);
             }])->availableForOwner();
         } else {
-            $visitorUserId = (string) auth()->user()->_id;
             $isFollowed = Follow::query()
                 ->select(['user._id', '_id'])
                 ->creator(auth()->user()->_id)
@@ -270,15 +268,7 @@ class MediaService
             }
         }
 
-        $data = $query->paginate(15);
-
-        $visitedVideos = [];
-        foreach ($data->items() as $model) {
-            $visitedVideos[] = new ObjectId($model->_id);
-        }
-        MediaWatched::dispatch($visitedVideos, 60, $visitorUserId);
-
-        return $data;
+        return $query->paginate(15);
     }
 
     /**
