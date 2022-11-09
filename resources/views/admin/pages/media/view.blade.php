@@ -212,7 +212,7 @@
                                         <div class="form-group row m-0">
                                             <label for="status" class="col-sm-2 col-form-label">Status</label>
                                             <div class="col-sm-10">
-                                                <select name="verification_status" id="verification_status" class="form-control">
+                                                <select name="status" id="status" class="form-control">
                                                     @foreach(\App\Models\Media::getStatuses() as $key => $label)
                                                         <option value="{{ $key }}" {!! $media->status == $key ? 'selected' : '' !!}>{{ $label }}</option>
                                                     @endforeach

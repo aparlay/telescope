@@ -269,7 +269,15 @@ class MediaService
             }
         }
 
-        return $query->paginate(15);
+        $data = $query->paginate(15);
+
+        $visitedVideos = [];
+        foreach ($data->items() as $model) {
+            $visitedVideos[] = new ObjectId($model->_id);
+        }
+        MediaWatched::dispatch($visitedVideos, 60, $userId);
+
+        return $data;
     }
 
     /**

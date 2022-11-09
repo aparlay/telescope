@@ -12,8 +12,10 @@ use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UploadService;
+use Aparlay\Core\Jobs\MediaWatched;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use MongoDB\BSON\ObjectId;
 
 class MediaController extends Controller
 {
@@ -67,6 +69,9 @@ class MediaController extends Controller
      */
     public function show(Media $media): Response
     {
+        $visitedVideos[] = new ObjectId($media->_id);
+        MediaWatched::dispatch($visitedVideos, 60);
+
         return $this->response(new MediaResource($media));
     }
 
