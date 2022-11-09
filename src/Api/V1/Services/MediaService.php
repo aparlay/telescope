@@ -256,7 +256,7 @@ class MediaService
                 $query->where('status', AlertStatus::NOT_VISITED->value);
             }])->availableForOwner();
         } else {
-            $visitorUserId = (string)auth()->user()->_id;
+            $visitorUserId = (string) auth()->user()->_id;
             $isFollowed = Follow::query()
                 ->select(['user._id', '_id'])
                 ->creator(auth()->user()->_id)
