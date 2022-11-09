@@ -66,7 +66,7 @@ final class Stats extends BaseDashboardComponent
             ],
             [
                 'label' => 'Email Verifications',
-                'value' => Arr::get($results, 'user_verified').'['.round(100 * Arr::get($results, 'user_verified') / Arr::get($results, 'email_sent'),2).'%]',
+                'value' => Arr::get($results, 'user_verified').'['.round(100 * Arr::get($results, 'user_verified') / Arr::get($results, 'email_sent'), 2).'%]',
             ],
             [
                 'label' => 'Email Bounced',
