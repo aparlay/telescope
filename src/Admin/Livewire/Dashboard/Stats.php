@@ -49,11 +49,11 @@ final class Stats extends BaseDashboardComponent
         return [
             [
                 'label' => 'New Visitors',
-                'value' => Arr::get($results, 'google_analytics.new_users.total'),
+                'value' => Arr::get($results, 'google_analytics_new_users'),
             ],
             [
                 'label' => 'Active Users',
-                'value' => Arr::get($results, 'google_analytics.active_users.total'),
+                'value' => Arr::get($results, 'google_analytics_active_users'),
             ],
             [
                 'label' => 'Registrations',
@@ -61,20 +61,6 @@ final class Stats extends BaseDashboardComponent
             ],
             [
                 'label' => 'Verifications',
-            ],
-            [
-                'label' => 'Emails Sent',
-                'value' => Arr::get($results, 'email_sent'),
-            ],
-            [
-                'label' => 'Email Verifications',
-                'value' => Arr::get($results, 'user_verified').'['.round(100 * Arr::get($results, 'user_verified') / Arr::get($results, 'email_sent')).'%]',
-            ],
-            [
-                'label' => 'Email Bounced',
-            ],
-            [
-                'label' => 'Email Bounced Ratio',
             ],
             [
                 'label' => 'Video Uploads',
@@ -109,6 +95,20 @@ final class Stats extends BaseDashboardComponent
                     Arr::get($results, 'payment_subscriptions_amount', 0) +
                     Arr::get($results, 'payment_tips_amount', 0)
                 ),
+            ],
+            [
+                'label' => 'Emails Sent',
+                'value' => Arr::get($results, 'email_sent'),
+            ],
+            [
+                'label' => 'Email Verifications',
+                'value' => Arr::get($results, 'user_verified').'['.round(100 * Arr::get($results, 'user_verified') / Arr::get($results, 'email_sent')).'%]',
+            ],
+            [
+                'label' => 'Email Bounced',
+            ],
+            [
+                'label' => 'Email Bounced Ratio',
             ],
         ];
     }
