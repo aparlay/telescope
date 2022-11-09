@@ -9,12 +9,12 @@ use Jenssegers\Mongodb\Collection;
 
 final class DashboardStatsService
 {
-    public function getAnalyticStats(Carbon $from, Carbon $to)
+    public function getAnalyticStats(?Carbon $from, ?Carbon $to)
     {
         $value = Analytic::query()->raw(function (Collection $collection) use ($from, $to) {
             $aggregations = [];
 
-            if (isset($this->from) && isset($this->until)) {
+            if (isset($from) && isset($to)) {
                 $aggregations[] = [
                     '$match' => [
                         'date' => [
