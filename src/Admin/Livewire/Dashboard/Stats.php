@@ -39,19 +39,21 @@ final class Stats extends BaseDashboardComponent
             }
         }
 
-        $statsService = new DashboardStatsService($start, $end);
+        $statsService = new DashboardStatsService();
 
-        return $this->getDisplayedStats($statsService->getAnalyticStats());
+        return $this->getDisplayedStats($statsService->getAnalyticStats($start, $end));
     }
 
     private function getDisplayedStats(array $results): array
     {
         return [
             [
-                'label' => 'Unique Visitors',
+                'label' => 'New Visitors',
+                'value' => Arr::get($results, 'google_analytics.new_users.total'),
             ],
             [
                 'label' => 'Active Users',
+                'value' => Arr::get($results, 'google_analytics.active_users.total'),
             ],
             [
                 'label' => 'Registrations',

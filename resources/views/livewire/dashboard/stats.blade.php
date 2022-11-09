@@ -5,11 +5,11 @@
                 <div class="m-1 card h-100 rounded-lg border border-gray-200 shadow-md">
                     <div class="card-body align-middle p-0 text-center">
                         @if(isset($stat['value']))
-                            <div class="text text-gray h2">
+                            <div class="text text-gray-dark h2 mb-0 mt-1">
                                 {{ $stat['value'] }}
                             </div>
                         @else
-                            <div class="text-gray h2">
+                            <div class="text-gray h2 mb-0 mt-1">
                                 ({{__('not set')}})
                             </div>
                         @endif
