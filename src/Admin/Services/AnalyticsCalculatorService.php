@@ -12,18 +12,32 @@ use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Payment\Admin\Models\Tip;
 use Aparlay\Payment\Models\Subscription;
 use Aparlay\Payout\Models\Order;
+use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
+use Google\Analytics\Data\V1beta\DateRange;
+use Google\Analytics\Data\V1beta\Dimension;
+use Google\Analytics\Data\V1beta\Metric;
+use Google\ApiCore\ApiException;
 use MongoDB\BSON\UTCDateTime;
 
 final class AnalyticsCalculatorService
 {
+    private BetaAnalyticsDataClient $client;
+
+    public function __construct()
+    {
+        putenv('GOOGLE_APPLICATION_CREDENTIALS='.config('app.google-analytics.key_file'));
+        $this->client = new BetaAnalyticsDataClient();
+    }
+
     /**
-     * @param UTCDateTime $startAt
-     * @param UTCDateTime $endAt
-     * @param bool $saveResults
+     * @param  UTCDateTime  $startAt
+     * @param  UTCDateTime  $endAt
+     * @param  bool         $saveResults
      *
      * @return array
+     * @throws ApiException
      */
-    public static function calculateAnalytics(UTCDateTime $startAt, UTCDateTime $endAt, bool $saveResults = true): array
+    public function calculateAnalytics(UTCDateTime $startAt, UTCDateTime $endAt, bool $saveResults = true): array
     {
         $availableMedia = Media::date(null, $endAt)->count();
 
@@ -73,6 +87,24 @@ final class AnalyticsCalculatorService
                 'tips' => Tip::date($startAt, $endAt)->count(),
                 'tips_amount' => Tip::date($startAt, $endAt)->sum('amount'),
             ],
+            'google_analytics' => [
+                'active_users' => $this->reportActiveUsers(
+                    date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
+                    date('Y-m-d', $endAt->toDateTime()->getTimestamp())
+                ),
+                'new_users' => $this->reportNewUsers(
+                    date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
+                    date('Y-m-d', $endAt->toDateTime()->getTimestamp())
+                ),
+                'total_users' => $this->reportTotalUsers(
+                    date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
+                    date('Y-m-d', $endAt->toDateTime()->getTimestamp())
+                ),
+                'engagements' => $this->reportUserEngagementDuration(
+                    date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
+                    date('Y-m-d', $endAt->toDateTime()->getTimestamp())
+                ),
+            ],
         ];
 
         if ($saveResults) {
@@ -83,4 +115,99 @@ final class AnalyticsCalculatorService
 
         return $analytics;
     }
+
+    /**
+     * @param $from
+     * @param $to
+     *
+     * @return array
+     * @throws ApiException
+     */
+    public function reportActiveUsers($from, $to): array
+    {
+        return $this->getMetricResults('activeUsers', $from, $to);
+    }
+
+    /**
+     * @param $from
+     * @param $to
+     *
+     * @return array
+     * @throws ApiException
+     */
+    public function reportNewUsers($from, $to): array
+    {
+        return $this->getMetricResults('newUsers', $from, $to);
+    }
+
+    /**
+     * @param $from
+     * @param $to
+     *
+     * @return array
+     * @throws ApiException
+     */
+    public function reportTotalUsers($from, $to): array
+    {
+        return $this->getMetricResults('totalUsers', $from, $to);
+    }
+
+    /**
+     * @param $from
+     * @param $to
+     *
+     * @return array
+     * @throws ApiException
+     */
+    public function reportUserEngagementDuration($from, $to): array
+    {
+        return $this->getMetricResults('userEngagementDuration', $from, $to);
+    }
+
+    /**
+     * @param  string  $metric
+     * @param  string  $from
+     * @param  string  $to
+     *
+     * @return array
+     * @throws ApiException
+     */
+    private function getMetricResults(string $metric, string $from, string $to): array
+    {
+        $response = $this->client->runReport([
+            'property' => 'properties/'.config('app.google-analytics.property_id'),
+            'dateRanges' => [
+                new DateRange([
+                    'start_date' => $from,
+                    'end_date' => $to,
+                ]),
+            ],
+            'dimensions' => [
+                new Dimension(
+                    [
+                        'name' => 'country',
+                    ]
+                ),
+            ],
+            'metrics' => [
+                new Metric(
+                    [
+                        'name' => $metric,
+                    ]
+                ),
+            ],
+        ]);
+
+        $countries = [];
+        $total = 0;
+        foreach ($response->getRows() as $row) {
+            foreach ($row->getDimensionValues() as $key => $dimensionValue) {
+                $countries[$dimensionValue->getValue()] = $row->getMetricValues()[$key]->getValue();
+                $total += $row->getMetricValues()[$key]->getValue();
+            }
+        }
+
+        return ['countries' => $countries, 'total' => $total];
+    }
+
 }
