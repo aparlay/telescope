@@ -22,6 +22,7 @@ class AnalyticsDailyCommand extends Command implements Isolatable
 
         $analytics = app()->make(AnalyticsCalculatorService::class);
         $analytics->calculateAnalytics($startUtc, $endUtc);
+
         return self::SUCCESS;
     }
 }

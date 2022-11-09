@@ -209,5 +209,4 @@ final class AnalyticsCalculatorService
 
         return ['countries' => $countries, 'total' => $total];
     }
-
 }
