@@ -83,12 +83,13 @@ class BunnyCdnPurgeUrl implements ShouldQueue
      */
     public function handle()
     {
-        if (($media = Media::media($this->media_id)->first()) !== null) {
-            $this->purge($media->cover_url);
-            $this->purge($media->file_url);
+        $media = Media::media($this->media_id)->first();
+        if ($media === null) {
+            throw new Exception(__CLASS__.PHP_EOL.'Bunny CDN Url Purge not found the requested media with id '.$this->media_id);
         }
 
-        throw new Exception(__CLASS__.PHP_EOL.'Bunny CDN Url Purge not found the requested media with id '.$this->media_id);
+        $this->purge($media->cover_url);
+        $this->purge($media->file_url);
     }
 
     public function failed(Throwable $exception): void
