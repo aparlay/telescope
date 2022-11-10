@@ -25,7 +25,7 @@ class WarmupCacheCommand extends Command implements Isolatable
                     'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
                     'is_verified' => $user->is_verified,
                 ];
-                $this->info('User '.$user->_id.' '.$user->username.' cached');
+                $this->info('User '.$user->_id.' cached');
             }
 
             Cache::store('redis')->setMultiple($redis, config('app.cache.veryLongDuration'));
