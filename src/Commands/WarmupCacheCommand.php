@@ -16,6 +16,7 @@ class WarmupCacheCommand extends Command implements Isolatable
 
     public function handle()
     {
+        $this->info('Warming up simple user cache');
         User::chunk(500, function ($users) {
             $redis = [];
             foreach ($users as $user) {
@@ -25,7 +26,6 @@ class WarmupCacheCommand extends Command implements Isolatable
                     'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
                     'is_verified' => $user->is_verified,
                 ];
-                $this->info('User '.$user->_id.' cached');
             }
 
             Cache::store('redis')->setMultiple($redis, config('app.cache.veryLongDuration'));
