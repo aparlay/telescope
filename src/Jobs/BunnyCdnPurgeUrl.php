@@ -65,7 +65,7 @@ class BunnyCdnPurgeUrl implements ShouldQueue
      */
     public function __construct(string|ObjectId $mediaId)
     {
-        $this->onQueue(config('app.server_specific_queue'));
+        $this->onQueue('low');
 
         $this->media_id = (string) $mediaId;
     }
