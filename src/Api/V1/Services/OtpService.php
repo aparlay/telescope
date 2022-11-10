@@ -54,7 +54,7 @@ class OtpService
         if (count($previousOTP) > 4) {
             throw new BlockedException(
                 __('You cannot create more OTP, please wait :count seconds to request a new otp or try again later.', [
-                    'count' => $minOtpCreatedAt->addMinutes(1)->diffInSeconds(now()),
+                    'count' => $minOtpCreatedAt->addMinutes(5)->diffInSeconds(now()),
                 ]),
                 'ERROR',
                 'LOCKED',
