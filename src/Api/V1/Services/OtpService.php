@@ -45,7 +45,7 @@ class OtpService
      */
     public function generateOtp(string $identity, string $device_id = null)
     {
-        $lastMinute = DT::timestampToUtc(now()->subMinutes(1)->timestamp);
+        $lastMinute = DT::timestampToUtc(now()->subMinutes(5)->timestamp);
 
         $previousOTP = Otp::query()->identity($identity)->whereDate('created_at', '>=', $lastMinute)->get();
 
