@@ -16,7 +16,6 @@ class WarmupCacheCommand extends Command
     public function handle()
     {
         User::chunk(500, function ($users) {
-            $octane = [];
             $redis = [];
             foreach ($users as $user) {
                 $data = [
@@ -25,12 +24,10 @@ class WarmupCacheCommand extends Command
                     'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
                     'is_verified' => $user->is_verified,
                 ];
-                $octane['SimpleUserCast:'.$user->_id] = json_encode($data);
                 $redis['SimpleUserCast:'.$user->_id] = $data;
                 $this->info('User '.$user->_id.' '.$user->username.' cached');
             }
 
-            Cache::store('octane')->setMultiple($octane, config('app.cache.veryLongDuration'));
             Cache::store('redis')->setMultiple($redis, config('app.cache.veryLongDuration'));
         });
 
