@@ -62,7 +62,7 @@ final class DashboardStatsService
                         'google_analytics_active_users' => ['$sum' => '$google_analytics.active_users.total'],
                         'google_analytics_new_users' => ['$sum' => '$google_analytics.new_users.total'],
                         'google_analytics_total_users' => ['$sum' => '$google_analytics.total_users.total'],
-                        'google_analytics_engagement' => ['$sum' => '$google_analytics.engagements.total'],
+                        'google_analytics_engagements' => ['$sum' => '$google_analytics.engagements.total'],
                     ],
             ];
 
