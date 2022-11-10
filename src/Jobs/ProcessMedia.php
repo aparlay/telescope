@@ -84,7 +84,7 @@ class ProcessMedia implements ShouldQueue
      */
     public function handle()
     {
-        Redis::funnel(__CLASS__)->releaseAfter(600)->limit(1)
+        Redis::funnel(__CLASS__)->releaseAfter(180)->limit(1)
             ->then(function () {
                 $this->processVideo();
             }, function () {

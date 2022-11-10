@@ -134,7 +134,7 @@ class BunnyCdnPurgeUrl implements ShouldQueue
                             '',
                             self::class,
                             'https://api.bunny.net/purge',
-                            ['async' => true, 'url' => $urls],
+                            ['async' => true, 'urls' => $urls],
                             $response->json()
                         )
                     );
