@@ -37,6 +37,10 @@ class UpdateCoreSimpleUserListener implements ShouldQueue
             'is_verified' => $user->is_verified,
         ];
 
+        Cache::store('octane')->forget($cacheKey);
+        Cache::store('redis')->forget($cacheKey);
+        Redis::unlink($cacheKey);
+
         Cache::store('octane')->put($cacheKey, json_encode($userArray), config('app.cache.veryLongDuration'));
         Redis::set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
     }
