@@ -88,8 +88,7 @@ class BunnyCdnPurgeUrl implements ShouldQueue
             throw new Exception(__CLASS__.PHP_EOL.'Bunny CDN Url Purge not found the requested media with id '.$this->media_id);
         }
 
-        $this->purge($media->cover_url);
-        $this->purge($media->file_url);
+        $this->purge([$media->cover_url, $media->file_url]);
     }
 
     public function failed(Throwable $exception): void
@@ -99,7 +98,7 @@ class BunnyCdnPurgeUrl implements ShouldQueue
         }
     }
 
-    private function purge($url)
+    private function purge($urls)
     {
         try {
             $response = Http::timeout(180)
@@ -124,7 +123,7 @@ class BunnyCdnPurgeUrl implements ShouldQueue
                 ])
                 ->post('https://api.bunny.net/purge', [
                     'async' => true,
-                    'url' => $url,
+                    'urls' => $urls,
                 ]);
 
             if ($response->failed()) {
@@ -135,7 +134,7 @@ class BunnyCdnPurgeUrl implements ShouldQueue
                             '',
                             self::class,
                             'https://api.bunny.net/purge',
-                            ['async' => true, 'url' => $url],
+                            ['async' => true, 'url' => $urls],
                             $response->json()
                         )
                     );
