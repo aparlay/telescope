@@ -144,13 +144,14 @@ class MediaLike extends BaseModel
         }
 
         if (! Redis::exists($cacheKey)) {
-            $likedMediaIds = self::project(['media_id' => true, '_id' => false])
+            $likedMediaObjectIds = self::project(['media_id' => true, '_id' => false])
                 ->creator($userId)
                 ->pluck('media_id')
                 ->toArray();
 
-            if (empty($likedMediaIds)) {
-                $likedMediaIds = [''];
+            $likedMediaIds = [''];
+            foreach ($likedMediaObjectIds as $key => $likedMediaId) {
+                $likedMediaIds[$key] = (string)$likedMediaId;
             }
 
             Redis::sAdd($cacheKey, ...$likedMediaIds);
