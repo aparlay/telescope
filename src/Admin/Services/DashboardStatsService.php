@@ -4,7 +4,6 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Analytic;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Illuminate\Support\Arr;
 use Jenssegers\Mongodb\Collection;
 
@@ -16,14 +15,12 @@ final class DashboardStatsService
             $aggregations = [];
 
             if (isset($from) && isset($to)) {
-                $dats = [];
-                $period = CarbonPeriod::create($from->format('Y-m-d'), $to->format('Y-m-d'));
-                foreach ($period as $date) {
-                    $dats[] = $date->format('Y-m-d');
-                }
                 $aggregations[] = [
                     '$match' => [
-                        'date' => ['$in' => $dats],
+                        'date' => [
+                            '$gte' => $from->format('Y-m-d'),
+                            '$lte' => $to->format('Y-m-d'),
+                        ],
                     ],
                 ];
             }
