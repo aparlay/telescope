@@ -17,7 +17,7 @@ final class DashboardStatsService
 
             if (isset($from) && isset($to)) {
                 $dats = [];
-                $period = CarbonPeriod::create($from->format('Y-m-d'),  $to->format('Y-m-d'));
+                $period = CarbonPeriod::create($from->format('Y-m-d'), $to->format('Y-m-d'));
                 foreach ($period as $date) {
                     $dats[] = $date->format('Y-m-d');
                 }
