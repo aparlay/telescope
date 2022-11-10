@@ -10,7 +10,7 @@ class UserNotificationQueryBuilder extends EloquentQueryBuilder
 {
     public function actor($userId): self
     {
-        return $this->where('payload.user._id', (string)$userId);
+        return $this->where('payload.user._id', (string) $userId);
     }
 
     public function visited(): self
