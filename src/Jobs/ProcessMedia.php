@@ -302,6 +302,6 @@ class ProcessMedia implements ShouldQueue
         $media->refresh();
         $media->notify(new VideoPending());
         MediaProcessingCompletedEvent::dispatch($media);
-        BunnyCdnPurgeUrl::dispatch((string)$media->_id);
+        BunnyCdnPurgeUrl::dispatch((string) $media->_id);
     }
 }

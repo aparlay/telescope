@@ -26,7 +26,7 @@ class ReprocessAllUserVideosListener implements ShouldQueue
                 $lastMediaFile = $media->files_history[array_key_last($media->files_history)];
                 if (isset($lastMediaFile['file'])) {
                     ReprocessMedia::dispatch($media->_id, $lastMediaFile['file'])
-                        ->delay(now()->addMinutes(2*$i++))
+                        ->delay(now()->addMinutes(2 * $i++))
                         ->onQueue('low');
                 }
             }
