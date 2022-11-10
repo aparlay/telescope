@@ -26,7 +26,7 @@ class ReprocessAllUserVideosListener implements ShouldQueue
             ->whereIn('status', [
                 MediaStatus::COMPLETED->value,
                 MediaStatus::CONFIRMED->value,
-                MediaStatus::DENIED->value])
+                MediaStatus::DENIED->value, ])
             ->get();
         foreach ($medias as $media) {
             if (is_array($media->files_history) && ! empty($media->files_history)) {
