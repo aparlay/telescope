@@ -2,21 +2,12 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Events\MediaProcessingCompletedEvent;
-use Aparlay\Core\Microservices\ffmpeg\MediaClient;
-use Aparlay\Core\Microservices\ffmpeg\OptimizeRequest;
-use Aparlay\Core\Microservices\ffmpeg\OptimizeResponse;
-use Aparlay\Core\Microservices\ffmpeg\RemoveRequest;
-use Aparlay\Core\Microservices\ffmpeg\UploadRequest;
-use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Aparlay\Core\Notifications\ThirdPartyLogger;
-use Aparlay\Core\Notifications\VideoPending;
 use ErrorException;
 use Exception;
-use Grpc\ChannelCredentials;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -25,13 +16,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Str;
 use Throwable;
 
-class BunnyCdnPurgeUrl implements ShouldQueue
+class BunnyCdnPurgeUrlJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;

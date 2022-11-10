@@ -2,11 +2,9 @@
 
 namespace Aparlay\Core\Commands;
 
-use Aparlay\Core\Helpers\Cdn;
-use Aparlay\Core\Models\User;
+use Aparlay\Core\Jobs\WarmupSimpleUserCacheJob;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Isolatable;
-use Illuminate\Support\Facades\Cache;
 
 class WarmupCacheCommand extends Command implements Isolatable
 {
@@ -17,19 +15,7 @@ class WarmupCacheCommand extends Command implements Isolatable
     public function handle()
     {
         $this->info('Warming up simple user cache');
-        User::chunk(500, function ($users) {
-            $redis = [];
-            foreach ($users as $user) {
-                $redis['SimpleUserCast:'.$user->_id] = [
-                    '_id' => (string) $user->_id,
-                    'username' => $user->username,
-                    'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
-                    'is_verified' => $user->is_verified,
-                ];
-            }
-
-            Cache::store('redis')->setMultiple($redis, config('app.cache.veryLongDuration'));
-        });
+        WarmupSimpleUserCacheJob::dispatch();
 
         return self::SUCCESS;
     }
