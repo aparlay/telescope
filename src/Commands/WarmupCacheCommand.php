@@ -5,9 +5,10 @@ namespace Aparlay\Core\Commands;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\Isolatable;
 use Illuminate\Support\Facades\Cache;
 
-class WarmupCacheCommand extends Command
+class WarmupCacheCommand extends Command implements Isolatable
 {
     public $signature = 'core:warmup';
 
@@ -18,13 +19,12 @@ class WarmupCacheCommand extends Command
         User::chunk(500, function ($users) {
             $redis = [];
             foreach ($users as $user) {
-                $data = [
+                $redis['SimpleUserCast:'.$user->_id] = [
                     '_id' => (string) $user->_id,
                     'username' => $user->username,
                     'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
                     'is_verified' => $user->is_verified,
                 ];
-                $redis['SimpleUserCast:'.$user->_id] = $data;
                 $this->info('User '.$user->_id.' '.$user->username.' cached');
             }
 
