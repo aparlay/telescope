@@ -45,7 +45,7 @@ class MediaCommentResource extends JsonResource
 
         $isLiked = false;
         if (auth()->check()) {
-            $isLiked = $this->mediaCommentLikeService->isLikedByUser((string)$this->_id);
+            $isLiked = $this->mediaCommentLikeService->isLikedByUser((string) $this->_id);
         }
 
         $data = [
