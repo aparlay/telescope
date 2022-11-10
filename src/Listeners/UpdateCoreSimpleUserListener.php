@@ -38,7 +38,6 @@ class UpdateCoreSimpleUserListener implements ShouldQueue
         ];
 
         Cache::store('octane')->forget($cacheKey);
-        Cache::store('redis')->forget($cacheKey);
         Redis::unlink($cacheKey);
 
         Cache::store('octane')->put($cacheKey, json_encode($userArray), config('app.cache.veryLongDuration'));
