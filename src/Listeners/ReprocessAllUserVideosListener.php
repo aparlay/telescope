@@ -11,6 +11,7 @@ use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaCommentLike;
 use Aparlay\Core\Models\MediaLike;
+use Aparlay\Core\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
@@ -19,7 +20,7 @@ class ReprocessAllUserVideosListener implements ShouldQueue
 {
     public function handle(UsernameChangedEvent $event)
     {
-        $user = $event->user;
+        $user = User::user($event->user->_id)->with('mediaObjs')->first();
         $i = 1;
         foreach ($user->mediaObjs as $media) {
             if (is_array($media->files_history) && ! empty($media->files_history)) {
