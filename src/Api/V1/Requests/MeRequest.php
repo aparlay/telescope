@@ -36,7 +36,7 @@ class MeRequest extends FormRequest
     {
         return [
             'avatar' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:10485760'],
-            'username' => ['unique:users', 'min:2', 'max:255', 'alpha_dash'],
+            'username' => ['unique:users', 'min:2', 'max:30', 'alpha_dash'],
             'country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
             'payout_country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
         ];
