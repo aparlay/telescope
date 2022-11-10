@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Listeners;
 
-use Aparlay\Core\Events\SimpleUserChangedEvent;
+use Aparlay\Core\Events\UsernameChangedEvent;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Redis;
 
 class UpdateCoreSimpleUserListener implements ShouldQueue
 {
-    public function handle(SimpleUserChangedEvent $event)
+    public function handle(UsernameChangedEvent $event)
     {
         $user = $event->user;
 

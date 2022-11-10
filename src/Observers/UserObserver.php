@@ -4,7 +4,8 @@ namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Api\V1\Notifications\UserDeactivateAccount;
 use Aparlay\Core\Casts\SimpleUserCast;
-use Aparlay\Core\Events\SimpleUserChangedEvent;
+use Aparlay\Core\Events\AvatarChangedEvent;
+use Aparlay\Core\Events\UsernameChangedEvent;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\IP;
 use Aparlay\Core\Jobs\DeleteUserConnect;
@@ -114,8 +115,11 @@ class UserObserver extends BaseModelObserver
      */
     public function updated($model): void
     {
-        if ($model->wasChanged('avatar') || $model->wasChanged('username')) {
-            SimpleUserChangedEvent::dispatch($model, $model->avatar);
+        if ($model->wasChanged('username')) {
+            UsernameChangedEvent::dispatch($model);
+        }
+        if ($model->wasChanged('avatar')) {
+            AvatarChangedEvent::dispatch($model);
         }
 
         if ($model->wasChanged('status') && $model->status != $model->getOriginal('status')) {
