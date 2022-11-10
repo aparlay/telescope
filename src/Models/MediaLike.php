@@ -141,11 +141,6 @@ class MediaLike extends BaseModel
 
         if ($refresh) {
             Redis::del($cacheKey);
-            Cache::store('octane')->forget($cacheKey);
-        }
-
-        if (Cache::store('octane')->get($cacheKey, false) !== false) {
-            return; // cache already exists
         }
 
         if (! Redis::exists($cacheKey)) {
@@ -158,16 +153,8 @@ class MediaLike extends BaseModel
                 $likedMediaIds = [''];
             }
 
-            Cache::store('octane')->put($cacheKey, implode(',', $likedMediaIds), 300);
-
             Redis::sAdd($cacheKey, ...$likedMediaIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
-        }
-
-        if (Cache::store('octane')->get($cacheKey, false) === false) {
-            $likedMediaIds = Redis::sMembers($cacheKey);
-
-            Cache::store('octane')->put($cacheKey, implode(',', $likedMediaIds), 300);
         }
     }
 
@@ -180,9 +167,7 @@ class MediaLike extends BaseModel
     public static function checkMediaIsLikedByUser(string $mediaId, string $userId): bool
     {
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
-        $likedMedias = Cache::store('octane')->get($cacheKey, false);
 
-        return ($likedMedias !== false) ? in_array($mediaId, explode(',', $likedMedias)) :
-            Redis::sismember($cacheKey, $mediaId);
+        return Redis::sismember($cacheKey, $mediaId);
     }
 }
