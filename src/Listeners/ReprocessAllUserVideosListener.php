@@ -20,9 +20,8 @@ class ReprocessAllUserVideosListener implements ShouldQueue
 {
     public function handle(UsernameChangedEvent $event)
     {
-        $user = User::user($event->user->_id)->with('mediaObjs')->first();
         $i = 1;
-        foreach ($user->mediaObjs as $media) {
+        foreach (Media::creator($event->user->_id)->availableForFollower()->get() as $media) {
             if (is_array($media->files_history) && ! empty($media->files_history)) {
                 $lastMediaFile = $media->files_history[array_key_last($media->files_history)];
                 if (isset($lastMediaFile['file'])) {
