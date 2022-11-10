@@ -48,7 +48,7 @@ final class Stats extends BaseDashboardComponent
     {
         return [
             [
-                'label' => 'New Visitors',
+                'label' => 'Unique Visitors',
                 'value' => Arr::get($results, 'google_analytics_new_users'),
             ],
             [
@@ -102,7 +102,7 @@ final class Stats extends BaseDashboardComponent
             ],
             [
                 'label' => 'Email Verifications',
-                'value' => Arr::get($results, 'user_verified').'['.round(100 * Arr::get($results, 'user_verified') / Arr::get($results, 'email_sent')).'%]',
+                'value' => (Arr::get($results, 'email_sent') > 1) ? Arr::get($results, 'user_verified').'['.round(100 * Arr::get($results, 'user_verified') / Arr::get($results, 'email_sent')).'%]' : null,
             ],
             [
                 'label' => 'Email Bounced',
