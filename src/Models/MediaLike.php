@@ -151,7 +151,7 @@ class MediaLike extends BaseModel
 
             $likedMediaIds = [''];
             foreach ($likedMediaObjectIds as $key => $likedMediaId) {
-                $likedMediaIds[$key] = (string)$likedMediaId;
+                $likedMediaIds[$key] = (string) $likedMediaId;
             }
 
             Redis::sAdd($cacheKey, ...$likedMediaIds);
