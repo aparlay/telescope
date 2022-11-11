@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Commands;
 
 use Aparlay\Core\Jobs\WarmupSimpleUserCacheJob;
+use Aparlay\Core\Models\UserNotification;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Isolatable;
 

@@ -58,9 +58,9 @@ class WarmupSimpleUserCacheJob implements ShouldQueue
     public function handle()
     {
         User::chunk(500, function ($users) {
-            $redis = [];
+            $data = [];
             foreach ($users as $user) {
-                $redis['SimpleUserCast:'.$user->_id] = [
+                $data['SimpleUserCast:'.$user->_id] = [
                     '_id' => (string) $user->_id,
                     'username' => $user->username,
                     'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
@@ -68,7 +68,7 @@ class WarmupSimpleUserCacheJob implements ShouldQueue
                 ];
             }
 
-            Cache::store('redis')->setMultiple($redis, config('app.cache.veryLongDuration'));
+            Cache::store('redis')->setMultiple($data, config('app.cache.veryLongDuration'));
         });
     }
 
