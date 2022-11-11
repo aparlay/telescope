@@ -13,6 +13,7 @@ use Aparlay\Core\Models\MediaCommentLike;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\UserNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 
 class UpdateCoreSimpleUserListener implements ShouldQueue
@@ -39,6 +40,7 @@ class UpdateCoreSimpleUserListener implements ShouldQueue
             'is_verified' => $user->is_verified,
         ];
 
+        Cache::store('octane')->delete($cacheKey);
         Redis::unlink($cacheKey);
         Redis::set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
     }
