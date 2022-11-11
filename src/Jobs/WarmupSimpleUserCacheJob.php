@@ -68,7 +68,6 @@ class WarmupSimpleUserCacheJob implements ShouldQueue
                 ];
             }
 
-
             Cache::store('octane')->setMultiple($data, config('app.cache.veryLongDuration'));
             Cache::store('redis')->setMultiple($data, config('app.cache.veryLongDuration'));
         });
