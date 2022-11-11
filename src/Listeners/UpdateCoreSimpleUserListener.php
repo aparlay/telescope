@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Listeners;
 
+use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Events\AvatarChangedEvent;
 use Aparlay\Core\Events\UsernameChangedEvent;
 use Aparlay\Core\Helpers\Cdn;
@@ -13,6 +14,7 @@ use Aparlay\Core\Models\MediaCommentLike;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\UserNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 
 class UpdateCoreSimpleUserListener implements ShouldQueue
@@ -32,14 +34,10 @@ class UpdateCoreSimpleUserListener implements ShouldQueue
         UserNotification::query()->payloadUserId((string) $user->_id)->update(['payload.user.avatar' => $user->avatar, 'payload.user.username' => $user->username]);
 
         $cacheKey = 'SimpleUserCast:'.$user->_id;
-        $userArray = [
-            '_id' => (string) $user->_id,
-            'username' => $user->username,
-            'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
-            'is_verified' => $user->is_verified,
-        ];
 
-        Redis::unlink($cacheKey);
-        Redis::set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
+        Cache::store('octane')->delete($cacheKey);
+        Cache::store('redis')->delete($cacheKey);
+
+        SimpleUserCast::cacheByUserId($user->_id);
     }
 }
