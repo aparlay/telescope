@@ -19,7 +19,7 @@ class UpdateCoreSimpleUserListener implements ShouldQueue
 {
     public function handle(UsernameChangedEvent|AvatarChangedEvent $event)
     {
-        $user = User::user($event->user->_id)->firstOrFail();
+        $user = $event->user;
 
         Follow::query()->creator($user->_id)->update(['creator.avatar' => $user->avatar, 'creator.username' => $user->username]);
         Follow::query()->user($user->_id)->update(['user.avatar' => $user->avatar, 'user.username' => $user->username]);
