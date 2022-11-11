@@ -8,11 +8,10 @@ use MongoDB\BSON\ObjectId;
 
 class UserNotificationQueryBuilder extends EloquentQueryBuilder
 {
-    public function actor(string $userId): self
+    public function payloadUserId(string $userId)
     {
-        return $this->where('payload.user._id', $userId);
+        return $this->whereRaw(['payload.user._id' => $userId]);
     }
-
     public function visited(): self
     {
         return $this->status(UserNotificationStatus::VISITED->value);
