@@ -11,6 +11,7 @@ use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaCommentLike;
 use Aparlay\Core\Models\MediaLike;
+use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\UserNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Redis;
@@ -19,7 +20,7 @@ class UpdateCoreSimpleUserListener implements ShouldQueue
 {
     public function handle(UsernameChangedEvent|AvatarChangedEvent $event)
     {
-        $user = $event->user;
+        $user = User::user($event->user->_id)->firstOrFail();
 
         Follow::query()->creator($user->_id)->update(['creator.avatar' => $user->avatar, 'creator.username' => $user->username]);
         Follow::query()->user($user->_id)->update(['user.avatar' => $user->avatar, 'user.username' => $user->username]);
