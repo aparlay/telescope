@@ -12,6 +12,7 @@ class UserNotificationQueryBuilder extends EloquentQueryBuilder
     {
         return $this->whereRaw(['payload.user._id' => $userId]);
     }
+
     public function visited(): self
     {
         return $this->status(UserNotificationStatus::VISITED->value);
