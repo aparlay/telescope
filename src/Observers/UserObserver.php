@@ -82,8 +82,7 @@ class UserObserver extends BaseModelObserver
 
         // Reset the Redis cache
         if ($model->_id) {
-            $cacheKey = 'SimpleUserCast:'.$model->_id;
-            Redis::del($cacheKey);
+            SimpleUserCast::cacheByUserId($model->_id, true);
         }
 
         if ($model->isDirty(['username', 'email', 'phone_number', 'full_name'])) {

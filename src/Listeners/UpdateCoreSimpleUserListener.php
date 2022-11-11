@@ -5,7 +5,6 @@ namespace Aparlay\Core\Listeners;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Events\AvatarChangedEvent;
 use Aparlay\Core\Events\UsernameChangedEvent;
-use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
@@ -15,7 +14,6 @@ use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\UserNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 
 class UpdateCoreSimpleUserListener implements ShouldQueue
 {
@@ -33,11 +31,6 @@ class UpdateCoreSimpleUserListener implements ShouldQueue
         MediaCommentLike::query()->creator($user->_id)->update(['creator.avatar' => $user->avatar, 'creator.username' => $user->username]);
         UserNotification::query()->payloadUserId((string) $user->_id)->update(['payload.user.avatar' => $user->avatar, 'payload.user.username' => $user->username]);
 
-        $cacheKey = 'SimpleUserCast:'.$user->_id;
-
-        Cache::store('octane')->delete($cacheKey);
-        Cache::store('redis')->delete($cacheKey);
-
-        SimpleUserCast::cacheByUserId($user->_id);
+        SimpleUserCast::cacheByUserId($user->_id, true);
     }
 }
