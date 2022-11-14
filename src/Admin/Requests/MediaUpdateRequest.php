@@ -3,10 +3,12 @@
 namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class MediaUpdateRequest extends FormRequest
 {
@@ -60,5 +62,14 @@ class MediaUpdateRequest extends FormRequest
         throw new HttpResponseException(
             redirect()->back()->withErrors($errors)
         );
+    }
+
+    public function prepareForValidation()
+    {
+        if ($this->status === MediaStatus::CONFIRMED->value && !isset($this->skin_score, $this->awesomeness_score, $this->beauty_score)) {
+            throw ValidationException::withMessages([
+                'avatar' => 'You must set all scores before confirm a video for public feed.',
+            ]);
+        }
     }
 }
