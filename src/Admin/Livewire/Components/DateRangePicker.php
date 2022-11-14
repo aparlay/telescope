@@ -18,6 +18,8 @@ final class DateRangePicker extends Component
 
     public bool $showAllDates = true;
 
+    public bool $exportable = true;
+
     protected $listeners = [
         'showAllDates-changed' => 'showAllDatesChanged',
     ];
