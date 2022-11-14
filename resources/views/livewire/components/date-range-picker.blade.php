@@ -62,7 +62,10 @@
 
                 const boot = () => {
                     datePicker.daterangepicker({
-                        opens: 'left'
+                        opens: 'left',
+                        locale: {
+                            format: 'DD/MM/YYYY'
+                        }
                     }, function (start, end, label) {
                         setDateRangePicker(start, end, false);
                     });
