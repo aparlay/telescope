@@ -46,9 +46,22 @@
             <i class="fa fa-angle-double-right"></i>
         </button>
     </div>
-    <span class="col-12 col-md-3">
-        <input type="text" class="form-control w-100 border-secondary text-center col-12" id="date-range"/>
-    </span>
+    <div class="col-12 col-md-3 text-center text-left">
+        <div class="d-flex bd-highlight">
+            <div class="flex-grow-1">
+                <input type="text" class="form-control w-100 border-secondary text-center col-12" id="date-range"/>
+            </div>
+
+            @if($exportable)
+                <div class="pl-2">
+                    <button type="button" class="btn btn-default">
+                        .xls
+                    </button>
+                </div>
+            @endif
+        </div>
+    </div>
+
     @push('css')
         <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.css') }}">
     @endpush

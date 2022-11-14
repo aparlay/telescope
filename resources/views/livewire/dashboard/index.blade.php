@@ -1,12 +1,7 @@
 <div class="container bg-white border pt-3">
     <div class="py-2 row">
-        <div class="col-12 col-md-1 py-1 py-md-0 text-center text-left">
-            <button type="button" class="btn btn-default">
-                .xls
-            </button>
-        </div>
-        <div class="col-12 col-md-11">
-            <livewire:components.date-range-picker :showAllDates="$showAllDates" :dateInterval="$dateInterval"/>
+        <div class="col-12 col-md-12">
+            <livewire:components.date-range-picker :showAllDates="$showAllDates" :dateInterval="$dateInterval" :exportable="true"/>
         </div>
     </div>
     <hr>
