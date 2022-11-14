@@ -66,7 +66,7 @@ class MediaUpdateRequest extends FormRequest
 
     public function prepareForValidation()
     {
-        if ((int)$this->status === MediaStatus::CONFIRMED->value && (empty($this->skin_score) || empty($this->awesomeness_score) || empty($this->beauty_score))) {
+        if ((int) $this->status === MediaStatus::CONFIRMED->value && (empty($this->skin_score) || empty($this->awesomeness_score) || empty($this->beauty_score))) {
             throw ValidationException::withMessages([
                 'avatar' => 'You must set all scores before confirm a video for public feed.',
             ]);
