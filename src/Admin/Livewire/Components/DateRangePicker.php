@@ -64,6 +64,11 @@ final class DateRangePicker extends Component
         $this->showAllDates = ! ($this->showAllDates);
     }
 
+    public function exportExcel()
+    {
+        $this->emit('export-excel');
+    }
+
     private function getSelectedPeriod(array $value)
     {
         if ($value == $this->today) {
