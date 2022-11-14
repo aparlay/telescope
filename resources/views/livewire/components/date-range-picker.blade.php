@@ -1,7 +1,7 @@
 <div class="form-inline">
     <div class="col-6 col-md-1 pb-2 pb-md-0">
         <button type="button"
-                @class(['w-100', 'btn btn-sm', 'btn-secondary' => $showAllDates, 'btn-default' => !$showAllDates])
+                @class(['w-100', 'btn', 'btn-secondary' => $showAllDates, 'btn-default' => !$showAllDates])
                 data-interval="all"
                 wire:click="$emit('showAllDates-changed')"
         >
@@ -9,40 +9,40 @@
         </button>
     </div>
     <div class="btn-group col-6 col-md-2 pb-2 pb-md-0">
-        <button type="button" class="btn btn-sm btn-default" data-interval="days" data-interval-add="-1">
+        <button type="button" class="btn btn-default" data-interval="days" data-interval-add="-1">
             <i class="fa fa-angle-double-left"></i>
         </button>
         <button type="button"
-                class="btn btn-sm @if($selected == 'today') btn-secondary @else btn-default @endif"
+                class="btn @if($selected == 'today') btn-secondary @else btn-default @endif"
                 data-interval="days" data-interval-add="0">
             {{__('Today')}}
         </button>
-        <button type="button" class="btn btn-sm btn-default" data-interval="days" data-interval-add="1">
+        <button type="button" class="btn btn-default" data-interval="days" data-interval-add="1">
             <i class="fa fa-angle-double-right"></i>
         </button>
     </div>
-    <div class="btn-group col-6 col-md-2 pb-2 pb-md-0">
-        <button type="button" class="btn btn-sm btn-default" data-interval="weeks" data-interval-add="-1">
+    <div class="btn-group col-6 col-md-3 pb-2 pb-md-0">
+        <button type="button" class="btn btn-default" data-interval="weeks" data-interval-add="-1">
             <i class="fa fa-angle-double-left"></i>
         </button>
-        <button type="button" class="btn btn-sm @if($selected == 'this-week') btn-secondary @else btn-default @endif"
+        <button type="button" class="btn @if($selected == 'this-week') btn-secondary @else btn-default @endif"
                 data-interval="weeks" data-interval-add="0">
             {{__('This Week')}}
         </button>
-        <button type="button" class="btn btn-sm btn-default" data-interval="weeks" data-interval-add="1">
+        <button type="button" class="btn btn-default" data-interval="weeks" data-interval-add="1">
             <i class="fa fa-angle-double-right"></i>
         </button>
     </div>
-    <div class="btn-group col-6 col-md-2 pb-2 pb-md-0">
-        <button type="button" class="btn btn-sm btn-default" data-interval="months" data-interval-add="-1">
+    <div class="btn-group col-6 col-md-3 pb-2 pb-md-0">
+        <button type="button" class="btn btn-default" data-interval="months" data-interval-add="-1">
             <i class="fa fa-angle-double-left"></i>
         </button>
-        <button type="button" class="btn btn-sm
+        <button type="button" class="btn
                 @if($selected == 'this-month') btn-secondary @else btn-default @endif"
                 data-interval="months" data-interval-add="0">
             {{__('This Month')}}
         </button>
-        <button type="button" class="btn btn-sm btn-default" data-interval="months" data-interval-add="1">
+        <button type="button" class="btn btn-default" data-interval="months" data-interval-add="1">
             <i class="fa fa-angle-double-right"></i>
         </button>
     </div>
@@ -54,7 +54,7 @@
 
             @if($exportable)
                 <div class="pl-2">
-                    <button wire:click="exportExcel" type="button" class="btn btn-default">
+                    <button type="button" class="btn btn-default">
                         .xls
                     </button>
                 </div>
@@ -75,7 +75,10 @@
 
                 const boot = () => {
                     datePicker.daterangepicker({
-                        opens: 'left'
+                        opens: 'left',
+                        locale: {
+                            format: 'DD/MM/YYYY'
+                        }
                     }, function (start, end, label) {
                         setDateRangePicker(start, end, false);
                     });
