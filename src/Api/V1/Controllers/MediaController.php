@@ -69,9 +69,6 @@ class MediaController extends Controller
      */
     public function show(Media $media): Response
     {
-        $visitedVideos[] = new ObjectId($media->_id);
-        MediaWatched::dispatch($visitedVideos, 60);
-
         return $this->response(new MediaResource($media));
     }
 
