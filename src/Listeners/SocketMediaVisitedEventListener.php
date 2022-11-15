@@ -21,7 +21,9 @@ class SocketMediaVisitedEventListener implements ShouldQueue
             MediaWatched::dispatch([new ObjectId($payload['media_id'])], (int)$payload['duration'], $payload['user_id']);
 
             $cacheKey = (new MediaVisit())->getCollection().':'.$payload['device_id'];
-            Cache::store('redis')->set($cacheKey, [$payload['media_id']], config('app.cache.veryLongDuration'));
+            $visited = Cache::store('redis')->get($cacheKey, []);
+            $visited[] = $payload['media_id'];
+            Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
         }
     }
 }

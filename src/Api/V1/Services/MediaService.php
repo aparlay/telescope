@@ -170,15 +170,6 @@ class MediaService
             }
         }
 
-        $visited = Cache::store('redis')->get($cacheKey, []);
-        $visitedVideos = [];
-        foreach ($data->items() as $model) {
-            $visited[] = $model->_id;
-            $visitedVideos[] = new ObjectId($model->_id);
-        }
-        MediaWatched::dispatch($visitedVideos, 60, $userId);
-        Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
-
         return $data;
     }
 
