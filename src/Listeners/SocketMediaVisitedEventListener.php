@@ -12,7 +12,7 @@ class SocketMediaVisitedEventListener implements ShouldQueue
 {
     public function handle($event)
     {
-        if ($event->payload['name'] !== 'client_event' || $event->payload['event'] !== 'client_media_visited') {
+        if ($event->payload['name'] !== 'client_event' || $event->payload['event'] !== 'client-media-visited') {
             return;
         }
 

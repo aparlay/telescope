@@ -145,7 +145,6 @@ class MediaService
         $originalQuery = $query;
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
-        $userId = null;
         if (! auth()->guest()) {
             $userId = auth()->user()->_id;
             $query->notBlockedFor(auth()->user()->_id)->notVisitedByUserAndDevice($userId, $deviceId);
@@ -169,6 +168,12 @@ class MediaService
                 $data = $originalData;
             }
         }
+
+        $visited = Cache::store('redis')->get($cacheKey, []);
+        foreach ($data->items() as $model) {
+            $visited[] = $model->_id;
+        }
+        Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
         return $data;
     }
