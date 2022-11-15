@@ -16,9 +16,9 @@ class SocketWebhookController extends Controller
     ];
 
     const PUSHER_CLIENT_EVENTS = [
-        'client_message_read',
-        'client_message_received',
-        'client_media_visited',
+        'client-message-read',
+        'client-message-received',
+        'client-media-visited',
     ];
 
     /**
