@@ -75,9 +75,7 @@ class UserNotificationQueryBuilder extends EloquentQueryBuilder
      */
     public function entity(ObjectId|string $entityId, string $entityType): self
     {
-        $entityId = $entityId instanceof ObjectId ? $entityId : new ObjectId($entityId);
-
-        return $this->where('entity._id', $entityId)->where('entity._type', $entityType);
+        return $this->whereId($entityId, 'entity._id')->where('entity._type', $entityType);
     }
 
     /**

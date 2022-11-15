@@ -2,11 +2,11 @@
 
 namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Models\UserNotification;
 use Aparlay\Core\Notifications\MediaCommentedNotification;
-use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaCommentObserver extends BaseModelObserver
@@ -75,12 +75,10 @@ class MediaCommentObserver extends BaseModelObserver
         if ($media === null) {
             return;
         }
-        $commentCount = MediaComment::query()->media($media->_id)->count();
-        $media->comment_count = $commentCount;
-        $media->count_fields_updated_at = array_merge(
-            $media->count_fields_updated_at,
-            ['comments' => DT::utcNow()]
-        );
-        $media->save();
+        $media->updateComments();
+
+        if ($media->comment_count === 0) {
+            UserNotification::query()->category(UserNotificationCategory::COMMENTS->value)->mediaEntity($media->_id)->delete();
+        }
     }
 }
