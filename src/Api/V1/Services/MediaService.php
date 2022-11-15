@@ -215,6 +215,7 @@ class MediaService
     public function getNewFeed(): LengthAwarePaginator
     {
         $query = Media::query();
+
         return $query->public()->confirmed()->recentFirst()->paginate(5)->withQueryString();
     }
 
