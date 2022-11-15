@@ -62,7 +62,7 @@ class UserNotificationService
         $data['entity._type'] = $data['entity_type'];
 
         if (in_array($data['category'], [UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value])) {
-            $model = UserNotification::query()
+            $userNotification = UserNotification::query()
                 ->entity($data['entity._id'], $data['entity._type'])
                 ->user($this->getUser()->_id)
                 ->category($data['category'])
@@ -84,20 +84,20 @@ class UserNotificationService
             }
         }
 
-        if (empty($model)) {
-            $model = UserNotification::create($data);
+        if (empty($userNotification)) {
+            $userNotification = UserNotification::create($data);
         } else {
-            $model->update([
+            $userNotification->update([
                 'status' => UserNotificationStatus::NOT_VISITED->value,
                 'updated_at' => DT::utcNow(),
-                'message' => $message ?? $model->message,
-                'payload' => $notificationDto->payload ?? $model->payload,
+                'message' => $message ?? $userNotification->message,
+                'payload' => $notificationDto->payload ?? $userNotification->payload,
             ]);
         }
 
         $this->getUser()->increaseStatCounter('notifications');
 
-        return $model;
+        return $userNotification;
     }
 
     /**

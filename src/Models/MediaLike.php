@@ -9,11 +9,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class MediaLike.
@@ -24,10 +22,10 @@ use MongoDB\BSON\UTCDateTime;
  * @property ObjectId   $user_id
  * @property array      $creator
  * @property string     $created_at
- * @property User       $creatorObj
  * @property mixed|null $creator_id
  * @property Media      $mediaObj
  * @property User       $userObj
+ * @property User       $creatorObj
  */
 class MediaLike extends BaseModel
 {

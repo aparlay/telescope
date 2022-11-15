@@ -2,7 +2,9 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\MediaLike;
+use Aparlay\Core\Models\UserNotification;
 use Aparlay\Core\Notifications\MediaLikedNotification;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -59,6 +61,10 @@ class MediaLikeObserver extends BaseModelObserver
         }
         $media->updateLikes();
         $media->userObj->updateLikes();
+
+        if ($media->like_count === 0) {
+            UserNotification::query()->category(UserNotificationCategory::LIKES->value)->mediaEntity($media->_id)->delete();
+        }
 
         // Reset the Redis cache
         MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
