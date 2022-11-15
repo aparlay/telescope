@@ -10,17 +10,6 @@ use Illuminate\Http\Response;
 
 class SocketWebhookController extends Controller
 {
-    const PUSHER_EVENTS = [
-        'member_added',
-        'client_event',
-    ];
-
-    const PUSHER_CLIENT_EVENTS = [
-        'client-message-read',
-        'client-message-received',
-        'client-media-visited',
-    ];
-
     /**
      * Display a listing of the resource.
      */
@@ -35,13 +24,8 @@ class SocketWebhookController extends Controller
         abort_unless($webhookSignature === $expectedSignature, 401);
 
         foreach ($request->input('events', []) as $event) {
-            if (in_array($event['name'], self::PUSHER_EVENTS, true)) {
-                $event['data'] = isset($event['data']) ? json_decode($event['data'], true) : [];
-                SocketClientEvent::dispatchIf(
-                    in_array($event['event'], self::PUSHER_CLIENT_EVENTS, true),
-                    $event
-                );
-            }
+            $event['data'] = isset($event['data']) ? json_decode($event['data'], true) : [];
+            SocketClientEvent::dispatchIf(($event['name'] === 'client_event'), $event);
         }
 
         return response('', 200, []);
