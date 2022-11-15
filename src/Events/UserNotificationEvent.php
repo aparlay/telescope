@@ -33,7 +33,8 @@ class UserNotificationEvent implements ShouldBroadcast
         public string $userId,
         public string $message = '',
         public array $payload = [],
-        public string $eventType = '')
+        public string $eventType = ''
+    )
     {
     }
 
@@ -65,6 +66,7 @@ class UserNotificationEvent implements ShouldBroadcast
     public function broadcastWith(): array
     {
         $userNotification = UserNotification::findOrFail(new ObjectId($this->userNotificationId));
+
         return [
             '_id' => (string) $userNotification->_id,
             'category' => $userNotification->category,

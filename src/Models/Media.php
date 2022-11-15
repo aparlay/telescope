@@ -782,7 +782,6 @@ class Media extends BaseModel
         $this->refresh();
     }
 
-
     /**
      * @return string
      */
@@ -795,21 +794,21 @@ class Media extends BaseModel
             ->limit(2)
             ->get();
         $twoUserExists = isset($mediaLikes[0]->creatorObj->username, $mediaLikes[1]->creatorObj->username);
+
         return match (true) {
-            ($this->like_count > 2 && $twoUserExists) =>
-            __(':username1, :username2 and :count others liked your video.',
+            ($this->like_count > 2 && $twoUserExists) => __(
+                ':username1, :username2 and :count others liked your video.',
                 [
                     'username1' => $mediaLikes[0]->creatorObj->username,
                     'username2' => $mediaLikes[1]->creatorObj->username,
-                    'count' => $this->like_count - 2
+                    'count' => $this->like_count - 2,
                 ]
             ),
-            ($this->like_count === 2 && $twoUserExists) =>
-            __(
+            ($this->like_count === 2 && $twoUserExists) => __(
                 ':username1 and :username2 liked your video.',
                 [
                     'username1' => $mediaLikes[0]->creatorObj->username,
-                    'username2' => $mediaLikes[1]->creatorObj->username
+                    'username2' => $mediaLikes[1]->creatorObj->username,
                 ]
             ),
             default => __(':username liked your video.', ['username' => $mediaLikes[0]->creatorObj->username])
@@ -828,22 +827,21 @@ class Media extends BaseModel
             ->limit(2)
             ->get();
         $twoUserExists = isset($mediaComments[0]->creatorObj->username, $mediaComments[1]->creatorObj->username);
+
         return match (true) {
-            ($this->comment_count > 2 && $twoUserExists) =>
-            __(
+            ($this->comment_count > 2 && $twoUserExists) => __(
                 ':username1, :username2 and :count others commented on your video.',
                 [
                     'username1' => $mediaComments[0]->creatorObj->username,
                     'username2' => $mediaComments[1]->creatorObj->username,
-                    'count' => $this->comment_count - 2
+                    'count' => $this->comment_count - 2,
                 ]
             ),
-            ($this->comment_count === 2 && $twoUserExists) =>
-            __(
+            ($this->comment_count === 2 && $twoUserExists) => __(
                 ':username1 and :username2 commented on your video.',
                 [
                     'username1' => $mediaComments[0]->creatorObj->username,
-                    'username2' => $mediaComments[1]->creatorObj->username
+                    'username2' => $mediaComments[1]->creatorObj->username,
                 ]
             ),
             default => __(':username liked your video.', ['username' => $mediaComments[0]->creatorObj->username])
