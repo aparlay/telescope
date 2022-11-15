@@ -4,6 +4,8 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Dto\UserNotificationDto;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaComment;
+use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Models\UserNotification;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Events\UserNotificationUnreadStatusUpdatedEvent;
@@ -70,16 +72,18 @@ class UserNotificationService
 
             $media = Media::media($data['entity._id'])->first();
             if ($data['category'] === UserNotificationCategory::LIKES->value) {
+                $mediaLikes = MediaLike::query()->with('creatorObj')->media($data['entity._id'])->recent()->limit(2)->get();
                 $message = match (true) {
-                    ($media->like_count > 2 && isset($media->likes[0]['username'], $media->likes[1]['username'])) => __(':username1, :username2 and :count others liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username'], 'count' => $media->like_count - 2]),
-                    ($media->like_count === 2 && isset($media->likes[0]['username'], $media->likes[1]['username'])) => __(':username1 and :username2 liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username']]),
-                    default => __(':username liked your video.', ['username' => $media->likes[0]['username']])
+                    ($media->like_count > 2 && isset($mediaLikes[0]->creatorObj->username, $mediaLikes[1]->creatorObj->username)) => __(':username1, :username2 and :count others liked your video.', ['username1' => $mediaLikes[0]->creatorObj->username, 'username2' => $mediaLikes[1]->creatorObj->username, 'count' => $media->like_count - 2]),
+                    ($media->like_count === 2 && isset($mediaLikes[0]->creatorObj->username, $mediaLikes[1]->creatorObj->username)) => __(':username1 and :username2 liked your video.', ['username1' => $mediaLikes[1]->creatorObj->username, 'username2' => $mediaLikes[1]->creatorObj->username]),
+                    default => __(':username liked your video.', ['username' => $mediaLikes[0]->creatorObj->username])
                 };
             } else {
+                $mediaComments = MediaComment::query()->with('creatorObj')->media($data['entity._id'])->recent()->limit(2)->get();
                 $message = match (true) {
-                    ($media->comment_count > 2 && isset($media->comments[0]['username'], $media->comments[1]['username'])) => __(':username1, :username2 and :count others commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comment_count - 2]),
-                    ($media->comment_count === 2 && isset($media->comments[0]['username'], $media->comments[1]['username'])) => __(':username1 and :username2 commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username']]),
-                    default => __(':username liked your video.', ['username' => $media->comments[0]['username']])
+                    ($media->comment_count > 2 && isset($mediaComments[0]->creatorObj->username, $mediaComments[1]->creatorObj->username)) => __(':username1, :username2 and :count others commented on your video.', ['username1' => $mediaComments[0]->creatorObj->username, 'username2' => $mediaComments[1]->creatorObj->username, 'count' => $media->comment_count - 2]),
+                    ($media->comment_count === 2 && isset($mediaComments[0]->creatorObj->username, $mediaComments[1]->creatorObj->username)) => __(':username1 and :username2 commented on your video.', ['username1' => $mediaComments[0]->creatorObj->username, 'username2' => $mediaComments[1]->creatorObj->username]),
+                    default => __(':username liked your video.', ['username' => $mediaComments[0]->creatorObj->username])
                 };
             }
         }
