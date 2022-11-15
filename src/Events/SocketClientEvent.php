@@ -11,7 +11,6 @@ class SocketClientEvent
 {
     use Dispatchable;
     use SerializesModels;
-    use SerializesModels;
 
     /**
      * Create a new event instance.

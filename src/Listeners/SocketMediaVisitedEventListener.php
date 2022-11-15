@@ -14,9 +14,9 @@ class SocketMediaVisitedEventListener implements ShouldQueue
             return;
         }
 
-        $payload = $event->payload['data'];
-        if (isset($payload['user_id'], $payload['media_id'], $payload['device_id'])) {
-            MediaWatched::dispatch(new ObjectId($payload['media_id']), $payload['duration'], $payload['user_id']);
+        $data = $event->payload['data'];
+        if (isset($data['user_id'], $data['media_id'], $data['device_id'], $data['duration'])) {
+            MediaWatched::dispatch(new ObjectId($data['media_id']), $data['duration'], $data['user_id']);
         }
     }
 }
