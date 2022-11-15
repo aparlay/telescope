@@ -24,28 +24,17 @@ class UserNotificationEvent implements ShouldBroadcast
     use InteractsWithBroadcasting;
 
     /**
-     * The credit card instance.
-     *
-     * @var UserNotification
-     */
-    public UserNotification $userNotification;
-    public string $userId;
-    public string $eventType;
-    public $message;
-    public $payload;
-
-    /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(string $userNotificationId, string $userId, string $message = '', array $payload = [], string $eventType = '')
+    public function __construct(
+        public string $userNotificationId,
+        public string $userId,
+        public string $message = '',
+        public array $payload = [],
+        public string $eventType = '')
     {
-        $this->userNotification = UserNotification::findOrFail(new ObjectId($userNotificationId));
-        $this->userId = $userId;
-        $this->eventType = $eventType;
-        $this->message = $message;
-        $this->payload = $payload;
     }
 
     /**
@@ -75,16 +64,17 @@ class UserNotificationEvent implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
+        $userNotification = UserNotification::findOrFail(new ObjectId($this->userNotificationId));
         return [
-            '_id' => (string) $this->userNotification->_id,
-            'category' => $this->userNotification->category,
-            'category_label' => $this->userNotification->category_label,
-            'status' => $this->userNotification->status,
-            'status_label' => $this->userNotification->status_label,
+            '_id' => (string) $userNotification->_id,
+            'category' => $userNotification->category,
+            'category_label' => $userNotification->category_label,
+            'status' => $userNotification->status,
+            'status_label' => $userNotification->status_label,
             'message' => $this->message,
             'payload' => $this->payload,
-            'created_at' => $this->userNotification->created_at->valueOf(),
-            'updated_at' => $this->userNotification->updated_at->valueOf(),
+            'created_at' => $userNotification->created_at->valueOf(),
+            'updated_at' => $userNotification->updated_at->valueOf(),
         ];
     }
 }
