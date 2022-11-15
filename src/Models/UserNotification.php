@@ -146,7 +146,8 @@ class UserNotification extends BaseModel
     /**
      * @return void
      */
-    public function regenerateMessage(): void {
+    public function regenerateMessage(): void
+    {
         if ($this->category === UserNotificationCategory::LIKES->value) {
             $this->regenerateLikeMessage();
         }
@@ -159,7 +160,8 @@ class UserNotification extends BaseModel
     /**
      * @return bool
      */
-    private function regenerateLikeMessage(): bool {
+    private function regenerateLikeMessage(): bool
+    {
         /** @var Media $media */
         $media = $this->entityObj;
         $this->message = $media->likesNotificationMessage();
