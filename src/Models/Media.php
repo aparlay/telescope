@@ -306,7 +306,7 @@ class Media extends BaseModel
      */
     public function getIsAdultAttribute(): bool
     {
-        return $this->skin_score >= 8;
+        return $this->skin_score >= 9;
     }
 
     /**
