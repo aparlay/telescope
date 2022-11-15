@@ -269,13 +269,13 @@ class MediaService
 
     /**
      * @param  Media          $media
-     * @param  int            $duration
+     * @param  int|float      $duration
      * @param  ObjectId|null  $userId
      *
      * @return void
      * @throws Exception
      */
-    public function watched($media, int $duration = 60, ObjectId|null $userId = null): void
+    public function watched($media, int|float $duration = 60, ObjectId|null $userId = null): void
     {
         if ($userId !== null) {
             $this->userWatched($userId, $media, $duration);
@@ -285,13 +285,13 @@ class MediaService
     }
 
     /**
-     * @param  Media  $media
-     * @param  int    $duration
+     * @param  Media     $media
+     * @param  int|float $duration
      *
      * @return void
      * @throws Exception
      */
-    public function anonymousWatched($media, int $duration = 60): void
+    public function anonymousWatched($media, int|float $duration = 60): void
     {
         if ($duration > 3) {
             $multiplier = config('app.media.visit_multiplier', 1);
@@ -308,12 +308,12 @@ class MediaService
     /**
      * @param  ObjectId  $userId
      * @param  Media     $media
-     * @param  int       $duration
+     * @param  int|float $duration
      *
      * @return void
      * @throws Exception
      */
-    public function userWatched(ObjectId $userId, $media, int $duration = 60): void
+    public function userWatched(ObjectId $userId, $media, int|float $duration = 60): void
     {
         if (($mediaVisit = MediaVisit::query()->user($userId)->dateString(date('Y-m-d'))->first()) === null) {
             $mediaVisit = new MediaVisit();
