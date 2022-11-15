@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PusherClientEvent
+class SocketClientEvent
 {
     use Dispatchable;
     use SerializesModels;
