@@ -128,11 +128,6 @@ class Follow extends BaseModel
 
         if ($refresh) {
             Redis::del($cacheKey);
-            Cache::store('octane')->forget($cacheKey);
-        }
-
-        if (Cache::store('octane')->get($cacheKey, false) !== false) {
-            return; // cache already exists
         }
 
         if (! Redis::exists($cacheKey)) {
@@ -147,16 +142,8 @@ class Follow extends BaseModel
 
             $followerIds = array_map('strval', $followerIds);
 
-            Cache::store('octane')->put($cacheKey, implode(',', $followerIds), 300);
-
             Redis::sAdd($cacheKey, ...$followerIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
-        }
-
-        if (Cache::store('octane')->get($cacheKey, false) === false) {
-            $followerIds = Redis::sMembers($cacheKey);
-
-            Cache::store('octane')->put($cacheKey, implode(',', $followerIds), 300);
         }
     }
 
@@ -169,10 +156,8 @@ class Follow extends BaseModel
     public static function checkCreatorIsFollowedByUser(string $creatorId, string $userId): bool
     {
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
-        $followerIds = Cache::store('octane')->get($cacheKey, false);
 
-        return ($followerIds !== false) ? in_array($creatorId, explode(',', $followerIds)) :
-            Redis::sismember($cacheKey, (string) $creatorId);
+        return Redis::sismember($cacheKey, $creatorId);
     }
 
     /**

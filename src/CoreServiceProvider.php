@@ -5,6 +5,7 @@ namespace Aparlay\Core;
 use Aparlay\Core\Admin\Components\ChatSearchResult;
 use Aparlay\Core\Admin\Components\DatePicker;
 use Aparlay\Core\Admin\Components\MediaCover;
+use Aparlay\Core\Admin\Components\MediaSearchResult;
 use Aparlay\Core\Admin\Components\Modals;
 use Aparlay\Core\Admin\Components\OrderSearchResult;
 use Aparlay\Core\Admin\Components\PayoutSearchResult;
@@ -226,5 +227,6 @@ class CoreServiceProvider extends ServiceProvider
         Blade::component('chat-search-result', ChatSearchResult::class);
         Blade::component('order-search-result', OrderSearchResult::class);
         Blade::component('payout-search-result', PayoutSearchResult::class);
+        Blade::component('media-search-result', MediaSearchResult::class);
     }
 }

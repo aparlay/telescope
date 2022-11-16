@@ -195,6 +195,7 @@ class User extends \App\Models\User
         'verification_status' => 1, // unverified
         'setting' => [
             'otp' => false,
+            'show_adult_content' => false,
             'notifications' => [
                 'unread_message_alerts' => true,
                 'news_and_updates' => true,

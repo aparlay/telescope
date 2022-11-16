@@ -49,6 +49,7 @@ final class Stats extends BaseDashboardComponent
         return [
             [
                 'label' => 'Unique Visitors',
+                'value' => Arr::get($results, 'google_analytics_total_users'),
             ],
             [
                 'label' => 'Active Users',
@@ -56,6 +57,9 @@ final class Stats extends BaseDashboardComponent
             [
                 'label' => 'Registrations',
                 'value' => Arr::get($results, 'user_registered'),
+            ],
+            [
+                'label' => 'Verifications',
             ],
             [
                 'label' => 'Video Uploads',
@@ -66,8 +70,12 @@ final class Stats extends BaseDashboardComponent
                 'value' => Arr::get($results, 'media_confirmed'),
             ],
             [
-                'label' => 'Verifications',
-                'value' => Arr::get($results, 'user_verified'),
+                'label' => 'Likes',
+                'value' => Arr::get($results, 'media_likes'),
+            ],
+            [
+                'label' => 'Comments',
+                'value' => Arr::get($results, 'media_comments'),
             ],
             [
                 'label' => 'Subscriptions',
@@ -88,16 +96,12 @@ final class Stats extends BaseDashboardComponent
                 ),
             ],
             [
-                'label' => 'Likes',
-                'value' => Arr::get($results, 'media_likes'),
-            ],
-            [
-                'label' => 'Comments',
-                'value' => Arr::get($results, 'media_comments'),
-            ],
-            [
                 'label' => 'Emails Sent',
                 'value' => Arr::get($results, 'email_sent'),
+            ],
+            [
+                'label' => 'Email Verifications',
+                'value' => (Arr::get($results, 'email_sent') > 1) ? Arr::get($results, 'user_verified').'['.round(100 * Arr::get($results, 'user_verified') / Arr::get($results, 'email_sent')).'%]' : null,
             ],
             [
                 'label' => 'Email Bounced',

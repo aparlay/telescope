@@ -145,7 +145,6 @@ class MediaService
         $originalQuery = $query;
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
-        $userId = null;
         if (! auth()->guest()) {
             $userId = auth()->user()->_id;
             $query->notBlockedFor(auth()->user()->_id)->notVisitedByUserAndDevice($userId, $deviceId);
@@ -171,12 +170,9 @@ class MediaService
         }
 
         $visited = Cache::store('redis')->get($cacheKey, []);
-        $visitedVideos = [];
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
-            $visitedVideos[] = new ObjectId($model->_id);
         }
-        MediaWatched::dispatch($visitedVideos, 60, $userId);
         Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
         return $data;
@@ -209,15 +205,7 @@ class MediaService
             return new \Illuminate\Pagination\LengthAwarePaginator([], 0, 5, 0);
         }
 
-        $data = $query->availableForFollower()->following(auth()->user()->_id)->recentFirst()->paginate(5)->withQueryString();
-        $visitedVideos = [];
-        foreach ($data->items() as $model) {
-            $visitedVideos[] = new ObjectId($model->_id);
-        }
-
-        MediaWatched::dispatch($visitedVideos, 60, $userId);
-
-        return $data;
+        return $query->availableForFollower()->following(auth()->user()->_id)->recentFirst()->paginate(5)->withQueryString();
     }
 
     /**
@@ -227,16 +215,8 @@ class MediaService
     public function getNewFeed(): LengthAwarePaginator
     {
         $query = Media::query();
-        $data = $query->public()->confirmed()->recentFirst()->paginate(5)->withQueryString();
-        $visitedVideos = [];
-        foreach ($data->items() as $model) {
-            $visitedVideos[] = new ObjectId($model->_id);
-        }
-        $userId = auth()->guest() ? null : auth()->user()->_id;
 
-        MediaWatched::dispatch($visitedVideos, 60, $userId);
-
-        return $data;
+        return $query->public()->confirmed()->recentFirst()->paginate(5)->withQueryString();
     }
 
     /**
@@ -248,7 +228,6 @@ class MediaService
     {
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();
-
         if (auth()->guest()) {
             $query->confirmed()->public();
         } elseif ((string) $userId === (string) auth()->user()->_id) {
@@ -274,13 +253,13 @@ class MediaService
 
     /**
      * @param  Media          $media
-     * @param  int            $duration
+     * @param  int|float      $duration
      * @param  ObjectId|null  $userId
      *
      * @return void
      * @throws Exception
      */
-    public function watched($media, int $duration = 60, ObjectId|null $userId = null): void
+    public function watched($media, int|float $duration = 60, ObjectId|null $userId = null): void
     {
         if ($userId !== null) {
             $this->userWatched($userId, $media, $duration);
@@ -290,13 +269,13 @@ class MediaService
     }
 
     /**
-     * @param  Media  $media
-     * @param  int    $duration
+     * @param  Media     $media
+     * @param  int|float $duration
      *
      * @return void
      * @throws Exception
      */
-    public function anonymousWatched($media, int $duration = 60): void
+    public function anonymousWatched($media, int|float $duration = 60): void
     {
         if ($duration > 3) {
             $multiplier = config('app.media.visit_multiplier', 1);
@@ -313,12 +292,12 @@ class MediaService
     /**
      * @param  ObjectId  $userId
      * @param  Media     $media
-     * @param  int       $duration
+     * @param  int|float $duration
      *
      * @return void
      * @throws Exception
      */
-    public function userWatched(ObjectId $userId, $media, int $duration = 60): void
+    public function userWatched(ObjectId $userId, $media, int|float $duration = 60): void
     {
         if (($mediaVisit = MediaVisit::query()->user($userId)->dateString(date('Y-m-d'))->first()) === null) {
             $mediaVisit = new MediaVisit();

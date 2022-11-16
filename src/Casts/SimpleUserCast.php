@@ -86,10 +86,15 @@ class SimpleUserCast implements CastsAttributes
     /**
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public static function cacheByUserId(ObjectId|string $userId): array
+    public static function cacheByUserId(ObjectId|string $userId, bool $refresh = false): array
     {
         $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
         $cacheKey = 'SimpleUserCast:'.$userId;
+
+        if ($refresh) {
+            Cache::store('octane')->delete($cacheKey);
+            Cache::store('redis')->delete($cacheKey);
+        }
 
         if (($userArray = Cache::store('octane')->get($cacheKey, false)) !== false) {
             return json_decode($userArray, true); // cache already exists

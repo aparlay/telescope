@@ -2,11 +2,11 @@
 
 namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Models\UserNotification;
 use Aparlay\Core\Notifications\MediaCommentedNotification;
-use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaCommentObserver extends BaseModelObserver
@@ -32,21 +32,13 @@ class MediaCommentObserver extends BaseModelObserver
         }
 
         if (empty($mediaComment->reply_to_user['_id'])) {
-            if (isset($media->comments[0]['username'], $media->comments[1]['username']) && $media->comment_count > 2) {
-                $message = __(':username1, :username2 and :count others commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comment_count - 2]);
-            } elseif (isset($media->comments[0]['username'], $media->comments[1]['username']) && $media->comment_count == 2) {
-                $message = __(':username1 and :username2 commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username']]);
-            } else {
-                $message = __(':username commented on your video.', ['username' => $mediaComment->creator['username']]);
-            }
-
             $media->notify(
                 new MediaCommentedNotification(
                     $mediaComment->creatorObj,
                     $media->creatorObj,
                     $media,
                     $mediaComment,
-                    $message
+                    $media->commentsNotificationMessage(),
                 )
             );
         } else {
@@ -75,12 +67,10 @@ class MediaCommentObserver extends BaseModelObserver
         if ($media === null) {
             return;
         }
-        $commentCount = MediaComment::query()->media($media->_id)->count();
-        $media->comment_count = $commentCount;
-        $media->count_fields_updated_at = array_merge(
-            $media->count_fields_updated_at,
-            ['comments' => DT::utcNow()]
-        );
-        $media->save();
+        $media->updateComments();
+
+        if ($media->comment_count === 0) {
+            UserNotification::query()->category(UserNotificationCategory::COMMENTS->value)->mediaEntity($media->_id)->delete();
+        }
     }
 }

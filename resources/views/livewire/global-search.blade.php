@@ -25,6 +25,8 @@
                             <x-order-search-result :order="$model"/>
                         @elseif($category == 'Chat')
                             <x-chat-search-result :chat="$model"/>
+                        @elseif($category == 'Media')
+                            <x-media-search-result :media="$model"/>
                         @endif
                     @endforeach
                 @endforeach
