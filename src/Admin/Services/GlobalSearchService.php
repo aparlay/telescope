@@ -13,7 +13,7 @@ class GlobalSearchService
 {
     public static function search(string $searchQuery): array
     {
-        $orders = $payouts = $chats = [];
+        $orders = $payouts = $chats = $medias = [];
 
         try {
             $users = self::searchUsers($searchQuery);

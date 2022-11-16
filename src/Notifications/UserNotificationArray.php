@@ -10,7 +10,9 @@ trait UserNotificationArray
     public ObjectId|null $entity_id;
     public mixed $usernotifiable;
     public int $category;
+    public string $category_label;
     public int $status;
+    public string $status_label;
     public string $message;
     public array $payload;
     public string $eventType;
@@ -39,7 +41,9 @@ trait UserNotificationArray
             'entity_type' => $this->entity_type,
             'entity_id' => $this->entity_id,
             'category' => $this->category,
+            'category_label' => $this->category_label,
             'status' => $this->status,
+            'status_label' => $this->status_label,
             'user_id' => $this->user_id,
             'message' => $this->message,
             'payload' => $this->payload,
