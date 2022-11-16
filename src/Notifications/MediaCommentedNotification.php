@@ -28,7 +28,9 @@ class MediaCommentedNotification extends Notification
         $this->entity_id = new ObjectId($media->_id);
         $this->user_id = new ObjectId($receiver->_id);
         $this->category = UserNotificationCategory::COMMENTS->value;
+        $this->category_label = UserNotificationCategory::COMMENTS->label();
         $this->status = UserNotificationStatus::NOT_VISITED->value;
+        $this->status_label = UserNotificationStatus::NOT_VISITED->label();
         $this->message = $message;
         $this->eventType = 'MediaComment';
         $this->payload = [
