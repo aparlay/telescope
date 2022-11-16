@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Chat\Admin\Models\Chat;
+use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Payment\Models\Order;
 use Aparlay\Payout\Models\UserPayout;
@@ -33,6 +34,7 @@ class GlobalSearchService
             $users = User::query()->user($searchQuery)->limit(5)->get()->merge(
                 $users
             );
+            $medias = Media::query()->media($searchQuery)->limit(5)->get();
         }
 
         $result = [];
@@ -41,6 +43,7 @@ class GlobalSearchService
         $result['Order'] = $orders;
         $result['Payout'] = $payouts;
         $result['Chat'] = $chats;
+        $result['Media'] = $medias;
 
         return $result;
     }

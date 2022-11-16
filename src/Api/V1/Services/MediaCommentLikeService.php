@@ -2,12 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
-use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Models\MediaCommentLike;
-use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
@@ -16,19 +13,17 @@ class MediaCommentLikeService
     use HasUserTrait;
 
     /**
-     * @param $mediaCommentId
+     * @param string $mediaCommentId
      * @return bool
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function isLikedByUser($mediaCommentId)
+    public function isLikedByUser(string $mediaCommentId): bool
     {
         $this->cacheByUserId();
 
         $cacheKey = (new MediaCommentLike())->getCollection().':creator:'.$this->getUser()->_id;
-        $likedComments = Cache::store('octane')->get($cacheKey, false);
 
-        return ($likedComments !== false) ? in_array($mediaCommentId, explode(',', $likedComments)) :
-            Redis::sismember($cacheKey, $mediaCommentId);
+        return Redis::sismember($cacheKey, $mediaCommentId);
     }
 
     /**
@@ -43,31 +38,22 @@ class MediaCommentLikeService
 
         if ($refresh) {
             Redis::del($cacheKey);
-            Cache::store('octane')->forget($cacheKey);
         }
 
-        if (Cache::store('octane')->get($cacheKey, false) !== false) {
-            return;
-        }
         if (! Redis::exists($cacheKey)) {
-            $likedComments = MediaCommentLike::query()
+            $likedCommentIds = MediaCommentLike::query()
                 ->creator($userId)
                 ->pluck('media_comment_id')
                 ->toArray();
 
-            if (empty($likedComments)) {
-                $likedComments = [''];
+            if (empty($likedCommentIds)) {
+                $likedCommentIds = [''];
             }
 
-            Cache::store('octane')->put($cacheKey, implode(',', $likedComments), 300);
-            Redis::sAdd($cacheKey, ...$likedComments);
+            $likedCommentIds = array_map('strval', $likedCommentIds);
+
+            Redis::sAdd($cacheKey, ...$likedCommentIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
-        }
-
-        if (Cache::store('octane')->get($cacheKey, false) === false) {
-            $likedComments = Redis::sMembers($cacheKey);
-
-            Cache::store('octane')->put($cacheKey, implode(',', $likedComments), 300);
         }
     }
 
