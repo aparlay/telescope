@@ -2,12 +2,12 @@
 
 namespace Aparlay\Core\Commands;
 
-use Aparlay\Core\Helpers\Cdn;
-use Aparlay\Core\Models\User;
+use Aparlay\Core\Jobs\WarmupSimpleUserCacheJob;
+use Aparlay\Core\Models\UserNotification;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Contracts\Console\Isolatable;
 
-class WarmupCacheCommand extends Command
+class WarmupCacheCommand extends Command implements Isolatable
 {
     public $signature = 'core:warmup';
 
@@ -15,24 +15,8 @@ class WarmupCacheCommand extends Command
 
     public function handle()
     {
-        User::chunk(500, function ($users) {
-            $octane = [];
-            $redis = [];
-            foreach ($users as $user) {
-                $data = [
-                    '_id' => (string) $user->_id,
-                    'username' => $user->username,
-                    'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
-                    'is_verified' => $user->is_verified,
-                ];
-                $octane['SimpleUserCast:'.$user->_id] = json_encode($data);
-                $redis['SimpleUserCast:'.$user->_id] = $data;
-                $this->info('User '.$user->_id.' '.$user->username.' cached');
-            }
-
-            Cache::store('octane')->setMultiple($octane, config('app.cache.veryLongDuration'));
-            Cache::store('redis')->setMultiple($redis, config('app.cache.veryLongDuration'));
-        });
+        $this->info('Warming up simple user cache');
+        WarmupSimpleUserCacheJob::dispatch();
 
         return self::SUCCESS;
     }

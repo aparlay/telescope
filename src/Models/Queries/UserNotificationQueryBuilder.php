@@ -8,7 +8,10 @@ use MongoDB\BSON\ObjectId;
 
 class UserNotificationQueryBuilder extends EloquentQueryBuilder
 {
-    use SimpleUserCreatorQuery;
+    public function payloadUserId(string $userId)
+    {
+        return $this->whereRaw(['payload.user._id' => $userId]);
+    }
 
     public function visited(): self
     {
