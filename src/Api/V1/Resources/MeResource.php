@@ -64,6 +64,7 @@ class MeResource extends JsonResource
             'avatar' => $this->avatar,
             'setting' => [
                 'otp' => $this->setting['otp'] ?? false,
+                'show_adult_content' => $this->setting['show_adult_content'] ?? false,
                 'notifications' => [
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? false,
                     'new_followers' => $this->setting['notifications']['new_followers'] ?? false,

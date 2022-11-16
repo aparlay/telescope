@@ -4,6 +4,8 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Dto\UserNotificationDto;
 use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaComment;
+use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Models\UserNotification;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Events\UserNotificationUnreadStatusUpdatedEvent;
@@ -62,42 +64,27 @@ class UserNotificationService
         $data['entity._type'] = $data['entity_type'];
 
         if (in_array($data['category'], [UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value])) {
-            $model = UserNotification::query()
+            $userNotification = UserNotification::query()
                 ->entity($data['entity._id'], $data['entity._type'])
                 ->user($this->getUser()->_id)
                 ->category($data['category'])
                 ->first();
-
-            $media = Media::media($data['entity._id'])->first();
-            if ($data['category'] === UserNotificationCategory::LIKES->value) {
-                $message = match (true) {
-                    ($media->like_count > 2 && isset($media->likes[0]['username'], $media->likes[1]['username'])) => __(':username1, :username2 and :count others liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username'], 'count' => $media->like_count - 2]),
-                    ($media->like_count === 2 && isset($media->likes[0]['username'], $media->likes[1]['username'])) => __(':username1 and :username2 liked your video.', ['username1' => $media->likes[0]['username'], 'username2' => $media->likes[1]['username']]),
-                    default => __(':username liked your video.', ['username' => $media->likes[0]['username']])
-                };
-            } else {
-                $message = match (true) {
-                    ($media->comment_count > 2 && isset($media->comments[0]['username'], $media->comments[1]['username'])) => __(':username1, :username2 and :count others commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username'], 'count' => $media->comment_count - 2]),
-                    ($media->comment_count === 2 && isset($media->comments[0]['username'], $media->comments[1]['username'])) => __(':username1 and :username2 commented on your video.', ['username1' => $media->comments[0]['username'], 'username2' => $media->comments[1]['username']]),
-                    default => __(':username liked your video.', ['username' => $media->comments[0]['username']])
-                };
-            }
         }
 
-        if (empty($model)) {
-            $model = UserNotification::create($data);
+        if (empty($userNotification)) {
+            $userNotification = UserNotification::create($data);
         } else {
-            $model->update([
+            $userNotification->update([
                 'status' => UserNotificationStatus::NOT_VISITED->value,
                 'updated_at' => DT::utcNow(),
-                'message' => $message ?? $model->message,
-                'payload' => $notificationDto->payload ?? $model->payload,
+                'payload' => $notificationDto->payload ?? $userNotification->payload,
             ]);
         }
 
+        $userNotification->regenerateMessage();
         $this->getUser()->increaseStatCounter('notifications');
 
-        return $model;
+        return $userNotification;
     }
 
     /**

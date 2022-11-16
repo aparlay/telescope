@@ -2,8 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Api\V1\Services\MediaService;
-use Aparlay\Core\Models\Media;
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
@@ -12,10 +11,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use MongoDB\BSON\ObjectId;
+use Illuminate\Support\Facades\Cache;
 use Throwable;
 
-class MediaWatched implements ShouldQueue
+class WarmupSimpleUserCacheJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -25,7 +24,7 @@ class MediaWatched implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -37,31 +36,44 @@ class MediaWatched implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [5, 10, 15];
+    public $backoff = 10;
 
     /**
      * Create a new job instance.
      *
      * @return void
-     *
      * @throws Exception
      */
-    public function __construct(public array|ObjectId $mediaIds, public int|float $duration = 60, public string|null $userId = null)
+    public function __construct()
     {
         $this->onQueue('low');
     }
 
     /**
      * Execute the job.
+     *
+     * @return void
+     * @throws Exception
      */
-    public function handle(): void
+    public function handle()
     {
-        $mediaService = app()->make(MediaService::class);
-        $userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
-        $this->mediaIds = is_array($this->mediaIds) ? $this->mediaIds : [$this->mediaIds];
-        foreach (Media::query()->whereIn('_id', $this->mediaIds)->get() as $media) {
-            $mediaService->watched($media, $this->duration, $userId);
-        }
+        User::chunk(500, function ($users) {
+            $data = [];
+            foreach ($users as $user) {
+                $data['SimpleUserCast:'.$user->_id] = [
+                    '_id' => (string) $user->_id,
+                    'username' => $user->username,
+                    'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
+                    'is_verified' => $user->is_verified,
+                ];
+            }
+
+            Cache::store('octane')->deleteMultiple(array_keys($data));
+            Cache::store('redis')->deleteMultiple(array_keys($data));
+
+            Cache::store('octane')->setMultiple($data, 300);
+            Cache::store('redis')->setMultiple($data, config('app.cache.veryLongDuration'));
+        });
     }
 
     public function failed(Throwable $exception): void
