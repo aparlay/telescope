@@ -163,6 +163,7 @@ class UserVerificationModal extends Component
                 default => ''
             };
             $payload['verification_status'] = $newVerificationStatus;
+            $payload['verification_status_label'] = UserVerificationStatus::from($newVerificationStatus)->label();
 
             if ($message) {
                 $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));

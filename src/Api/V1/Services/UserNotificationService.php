@@ -58,7 +58,7 @@ class UserNotificationService
      */
     public function create(UserNotificationDto $notificationDto): Model|UserNotification|null
     {
-        $data = $notificationDto->except('user')->toArray();
+        $data = $notificationDto->except('user', 'category_label', 'status_label')->toArray();
         $data['user_id'] = new ObjectId($this->getUser()->_id);
         $data['entity._id'] = new ObjectId($data['entity_id']);
         $data['entity._type'] = $data['entity_type'];
