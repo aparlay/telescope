@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\MediaComment;
+use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Api\V1\Resources\SimpleUserTrait;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
@@ -778,5 +780,71 @@ class Media extends BaseModel
 
         $this->save();
         $this->refresh();
+    }
+
+    /**
+     * @return string
+     */
+    public function likesNotificationMessage(): string
+    {
+        $mediaLikes = MediaLike::query()
+            ->with('creatorObj')
+            ->media($this->_id)
+            ->recent()
+            ->limit(2)
+            ->get();
+        $twoUserExists = isset($mediaLikes[0]->creatorObj->username, $mediaLikes[1]->creatorObj->username);
+
+        return match (true) {
+            ($this->like_count > 2 && $twoUserExists) => __(
+                ':username1, :username2 and :count others liked your video.',
+                [
+                    'username1' => $mediaLikes[0]->creatorObj->username,
+                    'username2' => $mediaLikes[1]->creatorObj->username,
+                    'count' => $this->like_count - 2,
+                ]
+            ),
+            ($this->like_count === 2 && $twoUserExists) => __(
+                ':username1 and :username2 liked your video.',
+                [
+                    'username1' => $mediaLikes[0]->creatorObj->username,
+                    'username2' => $mediaLikes[1]->creatorObj->username,
+                ]
+            ),
+            default => __(':username liked your video.', ['username' => $mediaLikes[0]->creatorObj->username])
+        };
+    }
+
+    /**
+     * @return string
+     */
+    public function commentsNotificationMessage(): string
+    {
+        $mediaComments = MediaComment::query()
+            ->with('creatorObj')
+            ->media($this->_id)
+            ->recent()
+            ->limit(2)
+            ->get();
+        $twoUserExists = isset($mediaComments[0]->creatorObj->username, $mediaComments[1]->creatorObj->username);
+
+        return match (true) {
+            ($this->comment_count > 2 && $twoUserExists) => __(
+                ':username1, :username2 and :count others commented on your video.',
+                [
+                    'username1' => $mediaComments[0]->creatorObj->username,
+                    'username2' => $mediaComments[1]->creatorObj->username,
+                    'count' => $this->comment_count - 2,
+                ]
+            ),
+            ($this->comment_count === 2 && $twoUserExists) => __(
+                ':username1 and :username2 commented on your video.',
+                [
+                    'username1' => $mediaComments[0]->creatorObj->username,
+                    'username2' => $mediaComments[1]->creatorObj->username,
+                ]
+            ),
+            default => __(':username liked your video.', ['username' => $mediaComments[0]->creatorObj->username])
+        };
     }
 }

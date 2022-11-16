@@ -2,6 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\Media;
+use Aparlay\Core\Api\V1\Models\MediaComment;
+use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Database\Factories\UserNotificationFactory;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
@@ -138,5 +141,43 @@ class UserNotification extends BaseModel
     public function getCategoryLabelAttribute(): string
     {
         return UserNotificationCategory::from($this->category)->label();
+    }
+
+    /**
+     * @return void
+     */
+    public function regenerateMessage(): void
+    {
+        if ($this->category === UserNotificationCategory::LIKES->value) {
+            $this->regenerateLikeMessage();
+        }
+
+        if ($this->category === UserNotificationCategory::COMMENTS->value) {
+            $this->regenerateCommentMessage();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    private function regenerateLikeMessage(): bool
+    {
+        /** @var Media $media */
+        $media = $this->entityObj;
+        $this->message = $media->likesNotificationMessage();
+
+        return $this->save();
+    }
+
+    /**
+     * @return bool
+     */
+    private function regenerateCommentMessage(): bool
+    {
+        /** @var Media $media */
+        $media = $this->entityObj;
+        $this->message = $media->commentsNotificationMessage();
+
+        return $this->save();
     }
 }
