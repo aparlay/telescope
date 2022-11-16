@@ -24,7 +24,7 @@ class SocketWebhookController extends Controller
         abort_unless($webhookSignature === $expectedSignature, 401);
 
         foreach ($request->input('events', []) as $event) {
-            $event['data'] = isset($event['data']) ? json_decode($event['data'], true) : [];
+            $event['data'] = isset($event['data']) ? (is_array($event['data']) ? $event['data'] : json_decode($event['data'], true)) : [];
             SocketClientEvent::dispatchIf(($event['name'] === 'client_event'), $event);
         }
 
