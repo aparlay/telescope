@@ -4,7 +4,7 @@
 @endphp
 
 <div class="card">
-    <form action="{{ route('core.admin.user.updateProfile', ['user' => $user->_id]) }}" class="form-horizontal" method="post">
+    <form action="{{ route('core.admin.user.updateProfile', ['user' => $user->_id]) }}" class="form-horizontal" method="post" id="profile-form">
         @csrf()
         @method('PUT')
         <div class="card-header">
