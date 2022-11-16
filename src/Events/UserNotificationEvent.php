@@ -34,8 +34,7 @@ class UserNotificationEvent implements ShouldBroadcast
         public string $message = '',
         public array $payload = [],
         public string $eventType = ''
-    )
-    {
+    ) {
     }
 
     /**
