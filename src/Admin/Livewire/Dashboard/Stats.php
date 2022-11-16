@@ -53,7 +53,6 @@ final class Stats extends BaseDashboardComponent
             ],
             [
                 'label' => 'Active Users',
-                'value' => Arr::get($results, 'google_analytics_active_users'),
             ],
             [
                 'label' => 'Registrations',

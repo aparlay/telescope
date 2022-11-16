@@ -38,13 +38,6 @@ class UserInfoUpdateRequest extends FormRequest
                 Rule::unique('users', 'email')->ignore($this->user->_id, '_id'),
                 'max:255',
             ],
-            'username' => [
-                'required',
-                Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
-                'min:3',
-                'max:30',
-                'alpha_dash',
-            ],
             'verification_status' => [
                 'nullable', Rule::in(UserVerificationStatus::getAllValues()),
             ],

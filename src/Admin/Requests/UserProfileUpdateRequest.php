@@ -30,7 +30,9 @@ class UserProfileUpdateRequest extends FormRequest
             'username' => [
                 'required',
                 Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
-                'max:255',
+                'min:3',
+                'max:30',
+                'alpha_dash',
             ],
             'bio' => ['nullable', 'string'],
             'promo_link' => ['nullable', 'url'],
