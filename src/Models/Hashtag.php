@@ -106,7 +106,7 @@ class Hashtag extends BaseModel
      */
     public function toSearchableArray()
     {
-        $media = Media::hashtag($this->tag)->inRandomOrder()->first();
+        $media = Media::hashtag($this->tag)->limit(500)->get()->random();
 
         return [
             '_id' => (string) $this->_id,
