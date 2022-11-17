@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -100,13 +102,25 @@ class Hashtag extends BaseModel
     }
 
     /**
+     * Determine if the model should be searchable.
+     *
+     * @return bool
+     */
+    public function shouldBeSearchable(): bool
+    {
+        $media = Media::hashtag($this->tag)->public()->availableForFollower()->first();
+
+        return ! empty($media);
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array
      */
     public function toSearchableArray()
     {
-        $media = Media::hashtag($this->tag)->sort('default')->first();
+        $media = Media::hashtag($this->tag)->public()->availableForFollower()->limit(500)->get()->random();
 
         return [
             '_id' => (string) $this->_id,
