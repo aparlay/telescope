@@ -256,6 +256,7 @@ class Media extends BaseModel
             'hashtags' => $this->hashtags,
             'score' => $this->sort_scores['default'],
             'country' => $this->userObj->country_alpha2 ?? '',
+            'is_adult' => $this->is_adult ?? false,
             'last_online_at' => 0,
             '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
         ];
