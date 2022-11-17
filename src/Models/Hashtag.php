@@ -101,7 +101,6 @@ class Hashtag extends BaseModel
         return 'global';
     }
 
-
     /**
      * Determine if the model should be searchable.
      *
@@ -110,7 +109,8 @@ class Hashtag extends BaseModel
     public function shouldBeSearchable(): bool
     {
         $media = Media::hashtag($this->tag)->public()->availableForFollower()->first();
-        return !empty($media);
+
+        return ! empty($media);
     }
 
     /**
