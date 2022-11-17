@@ -308,7 +308,7 @@ class MediaService
         $mediaVisit->media_id = new ObjectId($media->_id);
         $mediaVisit->duration = $duration;
 
-        if ($duration > ($media->length / 4)) {
+        if ($duration > 3) {
             $media->updateVisits($duration);
         }
 
