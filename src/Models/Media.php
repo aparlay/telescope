@@ -727,7 +727,7 @@ class Media extends BaseModel
     {
         $visitCount = MediaVisit::query()->media($this->_id)->count();
         $multiplier = config('app.media.visit_multiplier', 1);
-        $this->length_watched += ((($duration > $this->length) ? $this->length : $duration) * $multiplier);
+        $this->length_watched += ((($duration > ($this->length * 3)) ? $this->length : $duration) * $multiplier);
         $this->visit_count = $visitCount + $multiplier;
         $this->visits = MediaVisit::query()
             ->with('userObj')
