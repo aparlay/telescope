@@ -135,6 +135,7 @@ class Hashtag extends BaseModel
             'country' => '',
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
+            'is_adult' => $media?->is_adult ?? false,
             'last_online_at' => 0,
             'comment_count' => $this->comment_count,
             '_geo' => ['lat' => 0.0, 'lng' => 0.0],

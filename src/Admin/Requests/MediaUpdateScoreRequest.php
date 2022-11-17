@@ -3,12 +3,14 @@
 namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
-class MediaUpdateRequest extends FormRequest
+class MediaUpdateScoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,10 +30,21 @@ class MediaUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['nullable', 'string'],
-            'visibility' => ['required', 'boolean'],
-            'is_protected' => ['required', 'boolean'],
-            'is_music_licensed' => ['required', 'boolean'],
+            'skin_score' => [
+                'required',
+                'integer',
+                Rule::in(array_keys(Media::getSkinScores())),
+            ],
+            'awesomeness_score' => [
+                'required',
+                'integer',
+                Rule::in(array_keys(Media::getAwesomenessScores())),
+            ],
+            'beauty_score' => [
+                'required',
+                'integer',
+                Rule::in(array_keys(Media::getBeautyScores())),
+            ],
             'status' => [
                 'required',
                 'integer',
@@ -55,10 +68,13 @@ class MediaUpdateRequest extends FormRequest
 
     public function prepareForValidation()
     {
-        $this->merge([
-            'visibility' => request()->boolean('visibility'),
-            'is_protected' => request()->boolean('is_protected'),
-            'is_music_licensed' => request()->boolean('is_music_licensed'),
-        ]);
+        if (
+            (int) $this->status === MediaStatus::CONFIRMED->value &&
+            (empty($this->skin_score) || empty($this->awesomeness_score) || empty($this->beauty_score))
+        ) {
+            throw ValidationException::withMessages([
+                'avatar' => 'You must set all scores before confirm a video for public feed.',
+            ]);
+        }
     }
 }
