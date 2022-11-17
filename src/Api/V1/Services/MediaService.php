@@ -279,7 +279,7 @@ class MediaService
     {
         if ($duration > 3) {
             $multiplier = config('app.media.visit_multiplier', 1);
-            $media->length_watched += ((($duration > ($media->length *3)) ? $media->length : $duration) * $multiplier);
+            $media->length_watched += ((($duration > ($media->length * 3)) ? $media->length : $duration) * $multiplier);
             $media->visit_count += $multiplier;
             $media->count_fields_updated_at = array_merge(
                 $media->count_fields_updated_at,
