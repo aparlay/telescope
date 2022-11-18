@@ -358,6 +358,7 @@ class User extends \App\Models\User
             'country' => $this->country_alpha2,
             'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
             'like_count' => $this->counters['likes'],
+            'is_adult' => false,
             'visit_count' => 0,
             'comment_count' => 0,
             '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0],

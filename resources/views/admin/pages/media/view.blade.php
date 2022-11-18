@@ -24,7 +24,7 @@
                                 Your browser does not support the video tag.
                             </video>
 
-                            <form action="" class="form-horizontal" method="POST">
+                            <form action="{{route('core.admin.media.updateScore', ['media' => $media->_id])}}" class="form-horizontal" method="POST">
                             <div class="card-body box-profile">
                                 <div class="row">
                                     <div class="col-12">
@@ -232,7 +232,7 @@
                                             <label for="is_protected" class="col-sm-2 col-form-label">Delete Protected</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" name="is_protected" id="is_protected" {!! ($media->is_protected == true) ? 'checked' : '' !!}>
+                                                    <input type="checkbox" value="1" class="custom-control-input" name="is_protected" id="is_protected" {!! ($media->is_protected == true) ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="is_protected"></label>
                                                 </div>
                                             </div>
@@ -241,7 +241,7 @@
                                             <label for="is_music_licensed" class="col-sm-2 col-form-label">Music Licensed</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="checkbox" class="custom-control-input" name="is_music_licensed" id="is_music_licensed" {!! ($media->is_music_licensed == true) ? 'checked' : '' !!}>
+                                                    <input type="checkbox" value="1" class="custom-control-input" name="is_music_licensed" id="is_music_licensed" {!! ($media->is_music_licensed == true) ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="is_music_licensed"></label>
                                                 </div>
                                             </div>

@@ -6,11 +6,14 @@ use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
+use Aparlay\Core\Admin\Requests\MediaUpdateRequest;
+use Aparlay\Core\Admin\Requests\MediaUpdateScoreRequest;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaService extends AdminBaseService
 {
@@ -131,35 +134,62 @@ class MediaService extends AdminBaseService
     }
 
     /**
-     * @param $id
+     * @param                      $id
+     * @param  MediaUpdateRequest  $request
+     *
+     * @return Media|mixed
+     * @throws InvalidArgumentException
      */
-    public function update($id)
+    public function update($id, MediaUpdateRequest $request)
     {
         $data = request()->only([
             'description',
             'status',
-            'skin_score',
             'visibility',
             'is_protected',
             'is_music_licensed',
         ]);
 
         $dataModified = [
-            'visibility' => request()->boolean('visibility'),
-            'is_protected' => request()->boolean('is_protected'),
-            'is_music_licensed' => request()->boolean('is_music_licensed'),
+            'visibility' => $request->boolean('visibility'),
+            'is_protected' => $request->boolean('is_protected'),
+            'is_music_licensed' => $request->boolean('is_music_licensed'),
+        ];
+
+        $data = array_merge($data, $dataModified);
+
+        $media = $this->mediaRepository->update($data, $id);
+
+        return $this->calculateSortScores($media, 0);
+    }
+
+    /**
+     * @param                           $id
+     * @param  MediaUpdateScoreRequest  $request
+     *
+     * @return Media|mixed
+     * @throws InvalidArgumentException
+     */
+    public function updateScore($id, MediaUpdateScoreRequest $request)
+    {
+        $data = $request->only([
+            'status',
+        ]);
+
+        $dataModified = [
+            'status' => $request->integer('status'),
             'scores' => [
                 [
                     'type' => 'skin',
-                    'score' => request()->skin_score,
+                    'score' => $request->integer('skin_score'),
                 ],
                 [
                     'type' => 'awesomeness',
-                    'score' => request()->awesomeness_score,
+                    'score' => $request->integer('awesomeness_score'),
                 ],
                 [
                     'type' => 'beauty',
-                    'score' => request()->beauty_score,
+                    'score' => $request->integer('beauty_score'),
                 ],
             ],
         ];
