@@ -4,7 +4,7 @@
 @endphp
 
 <div class="card">
-    <form action="{{ route('core.admin.user.updateGeneral', ['user' => $user->_id]) }}" class="form-horizontal" method="post">
+    <form action="{{ route('core.admin.user.update.general', ['user' => $user->_id]) }}" class="form-horizontal" method="post">
         @csrf()
         @method('PUT')
         <div class="card-header">
@@ -23,14 +23,21 @@
         <div class="card-body">
             <div class="tab-pane active" id="user-info">
                 <div class="form-group row">
+                    <label for="banned_countries" class="col-sm-2 col-form-label">Banned Countries</label>
+                    <div class="col-sm-10 mt-2 pl-4">
+                        <p>--</p>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <label for="feature_tips" class="col-sm-2 col-form-label">Feature Tips</label>
-                    <div class="col-sm-10">
-                        <div class="custom-control custom-switch mt-2">
+                    <div class="col-sm-10 mt-2 pl-4">
+                        <div class="custom-control custom-switch">
                             <input type="checkbox" value="1" class="custom-control-input" name="features[tips]" id="feature_tips" {!! Arr::get($user->features, 'tips') ? 'checked' : '' !!}>
                             <label class="custom-control-label" for="feature_tips"></label>
                         </div>
                     </div>
                 </div>
+<!--
                 <div class="form-group row">
                     <label for="feature_demo" class="col-sm-2 col-form-label">Feature Demo User</label>
                     <div class="col-sm-10">
@@ -40,6 +47,7 @@
                         </div>
                     </div>
                 </div>
+-->
             </div>
         </div>
     </form>

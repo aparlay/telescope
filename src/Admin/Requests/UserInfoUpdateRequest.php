@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Helpers\Country;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -41,8 +42,8 @@ class UserInfoUpdateRequest extends FormRequest
             'verification_status' => [
                 'nullable', Rule::in(UserVerificationStatus::getAllValues()),
             ],
+            'birthday' => ['nullable', 'date'],
             'payout_country_alpha2' => ['nullable', Rule::in(array_keys(Country::getAlpha2AndNames()))],
-            'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
             'country_alpha2' => ['nullable', Rule::in(array_keys(Country::getAlpha2AndNames()))],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
             'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
@@ -52,6 +53,7 @@ class UserInfoUpdateRequest extends FormRequest
             'role' => ['nullable', Rule::in(Role::where('guard_name', 'admin')->pluck('name'))],
             'email_verified' => ['nullable', 'boolean'],
             'referral_id' => ['nullable', Rule::exists((new User())->getCollection(), '_id')],
+            'full_name' => ['required', 'max:255'],
         ];
     }
 
@@ -66,12 +68,5 @@ class UserInfoUpdateRequest extends FormRequest
         throw new HttpResponseException(
             redirect()->back()->withErrors($errors)
         );
-    }
-
-    public function prepareForValidation()
-    {
-        $this->merge([
-            'referral_id' => $this->referral_id ? new ObjectId($this->referral_id) : null,
-        ]);
     }
 }

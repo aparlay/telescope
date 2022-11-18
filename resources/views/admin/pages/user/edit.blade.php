@@ -61,6 +61,7 @@
                             @include('default_view::admin.pages.user.tabs.edit.profile', ['user' => $user])
                             @include('default_view::admin.pages.user.tabs.edit.user-info', ['user' => $user])
                             @include('default_view::admin.pages.user.tabs.edit.general', ['user' => $user])
+                            @include('default_view::admin.pages.user.tabs.edit.payouts', ['user' => $user])
                         </div>
                     </div>
 
