@@ -64,7 +64,7 @@ class MediaBatchWatched implements ShouldQueue
         }
 
         foreach (Media::query()->whereIn('_id', $mediaIds)->get() as $media) {
-            $mediaService->watched($media, $durations[(string)$media->_id]);
+            $mediaService->watched($media, $durations[(string) $media->_id]);
         }
     }
 
