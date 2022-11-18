@@ -160,11 +160,13 @@ class UserService extends AdminBaseService
             'gender',
             'interested_in',
             'type',
+            'birthday',
             'status',
             'visibility',
             'country_alpha2',
             'verification_status',
             'payout_country_alpha2',
+            'full_name',
         ]);
 
         $data['referral_id'] = $request->input('referral_id') ? new ObjectId($request->input('referral_id')) : null;

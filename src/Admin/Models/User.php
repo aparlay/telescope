@@ -29,11 +29,13 @@ class User extends UserBase implements Auditable
 
     protected $fillable = [
         'username',
+        'full_name',
         'email',
         'email_verified',
         'bio',
         'features',
         'gender',
+        'birthday',
         'interested_in',
         'type',
         'status',
