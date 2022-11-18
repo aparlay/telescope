@@ -46,7 +46,7 @@ class MediaBatchWatched implements ShouldQueue
      *
      * @throws Exception
      */
-    public function __construct(public array|ObjectId $medias, public string|null $userId = null)
+    public function __construct(public array $medias, public string|null $userId = null)
     {
         $this->onQueue('low');
     }
