@@ -726,9 +726,10 @@ class Media extends BaseModel
 
     public function updateVisits($duration = 0)
     {
+        $length = ($duration > ($this->length * 3)) ? $this->length : $duration;
         $visitCount = MediaVisit::query()->media($this->_id)->count();
         $multiplier = config('app.media.visit_multiplier', 1);
-        $this->length_watched += ((($duration > ($this->length * 3)) ? $this->length : $duration) * $multiplier);
+        $this->length_watched += ($length * $multiplier);
         $this->visit_count = $visitCount + $multiplier;
         $this->visits = MediaVisit::query()
             ->with('userObj')
@@ -753,6 +754,11 @@ class Media extends BaseModel
         );
         $this->save();
         $this->refresh();
+
+        $durationCacheKey = 'tracking:media:duration:'.date('Y:m:d');
+        $watchedCacheKey = 'tracking:media:watched:'.date('Y:m:d');
+        Cache::store('redis')->increment($durationCacheKey, $length);
+        Cache::store('redis')->increment($watchedCacheKey);
     }
 
     public function updateComments()

@@ -278,14 +278,20 @@ class MediaService
     public function anonymousWatched($media, int|float $duration = 60): void
     {
         if ($duration > 3) {
+            $length = ($duration > ($media->length * 3)) ? $media->length : $duration;
             $multiplier = config('app.media.visit_multiplier', 1);
-            $media->length_watched += ((($duration > ($media->length * 3)) ? $media->length : $duration) * $multiplier);
+            $media->length_watched += ($length * $multiplier);
             $media->visit_count += $multiplier;
             $media->count_fields_updated_at = array_merge(
                 $media->count_fields_updated_at,
                 ['visits' => DT::utcNow()]
             );
             $media->save();
+
+            $durationCacheKey = 'tracking:media:duration:'.date('Y:m:d');
+            $watchedCacheKey = 'tracking:media:watched:'.date('Y:m:d');
+            Cache::store('redis')->increment($durationCacheKey, $length);
+            Cache::store('redis')->increment($watchedCacheKey);
         }
     }
 
