@@ -18,6 +18,7 @@ use Aparlay\Core\Models\Enums\MediaStatus;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Str;
@@ -290,8 +291,8 @@ class MediaService
 
             $durationCacheKey = 'tracking:media:duration:'.date('Y:m:d');
             $watchedCacheKey = 'tracking:media:watched:'.date('Y:m:d');
-            Cache::store('redis')->increment($durationCacheKey, $length);
-            Cache::store('redis')->increment($watchedCacheKey);
+            Redis::incrbyfloat($durationCacheKey, $length);
+            Redis::incr($watchedCacheKey);
         }
     }
 
