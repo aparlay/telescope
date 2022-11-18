@@ -206,19 +206,19 @@ class UserService extends AdminBaseService
 
     public function updatePayouts(User $user, UserPayoutsUpdateRequest $request): User
     {
-/*
-        $data = [
-        ];
+        /*
+                $data = [
+                ];
 
-        $role = $request->input('role');
+                $role = $request->input('role');
 
-        if ($role && auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
-            $user->syncRoles($request->input('role'));
-        }
+                if ($role && auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
+                    $user->syncRoles($request->input('role'));
+                }
 
-        $user->fill($data);
-        $user->save();
-*/
+                $user->fill($data);
+                $user->save();
+        */
 
         return $user;
     }
