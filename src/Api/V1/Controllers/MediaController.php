@@ -134,7 +134,7 @@ class MediaController extends Controller
         $cacheKey = 'guest:media:watched:'.date('Y:m:d').$deviceId;
         $medias = $request->all();
         $mediaIds = [];
-        if (!empty($deviceId) && !empty($medias)) {
+        if (! empty($deviceId) && ! empty($medias)) {
             $medias = collect(array_slice($medias, 0, 500))->filter(function ($item, $key) use (&$mediaIds, $cacheKey) {
                 if (empty($item['media_id']) || empty($item['duration'])) {
                     return false;
@@ -149,6 +149,7 @@ class MediaController extends Controller
                 }
 
                 $mediaIds[] = $item['media_id'];
+
                 return true;
             })->toArray();
 
