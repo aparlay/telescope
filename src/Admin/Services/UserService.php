@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Admin\Requests\UserGeneralUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserPayoutsUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Constants\Roles;
@@ -151,23 +152,19 @@ class UserService extends AdminBaseService
 
     public function updateInfo(User $user, UserInfoUpdateRequest $request): User
     {
-        if ($request->hasFile('avatar')) {
-            $this->uploadAvatar($user);
-        }
-
         $data = $request->only([
             'email',
             'gender',
             'interested_in',
             'type',
+            'birthday',
             'status',
             'visibility',
             'country_alpha2',
             'verification_status',
             'payout_country_alpha2',
+            'full_name',
         ]);
-
-        $data['referral_id'] = $request->input('referral_id') ? new ObjectId($request->input('referral_id')) : null;
 
         $dataBooleans = [
             'email_verified' => $request->boolean('email_verified'),
@@ -188,14 +185,10 @@ class UserService extends AdminBaseService
 
     public function updateGeneral(User $user, UserGeneralUpdateRequest $request): User
     {
-        if ($request->hasFile('avatar')) {
-            $this->uploadAvatar($user);
-        }
-
         $data = [
             'features' => [
                 'tips' => $request->boolean('features.tips'),
-                'demo' => $request->boolean('features.demo'),
+//                'demo' => $request->boolean('features.demo'),
             ],
         ];
 
@@ -207,6 +200,25 @@ class UserService extends AdminBaseService
 
         $user->fill($data);
         $user->save();
+
+        return $user;
+    }
+
+    public function updatePayouts(User $user, UserPayoutsUpdateRequest $request): User
+    {
+        /*
+                $data = [
+                ];
+
+                $role = $request->input('role');
+
+                if ($role && auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
+                    $user->syncRoles($request->input('role'));
+                }
+
+                $user->fill($data);
+                $user->save();
+        */
 
         return $user;
     }

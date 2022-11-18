@@ -4,7 +4,7 @@
 @endphp
 
 <div class="card">
-    <form action="{{ route('core.admin.user.update.profile', ['user' => $user->_id]) }}" class="form-horizontal" method="post" id="profile-form">
+    <form action="{{ route('core.admin.user.update.payouts', ['user' => $user->_id]) }}" class="form-horizontal" method="post" id="profile-form">
         @csrf()
         @method('PUT')
         <div class="card-header">
@@ -23,21 +23,21 @@
         <div class="card-body">
             <div class="tab-pane active" id="user-info">
                 <div class="form-group row">
-                    <label for="username" class="col-sm-2 col-form-label">Username</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="username" name="username" value="{{ $user->username }}">
+                    <label for="bank_transfer" class="col-sm-2 col-form-label">Bank Transfer</label>
+                    <div class="col-sm-10 mt-2 pl-4">
+                        <p>--</p>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="bio" class="col-sm-2 col-form-label">Bio</label>
-                    <div class="col-sm-10">
-                        <textarea name="bio" id="bio" cols="30" rows="3" class="form-control">{{ $user->bio }}</textarea>
+                    <label for="crypto_transfer" class="col-sm-2 col-form-label">Crypto Transfer</label>
+                    <div class="col-sm-10 mt-2 pl-4">
+                        <p>--</p>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="promo_link" class="col-sm-2 col-form-label">Promo Link</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="promo_link" name="promo_link" value="{{ $user->promo_link }}">
+                    <label for="bank_transfer_select_payer" class="col-sm-2 col-form-label">Bank Transfer Select Payer</label>
+                    <div class="col-sm-10 mt-2 pl-4">
+                        <p>--</p>
                     </div>
                 </div>
             </div>
