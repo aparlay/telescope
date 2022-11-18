@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Requests\MediaUploadRequest;
 use Aparlay\Core\Admin\Requests\UserGeneralUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserPayoutsUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
 use Aparlay\Core\Admin\Services\MediaService;
@@ -118,7 +119,7 @@ class UserController extends Controller
     {
         $this->userService->updateProfile($user, $request);
 
-        return back()->with('success', 'User profile updated successfully.');
+        return back()->with('success', 'User updated successfully.');
     }
 
     /**
@@ -142,7 +143,19 @@ class UserController extends Controller
     {
         $this->userService->updateGeneral($user, $request);
 
-        return back()->with('success', 'User profile updated successfully.');
+        return back()->with('success', 'User updated successfully.');
+    }
+
+    /**
+     * @param User $user
+     * @param UserPayoutsUpdateRequest $request
+     * @return RedirectResponse
+     */
+    public function updatePayouts(User $user, UserPayoutsUpdateRequest $request): RedirectResponse
+    {
+        $this->userService->updatePayouts($user, $request);
+
+        return back()->with('success', 'User updated successfully.');
     }
 
     /**

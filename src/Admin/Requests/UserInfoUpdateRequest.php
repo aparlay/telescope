@@ -44,7 +44,6 @@ class UserInfoUpdateRequest extends FormRequest
             ],
             'birthday' => ['nullable', 'date'],
             'payout_country_alpha2' => ['nullable', Rule::in(array_keys(Country::getAlpha2AndNames()))],
-            'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
             'country_alpha2' => ['nullable', Rule::in(array_keys(Country::getAlpha2AndNames()))],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
             'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
