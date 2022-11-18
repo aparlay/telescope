@@ -676,7 +676,7 @@ class Media extends BaseModel
     {
         $config = config('app.media.score_weights.'.$category);
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
-        $promote = (int) Cache::store('redis')->get($cacheKey, 0);
+        $promote = (int) Redis::get($cacheKey);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
             $promote += match (true) {
                 ($this->skin_score >= 9) => 1,

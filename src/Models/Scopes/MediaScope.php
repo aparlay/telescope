@@ -156,7 +156,7 @@ trait MediaScope
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $mediaVisit), SORT_REGULAR));
         }
 
-        $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
+        $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
         $visitedIdsFromCache = Cache::store('redis')->get($cacheKey, []);
         if (! empty($visitedIdsFromCache)) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
@@ -177,7 +177,7 @@ trait MediaScope
             return $query;
         }
 
-        $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
+        $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
         $visitedIds = Cache::store('redis')->get($cacheKey, []);
         if (! empty($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));

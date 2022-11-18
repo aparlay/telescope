@@ -142,7 +142,7 @@ class MediaService
         $query = Media::public()->confirmed();
 
         $deviceId = request()->header('X-DEVICE-ID', '');
-        $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
+        $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
         $originalQuery = $query;
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 

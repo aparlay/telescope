@@ -12,6 +12,7 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -218,7 +219,7 @@ class MediaService extends AdminBaseService
     {
         $cacheKey = (new Media())->getCollection().':promote:'.$media->_id;
         if ($promote > 0) {
-            Cache::store('redis')->set($cacheKey, $promote, 86400);
+            Redis::set($cacheKey, $promote, 86400);
         }
 
         $media->recalculateSortScores();
