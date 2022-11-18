@@ -131,7 +131,7 @@ class MediaController extends Controller
     public function watched(Request $request): Response
     {
         $deviceId = $request->header('X-DEVICE-ID', '');
-        $cacheKey = 'guest:media:watched:'.date('Y:m:d').$deviceId;
+        $cacheKey = 'tracking:media:watched:'.date('Y:m:d:').$deviceId;
         $medias = $request->all();
         $mediaIds = [];
         if (!empty($deviceId) && !empty($medias)) {
