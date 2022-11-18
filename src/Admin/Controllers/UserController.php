@@ -160,18 +160,6 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @param UserGeneralUpdateRequest $request
-     * @return RedirectResponse
-     */
-    public function updateGeneral(User $user, UserGeneralUpdateRequest $request): RedirectResponse
-    {
-        $this->userService->updateGeneral($user, $request);
-
-        return back()->with('success', 'User profile updated successfully.');
-    }
-
-    /**
-     * @param User $user
      * @param UserStatusRequest $request
      * @return RedirectResponse
      */
