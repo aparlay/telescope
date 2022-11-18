@@ -21,6 +21,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -757,8 +758,8 @@ class Media extends BaseModel
 
         $durationCacheKey = 'tracking:media:duration:'.date('Y:m:d');
         $watchedCacheKey = 'tracking:media:watched:'.date('Y:m:d');
-        Cache::store('redis')->increment($durationCacheKey, $length);
-        Cache::store('redis')->increment($watchedCacheKey);
+        Redis::incrbyfloat($durationCacheKey, $length);
+        Redis::incr($watchedCacheKey);
     }
 
     public function updateComments()
