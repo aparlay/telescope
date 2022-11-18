@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])->name('core.api.v1.')->prefix('v1')->group(function () {
     /* Media Prefix Group */
     Route::prefix('media')->name('media.')->group(function () {
+        Route::put('/watched', [MediaController::class, 'watched'])->name('watched');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
         Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
 

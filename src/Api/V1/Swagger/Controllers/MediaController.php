@@ -84,6 +84,76 @@ use OpenApi\Annotations as OA;
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     ),
  * )
+ * @OA\PUT (
+ *     path="/v1/media/watched",
+ *     tags={"Core | Media"},
+ *     summary="list of watched media",
+ *     description="To store a list of watched media by current guest user you need to call this endpoint.",
+ *     operationId="mediaWatched",
+ *     security={{"bearerAuth": {}}},
+ *     @OA\Parameter(
+ *         name="X-DEVICE-ID",
+ *         in="header",
+ *         description="unique id of the device user is going to send this request it can be segment.com anonymousId.",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="string"
+ *         )
+ *     ),
+ *     @OA\Parameter(
+ *         name="medias",
+ *         in="query",
+ *         description="list of media id and duration",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="array",
+ *             @OA\Items(ref="#/components/schemas/MediaWatched")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=202,
+ *         description="successful operation",
+ *         @OA\Header(
+ *             header="X-Rate-Limit-Limit",
+ *             description="the maximum number of allowed requests during a period",
+ *             @OA\Schema(
+ *                 type="integer",
+ *                 format="int32"
+ *             )
+ *         ),
+ *         @OA\Header(
+ *             header="X-Rate-Limit-Remaining",
+ *             description="the remaining number of allowed requests within the current period",
+ *             @OA\Schema(
+ *                 type="integer",
+ *                 format="int32"
+ *             )
+ *         ),
+ *         @OA\Header(
+ *             header="X-Rate-Limit-Reset",
+ *             description="the number of seconds to wait before having maximum number of allowed requests again",
+ *             @OA\Schema(
+ *                 type="integer",
+ *                 format="int32"
+ *             )
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Unauthorized",
+ *         @OA\JsonContent(ref="#/components/schemas/401"),
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="DATA VALIDATION FAILED",
+ *         @OA\JsonContent(ref="#/components/schemas/422"),
+ *     ),
+ *     @OA\Response(
+ *         response=429,
+ *         description="TOO MANY REQUESTS",
+ *         @OA\JsonContent(ref="#/components/schemas/429"),
+ *     ),
+ * )
  *
  * @OA\Get (
  *     path="/v1/user/{user_id}/media",
