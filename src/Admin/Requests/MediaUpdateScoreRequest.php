@@ -33,17 +33,17 @@ class MediaUpdateScoreRequest extends FormRequest
             'skin_score' => [
                 'required',
                 'integer',
-                Rule::in(array_keys(Media::getSkinScores())),
+                Rule::in(array_values(Media::getSkinScores())),
             ],
             'awesomeness_score' => [
                 'required',
                 'integer',
-                Rule::in(array_keys(Media::getAwesomenessScores())),
+                Rule::in(array_values(Media::getAwesomenessScores())),
             ],
             'beauty_score' => [
                 'required',
                 'integer',
-                Rule::in(array_keys(Media::getBeautyScores())),
+                Rule::in(array_values(Media::getBeautyScores())),
             ],
             'status' => [
                 'required',
