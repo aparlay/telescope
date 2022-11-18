@@ -156,11 +156,11 @@ class MediaController extends Controller
             if (Redis::exists($cacheKey)) {
                 Redis::expireat($cacheKey, now()->addDay()->startOfDay()->getTimestamp());
             }
-            if (!empty($mediaIds)) {
+            if (! empty($mediaIds)) {
                 Redis::sAdd($cacheKey, ...$mediaIds);
             }
 
-            if (!empty($medias)) {
+            if (! empty($medias)) {
                 MediaBatchWatched::dispatch($medias);
             }
         }
