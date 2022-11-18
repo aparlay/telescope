@@ -17,6 +17,8 @@ use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
 use Google\Analytics\Data\V1beta\Metric;
 use Google\ApiCore\ApiException;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\UTCDateTime;
 
 final class AnalyticsCalculatorService
@@ -69,10 +71,12 @@ final class AnalyticsCalculatorService
             ],
             'user' => [
                 'registered' => User::date($startAt, $endAt)->count(),
-                'login' => 0,
+                'login' => User::date($startAt, $endAt, 'last_online_at')->count(),
                 'verified' => User::date($startAt, $endAt)->active()->count(),
-                'duration' => 0,
-                'watched' => 0,
+                'unique' => Redis::sCard('tracking:users:unique:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
+                'returned' => Redis::sCard('tracking:users:returned:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
+                'duration' => Cache::store('redis')->get('tracking:media:duration:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000), 0),
+                'watched' => Cache::store('redis')->get('tracking:media:watched:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000), 0),
             ],
             'email' => [
                 'sent' => Email::date($startAt, $endAt)->count(),
