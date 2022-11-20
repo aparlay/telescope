@@ -93,20 +93,20 @@ final class AnalyticsCalculatorService
             ],
             'google_analytics' => [
                 'active_users' => $this->reportActiveUsers(
-                    gmdate('Y-m-d', $startAt->toDateTime()->getTimestamp()),
-                    gmdate('Y-m-d', $endAt->toDateTime()->getTimestamp())
+                    date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
+                    date('Y-m-d', $endAt->toDateTime()->getTimestamp())
                 ),
                 'new_users' => $this->reportNewUsers(
-                    gmdate('Y-m-d', $startAt->toDateTime()->getTimestamp()),
-                    gmdate('Y-m-d', $endAt->toDateTime()->getTimestamp())
+                    date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
+                    date('Y-m-d', $endAt->toDateTime()->getTimestamp())
                 ),
                 'total_users' => $this->reportTotalUsers(
-                    gmdate('Y-m-d', $startAt->toDateTime()->getTimestamp()),
-                    gmdate('Y-m-d', $endAt->toDateTime()->getTimestamp())
+                    date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
+                    date('Y-m-d', $endAt->toDateTime()->getTimestamp())
                 ),
                 'engagements' => $this->reportUserEngagementDuration(
-                    gmdate('Y-m-d', $startAt->toDateTime()->getTimestamp()),
-                    gmdate('Y-m-d', $endAt->toDateTime()->getTimestamp())
+                    date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
+                    date('Y-m-d', $endAt->toDateTime()->getTimestamp())
                 ),
             ],
         ];
