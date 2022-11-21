@@ -17,10 +17,12 @@ class AnalyticsDailyCommand extends Command implements Isolatable
     {
         $daysBefore = $this->argument('day');
         $stringTime = ($daysBefore === '0') ? 'midnight' : '-'.$daysBefore.' days midnight';
-        $timestamp = strtotime($stringTime);
+        $endingTime = ($daysBefore === '0') ? 'tomorrow' : '-'.($daysBefore - 1).' days midnight';
+        $stringTimestamp = strtotime($stringTime);
+        $endingTimestamp = strtotime($endingTime);
 
-        $startUtc = DT::timestampToUtc($timestamp);
-        $endUtc = DT::timestampToUtc($timestamp + 86400);
+        $startUtc = DT::timestampToUtc($stringTimestamp);
+        $endUtc = DT::timestampToUtc($endingTimestamp - 1);
 
         $analytics = app()->make(AnalyticsCalculatorService::class);
         $analytics->calculateAnalytics($startUtc, $endUtc);

@@ -5,7 +5,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -13,6 +14,7 @@ return new class() extends Migration {
      */
     public function up()
     {
+
         $default = [
             'otp' => false,
             'show_adult_content' => false,
@@ -33,17 +35,7 @@ return new class() extends Migration {
             ],
         ];
         foreach (User::lazy() as $user) {
-            $setting = $user->setting;
-
-            if (empty($setting)) {
-                $setting = $default;
-            }
-
-            if (empty($user->setting['show_adult_content'])) {
-                $setting['show_adult_content'] = false;
-            }
-
-            $user->setting = $setting;
+            $user->setting = $default;
             $user->saveQuietly();
         }
     }
