@@ -262,9 +262,9 @@ class MediaService
             $this->anonymousWatched($media, $duration);
         }
 
-        if (!empty($uuid)) {
+        if (! empty($uuid)) {
             $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
-            Redis::sadd($cacheKey, (string)$media->_id);
+            Redis::sadd($cacheKey, (string) $media->_id);
         }
     }
 

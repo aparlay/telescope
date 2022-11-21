@@ -50,7 +50,8 @@ class MediaWatched implements ShouldQueue
         public array|ObjectId $mediaIds,
         public int|float $duration = 60,
         public string|null $userId = null,
-        public string|null $uuid = null)
+        public string|null $uuid = null
+    )
     {
         $this->onQueue('low');
     }
