@@ -20,7 +20,7 @@ use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Exception;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 class UserObserver extends BaseModelObserver
 {

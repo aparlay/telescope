@@ -8,7 +8,7 @@ use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 final class MediaQueryBuilder extends EloquentQueryBuilder
 {

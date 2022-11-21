@@ -28,7 +28,7 @@ use MathPHP\Statistics\Significance;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use Psr\SimpleCache\InvalidArgumentException;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Class Media.

@@ -15,7 +15,7 @@ use Aparlay\Core\Api\V1\Services\UploadService;
 use Aparlay\Core\Jobs\MediaBatchWatched;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 class MediaController extends Controller
 {

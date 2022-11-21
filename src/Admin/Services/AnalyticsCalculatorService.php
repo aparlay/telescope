@@ -18,7 +18,7 @@ use Google\Analytics\Data\V1beta\Dimension;
 use Google\Analytics\Data\V1beta\Metric;
 use Google\ApiCore\ApiException;
 use MongoDB\BSON\UTCDateTime;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 final class AnalyticsCalculatorService
 {
