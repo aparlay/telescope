@@ -17,11 +17,13 @@ return new class() extends Migration {
             'otp' => false,
             'show_adult_content' => false,
             'notifications' => [
-                'unread_message_alerts' => false,
-                'new_followers' => false,
-                'news_and_updates' => false,
-                'tips' => false,
-                'new_subscribers' => false,
+                'unread_message_alerts' => true,
+                'news_and_updates' => true,
+                'new_followers' => true,
+                'new_subscribers' => true,
+                'tips' => true,
+                'likes' => true,
+                'comments' => true,
             ],
             'payment' => [
                 'allow_unverified_cc' => false,
@@ -29,7 +31,6 @@ return new class() extends Migration {
                 'block_cc_payments' => false,
                 'unverified_cc_spent_amount' => 0,
             ],
-            'block_unverified_cc' => false,
         ];
         foreach (User::lazy() as $user) {
             $setting = $user->setting;
