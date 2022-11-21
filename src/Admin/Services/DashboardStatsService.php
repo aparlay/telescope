@@ -62,7 +62,7 @@ final class DashboardStatsService
 
                         'unique_users' => ['$sum' => '$user.unique'],
                         'returned_users' => ['$sum' => '$user.returned'],
-                        'active_users' => 0,
+                        'active_users' => ['$sum' => '$user.returned'],
                     ],
             ];
 
