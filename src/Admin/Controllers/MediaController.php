@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Requests\MediaUpdateRequest;
+use Aparlay\Core\Admin\Requests\MediaUpdateScoreRequest;
 use Aparlay\Core\Admin\Requests\MediaUploadRequest;
 use Aparlay\Core\Admin\Resources\MediaResource;
 use Aparlay\Core\Admin\Services\MediaService;
@@ -12,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Psr\SimpleCache\InvalidArgumentException;
 use Session;
 
 class MediaController extends Controller
@@ -107,13 +109,29 @@ class MediaController extends Controller
     }
 
     /**
-     * @param MediaUpdateRequest $request
-     * @param $id
+     * @param  Media               $media
+     * @param  MediaUpdateRequest  $request
+     *
      * @return RedirectResponse
+     * @throws InvalidArgumentException
      */
     public function update(Media $media, MediaUpdateRequest $request): RedirectResponse
     {
-        $this->mediaService->update($media->_id);
+        $this->mediaService->update($media->_id, $request);
+
+        return redirect()->back()->with(['success' => 'Media updated successfully']);
+    }
+
+    /**
+     * @param  Media                    $media
+     * @param  MediaUpdateScoreRequest  $request
+     *
+     * @return RedirectResponse
+     * @throws InvalidArgumentException
+     */
+    public function updateScore(Media $media, MediaUpdateScoreRequest $request): RedirectResponse
+    {
+        $this->mediaService->updateScore($media->_id, $request);
 
         return redirect()->back()->with(['success' => 'Media updated successfully']);
     }

@@ -68,6 +68,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('media/{media}', [MediaController::class, 'update'])
                 ->middleware(['permission:edit medias'])
                 ->name('update');
+            Route::post('media/{media}/score', [MediaController::class, 'updateScore'])
+                ->middleware(['permission:edit medias'])
+                ->name('updateScore');
             Route::post('reprocess/{media}', [MediaController::class, 'reprocess'])
                 ->middleware(['permission:edit medias'])
                 ->name('reprocess');

@@ -7,6 +7,7 @@ use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
 final class MediaQueryBuilder extends EloquentQueryBuilder
@@ -161,9 +162,10 @@ final class MediaQueryBuilder extends EloquentQueryBuilder
 
     /**
      * @param  ObjectId|string  $userId
-     * @param  string  $deviceId
+     * @param  string           $deviceId
+     *
      * @return self
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \RedisException
      */
     public function notVisitedByUserAndDevice(ObjectId | string $userId, string $deviceId): self
     {
@@ -172,8 +174,8 @@ final class MediaQueryBuilder extends EloquentQueryBuilder
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $mediaVisit), SORT_REGULAR));
         }
 
-        $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
-        $visitedIdsFromCache = Cache::store('redis')->get($cacheKey, []);
+        $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
+        $visitedIdsFromCache = Redis::get($cacheKey, []);
         if (! empty($visitedIdsFromCache)) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
         }
@@ -183,8 +185,9 @@ final class MediaQueryBuilder extends EloquentQueryBuilder
 
     /**
      * @param  string  $deviceId
+     *
      * @return self
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \RedisException
      */
     public function notVisitedByDevice(string $deviceId): self
     {
@@ -192,8 +195,8 @@ final class MediaQueryBuilder extends EloquentQueryBuilder
             return $this;
         }
 
-        $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
-        $visitedIds = Cache::store('redis')->get($cacheKey, []);
+        $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
+        $visitedIds = Redis::get($cacheKey, []);
         if (! empty($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));
             $this->whereNotIn('_id', $visitedIds);

@@ -30,16 +30,16 @@ class Media extends MediaBase implements Auditable
 
     public static function getSkinScores()
     {
-        return range(0, 10);
+        return range(1, 10);
     }
 
     public static function getAwesomenessScores()
     {
-        return range(0, 10);
+        return range(1, 10);
     }
 
     public static function getBeautyScores()
     {
-        return range(0, 10);
+        return range(1, 10);
     }
 }

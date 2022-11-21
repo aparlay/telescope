@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -256,6 +256,7 @@ class Media extends BaseModel
             'hashtags' => $this->hashtags,
             'score' => $this->sort_scores['default'],
             'country' => $this->userObj->country_alpha2 ?? '',
+            'is_adult' => $this->is_adult ?? false,
             'last_online_at' => 0,
             '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
         ];
@@ -674,7 +675,7 @@ class Media extends BaseModel
     {
         $config = config('app.media.score_weights.'.$category);
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
-        $promote = (int) Cache::store('redis')->get($cacheKey, 0);
+        $promote = (int) Redis::get($cacheKey);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
             $promote += match (true) {
                 ($this->skin_score >= 9) => 1,
@@ -725,9 +726,10 @@ class Media extends BaseModel
 
     public function updateVisits($duration = 0)
     {
+        $length = ($duration > ($this->length * 3)) ? $this->length : $duration;
         $visitCount = MediaVisit::query()->media($this->_id)->count();
         $multiplier = config('app.media.visit_multiplier', 1);
-        $this->length_watched += ((($duration > ($this->length * 3)) ? $this->length : $duration) * $multiplier);
+        $this->length_watched += ($length * $multiplier);
         $this->visit_count = $visitCount + $multiplier;
         $this->visits = MediaVisit::query()
             ->with('userObj')
@@ -752,6 +754,11 @@ class Media extends BaseModel
         );
         $this->save();
         $this->refresh();
+
+        $durationCacheKey = 'tracking:media:duration:'.date('Y:m:d');
+        $watchedCacheKey = 'tracking:media:watched:'.date('Y:m:d');
+        Redis::incrbyfloat($durationCacheKey, $length);
+        Redis::incr($watchedCacheKey);
     }
 
     public function updateComments()

@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
@@ -15,14 +15,12 @@ use Illuminate\Queue\SerializesModels;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
-class DeleteMediaLikes implements ShouldQueue
+class MediaBatchWatched implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
-    public string $mediaId;
 
     /**
      * The number of times the job may be attempted.
@@ -39,7 +37,7 @@ class DeleteMediaLikes implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [60, 300, 1800, 3600];
+    public $backoff = [5, 10, 15];
 
     /**
      * Create a new job instance.
@@ -48,10 +46,9 @@ class DeleteMediaLikes implements ShouldQueue
      *
      * @throws Exception
      */
-    public function __construct(string $mediaId)
+    public function __construct(public array $medias, public string|null $userId = null)
     {
         $this->onQueue('low');
-        $this->mediaId = $mediaId;
     }
 
     /**
@@ -59,12 +56,15 @@ class DeleteMediaLikes implements ShouldQueue
      */
     public function handle(): void
     {
-        MediaLike::query()->media($this->mediaId)->delete();
-        if (($media = Media::find(new ObjectId($this->mediaId))) !== null) {
-            $media->creatorObj->updateLikes();
+        $mediaService = app()->make(MediaService::class);
+        $durations = $mediaIds = [];
+        foreach ($this->medias as $item) {
+            $durations[$item['media_id']] = $item['duration'];
+            $mediaIds[] = new ObjectId($item['media_id']);
+        }
 
-            // Reset the Redis cache
-            MediaLike::cacheByUserId((string) $media->creator['_id'], true);
+        foreach (Media::query()->whereIn('_id', $mediaIds)->get() as $media) {
+            $mediaService->watched($media, $durations[(string) $media->_id]);
         }
     }
 
