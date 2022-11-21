@@ -7,8 +7,8 @@ use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
+use Redis;
 
 trait MediaScope
 {
@@ -143,11 +143,12 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder  $query
+     * @param  Builder          $query
      * @param  ObjectId|string  $userId
-     * @param  string  $deviceId
+     * @param  string           $deviceId
+     *
      * @return Builder
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \RedisException
      */
     public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId | string $userId, string $deviceId): Builder
     {
@@ -157,7 +158,7 @@ trait MediaScope
         }
 
         $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
-        $visitedIdsFromCache = Cache::store('redis')->get($cacheKey, []);
+        $visitedIdsFromCache = Redis::get($cacheKey, []);
         if (! empty($visitedIdsFromCache)) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
         }
@@ -167,9 +168,10 @@ trait MediaScope
 
     /**
      * @param  Builder  $query
-     * @param  string  $deviceId
+     * @param  string   $deviceId
+     *
      * @return Builder
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \RedisException
      */
     public function scopeNotVisitedByDevice(Builder $query, string $deviceId): Builder
     {
@@ -178,7 +180,7 @@ trait MediaScope
         }
 
         $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
-        $visitedIds = Cache::store('redis')->get($cacheKey, []);
+        $visitedIds = Redis::get($cacheKey, []);
         if (! empty($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));
             $query->whereNotIn('_id', $visitedIds);

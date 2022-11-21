@@ -7,7 +7,7 @@ use Aparlay\Core\Api\V1\Repositories\UserRepository;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Redis;
+use Redis;
 use Illuminate\Support\Str;
 
 class OnlineUserService

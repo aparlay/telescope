@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Microservices\ws;
 
-use Illuminate\Support\Facades\Redis;
+use Redis;
 
 class WsChannel
 {

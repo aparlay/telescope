@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
+use Redis;
 use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Jenssegers\Mongodb\Relations\BelongsTo;
