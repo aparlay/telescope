@@ -27,30 +27,19 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
+                <div class="col-12">
+                    <div class="card card-default p-2 ml-n2">
+                        <livewire:notes-table :userId="(string) $user->_id"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-2">
                     @include('default_view::admin.pages.user.tabs.edit.menu')
                 </div>
                 <div class="col-md-10 pl-4">
                     <div class="">
                         @include('default_view::admin.pages.user.tabs.edit.statistics')
-                    </div>
-
-                    <div class="card card-default collapsed-card">
-                        <div class="card-header">
-                            <h3 class="card-title text-uppercase">Notes</h3>
-                            <div class="card-tools">
-                                <button
-                                    type="button"
-                                    class="btn btn-tool"
-                                    data-card-widget="collapse"
-                                    data-expand-icon="fa-chevron-down"
-                                    data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            @include('default_view::admin.pages.user.tabs.notes', ['user' => $user])
-                        </div>
                     </div>
 
                     <div class="card card-default">

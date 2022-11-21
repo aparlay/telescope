@@ -17,7 +17,6 @@ use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
 use Google\Analytics\Data\V1beta\Metric;
 use Google\ApiCore\ApiException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\UTCDateTime;
 
@@ -38,6 +37,7 @@ final class AnalyticsCalculatorService
      *
      * @return array
      * @throws ApiException
+     * @throws \RedisException
      */
     public function calculateAnalytics(UTCDateTime $startAt, UTCDateTime $endAt, bool $saveResults = true): array
     {

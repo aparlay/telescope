@@ -143,11 +143,12 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder  $query
+     * @param  Builder          $query
      * @param  ObjectId|string  $userId
-     * @param  string  $deviceId
+     * @param  string           $deviceId
+     *
      * @return Builder
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \RedisException
      */
     public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId | string $userId, string $deviceId): Builder
     {
@@ -167,9 +168,10 @@ trait MediaScope
 
     /**
      * @param  Builder  $query
-     * @param  string  $deviceId
+     * @param  string   $deviceId
+     *
      * @return Builder
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \RedisException
      */
     public function scopeNotVisitedByDevice(Builder $query, string $deviceId): Builder
     {

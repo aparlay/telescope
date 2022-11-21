@@ -11,7 +11,6 @@ use Aparlay\Core\Api\V1\Repositories\MediaRepository;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Jobs\MediaWatched;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
@@ -136,6 +135,7 @@ class MediaService
     /**
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
+     * @throws \RedisException
      */
     public function getPublicFeeds(): LengthAwarePaginator
     {
