@@ -55,7 +55,7 @@ class ContactUs extends Notification
         $message .= PHP_EOL.'_*Message:*_ '.$this->message;
 
         return (new SlackMessage())
-            ->to(config('app.slack_payment_success'))
+            ->to(config('app.slack_contact_us'))
             ->content($message)
             ->success();
     }
