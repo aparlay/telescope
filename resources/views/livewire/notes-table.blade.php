@@ -1,14 +1,15 @@
 <div class="notes-table">
-    <div class="filters pb-3">
+    <h4>Notes</h4>
+
+    <div class="filters pb-2">
         <div class="row">
-            <div class="col-md-6 pt-4">
-                <span class="h4">Notes</span>
-                <button class="btn btn-md btn-success" type="button"
+            <div class="col-md-12">
+                <button class="btn btn-success" type="button"
                         wire:click="$emit('showModal', 'modals.user-notes-create-modal', '{{ $userId }}')">
                     Add New <i class="fas fa-plus fa-xs"></i>
                 </button>
             </div>
-
+<!--
             <div class="col-md-2">
                 <label for="">Start Date</label>
                 <x-date-picker
@@ -29,15 +30,17 @@
                 <label for="">Per Page</label>
                 <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
+-->
         </div>
     </div>
+
     <table class="table table-striped">
         <tbody>
         <tr>
             <th class="col-md-2">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'"/>
-                    <input class="form-control" type="text" wire:model="filter.creator_username"/>
+                    <!--<input class="form-control" type="text" wire:model="filter.creator_username"/>-->
                 </div>
             </th>
             <th class="col-md-6">
@@ -67,7 +70,6 @@
                     <label for="">Action</label>
                 </div>
             </th>
-            <th></th>
         </tr>
 
         @foreach($notes as $note)
