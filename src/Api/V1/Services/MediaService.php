@@ -147,8 +147,8 @@ class MediaService
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
         $sortCategory = auth()->guest() ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
-        if (!auth()->guest() && request()->integer('page') === 0) {
-            $this->loadUserVisitedVideos((string)auth()->user()->_id, $uuId);
+        if (! auth()->guest() && request()->integer('page') === 0) {
+            $this->loadUserVisitedVideos((string) auth()->user()->_id, $uuId);
         }
 
         $data = $query->medias($this->notVisitedVideoIds($uuId))
@@ -166,7 +166,7 @@ class MediaService
 
         $visited = [];
         foreach ($data->items() as $model) {
-            $visited[] = (string)$model->_id;
+            $visited[] = (string) $model->_id;
         }
         $this->cacheVisitedVideoByDeviceId($visited, $uuId);
 
@@ -374,7 +374,7 @@ class MediaService
             ->merge($blockedMediaIds)
             ->flatten()
             ->map(function ($item, $key) {
-                return (string)$item;
+                return (string) $item;
             })
             ->toArray();
 
@@ -393,7 +393,7 @@ class MediaService
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuId;
         $mediaIdsCacheKey = (new Media())->getCollection().':ids';
 
-        if (!Redis::exists($mediaIdsCacheKey)) {
+        if (! Redis::exists($mediaIdsCacheKey)) {
             $this->cacheAllVideos();
         }
 
@@ -407,7 +407,7 @@ class MediaService
     {
         $mediaIds = [];
         foreach (Media::public()->confirmed()->select('_id')->get()->pluck('_id') as $media) {
-            $mediaIds[] = (string)$media;
+            $mediaIds[] = (string) $media;
         }
 
         $cacheKey = (new Media())->getCollection().':ids';
