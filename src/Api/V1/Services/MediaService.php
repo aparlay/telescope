@@ -16,7 +16,6 @@ use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
@@ -141,23 +140,23 @@ class MediaService
     {
         $query = Media::public()->confirmed();
 
-        $uuId = request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', ''));
+        $uuid = request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', ''));
 
         $originalQuery = $query;
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
         $sortCategory = auth()->guest() ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
         if (! auth()->guest() && request()->integer('page') === 0) {
-            $this->loadUserVisitedVideos((string) auth()->user()->_id, $uuId);
+            $this->loadUserVisitedVideos((string) auth()->user()->_id, $uuid);
         }
 
-        $data = $query->medias($this->notVisitedVideoIds($uuId))
+        $data = $query->medias($this->notVisitedVideoIds($uuid))
             ->sort($sortCategory)
             ->paginate(5)
             ->withQueryString();
 
         if ($data->isEmpty() || $data->total() <= 5) {
-            $this->flushVisitedVideos($uuId);
+            $this->flushVisitedVideos($uuid);
 
             if ($data->isEmpty()) {
                 $data = $originalData;
@@ -168,7 +167,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = (string) $model->_id;
         }
-        $this->cacheVisitedVideoByDeviceId($visited, $uuId);
+        $this->cacheVisitedVideoByDeviceId($visited, $uuid);
 
         return $data;
     }
@@ -250,25 +249,30 @@ class MediaService
      * @param  Media          $media
      * @param  int|float      $duration
      * @param  ObjectId|null  $userId
+     * @param  string|null    $uuid
      *
      * @return void
      * @throws Exception
      */
-    public function watched($media, int|float $duration = 60, ObjectId|null $userId = null): void
+    public function watched($media, int|float $duration = 60, ObjectId|null $userId = null, string|null $uuid = null): void
     {
         if ($userId !== null) {
             $this->userWatched($userId, $media, $duration);
         } else {
             $this->anonymousWatched($media, $duration);
         }
+
+        if (!empty($uuid)) {
+            $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
+            Redis::sadd($cacheKey, (string)$media->_id);
+        }
     }
 
     /**
-     * @param  Media     $media
-     * @param  int|float $duration
+     * @param  Media        $media
+     * @param  int|float    $duration
      *
      * @return void
-     * @throws Exception
      */
     public function anonymousWatched($media, int|float $duration = 60): void
     {
@@ -291,9 +295,10 @@ class MediaService
     }
 
     /**
-     * @param  ObjectId  $userId
-     * @param  Media     $media
-     * @param  int|float $duration
+     * @param  ObjectId     $userId
+     * @param  Media        $media
+     * @param  string|null  $uuid
+     * @param  int|float    $duration
      *
      * @return void
      * @throws Exception
@@ -319,44 +324,44 @@ class MediaService
     }
 
     /**
-     * @param  string  $deviceId
+     * @param  string  $uuid
      *
      * @return void
      * @throws InvalidArgumentExceptionAlias
      */
-    public function flushVisitedVideos(string $deviceId): void
+    public function flushVisitedVideos(string $uuid): void
     {
         if (! auth()->guest()) {
             MediaVisit::query()->user(auth()->user()->_id)->delete();
         }
-        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$deviceId;
+        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         Redis::unlink($cacheKey);
     }
 
     /**
      * @param  array   $mediaIds
-     * @param  string  $deviceId
+     * @param  string  $uuid
      *
      * @return void
      */
-    public function cacheVisitedVideoByDeviceId(array $mediaIds, string $deviceId): void
+    public function cacheVisitedVideoByDeviceId(array $mediaIds, string $uuid): void
     {
         if (empty($mediaIds)) {
             return;
         }
 
-        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$deviceId;
+        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         Redis::sadd($cacheKey, ...$mediaIds);
         Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
     }
 
     /**
      * @param  string  $userId
-     * @param  string  $uuId
+     * @param  string  $uuid
      *
      * @return void
      */
-    public function loadUserVisitedVideos(string $userId, string $uuId): void
+    public function loadUserVisitedVideos(string $userId, string $uuid): void
     {
         // blocked video considered as visited
         $blockedMediaIds = Media::public()
@@ -378,19 +383,19 @@ class MediaService
             })
             ->toArray();
 
-        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuId;
+        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         Redis::sadd($cacheKey, ...$mediaIds);
         Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
     }
 
     /**
-     * @param  string  $uuId
+     * @param  string  $uuid
      *
      * @return array
      */
-    public function notVisitedVideoIds(string $uuId): array
+    public function notVisitedVideoIds(string $uuid): array
     {
-        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuId;
+        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         $mediaIdsCacheKey = (new Media())->getCollection().':ids';
 
         if (! Redis::exists($mediaIdsCacheKey)) {
