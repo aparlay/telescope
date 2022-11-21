@@ -7,8 +7,8 @@ use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use MongoDB\BSON\ObjectId;
 use Illuminate\Support\Facades\Redis;
+use MongoDB\BSON\ObjectId;
 
 trait MediaScope
 {
