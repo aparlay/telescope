@@ -49,7 +49,7 @@ final class Stats extends BaseDashboardComponent
         return [
             [
                 'label' => 'Unique Visitors',
-                'value' => Arr::get($results, 'unique_users') + Arr::get($results, 'returned_users'),
+                'value' => Arr::get($results, 'returned_users'),
             ],
             [
                 'label' => 'Active Users',
