@@ -4,118 +4,80 @@
 
 @endphp
 
-<div class="medias-table">
-    <div class="filters pb-3">
+<div class="medias-table user-profile-table mt-2">
+    <div @class(['filters mb-2', 'd-none' => $hiddenFields['creator_username']])>
         <div class="row">
-            <div class="col-md-6 pt-4">
-                <h4>Medias</h4>
-            </div>
-
-            <div class="col-md-2">
-                <label for="">Start Date</label>
-                <x-date-picker
-                        wire:model.lazy="filter.created_at.start"
-                        autocomplete="off"
-                        placeholder="Start"
-                />
-            </div>
-            <div class="col-md-2">
-                <label for="">End Date</label>
-                <x-date-picker
-                        wire:model.lazy="filter.created_at.end"
-                        autocomplete="off"
-                        placeholder="End"
-                />
-            </div>
-            <div class="col-md-2 ml-auto">
-                <label for="">Per Page</label>
-                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
+            <div class="col-md-12">
+                <input class="form-control" type="text" placeholder="filter creator" wire:model="filter.creator_username"/>
             </div>
         </div>
     </div>
 
     <table class="table table-striped">
         <tbody>
-        <tr>
-            <th class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'file'" :fieldLabel="'Cover'" />
-                </div>
-                </th>
-            <td @class(['col-md-2', 'd-none' => $hiddenFields['creator_username']])>
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'creator.username'" :fieldLabel="'Creator'" />
-                    <input class="form-control" type="text" wire:model="filter.creator_username"/>
-                </div>
-            </td>
-
-            <td class="col-md-1">
-                <div>
-                <x-sortable-column-header :sort="$sort" :fieldName="'status'" :fieldLabel="'Status'" />
-                    <select class="form-control" wire:model="filter.status">
-                        <option value="">Any</option>
-                        @foreach(Media::getStatuses() as $value => $label)
-                            <option value="{{$value}}">{{$label}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </td>
-            <td class="col-md-1">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'like_count'" :fieldLabel="'Likes'" />
-                    <input class="form-control" type="text" wire:model="filter.like_count"/>
-                </div>
-            </td>
-            <td class="col-md-1">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'visit_count'" :fieldLabel="'Visits'" />
-                    <input class="form-control" type="text" wire:model="filter.visit_count"/>
-                </div>
-            </td>
-            <td class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
-                </div>
-            </td>
-            <td class="col-md-1">
-                <div>
-                    <label for="">Details</label>
-                </div>
-            </td>
-
-        </tr>
-
-        @foreach($medias as $media)
             <tr>
-                <td>
-                    <x-media-cover :media="$media"/>
-                </td>
-                <td @class(['col-md-2', 'd-none' => $hiddenFields['creator_username']])>
-                    <x-username-avatar :user="$media->creatorObj"/>
-                </td>
-                <td>
-                    <span class="badge bg-{{ MediaStatus::from($media->status)->badgeColor() }}">
-                        {{ MediaStatus::from($media->status)->label() }}
-                    </span>
-                </td>
-                <td>
-                     {{$media->like_count}}
-                </td>
-                <td>
-                     {{$media->visit_count}}
-                </td>
-                <td>
-                     {{$media->created_at}}
-                </td>
-                <td>
-                    <div class="col-md-6">
-                        <div>
-                            <a class="btn btn-primary btn-sm" href="{{$media->admin_url}}" title="View"><i class="fas fa-eye"></i></a>
-                        </div>
-                    </div>
-                </td>
+                <th class="col-md-1">
+                    <x-sortable-column-header :sort="$sort" :fieldName="'file'" :fieldLabel="'Cover'" />
+                </th>
+
+                <th @class(['col-md-3', 'd-none' => $hiddenFields['creator_username']])>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'creator.username'" :fieldLabel="'Creator'" />
+                </th>
+
+                <th class="col-md-2">
+                    <x-sortable-column-header :sort="$sort" :fieldName="'status'" :fieldLabel="'Status'" />
+                </th>
+
+                <th class="col-md-1">
+                    <x-sortable-column-header :sort="$sort" :fieldName="'like_count'" :fieldLabel="'Likes'" />
+                </th>
+
+                <th class="col-md-1">
+                    <x-sortable-column-header :sort="$sort" :fieldName="'visit_count'" :fieldLabel="'Visits'" />
+                </th>
+
+                <th class="col-md-2">
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
+                </th>
+
+                <th class="col-md-2 text-right">
+                    <label for="">Actions</label>
+                </th>
             </tr>
-        @endforeach
+
+            @foreach($medias as $media)
+                <tr>
+                    <td>
+                        <x-media-cover :media="$media"/>
+                    </td>
+
+                    <td @class(['col-md-2', 'd-none' => $hiddenFields['creator_username']])>
+                        <x-username-avatar :user="$media->creatorObj"/>
+                    </td>
+
+                    <td class="col-md-1">
+                        <span class="badge bg-{{ MediaStatus::from($media->status)->badgeColor() }}">
+                            {{ MediaStatus::from($media->status)->label() }}
+                        </span>
+                    </td>
+
+                    <td class="col-md-1">
+                        {{$media->like_count}}
+                    </td>
+
+                    <td class="col-md-1">
+                        {{$media->visit_count}}
+                    </td>
+
+                    <td class="col-md-1">
+                        {{$media->created_at}}
+                    </td>
+
+                    <td class="col-md-1 text-right">
+                        <a class="btn btn-primary btn-sm" href="{{$media->admin_url}}" title="View"><i class="fas fa-eye"></i></a>
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
     {{ $medias->links() }}
