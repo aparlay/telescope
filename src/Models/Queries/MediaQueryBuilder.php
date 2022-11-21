@@ -9,6 +9,7 @@ use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
+use Psr\SimpleCache\InvalidArgumentException;
 
 final class MediaQueryBuilder extends EloquentQueryBuilder
 {
@@ -175,7 +176,7 @@ final class MediaQueryBuilder extends EloquentQueryBuilder
         }
 
         $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
-        $visitedIdsFromCache = Redis::get($cacheKey, []);
+        $visitedIdsFromCache = Cache::store('redis')->get($cacheKey, []);
         if (! empty($visitedIdsFromCache)) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
         }
@@ -187,7 +188,7 @@ final class MediaQueryBuilder extends EloquentQueryBuilder
      * @param  string  $deviceId
      *
      * @return self
-     * @throws \RedisException
+     * @throws InvalidArgumentException
      */
     public function notVisitedByDevice(string $deviceId): self
     {
@@ -196,7 +197,7 @@ final class MediaQueryBuilder extends EloquentQueryBuilder
         }
 
         $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
-        $visitedIds = Redis::get($cacheKey, []);
+        $visitedIds = Cache::store('redis')->get($cacheKey, []);
         if (! empty($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));
             $this->whereNotIn('_id', $visitedIds);
