@@ -133,21 +133,23 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
     /* Without Middleware Endpoints */
     Route::get('/version/{os}/{version}', [VersionController::class, 'show'])
         ->name('version.show')
-        ->withoutMiddleware(['device-id']);
+        ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
     Route::get('/cache', [SiteController::class, 'cache'])
         ->name('site.cache')
-        ->withoutMiddleware(['device-id']);
+        ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
     Route::get('/health', [SiteController::class, 'health'])
         ->name('site.health')
-        ->withoutMiddleware(['device-id']);
+        ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
 
     Route::post('/contact-us', [ContactUsController::class, 'send'])
         ->name('contactus')
-        ->withoutMiddleware(['device-id']);
+        ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
 });
 
 Route::get('/metrics', [SiteController::class, 'metrics'])
     ->name('site.metrics')
-    ->withoutMiddleware(['device-id']);
+    ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
 
-Route::post('/v1/webhook/pusher', [SocketWebhookController::class, 'pusher'])->name('webhook-pusher');
+Route::post('/v1/webhook/pusher', [SocketWebhookController::class, 'pusher'])
+    ->name('webhook-pusher')
+    ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
