@@ -22,8 +22,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
+use Redis;
 use Throwable;
 
 class ProcessMedia implements ShouldQueue

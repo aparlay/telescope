@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -29,6 +28,7 @@ use MathPHP\Statistics\Significance;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use Psr\SimpleCache\InvalidArgumentException;
+use Redis;
 
 /**
  * Class Media.
@@ -675,7 +675,7 @@ class Media extends BaseModel
     {
         $config = config('app.media.score_weights.'.$category);
         $cacheKey = $this->getCollection().':promote:'.$this->_id;
-        $promote = (int) Cache::store('redis')->get($cacheKey, 0);
+        $promote = (int) Redis::get($cacheKey);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
             $promote += match (true) {
                 ($this->skin_score >= 9) => 1,
@@ -757,8 +757,8 @@ class Media extends BaseModel
 
         $durationCacheKey = 'tracking:media:duration:'.date('Y:m:d');
         $watchedCacheKey = 'tracking:media:watched:'.date('Y:m:d');
-        Cache::store('redis')->increment($durationCacheKey, $length);
-        Cache::store('redis')->increment($watchedCacheKey);
+        Redis::incrbyfloat($durationCacheKey, $length);
+        Redis::incr($watchedCacheKey);
     }
 
     public function updateComments()

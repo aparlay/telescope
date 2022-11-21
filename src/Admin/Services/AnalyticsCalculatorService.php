@@ -17,9 +17,8 @@ use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
 use Google\Analytics\Data\V1beta\Metric;
 use Google\ApiCore\ApiException;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\UTCDateTime;
+use Redis;
 
 final class AnalyticsCalculatorService
 {
@@ -38,6 +37,7 @@ final class AnalyticsCalculatorService
      *
      * @return array
      * @throws ApiException
+     * @throws \RedisException
      */
     public function calculateAnalytics(UTCDateTime $startAt, UTCDateTime $endAt, bool $saveResults = true): array
     {
@@ -75,8 +75,8 @@ final class AnalyticsCalculatorService
                 'verified' => User::date($startAt, $endAt)->active()->count(),
                 'unique' => Redis::sCard('tracking:users:unique:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
                 'returned' => Redis::sCard('tracking:users:returned:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
-                'duration' => Cache::store('redis')->get('tracking:media:duration:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000), 0),
-                'watched' => Cache::store('redis')->get('tracking:media:watched:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000), 0),
+                'duration' => (int) Redis::get('tracking:media:duration:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
+                'watched' => (int) Redis::get('tracking:media:watched:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000), 0),
             ],
             'email' => [
                 'sent' => Email::date($startAt, $endAt)->count(),

@@ -11,15 +11,14 @@ use Aparlay\Core\Api\V1\Repositories\MediaRepository;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Jobs\MediaWatched;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
+use Redis;
 use Str;
 
 class MediaService
@@ -135,13 +134,14 @@ class MediaService
     /**
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
+     * @throws \RedisException
      */
     public function getPublicFeeds(): LengthAwarePaginator
     {
         $query = Media::public()->confirmed();
 
         $deviceId = request()->header('X-DEVICE-ID', '');
-        $cacheKey = (new MediaVisit())->getCollection().':'.$deviceId;
+        $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
         $originalQuery = $query;
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
@@ -162,18 +162,18 @@ class MediaService
             if (! auth()->guest()) {
                 MediaVisit::query()->user(auth()->user()->_id)->delete();
             }
-            Cache::store('redis')->delete($cacheKey);
+            Redis::unlink($cacheKey);
 
             if ($data->isEmpty()) {
                 $data = $originalData;
             }
         }
 
-        $visited = Cache::store('redis')->get($cacheKey, []);
+        $visited = Redis::get($cacheKey, []);
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
+        Redis::set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
         return $data;
     }
@@ -290,8 +290,8 @@ class MediaService
 
             $durationCacheKey = 'tracking:media:duration:'.date('Y:m:d');
             $watchedCacheKey = 'tracking:media:watched:'.date('Y:m:d');
-            Cache::store('redis')->increment($durationCacheKey, $length);
-            Cache::store('redis')->increment($watchedCacheKey);
+            Redis::incrbyfloat($durationCacheKey, $length);
+            Redis::incr($watchedCacheKey);
         }
     }
 

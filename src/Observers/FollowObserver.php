@@ -5,9 +5,7 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
-use Aparlay\Core\Notifications\MediaLikedNotification;
 use Aparlay\Core\Notifications\UserFollowedNotification;
-use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
 class FollowObserver extends BaseModelObserver

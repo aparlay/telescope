@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
@@ -13,7 +12,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
