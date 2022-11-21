@@ -135,23 +135,24 @@ class MediaController extends Controller
         $medias = $request->all();
         $mediaIds = [];
         if (! empty($deviceId) && ! empty($medias)) {
-            $medias = collect(array_slice($medias, 0, 500))->filter(function ($item, $key) use (&$mediaIds, $cacheKey) {
-                if (empty($item['media_id']) || empty($item['duration'])) {
-                    return false;
-                }
+            $medias = collect(array_slice($medias, 0, 500))
+                ->filter(function ($item, $key) use (&$mediaIds, $cacheKey) {
+                    if (empty($item['media_id']) || empty($item['duration'])) {
+                        return false;
+                    }
 
-                if (Redis::sismember($cacheKey, $item['media_id'])) {
-                    return false;
-                }
+                    if (Redis::sismember($cacheKey, $item['media_id'])) {
+                        return false;
+                    }
 
-                if (in_array($item['media_id'], $mediaIds)) {
-                    return false;
-                }
+                    if (in_array($item['media_id'], $mediaIds)) {
+                        return false;
+                    }
 
-                $mediaIds[] = $item['media_id'];
+                    $mediaIds[] = $item['media_id'];
 
-                return true;
-            })->toArray();
+                    return true;
+                })->toArray();
 
             if (Redis::exists($cacheKey)) {
                 Redis::expireat($cacheKey, now()->addDay()->startOfDay()->getTimestamp());
