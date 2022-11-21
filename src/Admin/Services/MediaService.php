@@ -13,7 +13,7 @@ use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 class MediaService extends AdminBaseService
 {

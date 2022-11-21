@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
 use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Class MediaVisit.

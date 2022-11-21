@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use MongoDB\BSON\ObjectId;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Class Follow.

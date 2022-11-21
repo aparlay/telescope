@@ -18,7 +18,7 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 use Str;
 
 class MediaService

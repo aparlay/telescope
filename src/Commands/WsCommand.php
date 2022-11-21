@@ -20,7 +20,7 @@ use PHPOpenSourceSaver\JWTAuth\Claims\Subject;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use PHPOpenSourceSaver\JWTAuth\Payload;
 use PHPOpenSourceSaver\JWTAuth\Validators\PayloadValidator;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 use Swoole\Coroutine\Http\Client;
 use Swoole\Runtime;
 use Swoole\WebSocket\Frame;

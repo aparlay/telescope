@@ -23,7 +23,7 @@ use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 use Throwable;
 
 class ProcessMedia implements ShouldQueue

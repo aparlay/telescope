@@ -8,7 +8,7 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Str;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 class OnlineUserService
 {
