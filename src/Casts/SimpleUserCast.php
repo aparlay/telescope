@@ -7,7 +7,6 @@ use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 use Jenssegers\Mongodb\Eloquent\Model;
 use MongoDB\BSON\ObjectId;
 

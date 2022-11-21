@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
@@ -93,6 +92,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder confirmed()
  * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
  * @method static |self|Builder notBlockedFor(ObjectId|string $user)
+ * @method static |self|Builder blockedFor(ObjectId|string $user)
+ * @method static |self|Builder medias(ObjectId[] $mediaIds)
  * @method static |self|Builder notVisitedByDevice(string $deviceId)
  * @method static |self|Builder hashtag(string $tag)
  * @method static |self|Builder sort(string $category)

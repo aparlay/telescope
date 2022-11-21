@@ -7,7 +7,9 @@ use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
+use Psr\SimpleCache\InvalidArgumentException;
 
 final class MediaQueryBuilder extends EloquentQueryBuilder
 {
@@ -161,9 +163,10 @@ final class MediaQueryBuilder extends EloquentQueryBuilder
 
     /**
      * @param  ObjectId|string  $userId
-     * @param  string  $deviceId
+     * @param  string           $deviceId
+     *
      * @return self
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function notVisitedByUserAndDevice(ObjectId | string $userId, string $deviceId): self
     {
@@ -183,8 +186,9 @@ final class MediaQueryBuilder extends EloquentQueryBuilder
 
     /**
      * @param  string  $deviceId
+     *
      * @return self
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function notVisitedByDevice(string $deviceId): self
     {
