@@ -7,7 +7,7 @@ use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
 
 trait MediaScope
@@ -158,7 +158,7 @@ trait MediaScope
         }
 
         $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
-        $visitedIdsFromCache = Redis::get($cacheKey, []);
+        $visitedIdsFromCache = Cache::store('redis')->get($cacheKey, []);
         if (! empty($visitedIdsFromCache)) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
         }
@@ -180,7 +180,7 @@ trait MediaScope
         }
 
         $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
-        $visitedIds = Redis::get($cacheKey, []);
+        $visitedIds = Cache::store('redis')->get($cacheKey, []);
         if (! empty($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));
             $query->whereNotIn('_id', $visitedIds);

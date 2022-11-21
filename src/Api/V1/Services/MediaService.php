@@ -16,6 +16,7 @@ use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
@@ -162,18 +163,18 @@ class MediaService
             if (! auth()->guest()) {
                 MediaVisit::query()->user(auth()->user()->_id)->delete();
             }
-            Redis::unlink($cacheKey);
+            Cache::store('redis')->delete($cacheKey);
 
             if ($data->isEmpty()) {
                 $data = $originalData;
             }
         }
 
-        $visited = Redis::get($cacheKey, []);
+        $visited = Cache::store('redis')->get($cacheKey, []);
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        Redis::set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
+        Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
 
         return $data;
     }
