@@ -166,7 +166,7 @@ final class MediaQueryBuilder extends EloquentQueryBuilder
      * @param  string           $deviceId
      *
      * @return self
-     * @throws \RedisException
+     * @throws InvalidArgumentException
      */
     public function notVisitedByUserAndDevice(ObjectId | string $userId, string $deviceId): self
     {
