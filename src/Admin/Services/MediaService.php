@@ -11,9 +11,9 @@ use Aparlay\Core\Admin\Requests\MediaUpdateScoreRequest;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException;
-use Illuminate\Support\Facades\Redis;
 
 class MediaService extends AdminBaseService
 {
