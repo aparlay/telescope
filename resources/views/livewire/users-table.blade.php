@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <table class="table table-striped">
+    <table class="table table-striped table-responsive">
         <thead>
             <tr class="d-flex">
                 <th class="col-md-2">
@@ -97,29 +97,29 @@
         <tbody>
 
         @foreach($users as $user)
-            <tr>
-                <td>
+            <tr class="d-flex">
+                <td class="col-md-2">
                     <x-username-avatar :user="$user"/>
                 </td>
-                <td>
+                <td class="col-md-2">
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
                 </td>
-                <td>
+                <td class="col-md-2">
                     <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}"
                          class="mr-1 align-bottom">{{ $user->country_label }}
                 </td>
-                <td>
+                <td class="col-md-1">
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
                         {{ UserGender::from($user->gender)->label() }}
                     </span>
                 </td>
-                <td>
+                <td class="col-md-1">
                     <span class="badge bg-{{ UserStatus::from($user->status)->badgeColor() }}">
                         {{ UserStatus::from($user->status)->label() }}
                     </span>
                 </td>
 
-                <td>
+                <td class="col-md-1">
                     <div class="row">
                         <div class="col-md-6">
                             @if ($user->verification_status)
@@ -134,11 +134,11 @@
                     </div>
                 </td>
 
-                <td>
+                <td class="col-md-2">
                     {{ $user->created_at }}
                 </td>
 
-                <td>
+                <td class="col-md-1">
                     <div class="col-md-6">
                         <div>
                             <a class="" href="{{$user->admin_url}}">

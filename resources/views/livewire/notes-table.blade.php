@@ -30,20 +30,26 @@
         </thead>
         <tbody>
 
-            @foreach($notes as $note)
-                <tr class="d-flex">
-                    <td>
-                        <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
-                            {{ $note->creator['username'] }}
-                        </a>
-                    </td>
-                    <td>
-                        {!! $note->message !!}
-                    </td>
-                    <td>
-                        {{ $note->created_at }}
-                    </td>
-                    <td>
+        @foreach($notes as $note)
+            <tr class="d-flex">
+                <td class="col-md-2">
+                    <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
+                        {{ $note->creator['username'] }}
+                    </a>
+                </td>
+                <td class="col-md-6">
+                    {!! $note->message !!}
+                </td>
+                <td class="col-md-1">
+                    <span class="badge bg-{{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->badgeColor() }}">
+                        {{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->label() }}
+                    </span>
+                </td>
+                <td class="col-md-2">
+                    {{ $note->created_at }}
+                </td>
+                <td class="col-md-1">
+                    <div>
                         <a
                             class=""
                             wire:key="delete_note_{{ $note->_id }}}"
