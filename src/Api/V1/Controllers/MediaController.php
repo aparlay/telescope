@@ -130,17 +130,18 @@ class MediaController extends Controller
      */
     public function watched(Request $request): Response
     {
-        $deviceId = $request->header('X-DEVICE-ID', '');
-        $cacheKey = 'tracking:media:watched:'.date('Y:m:d:').$deviceId;
+        $uuid = $request->cookie('__Secure_uuid', $request->header('X-DEVICE-ID', ''));
+        $cacheKey = 'tracking:media:watched:'.date('Y:m:d:').$uuid;
         $medias = $request->all();
         $mediaIds = [];
-        if (! empty($deviceId) && ! empty($medias)) {
+        if (! empty($uuid) && ! empty($medias)) {
             $medias = collect(array_slice($medias, 0, 500))
                 ->filter(function ($item, $key) use (&$mediaIds, $cacheKey) {
                     if (empty($item['media_id']) || empty($item['duration'])) {
                         return false;
                     }
 
+                    // to prevent some user what a video 1k times in a day and make it unreliable
                     if (Redis::sismember($cacheKey, $item['media_id'])) {
                         return false;
                     }
@@ -161,9 +162,7 @@ class MediaController extends Controller
                 Redis::sAdd($cacheKey, ...$mediaIds);
             }
 
-            if (! empty($medias)) {
-                MediaBatchWatched::dispatch($medias);
-            }
+            MediaBatchWatched::dispatch($medias, $uuid);
         }
 
         return response('', 202, []);
