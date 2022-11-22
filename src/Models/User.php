@@ -499,18 +499,7 @@ class User extends \App\Models\User
             return false;
         }
         $userId = auth()->user()->_id;
-
-        $cacheKey = 'user:'.$userId.':follow:'.$this->_id;
-        if (Cache::store('octane')->has($cacheKey)) {
-            return Cache::store('octane')->get($cacheKey);
-        }
-
-        Follow::cacheByUserId($userId);
-        $result = Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
-
-        Cache::store('octane')->set($cacheKey, $result, 300);
-
-        return $result;
+        return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
     }
 
     /**
