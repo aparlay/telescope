@@ -40,8 +40,8 @@
     </div>
 
     <table class="table table-striped">
-        <tbody>
-        <tr>
+        <thead>
+        <tr class="d-flex">
             <th class="col-md-2">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
@@ -59,8 +59,8 @@
                     <x-sortable-column-header :sort="$sort" :fieldName="'country'" :fieldLabel="'Country'" />
 
                     <x-wire-dropdown-list
-                        :wire-model="'filter.country'"
-                        :options="\Aparlay\Core\Models\Country::query()->get()->pluck('name', 'alpha2')->all()"
+                            :wire-model="'filter.country'"
+                            :options="\Aparlay\Core\Models\Country::query()->get()->pluck('name', 'alpha2')->all()"
                     />
                 </div>
             </th>
@@ -93,6 +93,8 @@
                 </div>
             </th>
         </tr>
+        </thead>
+        <tbody>
 
         @foreach($users as $user)
             <tr>
