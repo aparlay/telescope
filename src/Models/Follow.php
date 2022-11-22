@@ -155,16 +155,15 @@ class Follow extends BaseModel
      */
     public static function checkCreatorIsFollowedByUser(string $creatorId, string $userId): bool
     {
-        $cacheKey = 'user:'.$userId.':followedBy:'.$creatorId;
-        if (Cache::store('octane')->has($cacheKey)) {
-            return Cache::store('octane')->get($cacheKey);
+        $octaneCacheKey = 'user:'.$userId.':followedBy:'.$creatorId;
+        if (Cache::store('octane')->has($octaneCacheKey)) {
+            return Cache::store('octane')->get($octaneCacheKey);
         }
 
         self::cacheByUserId($userId);
 
-        $cacheKey = (new self())->getCollection().':creator:'.$userId;
-        $result = Redis::sismember($cacheKey, $creatorId);
-        Cache::store('octane')->set($cacheKey, $result, 300);
+        $result = Redis::sismember((new self())->getCollection().':creator:'.$userId, $creatorId);
+        Cache::store('octane')->set($octaneCacheKey, $result ? '1' : '0', 300);
 
         return $result;
     }
