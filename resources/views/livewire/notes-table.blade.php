@@ -74,23 +74,23 @@
 
         @foreach($notes as $note)
             <tr class="d-flex">
-                <td>
+                <td class="col-md-2">
                     <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
                         {{ $note->creator['username'] }}
                     </a>
                 </td>
-                <td>
+                <td class="col-md-6">
                     {!! $note->message !!}
                 </td>
-                <td>
+                <td class="col-md-1">
                     <span class="badge bg-{{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->badgeColor() }}">
                         {{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->label() }}
                     </span>
                 </td>
-                <td>
+                <td class="col-md-2">
                     {{ $note->created_at }}
                 </td>
-                <td>
+                <td class="col-md-1">
                     <div>
                         <a
                             class=""
