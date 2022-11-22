@@ -435,7 +435,7 @@ class MediaService
         if (! empty($uuid) && ! empty($medias)) {
             $medias = collect(array_slice($medias, 0, 500))
                 ->filter(function ($item, $key) use (&$mediaIds, $cacheKey) {
-                    if (empty($item['media_id']) || !isset($item['duration'])) {
+                    if (empty($item['media_id']) || ! isset($item['duration'])) {
                         return false;
                     }
 
