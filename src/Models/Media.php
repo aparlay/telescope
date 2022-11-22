@@ -505,6 +505,7 @@ class Media extends BaseModel
         }
 
         $userId = auth()->user()->_id;
+
         return Follow::checkCreatorIsFollowedByUser((string) $this->creator['_id'], (string) $userId);
     }
 
