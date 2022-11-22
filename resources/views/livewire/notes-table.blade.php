@@ -12,8 +12,8 @@
     </div>
 
     <table class="table table-striped">
-        <tbody>
-            <tr>
+        <thead>
+            <tr class="d-flex">
                 <th class="col-md-1">
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'"/>
                 </th>
@@ -27,9 +27,11 @@
                     <label for="">Action</label>
                 </th>
             </tr>
+        </thead>
+        <tbody>
 
             @foreach($notes as $note)
-                <tr>
+                <tr class="d-flex">
                     <td>
                         <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
                             {{ $note->creator['username'] }}
