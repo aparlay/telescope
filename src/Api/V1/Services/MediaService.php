@@ -11,11 +11,15 @@ use Aparlay\Core\Api\V1\Repositories\MediaRepository;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Jobs\MediaBatchWatched;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
@@ -313,6 +317,11 @@ class MediaService
                 $data = $originalData;
             }
         }
+        $visited = [];
+        foreach ($data->items() as $model) {
+            $visited[] = $model->_id;
+        }
+        $this->cacheVisitedVideoByUuid($visited, $uuid);
 
         return $data;
     }
@@ -338,7 +347,7 @@ class MediaService
      *
      * @return void
      */
-    public function cacheVisitedVideoByDeviceId(array $mediaIds, string $uuid): void
+    public function cacheVisitedVideoByUuid(array $mediaIds, string $uuid): void
     {
         if (empty($mediaIds)) {
             return;
@@ -346,7 +355,7 @@ class MediaService
 
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         Redis::sadd($cacheKey, ...$mediaIds);
-        Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
+        Redis::expireat($cacheKey, now()->addDays(5)->getTimestamp());
     }
 
     /**
@@ -411,5 +420,48 @@ class MediaService
 
         $cacheKey = (new Media())->getCollection().':ids';
         Redis::sadd($cacheKey, ...$mediaIds);
+    }
+
+    /**
+     * @param  array   $medias
+     * @param  string  $uuid
+     *
+     * @return void
+     */
+    public function watchedMedia(array $medias, string $uuid): void
+    {
+        $cacheKey = 'tracking:media:watched:'.date('Y:m:d:').$uuid;
+        $mediaIds = [];
+        if (! empty($uuid) && ! empty($medias)) {
+            $medias = collect(array_slice($medias, 0, 500))
+                ->filter(function ($item, $key) use (&$mediaIds, $cacheKey) {
+                    if (empty($item['media_id']) || !isset($item['duration'])) {
+                        return false;
+                    }
+
+                    // to prevent some user what a video 1k times in a day and make it unreliable
+                    if (Redis::sismember($cacheKey, $item['media_id'])) {
+                        return false;
+                    }
+
+                    if (in_array($item['media_id'], $mediaIds)) {
+                        return false;
+                    }
+
+                    $mediaIds[] = $item['media_id'];
+
+                    return true;
+                })->toArray();
+
+            if (Redis::exists($cacheKey)) {
+                Redis::expireat($cacheKey, now()->addDay()->startOfDay()->getTimestamp());
+            }
+
+            if (! empty($mediaIds)) {
+                Redis::sadd($cacheKey, ...$mediaIds);
+            }
+
+            MediaBatchWatched::dispatch($medias, $uuid);
+        }
     }
 }
