@@ -62,7 +62,6 @@ final class DashboardStatsService
 
                         'unique_users' => ['$sum' => '$user.unique'],
                         'returned_users' => ['$sum' => '$user.returned'],
-                        'active_users' => ['$sum' => '$user.returned'],
                     ],
             ];
 
@@ -94,8 +93,9 @@ final class DashboardStatsService
             return $collection->aggregate($aggregations);
         });
 
+        $result['active_users'] = 0;
         if (method_exists($value, 'toArray')) {
-            $result['active_users'] = Arr::first(Arr::first($value->toArray())) ?? [];
+            $result['active_users'] = Arr::first(Arr::first($value->toArray())) ?? 0;
         }
 
         return $result;
