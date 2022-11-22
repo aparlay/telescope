@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <table class="table table-striped">
+    <table class="table table-striped border">
         <thead>
             <tr class="d-flex">
                 <th class="col-1 col-md-1 col-sm-2">
