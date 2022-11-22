@@ -62,7 +62,7 @@
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
                 </div>
             </th>
-            <th class="col-md-1">
+            <th class="col-md-1 col-md-1">
                 <div>
                     <label for="">Action</label>
                 </div>
@@ -74,23 +74,23 @@
 
         @foreach($notes as $note)
             <tr class="d-flex">
-                <td class="col-md-2">
+                <td class="col-1 col-md-1">
                     <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
                         {{ $note->creator['username'] }}
                     </a>
                 </td>
-                <td class="col-md-6">
+                <td class="col-7 col-md-7">
                     {!! $note->message !!}
                 </td>
-                <td class="col-md-1">
+                <td class="col-1 col-md-1">
                     <span class="badge bg-{{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->badgeColor() }}">
                         {{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->label() }}
                     </span>
                 </td>
-                <td class="col-md-2">
+                <td class="col-2 col-md-2">
                     {{ $note->created_at }}
                 </td>
-                <td class="col-md-1">
+                <td class="col-1 col-md-1">
                     <div>
                         <a
                             class=""
