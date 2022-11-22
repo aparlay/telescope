@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <table class="table table-striped bg-white botder">
+    <table class="table table-striped bg-white border">
         <thead>
             <tr class="d-flex">
                 <th class="col-md-2">
