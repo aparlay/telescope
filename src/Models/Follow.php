@@ -160,7 +160,7 @@ class Follow extends BaseModel
             return Cache::store('octane')->get($cacheKey);
         }
 
-        Follow::cacheByUserId($userId);
+        self::cacheByUserId($userId);
 
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
         $result = Redis::sismember($cacheKey, $creatorId);
