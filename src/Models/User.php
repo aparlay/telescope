@@ -498,11 +498,20 @@ class User extends \App\Models\User
         if (auth()->guest()) {
             return false;
         }
-
         $userId = auth()->user()->_id;
-        Follow::cacheByUserId($userId);
 
-        return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
+        $cacheKey = 'user:'.$userId.':follow'.$this->_id;
+        $result = Cache::store('octane')->get($cacheKey);
+        if ($result !== null) {
+            return $result;
+        }
+
+        Follow::cacheByUserId($userId);
+        $result = Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
+
+        Cache::store('octane')->set($cacheKey, $result, 300);
+
+        return $result;
     }
 
     /**

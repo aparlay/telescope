@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
@@ -520,9 +521,18 @@ class Media extends BaseModel
         }
 
         $userId = auth()->user()->_id;
-        MediaLike::cacheByUserId($userId);
+        $cacheKey = 'media:'.$this->_id.':likedBy:'.$userId;
+        $result = Cache::store('octane')->get($cacheKey);
+        if ($result !== null) {
+            return $result;
+        }
 
-        return MediaLike::checkMediaIsLikedByUser((string) $this->_id, (string) $userId);
+        MediaLike::cacheByUserId($userId);
+        $result = MediaLike::checkMediaIsLikedByUser((string) $this->_id, (string) $userId);
+
+        Cache::store('octane')->set($cacheKey, $result, 300);
+
+        return $result;
     }
 
     /**
