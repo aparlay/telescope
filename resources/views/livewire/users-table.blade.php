@@ -6,7 +6,7 @@
     use Aparlay\Core\Models\Country;
 @endphp
 
-<div class="user-table">
+<div class="user-table table-responsive">
     <div class="filters pb-3">
         <div class="row">
             <div class="col-md-6">
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <table class="table table-striped table-responsive">
+    <table class="table table-striped bg-white botder">
         <thead>
             <tr class="d-flex">
                 <th class="col-md-2">
