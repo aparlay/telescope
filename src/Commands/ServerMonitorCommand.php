@@ -17,9 +17,9 @@ class ServerMonitorCommand extends Command implements Isolatable
     {
         $alarm = false;
         $messages = [];
-        if (disk_free_space("/") < config('app.monitor.minimum_disk_space')) {
+        if (disk_free_space('/') < config('app.monitor.minimum_disk_space')) {
             $alarm = true;
-            $messages['Disk Space'] = BladeHelper::fileSize(disk_free_space("/")) . '/' . BladeHelper::fileSize(disk_total_space("/")) ;
+            $messages['Disk Space'] = BladeHelper::fileSize(disk_free_space('/')).'/'.BladeHelper::fileSize(disk_total_space('/'));
         }
 
         $load = sys_getloadavg();
@@ -30,7 +30,7 @@ class ServerMonitorCommand extends Command implements Isolatable
 
         $memory = $this->availableMemory();
 
-        if ($memory  < (config('app.monitor.minimum_disk_space') * 1_000_000)) {
+        if ($memory < (config('app.monitor.minimum_disk_space') * 1_000_000)) {
             $alarm = true;
             $messages['System Available Mem'] = BladeHelper::fileSize($memory);
         }
@@ -38,15 +38,16 @@ class ServerMonitorCommand extends Command implements Isolatable
         if ($alarm) {
             ServerAlarmEvent::dispatch(config('app.server_specific_queue'), $messages);
         }
+
         return self::SUCCESS;
     }
 
     private function availableMemory()
     {
-        $fh = fopen('/proc/meminfo','r');
+        $fh = fopen('/proc/meminfo', 'r');
         $memory = 0;
         while ($line = fgets($fh)) {
-            $pieces = array();
+            $pieces = [];
             if (preg_match('/^MemTotal:\s+(\d+)\skB$/', $line, $pieces)) {
                 $memory = $pieces[1];
                 break;
