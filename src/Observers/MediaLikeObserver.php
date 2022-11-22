@@ -39,7 +39,7 @@ class MediaLikeObserver extends BaseModelObserver
 
         // Reset the Redis cache
         MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
-        $cacheKey = 'media:'.$media->_id.':likedBy:'.$mediaLike->creator['_id'];
+        $cacheKey = md5('media:'.$media->_id.':likedBy:'.$mediaLike->creator['_id']);
         Cache::store('octane')->delete($cacheKey);
     }
 
@@ -65,7 +65,7 @@ class MediaLikeObserver extends BaseModelObserver
 
         // Reset the Redis cache
         MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
-        $cacheKey = 'media:'.$media->_id.':likedBy:'.$mediaLike->creator['_id'];
+        $cacheKey = md5('media:'.$media->_id.':likedBy:'.$mediaLike->creator['_id']);
         Cache::store('octane')->delete($cacheKey);
     }
 }

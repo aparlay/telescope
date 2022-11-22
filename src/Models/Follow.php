@@ -155,7 +155,7 @@ class Follow extends BaseModel
      */
     public static function checkCreatorIsFollowedByUser(string $creatorId, string $userId): bool
     {
-        $octaneCacheKey = 'user:'.$userId.':followedBy:'.$creatorId;
+        $octaneCacheKey = md5('user:'.$userId.':followedBy:'.$creatorId);
         if (Cache::store('octane')->has($octaneCacheKey)) {
             return Cache::store('octane')->get($octaneCacheKey);
         }
