@@ -499,6 +499,7 @@ class User extends \App\Models\User
             return false;
         }
         $userId = auth()->user()->_id;
+
         return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
     }
 
