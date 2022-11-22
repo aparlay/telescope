@@ -11,7 +11,7 @@ class ServerAlarmListener
     public function handle(ServerAlarmEvent $event)
     {
         if (($user = User::admin()->first()) !== null) {
-            $message = '_*Attention:*_ Server Resource Limitation';
+            $message = ':fire: _*Attention:*_ Server Resource Limitation';
             foreach ($event->messages as $title => $message) {
                 $message .= PHP_EOL.'_*'.$title.':*_ '.$message;
             }
