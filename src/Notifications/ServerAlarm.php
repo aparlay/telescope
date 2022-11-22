@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class QueueBusy extends Notification
+class ServerAlarm extends Notification
 {
     use Queueable;
 

@@ -42,6 +42,7 @@ use Aparlay\Core\Commands\MeilisearchSettingCommand;
 use Aparlay\Core\Commands\ResetMediaCountersCommand;
 use Aparlay\Core\Commands\ResetUserCountersCommand;
 use Aparlay\Core\Commands\RoleCommand;
+use Aparlay\Core\Commands\ServerMonitorCommand;
 use Aparlay\Core\Commands\UserScoreCommand;
 use Aparlay\Core\Commands\UserScoreDailyCommand;
 use Aparlay\Core\Commands\VideoReprocessCommand;
@@ -102,6 +103,7 @@ class CoreServiceProvider extends ServiceProvider
             ], 'public');
 
             $this->commands([
+                ServerMonitorCommand::class,
                 CoreCommand::class,
                 RoleCommand::class,
                 VideoReprocessCommand::class,
