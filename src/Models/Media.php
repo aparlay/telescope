@@ -520,9 +520,8 @@ class Media extends BaseModel
 
         $userId = auth()->user()->_id;
         $cacheKey = 'media:'.$this->_id.':likedBy:'.$userId;
-        $result = Cache::store('octane')->get($cacheKey);
-        if ($result !== null) {
-            return $result;
+        if (Cache::store('octane')->has($cacheKey)) {
+            return Cache::store('octane')->get($cacheKey);
         }
 
         MediaLike::cacheByUserId($userId);

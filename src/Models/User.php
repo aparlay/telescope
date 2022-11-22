@@ -500,10 +500,9 @@ class User extends \App\Models\User
         }
         $userId = auth()->user()->_id;
 
-        $cacheKey = 'user:'.$userId.':follow'.$this->_id;
-        $result = Cache::store('octane')->get($cacheKey);
-        if ($result !== null) {
-            return $result;
+        $cacheKey = 'user:'.$userId.':follow:'.$this->_id;
+        if (Cache::store('octane')->has($cacheKey)) {
+            return Cache::store('octane')->get($cacheKey);
         }
 
         Follow::cacheByUserId($userId);
