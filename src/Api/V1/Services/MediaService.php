@@ -282,7 +282,6 @@ class MediaService
         }
     }
 
-
     /**
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
