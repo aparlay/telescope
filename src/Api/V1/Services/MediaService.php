@@ -430,17 +430,11 @@ class MediaService
      */
     public function watchedMedia(array $medias, string $uuid): void
     {
-        $cacheKey = 'tracking:media:watched:'.date('Y:m:d:').$uuid;
         $mediaIds = [];
         if (! empty($uuid) && ! empty($medias)) {
             $medias = collect(array_slice($medias, 0, 500))
-                ->filter(function ($item, $key) use (&$mediaIds, $cacheKey) {
-                    if (empty($item['media_id']) || !isset($item['duration'])) {
-                        return false;
-                    }
-
-                    // to prevent some user what a video 1k times in a day and make it unreliable
-                    if (Redis::sismember($cacheKey, $item['media_id'])) {
+                ->filter(function ($item, $key) use (&$mediaIds) {
+                    if (empty($item['media_id']) || ! isset($item['duration'])) {
                         return false;
                     }
 
@@ -452,14 +446,6 @@ class MediaService
 
                     return true;
                 })->toArray();
-
-            if (Redis::exists($cacheKey)) {
-                Redis::expireat($cacheKey, now()->addDay()->startOfDay()->getTimestamp());
-            }
-
-            if (! empty($mediaIds)) {
-                Redis::sadd($cacheKey, ...$mediaIds);
-            }
 
             MediaBatchWatched::dispatch($medias, $uuid);
         }
