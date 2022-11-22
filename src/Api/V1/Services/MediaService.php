@@ -132,47 +132,6 @@ class MediaService
     }
 
     /**
-     * @return LengthAwarePaginator
-     * @throws InvalidArgumentExceptionAlias
-     * @throws \RedisException
-     */
-    public function getPublicFeeds(): LengthAwarePaginator
-    {
-        $query = Media::public()->confirmed();
-
-        $uuid = request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', ''));
-
-        $originalQuery = $query;
-        $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
-
-        $sortCategory = auth()->guest() ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
-        if (! auth()->guest() && request()->integer('page') === 0) {
-            $this->loadUserVisitedVideos((string) auth()->user()->_id, $uuid);
-        }
-
-        $data = $query->medias($this->notVisitedVideoIds($uuid))
-            ->sort($sortCategory)
-            ->paginate(5)
-            ->withQueryString();
-
-        if ($data->isEmpty() || $data->total() <= 5) {
-            $this->flushVisitedVideos($uuid);
-
-            if ($data->isEmpty()) {
-                $data = $originalData;
-            }
-        }
-
-        $visited = [];
-        foreach ($data->items() as $model) {
-            $visited[] = (string) $model->_id;
-        }
-        $this->cacheVisitedVideoByDeviceId($visited, $uuid);
-
-        return $data;
-    }
-
-    /**
      * @param  string  $type
      * @return LengthAwarePaginator
      * @throws Exception
@@ -321,6 +280,42 @@ class MediaService
         if (! $mediaVisit->save()) {
             throw new Exception('Cannot save media visit data.');
         }
+    }
+
+
+    /**
+     * @return LengthAwarePaginator
+     * @throws InvalidArgumentExceptionAlias
+     * @throws \RedisException
+     */
+    public function getPublicFeeds(): LengthAwarePaginator
+    {
+        $query = Media::public()->confirmed();
+
+        $uuid = request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', ''));
+
+        $originalQuery = $query;
+        $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
+
+        $sortCategory = auth()->guest() ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
+        if (! auth()->guest() && request()->integer('page') === 0) {
+            $this->loadUserVisitedVideos((string) auth()->user()->_id, $uuid);
+        }
+
+        $data = $query->medias($this->notVisitedVideoIds($uuid))
+            ->sort($sortCategory)
+            ->paginate(5)
+            ->withQueryString();
+
+        if ($data->isEmpty() || $data->total() <= 5) {
+            $this->flushVisitedVideos($uuid);
+
+            if ($data->isEmpty()) {
+                $data = $originalData;
+            }
+        }
+
+        return $data;
     }
 
     /**
