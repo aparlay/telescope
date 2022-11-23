@@ -6,6 +6,7 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\UserFollowedNotification;
+use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
 
 class FollowObserver extends BaseModelObserver
@@ -86,6 +87,8 @@ class FollowObserver extends BaseModelObserver
 
         // Reset the Redis cache
         Follow::cacheByUserId($model->creator['_id'], true);
+        $cacheKey = md5('user:'.$model->creator['_id'].':followedBy:'.$model->user['_id']);
+        Cache::store('octane')->delete($cacheKey);
     }
 
     /**
@@ -131,5 +134,7 @@ class FollowObserver extends BaseModelObserver
 
         // Reset the Redis cache
         Follow::cacheByUserId($model->creator['_id'], true);
+        $cacheKey = md5('user:'.$model->creator['_id'].':followedBy:'.$model->user['_id']);
+        Cache::store('octane')->delete($cacheKey);
     }
 }

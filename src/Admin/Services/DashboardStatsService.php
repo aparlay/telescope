@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Analytic;
+use Aparlay\Core\Models\ActiveUser;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Jenssegers\Mongodb\Collection;
@@ -67,10 +68,36 @@ final class DashboardStatsService
             return $collection->aggregate($aggregations);
         });
 
+        $result = [];
         if (method_exists($value, 'toArray')) {
-            return Arr::first($value->toArray()) ?? [];
+            $result = Arr::first($value->toArray()) ?? [];
         }
 
-        return [];
+        $value = ActiveUser::query()->raw(function (Collection $collection) use ($from, $to) {
+            $aggregations = [];
+
+            if (isset($from) && isset($to)) {
+                $aggregations[] = [
+                    '$match' => [
+                        'date' => [
+                            '$gte' => $from->format('Y-m-d'),
+                            '$lte' => $to->format('Y-m-d'),
+                        ],
+                    ],
+                ];
+            }
+
+            $aggregations[] = ['$group' => ['_id' => '$uuid', 'count' => ['$sum' => 1]]];
+            $aggregations[] = ['$count' => 'count'];
+
+            return $collection->aggregate($aggregations);
+        });
+
+        $result['active_users'] = 0;
+        if (method_exists($value, 'toArray')) {
+            $result['active_users'] = Arr::first(Arr::first($value->toArray())) ?? 0;
+        }
+
+        return $result;
     }
 }

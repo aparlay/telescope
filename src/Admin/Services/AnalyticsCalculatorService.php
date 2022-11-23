@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\ActiveUser;
 use Aparlay\Core\Models\Analytic;
 use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Media;
@@ -12,6 +13,8 @@ use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Payment\Admin\Models\Tip;
 use Aparlay\Payment\Models\Subscription;
 use Aparlay\Payout\Models\Order;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Google\Analytics\Data\V1beta\BetaAnalyticsDataClient;
 use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
@@ -117,7 +120,31 @@ final class AnalyticsCalculatorService
             ], $analytics);
         }
 
+        $this->storeActiveUsers(
+            date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
+            date('Y-m-d', $endAt->toDateTime()->getTimestamp())
+        );
+
         return $analytics;
+    }
+
+    /**
+     * @param $from
+     * @param $to
+     *
+     * @return void
+     */
+    public function storeActiveUsers($from, $to): void
+    {
+        foreach (CarbonPeriod::create($from, $to) as $date) {
+            /** @var Carbon $date */
+            $returnedCacheKey = 'tracking:users:returned:'.date('Y:m:d', $date->getTimestamp());
+            if (Redis::exists($returnedCacheKey)) {
+                foreach (Redis::smembers($returnedCacheKey) as $uuid) {
+                    ActiveUser::firstOrCreate(['date' => date('Y-m-d', $date->getTimestamp()), 'uuid' => $uuid]);
+                }
+            }
+        }
     }
 
     /**

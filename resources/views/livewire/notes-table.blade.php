@@ -12,7 +12,7 @@
     </div>
 
     <table class="table table-striped">
-        <tbody>
+        <thead>
             <tr>
                 <th class="col-1 col-md-1 col-sm-2">
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'"/>
@@ -23,27 +23,29 @@
                 <th class="col-2 col-md-2 col-sm-3">
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
                 </th>
-                <th class="col-1">
+                <th class="col-1 text-right">
                     <label for="">Action</label>
                 </th>
             </tr>
+        </thead>
 
+        <tbody>
             @foreach($notes as $note)
                 <tr>
-                    <td>
+                    <td class="col-1 col-md-1 col-sm-2">
                         <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
                             {{ $note->creator['username'] }}
                         </a>
                     </td>
-                    <td>
+                    <td class="col-8 col-md-8 col-sm-6">
                         {!! $note->message !!}
                     </td>
-                    <td>
+                    <td class="col-2 col-md-2 col-sm-3">
                         {{ $note->created_at }}
                     </td>
-                    <td>
+                    <td class="col-1 text-right">
                         <a
-                            class=""
+                            class="text-red"
                             wire:key="delete_note_{{ $note->_id }}}"
                             wire:click="$emit('showModal', 'modals.user-notes-delete-modal', '{{ $note->_id }}')"
                         >
