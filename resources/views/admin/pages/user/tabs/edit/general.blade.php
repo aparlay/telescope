@@ -7,8 +7,8 @@
     @csrf()
     @method('PUT')
     <div class="card collapsed-card user-profile-card" id="user-general">
-        <div class="card-header">
-            <h3 class="card-title">General</h3>
+        <div class="card-header py-0">
+            <h3 class="card-title p-2">General</h3>
             <div class="card-tools">
                 <button type="button" class="btn text-blue card-edit" data-edit="user-general">Edit <i class="fas fa-pen"></i></button>
                 <button type="submit" class="btn text-blue card-save d-none">Save <i class="fas fa-save"></i></button>
@@ -21,9 +21,9 @@
                 ><i class="fas fa-chevron-up"></i></button>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body py-0">
             <div class="tab-pane active" id="user-info">
-                <div class="form-group row">
+                <div class="form-group row m-0">
                     <label for="banned_countries" class="col-sm-2 col-form-label">Banned Countries</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
@@ -31,11 +31,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="form-group row m-0">
                     <label for="feature_tips" class="col-sm-2 col-form-label">Feature Tips</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4 data-show">
-                            <p>{{ Arr::get($user->features, 'tips') ? 'yes' : 'no' }}</p>
+                            <p>{{ Arr::get($user->features, 'tips') ? 'Yes' : 'No' }}</p>
                         </div>
                         <div class="custom-control custom-switch mt-2 ml-2 data-edit d-none">
                             <input type="checkbox" value="1" class="custom-control-input" name="features[tips]" id="feature_tips" {!! Arr::get($user->features, 'tips') ? 'checked' : '' !!}>
@@ -44,7 +44,7 @@
                     </div>
                 </div>
 <!--
-                <div class="form-group row">
+                <div class="form-group row m-0">
                     <label for="feature_demo" class="col-sm-2 col-form-label">Feature Demo User</label>
                     <div class="col-sm-10">
                         <div class="custom-control custom-switch mt-2">
