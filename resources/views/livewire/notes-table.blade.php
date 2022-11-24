@@ -11,7 +11,21 @@
         </div>
     </div>
 
-    <table class="table table-striped">
+<!--
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link py-1 active" aria-current="page" href="#">All</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link py-1" href="#">Notes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link py-1" href="#">Logs</a>
+        </li>
+    </ul>
+-->
+
+    <table class="table table-striped border">
         <thead>
             <tr>
                 <th class="col-1 col-md-1 col-sm-2">

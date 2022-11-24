@@ -3,7 +3,7 @@
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col px-1">
                         <span class="mb-0 d-block text-center">
                             0
                         </span>
@@ -17,7 +17,7 @@
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col px-1">
                         <span class="mb-0 d-block text-center">
                             0
                         </span>
@@ -31,7 +31,7 @@
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col px-1">
                         <span class="mb-0 d-block text-center">
                             0
                         </span>
@@ -45,7 +45,7 @@
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col px-1">
                         <span class="mb-0 d-block text-center">
                             {{ money((int)($user->stats['amounts']['spent']['tips'] ?? 0), 'USD') }}
                         </span>
@@ -59,7 +59,7 @@
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col px-1">
                         <span class="mb-0 d-block text-center">
                             {{ money((int)($user->stats['amounts']['earned']['commissions']['tips'] ?? 0), 'USD') }}
                         </span>
@@ -73,7 +73,7 @@
         <div class="card mb-4 mb-xl-0">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col px-1">
                         <span class="mb-0 d-block text-center">
                             {{ money((int)($user->stats['amounts']['earned']['referral']['subscriptions'] ?? 0), 'USD') }}
                         </span>

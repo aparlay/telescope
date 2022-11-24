@@ -35,10 +35,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-3">
                     @include('default_view::admin.pages.user.tabs.edit.menu')
                 </div>
-                <div class="col-md-10 pl-4">
+                <div class="col-md-9 pl-2">
                     <div class="">
                         @include('default_view::admin.pages.user.tabs.edit.statistics')
                     </div>
