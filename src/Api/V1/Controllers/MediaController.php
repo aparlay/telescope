@@ -126,45 +126,12 @@ class MediaController extends Controller
      * @param  Request  $request
      *
      * @return Response
-     * @throws \RedisException
      */
     public function watched(Request $request): Response
     {
-        $deviceId = $request->header('X-DEVICE-ID', '');
-        $cacheKey = 'tracking:media:watched:'.date('Y:m:d:').$deviceId;
+        $uuid = $request->cookie('__Secure_uuid', $request->header('X-DEVICE-ID', ''));
         $medias = $request->all();
-        $mediaIds = [];
-        if (! empty($deviceId) && ! empty($medias)) {
-            $medias = collect(array_slice($medias, 0, 500))->filter(function ($item, $key) use (&$mediaIds, $cacheKey) {
-                if (empty($item['media_id']) || empty($item['duration'])) {
-                    return false;
-                }
-
-                if (Redis::sismember($cacheKey, $item['media_id'])) {
-                    return false;
-                }
-
-                if (in_array($item['media_id'], $mediaIds)) {
-                    return false;
-                }
-
-                $mediaIds[] = $item['media_id'];
-
-                return true;
-            })->toArray();
-
-            if (Redis::exists($cacheKey)) {
-                Redis::expireat($cacheKey, now()->addDay()->startOfDay()->getTimestamp());
-            }
-
-            if (! empty($mediaIds)) {
-                Redis::sAdd($cacheKey, ...$mediaIds);
-            }
-
-            if (! empty($medias)) {
-                MediaBatchWatched::dispatch($medias);
-            }
-        }
+        $this->mediaService->watchedMedia($medias, $uuid);
 
         return response('', 202, []);
     }

@@ -46,7 +46,7 @@ class MediaBatchWatched implements ShouldQueue
      *
      * @throws Exception
      */
-    public function __construct(public array $medias, public string|null $userId = null)
+    public function __construct(public array $medias, public string|null $uuid = null)
     {
         $this->onQueue('low');
     }
@@ -64,7 +64,7 @@ class MediaBatchWatched implements ShouldQueue
         }
 
         foreach (Media::query()->whereIn('_id', $mediaIds)->get() as $media) {
-            $mediaService->watched($media, $durations[(string) $media->_id]);
+            $mediaService->watched($media, $durations[(string) $media->_id], null, $this->uuid);
         }
     }
 
