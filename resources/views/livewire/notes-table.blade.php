@@ -23,35 +23,29 @@
                 <th class="col-2 col-md-2 col-sm-3">
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
                 </th>
-                <th class="col-1 col-md-1">
+                <th class="col-1 col-md-1 text-right">
                     <label for="">Action</label>
                 </th>
             </tr>
         </thead>
-        <tbody>
 
-        @foreach($notes as $note)
-            <tr class="d-flex">
-                <td class="col-1 col-md-1">
-                    <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
-                        {{ $note->creator['username'] }}
-                    </a>
-                </td>
-                <td class="col-7 col-md-7">
-                    {!! $note->message !!}
-                </td>
-                <td class="col-1 col-md-1">
-                    <span class="badge bg-{{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->badgeColor() }}">
-                        {{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->label() }}
-                    </span>
-                </td>
-                <td class="col-2 col-md-2">
-                    {{ $note->created_at }}
-                </td>
-                <td class="col-1 col-md-1">
-                    <div>
+        <tbody>
+            @foreach($notes as $note)
+                <tr class="d-flex">
+                    <td class="col-1 col-md-1 col-sm-2">
+                        <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
+                            {{ $note->creator['username'] }}
+                        </a>
+                    </td>
+                    <td class="col-8 col-md-8 col-sm-6">
+                        {!! $note->message !!}
+                    </td>
+                    <td class="col-2 col-md-2 col-sm-3">
+                        {{ $note->created_at }}
+                    </td>
+                    <td class="col-1 text-right">
                         <a
-                            class=""
+                            class="text-red"
                             wire:key="delete_note_{{ $note->_id }}}"
                             wire:click="$emit('showModal', 'modals.user-notes-delete-modal', '{{ $note->_id }}')"
                         >
@@ -59,7 +53,6 @@
                         </a>
                     </td>
                 </tr>
-
             @endforeach
         </tbody>
     </table>
