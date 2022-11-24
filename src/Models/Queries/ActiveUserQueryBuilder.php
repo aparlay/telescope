@@ -33,4 +33,13 @@ class ActiveUserQueryBuilder extends EloquentQueryBuilder
     {
         return $this->whereBetween('date', [$start, $end]);
     }
+
+    /**
+     * @param  string  $date
+     * @return $this
+     */
+    public function stringDate(string $date): self
+    {
+        return $this->where('date', $date);
+    }
 }
