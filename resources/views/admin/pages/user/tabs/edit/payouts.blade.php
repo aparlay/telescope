@@ -7,8 +7,8 @@
     @csrf()
     @method('PUT')
     <div class="card collapsed-card user-profile-card" id="user-payouts">
-        <div class="card-header">
-            <h3 class="card-title">Payouts</h3>
+        <div class="card-header py-0">
+            <h3 class="card-title p-2">Payouts</h3>
             <div class="card-tools">
                 <button type="button" class="btn text-blue card-edit" data-edit="user-payouts">Edit <i class="fas fa-pen"></i></button>
                 <button type="submit" class="btn text-blue card-save d-none">Save <i class="fas fa-save"></i></button>
@@ -21,9 +21,9 @@
                 ><i class="fas fa-chevron-up"></i></button>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body py-0">
             <div class="tab-pane active" id="user-info">
-                <div class="form-group row">
+                <div class="form-group row m-0">
                     <label for="bank_transfer" class="col-sm-2 col-form-label">Bank Transfer</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="form-group row m-0">
                     <label for="crypto_transfer" class="col-sm-2 col-form-label">Crypto Transfer</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="form-group row m-0">
                     <label for="bank_transfer_select_payer" class="col-sm-2 col-form-label">Bank Transfer Select Payer</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">

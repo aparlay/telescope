@@ -38,6 +38,9 @@
                         </a>
                     </td>
                     <td class="col-8 col-md-8 col-sm-6">
+                        <span class="badge bg-{{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->label() == 'other' ? 'warning' : 'secondary' }}">
+                            {{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->label() == 'other' ? 'note' : 'log' }}
+                        </span>
                         {!! $note->message !!}
                     </td>
                     <td class="col-2 col-md-2 col-sm-3">
