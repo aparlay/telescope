@@ -87,7 +87,7 @@ class UserService
         if (($fileName = $request->avatar->storePubliclyAs('avatars', $avatar, 'public')) !== false) {
             /* Store avatar name in database */
             $oldFileName = $user->avatar;
-            $avatarUrl = str_replace('api.waptap.com', 'api1.waptap.com',Storage::disk('public')->url('avatars/'.$avatar));
+            $avatarUrl = str_replace('api.waptap.com', 'api1.waptap.com', Storage::disk('public')->url('avatars/'.$avatar));
             $this->userRepository->update(['avatar' => $avatarUrl], $user->_id);
 
             if (! config('app.is_testing')) {
