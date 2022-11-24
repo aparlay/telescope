@@ -149,7 +149,7 @@ final class AnalyticsCalculatorService
                 }
             }
 
-            if (!empty($data)) {
+            if (! empty($data)) {
                 ActiveUser::insert($data);
             }
         }
