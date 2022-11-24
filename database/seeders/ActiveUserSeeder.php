@@ -14,6 +14,6 @@ class ActiveUserSeeder extends Seeder
      */
     public function run(): void
     {
-        ActiveUser::factory()->count(3000)->create();
+        ActiveUser::factory()->count(300000)->create();
     }
 }

@@ -11,12 +11,15 @@ use Aparlay\Core\Api\V1\Repositories\MediaRepository;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Jobs\MediaBatchWatched;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
@@ -133,53 +136,6 @@ class MediaService
     }
 
     /**
-     * @return LengthAwarePaginator
-     * @throws InvalidArgumentExceptionAlias
-     * @throws \RedisException
-     */
-    public function getPublicFeeds(): LengthAwarePaginator
-    {
-        $query = Media::public()->confirmed();
-
-        $deviceId = request()->header('X-DEVICE-ID', '');
-        $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
-        $originalQuery = $query;
-        $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
-
-        if (! auth()->guest()) {
-            $userId = auth()->user()->_id;
-            $query->notBlockedFor(auth()->user()->_id)->notVisitedByUserAndDevice($userId, $deviceId);
-
-            $sortCategory = MediaSortCategories::REGISTERED->value;
-        } else {
-            $query->notVisitedByDevice($deviceId);
-
-            $sortCategory = MediaSortCategories::GUEST->value;
-        }
-
-        $data = $query->sort($sortCategory)->paginate(5)->withQueryString();
-
-        if ($data->isEmpty() || $data->total() <= 5) {
-            if (! auth()->guest()) {
-                MediaVisit::query()->user(auth()->user()->_id)->delete();
-            }
-            Cache::store('redis')->delete($cacheKey);
-
-            if ($data->isEmpty()) {
-                $data = $originalData;
-            }
-        }
-
-        $visited = Cache::store('redis')->get($cacheKey, []);
-        foreach ($data->items() as $model) {
-            $visited[] = $model->_id;
-        }
-        Cache::store('redis')->set($cacheKey, array_unique($visited, SORT_REGULAR), config('app.cache.veryLongDuration'));
-
-        return $data;
-    }
-
-    /**
      * @param  string  $type
      * @return LengthAwarePaginator
      * @throws Exception
@@ -256,25 +212,30 @@ class MediaService
      * @param  Media          $media
      * @param  int|float      $duration
      * @param  ObjectId|null  $userId
+     * @param  string|null    $uuid
      *
      * @return void
      * @throws Exception
      */
-    public function watched($media, int|float $duration = 60, ObjectId|null $userId = null): void
+    public function watched($media, int|float $duration = 60, ObjectId|null $userId = null, string|null $uuid = null): void
     {
         if ($userId !== null) {
             $this->userWatched($userId, $media, $duration);
         } else {
             $this->anonymousWatched($media, $duration);
         }
+
+        if (! empty($uuid)) {
+            $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
+            Redis::sadd($cacheKey, (string) $media->_id);
+        }
     }
 
     /**
-     * @param  Media     $media
-     * @param  int|float $duration
+     * @param  Media        $media
+     * @param  int|float    $duration
      *
      * @return void
-     * @throws Exception
      */
     public function anonymousWatched($media, int|float $duration = 60): void
     {
@@ -297,9 +258,10 @@ class MediaService
     }
 
     /**
-     * @param  ObjectId  $userId
-     * @param  Media     $media
-     * @param  int|float $duration
+     * @param  ObjectId     $userId
+     * @param  Media        $media
+     * @param  string|null  $uuid
+     * @param  int|float    $duration
      *
      * @return void
      * @throws Exception
@@ -321,6 +283,171 @@ class MediaService
 
         if (! $mediaVisit->save()) {
             throw new Exception('Cannot save media visit data.');
+        }
+    }
+
+    /**
+     * @return LengthAwarePaginator
+     * @throws InvalidArgumentExceptionAlias
+     * @throws \RedisException
+     */
+    public function getPublicFeeds(): LengthAwarePaginator
+    {
+        $query = Media::public()->confirmed();
+
+        $uuid = request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', ''));
+
+        $originalQuery = $query;
+        $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
+
+        $sortCategory = auth()->guest() ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
+        if (! auth()->guest() && request()->integer('page') === 0) {
+            $this->loadUserVisitedVideos((string) auth()->user()->_id, $uuid);
+        }
+
+        $data = $query->medias($this->notVisitedVideoIds($uuid))
+            ->sort($sortCategory)
+            ->paginate(5)
+            ->withQueryString();
+
+        if ($data->isEmpty() || $data->total() <= 5) {
+            $this->flushVisitedVideos($uuid);
+
+            if ($data->isEmpty()) {
+                $data = $originalData;
+            }
+        }
+        $visited = [];
+        foreach ($data->items() as $model) {
+            $visited[] = $model->_id;
+        }
+        $this->cacheVisitedVideoByUuid($visited, $uuid);
+
+        return $data;
+    }
+
+    /**
+     * @param  string  $uuid
+     *
+     * @return void
+     * @throws InvalidArgumentExceptionAlias
+     */
+    public function flushVisitedVideos(string $uuid): void
+    {
+        if (! auth()->guest()) {
+            MediaVisit::query()->user(auth()->user()->_id)->delete();
+        }
+        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
+        Redis::unlink($cacheKey);
+    }
+
+    /**
+     * @param  array   $mediaIds
+     * @param  string  $uuid
+     *
+     * @return void
+     */
+    public function cacheVisitedVideoByUuid(array $mediaIds, string $uuid): void
+    {
+        if (empty($mediaIds)) {
+            return;
+        }
+
+        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
+        Redis::sadd($cacheKey, ...$mediaIds);
+        Redis::expireat($cacheKey, now()->addDays(5)->getTimestamp());
+    }
+
+    /**
+     * @param  string  $userId
+     * @param  string  $uuid
+     *
+     * @return void
+     */
+    public function loadUserVisitedVideos(string $userId, string $uuid): void
+    {
+        // blocked video considered as visited
+        $blockedMediaIds = Media::public()
+            ->confirmed()
+            ->blockedFor($userId)
+            ->select('_id')
+            ->get()
+            ->pluck('_id');
+
+        $mediaIds = MediaVisit::query()
+            ->select('media_ids')
+            ->user($userId)
+            ->get()
+            ->pluck('media_ids')
+            ->merge($blockedMediaIds)
+            ->flatten()
+            ->map(function ($item, $key) {
+                return (string) $item;
+            })
+            ->toArray();
+
+        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
+        Redis::sadd($cacheKey, ...$mediaIds);
+        Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
+    }
+
+    /**
+     * @param  string  $uuid
+     *
+     * @return array
+     */
+    public function notVisitedVideoIds(string $uuid): array
+    {
+        $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
+        $mediaIdsCacheKey = (new Media())->getCollection().':ids';
+
+        if (! Redis::exists($mediaIdsCacheKey)) {
+            $this->cacheAllVideos();
+        }
+
+        return array_slice(Redis::sdiff($mediaIdsCacheKey, $cacheKey), 0, 500);
+    }
+
+    /**
+     * @return void
+     */
+    public function cacheAllVideos(): void
+    {
+        $mediaIds = [];
+        foreach (Media::public()->confirmed()->select('_id')->get()->pluck('_id') as $media) {
+            $mediaIds[] = (string) $media;
+        }
+
+        $cacheKey = (new Media())->getCollection().':ids';
+        Redis::sadd($cacheKey, ...$mediaIds);
+    }
+
+    /**
+     * @param  array   $medias
+     * @param  string  $uuid
+     *
+     * @return void
+     */
+    public function watchedMedia(array $medias, string $uuid): void
+    {
+        $mediaIds = [];
+        if (! empty($uuid) && ! empty($medias)) {
+            $medias = collect(array_slice($medias, 0, 500))
+                ->filter(function ($item, $key) use (&$mediaIds) {
+                    if (empty($item['media_id']) || ! isset($item['duration'])) {
+                        return false;
+                    }
+
+                    if (in_array($item['media_id'], $mediaIds)) {
+                        return false;
+                    }
+
+                    $mediaIds[] = $item['media_id'];
+
+                    return true;
+                })->toArray();
+
+            MediaBatchWatched::dispatch($medias, $uuid);
         }
     }
 }

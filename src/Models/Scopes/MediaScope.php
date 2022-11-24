@@ -51,6 +51,20 @@ trait MediaScope
         return $query->where('_id', $mediaId);
     }
 
+    /**
+     * @param  Builder  $query
+     * @param  array    $mediaIds
+     * @return Builder
+     */
+    public function scopeMedias(Builder $query, array $mediaIds): Builder
+    {
+        foreach ($mediaIds as $key => $mediaId) {
+            $mediaIds[$key] = $mediaId instanceof ObjectId ? $mediaId : new ObjectId($mediaId);
+        }
+
+        return $query->whereIn('_id', $mediaIds);
+    }
+
     public function scopeCompleted(Builder $query): Builder
     {
         return $query->where('status', MediaStatus::COMPLETED->value);
@@ -135,6 +149,18 @@ trait MediaScope
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
         return $query->where('blocked_user_ids', '!=', $userId);
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  ObjectId|string  $userId
+     * @return Builder
+     */
+    public function scopeBlockedFor(Builder $query, ObjectId | string $userId): Builder
+    {
+        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+
+        return $query->where('blocked_user_ids', $userId);
     }
 
     public function scopeSlug(Builder $query, string $slug): Builder
