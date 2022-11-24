@@ -145,7 +145,7 @@ final class AnalyticsCalculatorService
                 $storedUuids = ActiveUser::query()->stringDate($dateString)->select(['uuid'])->pluck('uuid')->toArray();
                 $freshUuids = array_diff(Redis::smembers($returnedCacheKey), $storedUuids);
                 foreach ($freshUuids as $uuid) {
-                    $data[] = ['date' => $dateString, 'uuid' => $uuid];
+                    $data[] = ['date' => $dateString, 'uuid' => $uuid, 'created_at' => new UTCDateTime()];
                 }
             }
 
