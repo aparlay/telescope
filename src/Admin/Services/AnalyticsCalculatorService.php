@@ -138,11 +138,19 @@ final class AnalyticsCalculatorService
     {
         foreach (CarbonPeriod::create($from, $to) as $date) {
             /** @var Carbon $date */
+            $data = [];
             $returnedCacheKey = 'tracking:users:returned:'.date('Y:m:d', $date->getTimestamp());
             if (Redis::exists($returnedCacheKey)) {
-                foreach (Redis::smembers($returnedCacheKey) as $uuid) {
-                    ActiveUser::firstOrCreate(['date' => date('Y-m-d', $date->getTimestamp()), 'uuid' => $uuid]);
+                $dateString = date('Y-m-d', $date->getTimestamp());
+                $storedUuids = ActiveUser::query()->stringDate($dateString)->select(['uuid'])->pluck('uuid')->toArray();
+                $freshUuids = array_diff(Redis::smembers($returnedCacheKey), $storedUuids);
+                foreach ($freshUuids as $uuid) {
+                    $data[] = ['date' => $dateString, 'uuid' => $uuid];
                 }
+            }
+
+            if (!empty($data)) {
+                ActiveUser::insert($data);
             }
         }
     }
