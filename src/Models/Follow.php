@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 
@@ -130,18 +131,18 @@ class Follow extends BaseModel
         }
 
         if (! Redis::exists($cacheKey)) {
-            $followerIds = self::project(['user._id' => true, '_id' => false])
+            $followingIds = self::project(['user._id' => true, '_id' => false])
                 ->creator(new ObjectId($userId))
                 ->pluck('user._id')
                 ->toArray();
 
-            if (empty($followerIds)) {
-                $followerIds = [''];
+            if (empty($followingIds)) {
+                $followingIds = [''];
             }
 
-            $followerIds = array_map('strval', $followerIds);
+            $followingIds = array_map('strval', $followingIds);
 
-            Redis::sAdd($cacheKey, ...$followerIds);
+            Redis::sAdd($cacheKey, ...$followingIds);
             Redis::expire($cacheKey, config('app.cache.veryLongDuration'));
         }
     }
@@ -154,9 +155,18 @@ class Follow extends BaseModel
      */
     public static function checkCreatorIsFollowedByUser(string $creatorId, string $userId): bool
     {
-        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+        $octaneCacheKey = md5('user:'.$userId.':followedBy:'.$creatorId);
+        if (Cache::store('octane')->has($octaneCacheKey)) {
+            return Cache::store('octane')->get($octaneCacheKey);
+        }
 
-        return Redis::sismember($cacheKey, $creatorId);
+        self::cacheByUserId($userId);
+
+        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+        $result = Redis::sismember($cacheKey, $creatorId);
+        Cache::store('octane')->set($octaneCacheKey, $result, 300);
+
+        return $result;
     }
 
     /**

@@ -6,6 +6,7 @@ use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\UserNotification;
 use Aparlay\Core\Notifications\MediaLikedNotification;
+use Illuminate\Support\Facades\Cache;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaLikeObserver extends BaseModelObserver
@@ -38,6 +39,8 @@ class MediaLikeObserver extends BaseModelObserver
 
         // Reset the Redis cache
         MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
+        $cacheKey = md5('media:'.$media->_id.':likedBy:'.$mediaLike->creator['_id']);
+        Cache::store('octane')->delete($cacheKey);
     }
 
     /**
@@ -62,5 +65,7 @@ class MediaLikeObserver extends BaseModelObserver
 
         // Reset the Redis cache
         MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
+        $cacheKey = md5('media:'.$media->_id.':likedBy:'.$mediaLike->creator['_id']);
+        Cache::store('octane')->delete($cacheKey);
     }
 }

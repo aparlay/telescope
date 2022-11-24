@@ -498,9 +498,7 @@ class User extends \App\Models\User
         if (auth()->guest()) {
             return false;
         }
-
         $userId = auth()->user()->_id;
-        Follow::cacheByUserId($userId);
 
         return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
     }

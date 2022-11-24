@@ -6,7 +6,7 @@
     use Aparlay\Core\Models\Country;
 @endphp
 
-<div class="user-table">
+<div class="user-table table-responsive">
     <div class="filters pb-3">
         <div class="row">
             <div class="col-md-6">
@@ -39,9 +39,9 @@
         </div>
     </div>
 
-    <table class="table table-striped">
-        <tbody>
-        <tr>
+    <table class="table table-striped bg-white border">
+        <thead>
+        <tr class="d-flex">
             <th class="col-md-2">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
@@ -59,8 +59,8 @@
                     <x-sortable-column-header :sort="$sort" :fieldName="'country'" :fieldLabel="'Country'" />
 
                     <x-wire-dropdown-list
-                        :wire-model="'filter.country'"
-                        :options="\Aparlay\Core\Models\Country::query()->get()->pluck('name', 'alpha2')->all()"
+                            :wire-model="'filter.country'"
+                            :options="\Aparlay\Core\Models\Country::query()->get()->pluck('name', 'alpha2')->all()"
                     />
                 </div>
             </th>
@@ -93,31 +93,33 @@
                 </div>
             </th>
         </tr>
+        </thead>
+        <tbody>
 
         @foreach($users as $user)
-            <tr>
-                <td>
+            <tr class="d-flex">
+                <td class="col-md-2">
                     <x-username-avatar :user="$user"/>
                 </td>
-                <td>
+                <td class="col-md-2">
                     <a href="{{$user->admin_url}}">{{ $user->email }}</a>
                 </td>
-                <td>
+                <td class="col-md-2">
                     <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}"
                          class="mr-1 align-bottom">{{ $user->country_label }}
                 </td>
-                <td>
+                <td class="col-md-1">
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
                         {{ UserGender::from($user->gender)->label() }}
                     </span>
                 </td>
-                <td>
+                <td class="col-md-1">
                     <span class="badge bg-{{ UserStatus::from($user->status)->badgeColor() }}">
                         {{ UserStatus::from($user->status)->label() }}
                     </span>
                 </td>
 
-                <td>
+                <td class="col-md-1">
                     <div class="row">
                         <div class="col-md-6">
                             @if ($user->verification_status)
@@ -132,11 +134,11 @@
                     </div>
                 </td>
 
-                <td>
+                <td class="col-md-2">
                     {{ $user->created_at }}
                 </td>
 
-                <td>
+                <td class="col-md-1">
                     <div class="col-md-6">
                         <div>
                             <a class="" href="{{$user->admin_url}}">
