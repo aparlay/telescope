@@ -93,6 +93,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder confirmed()
  * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
  * @method static |self|Builder notBlockedFor(ObjectId|string $user)
+ * @method static |self|Builder blockedFor(ObjectId|string $user)
+ * @method static |self|Builder medias(ObjectId[] $mediaIds)
  * @method static |self|Builder notVisitedByDevice(string $deviceId)
  * @method static |self|Builder hashtag(string $tag)
  * @method static |self|Builder sort(string $category)

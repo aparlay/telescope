@@ -46,8 +46,12 @@ class MediaWatched implements ShouldQueue
      *
      * @throws Exception
      */
-    public function __construct(public array|ObjectId $mediaIds, public int|float $duration = 60, public string|null $userId = null)
-    {
+    public function __construct(
+        public array|ObjectId $mediaIds,
+        public int|float $duration = 60,
+        public string|null $userId = null,
+        public string|null $uuid = null
+    ) {
         $this->onQueue('low');
     }
 
@@ -60,7 +64,7 @@ class MediaWatched implements ShouldQueue
         $userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
         $this->mediaIds = is_array($this->mediaIds) ? $this->mediaIds : [$this->mediaIds];
         foreach (Media::query()->whereIn('_id', $this->mediaIds)->get() as $media) {
-            $mediaService->watched($media, $this->duration, $userId);
+            $mediaService->watched($media, $this->duration, $userId, $this->uuid);
         }
     }
 

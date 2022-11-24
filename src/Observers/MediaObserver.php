@@ -14,6 +14,7 @@ use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Redis;
 
 class MediaObserver extends BaseModelObserver
 {
@@ -99,6 +100,13 @@ class MediaObserver extends BaseModelObserver
             foreach ($media->hashtags as $tag) {
                 RecalculateHashtag::dispatch($tag);
             }
+
+            $mediaIds = [];
+            foreach (Media::public()->confirmed()->select('_id')->get()->toArray() as $media) {
+                $mediaIds[] = (string) $media['_id'];
+            }
+            $cacheKey = (new Media())->getCollection().':ids';
+            Redis::sadd($cacheKey, ...$mediaIds);
         }
     }
 
