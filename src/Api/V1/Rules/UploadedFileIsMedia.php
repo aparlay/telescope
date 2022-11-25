@@ -27,7 +27,8 @@ class UploadedFileIsMedia implements Rule
      */
     public function passes($attribute, $value)
     {
-        return in_array(Storage::disk('upload')->mimeType($value), ['video/', 'image/']);
+        $mimeType = Storage::disk('upload')->mimeType($value);
+        return str_starts_with($mimeType, 'video/') || str_starts_with($mimeType, 'image/');
     }
 
     /**

@@ -27,7 +27,7 @@ class UploadedFileIsVideo implements Rule
      */
     public function passes($attribute, $value)
     {
-        return str_contains(Storage::disk('upload')->mimeType($value), 'video/');
+        return str_starts_with(Storage::disk('upload')->mimeType($value), 'video/');
     }
 
     /**
