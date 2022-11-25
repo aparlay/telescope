@@ -9,11 +9,11 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 /**
- * @property string email
- * @property string phone_number
- * @property string username
- * @property string password
- * @property string gender
+ * @property string $email
+ * @property string $phone_number
+ * @property string $username
+ * @property string $password
+ * @property string $gender
  */
 class MeRequest extends FormRequest
 {
