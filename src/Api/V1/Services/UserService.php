@@ -90,13 +90,8 @@ class UserService
             $avatarUrl = str_replace('api.waptap.com', 'api1.waptap.com', Storage::disk('public')->url('avatars/'.$avatar));
             $this->userRepository->update(['avatar' => $avatarUrl], $user->_id);
 
-            if (! config('app.is_testing')) {
-                UploadAvatar::dispatch((string) $user->_id, 'avatars/'.$avatar)->delay(10);
-            }
-
-            if (! str_contains($oldFileName, 'default_')) {
-                DeleteAvatar::dispatch(basename($oldFileName))->delay(100);
-            }
+            UploadAvatar::dispatchIf(!config('app.is_testing'), (string) $user->_id, 'avatars/'.$avatar)->delay(10);
+            DeleteAvatar::dispatchIf(!str_contains($oldFileName, 'default_'), basename($oldFileName))->delay(100);
         }
 
         return false;
