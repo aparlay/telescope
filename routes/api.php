@@ -10,11 +10,11 @@ use Aparlay\Core\Api\V1\Controllers\MediaController;
 use Aparlay\Core\Api\V1\Controllers\MediaLikeController;
 use Aparlay\Core\Api\V1\Controllers\ReportController;
 use Aparlay\Core\Api\V1\Controllers\SiteController;
-use Aparlay\Core\Api\V1\Controllers\WebhookController;
 use Aparlay\Core\Api\V1\Controllers\UserController;
 use Aparlay\Core\Api\V1\Controllers\UserDocumentController;
 use Aparlay\Core\Api\V1\Controllers\UserNotificationController;
 use Aparlay\Core\Api\V1\Controllers\VersionController;
+use Aparlay\Core\Api\V1\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 /*
