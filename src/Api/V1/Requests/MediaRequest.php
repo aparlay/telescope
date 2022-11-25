@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
+use Aparlay\Core\Api\V1\Rules\UploadedFileExists;
+use Aparlay\Core\Api\V1\Rules\UploadedFileIsMedia;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -43,20 +45,7 @@ class MediaRequest extends FormRequest
         return [
             'description' => ['nullable', 'string', 'max:200'],
             'visibility' => ['nullable', 'integer'],
-            'file' => ['required', 'string'],
+            'file' => ['required', 'string', new UploadedFileExists(), new UploadedFileIsVideo()],
         ];
-    }
-
-    /**
-     * @return void
-     */
-    public function prepareForValidation()
-    {
-        if (! Storage::disk('upload')->exists($this->file)) {
-            throw ValidationException::withMessages(['file' => 'Uploaded file does not exists.']);
-        }
-        if (! str_contains(Storage::disk('upload')->mimeType($this->file), 'video/')) {
-            throw ValidationException::withMessages(['file' => 'Uploaded file must be a standard video file.']);
-        }
     }
 }
