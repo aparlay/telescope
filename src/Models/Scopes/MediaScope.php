@@ -263,4 +263,14 @@ trait MediaScope
     {
         return $query->where('hashtags', $tag);
     }
+
+    /**
+     * @param  Builder  $query
+     * @param  int  $gender
+     * @return mixed
+     */
+    public function scopeGenderContent(Builder $query, int $gender): Builder
+    {
+        return $query->where('content_gender', $gender);
+    }
 }
