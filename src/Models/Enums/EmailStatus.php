@@ -8,7 +8,7 @@ enum EmailStatus: int implements Enum
 
     case QUEUED = 0;
     case SENT = 1;
-    case OPENED = 2;
+    case DELIVERED = 2;
     case FAILED = 3;
 
     public function label(): string
@@ -16,7 +16,7 @@ enum EmailStatus: int implements Enum
         return match ($this) {
             self::QUEUED => __('queued'),
             self::SENT => __('sent'),
-            self::OPENED => __('opened'),
+            self::DELIVERED => __('opened'),
             self::FAILED => __('failed'),
         };
     }
@@ -26,7 +26,7 @@ enum EmailStatus: int implements Enum
         return match ($this) {
             self::QUEUED => 'warning',
             self::SENT => 'info',
-            self::OPENED => 'success',
+            self::DELIVERED => 'success',
             self::FAILED => 'danger',
         };
     }

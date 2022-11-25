@@ -104,10 +104,10 @@ class OtpService
             'user' => $user->toArray(),
         ];
 
-        EmailRepository::create($request);
+        $email = EmailRepository::create($request);
 
         /** Prepare email content and dispatch the job to schedule the email */
-        $email = $otp->identity;
+        $to = $otp->identity;
         $subject = __(':code is your :app verification code', [
             'code' => $otp->otp,
             'app' => config('app.name'),
@@ -118,7 +118,7 @@ class OtpService
             'otpLink' => '',
             'tracking_url' => config('app.frontend_url').'/t/'.$otp->_id,
         ];
-        EmailJob::dispatch($email, $subject, $type, $payload);
+        EmailJob::dispatch((string)$email->_id, $to, $subject, $type, $payload);
 
         return true;
     }

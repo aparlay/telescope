@@ -111,7 +111,7 @@ class Email extends BaseModel
         return [
             EmailStatus::QUEUED->value => EmailStatus::QUEUED->label(),
             EmailStatus::SENT->value => EmailStatus::SENT->label(),
-            EmailStatus::OPENED->value => EmailStatus::OPENED->label(),
+            EmailStatus::DELIVERED->value => EmailStatus::DELIVERED->label(),
             EmailStatus::FAILED->value => EmailStatus::FAILED->label(),
         ];
     }

@@ -10,7 +10,7 @@ use Aparlay\Core\Api\V1\Controllers\MediaController;
 use Aparlay\Core\Api\V1\Controllers\MediaLikeController;
 use Aparlay\Core\Api\V1\Controllers\ReportController;
 use Aparlay\Core\Api\V1\Controllers\SiteController;
-use Aparlay\Core\Api\V1\Controllers\SocketWebhookController;
+use Aparlay\Core\Api\V1\Controllers\WebhookController;
 use Aparlay\Core\Api\V1\Controllers\UserController;
 use Aparlay\Core\Api\V1\Controllers\UserDocumentController;
 use Aparlay\Core\Api\V1\Controllers\UserNotificationController;
@@ -150,6 +150,14 @@ Route::get('/metrics', [SiteController::class, 'metrics'])
     ->name('site.metrics')
     ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
 
-Route::post('/v1/webhook/pusher', [SocketWebhookController::class, 'pusher'])
+Route::post('/v1/webhook/pusher', [WebhookController::class, 'socket'])
     ->name('webhook-pusher')
+    ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
+
+Route::post('/v1/webhook/socket', [WebhookController::class, 'socket'])
+    ->name('webhook.socket')
+    ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
+
+Route::post('/v1/email/{email}/status', [WebhookController::class, 'statusEmailUpdate'])
+    ->name('webhook.status-email-update')
     ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
