@@ -259,6 +259,7 @@ class Media extends BaseModel
         } else {
             $gender = [MediaContentGender::FEMALE->value];
         }
+
         return [
             '_id' => (string) $this->_id,
             'type' => 'media',

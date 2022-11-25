@@ -34,7 +34,6 @@ class MediaController extends Controller
         if (($type = request()?->input('type')) !== null) {
             $collection = new MediaCollection($this->mediaService->getFeedByType($type));
         } else {
-
             $uuid = request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', ''));
             $isGuest = auth()->guest();
             $isFirstPage = request()->integer('page') === 0;

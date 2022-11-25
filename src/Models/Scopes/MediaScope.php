@@ -192,7 +192,7 @@ trait MediaScope
 
         $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
         $visitedIdsFromCache = Cache::store('redis')->get($cacheKey, []);
-        if (!empty($visitedIdsFromCache)) {
+        if (! empty($visitedIdsFromCache)) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
         }
 
@@ -214,7 +214,7 @@ trait MediaScope
 
         $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
         $visitedIds = Cache::store('redis')->get($cacheKey, []);
-        if (!empty($visitedIds)) {
+        if (! empty($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));
             $query->whereNotIn('_id', $visitedIds);
         }
@@ -282,6 +282,7 @@ trait MediaScope
     {
         if (is_array($genders)) {
             $genders = array_map('intval', $genders);
+
             return $query->whereIn('content_gender', $genders);
         }
 

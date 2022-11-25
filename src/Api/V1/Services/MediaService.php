@@ -300,7 +300,7 @@ class MediaService
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
         $sortCategory = $isGuest ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
-        if (!$isGuest && $isFirstPage) {
+        if (! $isGuest && $isFirstPage) {
             $this->loadUserVisitedVideos((string) auth()->user()->_id, $uuid);
         }
 
