@@ -1,0 +1,59 @@
+<?php
+
+use Aparlay\Core\Models\Enums\MediaContentGender;
+use Aparlay\Core\Models\Media;
+use Aparlay\Core\Models\User;
+use Illuminate\Database\Migrations\Migration;
+use Jenssegers\Mongodb\Schema\Blueprint;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table((new Media())->getCollection(), function (Blueprint $table) {
+            $table->dropIndexIfExists(['status', 'sort_scores.default', 'visibility']);
+            $table->dropIndexIfExists(['status', 'sort_scores.guest', 'visibility']);
+            $table->dropIndexIfExists(['status', 'sort_scores.returned', 'visibility']);
+            $table->dropIndexIfExists(['status', 'sort_scores.registered', 'visibility']);
+            $table->dropIndexIfExists(['status', 'sort_scores.paid', 'visibility']);
+        });
+        Media::query()->whereNull('is_fake')->update(['gender_content' => MediaContentGender::FEMALE->value]);
+        User::query()->where('setting.show_adult_content', true)->update(['setting.show_adult_content' => MediaContentGender::FEMALE->value]);
+        Schema::table((new Media())->getCollection(), function (Blueprint $table) {
+            $table->index(['status', 'sort_scores.default', 'visibility', 'gender_content'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.guest', 'visibility', 'gender_content'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.returned', 'visibility', 'gender_content'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.registered', 'visibility', 'gender_content'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.paid', 'visibility', 'gender_content'], null, ['background' => true]);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table((new Media())->getCollection(), function (Blueprint $table) {
+            $table->dropIndexIfExists(['status', 'sort_scores.default', 'visibility', 'gender_content']);
+            $table->dropIndexIfExists(['status', 'sort_scores.guest', 'visibility', 'gender_content']);
+            $table->dropIndexIfExists(['status', 'sort_scores.returned', 'visibility', 'gender_content']);
+            $table->dropIndexIfExists(['status', 'sort_scores.registered', 'visibility', 'gender_content']);
+            $table->dropIndexIfExists(['status', 'sort_scores.paid', 'visibility', 'gender_content']);
+        });
+
+        Schema::table((new Media())->getCollection(), function (Blueprint $table) {
+            $table->index(['status', 'sort_scores.default', 'visibility'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.guest', 'visibility'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.returned', 'visibility'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.registered', 'visibility'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.paid', 'visibility'], null, ['background' => true]);
+        });
+    }
+};

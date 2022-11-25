@@ -121,6 +121,7 @@ class Hashtag extends BaseModel
     public function toSearchableArray()
     {
         $media = Media::hashtag($this->tag)->public()->availableForFollower()->limit(500)->get()->random();
+        $genders = Media::select(['gender_content'])->hashtag($this->tag)->public()->availableForFollower()->groupBy('gender_content')->get(['gender_content'])->pluck('gender_content')->toArray();
 
         return [
             '_id' => (string) $this->_id,
@@ -131,7 +132,7 @@ class Hashtag extends BaseModel
             'description' => $this->tag,
             'hashtags' => [$this->tag],
             'score' => $this->sort_score,
-            'gender' => [],
+            'gender' => $genders,
             'country' => '',
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,

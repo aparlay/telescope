@@ -12,10 +12,9 @@ use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UploadService;
-use Aparlay\Core\Jobs\MediaBatchWatched;
+use Aparlay\Core\Models\Enums\MediaContentGender;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Redis;
 
 class MediaController extends Controller
 {
@@ -35,7 +34,15 @@ class MediaController extends Controller
         if (($type = request()?->input('type')) !== null) {
             $collection = new MediaCollection($this->mediaService->getFeedByType($type));
         } else {
-            $collection = new MediaFeedsCollection($this->mediaService->getPublicFeeds());
+
+            $uuid = request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', ''));
+            $isGuest = auth()->guest();
+            $isFirstPage = request()->integer('page') === 0;
+            $genderContents = request()->input('gender_content', MediaContentGender::getAllValues());
+
+            $collection = new MediaFeedsCollection(
+                $this->mediaService->getPublicFeeds($uuid, $isGuest, $genderContents, $isFirstPage)
+            );
         }
 
         return $this->response($collection, '', Response::HTTP_OK);

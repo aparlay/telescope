@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Models\Enums;
 
-enum MediaContent: int implements Enum
+enum MediaContentGender: int implements Enum
 {
     use EnumEnhancements;
 

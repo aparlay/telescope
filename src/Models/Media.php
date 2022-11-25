@@ -9,7 +9,7 @@ use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Enums\MediaContent;
+use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
@@ -100,7 +100,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder notVisitedByDevice(string $deviceId)
  * @method static |self|Builder hashtag(string $tag)
  * @method static |self|Builder sort(string $category)
- * @method static |self|Builder genderContent(int $gender)
+ * @method static |self|Builder genderContent(array|int $genderContent)
  * @method static |self|Builder public()
  * @method static |self|Builder private()
  */
@@ -254,10 +254,10 @@ class Media extends BaseModel
     {
         if (isset($this->gender_content)) {
             $gender = [$this->gender_content];
-        } elseif (in_array($this->userObj->gender, MediaContent::getAllValues())) {
+        } elseif (in_array($this->userObj->gender, MediaContentGender::getAllValues())) {
             $gender = [$this->userObj->gender];
         } else {
-            $gender = [MediaContent::FEMALE->value];
+            $gender = [MediaContentGender::FEMALE->value];
         }
         return [
             '_id' => (string) $this->_id,

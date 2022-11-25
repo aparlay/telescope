@@ -16,10 +16,7 @@ use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
@@ -287,26 +284,29 @@ class MediaService
     }
 
     /**
+     * @param  string  $uuid
+     * @param  bool    $isGuest
+     * @param  array   $content
+     * @param  bool    $isFirstPage
+     *
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
-     * @throws \RedisException
      */
-    public function getPublicFeeds(): LengthAwarePaginator
+    public function getPublicFeeds(string $uuid, bool $isGuest = true, array $content = [0, 1, 2], bool $isFirstPage = false): LengthAwarePaginator
     {
         $query = Media::public()->confirmed();
-
-        $uuid = request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', ''));
 
         $originalQuery = $query;
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
-        $sortCategory = auth()->guest() ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
-        if (! auth()->guest() && request()->integer('page') === 0) {
+        $sortCategory = $isGuest ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
+        if (!$isGuest && $isFirstPage) {
             $this->loadUserVisitedVideos((string) auth()->user()->_id, $uuid);
         }
 
         $data = $query->medias($this->notVisitedVideoIds($uuid))
             ->sort($sortCategory)
+            ->genderContent($content)
             ->paginate(5)
             ->withQueryString();
 
