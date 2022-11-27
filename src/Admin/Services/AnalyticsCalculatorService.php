@@ -82,17 +82,19 @@ final class AnalyticsCalculatorService
                 'watched' => (int) Redis::get('tracking:media:watched:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000), 0),
             ],
             'email' => [
-                'sent' => Email::date($startAt, $endAt)->count(),
-                'failed' => Email::date($startAt, $endAt)->failed()->count(),
-                'opened' => Email::date($startAt, $endAt)->opened()->count(),
+                'sent' => Email::query()->date($startAt, $endAt)->sent()->count(),
+                'failed' => Email::query()->date($startAt, $endAt)->failed()->count(),
+                'delivered' => Email::query()->date($startAt, $endAt)->delivered()->count(),
+                'deferred' => Email::query()->date($startAt, $endAt)->deferred()->count(),
+                'bounced' => Email::query()->date($startAt, $endAt)->bounced()->count(),
             ],
             'payment' => [
-                'orders' => Order::date($startAt, $endAt)->count(),
-                'orders_amount' => Order::date($startAt, $endAt)->sum('amount'),
-                'subscriptions' => Subscription::date($startAt, $endAt)->count(),
-                'subscriptions_amount' => Subscription::date($startAt, $endAt)->sum('amount'),
-                'tips' => Tip::date($startAt, $endAt)->count(),
-                'tips_amount' => Tip::date($startAt, $endAt)->sum('amount'),
+                'orders' => Order::query()->date($startAt, $endAt)->count(),
+                'orders_amount' => Order::query()->date($startAt, $endAt)->sum('amount'),
+                'subscriptions' => Subscription::query()->date($startAt, $endAt)->count(),
+                'subscriptions_amount' => Subscription::query()->date($startAt, $endAt)->sum('amount'),
+                'tips' => Tip::query()->date($startAt, $endAt)->count(),
+                'tips_amount' => Tip::query()->date($startAt, $endAt)->sum('amount'),
             ],
             'google_analytics' => [
                 'active_users' => $this->reportActiveUsers(
