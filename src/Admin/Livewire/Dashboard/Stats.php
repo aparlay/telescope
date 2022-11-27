@@ -98,7 +98,7 @@ final class Stats extends BaseDashboardComponent
             ],
             [
                 'label' => 'Emails Sent',
-                'value' => Arr::get($results, 'email_sent'),
+                'value' => Arr::get($results, 'email_sent') + Arr::get($results, 'email_delivered') + Arr::get($results, 'email_bounced') + Arr::get($results, 'email_deferred'),
             ],
             [
                 'label' => 'Email Verifications',
