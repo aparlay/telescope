@@ -151,7 +151,7 @@ class MediaService extends AdminBaseService
         ]);
 
         $dataModified = [
-            'visibility' => $request->boolean('visibility'),
+            'visibility' => $request->integer('visibility') ?? 0,
             'is_protected' => $request->boolean('is_protected'),
             'is_music_licensed' => $request->boolean('is_music_licensed'),
         ];
