@@ -42,14 +42,14 @@ class Email implements ShouldQueue
      * Create a new job instance.
      *
      * @param  string  $emailId
-     * @param  string  $emailAddress
+     * @param  string  $to
      * @param  string  $subject
      * @param  string  $type
      * @param  array   $payload
      */
     public function __construct(
         protected string $emailId,
-        protected string $emailAddress,
+        protected string $to,
         protected string $subject,
         protected string $type,
         protected array $payload
@@ -64,7 +64,7 @@ class Email implements ShouldQueue
     public function handle()
     {
         $send = new EmailEnvelope($this->emailId, $this->subject, $this->type, $this->payload);
-        Mail::to($this->emailAddress)->send($send);
+        Mail::to($this->to)->send($send);
         \Aparlay\Core\Models\Email::query()->email($this->emailId)->update(['status' => EmailStatus::SENT->value]);
     }
 

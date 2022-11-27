@@ -119,6 +119,8 @@ class Email extends BaseModel
             EmailStatus::QUEUED->value => EmailStatus::QUEUED->label(),
             EmailStatus::SENT->value => EmailStatus::SENT->label(),
             EmailStatus::DELIVERED->value => EmailStatus::DELIVERED->label(),
+            EmailStatus::DEFERRED->value => EmailStatus::DEFERRED->label(),
+            EmailStatus::BOUNCED->value => EmailStatus::BOUNCED->label(),
             EmailStatus::FAILED->value => EmailStatus::FAILED->label(),
         ];
     }

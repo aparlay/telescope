@@ -38,7 +38,7 @@ class EmailEnvelope extends Mailable
     public function headers()
     {
         return new Headers(
-            messageId: '<' . $this->emailId . '@' . config('app.domain') . '>',
+            messageId: '<'.$this->emailId.'@'.config('app.domain').'>',
             references: [$this->emailId],
             text: [
                 'X-Email-ID' => $this->emailId,

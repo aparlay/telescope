@@ -72,7 +72,7 @@ class WebhookController extends Controller
 
         $result = 422;
         if (isset($message['status'])) {
-            $emailId = str_replace(['<','>','@waptap.com'], '', $request->input('message_id', ''));
+            $emailId = str_replace(['<', '>', '@waptap.com'], '', $request->input('message_id', ''));
             if (strlen($emailId) === 24) {
                 $result = Email::query()->email($request->input('message_id', ''))->sent()->update([
                     'server' => $request->input('hostname', ''),
@@ -99,6 +99,7 @@ class WebhookController extends Controller
         }
 
         $code = ($result > 0) ? Response::HTTP_CREATED : Response::HTTP_OK;
+
         return response('', $code, []);
     }
 }
