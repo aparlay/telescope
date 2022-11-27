@@ -2,14 +2,14 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
+use Aparlay\Core\Api\V1\Rules\UploadedFileExists;
+use Aparlay\Core\Api\V1\Rules\UploadedFileIsVideo;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @property string email
- * @property string phone_number
- * @property string username
- * @property string password
- * @property string gender
+ * @property string $description
+ * @property string $visibility
+ * @property string $file
  */
 class MediaRequest extends FormRequest
 {
@@ -33,7 +33,7 @@ class MediaRequest extends FormRequest
         return [
             'description' => ['nullable', 'string', 'max:200'],
             'visibility' => ['nullable', 'integer'],
-            'file' => ['required', 'string'],
+            'file' => ['required', 'string', new UploadedFileExists(), new UploadedFileIsVideo()],
         ];
     }
 }
