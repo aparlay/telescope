@@ -465,7 +465,7 @@ class Media extends BaseModel
     {
         return in_array(
             $this->status,
-            [MediaStatus::COMPLETED->value, MediaStatus::CONFIRMED->value, MediaStatus::ADMIN_DELETED->value],
+            [MediaStatus::COMPLETED->value, MediaStatus::CONFIRMED->value,MediaStatus::DENIED->value, MediaStatus::ADMIN_DELETED->value],
             true
         );
     }
