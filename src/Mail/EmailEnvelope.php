@@ -41,6 +41,7 @@ class EmailEnvelope extends Mailable
             //messageId: '<'.$this->emailId.'@'.config('app.domain').'>',
             references: [$this->emailId],
             text: [
+                'X-Email-Id' => $this->emailId,
                 'List-Unsubscribe' => '<mailto: unsubscribe@waptap.com?subject=unsubscribe>,  <https://www.waptap.com/unsubscribe/?email_id='.$this->emailId.'>',
             ],
         );
