@@ -158,6 +158,6 @@ Route::post('/v1/webhook/socket', [WebhookController::class, 'socket'])
     ->name('webhook.socket')
     ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
 
-Route::post('/v1/email/{email}/status', [WebhookController::class, 'statusEmailUpdate'])
+Route::post('/v1/email/status', [WebhookController::class, 'statusEmailUpdate'])
     ->name('webhook.status-email-update')
     ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);

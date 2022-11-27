@@ -59,6 +59,6 @@ class EmailQueryBuilder extends EloquentQueryBuilder
      */
     public function to(string $email): self
     {
-        return $this->where('email', $email);
+        return $this->where('to', $email);
     }
 }
