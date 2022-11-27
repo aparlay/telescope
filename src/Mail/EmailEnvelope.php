@@ -38,11 +38,11 @@ class EmailEnvelope extends Mailable
     public function headers()
     {
         return new Headers(
-            //messageId: '<'.$this->emailId.'@'.config('app.main_domain').'>',
+            messageId: $this->emailId.'@'.config('app.main_domain'),
             references: [$this->emailId],
             text: [
                 'X-Email-Id' => $this->emailId,
-                'List-Unsubscribe' => '<mailto: unsubscribe@waptap.com?subject=unsubscribe>,  <https://www.waptap.com/unsubscribe/?email_id='.$this->emailId.'>',
+                'List-Unsubscribe' => '<mailto:unsubscribe@waptap.com?subject=unsubscribe>, <https://www.waptap.com/unsubscribe/?email_id='.$this->emailId.'>',
             ],
         );
     }
