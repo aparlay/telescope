@@ -11,13 +11,18 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Relations\BelongsTo;
+use MongoDB\BSON\ObjectId;
 
 /**
  * Class Email.
  *
- * @property int  $status
- * @property null $user_id
- * @property User $userObj
+ * @property ObjectId      $_id
+ * @property ObjectId|null $user_id
+ * @property string        $to
+ * @property string        $status_label
+ * @property int           $status
+ * @property int           $type
+ * @property User          $userObj
  */
 class Email extends BaseModel
 {
@@ -44,6 +49,7 @@ class Email extends BaseModel
         'user',
         'to',
         'status',
+        'status_label',
         'type',
         'tracking',
         'created_at',
@@ -96,6 +102,7 @@ class Email extends BaseModel
 
     /**
      * @param $query
+     *
      * @return EmailQueryBuilder
      */
     public function newEloquentBuilder($query): EmailQueryBuilder
@@ -111,7 +118,7 @@ class Email extends BaseModel
         return [
             EmailStatus::QUEUED->value => EmailStatus::QUEUED->label(),
             EmailStatus::SENT->value => EmailStatus::SENT->label(),
-            EmailStatus::OPENED->value => EmailStatus::OPENED->label(),
+            EmailStatus::DELIVERED->value => EmailStatus::DELIVERED->label(),
             EmailStatus::FAILED->value => EmailStatus::FAILED->label(),
         ];
     }
