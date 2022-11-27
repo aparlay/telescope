@@ -54,7 +54,6 @@ class Email implements ShouldQueue
         protected string $type,
         protected array $payload
     ) {
-
     }
 
     /**

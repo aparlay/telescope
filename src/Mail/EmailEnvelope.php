@@ -20,7 +20,6 @@ class EmailEnvelope extends Mailable
      * @param  string  $emailSubject
      * @param  string  $template
      * @param  array   $payload
-     *
      */
     public function __construct(
         protected string $emailId,
