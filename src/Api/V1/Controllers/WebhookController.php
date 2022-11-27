@@ -79,7 +79,7 @@ class WebhookController extends Controller
                     'status_label' => $message['status'],
                     'status' => match ($message['status']) {
                         'sent' => EmailStatus::DELIVERED->value,
-                        'deferred' => EmailStatus::DELAYED->value,
+                        'deferred' => EmailStatus::DEFERRED->value,
                         'bounced' => EmailStatus::BOUNCED->value,
                         default => EmailStatus::FAILED->value,
                     },
@@ -90,7 +90,7 @@ class WebhookController extends Controller
                     'status_label' => $message['status'],
                     'status' => match ($message['status']) {
                         'sent' => EmailStatus::DELIVERED->value,
-                        'deferred' => EmailStatus::DELAYED->value,
+                        'deferred' => EmailStatus::DEFERRED->value,
                         'bounced' => EmailStatus::BOUNCED->value,
                         default => EmailStatus::FAILED->value,
                     },
