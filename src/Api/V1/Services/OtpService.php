@@ -8,12 +8,15 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\EmailRepository;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\Email as EmailJob;
+use Aparlay\Core\Models\Enums\EmailStatus;
+use Aparlay\Core\Models\Enums\EmailType;
 use Aparlay\Core\Models\Enums\OtpType;
 use App\Exceptions\BlockedException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use MongoDB\BSON\ObjectId;
 
 class OtpService
 {
@@ -101,7 +104,13 @@ class OtpService
         /** Prepare email request data and insert in Email table */
         $request = [
             'to' => $otp->identity,
-            'user' => $user->toArray(),
+            'user' => [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ],
+            'status' => EmailStatus::QUEUED->value,
+            'type' => EmailType::OTP->value,
         ];
 
         $email = EmailRepository::create($request);
