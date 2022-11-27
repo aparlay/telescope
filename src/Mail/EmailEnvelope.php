@@ -42,7 +42,7 @@ class EmailEnvelope extends Mailable
             references: [$this->emailId],
             text: [
                 'X-Email-Id' => $this->emailId,
-                'List-Unsubscribe' => '<mailto:unsubscribe@waptap.com?subject=unsubscribe>, <https://www.waptap.com/unsubscribe/?email_id='.$this->emailId.'>',
+                'List-Unsubscribe' => '<https://www.waptap.com/unsubscribe/?email_id='.$this->emailId.'>, <mailto:unsubscribe@waptap.com?subject=unsubscribe.'.$this->emailId.'>',
             ],
         );
     }
