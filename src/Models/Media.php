@@ -9,6 +9,7 @@ use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
@@ -72,6 +73,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Alert[]            $alertObjs
  * @property UserNotification[] $userNotificationObjs
  * @property array              $files_history
+ * @property int                $gender_content
  *
  * @property-read string        $slack_subject_admin_url
  * @property-read string        $slack_admin_url
@@ -98,6 +100,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder notVisitedByDevice(string $deviceId)
  * @method static |self|Builder hashtag(string $tag)
  * @method static |self|Builder sort(string $category)
+ * @method static |self|Builder genderContent(array|int $genderContent)
  * @method static |self|Builder public()
  * @method static |self|Builder private()
  */
@@ -160,6 +163,7 @@ class Media extends BaseModel
         'sort_scores',
         'slug',
         'tips',
+        'gender_content',
         'created_by',
         'updated_by',
         'created_at',
@@ -177,6 +181,7 @@ class Media extends BaseModel
         'visit_count' => 0,
         'comment_count' => 0,
         'tips' => 0,
+        'gender_content' => 0,
         'sort_scores' => [
             'default' => 0,
             'guest' => 0,
@@ -198,6 +203,7 @@ class Media extends BaseModel
         'like_count' => 'integer',
         'visit_count' => 'integer',
         'comment_count' => 'integer',
+        'gender_content' => 'integer',
         'tips' => 'integer',
         'is_comments_enabled' => 'boolean',
     ];
@@ -246,12 +252,21 @@ class Media extends BaseModel
      */
     public function toSearchableArray()
     {
+        if (isset($this->gender_content)) {
+            $gender = [$this->gender_content];
+        } elseif (in_array($this->userObj->gender, MediaContentGender::getAllValues())) {
+            $gender = [$this->userObj->gender];
+        } else {
+            $gender = [MediaContentGender::FEMALE->value];
+        }
+
         return [
             '_id' => (string) $this->_id,
             'type' => 'media',
             'poster' => $this->cover_url,
             'username' => $this->userObj->username ?? '',
             'full_name' => $this->userObj->full_name ?? '',
+            'gender' => $gender,
             'description' => $this->description,
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,

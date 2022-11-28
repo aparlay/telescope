@@ -6,16 +6,15 @@ use Aparlay\Core\Api\V1\Dto\MediaDTO;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Requests\PublicFeedRequest;
 use Aparlay\Core\Api\V1\Requests\UpdateMediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UploadService;
-use Aparlay\Core\Jobs\MediaBatchWatched;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Redis;
 
 class MediaController extends Controller
 {
@@ -30,12 +29,16 @@ class MediaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(PublicFeedRequest $request): Response
     {
         if (($type = request()?->input('type')) !== null) {
             $collection = new MediaCollection($this->mediaService->getFeedByType($type));
         } else {
-            $collection = new MediaFeedsCollection($this->mediaService->getPublicFeeds());
+            $isGuest = auth()->guest();
+            $isFirstPage = request()->integer('page') === 0;
+            $collection = new MediaFeedsCollection(
+                $this->mediaService->getPublicFeeds($request, $isGuest, $isFirstPage)
+            );
         }
 
         return $this->response($collection, '', Response::HTTP_OK);

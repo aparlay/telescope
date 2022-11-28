@@ -195,7 +195,7 @@ class User extends \App\Models\User
         'verification_status' => 1, // unverified
         'setting' => [
             'otp' => false,
-            'show_adult_content' => false,
+            'show_adult_content' => 2,
             'notifications' => [
                 'unread_message_alerts' => true,
                 'news_and_updates' => true,
@@ -352,6 +352,7 @@ class User extends \App\Models\User
             'poster' => $this->avatar,
             'username' => $this->username,
             'full_name' => $this->full_name,
+            'gender' => $this->gender ?? UserGender::FEMALE->value,
             'description' => $this->bio,
             'hashtags' => [],
             'score' => $this->scores['sort'],

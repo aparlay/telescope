@@ -43,7 +43,7 @@ class MediaResource extends JsonResource
             $alerts = $this->alerts;
         }
 
-        // should hide adult content for guests or setting.show_adult_content = false or default is false
+        // should hide adult content for guests or setting.show_adult_content = 1 or default is false
 
         return [
             '_id' => (string) $this->_id,
