@@ -281,7 +281,7 @@ class UserService extends AdminBaseService
             default => null
         };
 
-        UserVisibilityChangedEvent::dispatch($user, $this->getUser(), $noteType, $userVisibility);
+        UserVisibilityChangedEvent::dispatch($this->getUser(), $user, $noteType, $userVisibility);
 
         return $this->userRepository->update(['visibility' => $userVisibility], $userId);
     }
