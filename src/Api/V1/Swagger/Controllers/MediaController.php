@@ -35,7 +35,7 @@ use OpenApi\Annotations as OA;
  *         name="show_adult_content",
  *         in="query",
  *         example="ask",
- *         description="should we show adult content or filter them out. possible values for this field is 1,2,3,no,ask,always",
+ *         description="should we show adult content or filter them out? possible values for this field is 1,2,3,no,ask,always",
  *         required=false,
  *         @OA\Schema(
  *             type="string"
@@ -45,7 +45,7 @@ use OpenApi\Annotations as OA;
  *         name="content_gender",
  *         in="query",
  *         example="female,male,3",
- *         description="type of feed. default is all contents for the guests and selected content gender for login users. possible values for this field is 1,2,3,female,male,transgender",
+ *         description="comma separated content gender values. default is all genders of contents for the guests and selected content gender for login users. possible values for this field is 1,2,3,female,male,transgender",
  *         required=false,
  *         @OA\Schema(
  *             type="string"

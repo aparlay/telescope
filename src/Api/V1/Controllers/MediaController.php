@@ -13,7 +13,6 @@ use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UploadService;
-use Aparlay\Core\Models\Enums\MediaContentGender;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
