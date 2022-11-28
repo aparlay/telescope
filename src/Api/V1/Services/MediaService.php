@@ -438,11 +438,11 @@ class MediaService
             Media::CachePublicMediaIds();
         }
 
-        if ($explicitVisibility === UserSettingShowAdultContent::NEVER->value && !Redis::exists($explicitMediaIdsCacheKey)) {
+        if ($explicitVisibility === UserSettingShowAdultContent::NEVER->value && ! Redis::exists($explicitMediaIdsCacheKey)) {
             Media::CachePublicExplicitMediaIds();
         }
 
-        if ($explicitVisibility === UserSettingShowAdultContent::TOPLESS->value && !Redis::exists($toplessMediaIdsCacheKey)) {
+        if ($explicitVisibility === UserSettingShowAdultContent::TOPLESS->value && ! Redis::exists($toplessMediaIdsCacheKey)) {
             Media::CachePublicToplessMediaIds();
         }
 
