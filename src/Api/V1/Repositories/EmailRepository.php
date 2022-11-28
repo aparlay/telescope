@@ -19,16 +19,7 @@ class EmailRepository
     {
         /* Set the Default Values and required to be input parameters */
         try {
-            return Email::create([
-                'to' => $email['to'],
-                'user' => [
-                    '_id' => $email['user']['_id'],
-                    'username' => $email['user']['username'],
-                    'avatar' => $email['user']['avatar'],
-                ],
-                'status' => EmailStatus::QUEUED->value,
-                'type' => EmailType::OTP->value,
-            ]);
+            return Email::create($email);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 

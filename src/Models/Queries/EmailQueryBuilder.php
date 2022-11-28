@@ -14,9 +14,25 @@ class EmailQueryBuilder extends EloquentQueryBuilder
     /**
      * @return self
      */
-    public function opened(): self
+    public function delivered(): self
     {
-        return $this->where('status', EmailStatus::OPENED->value);
+        return $this->where('status', EmailStatus::DELIVERED->value);
+    }
+
+    /**
+     * @return self
+     */
+    public function deferred(): self
+    {
+        return $this->where('status', EmailStatus::DEFERRED->value);
+    }
+
+    /**
+     * @return self
+     */
+    public function bounced(): self
+    {
+        return $this->where('status', EmailStatus::BOUNCED->value);
     }
 
     /**
@@ -42,5 +58,23 @@ class EmailQueryBuilder extends EloquentQueryBuilder
     public function user(ObjectId | string $userId): self
     {
         return $this->whereId($userId, 'user._id');
+    }
+
+    /**
+     * @param  ObjectId|string  $emailId
+     * @return self
+     */
+    public function email(ObjectId | string $emailId): self
+    {
+        return $this->whereId($emailId, '_id');
+    }
+
+    /**
+     * @param  string  $email
+     * @return self
+     */
+    public function to(string $email): self
+    {
+        return $this->where('to', $email);
     }
 }
