@@ -274,6 +274,26 @@ trait MediaScope
     }
 
     /**
+     * @param  Builder  $query
+     *
+     * @return mixed
+     */
+    public function scopeExplicit(Builder $query): Builder
+    {
+        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$gte' => config('app.media.explicit_skin_score')]]]);
+    }
+
+    /**
+     * @param  Builder  $query
+     *
+     * @return mixed
+     */
+    public function scopeTopless(Builder $query): Builder
+    {
+        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$gte' => config('app.media.topless_skin_score')]]]);
+    }
+
+    /**
      * @param  Builder    $query
      * @param  array|int  $genders
      *

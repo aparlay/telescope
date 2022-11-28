@@ -32,7 +32,7 @@ class MediaController extends Controller
     public function index(PublicFeedRequest $request): Response
     {
         if (($type = request()?->input('type')) !== null) {
-            $collection = new MediaCollection($this->mediaService->getFeedByType($type));
+            $collection = new MediaCollection($this->mediaService->getFeedByType($request, $type));
         } else {
             $isGuest = auth()->guest();
             $isFirstPage = request()->integer('page') === 0;

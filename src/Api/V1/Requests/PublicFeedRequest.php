@@ -7,18 +7,13 @@ use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
-
-use function Aws\map;
 
 /**
  * @property string $uuid
  * @property int    $show_adult_content
  * @property array  $content_gender
  * @property string $password
- * @property string $gender
  */
 class PublicFeedRequest extends FormRequest
 {
@@ -55,25 +50,27 @@ class PublicFeedRequest extends FormRequest
     {
         $contentGenders = [];
         foreach (explode(',', request()->input('content_gender', 'female,male,transgender')) as $item) {
-            if (!is_numeric($item)) {
+            if (! is_numeric($item)) {
                 $contentGenders[] = match ($item) {
                     MediaContentGender::FEMALE->label() => MediaContentGender::FEMALE->value,
                     MediaContentGender::MALE->label() => MediaContentGender::MALE->value,
                     MediaContentGender::TRANSGENDER->label() => MediaContentGender::TRANSGENDER->value,
                 };
             } else {
-                $contentGenders[] = (int)$item;
+                $contentGenders[] = (int) $item;
             }
         }
 
         $showAdultContent = request()->input('show_adult_content', null);
         $showAdultContent = match ($showAdultContent) {
-            UserSettingShowAdultContent::NO->value => UserSettingShowAdultContent::NO->value,
+            UserSettingShowAdultContent::NEVER->value => UserSettingShowAdultContent::NEVER->value,
             UserSettingShowAdultContent::ASK->value => UserSettingShowAdultContent::ASK->value,
-            UserSettingShowAdultContent::ALWAYS->value => UserSettingShowAdultContent::ALWAYS->value,
-            UserSettingShowAdultContent::NO->label() => UserSettingShowAdultContent::NO->value,
+            UserSettingShowAdultContent::TOPLESS->value => UserSettingShowAdultContent::TOPLESS->value,
+            UserSettingShowAdultContent::ALL->value => UserSettingShowAdultContent::ALL->value,
+            UserSettingShowAdultContent::NEVER->label() => UserSettingShowAdultContent::NEVER->value,
             UserSettingShowAdultContent::ASK->label() => UserSettingShowAdultContent::ASK->value,
-            UserSettingShowAdultContent::ALWAYS->label() => UserSettingShowAdultContent::ALWAYS->value,
+            UserSettingShowAdultContent::TOPLESS->label() => UserSettingShowAdultContent::TOPLESS->value,
+            UserSettingShowAdultContent::ALL->label() => UserSettingShowAdultContent::ALL->value,
             default => null
         };
         $showAdultContent = $showAdultContent ?? (auth()->guest() ? auth()->user()->setting['show_adult_content'] : 1);

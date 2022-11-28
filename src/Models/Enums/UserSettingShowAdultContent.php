@@ -6,25 +6,28 @@ enum UserSettingShowAdultContent: int implements Enum
 {
     use EnumEnhancements;
 
-    case NO = 1;
+    case NEVER = 1;
     case ASK = 2;
-    case ALWAYS = 3;
+    case TOPLESS = 3;
+    case ALL = 4;
 
     public function label(): string
     {
         return match ($this) {
-            self::NO => __('no'),
+            self::NEVER => __('never'),
             self::ASK => __('ask'),
-            self::ALWAYS => __('yes'),
+            self::TOPLESS => __('topless'),
+            self::ALL => __('all'),
         };
     }
 
     public function badgeColor(): string
     {
         return match ($this) {
-            self::NO => 'warning',
+            self::NEVER => 'default',
             self::ASK => 'info',
-            self::ALWAYS => 'success',
+            self::TOPLESS => 'warning',
+            self::ALL => 'success',
         };
     }
 }

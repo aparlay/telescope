@@ -141,25 +141,27 @@ class MediaService
     }
 
     /**
-     * @param  string  $type
+     * @param  PublicFeedRequest  $request
+     * @param  string             $type
      *
      * @return LengthAwarePaginator
      * @throws Exception
      */
-    public function getFeedByType(string $type): LengthAwarePaginator
+    public function getFeedByType(PublicFeedRequest $request, string $type): LengthAwarePaginator
     {
         return match ($type) {
-            'following' => $this->getFollowingFeed(),
-            'new' => $this->getNewFeed(),
-            default => $this->getFollowingFeed(),
+            'following' => $this->getFollowingFeed($request),
+            'new' => $this->getNewFeed($request),
+            default => $this->getFollowingFeed($request),
         };
     }
 
     /**
+     * @param  PublicFeedRequest  $request
+     *
      * @return LengthAwarePaginator
-     * @throws Exception
      */
-    public function getFollowingFeed(): LengthAwarePaginator
+    public function getFollowingFeed(PublicFeedRequest $request): LengthAwarePaginator
     {
         $query = Media::query();
         $userId = auth()->guest() ? null : auth()->user()->_id;
@@ -168,20 +170,28 @@ class MediaService
             return new \Illuminate\Pagination\LengthAwarePaginator([], 0, 5, 0);
         }
 
-        return $query->availableForFollower()->following(auth()->user()->_id)->recentFirst()->paginate(
-            5
-        )->withQueryString();
+        return $query->availableForFollower()
+            ->following(auth()->user()->_id)
+            ->recentFirst()
+            ->paginate(5)
+            ->withQueryString();
     }
 
     /**
+     * @param  PublicFeedRequest  $request
+     *
      * @return LengthAwarePaginator
-     * @throws Exception
      */
-    public function getNewFeed(): LengthAwarePaginator
+    public function getNewFeed(PublicFeedRequest $request): LengthAwarePaginator
     {
         $query = Media::query();
 
-        return $query->public()->confirmed()->recentFirst()->paginate(5)->withQueryString();
+        return $query->public()
+            ->confirmed()
+            ->gen()
+            ->recentFirst()
+            ->paginate(5)
+            ->withQueryString();
     }
 
     /**
@@ -323,13 +333,10 @@ class MediaService
         if (!$isGuest && $isFirstPage) {
             $this->loadUserVisitedVideos((string)auth()->user()->_id, $request->uuid);
         }
-        if ($request->show_adult_content === UserSettingShowAdultContent::NO->value) {
-            $this->removeExplicit();
-        }
 
-        $data = $query->medias($this->notVisitedVideoIds($request->uuid))
+        $data = $query->medias($this->notVisitedVideoIds($request->uuid, $request->show_adult_content))
             ->sort($sortCategory)
-            ->genderContent($request->gender)
+            ->genderContent($request->content_gender)
             ->paginate(5)
             ->withQueryString();
 
@@ -416,19 +423,36 @@ class MediaService
 
     /**
      * @param  string  $uuid
+     * @param  int     $explicitVisibility
      *
      * @return array
      */
-    public function notVisitedVideoIds(string $uuid): array
+    public function notVisitedVideoIds(string $uuid, int $explicitVisibility): array
     {
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
+        $explicitMediaIdsCacheKey = (new Media())->getCollection().':explicit:ids';
+        $toplessMediaIdsCacheKey = (new Media())->getCollection().':topless:ids';
         $mediaIdsCacheKey = (new Media())->getCollection().':ids';
 
         if (!Redis::exists($mediaIdsCacheKey)) {
-            $this->cacheAllVideos();
+            Media::CachePublicMediaIds();
         }
 
-        return array_slice(Redis::sdiff($mediaIdsCacheKey, $cacheKey), 0, 500);
+        if ($explicitVisibility === UserSettingShowAdultContent::NEVER->value && !Redis::exists($explicitMediaIdsCacheKey)) {
+            Media::CachePublicExplicitMediaIds();
+        }
+
+        if ($explicitVisibility === UserSettingShowAdultContent::TOPLESS->value && !Redis::exists($toplessMediaIdsCacheKey)) {
+            Media::CachePublicToplessMediaIds();
+        }
+
+        $notVisitedIds = match ($explicitVisibility) {
+            UserSettingShowAdultContent::NEVER->value => Redis::sdiff($mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey),
+            UserSettingShowAdultContent::TOPLESS->value => Redis::sdiff($toplessMediaIdsCacheKey, $cacheKey),
+            default => Redis::sdiff($mediaIdsCacheKey, $cacheKey),
+        };
+
+        return array_slice($notVisitedIds, 0, 500);
     }
 
     /**
