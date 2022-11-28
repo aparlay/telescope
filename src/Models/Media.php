@@ -890,7 +890,8 @@ class Media extends BaseModel
             ->topless()
             ->select('_id')
             ->get()
-            ->pluck('_id');
+            ->pluck('_id')
+            ->toArray();
         $toplessMediaIds = array_map('strval', $toplessMediaIds);
         $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
         Redis::sadd($toplessMediaIdsCacheKey, ...$toplessMediaIds);
@@ -905,7 +906,8 @@ class Media extends BaseModel
             ->explicit()
             ->select('_id')
             ->get()
-            ->pluck('_id');
+            ->pluck('_id')
+            ->toArray();
         $explicitMediaIds = array_map('strval', $explicitMediaIds);
         $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
         Redis::sadd($explicitMediaIdsCacheKey, ...$explicitMediaIds);
@@ -918,7 +920,8 @@ class Media extends BaseModel
             ->confirmed()
             ->select('_id')
             ->get()
-            ->pluck('_id');
+            ->pluck('_id')
+            ->toArray();
         $cacheKey = (new self())->getCollection().':ids';
         $mediaIds = array_map('strval', $mediaIds);
         Redis::sadd($cacheKey, ...$mediaIds);
