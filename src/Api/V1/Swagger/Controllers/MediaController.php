@@ -35,7 +35,7 @@ use OpenApi\Annotations as OA;
  *         name="show_adult_content",
  *         in="query",
  *         example="ask",
- *         description="should we show adult content or filter them out? possible values for this field is 1,2,3,never,ask,topless,all",
+ *         description="should we show adult content or filter them out? possible values for this field is 1,2,3,4,never,ask,topless,all",
  *         required=false,
  *         @OA\Schema(
  *             type="string"
