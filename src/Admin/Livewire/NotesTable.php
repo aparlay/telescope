@@ -12,6 +12,8 @@ class NotesTable extends BaseIndexComponent
 {
     public $model = Note::class;
     public $userId;
+    public $category;
+    public int $perPage = 10;
 
     public function getDefaultSort(): array
     {
@@ -35,6 +37,7 @@ class NotesTable extends BaseIndexComponent
         return [
             new FilterPartial('creator_username', 'string', 'creator.username'),
             new FilterExact('type', 'int'),
+            new FilterExact('category', 'int'),
             new FilterPartial('message', 'string'),
             new FilterDateRange('created_at', 'array', ['start', 'end']),
         ];
@@ -46,6 +49,10 @@ class NotesTable extends BaseIndexComponent
 
         if (! empty($this->userId)) {
             $query->user($this->userId);
+        }
+
+        if (! empty($this->category)) {
+            $query->category($this->category);
         }
 
         return $query;
@@ -60,7 +67,6 @@ class NotesTable extends BaseIndexComponent
     {
         return view('default_view::livewire.notes-table', [
            'notes' => $this->index(),
-           'hiddenFields' => ['user_username' => ! empty($this->userId)],
         ]);
     }
 }
