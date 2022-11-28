@@ -54,7 +54,9 @@ class EmailEnvelope extends Mailable
      */
     public function build(): void
     {
-        $this->subject($this->emailSubject)->view($this->getTemplate())->with($this->payload);
+        $data = $this->payload;
+        $data['unsubscribe_url'] = 'https://www.waptap.com/unsubscribe/?email_id='.$this->emailId;
+        $this->subject($this->emailSubject)->view($this->getTemplate())->with($data);
     }
 
     /**
