@@ -5,13 +5,14 @@ namespace Aparlay\Core\Api\V1\Requests;
 use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
+
+use function Aws\map;
+
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-
-use function Aws\map;
 
 /**
  * @property string $uuid
@@ -55,14 +56,14 @@ class PublicFeedRequest extends FormRequest
     {
         $contentGenders = [];
         foreach (explode(',', request()->input('content_gender', 'female,male,transgender')) as $item) {
-            if (!is_numeric($item)) {
+            if (! is_numeric($item)) {
                 $contentGenders[] = match ($item) {
                     MediaContentGender::FEMALE->label() => MediaContentGender::FEMALE->value,
                     MediaContentGender::MALE->label() => MediaContentGender::MALE->value,
                     MediaContentGender::TRANSGENDER->label() => MediaContentGender::TRANSGENDER->value,
                 };
             } else {
-                $contentGenders[] = (int)$item;
+                $contentGenders[] = (int) $item;
             }
         }
 
