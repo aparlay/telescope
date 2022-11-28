@@ -35,6 +35,7 @@ class NotesCreate extends Component
             $noteService = app()->make(NoteService::class);
             $user = User::find($this->userId);
             $noteService->addCustomNote($this->currentUser(), $user, $this->message);
+            $this->message = '';
         }
 
         $this->emit('updateParent');
