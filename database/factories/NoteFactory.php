@@ -3,8 +3,8 @@
 namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\NoteCategory;
+use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Note;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
