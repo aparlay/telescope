@@ -51,9 +51,6 @@ class MediaRepository
                     'avatar'   => $user->avatar,
                 ],
             ]);
-            if (! Storage::disk('upload')->exists($model->file)) {
-                throw new UnprocessableEntityHttpException('Uploaded file does not exists.');
-            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 

@@ -113,11 +113,13 @@ class UserRepository
         $user->verification_status = $verificationStatus;
         $user->save();
 
-        if ($oldVerificationStatus !== $verificationStatus) {
-            if (in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])) {
-                UserVerificationStatusChangedEvent::dispatch($adminUser, $user, $verificationStatus);
-            }
-        }
+        UserVerificationStatusChangedEvent::dispatchIf(
+            ($oldVerificationStatus !== $verificationStatus) &&
+            (in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])),
+            $adminUser,
+            $user,
+            $verificationStatus
+        );
 
         return $user;
     }

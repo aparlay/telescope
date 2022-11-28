@@ -184,13 +184,8 @@ class UserService extends AdminBaseService
             $oldFileName = $user->avatar;
             $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/'.$avatar)], $user->_id);
 
-            if (! config('app.is_testing')) {
-                UploadAvatar::dispatch((string) $user->_id, 'avatars/'.$avatar)->delay(10);
-            }
-
-            if (! str_contains($oldFileName, 'default_')) {
-                DeleteAvatar::dispatch(basename($oldFileName))->delay(100)->onQueue('low');
-            }
+            UploadAvatar::dispatchIf(! config('app.is_testing'), (string) $user->_id, 'avatars/'.$avatar)->delay(10);
+            DeleteAvatar::dispatchIf(! str_contains($oldFileName, 'default_'), basename($oldFileName))->delay(100);
         }
 
         return false;
@@ -211,9 +206,7 @@ class UserService extends AdminBaseService
             default => null
         };
 
-        if ($noteType) {
-            UserStatusChangedEvent::dispatch($this->getUser(), $user, $noteType);
-        }
+        UserStatusChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType);
 
         return $this->userRepository->update(['status' => $userStatus], $id);
     }

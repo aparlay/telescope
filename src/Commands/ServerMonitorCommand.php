@@ -35,9 +35,7 @@ class ServerMonitorCommand extends Command implements Isolatable
             $messages['System Available Mem'] = BladeHelper::fileSize($memory);
         }
 
-        if ($alarm) {
-            ServerAlarmEvent::dispatch(config('app.server_specific_queue'), $messages);
-        }
+        ServerAlarmEvent::dispatchIf($alarm, config('app.server_specific_queue'), $messages);
 
         return self::SUCCESS;
     }

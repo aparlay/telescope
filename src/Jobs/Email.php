@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Mail\EmailEnvelope;
+use Aparlay\Core\Models\Enums\EmailStatus;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Illuminate\Bus\Queueable;
@@ -19,11 +20,6 @@ class Email implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
-    protected string $email;
-    protected string $subject;
-    protected string $type;
-    protected array $payload;
 
     /**
      * The number of times the job may be attempted.
@@ -45,28 +41,31 @@ class Email implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param string $email
-     * @param string $subject
-     * @param string $type
-     * @param array $payload
-     * @return void
+     * @param  string  $emailId
+     * @param  string  $emailAddress
+     * @param  string  $subject
+     * @param  string  $type
+     * @param  array   $payload
      */
-    public function __construct(string $email, string $subject, string $type, array $payload)
-    {
-        $this->email = $email;
-        $this->subject = $subject;
-        $this->type = $type;
-        $this->payload = $payload;
+    public function __construct(
+        protected string $emailId,
+        protected string $emailAddress,
+        protected string $subject,
+        protected string $type,
+        protected array $payload
+    ) {
     }
 
     /**
      * Execute the job.
+     *
      * @return void
      */
     public function handle()
     {
-        $send = new EmailEnvelope($this->subject, $this->type, $this->payload);
-        Mail::to($this->email)->send($send);
+        $send = new EmailEnvelope($this->emailId, $this->subject, $this->type, $this->payload);
+        Mail::to($this->emailAddress)->send($send);
+        \Aparlay\Core\Models\Email::query()->email($this->emailId)->update(['status' => EmailStatus::SENT->value]);
     }
 
     /**

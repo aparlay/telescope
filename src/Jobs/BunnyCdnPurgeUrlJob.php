@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
@@ -92,7 +93,11 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
         try {
             $response = Http::timeout(180)
                 ->retry(5, 60000, function ($exception, $request) {
-                    if (! Str::startsWith($exception->response->status(), '2')) {
+                    if ($exception instanceof ConnectionException) {
+                        return true;
+                    }
+
+                    if (isset($exception->response) && ! Str::startsWith($exception->response->status(), '2')) {
                         User::admin()->first()->notify(new ThirdPartyLogger(
                             '',
                             self::class,
