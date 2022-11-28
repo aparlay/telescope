@@ -406,7 +406,7 @@
 
             $('.user-profile-card button.card-edit').on('click', function() {
                 let card = $(this).data('edit');
-                console.log(card);
+
                 $('#' + card + ' button.card-edit').addClass('d-none');
                 $('#' + card + ' .data-show').addClass('d-none');
 
