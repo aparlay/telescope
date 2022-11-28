@@ -5,21 +5,15 @@ namespace Aparlay\Core\Api\V1\Requests;
 use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
-
-use function Aws\map;
-
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 /**
  * @property string $uuid
  * @property int    $show_adult_content
  * @property array  $content_gender
  * @property string $password
- * @property string $gender
  */
 class PublicFeedRequest extends FormRequest
 {
@@ -69,12 +63,14 @@ class PublicFeedRequest extends FormRequest
 
         $showAdultContent = request()->input('show_adult_content', null);
         $showAdultContent = match ($showAdultContent) {
-            UserSettingShowAdultContent::NO->value => UserSettingShowAdultContent::NO->value,
+            UserSettingShowAdultContent::NEVER->value => UserSettingShowAdultContent::NEVER->value,
             UserSettingShowAdultContent::ASK->value => UserSettingShowAdultContent::ASK->value,
-            UserSettingShowAdultContent::ALWAYS->value => UserSettingShowAdultContent::ALWAYS->value,
-            UserSettingShowAdultContent::NO->label() => UserSettingShowAdultContent::NO->value,
+            UserSettingShowAdultContent::TOPLESS->value => UserSettingShowAdultContent::TOPLESS->value,
+            UserSettingShowAdultContent::ALL->value => UserSettingShowAdultContent::ALL->value,
+            UserSettingShowAdultContent::NEVER->label() => UserSettingShowAdultContent::NEVER->value,
             UserSettingShowAdultContent::ASK->label() => UserSettingShowAdultContent::ASK->value,
-            UserSettingShowAdultContent::ALWAYS->label() => UserSettingShowAdultContent::ALWAYS->value,
+            UserSettingShowAdultContent::TOPLESS->label() => UserSettingShowAdultContent::TOPLESS->value,
+            UserSettingShowAdultContent::ALL->label() => UserSettingShowAdultContent::ALL->value,
             default => null
         };
         $showAdultContent = $showAdultContent ?? (auth()->guest() ? auth()->user()->setting['show_adult_content'] : 1);

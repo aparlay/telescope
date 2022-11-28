@@ -101,12 +101,9 @@ class MediaObserver extends BaseModelObserver
                 RecalculateHashtag::dispatch($tag);
             }
 
-            $mediaIds = [];
-            foreach (Media::public()->confirmed()->select('_id')->get()->toArray() as $media) {
-                $mediaIds[] = (string) $media['_id'];
-            }
-            $cacheKey = (new Media())->getCollection().':ids';
-            Redis::sadd($cacheKey, ...$mediaIds);
+            Media::CachePublicExplicitMediaIds();
+            Media::CachePublicToplessMediaIds();
+            Media::CachePublicMediaIds();
         }
     }
 

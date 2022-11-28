@@ -102,6 +102,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder sort(string $category)
  * @method static |self|Builder genderContent(array|int $genderContent)
  * @method static |self|Builder public()
+ * @method static |self|Builder explicit()
+ * @method static |self|Builder topless()
  * @method static |self|Builder private()
  */
 class Media extends BaseModel
@@ -878,5 +880,48 @@ class Media extends BaseModel
             ),
             default => __(':username liked your video.', ['username' => $mediaComments[0]->creatorObj->username])
         };
+    }
+
+    public static function CachePublicToplessMediaIds()
+    {
+        $toplessMediaIds = Media::public()
+            ->confirmed()
+            ->public()
+            ->topless()
+            ->select('_id')
+            ->get()
+            ->pluck('_id');
+        $toplessMediaIds = array_map('strval', $toplessMediaIds);
+        $toplessMediaIdsCacheKey = (new Media())->getCollection().':topless:ids';
+        Redis::sadd($toplessMediaIdsCacheKey, ...$toplessMediaIds);
+        Redis::expireat($toplessMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
+    }
+
+    public static function CachePublicExplicitMediaIds()
+    {
+        $explicitMediaIds = Media::public()
+            ->confirmed()
+            ->public()
+            ->explicit()
+            ->select('_id')
+            ->get()
+            ->pluck('_id');
+        $explicitMediaIds = array_map('strval', $explicitMediaIds);
+        $explicitMediaIdsCacheKey = (new Media())->getCollection().':explicit:ids';
+        Redis::sadd($explicitMediaIdsCacheKey, ...$explicitMediaIds);
+        Redis::expireat($explicitMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
+    }
+
+    public static function CachePublicMediaIds()
+    {
+        $mediaIds = Media::public()
+            ->confirmed()
+            ->select('_id')
+            ->get()
+            ->pluck('_id');
+        $cacheKey = (new Media())->getCollection().':ids';
+        $mediaIds = array_map('strval', $mediaIds);
+        Redis::sadd($cacheKey, ...$mediaIds);
+        Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
     }
 }
