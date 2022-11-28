@@ -414,8 +414,5 @@
                 $('#' + card + ' .data-edit').removeClass('d-none');
             });
         });
-        $( document ).ready(function() {
-            window.initChat('{{$chatId}}', 'chat-{{$chatId}}');
-        });
     </script>
 @endsection
