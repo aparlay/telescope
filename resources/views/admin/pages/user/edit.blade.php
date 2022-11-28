@@ -455,9 +455,4 @@
     @livewireScripts
     <livewire:modals/>
     <script src="/js/admin.js"></script>
-    <script type="text/javascript">
-        $( document ).ready(function() {
-            window.initChat('{{$chatId}}', 'chat-{{$chatId}}');
-        });
-    </script>
 @endsection
