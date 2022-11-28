@@ -884,7 +884,7 @@ class Media extends BaseModel
 
     public static function CachePublicToplessMediaIds()
     {
-        $toplessMediaIds = Media::public()
+        $toplessMediaIds = self::public()
             ->confirmed()
             ->public()
             ->topless()
@@ -892,14 +892,14 @@ class Media extends BaseModel
             ->get()
             ->pluck('_id');
         $toplessMediaIds = array_map('strval', $toplessMediaIds);
-        $toplessMediaIdsCacheKey = (new Media())->getCollection().':topless:ids';
+        $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
         Redis::sadd($toplessMediaIdsCacheKey, ...$toplessMediaIds);
         Redis::expireat($toplessMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
     }
 
     public static function CachePublicExplicitMediaIds()
     {
-        $explicitMediaIds = Media::public()
+        $explicitMediaIds = self::public()
             ->confirmed()
             ->public()
             ->explicit()
@@ -907,19 +907,19 @@ class Media extends BaseModel
             ->get()
             ->pluck('_id');
         $explicitMediaIds = array_map('strval', $explicitMediaIds);
-        $explicitMediaIdsCacheKey = (new Media())->getCollection().':explicit:ids';
+        $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
         Redis::sadd($explicitMediaIdsCacheKey, ...$explicitMediaIds);
         Redis::expireat($explicitMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
     }
 
     public static function CachePublicMediaIds()
     {
-        $mediaIds = Media::public()
+        $mediaIds = self::public()
             ->confirmed()
             ->select('_id')
             ->get()
             ->pluck('_id');
-        $cacheKey = (new Media())->getCollection().':ids';
+        $cacheKey = (new self())->getCollection().':ids';
         $mediaIds = array_map('strval', $mediaIds);
         Redis::sadd($cacheKey, ...$mediaIds);
         Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
