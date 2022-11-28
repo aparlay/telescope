@@ -9,12 +9,14 @@ use Aparlay\Core\Api\V1\Models\MediaVisit;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\MediaRepository;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Requests\PublicFeedRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\MediaBatchWatched;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Redis;
@@ -25,6 +27,7 @@ use Str;
 class MediaService
 {
     use HasUserTrait;
+
     protected MediaRepository $mediaRepository;
 
     public function __construct()
@@ -34,6 +37,7 @@ class MediaService
 
     /**
      * @param  MediaRequest  $request
+     *
      * @return Media
      */
     public function create(MediaRequest $request): Media
@@ -42,13 +46,14 @@ class MediaService
     }
 
     /**
-     * @param Media $media
-     * @param MediaDTO $mediaDto
+     * @param  Media     $media
+     * @param  MediaDTO  $mediaDto
+     *
      * @return Media
      */
     public function update(Media $media, MediaDTO $mediaDto): Media
     {
-        if (! empty($mediaDto->is_comments_enabled)) {
+        if (!empty($mediaDto->is_comments_enabled)) {
             $media->is_comments_enabled = $mediaDto->is_comments_enabled;
         }
 
@@ -59,6 +64,7 @@ class MediaService
 
     /**
      * @param  int  $length
+     *
      * @return string
      */
     public static function generateSlug(int $length): string
@@ -70,6 +76,7 @@ class MediaService
 
     /**
      * @param  string  $description
+     *
      * @return array
      * @throws Exception
      */
@@ -88,6 +95,7 @@ class MediaService
 
     /**
      * @param  string  $description
+     *
      * @return array
      * @throws Exception
      */
@@ -134,6 +142,7 @@ class MediaService
 
     /**
      * @param  string  $type
+     *
      * @return LengthAwarePaginator
      * @throws Exception
      */
@@ -159,7 +168,9 @@ class MediaService
             return new \Illuminate\Pagination\LengthAwarePaginator([], 0, 5, 0);
         }
 
-        return $query->availableForFollower()->following(auth()->user()->_id)->recentFirst()->paginate(5)->withQueryString();
+        return $query->availableForFollower()->following(auth()->user()->_id)->recentFirst()->paginate(
+            5
+        )->withQueryString();
     }
 
     /**
@@ -175,6 +186,7 @@ class MediaService
 
     /**
      * @param  User  $user
+     *
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
      */
@@ -184,10 +196,12 @@ class MediaService
         $query = Media::creator($userId)->recentFirst();
         if (auth()->guest()) {
             $query->confirmed()->public();
-        } elseif ((string) $userId === (string) auth()->user()->_id) {
-            $query->with(['alertObjs' => function ($query) {
-                $query->where('status', AlertStatus::NOT_VISITED->value);
-            }])->availableForOwner();
+        } elseif ((string)$userId === (string)auth()->user()->_id) {
+            $query->with([
+                'alertObjs' => function ($query) {
+                    $query->where('status', AlertStatus::NOT_VISITED->value);
+                },
+            ])->availableForOwner();
         } else {
             $isFollowed = Follow::query()
                 ->select(['user._id', '_id'])
@@ -214,23 +228,27 @@ class MediaService
      * @return void
      * @throws Exception
      */
-    public function watched($media, int|float $duration = 60, ObjectId|null $userId = null, string|null $uuid = null): void
-    {
+    public function watched(
+        $media,
+        int|float $duration = 60,
+        ObjectId|null $userId = null,
+        string|null $uuid = null
+    ): void {
         if ($userId !== null) {
             $this->userWatched($userId, $media, $duration);
         } else {
             $this->anonymousWatched($media, $duration);
         }
 
-        if (! empty($uuid)) {
+        if (!empty($uuid)) {
             $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
-            Redis::sadd($cacheKey, (string) $media->_id);
+            Redis::sadd($cacheKey, (string)$media->_id);
         }
     }
 
     /**
-     * @param  Media        $media
-     * @param  int|float    $duration
+     * @param  Media      $media
+     * @param  int|float  $duration
      *
      * @return void
      */
@@ -278,40 +296,45 @@ class MediaService
             $media->updateVisits($duration);
         }
 
-        if (! $mediaVisit->save()) {
+        if (!$mediaVisit->save()) {
             throw new Exception('Cannot save media visit data.');
         }
     }
 
     /**
-     * @param  string  $uuid
-     * @param  bool    $isGuest
-     * @param  array   $content
-     * @param  bool    $isFirstPage
+     * @param  PublicFeedRequest  $request
+     * @param  bool               $isGuest
+     * @param  bool               $isFirstPage
      *
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
      */
-    public function getPublicFeeds(string $uuid, bool $isGuest = true, array $content = [0, 1, 2], bool $isFirstPage = false): LengthAwarePaginator
-    {
+    public function getPublicFeeds(
+        PublicFeedRequest $request,
+        bool $isGuest = true,
+        bool $isFirstPage = false,
+    ): LengthAwarePaginator {
         $query = Media::public()->confirmed();
 
         $originalQuery = $query;
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
         $sortCategory = $isGuest ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
-        if (! $isGuest && $isFirstPage) {
-            $this->loadUserVisitedVideos((string) auth()->user()->_id, $uuid);
+        if (!$isGuest && $isFirstPage) {
+            $this->loadUserVisitedVideos((string)auth()->user()->_id, $request->uuid);
+        }
+        if ($request->show_adult_content === UserSettingShowAdultContent::NO->value) {
+            $this->removeExplicit();
         }
 
-        $data = $query->medias($this->notVisitedVideoIds($uuid))
+        $data = $query->medias($this->notVisitedVideoIds($request->uuid))
             ->sort($sortCategory)
-            ->genderContent($content)
+            ->genderContent($request->gender)
             ->paginate(5)
             ->withQueryString();
 
         if ($data->isEmpty() || $data->total() <= 5) {
-            $this->flushVisitedVideos($uuid);
+            $this->flushVisitedVideos($request->uuid);
 
             if ($data->isEmpty()) {
                 $data = $originalData;
@@ -321,7 +344,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->cacheVisitedVideoByUuid($visited, $uuid);
+        $this->cacheVisitedVideoByUuid($visited, $request->uuid);
 
         return $data;
     }
@@ -334,7 +357,7 @@ class MediaService
      */
     public function flushVisitedVideos(string $uuid): void
     {
-        if (! auth()->guest()) {
+        if (!auth()->guest()) {
             MediaVisit::query()->user(auth()->user()->_id)->delete();
         }
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
@@ -382,7 +405,7 @@ class MediaService
             ->merge($blockedMediaIds)
             ->flatten()
             ->map(function ($item, $key) {
-                return (string) $item;
+                return (string)$item;
             })
             ->toArray();
 
@@ -401,7 +424,7 @@ class MediaService
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         $mediaIdsCacheKey = (new Media())->getCollection().':ids';
 
-        if (! Redis::exists($mediaIdsCacheKey)) {
+        if (!Redis::exists($mediaIdsCacheKey)) {
             $this->cacheAllVideos();
         }
 
@@ -415,7 +438,7 @@ class MediaService
     {
         $mediaIds = [];
         foreach (Media::public()->confirmed()->select('_id')->get()->pluck('_id') as $media) {
-            $mediaIds[] = (string) $media;
+            $mediaIds[] = (string)$media;
         }
 
         $cacheKey = (new Media())->getCollection().':ids';
@@ -431,10 +454,10 @@ class MediaService
     public function watchedMedia(array $medias, string $uuid): void
     {
         $mediaIds = [];
-        if (! empty($uuid) && ! empty($medias)) {
+        if (!empty($uuid) && !empty($medias)) {
             $medias = collect(array_slice($medias, 0, 500))
                 ->filter(function ($item, $key) use (&$mediaIds) {
-                    if (empty($item['media_id']) || ! isset($item['duration'])) {
+                    if (empty($item['media_id']) || !isset($item['duration'])) {
                         return false;
                     }
 

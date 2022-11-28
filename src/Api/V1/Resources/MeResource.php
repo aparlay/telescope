@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Resources;
 
 use Aparlay\Core\Api\V1\Models\UserNotification;
+use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\User;
 use Illuminate\Http\Request;
@@ -64,7 +65,7 @@ class MeResource extends JsonResource
             'avatar' => $this->avatar,
             'setting' => [
                 'otp' => $this->setting['otp'] ?? false,
-                'show_adult_content' => $this->setting['show_adult_content'] ?? false,
+                'show_adult_content' => $this->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
                 'notifications' => [
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? false,
                     'new_followers' => $this->setting['notifications']['new_followers'] ?? false,

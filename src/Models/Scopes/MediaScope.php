@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
+use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\MediaVisit;
@@ -282,10 +283,13 @@ trait MediaScope
     {
         if (is_array($genders)) {
             $genders = array_map('intval', $genders);
-
-            return $query->whereIn('content_gender', $genders);
+            $genders = array_intersect($genders, MediaContentGender::getAllValues());
+        } elseif (is_int($genders) && in_array($genders, MediaContentGender::getAllValues())) {
+            $genders = [$genders];
+        } else {
+            return $query;
         }
 
-        return $query->where('content_gender', $genders);
+        return $query->whereIn('content_gender', $genders);
     }
 }

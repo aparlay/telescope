@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Dto\MediaDTO;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
+use Aparlay\Core\Api\V1\Requests\PublicFeedRequest;
 use Aparlay\Core\Api\V1\Requests\UpdateMediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
@@ -29,18 +30,15 @@ class MediaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(PublicFeedRequest $request): Response
     {
         if (($type = request()?->input('type')) !== null) {
             $collection = new MediaCollection($this->mediaService->getFeedByType($type));
         } else {
-            $uuid = request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', ''));
             $isGuest = auth()->guest();
             $isFirstPage = request()->integer('page') === 0;
-            $genderContents = request()->input('gender_content', MediaContentGender::getAllValues());
-
             $collection = new MediaFeedsCollection(
-                $this->mediaService->getPublicFeeds($uuid, $isGuest, $genderContents, $isFirstPage)
+                $this->mediaService->getPublicFeeds($request, $isGuest, $isFirstPage)
             );
         }
 

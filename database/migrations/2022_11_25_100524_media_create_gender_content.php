@@ -1,6 +1,7 @@
 <?php
 
 use Aparlay\Core\Models\Enums\MediaContentGender;
+use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -22,7 +23,12 @@ return new class() extends Migration {
             $table->dropIndexIfExists(['status', 'sort_scores.paid', 'visibility']);
         });
         Media::query()->whereNull('is_fake')->update(['gender_content' => MediaContentGender::FEMALE->value]);
-        User::query()->where('setting.show_adult_content', true)->update(['setting.show_adult_content' => MediaContentGender::FEMALE->value]);
+        User::query()->where('setting.show_adult_content', true)
+            ->update(['setting.show_adult_content' => UserSettingShowAdultContent::ALWAYS->value]);
+        User::query()->where('setting.show_adult_content', false)
+            ->update(['setting.show_adult_content' => UserSettingShowAdultContent::ASK->value]);
+        User::query()->where('setting.show_adult_content', null)
+            ->update(['setting.show_adult_content' => UserSettingShowAdultContent::ASK->value]);
         Schema::table((new Media())->getCollection(), function (Blueprint $table) {
             $table->index(['status', 'sort_scores.default', 'visibility', 'gender_content'], null, ['background' => true]);
             $table->index(['status', 'sort_scores.guest', 'visibility', 'gender_content'], null, ['background' => true]);

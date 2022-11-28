@@ -8,14 +8,14 @@ enum UserSettingShowAdultContent: int implements Enum
 
     case NO = 1;
     case ASK = 2;
-    case YES = 3;
+    case ALWAYS = 3;
 
     public function label(): string
     {
         return match ($this) {
             self::NO => __('no'),
             self::ASK => __('ask'),
-            self::YES => __('yes'),
+            self::ALWAYS => __('yes'),
         };
     }
 
@@ -24,7 +24,7 @@ enum UserSettingShowAdultContent: int implements Enum
         return match ($this) {
             self::NO => 'warning',
             self::ASK => 'info',
-            self::YES => 'success',
+            self::ALWAYS => 'success',
         };
     }
 }
