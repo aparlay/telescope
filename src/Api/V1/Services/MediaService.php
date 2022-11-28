@@ -53,7 +53,7 @@ class MediaService
      */
     public function update(Media $media, MediaDTO $mediaDto): Media
     {
-        if (!empty($mediaDto->is_comments_enabled)) {
+        if (! empty($mediaDto->is_comments_enabled)) {
             $media->is_comments_enabled = $mediaDto->is_comments_enabled;
         }
 
@@ -206,7 +206,7 @@ class MediaService
         $query = Media::creator($userId)->recentFirst();
         if (auth()->guest()) {
             $query->confirmed()->public();
-        } elseif ((string)$userId === (string)auth()->user()->_id) {
+        } elseif ((string) $userId === (string) auth()->user()->_id) {
             $query->with([
                 'alertObjs' => function ($query) {
                     $query->where('status', AlertStatus::NOT_VISITED->value);
@@ -250,9 +250,9 @@ class MediaService
             $this->anonymousWatched($media, $duration);
         }
 
-        if (!empty($uuid)) {
+        if (! empty($uuid)) {
             $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
-            Redis::sadd($cacheKey, (string)$media->_id);
+            Redis::sadd($cacheKey, (string) $media->_id);
         }
     }
 
@@ -306,7 +306,7 @@ class MediaService
             $media->updateVisits($duration);
         }
 
-        if (!$mediaVisit->save()) {
+        if (! $mediaVisit->save()) {
             throw new Exception('Cannot save media visit data.');
         }
     }
@@ -330,8 +330,8 @@ class MediaService
         $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
 
         $sortCategory = $isGuest ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
-        if (!$isGuest && $isFirstPage) {
-            $this->loadUserVisitedVideos((string)auth()->user()->_id, $request->uuid);
+        if (! $isGuest && $isFirstPage) {
+            $this->loadUserVisitedVideos((string) auth()->user()->_id, $request->uuid);
         }
 
         $data = $query->medias($this->notVisitedVideoIds($request->uuid, $request->show_adult_content))
@@ -364,7 +364,7 @@ class MediaService
      */
     public function flushVisitedVideos(string $uuid): void
     {
-        if (!auth()->guest()) {
+        if (! auth()->guest()) {
             MediaVisit::query()->user(auth()->user()->_id)->delete();
         }
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
@@ -412,7 +412,7 @@ class MediaService
             ->merge($blockedMediaIds)
             ->flatten()
             ->map(function ($item, $key) {
-                return (string)$item;
+                return (string) $item;
             })
             ->toArray();
 
@@ -434,15 +434,15 @@ class MediaService
         $toplessMediaIdsCacheKey = (new Media())->getCollection().':topless:ids';
         $mediaIdsCacheKey = (new Media())->getCollection().':ids';
 
-        if (!Redis::exists($mediaIdsCacheKey)) {
+        if (! Redis::exists($mediaIdsCacheKey)) {
             Media::CachePublicMediaIds();
         }
 
-        if ($explicitVisibility === UserSettingShowAdultContent::NEVER->value && !Redis::exists($explicitMediaIdsCacheKey)) {
+        if ($explicitVisibility === UserSettingShowAdultContent::NEVER->value && ! Redis::exists($explicitMediaIdsCacheKey)) {
             Media::CachePublicExplicitMediaIds();
         }
 
-        if ($explicitVisibility === UserSettingShowAdultContent::TOPLESS->value && !Redis::exists($toplessMediaIdsCacheKey)) {
+        if ($explicitVisibility === UserSettingShowAdultContent::TOPLESS->value && ! Redis::exists($toplessMediaIdsCacheKey)) {
             Media::CachePublicToplessMediaIds();
         }
 
@@ -462,7 +462,7 @@ class MediaService
     {
         $mediaIds = [];
         foreach (Media::public()->confirmed()->select('_id')->get()->pluck('_id') as $media) {
-            $mediaIds[] = (string)$media;
+            $mediaIds[] = (string) $media;
         }
 
         $cacheKey = (new Media())->getCollection().':ids';
@@ -478,10 +478,10 @@ class MediaService
     public function watchedMedia(array $medias, string $uuid): void
     {
         $mediaIds = [];
-        if (!empty($uuid) && !empty($medias)) {
+        if (! empty($uuid) && ! empty($medias)) {
             $medias = collect(array_slice($medias, 0, 500))
                 ->filter(function ($item, $key) use (&$mediaIds) {
-                    if (empty($item['media_id']) || !isset($item['duration'])) {
+                    if (empty($item['media_id']) || ! isset($item['duration'])) {
                         return false;
                     }
 
