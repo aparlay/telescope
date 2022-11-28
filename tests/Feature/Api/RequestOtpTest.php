@@ -86,11 +86,10 @@ class RequestOtpTest extends ApiTestCase
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/request-otp', ['email' => $user->email])
             ->assertStatus(423)
-            ->assertJson([
+            ->assertJsonFragment([
                 'code' => 423,
                 'status' => 'ERROR',
                 'data' => [],
-                'message' => 'You cannot create more OTP, please wait 59 seconds to request a new otp or try again later.',
             ]);
     }
 

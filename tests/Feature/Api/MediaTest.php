@@ -417,6 +417,7 @@ class MediaTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data.file' => 'string',
                 ])
             );
