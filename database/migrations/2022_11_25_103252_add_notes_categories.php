@@ -13,7 +13,7 @@ return new class() extends Migration {
      */
     public function up()
     {
-        Note::each(function($model) {
+        Note::each(function ($model) {
             $model->category = (NoteType::OTHER->value === $model->type ? NoteCategory::NOTE->value : NoteCategory::LOG->value);
             $model->save();
         });
