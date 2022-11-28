@@ -12,7 +12,7 @@ class UpdateMediaVisibilityListener
         $mediaService = app()->make(MediaService::class);
 
         if ($event instanceof UserVisibilityChangedEvent) {
-            $mediaService->updateVisibilityByCreator($event->creator, $event->visibility);
+            $mediaService->updateVisibilityByCreator($event->user, $event->visibility);
         }
     }
 }
