@@ -27,14 +27,14 @@
     @include('default_view::admin.parts.messages')
     <div class="content">
         <div class="container-fluid">
-            <div class="row">
+            <div class="row mt-0">
                 <div class="col-12">
                     <div class="card card-default p-2 ml-n2">
-                        <livewire:notes-table :userId="(string) $user->_id"/>
+                        @include('default_view::admin.pages.user.tabs.notes', ['user' => $user])
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-0">
                 <div class="col-md-3">
                     @include('default_view::admin.pages.user.tabs.edit.menu')
                 </div>
