@@ -201,6 +201,10 @@ class MediaService extends AdminBaseService
         return $this->calculateSortScores($media, 0);
     }
 
+    public function updateVisibilityByCreator(User $creator, int $visibility) {
+        $this->mediaRepository->updateVisibility($creator, $visibility);
+    }
+
     public function reupload($media)
     {
         $this->mediaRepository->update(['file' => request()->input('file')], $media->_id);

@@ -9,6 +9,7 @@ use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserPayoutsUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
+use Aparlay\Core\Admin\Requests\UserVisibilityRequest;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Admin\Services\UploadService;
 use Aparlay\Core\Admin\Services\UserService;
@@ -175,6 +176,19 @@ class UserController extends Controller
             }
 
             return back()->with('success', 'User '.ucfirst(User::getStatuses()[$status]).' successfully.');
+        }
+
+        return back()->with('error', 'Update status failed.');
+    }
+
+    public function updateVisibility(User $user, UserVisibilityRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $visibility = (int) $request->input('visibility');
+
+        if ($this->userService->updateVisibility($user->_id, $visibility)) {
+            return back()->with('success', 'Set user '.ucfirst(User::getVisibilities()[$visibility]).' successfully.');
         }
 
         return back()->with('error', 'Update status failed.');
