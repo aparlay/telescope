@@ -18,7 +18,7 @@ enum EmailStatus: int implements Enum
         return match ($this) {
             self::QUEUED => __('queued'),
             self::SENT => __('sent'),
-            self::DELIVERED => __('opened'),
+            self::DELIVERED => __('delivered'),
             self::DEFERRED => __('delayed'),
             self::BOUNCED => __('bounced'),
             self::FAILED => __('failed'),
