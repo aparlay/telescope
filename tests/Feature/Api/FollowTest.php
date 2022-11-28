@@ -44,6 +44,7 @@ class FollowTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data._id' => 'string',
                     'data.created_at' => 'integer',
                     'data.creator' => 'array',

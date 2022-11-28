@@ -19,8 +19,10 @@ class ContactUsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param  ContactUsRequest  $request
+     *
      * @return Response
+     * @throws \Exception
      */
     public function send(ContactUsRequest $request): Response
     {

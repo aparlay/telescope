@@ -26,6 +26,7 @@ class SiteTest extends ApiTestCase
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
+                    'uuid' => 'string',
                     'status' => 'string',
                     'data.current' => 'integer',
                     'data.max' => 'integer',

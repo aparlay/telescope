@@ -33,6 +33,7 @@ class RequestOtpTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data.message' => 'string',
                 ])
             );
@@ -113,6 +114,7 @@ class RequestOtpTest extends ApiTestCase
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
+                    'uuid' => 'string',
                     'status' => 'string',
                     'data.message' => 'string',
                 ])
