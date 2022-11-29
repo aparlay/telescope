@@ -14,7 +14,7 @@
     </div>
 
     <table class="table table-striped">
-        <tbody>
+        <thead>
             <tr>
                 <th @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
                     <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
@@ -27,6 +27,7 @@
                 <th class="col-md-2">
                     <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'" />
                 </th>
+
                 <th class="col-md-1">
                     <label for="">Status</label>
                 </th>
@@ -35,7 +36,8 @@
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
                 </th>
             </tr>
-
+        </thead>
+        <tbody>
             @foreach($models as $model)
                 <tr>
                     <td @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
@@ -43,15 +45,16 @@
                             <x-username-avatar :user="$model->userObj"/>
                         @endif
                     </td>
+
                     <td>
                         @if ($model->userObj)
-                        <a href="{{$model->userObj->admin_url}}">
-                            {{ $model->to }}
-                    </a>
-                    @else
-                    <a href="mailto:{{$model->to}}">
-                        {{ $model->to }}
-                        </a>
+                            <a href="{{$model->userObj->admin_url}}">
+                                {{ $model->to }}
+                            </a>
+                        @else
+                            <a href="mailto:{{$model->to}}">
+                                {{ $model->to }}
+                            </a>
                         @endif
                     </td>
 
