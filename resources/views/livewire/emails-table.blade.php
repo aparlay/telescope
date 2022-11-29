@@ -55,6 +55,10 @@
                             <a href="mailto:{{$model->to}}">
                                 {{ $model->to }}
                             </a>
+                        @else
+                            <a href="mailto:{{$model->to}}">
+                                {{ $model->to }}
+                            </a>
                         @endif
                     </td>
 
@@ -73,7 +77,6 @@
                     <td>
                         {{ $model->created_at }}
                     </td>
-
                 </tr>
             @endforeach
         </tbody>

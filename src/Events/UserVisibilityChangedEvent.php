@@ -21,7 +21,6 @@ class UserVisibilityChangedEvent
         public Authenticatable|User $creator,
         public User $user,
         public int $type,
-        public int $visibility,
     ) {
     }
 }

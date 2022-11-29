@@ -367,7 +367,7 @@
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="visibility"
-                    value="{{ UserVisibility::PRIVATE->value }}">
+                    value="{{ UserVisibility::INVISIBLE_BY_ADMIN->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Make invisible</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

@@ -192,7 +192,7 @@ class UserController extends Controller
             return back()->with('success', 'Set user '.ucfirst(User::getVisibilities()[$visibility]).' successfully.');
         }
 
-        return back()->with('error', 'Update status failed.');
+        return back()->with('error', 'Update visibility failed.');
     }
 
     public function updateSettings(User $user, UserSettingsRequest $request): RedirectResponse

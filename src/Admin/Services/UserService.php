@@ -277,10 +277,11 @@ class UserService extends AdminBaseService
         $noteType = match ($userVisibility) {
             UserVisibility::PUBLIC->value => NoteType::PUBLIC->value,
             UserVisibility::PRIVATE->value => NoteType::PRIVATE->value,
+            UserVisibility::INVISIBLE_BY_ADMIN => NoteType::INVISIBLE_BY_ADMIN->value,
             default => null
         };
 
-        UserVisibilityChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType, $userVisibility);
+        UserVisibilityChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType);
 
         return $this->userRepository->update(['visibility' => $userVisibility], $userId);
     }
