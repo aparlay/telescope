@@ -138,7 +138,7 @@ class UserObserver extends BaseModelObserver
 
         if ($model->wasChanged('visibility')) {
             UpdateMedia::dispatch((string) $model->_id, [
-                'visibility' => $model->is_public ? MediaVisibility::PUBLIC->value : MediaVisibility::PRIVATE->value
+                'visibility' => $model->is_public ? MediaVisibility::PUBLIC->value : MediaVisibility::PRIVATE->value,
             ]);
         }
 
