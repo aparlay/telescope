@@ -13,7 +13,7 @@ return new class() extends Migration {
     {
         User::query()->update([
             'setting.payout.ban_payout' => false,
-            'setting.payout.auto_ban_payout' => false
+            'setting.payout.auto_ban_payout' => false,
         ]);
     }
 
