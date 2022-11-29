@@ -69,6 +69,7 @@ class MediaTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data._id' => 'string',
                     'data.description' => 'string',
                     'data.hash' => 'string',
@@ -213,6 +214,7 @@ class MediaTest extends ApiTestCase
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
+                    'uuid' => 'string',
                     'status' => 'string',
                     'data.alerts' => 'array',
                     'data.comment_count' => 'integer',
@@ -415,6 +417,7 @@ class MediaTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data.file' => 'string',
                 ])
             );
@@ -434,12 +437,9 @@ class MediaTest extends ApiTestCase
                 'file' => $videoFile,
             ])
             ->assertStatus(403)
-            ->assertJson([
-                'code' => 403,
-                'status' => 'ERROR',
-                'data' => [],
-                'message' => 'You need to complete registration first!',
-            ]);
+            ->assertJsonPath('code', 403)
+            ->assertJsonPath('status', 'ERROR')
+            ->assertJsonPath('message', 'You need to complete registration first!');
     }
 
     /**
@@ -686,6 +686,7 @@ class MediaTest extends ApiTestCase
 
         $assertableJson = [
             'code' => 'integer',
+            'uuid' => 'string',
             'status' => 'string',
             'data.items' => 'array',
             'data.items.0._id' => 'string',
@@ -941,6 +942,7 @@ class MediaTest extends ApiTestCase
         $assertableJson = [
             'code' => 'integer',
             'status' => 'string',
+            'uuid' => 'string',
             'data.items' => 'array',
             'data.items.0.alerts' => 'array',
             'data.items.0.comment_count' => 'integer',
@@ -998,6 +1000,7 @@ class MediaTest extends ApiTestCase
         $assertableJsonFollower = [
             'code' => 'integer',
             'status' => 'string',
+            'uuid' => 'string',
             'data.items' => 'array',
             'data.items.0.alerts' => 'array',
             'data.items.0.comment_count' => 'integer',

@@ -19,8 +19,10 @@ class ContactUsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param  ContactUsRequest  $request
+     *
      * @return Response
+     * @throws \Exception
      */
     public function send(ContactUsRequest $request): Response
     {
@@ -35,10 +37,12 @@ class ContactUsController extends Controller
         $email = EmailRepository::create($request);
         Email::dispatch((string) $email->_id, config('mail.support_email'), 'Contact Us notification', EmailModel::TEMPLATE_EMAIL_CONTACTUS, $data);
 
-        $user = User::admin()->first();
-        $user->notify(
-            new ContactUs($data['email'], $data['name'], 'Contact Us notification', $data['message'])
-        );
+        if (! config('app.is_testing')) {
+            $user = User::admin()->first();
+            $user->notify(
+                new ContactUs($data['email'], $data['name'], 'Contact Us notification', $data['message'])
+            );
+        }
 
         return $this->response([], Response::HTTP_OK);
     }
