@@ -59,9 +59,9 @@ enum NoteType: int implements Enum
             self::PUBLIC => __('success'),
             self::PRIVATE => __('warning'),
             self::INVISIBLE_BY_ADMIN => __('danger'),
-            self::SET_BAN_PAYOUT => __('warning'),
+            self::SET_BAN_PAYOUT => __('danger'),
             self::UNSET_BAN_PAYOUT => __('success'),
-            self::SET_AUTO_BAN_PAYOUT => __('warning'),
+            self::SET_AUTO_BAN_PAYOUT => __('danger'),
             self::UNSET_AUTO_BAN_PAYOUT => __('success'),
         };
     }
@@ -83,9 +83,9 @@ enum NoteType: int implements Enum
             self::PUBLIC => __("User {$user->note_admin_url} is <b class='text-success'>set to public</b> by {$admin->note_admin_url}"),
             self::PRIVATE => __("User {$user->note_admin_url} is <b class='text-warning'>set to private</b> by {$admin->note_admin_url}"),
             self::INVISIBLE_BY_ADMIN => __("User {$user->note_admin_url} is <b class='text-danger'>set invisible</b> by {$admin->note_admin_url}"),
-            self::SET_BAN_PAYOUT => __("User {$user->note_admin_url} payout is <b class='text-warning'>Banned</b> by {$admin->note_admin_url}"),
+            self::SET_BAN_PAYOUT => __("User {$user->note_admin_url} payout is <b class='text-danger'>Banned</b> by {$admin->note_admin_url}"),
             self::UNSET_BAN_PAYOUT => __("User {$user->note_admin_url} payout is <b class='text-success'>UnBanned</b> by {$admin->note_admin_url}"),
-            self::SET_AUTO_BAN_PAYOUT => __("User {$user->note_admin_url} auto payout is <b class='text-warning'>Banned</b> by {$admin->note_admin_url}"),
+            self::SET_AUTO_BAN_PAYOUT => __("User {$user->note_admin_url} auto payout is <b class='text-danger'>Banned</b> by {$admin->note_admin_url}"),
             self::UNSET_AUTO_BAN_PAYOUT => __("User {$user->note_admin_url} auto payout is <b class='text-success'>UnBanned</b> by {$admin->note_admin_url}"),
             default => __("User {$user->note_admin_url} is received unknown notes by {$admin->note_admin_url}"),
         };

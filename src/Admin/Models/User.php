@@ -5,7 +5,6 @@ namespace Aparlay\Core\Admin\Models;
 use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
-use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\User as UserBase;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -46,6 +45,7 @@ class User extends UserBase implements Auditable
         'verification_status',
         'country_alpha2',
         'payout_country_alpha2',
+        'setting',
     ];
 
     /**
