@@ -333,7 +333,8 @@ class User extends \App\Models\User
      */
     public function shouldBeSearchable(): bool
     {
-        return in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
+        return ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) &&
+            in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
             ! config('app.is_testing');
     }
 
