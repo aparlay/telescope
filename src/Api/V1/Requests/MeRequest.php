@@ -86,7 +86,7 @@ class MeRequest extends FormRequest
             ]);
         }
 
-        if (!auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
+        if (! auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
             throw ValidationException::withMessages([
                 'visibility' => 'Your account is invisible by administrator, you cannot change it to public/private.',
             ]);
