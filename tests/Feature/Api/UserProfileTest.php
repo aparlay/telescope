@@ -4,7 +4,9 @@ namespace Aparlay\Core\Tests\Feature\Api;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
 
@@ -28,7 +30,7 @@ class UserProfileTest extends ApiTestCase
                 'data' => [
                     [
                         'field' => 'username',
-                        'message' => 'The username must be at least 2 characters.',
+                        'message' => 'The username must be at least 3 characters.',
                     ],
                 ],
                 'message' => 'There are some errors in your provided data.',
@@ -267,12 +269,20 @@ class UserProfileTest extends ApiTestCase
                     'avatar',
                     'setting' => [
                         'otp',
+                        'show_adult_content',
+                        'filter_content_gender' => [
+                            'female',
+                            'male',
+                            'transgender',
+                        ],
                         'notifications' => [
                             'unread_message_alerts',
-                            'new_followers',
                             'news_and_updates',
-                            'tips',
+                            'new_followers',
                             'new_subscribers',
+                            'tips',
+                            'likes',
+                            'comments',
                         ],
                     ],
                     'features' => [
@@ -280,7 +290,6 @@ class UserProfileTest extends ApiTestCase
                         'demo',
                     ],
                     'gender',
-                    'interested_in',
                     'status',
                     'visibility',
                     'promo_link',
@@ -322,17 +331,23 @@ class UserProfileTest extends ApiTestCase
                     'data.avatar' => 'string',
                     'data.setting' => 'array',
                     'data.setting.otp' => 'boolean',
+                    'data.setting.show_adult_content' => 'integer',
+                    'data.setting.filter_content_gender' => 'array',
+                    'data.setting.filter_content_gender.female' => 'boolean',
+                    'data.setting.filter_content_gender.male' => 'boolean',
+                    'data.setting.filter_content_gender.transgender' => 'boolean',
                     'data.setting.notifications' => 'array',
                     'data.setting.notifications.unread_message_alerts' => 'boolean',
                     'data.setting.notifications.new_followers' => 'boolean',
                     'data.setting.notifications.news_and_updates' => 'boolean',
                     'data.setting.notifications.tips' => 'boolean',
+                    'data.setting.notifications.likes' => 'boolean',
+                    'data.setting.notifications.comments' => 'boolean',
                     'data.setting.notifications.new_subscribers' => 'boolean',
                     'data.features' => 'array',
                     'data.features.tips' => 'boolean',
                     'data.features.demo' => 'boolean',
                     'data.gender' => 'integer',
-                    'data.interested_in' => 'integer',
                     'data.visibility' => 'integer',
                     'data.block_count' => 'integer',
                     'data.follower_count' => 'integer',
@@ -367,11 +382,12 @@ class UserProfileTest extends ApiTestCase
     public function updateUserVisibility()
     {
         $user = User::first();
-        $visibility = $user->visibility === 0 ? 1 : 0;
+        $user->update(['visibility' => UserVisibility::PUBLIC->value]);
+        $user->refresh();
 
         Media::factory()->for($user, 'userObj')
             ->create([
-                'visibility' => $user->visibility,
+                'visibility' => MediaVisibility::PUBLIC->value,
                 'creator' => [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
@@ -382,7 +398,7 @@ class UserProfileTest extends ApiTestCase
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/me?_method=PUT', [
-                'visibility' => $visibility,
+                'visibility' => UserVisibility::PRIVATE->value,
             ]);
 
         $r->assertStatus(200)
@@ -400,12 +416,20 @@ class UserProfileTest extends ApiTestCase
                         'avatar',
                         'setting' => [
                             'otp',
+                            'show_adult_content',
+                            'filter_content_gender' => [
+                                'female',
+                                'male',
+                                'transgender',
+                            ],
                             'notifications' => [
                                 'unread_message_alerts',
-                                'new_followers',
                                 'news_and_updates',
-                                'tips',
+                                'new_followers',
                                 'new_subscribers',
+                                'tips',
+                                'likes',
+                                'comments',
                             ],
                         ],
                         'features' => [
@@ -413,7 +437,6 @@ class UserProfileTest extends ApiTestCase
                             'demo',
                         ],
                         'gender',
-                        'interested_in',
                         'status',
                         'visibility',
                         'promo_link',
@@ -466,6 +489,40 @@ class UserProfileTest extends ApiTestCase
             );
 
         $userDetails = User::where('_id', new ObjectId($user->_id))->first();
-        $this->assertEquals($visibility, $userDetails->visibility);
+        $this->assertEquals(UserVisibility::PRIVATE->value, $userDetails->visibility);
+    }
+
+    /**
+     * A basic unit test for username invalid.
+     *
+     * @test
+     */
+    public function updateInvisibleUserVisibility()
+    {
+        $user = User::first();
+        $user->update(['visibility' => UserVisibility::INVISIBLE_BY_ADMIN->value]);
+        $user->refresh();
+
+        $r = $this->actingAs($user)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->postJson('/v1/me?_method=PUT', [
+                'visibility' => UserVisibility::PRIVATE->value,
+            ]);
+
+        $r->assertStatus(422)
+            ->assertJson([
+                'code' => 422,
+                'status' => 'ERROR',
+                'data' => [
+                    [
+                        'field' => 'visibility',
+                        'message' => 'Your account is invisible by administrator, you cannot change it to public/private.'
+                    ]
+                ],
+                'message' => 'There are some errors in your provided data.',
+            ]);;
+
+        $userDetails = User::where('_id', new ObjectId($user->_id))->first();
+        $this->assertEquals(UserVisibility::INVISIBLE_BY_ADMIN->value, $userDetails->visibility);
     }
 }

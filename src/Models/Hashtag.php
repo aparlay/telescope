@@ -2,9 +2,6 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Models\Enums\MediaStatus;
-use Aparlay\Core\Models\Enums\MediaVisibility;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;

@@ -7,10 +7,8 @@ use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Services\OnlineUserService;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\UserFeature;
 use Aparlay\Core\Models\Enums\UserGender;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
@@ -54,7 +52,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $gender
  * @property int         $visibility
  * @property int         $show_online_status
- * @property int         $interested_in
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
  * @property array       $setting
@@ -102,6 +99,9 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read bool $is_tier3
  * @property-read bool $is_tier1
  * @property-read bool $is_risky
+ * @property-read bool $is_public
+ * @property-read bool $is_private
+ * @property-read bool $is_invisible
  * @property-read int $tip_commission_percentage
  * @property-read int $tip_referral_commission_percentage
  * @property-read int $subscription_commission_percentage
@@ -158,7 +158,6 @@ class User extends \App\Models\User
         'setting',
         'features',
         'gender',
-        'interested_in',
         'type',
         'status',
         'visibility',
@@ -213,8 +212,8 @@ class User extends \App\Models\User
             ],
             'payment' => [
                 'allow_unverified_cc' => false,
-                'block_unverified_cc' => false,
-                'block_cc_payments' => false,
+                'block_unverified_cc' => true,
+                'block_cc_payments' => true,
                 'unverified_cc_spent_amount' => 0,
             ],
         ],
@@ -287,7 +286,6 @@ class User extends \App\Models\User
         'phone_number_verified' => 'boolean',
         'gender' => 'integer',
         'avatar' => 'string',
-        'interested_in' => 'integer',
         'visibility' => 'integer',
         'stats.counters.followers' => 'integer',
         'stats.counters.followings' => 'integer',
@@ -339,9 +337,8 @@ class User extends \App\Models\User
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->visibility == UserVisibility::PUBLIC->value &&
+        return ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) &&
             in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
-            //$this->verification_status == UserVerificationStatus::VERIFIED->value &&
             ! config('app.is_testing');
     }
 
@@ -611,6 +608,21 @@ class User extends \App\Models\User
         return config('payment.earnings.exclusive_content_referral_commission_percentage', 5);
     }
 
+    public function getIsPublicAttribute(): bool
+    {
+        return $this->visibility === UserVisibility::PUBLIC->value;
+    }
+
+    public function getIsPrivateAttribute(): bool
+    {
+        return $this->visibility === UserVisibility::PRIVATE->value;
+    }
+
+    public function getIsInvisibleAttribute(): bool
+    {
+        return $this->visibility === UserVisibility::INVISIBLE_BY_ADMIN->value;
+    }
+
     /**
      * @param $attributeValue
      * @return void
@@ -727,19 +739,6 @@ class User extends \App\Models\User
             UserGender::MALE->value => UserGender::MALE->label(),
             UserGender::TRANSGENDER->value => UserGender::TRANSGENDER->label(),
             UserGender::NOT_MENTION->value => UserGender::NOT_MENTION->label(),
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public static function getInterestedIns(): array
-    {
-        return [
-            UserInterestedIn::FEMALE->value => UserInterestedIn::FEMALE->label(),
-            UserInterestedIn::MALE->value => UserInterestedIn::MALE->label(),
-            UserInterestedIn::TRANSGENDER->value => UserInterestedIn::TRANSGENDER->label(),
-            UserInterestedIn::COUPLE->value => UserInterestedIn::COUPLE->label(),
         ];
     }
 

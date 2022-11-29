@@ -12,15 +12,15 @@ use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateMedia;
 use Aparlay\Core\Jobs\UpdateUserCountry;
+use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Enums\UserGender;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
+use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Redis;
 
 class UserObserver extends BaseModelObserver
 {
@@ -38,9 +38,6 @@ class UserObserver extends BaseModelObserver
         }
         if (! in_array($model->gender, array_keys(User::getGenders()), true)) {
             $model->gender = UserGender::MALE->value;
-        }
-        if (empty($model->interested_in)) {
-            $model->interested_in = UserInterestedIn::FEMALE->value;
         }
         if (empty($model->visibility)) {
             $model->visibility = UserVisibility::PUBLIC->value;
@@ -135,7 +132,9 @@ class UserObserver extends BaseModelObserver
         }
 
         if ($model->wasChanged('visibility')) {
-            UpdateMedia::dispatch((string) $model->_id, ['visibility' => $model->visibility]);
+            UpdateMedia::dispatch((string) $model->_id, [
+                'visibility' => $model->is_public ? MediaVisibility::PUBLIC->value : MediaVisibility::PRIVATE->value,
+            ]);
         }
 
         $model->refresh();

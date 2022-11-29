@@ -157,7 +157,6 @@ class UserService extends AdminBaseService
         $data = $request->only([
             'email',
             'gender',
-            'interested_in',
             'type',
             'birthday',
             'status',

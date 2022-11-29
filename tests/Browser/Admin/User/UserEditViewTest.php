@@ -118,7 +118,6 @@ class UserEditViewTest extends DuskTestCase
                 ->clickAtXPath('//*[@id="user-info"]/form/div[6]/label') //feature tips
                 ->clickAtXPath('//*[@id="user-info"]/form/div[7]/label') //feature demo user
                 ->select('gender')
-                ->select('interested_in')
                 ->select('type')
                 ->select('role')
                 ->select('status')

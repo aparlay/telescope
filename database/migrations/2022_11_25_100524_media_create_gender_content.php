@@ -33,8 +33,8 @@ return new class() extends Migration {
         User::query()->where('setting.filter_content_gender', null)
             ->update(['setting.filter_content_gender' => [
                 MediaContentGender::FEMALE->label() => true,
-                MediaContentGender::MALE->label() => true,
-                MediaContentGender::TRANSGENDER->label() => true,
+                MediaContentGender::MALE->label() => false,
+                MediaContentGender::TRANSGENDER->label() => false,
             ]]);
 
         Schema::table((new Media())->getCollection(), function (Blueprint $table) {
