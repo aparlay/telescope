@@ -112,7 +112,6 @@ class UserController extends Controller
                 $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
 
-
             if ($user->payout_country_alpha2) {
                 $requestData = $request->except([
                     'avatar',
