@@ -336,7 +336,7 @@ class MediaService
 
         $data = $query->medias($this->notVisitedVideoIds($request->uuid, $request->show_adult_content))
             ->sort($sortCategory)
-            ->genderContent($request->content_gender)
+            ->genderContent($request->filter_content_gender)
             ->paginate(5)
             ->withQueryString();
 

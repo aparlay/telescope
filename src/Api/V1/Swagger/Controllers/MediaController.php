@@ -42,7 +42,7 @@ use OpenApi\Annotations as OA;
  *         )
  *     ),
  *     @OA\Parameter(
- *         name="content_gender",
+ *         name="filter_content_gender",
  *         in="query",
  *         example="female,male,3",
  *         description="comma separated content gender values. default is all genders of contents for the guests and selected content gender for login users. possible values for this field is 1,2,3,female,male,transgender",

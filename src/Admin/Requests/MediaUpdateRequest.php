@@ -56,7 +56,7 @@ class MediaUpdateRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'visibility' => request()->input('visibility', 0),
+            'visibility' => request()->input('visibility', 1),
             'is_protected' => request()->boolean('is_protected'),
             'is_music_licensed' => request()->boolean('is_music_licensed'),
         ]);

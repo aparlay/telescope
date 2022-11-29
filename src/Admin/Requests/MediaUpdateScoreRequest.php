@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -50,6 +51,11 @@ class MediaUpdateScoreRequest extends FormRequest
                 'integer',
                 Rule::in(array_keys(Media::getStatuses())),
             ],
+            'content_gender' => [
+                'required',
+                'integer',
+                Rule::in(MediaContentGender::getAllValues()),
+            ],
         ];
     }
 
@@ -70,10 +76,15 @@ class MediaUpdateScoreRequest extends FormRequest
     {
         if (
             (int) $this->status === MediaStatus::CONFIRMED->value &&
-            (empty($this->skin_score) || empty($this->awesomeness_score) || empty($this->beauty_score))
+            (
+                empty($this->skin_score) ||
+                empty($this->awesomeness_score) ||
+                empty($this->beauty_score) ||
+                !isset($this->content_gender)
+            )
         ) {
             throw ValidationException::withMessages([
-                'avatar' => 'You must set all scores before confirm a video for public feed.',
+                'avatar' => 'You must set all scores and content gender before confirm a video for public feed.',
             ]);
         }
     }

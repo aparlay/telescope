@@ -12,7 +12,7 @@ use Illuminate\Validation\Rule;
 /**
  * @property string $uuid
  * @property int    $show_adult_content
- * @property array  $content_gender
+ * @property array  $filter_content_gender
  * @property string $password
  */
 class PublicFeedRequest extends FormRequest
@@ -36,7 +36,7 @@ class PublicFeedRequest extends FormRequest
     {
         return [
             'show_adult_content' => ['nullable', Rule::in(UserSettingShowAdultContent::getAllValues())],
-            'content_gender.*' => ['integer', Rule::in(MediaContentGender::getAllValues())],
+            'filter_content_gender.*' => ['integer', Rule::in(MediaContentGender::getAllValues())],
             'payout_country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
         ];
     }
@@ -49,7 +49,7 @@ class PublicFeedRequest extends FormRequest
     public function prepareForValidation()
     {
         $contentGenders = [];
-        foreach (explode(',', request()->input('content_gender', 'female,male,transgender')) as $item) {
+        foreach (explode(',', request()->input('filter_content_gender', 'female,male,transgender')) as $item) {
             if (! is_numeric($item)) {
                 $contentGenders[] = match ($item) {
                     MediaContentGender::FEMALE->label() => MediaContentGender::FEMALE->value,
@@ -96,7 +96,7 @@ class PublicFeedRequest extends FormRequest
             'uuid' => request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', '')),
             'is_first_page' => (request()->integer('page') === 0),
             'show_adult_content' => $showAdultContent,
-            'content_gender' => $contentGenders,
+            'filter_content_gender' => $contentGenders,
         ]);
     }
 }
