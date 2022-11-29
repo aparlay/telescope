@@ -358,7 +358,7 @@ class User extends \App\Models\User
             'poster' => $this->avatar,
             'username' => $this->username,
             'full_name' => $this->full_name,
-            'gender' => $this->gender ?? UserGender::FEMALE->value,
+            'gender' => [$this->gender] ?? [UserGender::FEMALE->value],
             'description' => $this->bio,
             'hashtags' => [],
             'score' => $this->scores['sort'],
