@@ -298,7 +298,7 @@ class UserService extends AdminBaseService
         $success = true;
         $noteType = null;
 
-        foreach($userSettings as $key => $value) {
+        foreach ($userSettings as $key => $value) {
             if ($success) {
                 $success = $this->userRepository->updateSetting($user, $key, (bool) $value);
 

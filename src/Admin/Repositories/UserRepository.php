@@ -132,7 +132,8 @@ class UserRepository
      */
     public function updateSetting(User $user, string $settingKey, mixed $settingValue)
     {
-        $user['setting.' . $settingKey] = $settingValue;
+        $user['setting.'.$settingKey] = $settingValue;
+
         return $user->save();
     }
 

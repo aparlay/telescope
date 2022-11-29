@@ -198,7 +198,7 @@ class UserController extends Controller
     public function updateSettings(User $user, UserSettingsRequest $request): RedirectResponse
     {
         $this->userService->setUser(auth()->user());
-        
+
         $settings = $request->input('setting');
 
         if ($this->userService->updateSettings($user->_id, $settings)) {
