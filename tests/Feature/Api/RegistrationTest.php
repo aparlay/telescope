@@ -36,6 +36,7 @@ class RegistrationTest extends ApiTestCase
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
+                    'uuid' => 'string',
                     'status' => 'string',
                     'data.token' => 'string',
                     'data.token_expired_at' => 'integer',
@@ -77,6 +78,7 @@ class RegistrationTest extends ApiTestCase
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
+                    'uuid' => 'string',
                     'status' => 'string',
                     'data.token' => 'string',
                     'data.token_expired_at' => 'integer',

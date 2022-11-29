@@ -87,7 +87,11 @@
                 <td>
                     @if ($model->userObj)
                     <a href="{{$model->userObj->admin_url}}">
-                        {{ $model->userObj->email }}
+                        {{ $model->to }}
+                    </a>
+                    @else
+                    <a href="mailto:{{$model->to}}">
+                        {{ $model->to }}
                     </a>
                     @endif
                 </td>

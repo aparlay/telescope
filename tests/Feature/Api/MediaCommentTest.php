@@ -17,6 +17,7 @@ class MediaCommentTest extends ApiTestCase
     const MEDIA_COMMENT_TYPES = [
         'code' => 'integer',
         'status' => 'string',
+        'uuid' => 'string',
         'data._id' => 'string',
         'data.created_at' => 'integer',
         'data.likes_count' => 'integer',
@@ -265,6 +266,7 @@ class MediaCommentTest extends ApiTestCase
         $types = [
             'code' => 'integer',
             'status' => 'string',
+            'uuid' => 'string',
             'data._id' => 'string',
             'data.created_at' => 'integer',
             'data.likes_count' => 'integer',

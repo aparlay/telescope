@@ -12,11 +12,13 @@ use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateMedia;
 use Aparlay\Core\Jobs\UpdateUserCountry;
+use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
+use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Exception;
 
@@ -130,7 +132,9 @@ class UserObserver extends BaseModelObserver
         }
 
         if ($model->wasChanged('visibility')) {
-            UpdateMedia::dispatch((string) $model->_id, ['visibility' => $model->visibility]);
+            UpdateMedia::dispatch((string) $model->_id, [
+                'visibility' => $model->is_public ? MediaVisibility::PUBLIC->value : MediaVisibility::PRIVATE->value,
+            ]);
         }
 
         $model->refresh();

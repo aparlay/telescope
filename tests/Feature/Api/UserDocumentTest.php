@@ -36,6 +36,7 @@ class UserDocumentTest extends ApiTestCase
         $r->assertJson(
             fn ($json) => $json->whereAllType([
                 'code' => 'integer',
+                'uuid' => 'string',
                 'status' => 'string',
                 'data' => 'array',
             ])
@@ -65,6 +66,7 @@ class UserDocumentTest extends ApiTestCase
         $r->assertJson(
             fn ($json) => $json->whereAllType([
                 'code' => 'integer',
+                'uuid' => 'string',
                 'status' => 'string',
                 'data.type' => 'integer',
                 'data.status' => 'integer',
@@ -107,6 +109,7 @@ class UserDocumentTest extends ApiTestCase
             $r->assertJson(
                 fn ($json) => $json->whereAllType([
                     'code' => 'integer',
+                    'uuid' => 'string',
                     'status' => 'string',
                     'data.type' => 'integer',
                     'data.status' => 'integer',

@@ -21,8 +21,6 @@
     </div>
 @endsection
 @section('js')
-    <script src="{{ asset('admin/assets/js/adminAnalytics.js') }}"></script>
-    $section('css')
     <style>
         .input-container input {
             border: none;

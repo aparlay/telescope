@@ -53,6 +53,7 @@ class UserNotificationTest extends ApiTestCase
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
+                    'uuid' => 'string',
                     'status' => 'string',
                     'data.items.0._id' => 'string',
                     'data.items.0.status' => 'integer',
