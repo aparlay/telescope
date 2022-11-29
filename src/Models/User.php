@@ -7,10 +7,8 @@ use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Services\OnlineUserService;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\UserFeature;
 use Aparlay\Core\Models\Enums\UserGender;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
@@ -733,19 +731,6 @@ class User extends \App\Models\User
             UserGender::MALE->value => UserGender::MALE->label(),
             UserGender::TRANSGENDER->value => UserGender::TRANSGENDER->label(),
             UserGender::NOT_MENTION->value => UserGender::NOT_MENTION->label(),
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public static function getInterestedIns(): array
-    {
-        return [
-            UserInterestedIn::FEMALE->value => UserInterestedIn::FEMALE->label(),
-            UserInterestedIn::MALE->value => UserInterestedIn::MALE->label(),
-            UserInterestedIn::TRANSGENDER->value => UserInterestedIn::TRANSGENDER->label(),
-            UserInterestedIn::COUPLE->value => UserInterestedIn::COUPLE->label(),
         ];
     }
 

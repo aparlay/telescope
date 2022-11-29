@@ -4,10 +4,8 @@ namespace Aparlay\Core\Api\V1\Requests;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
-use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserGender;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;

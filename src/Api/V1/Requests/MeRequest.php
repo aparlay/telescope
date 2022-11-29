@@ -5,17 +5,11 @@ namespace Aparlay\Core\Api\V1\Requests;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
-use Aparlay\Core\Models\Enums\UserStatus;
-use Aparlay\Core\Models\Enums\UserType;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-use Maklad\Permission\Models\Role;
 
 /**
  * @property string $username
