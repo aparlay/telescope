@@ -4,7 +4,9 @@ namespace Aparlay\Core\Tests\Feature\Api;
 
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
 
@@ -28,7 +30,7 @@ class UserProfileTest extends ApiTestCase
                 'data' => [
                     [
                         'field' => 'username',
-                        'message' => 'The username must be at least 2 characters.',
+                        'message' => 'The username must be at least 3 characters.',
                     ],
                 ],
                 'message' => 'There are some errors in your provided data.',
@@ -282,12 +284,6 @@ class UserProfileTest extends ApiTestCase
                             'likes',
                             'comments',
                         ],
-                        'payment' => [
-                            'allow_unverified_cc',
-                            'block_unverified_cc',
-                            'block_cc_payments',
-                            'unverified_cc_spent_amount',
-                        ],
                     ],
                     'features' => [
                         'tips',
@@ -345,12 +341,9 @@ class UserProfileTest extends ApiTestCase
                     'data.setting.notifications.new_followers' => 'boolean',
                     'data.setting.notifications.news_and_updates' => 'boolean',
                     'data.setting.notifications.tips' => 'boolean',
+                    'data.setting.notifications.likes' => 'boolean',
+                    'data.setting.notifications.comments' => 'boolean',
                     'data.setting.notifications.new_subscribers' => 'boolean',
-                    'data.setting.payment' => 'array',
-                    'data.setting.notifications.allow_unverified_cc' => 'boolean',
-                    'data.setting.notifications.block_unverified_cc' => 'boolean',
-                    'data.setting.notifications.block_cc_payments' => 'boolean',
-                    'data.setting.notifications.unverified_cc_spent_amount' => 'boolean',
                     'data.features' => 'array',
                     'data.features.tips' => 'boolean',
                     'data.features.demo' => 'boolean',
@@ -389,11 +382,12 @@ class UserProfileTest extends ApiTestCase
     public function updateUserVisibility()
     {
         $user = User::first();
-        $visibility = $user->visibility === 0 ? 1 : 0;
+        $user->update(['visibility' => UserVisibility::PUBLIC->value]);
+        $user->refresh();
 
         Media::factory()->for($user, 'userObj')
             ->create([
-                'visibility' => $user->visibility,
+                'visibility' => MediaVisibility::PUBLIC->value,
                 'creator' => [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
@@ -404,7 +398,7 @@ class UserProfileTest extends ApiTestCase
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/me?_method=PUT', [
-                'visibility' => $visibility,
+                'visibility' => UserVisibility::PRIVATE->value,
             ]);
 
         $r->assertStatus(200)
@@ -436,12 +430,6 @@ class UserProfileTest extends ApiTestCase
                                 'tips',
                                 'likes',
                                 'comments',
-                            ],
-                            'payment' => [
-                                'allow_unverified_cc',
-                                'block_unverified_cc',
-                                'block_cc_payments',
-                                'unverified_cc_spent_amount',
                             ],
                         ],
                         'features' => [
@@ -501,6 +489,40 @@ class UserProfileTest extends ApiTestCase
             );
 
         $userDetails = User::where('_id', new ObjectId($user->_id))->first();
-        $this->assertEquals($visibility, $userDetails->visibility);
+        $this->assertEquals(UserVisibility::PRIVATE->value, $userDetails->visibility);
+    }
+
+    /**
+     * A basic unit test for username invalid.
+     *
+     * @test
+     */
+    public function updateInvisibleUserVisibility()
+    {
+        $user = User::first();
+        $user->update(['visibility' => UserVisibility::INVISIBLE_BY_ADMIN->value]);
+        $user->refresh();
+
+        $r = $this->actingAs($user)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->postJson('/v1/me?_method=PUT', [
+                'visibility' => UserVisibility::PRIVATE->value,
+            ]);
+
+        $r->assertStatus(422)
+            ->assertJson([
+                'code' => 422,
+                'status' => 'ERROR',
+                'data' => [
+                    [
+                        'field' => 'visibility',
+                        'message' => 'Your account is invisible by administrator, you cannot change it to public/private.'
+                    ]
+                ],
+                'message' => 'There are some errors in your provided data.',
+            ]);;
+
+        $userDetails = User::where('_id', new ObjectId($user->_id))->first();
+        $this->assertEquals(UserVisibility::INVISIBLE_BY_ADMIN->value, $userDetails->visibility);
     }
 }

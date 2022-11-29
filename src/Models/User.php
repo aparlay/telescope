@@ -212,8 +212,8 @@ class User extends \App\Models\User
             ],
             'payment' => [
                 'allow_unverified_cc' => false,
-                'block_unverified_cc' => false,
-                'block_cc_payments' => false,
+                'block_unverified_cc' => true,
+                'block_cc_payments' => true,
                 'unverified_cc_spent_amount' => 0,
             ],
         ],

@@ -76,8 +76,10 @@ class MeResource extends JsonResource
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? false,
                     'new_followers' => $this->setting['notifications']['new_followers'] ?? false,
                     'news_and_updates' => $this->setting['notifications']['news_and_updates'] ?? false,
-                    'tips' => $this->setting['notifications']['tips'] ?? false,
                     'new_subscribers' => $this->setting['notifications']['new_subscribers'] ?? false,
+                    'tips' => $this->setting['notifications']['tips'] ?? false,
+                    'likes' => $this->setting['notifications']['likes'] ?? false,
+                    'comments' => $this->setting['notifications']['comments'] ?? false,
                 ],
             ],
             'features' => [

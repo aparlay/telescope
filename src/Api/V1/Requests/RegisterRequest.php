@@ -136,8 +136,10 @@ class RegisterRequest extends FormRequest
                     'unread_message_alerts' => false,
                     'new_followers' => false,
                     'news_and_updates' => false,
-                    'tips' => false,
                     'new_subscribers' => false,
+                    'tips' => false,
+                    'likes' => false,
+                    'comments' => false,
                 ],
                 'payment' => [
                     'allow_unverified_cc' => false,

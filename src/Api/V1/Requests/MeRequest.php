@@ -14,10 +14,10 @@ use Illuminate\Validation\ValidationException;
 
 /**
  * @property string $username
- * @property int $visibility
+ * @property int    $visibility
  * @property string $country_alpha2
  * @property string $payout_country_alpha2
- * @property array $setting
+ * @property array  $setting
  */
 class MeRequest extends FormRequest
 {
@@ -45,7 +45,7 @@ class MeRequest extends FormRequest
             'bio' => ['nullable', 'string', 'min:3', 'max:200'],
             'promo_link' => ['nullable', 'url'],
             'username' => [
-                'required',
+                'nullable',
                 Rule::unique('users', 'username')->ignore($user->_id, '_id'),
                 'min:3',
                 'max:30',
@@ -55,7 +55,7 @@ class MeRequest extends FormRequest
             'country_alpha2' => ['nullable', Rule::in(array_keys(Country::getAlpha2AndNames()))],
             'visibility' => ['nullable', Rule::in([UserVisibility::PRIVATE->value, UserVisibility::PUBLIC->value])],
             'setting.otp' => ['nullable', 'bool'],
-            'setting.show_adult_content' => ['nullable', 'bool'],
+            'setting.show_adult_content' => ['nullable', 'integer'],
             'setting.notifications.*' => ['nullable', 'bool'],
             'setting.filter_content_gender.*' => ['nullable', 'bool'],
         ];
@@ -86,9 +86,9 @@ class MeRequest extends FormRequest
             ]);
         }
 
-        if (! auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
+        if (!auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
             throw ValidationException::withMessages([
-                'avatar' => 'Your account is invisible by administrator, you cannot change it to public/private.',
+                'visibility' => 'Your account is invisible by administrator, you cannot change it to public/private.',
             ]);
         }
 
@@ -96,7 +96,7 @@ class MeRequest extends FormRequest
         /* Set the Default Values and required to be input parameters */
         $this->merge([
             'username' => trim($this->username),
-            'visibility' => UserVisibility::PUBLIC->value,
+            'visibility' => $this->visibility ?? $user->visibility ?? UserVisibility::PUBLIC->value,
             'setting' => [
                 'otp' => $this->setting['otp'] ?? $user->setting['otp'] ?? false,
                 'show_adult_content' => $this->setting['show_adult_content'] ?? $user->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
@@ -109,14 +109,10 @@ class MeRequest extends FormRequest
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? $user->setting['notifications']['unread_message_alerts'] ?? true,
                     'new_followers' => $this->setting['notifications']['new_followers'] ?? $user->setting['notifications']['new_followers'] ?? true,
                     'news_and_updates' => $this->setting['notifications']['news_and_updates'] ?? $user->setting['notifications']['news_and_updates'] ?? true,
-                    'tips' => $this->setting['notifications']['tips'] ?? $user->setting['notifications']['tips'] ?? true,
                     'new_subscribers' => $this->setting['notifications']['new_subscribers'] ?? $user->setting['notifications']['new_subscribers'] ?? true,
-                ],
-                'payment' => [
-                    'allow_unverified_cc' => $this->setting['payment']['allow_unverified_cc'] ?? $user->setting['payment']['allow_unverified_cc'] ?? false,
-                    'block_unverified_cc' => $this->setting['payment']['block_unverified_cc'] ?? $user->setting['payment']['block_unverified_cc'] ?? false,
-                    'block_payments' => $this->setting['payment']['block_payments'] ?? $user->setting['payment']['block_payments'] ?? false,
-                    'unverified_cc_spent_amount' => $this->setting['payment']['unverified_cc_spent_amount'] ?? $user->setting['payment']['unverified_cc_spent_amount'] ?? 0,
+                    'tips' => $this->setting['notifications']['tips'] ?? $user->setting['notifications']['tips'] ?? true,
+                    'likes' => $this->setting['notifications']['likes'] ?? $user->setting['notifications']['likes'] ?? true,
+                    'comments' => $this->setting['notifications']['comments'] ?? $user->setting['notifications']['comments'] ?? true,
                 ],
             ],
             'referral_id' => $this->referral_id,
