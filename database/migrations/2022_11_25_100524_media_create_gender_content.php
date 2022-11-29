@@ -22,7 +22,7 @@ return new class() extends Migration {
             $table->dropIndexIfExists(['status', 'sort_scores.registered', 'visibility']);
             $table->dropIndexIfExists(['status', 'sort_scores.paid', 'visibility']);
         });
-        Media::query()->update(['gender_content' => MediaContentGender::FEMALE->value]);
+        Media::query()->update(['content_gender' => MediaContentGender::FEMALE->value]);
 
         User::query()->where('setting.show_adult_content', true)
             ->update(['setting.show_adult_content' => UserSettingShowAdultContent::ALL->value]);

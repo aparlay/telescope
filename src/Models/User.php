@@ -199,8 +199,8 @@ class User extends \App\Models\User
             'show_adult_content' => 2,
             'filter_content_gender' => [
                 'female' => true,
-                'male' => true,
-                'transgender' => true,
+                'male' => false,
+                'transgender' => false,
             ],
             'notifications' => [
                 'unread_message_alerts' => true,

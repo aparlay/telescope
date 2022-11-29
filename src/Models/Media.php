@@ -73,7 +73,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Alert[]            $alertObjs
  * @property UserNotification[] $userNotificationObjs
  * @property array              $files_history
- * @property int                $gender_content
+ * @property int                $content_gender
  *
  * @property-read string        $slack_subject_admin_url
  * @property-read string        $slack_admin_url
@@ -165,7 +165,7 @@ class Media extends BaseModel
         'sort_scores',
         'slug',
         'tips',
-        'gender_content',
+        'content_gender',
         'created_by',
         'updated_by',
         'created_at',
@@ -183,7 +183,7 @@ class Media extends BaseModel
         'visit_count' => 0,
         'comment_count' => 0,
         'tips' => 0,
-        'gender_content' => 0,
+        'content_gender' => 0,
         'sort_scores' => [
             'default' => 0,
             'guest' => 0,
@@ -205,7 +205,7 @@ class Media extends BaseModel
         'like_count' => 'integer',
         'visit_count' => 'integer',
         'comment_count' => 'integer',
-        'gender_content' => 'integer',
+        'content_gender' => 'integer',
         'tips' => 'integer',
         'is_comments_enabled' => 'boolean',
     ];

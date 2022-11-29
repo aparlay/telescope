@@ -151,7 +151,7 @@ class MediaService extends AdminBaseService
         ]);
 
         $dataModified = [
-            'visibility' => $request->integer('visibility') ?? 0,
+            'visibility' => $request->integer('visibility', 1) ?? 1,
             'is_protected' => $request->boolean('is_protected'),
             'is_music_licensed' => $request->boolean('is_music_licensed'),
         ];
@@ -172,12 +172,9 @@ class MediaService extends AdminBaseService
      */
     public function updateScore($id, MediaUpdateScoreRequest $request)
     {
-        $data = $request->only([
-            'status',
-        ]);
-
-        $dataModified = [
+        $data = [
             'status' => $request->integer('status'),
+            'content_gender' => $request->integer('content_gender'),
             'scores' => [
                 [
                     'type' => 'skin',
@@ -194,7 +191,6 @@ class MediaService extends AdminBaseService
             ],
         ];
 
-        $data = array_merge($data, $dataModified);
 
         $media = $this->mediaRepository->update($data, $id);
 
