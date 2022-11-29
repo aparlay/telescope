@@ -211,6 +211,8 @@ class User extends \App\Models\User
                 'block_cc_payments' => false,
                 'unverified_cc_spent_amount' => 0,
             ],
+            'ban_payout' => false,
+            'auto_ban_payout' => false,
         ],
         'features' => [
             'tips' => false,
@@ -293,6 +295,8 @@ class User extends \App\Models\User
         'stats.counters.subscribers' => 'integer',
         'stats.counters.chats' => 'integer',
         'stats.counters.notifications' => 'integer',
+        'settings.ban_payout' => 'boolean',
+        'settings.auto_ban_payout' => 'boolean',
         'type' => 'integer',
         'verification_status' => 'integer',
     ];
@@ -333,9 +337,8 @@ class User extends \App\Models\User
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->visibility == UserVisibility::PUBLIC->value &&
+        return ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) &&
             in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
-            //$this->verification_status == UserVerificationStatus::VERIFIED->value &&
             ! config('app.is_testing');
     }
 
@@ -598,6 +601,11 @@ class User extends \App\Models\User
     public function getExclusiveContentReferralCommissionPercentageAttribute(): int
     {
         return config('payment.earnings.exclusive_content_referral_commission_percentage', 5);
+    }
+
+    public function getIsPublicAttribute(): bool
+    {
+        return $this->visibility === UserVisibility::PUBLIC->value;
     }
 
     /**

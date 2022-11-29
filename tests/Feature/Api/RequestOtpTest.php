@@ -33,6 +33,7 @@ class RequestOtpTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data.message' => 'string',
                 ])
             );
@@ -85,11 +86,10 @@ class RequestOtpTest extends ApiTestCase
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/request-otp', ['email' => $user->email])
             ->assertStatus(423)
-            ->assertJson([
+            ->assertJsonFragment([
                 'code' => 423,
                 'status' => 'ERROR',
                 'data' => [],
-                'message' => 'You cannot create more OTP, please wait 59 seconds to request a new otp or try again later.',
             ]);
     }
 
@@ -113,6 +113,7 @@ class RequestOtpTest extends ApiTestCase
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
+                    'uuid' => 'string',
                     'status' => 'string',
                     'data.message' => 'string',
                 ])

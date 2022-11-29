@@ -8,6 +8,7 @@ use Aparlay\Core\Admin\Requests\UserGeneralUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserPayoutsUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserSettingsRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
 use Aparlay\Core\Admin\Requests\UserVisibilityRequest;
 use Aparlay\Core\Admin\Services\MediaService;
@@ -192,6 +193,19 @@ class UserController extends Controller
         }
 
         return back()->with('error', 'Update status failed.');
+    }
+
+    public function updateSettings(User $user, UserSettingsRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $settings = $request->input('setting');
+
+        if ($this->userService->updateSettings($user->_id, $settings)) {
+            return back()->with('success', 'Set user settings successfully.');
+        }
+
+        return back()->with('error', 'Update settings failed.');
     }
 
     public function upload(MediaUploadRequest $request)

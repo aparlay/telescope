@@ -10,6 +10,7 @@ use Aparlay\Core\Admin\Requests\UserPayoutsUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Constants\Roles;
+use Aparlay\Core\Events\UserSettingChangedEvent;
 use Aparlay\Core\Events\UserStatusChangedEvent;
 use Aparlay\Core\Events\UserVisibilityChangedEvent;
 use Aparlay\Core\Jobs\DeleteAvatar;
@@ -18,7 +19,6 @@ use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Support\Facades\Storage;
-use MongoDB\BSON\ObjectId;
 
 class UserService extends AdminBaseService
 {
@@ -267,11 +267,11 @@ class UserService extends AdminBaseService
     }
 
     /**
-     * @param string $userId
+     * @param mixed $userId
      * @param int $userVisibility
      * @return bool
      */
-    public function updateVisibility(string $userId, int $userVisibility): bool
+    public function updateVisibility(mixed $userId, int $userVisibility): bool
     {
         $user = $this->find($userId);
 
@@ -281,8 +281,41 @@ class UserService extends AdminBaseService
             default => null
         };
 
-        UserVisibilityChangedEvent::dispatch($this->getUser(), $user, $noteType, $userVisibility);
+        UserVisibilityChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType, $userVisibility);
 
         return $this->userRepository->update(['visibility' => $userVisibility], $userId);
+    }
+
+    /**
+     * @param mixed $userId
+     * @param array $userSettings
+     * @return bool
+     */
+    public function updateSettings(mixed $userId, array $userSettings): bool
+    {
+        $user = $this->find($userId);
+
+        $success = true;
+        $noteType = null;
+
+        foreach ($userSettings as $key => $value) {
+            if ($success) {
+                $success = $this->userRepository->updateSetting($user, $key, (bool) $value);
+
+                switch($key) {
+                    case 'ban_payout':
+                        $noteType = ($value ? NoteType::SET_BAN_PAYOUT->value : NoteType::UNSET_BAN_PAYOUT->value);
+                        break;
+
+                    case 'auto_ban_payout':
+                        $noteType = ($value ? NoteType::SET_AUTO_BAN_PAYOUT->value : NoteType::UNSET_AUTO_BAN_PAYOUT->value);
+                        break;
+                }
+            }
+        }
+
+        UserSettingChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType);
+
+        return $success;
     }
 }

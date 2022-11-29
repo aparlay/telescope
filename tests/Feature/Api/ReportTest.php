@@ -67,6 +67,7 @@ class ReportTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data._id' => 'string',
                     'data.media_id' => 'string',
                     'data.user_id' => 'string',
@@ -112,6 +113,7 @@ class ReportTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data._id' => 'string',
                     'data.media_id' => 'string',
                     'data.user_id' => 'string',
@@ -160,6 +162,7 @@ class ReportTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data._id' => 'string',
                     'data.media_id' => 'string',
                     'data.user_id' => 'string',
@@ -294,6 +297,7 @@ class ReportTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data._id' => 'string',
                     'data.media_id' => 'string',
                     'data.user_id' => 'string',

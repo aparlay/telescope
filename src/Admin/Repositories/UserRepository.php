@@ -124,6 +124,19 @@ class UserRepository
         return $user;
     }
 
+    /**
+     * @param \Aparlay\Core\Admin\Models\User $user
+     * @param string $settingKey
+     * @param mixed $settingValue
+     * @return bool
+     */
+    public function updateSetting(User $user, string $settingKey, mixed $settingValue)
+    {
+        $user['setting.'.$settingKey] = $settingValue;
+
+        return $user->save();
+    }
+
     public function countFilteredUser($text, $filters, $dateRangeFilter = null)
     {
         $query = $this->model->textSearch($text)->filter($filters);
