@@ -211,6 +211,8 @@ class User extends \App\Models\User
                 'block_cc_payments' => false,
                 'unverified_cc_spent_amount' => 0,
             ],
+            'ban_payout' => false,
+            'auto_ban_payout' => false,
         ],
         'features' => [
             'tips' => false,
@@ -293,6 +295,8 @@ class User extends \App\Models\User
         'stats.counters.subscribers' => 'integer',
         'stats.counters.chats' => 'integer',
         'stats.counters.notifications' => 'integer',
+        'settings.ban_payout' => 'boolean',
+        'settings.auto_ban_payout' => 'boolean',
         'type' => 'integer',
         'verification_status' => 'integer',
     ];

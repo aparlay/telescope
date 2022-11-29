@@ -18,6 +18,10 @@ enum NoteType: int implements Enum
     case OTHER = 8;
     case PUBLIC = 9;
     case PRIVATE = 10;
+    case SET_BAN_PAYOUT = 11;
+    case UNSET_BAN_PAYOUT = 12;
+    case SET_AUTO_BAN_PAYOUT = 13;
+    case UNSET_AUTO_BAN_PAYOUT = 14;
 
     public function label(): string
     {
@@ -31,7 +35,11 @@ enum NoteType: int implements Enum
             self::UNBAN_ALL_CC_PAYMENT => __('unban all cc payments'),
             self::OTHER => __('other'),
             self::PUBLIC => __('public'),
-            self::PRIVATE => __('private')
+            self::PRIVATE => __('private'),
+            self::SET_BAN_PAYOUT => __('set_ban_payout'),
+            self::UNSET_BAN_PAYOUT => __('unset_ban_payout'),
+            self::SET_AUTO_BAN_PAYOUT => __('set_auto_ban_payout'),
+            self::UNSET_AUTO_BAN_PAYOUT => __('unset_auto_ban_payout'),
         };
     }
 
@@ -48,6 +56,10 @@ enum NoteType: int implements Enum
             self::OTHER => __('info'),
             self::PUBLIC => __('success'),
             self::PRIVATE => __('warning'),
+            self::SET_BAN_PAYOUT => __('warning'),
+            self::UNSET_BAN_PAYOUT => __('success'),
+            self::SET_AUTO_BAN_PAYOUT => __('warning'),
+            self::UNSET_AUTO_BAN_PAYOUT => __('success'),
         };
     }
 
@@ -67,6 +79,10 @@ enum NoteType: int implements Enum
             self::UNBAN_ALL_CC_PAYMENT => __("User {$user->note_admin_url} is unbanned for any credit-card transaction by {$admin->note_admin_url}"),
             self::PUBLIC => __("User {$user->note_admin_url} is <b class='text-success'>set to public</b> by {$admin->note_admin_url}"),
             self::PRIVATE => __("User {$user->note_admin_url} is <b class='text-warning'>set to private</b> by {$admin->note_admin_url}"),
+            self::SET_BAN_PAYOUT => __("User {$user->note_admin_url} payout is <b class='text-warning'>Banned</b> by {$admin->note_admin_url}"),
+            self::UNSET_BAN_PAYOUT => __("User {$user->note_admin_url} payout is <b class='text-success'>UnBanned</b> by {$admin->note_admin_url}"),
+            self::SET_AUTO_BAN_PAYOUT => __("User {$user->note_admin_url} auto payout is <b class='text-warning'>Banned</b> by {$admin->note_admin_url}"),
+            self::UNSET_AUTO_BAN_PAYOUT => __("User {$user->note_admin_url} auto payout is <b class='text-success'>UnBanned</b> by {$admin->note_admin_url}"),
             default => __("User {$user->note_admin_url} is received unknown notes by {$admin->note_admin_url}"),
         };
     }

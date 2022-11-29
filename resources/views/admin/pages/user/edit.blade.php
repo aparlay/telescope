@@ -413,6 +413,12 @@
         </div>
     </div>
 
+    @include('default_view::admin.pages.user.modals.ban_payout', ['user' => $user, 'method' => 'set'])
+    @include('default_view::admin.pages.user.modals.ban_payout', ['user' => $user, 'method' => 'unset'])
+
+    @include('default_view::admin.pages.user.modals.auto_ban_payout', ['user' => $user, 'method' => 'set'])
+    @include('default_view::admin.pages.user.modals.auto_ban_payout', ['user' => $user, 'method' => 'unset'])
+
     <div id="changeUsernameModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->

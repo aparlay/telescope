@@ -125,6 +125,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 Route::patch('user/visibility/{user}', [UserController::class, 'updateVisibility'])
                     ->middleware(['permission:edit users'])
                     ->name('visibility');
+                Route::patch('user/settings/{user}', [UserController::class, 'updateSettings'])
+                    ->middleware(['permission:edit users'])
+                    ->name('settings');
                 Route::put('user/profile/{user}', [UserController::class, 'updateProfile'])
                     ->middleware(['permission:edit users'])
                     ->name('profile');

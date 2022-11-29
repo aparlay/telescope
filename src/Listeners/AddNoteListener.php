@@ -4,6 +4,7 @@ namespace Aparlay\Core\Listeners;
 
 use Aparlay\Core\Admin\Services\NoteService;
 use Aparlay\Core\Events\UserReceiveAlertEvent;
+use Aparlay\Core\Events\UserSettingChangedEvent;
 use Aparlay\Core\Events\UserStatusChangedEvent;
 use Aparlay\Core\Events\UserVerificationStatusChangedEvent;
 use Aparlay\Core\Events\UserVisibilityChangedEvent;
@@ -27,6 +28,14 @@ class AddNoteListener
         }
 
         if ($event instanceof UserVisibilityChangedEvent) {
+            $noteService->addNewNote(
+                $event->creator,
+                $event->user,
+                $event->type,
+            );
+        }
+
+        if ($event instanceof UserSettingChangedEvent) {
             $noteService->addNewNote(
                 $event->creator,
                 $event->user,
