@@ -191,7 +191,6 @@ class MediaService extends AdminBaseService
             ],
         ];
 
-
         $media = $this->mediaRepository->update($data, $id);
 
         return $this->calculateSortScores($media, 0);
