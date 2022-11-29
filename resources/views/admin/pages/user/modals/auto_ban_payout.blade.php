@@ -2,10 +2,10 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <form action="{{ route('core.admin.user.update.settings', ['user' => $user->_id])  }}" method="POST">
+            <form action="{{ route('core.admin.user.update.payoutsettings', ['user' => $user->_id])  }}" method="POST">
                 @csrf
                 @method('PATCH')
-                <input type="hidden" name="setting[auto_ban_payout]" value="{{ 'set' === $method ? 1 : 0 }}">
+                <input type="hidden" name="setting[payout][auto_ban_payout]" value="{{ 'set' === $method ? 1 : 0 }}">
                 <div class="modal-header bg-warning">
                     <h5 class="modal-title" id="exampleModalLiveLabel">{{ ucfirst($method) }} Auto Ban Payout</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">

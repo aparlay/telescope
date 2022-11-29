@@ -195,13 +195,13 @@ class UserController extends Controller
         return back()->with('error', 'Update visibility failed.');
     }
 
-    public function updateSettings(User $user, UserSettingsRequest $request): RedirectResponse
+    public function updatePayoutSettings(User $user, UserSettingsRequest $request): RedirectResponse
     {
         $this->userService->setUser(auth()->user());
 
         $settings = $request->input('setting');
 
-        if ($this->userService->updateSettings($user->_id, $settings)) {
+        if ($this->userService->updatePayoutSettings($user->_id, $settings['payout'])) {
             return back()->with('success', 'Set user settings successfully.');
         }
 

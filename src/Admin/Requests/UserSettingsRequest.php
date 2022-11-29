@@ -26,8 +26,8 @@ class UserSettingsRequest extends FormRequest
     public function rules()
     {
         return [
-            'settings.ban_payout' => ['nullable', 'boolean'],
-            'settings.auto_ban_payout' => ['nullable', 'boolean'],
+            'settings.payout.ban_payout' => ['nullable', 'boolean'],
+            'settings.payout.auto_ban_payout' => ['nullable', 'boolean'],
         ];
     }
 

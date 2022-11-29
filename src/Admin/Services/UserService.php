@@ -277,7 +277,7 @@ class UserService extends AdminBaseService
         $noteType = match ($userVisibility) {
             UserVisibility::PUBLIC->value => NoteType::PUBLIC->value,
             UserVisibility::PRIVATE->value => NoteType::PRIVATE->value,
-            UserVisibility::INVISIBLE_BY_ADMIN => NoteType::INVISIBLE_BY_ADMIN->value,
+            UserVisibility::INVISIBLE_BY_ADMIN->value => NoteType::INVISIBLE_BY_ADMIN->value,
             default => null
         };
 
@@ -291,16 +291,18 @@ class UserService extends AdminBaseService
      * @param array $userSettings
      * @return bool
      */
-    public function updateSettings(mixed $userId, array $userSettings): bool
+    public function updatePayoutSettings(mixed $userId, array $payoutSettings): bool
     {
         $user = $this->find($userId);
 
         $success = true;
         $noteType = null;
 
-        foreach ($userSettings as $key => $value) {
+        foreach ($payoutSettings as $key => $value) {
             if ($success) {
-                $success = $this->userRepository->updateSetting($user, $key, (bool) $value);
+                $setting = $user['setting'];
+                $setting['payout'][$key] = (bool) $value;
+                $success = $this->userRepository->update(['setting' => $setting], $userId);
 
                 switch($key) {
                     case 'ban_payout':
