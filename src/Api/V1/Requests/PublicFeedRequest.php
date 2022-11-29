@@ -60,6 +60,23 @@ class PublicFeedRequest extends FormRequest
                 $contentGenders[] = (int) $item;
             }
         }
+        if (empty($contentGenders)) {
+            if (auth()->guest()) {
+                $contentGenders = [0, 1, 2];
+            } else {
+                foreach (auth()->user()->setting['filter_content_gender'] as $gender => $enable) {
+                    if ($enable === false) {
+                        continue;
+                    }
+
+                    $contentGenders[] = match ($gender) {
+                        MediaContentGender::FEMALE->label() => MediaContentGender::FEMALE->value,
+                        MediaContentGender::MALE->label() => MediaContentGender::MALE->value,
+                        MediaContentGender::TRANSGENDER->label() => MediaContentGender::TRANSGENDER->value,
+                    };
+                }
+            }
+        }
 
         $showAdultContent = request()->input('show_adult_content', null);
         $showAdultContent = match ($showAdultContent) {

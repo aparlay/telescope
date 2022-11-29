@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Models\Block;
 use Aparlay\Core\Api\V1\Services\OnlineUserService;
 use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\UserFeature;
 use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserInterestedIn;
@@ -196,6 +197,11 @@ class User extends \App\Models\User
         'setting' => [
             'otp' => false,
             'show_adult_content' => 2,
+            'filter_content_gender' => [
+                'female' => true,
+                'male' => true,
+                'transgender' => true,
+            ],
             'notifications' => [
                 'unread_message_alerts' => true,
                 'news_and_updates' => true,
