@@ -11,11 +11,10 @@ return new class() extends Migration {
      */
     public function up()
     {
-        User::each(function ($model) {
-            $model['setting.ban_payout'] = false;
-            $model['setting.auto_ban_payout'] = false;
-            $model->save();
-        });
+        User::query()->update([
+            'setting.payout.ban_payout' => false,
+            'setting.payout.auto_ban_payout' => false
+        ]);
     }
 
     /**

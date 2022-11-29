@@ -49,7 +49,7 @@
     @endif
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Ban Send Photo</a>-->
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Ban Intro</a>-->
-    @if(false == $user->setting['auto_ban_payout'])
+    @if(false == $user->setting['payout']['auto_ban_payout'])
         <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#set-auto-ban-payout-modal">
             <i class="fas fa-circle mr-1 text-blue"></i>Set Auto Ban Payout
         </a>
@@ -58,7 +58,7 @@
             <i class="fas fa-circle mr-1 text-blue"></i>Unset Auto Ban Payout
         </a>
     @endif
-    @if(false == $user->setting['ban_payout'])
+    @if(false == $user->setting['payout']['ban_payout'])
         <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#set-ban-payout-modal">
             <i class="fas fa-circle mr-1 text-blue"></i>Set Ban Payout
         </a>
