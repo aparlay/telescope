@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 
 /**
  * @property string $username
- * @property integer $visibility
+ * @property int $visibility
  * @property string $country_alpha2
  * @property string $payout_country_alpha2
  * @property array $setting
@@ -38,6 +38,7 @@ class MeRequest extends FormRequest
     public function rules()
     {
         $user = auth()->user();
+
         return [
             'avatar' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:10485760'],
             'bio' => ['nullable', 'string', 'min:3', 'max:200'],
@@ -89,12 +90,11 @@ class MeRequest extends FormRequest
             ]);
         }
 
-        if (!auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
+        if (! auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
             throw ValidationException::withMessages([
                 'avatar' => 'Your account is invisible by administrator, you cannot change it to public/private.',
             ]);
         }
-
 
         $user = auth()->user();
         /* Set the Default Values and required to be input parameters */
