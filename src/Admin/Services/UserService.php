@@ -11,10 +11,12 @@ use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Constants\Roles;
 use Aparlay\Core\Events\UserStatusChangedEvent;
+use Aparlay\Core\Events\UserVisibilityChangedEvent;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 
@@ -262,5 +264,25 @@ class UserService extends AdminBaseService
         UserStatusChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType);
 
         return $this->userRepository->update(['status' => $userStatus], $id);
+    }
+
+    /**
+     * @param string $userId
+     * @param int $userVisibility
+     * @return bool
+     */
+    public function updateVisibility(string $userId, int $userVisibility): bool
+    {
+        $user = $this->find($userId);
+
+        $noteType = match ($userVisibility) {
+            UserVisibility::PUBLIC->value => NoteType::PUBLIC->value,
+            UserVisibility::PRIVATE->value => NoteType::PRIVATE->value,
+            default => null
+        };
+
+        UserVisibilityChangedEvent::dispatch($this->getUser(), $user, $noteType, $userVisibility);
+
+        return $this->userRepository->update(['visibility' => $userVisibility], $userId);
     }
 }

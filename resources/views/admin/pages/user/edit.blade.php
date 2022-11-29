@@ -1,3 +1,8 @@
+@php
+    use Aparlay\Core\Models\Enums\UserStatus;
+    use Aparlay\Core\Models\Enums\UserVisibility;
+@endphp
+
 @extends('adminlte::page')
 @section('title', 'User Profile')
 @section('plugins.Datatables', true)
@@ -273,7 +278,7 @@
                       method="POST">
                     @csrf
                     @method('PATCH')
-                    <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value }}"
+                    <input type="hidden" value="{{ UserStatus::BLOCKED->value }}"
                            name="status">
                     <div class="modal-header bg-danger">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Block User</h5>
@@ -303,7 +308,7 @@
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="status"
-                           value="{{ \Aparlay\Core\Models\Enums\UserStatus::SUSPENDED->value }}">
+                           value="{{ UserStatus::SUSPENDED->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Suspend</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -333,7 +338,7 @@
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="status"
-                           value="{{ \Aparlay\Core\Models\Enums\UserStatus::ACTIVE->value }}">
+                           value="{{ UserStatus::ACTIVE->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Reactivate</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -349,6 +354,60 @@
                         <button type="submit" class="btn btn-warning">Reactivate</button>
 
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="invisibleModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{{ route('core.admin.user.update.visibility', ['user' => $user->_id])  }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="visibility"
+                    value="{{ UserVisibility::PRIVATE->value }}">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="exampleModalLiveLabel">Make invisible</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to make creator invisible?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning">Confirm</button>
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="publicModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{{ route('core.admin.user.update.visibility', ['user' => $user->_id])  }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="visibility"
+                           value="{{ UserVisibility::PUBLIC->value }}">
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="exampleModalLiveLabel">Make public</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to make creator public?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning">Confirm</button>
+                  </div>
                 </form>
             </div>
         </div>

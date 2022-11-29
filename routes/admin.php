@@ -119,9 +119,12 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:edit users'])
                 ->name('login_as_user');
             Route::name('update.')->group(function () {
-                Route::patch('user/{user}', [UserController::class, 'updateStatus'])
+                Route::patch('user/status/{user}', [UserController::class, 'updateStatus'])
                     ->middleware(['permission:edit users'])
                     ->name('status');
+                Route::patch('user/visibility/{user}', [UserController::class, 'updateVisibility'])
+                    ->middleware(['permission:edit users'])
+                    ->name('visibility');
                 Route::put('user/profile/{user}', [UserController::class, 'updateProfile'])
                     ->middleware(['permission:edit users'])
                     ->name('profile');
