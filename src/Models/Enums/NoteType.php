@@ -22,6 +22,7 @@ enum NoteType: int implements Enum
     case UNSET_BAN_PAYOUT = 12;
     case SET_AUTO_BAN_PAYOUT = 13;
     case UNSET_AUTO_BAN_PAYOUT = 14;
+    case INVISIBLE_BY_ADMIN = 15;
 
     public function label(): string
     {
@@ -36,6 +37,7 @@ enum NoteType: int implements Enum
             self::OTHER => __('other'),
             self::PUBLIC => __('public'),
             self::PRIVATE => __('private'),
+            self::INVISIBLE_BY_ADMIN => __('invisible_by_admin'),
             self::SET_BAN_PAYOUT => __('set_ban_payout'),
             self::UNSET_BAN_PAYOUT => __('unset_ban_payout'),
             self::SET_AUTO_BAN_PAYOUT => __('set_auto_ban_payout'),
@@ -56,6 +58,7 @@ enum NoteType: int implements Enum
             self::OTHER => __('info'),
             self::PUBLIC => __('success'),
             self::PRIVATE => __('warning'),
+            self::INVISIBLE_BY_ADMIN => __('danger'),
             self::SET_BAN_PAYOUT => __('warning'),
             self::UNSET_BAN_PAYOUT => __('success'),
             self::SET_AUTO_BAN_PAYOUT => __('warning'),
@@ -79,6 +82,7 @@ enum NoteType: int implements Enum
             self::UNBAN_ALL_CC_PAYMENT => __("User {$user->note_admin_url} is unbanned for any credit-card transaction by {$admin->note_admin_url}"),
             self::PUBLIC => __("User {$user->note_admin_url} is <b class='text-success'>set to public</b> by {$admin->note_admin_url}"),
             self::PRIVATE => __("User {$user->note_admin_url} is <b class='text-warning'>set to private</b> by {$admin->note_admin_url}"),
+            self::INVISIBLE_BY_ADMIN => __("User {$user->note_admin_url} is <b class='text-danger'>set invisible</b> by {$admin->note_admin_url}"),
             self::SET_BAN_PAYOUT => __("User {$user->note_admin_url} payout is <b class='text-warning'>Banned</b> by {$admin->note_admin_url}"),
             self::UNSET_BAN_PAYOUT => __("User {$user->note_admin_url} payout is <b class='text-success'>UnBanned</b> by {$admin->note_admin_url}"),
             self::SET_AUTO_BAN_PAYOUT => __("User {$user->note_admin_url} auto payout is <b class='text-warning'>Banned</b> by {$admin->note_admin_url}"),

@@ -759,6 +759,7 @@ class User extends \App\Models\User
         return [
             UserVisibility::PRIVATE->value => UserVisibility::PRIVATE->label(),
             UserVisibility::PUBLIC->value => UserVisibility::PUBLIC->label(),
+            UserVisibility::INVISIBLE_BY_ADMIN->value => UserVisibility::INVISIBLE_BY_ADMIN->label(),
         ];
     }
 
