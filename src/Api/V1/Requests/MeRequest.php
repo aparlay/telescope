@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Requests;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
@@ -43,7 +44,6 @@ class MeRequest extends FormRequest
             'avatar' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:10485760'],
             'bio' => ['nullable', 'string', 'min:3', 'max:200'],
             'promo_link' => ['nullable', 'url'],
-
             'username' => [
                 'required',
                 Rule::unique('users', 'username')->ignore($user->_id, '_id'),
@@ -51,13 +51,9 @@ class MeRequest extends FormRequest
                 'max:30',
                 'alpha_dash',
             ],
-
             'payout_country_alpha2' => ['nullable', Rule::in(array_keys(Country::getAlpha2AndNames()))],
             'country_alpha2' => ['nullable', Rule::in(array_keys(Country::getAlpha2AndNames()))],
-
             'visibility' => ['nullable', Rule::in([UserVisibility::PRIVATE->value, UserVisibility::PUBLIC->value])],
-            'country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
-            'payout_country_alpha2' => [Rule::in(array_keys(Country::getAlpha2AndNames()))],
             'setting.otp' => ['nullable', 'bool'],
             'setting.show_adult_content' => ['nullable', 'bool'],
             'setting.notifications.*' => ['nullable', 'bool'],
@@ -102,25 +98,25 @@ class MeRequest extends FormRequest
             'username' => trim($this->username),
             'visibility' => UserVisibility::PUBLIC->value,
             'setting' => [
-                'otp' => $this->setting['otp'] ?? $user->setting['otp'],
-                'show_adult_content' => $this->setting['show_adult_content'] ?? $user->setting['show_adult_content'],
+                'otp' => $this->setting['otp'] ?? $user->setting['otp'] ?? false,
+                'show_adult_content' => $this->setting['show_adult_content'] ?? $user->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
                 'filter_content_gender' => [
-                    'female' => $this->setting['filter_content_gender']['female'] ?? $user->setting['filter_content_gender']['female'],
-                    'male' => $this->setting['filter_content_gender']['male'] ?? $user->setting['filter_content_gender']['male'],
-                    'transgender' => $this->setting['filter_content_gender']['transgender'] ?? $user->setting['filter_content_gender']['transgender'],
+                    'female' => $this->setting['filter_content_gender']['female'] ?? $user->setting['filter_content_gender']['female'] ?? true,
+                    'male' => $this->setting['filter_content_gender']['male'] ?? $user->setting['filter_content_gender']['male'] ?? false,
+                    'transgender' => $this->setting['filter_content_gender']['transgender'] ?? $user->setting['filter_content_gender']['transgender'] ?? false,
                 ],
                 'notifications' => [
-                    'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? $user->setting['notifications']['unread_message_alerts'],
-                    'new_followers' => $this->setting['notifications']['new_followers'] ?? $user->setting['notifications']['new_followers'],
-                    'news_and_updates' => $this->setting['notifications']['news_and_updates'] ?? $user->setting['notifications']['news_and_updates'],
-                    'tips' => $this->setting['notifications']['tips'] ?? $user->setting['notifications']['tips'],
-                    'new_subscribers' => $this->setting['notifications']['new_subscribers'] ?? $user->setting['notifications']['new_subscribers'],
+                    'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? $user->setting['notifications']['unread_message_alerts'] ?? true,
+                    'new_followers' => $this->setting['notifications']['new_followers'] ?? $user->setting['notifications']['new_followers'] ?? true,
+                    'news_and_updates' => $this->setting['notifications']['news_and_updates'] ?? $user->setting['notifications']['news_and_updates'] ?? true,
+                    'tips' => $this->setting['notifications']['tips'] ?? $user->setting['notifications']['tips'] ?? true,
+                    'new_subscribers' => $this->setting['notifications']['new_subscribers'] ?? $user->setting['notifications']['new_subscribers'] ?? true,
                 ],
                 'payment' => [
-                    'allow_unverified_cc' => $this->setting['payment']['allow_unverified_cc'] ?? $user->setting['payment']['allow_unverified_cc'],
-                    'block_unverified_cc' => $this->setting['payment']['block_unverified_cc'] ?? $user->setting['payment']['block_unverified_cc'],
-                    'block_payments' => $this->setting['payment']['block_payments'] ?? $user->setting['payment']['block_payments'],
-                    'unverified_cc_spent_amount' => $this->setting['payment']['unverified_cc_spent_amount'] ?? $user->setting['payment']['unverified_cc_spent_amount'],
+                    'allow_unverified_cc' => $this->setting['payment']['allow_unverified_cc'] ?? $user->setting['payment']['allow_unverified_cc'] ?? false,
+                    'block_unverified_cc' => $this->setting['payment']['block_unverified_cc'] ?? $user->setting['payment']['block_unverified_cc'] ?? false,
+                    'block_payments' => $this->setting['payment']['block_payments'] ?? $user->setting['payment']['block_payments'] ?? false,
+                    'unverified_cc_spent_amount' => $this->setting['payment']['unverified_cc_spent_amount'] ?? $user->setting['payment']['unverified_cc_spent_amount'] ?? 0,
                 ],
             ],
             'referral_id' => $this->referral_id,
