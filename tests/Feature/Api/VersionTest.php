@@ -38,6 +38,7 @@ class VersionTest extends ApiTestCase
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
                     'status' => 'string',
+                    'uuid' => 'string',
                     'data.require_force_update' => 'boolean',
                     'data.version' => 'array',
                     'data.version._id' => 'string',

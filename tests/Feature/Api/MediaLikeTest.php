@@ -58,6 +58,7 @@ class MediaLikeTest extends ApiTestCase
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
+                    'uuid' => 'string',
                     'status' => 'string',
                     'data._id' => 'string',
                     'data.created_at' => 'integer',

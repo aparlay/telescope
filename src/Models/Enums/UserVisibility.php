@@ -8,12 +8,14 @@ enum UserVisibility: int implements Enum
 
     case PRIVATE = 0;
     case PUBLIC = 1;
+    case INVISIBLE_BY_ADMIN = 2;
 
     public function label(): string
     {
         return match ($this) {
             self::PRIVATE => __('private'),
             self::PUBLIC => __('public'),
+            self::INVISIBLE_BY_ADMIN => __('invisible'),
         };
     }
 
@@ -22,6 +24,7 @@ enum UserVisibility: int implements Enum
         return match ($this) {
             self::PRIVATE => 'warning',
             self::PUBLIC => 'success',
+            self::INVISIBLE_BY_ADMIN => 'danger',
         };
     }
 }

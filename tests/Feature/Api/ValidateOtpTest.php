@@ -39,6 +39,7 @@ class ValidateOtpTest extends ApiTestCase
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
                     'code' => 'integer',
+                    'uuid' => 'string',
                     'status' => 'string',
                     'data.message' => 'string',
                 ])
