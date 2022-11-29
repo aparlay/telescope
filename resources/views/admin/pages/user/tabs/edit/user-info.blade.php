@@ -213,23 +213,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row m-0">
-                    <label for="interested_in" class="col-sm-2 col-form-label">Interested In</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
-                            @foreach($user->getInterestedIns() as $key => $label)
-                                @if ($key == $user->interested_in)
-                                    <p>{{ Str::ucfirst($label) }}</p>
-                                @endif
-                            @endforeach
-                        </div>
-                        <select name="interested_in" id="interested_in" class="form-control data-edit d-none">
-                            @foreach($user->getInterestedIns() as $key => $label)
-                                <option value="{{ $key }}" {!! $user->interested_in == $key ? 'selected' : '' !!}>{{ Str::ucfirst($label) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
