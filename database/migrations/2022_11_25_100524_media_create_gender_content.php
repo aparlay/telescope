@@ -38,11 +38,11 @@ return new class() extends Migration {
             ]]);
 
         Schema::table((new Media())->getCollection(), function (Blueprint $table) {
-            $table->index(['status', 'sort_scores.default', 'visibility', 'gender_content'], null, ['background' => true]);
-            $table->index(['status', 'sort_scores.guest', 'visibility', 'gender_content'], null, ['background' => true]);
-            $table->index(['status', 'sort_scores.returned', 'visibility', 'gender_content'], null, ['background' => true]);
-            $table->index(['status', 'sort_scores.registered', 'visibility', 'gender_content'], null, ['background' => true]);
-            $table->index(['status', 'sort_scores.paid', 'visibility', 'gender_content'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.default', 'visibility', 'content_gender'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.guest', 'visibility', 'content_gender'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.returned', 'visibility', 'content_gender'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.registered', 'visibility', 'content_gender'], null, ['background' => true]);
+            $table->index(['status', 'sort_scores.paid', 'visibility', 'content_gender'], null, ['background' => true]);
         });
     }
 
@@ -54,11 +54,11 @@ return new class() extends Migration {
     public function down()
     {
         Schema::table((new Media())->getCollection(), function (Blueprint $table) {
-            $table->dropIndexIfExists(['status', 'sort_scores.default', 'visibility', 'gender_content']);
-            $table->dropIndexIfExists(['status', 'sort_scores.guest', 'visibility', 'gender_content']);
-            $table->dropIndexIfExists(['status', 'sort_scores.returned', 'visibility', 'gender_content']);
-            $table->dropIndexIfExists(['status', 'sort_scores.registered', 'visibility', 'gender_content']);
-            $table->dropIndexIfExists(['status', 'sort_scores.paid', 'visibility', 'gender_content']);
+            $table->dropIndexIfExists(['status', 'sort_scores.default', 'visibility', 'content_gender']);
+            $table->dropIndexIfExists(['status', 'sort_scores.guest', 'visibility', 'content_gender']);
+            $table->dropIndexIfExists(['status', 'sort_scores.returned', 'visibility', 'content_gender']);
+            $table->dropIndexIfExists(['status', 'sort_scores.registered', 'visibility', 'content_gender']);
+            $table->dropIndexIfExists(['status', 'sort_scores.paid', 'visibility', 'content_gender']);
         });
 
         Schema::table((new Media())->getCollection(), function (Blueprint $table) {
