@@ -22,13 +22,21 @@ return new class() extends Migration {
             $table->dropIndexIfExists(['status', 'sort_scores.registered', 'visibility']);
             $table->dropIndexIfExists(['status', 'sort_scores.paid', 'visibility']);
         });
-        Media::query()->whereNull('is_fake')->update(['gender_content' => MediaContentGender::FEMALE->value]);
+        Media::query()->update(['gender_content' => MediaContentGender::FEMALE->value]);
+
         User::query()->where('setting.show_adult_content', true)
-            ->update(['setting.show_adult_content' => UserSettingShowAdultContent::ALWAYS->value]);
+            ->update(['setting.show_adult_content' => UserSettingShowAdultContent::ALL->value]);
         User::query()->where('setting.show_adult_content', false)
             ->update(['setting.show_adult_content' => UserSettingShowAdultContent::ASK->value]);
         User::query()->where('setting.show_adult_content', null)
             ->update(['setting.show_adult_content' => UserSettingShowAdultContent::ASK->value]);
+        User::query()->where('setting.filter_content_gender', null)
+            ->update(['setting.filter_content_gender' => [
+                MediaContentGender::FEMALE->label() => true,
+                MediaContentGender::MALE->label() => true,
+                MediaContentGender::TRANSGENDER->label() => true,
+            ]]);
+
         Schema::table((new Media())->getCollection(), function (Blueprint $table) {
             $table->index(['status', 'sort_scores.default', 'visibility', 'gender_content'], null, ['background' => true]);
             $table->index(['status', 'sort_scores.guest', 'visibility', 'gender_content'], null, ['background' => true]);
