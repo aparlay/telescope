@@ -54,7 +54,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $gender
  * @property int         $visibility
  * @property int         $show_online_status
- * @property int         $interested_in
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
  * @property array       $setting
@@ -102,6 +101,9 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read bool $is_tier3
  * @property-read bool $is_tier1
  * @property-read bool $is_risky
+ * @property-read bool $is_public
+ * @property-read bool $is_private
+ * @property-read bool $is_invisible
  * @property-read int $tip_commission_percentage
  * @property-read int $tip_referral_commission_percentage
  * @property-read int $subscription_commission_percentage
@@ -158,7 +160,6 @@ class User extends \App\Models\User
         'setting',
         'features',
         'gender',
-        'interested_in',
         'type',
         'status',
         'visibility',
@@ -287,7 +288,6 @@ class User extends \App\Models\User
         'phone_number_verified' => 'boolean',
         'gender' => 'integer',
         'avatar' => 'string',
-        'interested_in' => 'integer',
         'visibility' => 'integer',
         'stats.counters.followers' => 'integer',
         'stats.counters.followings' => 'integer',
@@ -605,6 +605,16 @@ class User extends \App\Models\User
     public function getExclusiveContentReferralCommissionPercentageAttribute(): int
     {
         return config('payment.earnings.exclusive_content_referral_commission_percentage', 5);
+    }
+
+    public function getIsPrivateAttribute(): bool
+    {
+        return $this->visibility === UserVisibility::PRIVATE->value;
+    }
+
+    public function getIsInvisibleAttribute(): bool
+    {
+        return $this->visibility === UserVisibility::INVISIBLE_BY_ADMIN->value;
     }
 
     /**

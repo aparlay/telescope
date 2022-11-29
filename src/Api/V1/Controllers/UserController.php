@@ -9,11 +9,14 @@ use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UserService;
+use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -109,10 +112,58 @@ class UserController extends Controller
                 $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
 
-            $requestData = $request->all();
 
             if ($user->payout_country_alpha2) {
-                $requestData = $request->except('payout_country_alpha2');
+                $requestData = $request->except([
+                    'avatar',
+                    'username',
+                    'visibility',
+                    'country_alpha2',
+                    'setting.otp',
+                    'setting.show_adult_content',
+                    'setting.notifications.unread_message_alerts',
+                    'setting.notifications.news_and_updates',
+                    'setting.notifications.new_followers',
+                    'setting.notifications.new_subscribers',
+                    'setting.notifications.tips',
+                    'setting.notifications.likes',
+                    'setting.notifications.comments',
+                    'setting.payment.allow_unverified_cc',
+                    'setting.payment.block_unverified_cc',
+                    'setting.payment.block_cc_payments',
+                    'setting.payment.unverified_cc_spent_amount',
+                    'setting.payment.allow_unverified_cc',
+                    'setting.payment.allow_unverified_cc',
+                    'setting.filter_content_gender.female',
+                    'setting.filter_content_gender.male',
+                    'setting.filter_content_gender.transgender',
+                ]);
+            } else {
+                $requestData = $request->only([
+                    'avatar',
+                    'username',
+                    'visibility',
+                    'country_alpha2',
+                    'payout_country_alpha2',
+                    'setting.otp',
+                    'setting.show_adult_content',
+                    'setting.notifications.unread_message_alerts',
+                    'setting.notifications.news_and_updates',
+                    'setting.notifications.new_followers',
+                    'setting.notifications.new_subscribers',
+                    'setting.notifications.tips',
+                    'setting.notifications.likes',
+                    'setting.notifications.comments',
+                    'setting.payment.allow_unverified_cc',
+                    'setting.payment.block_unverified_cc',
+                    'setting.payment.block_cc_payments',
+                    'setting.payment.unverified_cc_spent_amount',
+                    'setting.payment.allow_unverified_cc',
+                    'setting.payment.allow_unverified_cc',
+                    'setting.filter_content_gender.female',
+                    'setting.filter_content_gender.male',
+                    'setting.filter_content_gender.transgender',
+                ]);
             }
 
             /* Update User Profile Information */

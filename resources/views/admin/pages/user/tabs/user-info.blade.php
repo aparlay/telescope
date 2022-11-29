@@ -103,16 +103,6 @@
             </div>
         </div>
         <div class="form-group row">
-            <label for="interested_in" class="col-sm-2 col-form-label">Interested In</label>
-            <div class="col-sm-10">
-                <select name="interested_in" id="interested_in" class="form-control">
-                    @foreach($user->getInterestedIns() as $key => $interested_in)
-                        <option value="{{ $key }}" {!! $user->interested_in == $key ? 'selected' : '' !!}>{{ $interested_in }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        <div class="form-group row">
             <label for="type" class="col-sm-2 col-form-label">Type</label>
             <div class="col-sm-10">
                 <select name="type" id="type" class="form-control">
