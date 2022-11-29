@@ -80,7 +80,7 @@ class MediaUpdateScoreRequest extends FormRequest
                 empty($this->skin_score) ||
                 empty($this->awesomeness_score) ||
                 empty($this->beauty_score) ||
-                !isset($this->content_gender)
+                ! isset($this->content_gender)
             )
         ) {
             throw ValidationException::withMessages([
