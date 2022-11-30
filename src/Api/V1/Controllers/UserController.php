@@ -131,8 +131,6 @@ class UserController extends Controller
                     'setting.payment.block_unverified_cc',
                     'setting.payment.block_cc_payments',
                     'setting.payment.unverified_cc_spent_amount',
-                    'setting.payment.allow_unverified_cc',
-                    'setting.payment.allow_unverified_cc',
                     'setting.filter_content_gender.female',
                     'setting.filter_content_gender.male',
                     'setting.filter_content_gender.transgender',
