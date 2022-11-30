@@ -23,6 +23,7 @@ enum NoteType: int implements Enum
     case SET_AUTO_BAN_PAYOUT = 13;
     case UNSET_AUTO_BAN_PAYOUT = 14;
     case INVISIBLE_BY_ADMIN = 15;
+    case SET_PASSWORD = 16;
 
     public function label(): string
     {
@@ -42,6 +43,7 @@ enum NoteType: int implements Enum
             self::UNSET_BAN_PAYOUT => __('unset_ban_payout'),
             self::SET_AUTO_BAN_PAYOUT => __('set_auto_ban_payout'),
             self::UNSET_AUTO_BAN_PAYOUT => __('unset_auto_ban_payout'),
+            self::SET_PASSWORD => __('set_password'),
         };
     }
 
@@ -63,6 +65,7 @@ enum NoteType: int implements Enum
             self::UNSET_BAN_PAYOUT => __('success'),
             self::SET_AUTO_BAN_PAYOUT => __('danger'),
             self::UNSET_AUTO_BAN_PAYOUT => __('success'),
+            self::SET_PASSWORD => __('primary'),
         };
     }
 
@@ -87,6 +90,7 @@ enum NoteType: int implements Enum
             self::UNSET_BAN_PAYOUT => __("User {$user->note_admin_url} payout is <b class='text-success'>UnBanned</b> by {$admin->note_admin_url}"),
             self::SET_AUTO_BAN_PAYOUT => __("User {$user->note_admin_url} auto payout is <b class='text-danger'>Banned</b> by {$admin->note_admin_url}"),
             self::UNSET_AUTO_BAN_PAYOUT => __("User {$user->note_admin_url} auto payout is <b class='text-success'>UnBanned</b> by {$admin->note_admin_url}"),
+            self::SET_PASSWORD => __("User {$user->note_admin_url} password <b class='text-primary'>Set</b> by {$admin->note_admin_url}"),
             default => __("User {$user->note_admin_url} is received unknown notes by {$admin->note_admin_url}"),
         };
     }

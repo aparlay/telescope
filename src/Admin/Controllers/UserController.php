@@ -6,6 +6,7 @@ use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Requests\MediaUploadRequest;
 use Aparlay\Core\Admin\Requests\UserGeneralUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserPasswordRequest;
 use Aparlay\Core\Admin\Requests\UserPayoutsUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserSettingsRequest;
@@ -206,6 +207,18 @@ class UserController extends Controller
         }
 
         return back()->with('error', 'Update settings failed.');
+    }
+
+    public function setPassword(User $user, UserPasswordRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $password = $request->input('password');
+
+        if ($this->userService->setPassword($user->_id, $password)) {
+            return back()->with('success', 'Set user password successfully.');
+        }
+        return back()->with('error', 'Set password failed.');
     }
 
     public function upload(MediaUploadRequest $request)
