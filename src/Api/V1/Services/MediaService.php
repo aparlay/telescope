@@ -201,7 +201,7 @@ class MediaService
             ->recentFirst()
             ->paginate(5)
             ->withQueryString();
-            $visited = [];
+        $visited = [];
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
