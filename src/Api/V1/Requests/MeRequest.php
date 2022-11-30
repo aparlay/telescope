@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
@@ -92,6 +93,16 @@ class MeRequest extends FormRequest
             ]);
         }
 
+        if ($this->has('username')) {
+            $this->merge(['username' => trim($this->username)]);
+        }
+
+        if (! auth()->guest() && auth()->user()->status === UserStatus::ACTIVE->value && $this->has('username')) {
+            throw ValidationException::withMessages([
+                'username' => 'You cannot change your username any more.',
+            ]);
+        }
+
         $user = auth()->user();
         /* Set the Default Values and required to be input parameters */
         $this->merge([
@@ -120,9 +131,5 @@ class MeRequest extends FormRequest
                 ],
             ],
         ]);
-
-        if ($this->has('username')) {
-            $this->merge(['username' => trim($this->username)]);
-        }
     }
 }
