@@ -54,12 +54,14 @@ class MediaCommentsTable extends BaseIndexComponent
 
     public function buildQuery(): Builder|\Illuminate\Contracts\Database\Query\Builder
     {
-        $query = parent::buildQuery();
+        $query = parent::buildQuery()->with(['creatorObj']);
 
         if (! empty($this->userId)) {
             $query->where('creator._id', new ObjectId($this->userId));
-        } else {
-            $query->with(['creatorObj']);
+        }
+
+        if (! empty($this->mediaId)) {
+            $query->where('media_id', new ObjectId($this->mediaId));
         }
 
         return $query;
