@@ -30,7 +30,7 @@ class UserPasswordRequest extends FormRequest
             'password' => [
                 'required',
                 Password::min(8)->letters()->numbers(),
-                'confirmed'
+                'confirmed',
             ],
         ];
     }
