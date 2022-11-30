@@ -22,6 +22,7 @@ use Aparlay\Core\Admin\Livewire\Dashboard\Table;
 use Aparlay\Core\Admin\Livewire\Dashboard\TopCreditBalance;
 use Aparlay\Core\Admin\Livewire\EmailsTable;
 use Aparlay\Core\Admin\Livewire\GlobalSearch;
+use Aparlay\Core\Admin\Livewire\MediaCommentsTable;
 use Aparlay\Core\Admin\Livewire\MediasModerationTable;
 use Aparlay\Core\Admin\Livewire\MediasTable;
 use Aparlay\Core\Admin\Livewire\Modals\UserNoteCreateModal;
@@ -201,6 +202,7 @@ class CoreServiceProvider extends ServiceProvider
             'user-moderation-button' => UserModerationButton::class,
             'medias-table' => MediasTable::class,
             'medias-moderation-table' => MediasModerationTable::class,
+            'media-comments-table' => MediaCommentsTable::class,
             'settings-table' => SettingsTable::class,
             'emails-table' => EmailsTable::class,
             'notes-table' => NotesTable::class,
