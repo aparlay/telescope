@@ -516,11 +516,11 @@ class UserProfileTest extends ApiTestCase
                 'data' => [
                     [
                         'field' => 'visibility',
-                        'message' => 'Your account is invisible by administrator, you cannot change it to public/private.'
-                    ]
+                        'message' => 'Your account is invisible by administrator, you cannot change it to public/private.',
+                    ],
                 ],
                 'message' => 'There are some errors in your provided data.',
-            ]);;
+            ]);
 
         $userDetails = User::where('_id', new ObjectId($user->_id))->first();
         $this->assertEquals(UserVisibility::INVISIBLE_BY_ADMIN->value, $userDetails->visibility);
