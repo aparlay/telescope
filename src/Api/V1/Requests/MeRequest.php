@@ -95,8 +95,6 @@ class MeRequest extends FormRequest
         $user = auth()->user();
         /* Set the Default Values and required to be input parameters */
         $this->merge([
-            'username' => trim($this->username) ?? $user->username,
-            'visibility' => $this->visibility ?? $user->visibility ?? UserVisibility::PUBLIC->value,
             'setting' => [
                 'otp' => $this->setting['otp'] ?? $user->setting['otp'] ?? false,
                 'show_adult_content' => $this->setting['show_adult_content'] ?? $user->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
@@ -118,12 +116,13 @@ class MeRequest extends FormRequest
                     'allow_unverified_cc' => $user->setting['payment']['allow_unverified_cc'] ?? false,
                     'block_unverified_cc' => $user->setting['payment']['block_unverified_cc'] ?? true,
                     'block_cc_payments' => $user->setting['payment']['block_cc_payments'] ?? true,
-                    'unverified_cc_spent_amount' => (int)$user->setting['payment']['unverified_cc_spent_amount'] ?? 0,
+                    'unverified_cc_spent_amount' => (int)($user->setting['payment']['unverified_cc_spent_amount'] ?? 0),
                 ],
             ],
-            'referral_id' => $this->referral_id,
-            'features' => array_fill_keys(array_keys(User::getFeatures()), false),
-            'last_online_at' => DT::utcNow(),
         ]);
+
+        if ($this->has('username')) {
+            $this->merge(['username' => trim($this->username)]);
+        }
     }
 }
