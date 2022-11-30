@@ -129,6 +129,10 @@ class MeRequest extends FormRequest
                     'block_cc_payments' => $user->setting['payment']['block_cc_payments'] ?? true,
                     'unverified_cc_spent_amount' => (int) ($user->setting['payment']['unverified_cc_spent_amount'] ?? 0),
                 ],
+                'payout' => [
+                    'ban_payout' => $user->setting['payout']['ban_payout'] ?? false,
+                    'auto_ban_payout' => $user->setting['payout']['auto_ban_payout'] ?? false,
+                ],
             ],
         ]);
     }
