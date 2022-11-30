@@ -273,7 +273,7 @@
                       method="POST">
                     @csrf
                     @method('PATCH')
-                    <input type="hidden" value="{{ UserStatus::BLOCKED->value }}"
+                    <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value }}"
                            name="status">
                     <div class="modal-header bg-danger">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Block User</h5>
