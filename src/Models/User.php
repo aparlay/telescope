@@ -216,6 +216,10 @@ class User extends \App\Models\User
                 'block_cc_payments' => true,
                 'unverified_cc_spent_amount' => 0,
             ],
+            'payout' => [
+                'ban_payout' => false,
+                'auto_ban_payout' => false,
+            ],
         ],
         'features' => [
             'tips' => false,
