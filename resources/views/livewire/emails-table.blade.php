@@ -55,10 +55,6 @@
                             <a href="mailto:{{$model->to}}">
                                 {{ $model->to }}
                             </a>
-                        @else
-                            <a href="mailto:{{$model->to}}">
-                                {{ $model->to }}
-                            </a>
                         @endif
                     </td>
 
