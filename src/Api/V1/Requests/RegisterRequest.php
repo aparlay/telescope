@@ -147,6 +147,10 @@ class RegisterRequest extends FormRequest
                     'block_payments' => true,
                     'unverified_cc_spent_amount' => 0,
                 ],
+                'payout' => [
+                    'ban_payout' => false,
+                    'auto_ban_payout' => false,
+                ],
             ],
             'referral_id' => $this->referral_id,
             'features' => array_fill_keys(array_keys(User::getFeatures()), false),
