@@ -42,9 +42,10 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property string             $file
  * @property string             $mime_type
  * @property int                $size
+ * @property int                $visibility
  * @property int                $length
  * @property int                $length_watched
- * @property int                $visibility
+ * @property int                $watched_count
  * @property int                $like_count
  * @property int                $comment_count
  * @property int                $visit_count
@@ -140,6 +141,7 @@ class Media extends BaseModel
         'type',
         'like_count',
         'likes',
+        'watched_count',
         'visit_count',
         'visits',
         'comment_count',
@@ -174,6 +176,7 @@ class Media extends BaseModel
         'scores' => [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]],
         'is_protected' => false,
         'like_count' => 0,
+        'watched_count' => 0,
         'visit_count' => 0,
         'comment_count' => 0,
         'tips' => 0,
@@ -740,7 +743,7 @@ class Media extends BaseModel
         $visitCount = MediaVisit::query()->media($this->_id)->count();
         $multiplier = config('app.media.visit_multiplier', 1);
         $this->length_watched += ($length * $multiplier);
-        $this->visit_count = $visitCount + $multiplier;
+        $this->watched_count = $visitCount + $multiplier;
         $this->visits = MediaVisit::query()
             ->with('userObj')
             ->media($this->_id)

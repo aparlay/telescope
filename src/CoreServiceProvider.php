@@ -23,8 +23,10 @@ use Aparlay\Core\Admin\Livewire\Dashboard\Table;
 use Aparlay\Core\Admin\Livewire\Dashboard\TopCreditBalance;
 use Aparlay\Core\Admin\Livewire\EmailsTable;
 use Aparlay\Core\Admin\Livewire\GlobalSearch;
+use Aparlay\Core\Admin\Livewire\MediaCommentsTable;
 use Aparlay\Core\Admin\Livewire\MediasModerationTable;
 use Aparlay\Core\Admin\Livewire\MediasTable;
+use Aparlay\Core\Admin\Livewire\Modals\MediaCommentDeleteModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserNoteCreateModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserNoteDeleteModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
@@ -202,11 +204,13 @@ class CoreServiceProvider extends ServiceProvider
             'user-moderation-button' => UserModerationButton::class,
             'medias-table' => MediasTable::class,
             'medias-moderation-table' => MediasModerationTable::class,
+            'media-comments-table' => MediaCommentsTable::class,
             'settings-table' => SettingsTable::class,
             'emails-table' => EmailsTable::class,
             'notes-table' => NotesTable::class,
             'notes-create' => NotesCreate::class,
             'modals' => Modals::class,
+            'modals.media-comment-delete-modal' => MediaCommentDeleteModal::class,
             'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,
             'modals.user-notes-create-modal' => UserNoteCreateModal::class,
             'components.date-range-picker' => DateRangePicker::class,

@@ -4,11 +4,13 @@ namespace Aparlay\Core\Admin\Providers;
 
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Models\MediaComment;
 use Aparlay\Core\Admin\Models\Setting;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Observers\AlertObserver;
 use Aparlay\Core\Admin\Observers\SettingObserver;
 use Aparlay\Core\Listeners\CreateTipMediaComment;
+use Aparlay\Core\Observers\MediaCommentObserver;
 use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\UserObserver;
 use Aparlay\Payment\Events\TipCreatedEvent;
@@ -42,6 +44,7 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
         Alert::observe(new AlertObserver());
         User::observe(new UserObserver());
         Media::observe(new MediaObserver());
+        MediaComment::observe(new MediaCommentObserver());
         Setting::observe(new SettingObserver());
         parent::boot();
     }
