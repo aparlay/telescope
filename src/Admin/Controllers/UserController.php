@@ -218,6 +218,7 @@ class UserController extends Controller
         if ($this->userService->setPassword($user->_id, $password)) {
             return back()->with('success', 'Set user password successfully.');
         }
+
         return back()->with('error', 'Set password failed.');
     }
 
