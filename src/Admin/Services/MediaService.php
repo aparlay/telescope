@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Models\MediaComment;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
@@ -11,6 +12,8 @@ use Aparlay\Core\Admin\Requests\MediaUpdateScoreRequest;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Notifications\MediaScoreChanged;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -147,16 +150,9 @@ class MediaService extends AdminBaseService
             'status',
             'visibility',
             'is_protected',
+            'is_comments_enabled',
             'is_music_licensed',
         ]);
-
-        $dataModified = [
-            'visibility' => $request->integer('visibility') ?? 0,
-            'is_protected' => $request->boolean('is_protected'),
-            'is_music_licensed' => $request->boolean('is_music_licensed'),
-        ];
-
-        $data = array_merge($data, $dataModified);
 
         $media = $this->mediaRepository->update($data, $id);
 
@@ -197,6 +193,8 @@ class MediaService extends AdminBaseService
         $data = array_merge($data, $dataModified);
 
         $media = $this->mediaRepository->update($data, $id);
+
+        Notification::send($media, new MediaScoreChanged(auth()->user()));
 
         return $this->calculateSortScores($media, 0);
     }

@@ -2,13 +2,12 @@
 
 namespace Aparlay\Core\Admin\Requests;
 
-use Aparlay\Core\Admin\Models\Media;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
-class MediaUpdateRequest extends FormRequest
+class UserPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,15 +27,10 @@ class MediaUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['nullable', 'string'],
-            'visibility' => ['required', 'boolean'],
-            'is_protected' => ['required', 'boolean'],
-            'is_music_licensed' => ['required', 'boolean'],
-            'is_comments_enabled' => ['required', 'boolean'],
-            'status' => [
+            'password' => [
                 'required',
-                'integer',
-                Rule::in(array_keys(Media::getStatuses())),
+                Password::min(8)->letters()->numbers(),
+                'confirmed',
             ],
         ];
     }
@@ -52,15 +46,5 @@ class MediaUpdateRequest extends FormRequest
         throw new HttpResponseException(
             redirect()->back()->withErrors($errors)
         );
-    }
-
-    public function prepareForValidation()
-    {
-        $this->merge([
-            'visibility' => request()->input('visibility', 0),
-            'is_protected' => request()->boolean('is_protected'),
-            'is_music_licensed' => request()->boolean('is_music_licensed'),
-            'is_comments_enabled' => request()->boolean('is_comments_enabled'),
-        ]);
     }
 }

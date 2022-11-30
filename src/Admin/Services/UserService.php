@@ -10,6 +10,7 @@ use Aparlay\Core\Admin\Requests\UserPayoutsUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Constants\Roles;
+use Aparlay\Core\Events\UserPasswordChangedEvent;
 use Aparlay\Core\Events\UserSettingChangedEvent;
 use Aparlay\Core\Events\UserStatusChangedEvent;
 use Aparlay\Core\Events\UserVisibilityChangedEvent;
@@ -18,6 +19,7 @@ use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
+use Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
@@ -318,6 +320,23 @@ class UserService extends AdminBaseService
         }
 
         UserSettingChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType);
+
+        return $success;
+    }
+
+    /**
+     * @param mixed $userId
+     * @param string $password
+     * @return bool
+     */
+    public function setPassword(mixed $userId, string $password): bool
+    {
+        $user = $this->find($userId);
+        $noteType = NoteType::SET_PASSWORD->value;
+
+        $success = $this->userRepository->update(['password_hash' => Hash::make($password)], $userId);
+
+        UserPasswordChangedEvent::dispatchIf($success, $this->getUser(), $user, $noteType);
 
         return $success;
     }
