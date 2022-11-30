@@ -5,8 +5,7 @@ namespace Aparlay\Core\Admin\Livewire;
 use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
-use Aparlay\Core\Admin\Livewire\BaseIndexComponent;
-use Aparlay\Core\Models\MediaComment;
+use Aparlay\Core\Admin\Models\MediaComment;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
 
@@ -73,7 +72,7 @@ class MediaCommentsTable extends BaseIndexComponent
 
     public function render()
     {
-        return view('default_view::livewire.media-comment-table', [
+        return view('default_view::livewire.media-comments-table', [
             'models' => $this->index(),
             'hiddenFields' => [
                 'creator_username' => ! empty($this->userId),

@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Models\MediaComment;
 use Aparlay\Core\Admin\Requests\MediaUpdateRequest;
 use Aparlay\Core\Admin\Requests\MediaUpdateScoreRequest;
 use Aparlay\Core\Admin\Requests\MediaUploadRequest;
@@ -11,10 +12,8 @@ use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Jobs\ReprocessMedia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Psr\SimpleCache\InvalidArgumentException;
-use Session;
 
 class MediaController extends Controller
 {
@@ -42,13 +41,14 @@ class MediaController extends Controller
     /**
      * @param $mediaId
      * @param $direction
+     *
      * @return RedirectResponse
      */
     public function moderationNextOrPrev($mediaId, $direction)
     {
         $currentUser = auth()->user();
 
-        if ((int) $direction === 1) {
+        if ((int)$direction === 1) {
             $media = $this->mediaService->nextItemToReview($currentUser, $mediaId);
         } else {
             $media = $this->mediaService->prevItemToReview($currentUser, $mediaId);
@@ -90,7 +90,11 @@ class MediaController extends Controller
     public function view(Media $media)
     {
         $media = new MediaResource($this->mediaService->find($media->_id));
-        $scoreTypes = ! empty($media->scores) ? $media->scores : [['type' => 'skin', 'score' => 0], ['type' => 'awesomeness', 'score' => 0], ['type' => 'beauty', 'score' => 0]];
+        $scoreTypes = !empty($media->scores) ? $media->scores : [
+            ['type' => 'skin', 'score' => 0],
+            ['type' => 'awesomeness', 'score' => 0],
+            ['type' => 'beauty', 'score' => 0],
+        ];
 
         $moderationQueueNotEmpty = $this->mediaService->isModerationQueueNotEmpty();
 
@@ -140,19 +144,22 @@ class MediaController extends Controller
     {
         $media = $this->mediaService->find($media->_id);
 
-        if (is_array($media->files_history) && ! empty($media->files_history)) {
+        if (is_array($media->files_history) && !empty($media->files_history)) {
             $lastMediaFile = $media->files_history[array_key_last($media->files_history)];
             if (isset($lastMediaFile['file'])) {
                 ReprocessMedia::dispatch($media->_id, $lastMediaFile['file'])->onQueue('low');
 
-                return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with(
+                return redirect()->route('core.admin.media.view', ['media' => (string)$media->_id])->with(
                     'success',
                     'Video is placed in queue for reprocessing.'
                 );
             }
         }
 
-        return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with('danger', 'Original video not found.');
+        return redirect()->route('core.admin.media.view', ['media' => (string)$media->_id])->with(
+            'danger',
+            'Original video not found.'
+        );
     }
 
     public function pending($page = 1)
@@ -168,7 +175,9 @@ class MediaController extends Controller
         $prevPage = $currentPage === 1 ? $models->lastPage() : $currentPage - 1;
 
         foreach ($models as $model) {
-            return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(['prevPage' => $prevPage, 'nextPage' => $nextPage]);
+            return redirect()->route('core.admin.media.view', ['media' => (string)$model->_id])->with(
+                ['prevPage' => $prevPage, 'nextPage' => $nextPage]
+            );
         }
     }
 
@@ -176,11 +185,11 @@ class MediaController extends Controller
     {
         $media = $this->mediaService->find($media->_id);
         $matchedFile = $media->files_history[0] ?? [
-                'hash' => $media->hash,
-                'size' => $media->size,
-                'mime_type' => $media->mime_type,
-                'file' => $media->file,
-            ];
+            'hash' => $media->hash,
+            'size' => $media->size,
+            'mime_type' => $media->mime_type,
+            'file' => $media->file,
+        ];
         foreach ($media->files_history as $file) {
             if ($file['hash'] === $hash) {
                 $matchedFile = $file;
@@ -193,12 +202,19 @@ class MediaController extends Controller
         try {
             $b2File = $matchedFile['file'];
             if ($backblaze->exists($b2File)) {
-                return $backblaze->download($b2File, 'orig.'.$b2File, ['Content-Type' => $backblaze->mimeType($b2File)]);
+                return $backblaze->download($b2File, 'orig.'.$b2File, ['Content-Type' => $backblaze->mimeType($b2File)]
+                );
             }
 
-            return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with('danger', 'Video file not found.');
+            return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with(
+                'danger',
+                'Video file not found.'
+            );
         } catch (\Exception $e) {
-            return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with('danger', 'Video file download failed.');
+            return redirect()->route('core.admin.media.view', ['media' => $media->_id])->with(
+                'danger',
+                'Video file download failed.'
+            );
         }
     }
 

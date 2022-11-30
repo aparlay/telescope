@@ -74,7 +74,8 @@
                 </td>
 
                 <td>
-                    <button class="btn btn-sm btn-danger" type="button" data-toggle="modal" data-target="#delete-media-comment-modal">
+                    <button class="btn btn-md btn-danger" type="button"
+                            wire:click="$emit('showModal', 'modals.media-comment-delete-modal', '{{ (string)$model->id }}')">
                         Delete
                     </button>
                 </td>

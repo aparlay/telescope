@@ -16,9 +16,7 @@
     <div class="modal-content">
         <div class="modal-header pb-0">
             <h3 class="text-center w-100 mb-0">ID Verification</h3>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body pt-0">
             <div class="alert-default-secondary verify-header p-2">

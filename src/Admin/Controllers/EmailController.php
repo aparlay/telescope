@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
-use Aparlay\Core\Admin\Resources\EmailResource;
-use Aparlay\Core\Admin\Services\EmailService;
 
 /**
  * Class EmailController.

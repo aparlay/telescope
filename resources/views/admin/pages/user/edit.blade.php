@@ -59,19 +59,19 @@
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
                                     <b>Medias</b>
-                                    <a class="float-right">{{ $user->stats['counters']['medias'] }}</a>
+                                    <a class="float-right">{{ $user->stats['counters']['medias'] ?? 0 }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Followers</b>
-                                    <a class="float-right">{{ $user->stats['counters']['followers'] }}</a>
+                                    <a class="float-right">{{ $user->stats['counters']['followers'] ?? 0 }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Following</b>
-                                    <a class="float-right">{{ $user->stats['counters']['followings'] }}</a>
+                                    <a class="float-right">{{ $user->stats['counters']['followings'] ?? 0 }}</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Blocks</b>
-                                    <a class="float-right">{{ $user->stats['counters']['blocks'] }}</a>
+                                    <a class="float-right">{{ $user->stats['counters']['blocks'] ?? 0 }}</a>
                                 </li>
                             </ul>
                             <div class="row">
@@ -447,10 +447,8 @@
 
 @section('js')
     <script src="{{ URL::asset('admin/assets/js/ekko-lightbox.min.js') }}"></script>
-
     <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
-
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
     @livewireScripts
     <livewire:modals/>

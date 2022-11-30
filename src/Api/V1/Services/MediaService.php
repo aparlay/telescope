@@ -16,10 +16,7 @@ use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
@@ -162,7 +159,20 @@ class MediaService
             return new \Illuminate\Pagination\LengthAwarePaginator([], 0, 5, 0);
         }
 
-        return $query->availableForFollower()->following(auth()->user()->_id)->recentFirst()->paginate(5)->withQueryString();
+        $data = $query
+            ->availableForFollower()
+            ->following(auth()->user()->_id)
+            ->recentFirst()
+            ->paginate(5)
+            ->withQueryString();
+
+        $visited = [];
+        foreach ($data->items() as $model) {
+            $visited[] = $model->_id;
+        }
+        $this->markAsVisited($visited);
+
+        return $data;
     }
 
     /**
@@ -173,7 +183,19 @@ class MediaService
     {
         $query = Media::query();
 
-        return $query->public()->confirmed()->recentFirst()->paginate(5)->withQueryString();
+        $data = $query->public()
+            ->confirmed()
+            ->recentFirst()
+            ->paginate(5)
+            ->withQueryString();
+
+        $visited = [];
+        foreach ($data->items() as $model) {
+            $visited[] = $model->_id;
+        }
+        $this->markAsVisited($visited);
+
+        return $data;
     }
 
     /**
@@ -205,7 +227,14 @@ class MediaService
             }
         }
 
-        return $query->paginate(15);
+        $data = $query->paginate(15);
+        $visited = [];
+        foreach ($data->items() as $model) {
+            $visited[] = $model->_id;
+        }
+        $this->markAsVisited($visited);
+
+        return $data;
     }
 
     /**
@@ -239,14 +268,14 @@ class MediaService
      */
     public function anonymousWatched($media, int|float $duration = 60): void
     {
-        if ($duration > 3) {
+        if ($duration > 1) {
             $length = ($duration > ($media->length * 3)) ? $media->length : $duration;
             $multiplier = config('app.media.visit_multiplier', 1);
             $media->length_watched += ($length * $multiplier);
-            $media->visit_count += $multiplier;
+            $media->watched_count += $multiplier;
             $media->count_fields_updated_at = array_merge(
                 $media->count_fields_updated_at,
-                ['visits' => DT::utcNow()]
+                ['watch' => DT::utcNow()]
             );
             $media->save();
 
@@ -277,7 +306,7 @@ class MediaService
         $mediaVisit->media_id = new ObjectId($media->_id);
         $mediaVisit->duration = $duration;
 
-        if ($duration > 3) {
+        if ($duration > 1) {
             $media->updateVisits($duration);
         }
 
@@ -322,8 +351,22 @@ class MediaService
             $visited[] = $model->_id;
         }
         $this->cacheVisitedVideoByUuid($visited, $uuid);
+        $this->markAsVisited($visited);
 
         return $data;
+    }
+
+
+    /**
+     * @param array $userId
+     * @return void
+     */
+    public function markAsVisited(array $mediaIds): void
+    {
+        $mediaIds = array_map('strval', $mediaIds);
+        dispatch(function () use ($mediaIds) {
+            Media::medias($mediaIds)->increment('visit_count');
+        });
     }
 
     /**

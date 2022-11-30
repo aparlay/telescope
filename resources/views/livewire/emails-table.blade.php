@@ -33,8 +33,8 @@
         </div>
     </div>
 
-    <table class="table table-striped">
-        <tbody>
+    <table class="table table-striped border bg-white">
+        <thead>
         <tr>
             <th @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
                 <div>
@@ -55,7 +55,7 @@
                     <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'" />
                     <x-wire-dropdown-list
                         :wire-model="'filter.type'"
-                        :options="Email::getTypes()"
+                        :options="\Aparlay\Core\Admin\Models\Email::getTypes()"
                     />
                 </div>
             </th>
@@ -65,7 +65,7 @@
 
                     <x-wire-dropdown-list
                         :wire-model="'filter.status'"
-                        :options="Email::getStatuses()"
+                        :options="\Aparlay\Core\Admin\Models\Email::getStatuses()"
                     />
                 </div>
             </th>
@@ -76,7 +76,8 @@
                 </div>
             </th>
         </tr>
-
+        </thead>
+        <tbody>
         @foreach($models as $model)
             <tr>
                 <td @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
@@ -118,7 +119,7 @@
 
             </tr>
         @endforeach
-        </tbody>
+        </thead>
     </table>
     {{ $models->links() }}
 </div>

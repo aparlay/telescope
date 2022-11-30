@@ -1,5 +1,11 @@
 @extends('adminlte::page')
 @section('title', 'Media View')
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}">
+    <link rel="stylesheet" href="/css/admin.css">
+    @livewireStyles
+@stop
+
 @section('content')
     @inject('dt', 'Aparlay\Core\Helpers\DT')
     @inject('size', 'Aparlay\Core\Helpers\BladeHelper')
@@ -429,46 +435,6 @@
         </div>
     </div>
 
-    <!-- Delete media comment model -->
-    <div id="delete-media-comment-modal" class="fade modal" role="dialog" tabindex="-1" aria-hidden="true"
-         aria-labelledby="delete-media-comment-modal-label">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="delete-media-comment-modal-label" class="modal-title">Delete Comment</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="alert-modal-form" class="form-vertical kv-form-bs4"
-                      action="{{route('core.admin.media.comment.delete')}}" method="post" role="form">
-                <div class="modal-body">
-                        @csrf()
-                        <input type="hidden" name="status"
-                               value="{{ \Aparlay\Core\Models\Enums\AlertStatus::NOT_VISITED->value }}">
-                        <input type="hidden" name="type"
-                               value="{{ \Aparlay\Core\Models\Enums\AlertType::MEDIA_NOTICED->value }}">
-                        <div class="form-group highlight-addon field-media-delete-alert-modal-form-reason required">
-                            <label class="has-star" for="alert-modal-form-reason">Reason</label>
-                            <div>
-                                <input type="text" id="alert-modal-form-reason" class="form-control" name="reason"
-                                       placeholder="Type the message..." aria-required="true"></div>
-                            <div class="invalid-feedback"></div>
-                        </div>
-                        <input type="hidden" id="alert-media_id" class="form-control" name="media_id"
-                               value="{{ $media->_id }}">
-                        <input type="hidden" id="alert-user_id" class="form-control" name="user_id"
-                               value="{{ $media->creatorObj->_id }}">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" form="alert-modal-form">Submit</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <!-- Alert model -->
     <div id="alert-modal" class="fade modal" role="dialog" tabindex="-1" aria-hidden="true"
          aria-labelledby="alert-modal-label">
@@ -536,12 +502,12 @@
         </div>
     </div>
 @endsection
-@section('js')
+@push('js')
+    @livewireScripts
+    <livewire:modals/>
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
     <script src="{{ asset('admin/assets/js/media.js') }}"></script>
-@stop
-@section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/uploadMedia.css') }}">
-@stop
+    <script src="/js/admin.js"></script>
+@endpush
