@@ -441,7 +441,7 @@
                     </button>
                 </div>
                 <form id="alert-modal-form" class="form-vertical kv-form-bs4"
-                      action="{{route('core.admin.alert.store')}}" method="post" role="form">
+                      action="{{route('core.admin.media.comment.delete')}}" method="post" role="form">
                 <div class="modal-body">
                         @csrf()
                         <input type="hidden" name="status"

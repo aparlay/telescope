@@ -65,6 +65,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('media/{media}', [MediaController::class, 'view'])
                 ->middleware(['permission:show medias'])
                 ->name('view');
+            Route::post('media/{media}/comment/{comment}', [MediaController::class, 'update'])
+                ->middleware(['permission:edit medias'])
+                ->name('update');
             Route::post('media/{media}', [MediaController::class, 'update'])
                 ->middleware(['permission:edit medias'])
                 ->name('update');
