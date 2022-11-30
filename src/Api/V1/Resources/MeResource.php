@@ -67,7 +67,7 @@ class MeResource extends JsonResource
             'setting' => [
                 'otp' => $this->setting['otp'] ?? false,
                 'show_adult_content' => $this->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
-                'filter_content_gender' => $this->setting['content_gender'] ?? [
+                'filter_content_gender' => $this->setting['filter_content_gender'] ?? [
                     MediaContentGender::FEMALE->label() => true,
                     MediaContentGender::MALE->label() => true,
                     MediaContentGender::TRANSGENDER->label() => true,
