@@ -169,6 +169,6 @@ class MediaComment extends BaseModel
      */
     public function getAdminUrlAttribute(): string
     {
-        return route('core.admin.media.view', ['media' => $this->_id]);
+        return route('core.admin.media.view', ['media' => $this->media_id]);
     }
 }
