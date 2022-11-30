@@ -410,6 +410,9 @@
                                     Zorg Media Inc, 8 The Green STE A
                                     <br>
                                     Dover, DE 19901 United States
+                                    <br>
+                                    Don't want to get our emails?
+                                    <a href="{{ $unsubscribe_url }}" target="_blank" rel="noopener" style="color: #29b2e6; text-decoration: underline; line-height: inherit;">Unsubscribe</a>
                                 </td>
                             </tr>
                         </table>

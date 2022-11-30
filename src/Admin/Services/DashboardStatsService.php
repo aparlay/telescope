@@ -45,7 +45,9 @@ final class DashboardStatsService
 
                         'email_sent' => ['$sum' => '$email.sent'],
                         'email_failed' => ['$sum' => '$email.failed'],
-                        'email_opened' => ['$sum' => '$email.opened'],
+                        'email_delivered' => ['$sum' => '$email.delivered'],
+                        'email_deferred' => ['$sum' => '$email.deferred'],
+                        'email_bounced' => ['$sum' => '$email.bounced'],
 
                         'user_registered' => ['$sum' => '$user.registered'],
                         'user_login' => ['$sum' => '$user.login'],
