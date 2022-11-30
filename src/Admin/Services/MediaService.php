@@ -196,7 +196,6 @@ class MediaService extends AdminBaseService
 
         Notification::send($media, new MediaScoreChanged(auth()->user()));
 
-
         return $this->calculateSortScores($media, 0);
     }
 

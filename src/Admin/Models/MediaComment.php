@@ -8,5 +8,4 @@ use OwenIt\Auditing\Contracts\Auditable;
 class MediaComment extends MediaCommentBase implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
-
 }

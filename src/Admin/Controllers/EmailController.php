@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Admin\Controllers;
 
-
 /**
  * Class EmailController.
  */

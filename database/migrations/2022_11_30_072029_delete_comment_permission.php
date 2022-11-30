@@ -5,8 +5,7 @@ use Aparlay\Core\Constants\Roles;
 use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Role;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     const PERMISSION_DELETE_MEDIA_COMMENTS = 'delete media-comments';
 
     const PERMISSIONS_LIST = [

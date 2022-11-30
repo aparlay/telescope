@@ -356,7 +356,6 @@ class MediaService
         return $data;
     }
 
-
     /**
      * @param array $userId
      * @return void

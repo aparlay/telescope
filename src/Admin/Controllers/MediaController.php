@@ -48,7 +48,7 @@ class MediaController extends Controller
     {
         $currentUser = auth()->user();
 
-        if ((int)$direction === 1) {
+        if ((int) $direction === 1) {
             $media = $this->mediaService->nextItemToReview($currentUser, $mediaId);
         } else {
             $media = $this->mediaService->prevItemToReview($currentUser, $mediaId);
@@ -90,7 +90,7 @@ class MediaController extends Controller
     public function view(Media $media)
     {
         $media = new MediaResource($this->mediaService->find($media->_id));
-        $scoreTypes = !empty($media->scores) ? $media->scores : [
+        $scoreTypes = ! empty($media->scores) ? $media->scores : [
             ['type' => 'skin', 'score' => 0],
             ['type' => 'awesomeness', 'score' => 0],
             ['type' => 'beauty', 'score' => 0],
@@ -144,19 +144,19 @@ class MediaController extends Controller
     {
         $media = $this->mediaService->find($media->_id);
 
-        if (is_array($media->files_history) && !empty($media->files_history)) {
+        if (is_array($media->files_history) && ! empty($media->files_history)) {
             $lastMediaFile = $media->files_history[array_key_last($media->files_history)];
             if (isset($lastMediaFile['file'])) {
                 ReprocessMedia::dispatch($media->_id, $lastMediaFile['file'])->onQueue('low');
 
-                return redirect()->route('core.admin.media.view', ['media' => (string)$media->_id])->with(
+                return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with(
                     'success',
                     'Video is placed in queue for reprocessing.'
                 );
             }
         }
 
-        return redirect()->route('core.admin.media.view', ['media' => (string)$media->_id])->with(
+        return redirect()->route('core.admin.media.view', ['media' => (string) $media->_id])->with(
             'danger',
             'Original video not found.'
         );
@@ -175,7 +175,7 @@ class MediaController extends Controller
         $prevPage = $currentPage === 1 ? $models->lastPage() : $currentPage - 1;
 
         foreach ($models as $model) {
-            return redirect()->route('core.admin.media.view', ['media' => (string)$model->_id])->with(
+            return redirect()->route('core.admin.media.view', ['media' => (string) $model->_id])->with(
                 ['prevPage' => $prevPage, 'nextPage' => $nextPage]
             );
         }
@@ -202,7 +202,10 @@ class MediaController extends Controller
         try {
             $b2File = $matchedFile['file'];
             if ($backblaze->exists($b2File)) {
-                return $backblaze->download($b2File, 'orig.'.$b2File, ['Content-Type' => $backblaze->mimeType($b2File)]
+                return $backblaze->download(
+                    $b2File,
+                    'orig.'.$b2File,
+                    ['Content-Type' => $backblaze->mimeType($b2File)]
                 );
             }
 
