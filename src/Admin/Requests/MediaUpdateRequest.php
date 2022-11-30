@@ -32,6 +32,7 @@ class MediaUpdateRequest extends FormRequest
             'visibility' => ['required', 'boolean'],
             'is_protected' => ['required', 'boolean'],
             'is_music_licensed' => ['required', 'boolean'],
+            'is_comments_enabled' => ['required', 'boolean'],
             'status' => [
                 'required',
                 'integer',
@@ -59,6 +60,7 @@ class MediaUpdateRequest extends FormRequest
             'visibility' => request()->input('visibility', 1),
             'is_protected' => request()->boolean('is_protected'),
             'is_music_licensed' => request()->boolean('is_music_licensed'),
+            'is_comments_enabled' => request()->boolean('is_comments_enabled'),
         ]);
     }
 }

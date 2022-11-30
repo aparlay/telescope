@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <table class="table table-striped">
+    <table class="table table-striped border bg-white">
         <thead>
             <tr>
                 <th @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
@@ -26,11 +26,21 @@
 
                 <th class="col-md-2">
                     <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'" />
+                    <x-wire-dropdown-list
+                        :wire-model="'filter.type'"
+                        :options="\Aparlay\Core\Admin\Models\Email::getTypes()"
+                    />
                 </th>
-
-                <th class="col-md-1">
+            <th class="col-md-1">
+                <div>
                     <label for="">Status</label>
-                </th>
+
+                    <x-wire-dropdown-list
+                        :wire-model="'filter.status'"
+                        :options="\Aparlay\Core\Admin\Models\Email::getStatuses()"
+                    />
+                </div>
+            </th>
 
                 <th class="col-md-2">
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
@@ -49,10 +59,6 @@
                     <td>
                         @if ($model->userObj)
                             <a href="{{$model->userObj->admin_url}}">
-                                {{ $model->to }}
-                            </a>
-                        @else
-                            <a href="mailto:{{$model->to}}">
                                 {{ $model->to }}
                             </a>
                         @else
@@ -79,7 +85,7 @@
                     </td>
                 </tr>
             @endforeach
-        </tbody>
+        </thead>
     </table>
     {{ $models->links() }}
 </div>

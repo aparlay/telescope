@@ -1,8 +1,3 @@
-@php
-    use Aparlay\Core\Models\Enums\UserStatus;
-    use Aparlay\Core\Models\Enums\UserVisibility;
-@endphp
-
 @extends('adminlte::page')
 @section('title', 'User Profile')
 @section('plugins.Datatables', true)
@@ -443,10 +438,8 @@
 
 @section('js')
     <script src="{{ URL::asset('admin/assets/js/ekko-lightbox.min.js') }}"></script>
-
     <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
-
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
     @livewireScripts
     <livewire:modals/>

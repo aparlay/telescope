@@ -72,6 +72,7 @@ class MediaController extends Controller
      */
     public function show(Media $media): Response
     {
+        $this->mediaService->markAsVisited([$media->_id]);
         return $this->response(new MediaResource($media));
     }
 
