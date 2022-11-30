@@ -200,7 +200,8 @@ class MediaService
             ->gen()
             ->recentFirst()
             ->paginate(5)
-            ->withQueryString();$visited = [];
+            ->withQueryString();
+            $visited = [];
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
