@@ -46,10 +46,10 @@ class MeRequest extends FormRequest
             'promo_link' => ['nullable', 'url'],
             'username' => [
                 'nullable',
-                Rule::unique('users', 'username')->ignore($user->_id, '_id'),
                 'min:3',
                 'max:30',
                 'alpha_dash',
+                Rule::unique('users', 'username')->ignore($user->_id, '_id'),
             ],
             'payout_country_alpha2' => ['nullable', Rule::in(array_keys(Country::getAlpha2AndNames()))],
             'country_alpha2' => ['nullable', Rule::in(array_keys(Country::getAlpha2AndNames()))],
@@ -95,7 +95,7 @@ class MeRequest extends FormRequest
         $user = auth()->user();
         /* Set the Default Values and required to be input parameters */
         $this->merge([
-            'username' => trim($this->username),
+            'username' => trim($this->username) ?? $user->username,
             'visibility' => $this->visibility ?? $user->visibility ?? UserVisibility::PUBLIC->value,
             'setting' => [
                 'otp' => $this->setting['otp'] ?? $user->setting['otp'] ?? false,
@@ -113,6 +113,12 @@ class MeRequest extends FormRequest
                     'tips' => $this->setting['notifications']['tips'] ?? $user->setting['notifications']['tips'] ?? true,
                     'likes' => $this->setting['notifications']['likes'] ?? $user->setting['notifications']['likes'] ?? true,
                     'comments' => $this->setting['notifications']['comments'] ?? $user->setting['notifications']['comments'] ?? true,
+                ],
+                'payment' => [
+                    'allow_unverified_cc' => $user->setting['payment']['allow_unverified_cc'] ?? false,
+                    'block_unverified_cc' => $user->setting['payment']['block_unverified_cc'] ?? true,
+                    'block_cc_payments' => $user->setting['payment']['block_cc_payments'] ?? true,
+                    'unverified_cc_spent_amount' => (int)$user->setting['payment']['unverified_cc_spent_amount'] ?? 0,
                 ],
             ],
             'referral_id' => $this->referral_id,
