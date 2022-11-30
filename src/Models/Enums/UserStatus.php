@@ -6,9 +6,9 @@ enum UserStatus: int implements Enum
 {
     use EnumEnhancements;
 
-    case PENDING = 0;
-    case VERIFIED = 1;
-    case ACTIVE = 2;
+    case PENDING = 0; // just registered without OTP confirmation
+    case VERIFIED = 1; // OTP entered correctly
+    case ACTIVE = 2; // username set
     case SUSPENDED = 3;
     case BLOCKED = 4;
     case DEACTIVATED = 10;
