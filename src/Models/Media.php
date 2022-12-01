@@ -258,9 +258,9 @@ class Media extends BaseModel
     public function toSearchableArray()
     {
         if (isset($this->content_gender)) {
-            $gender = [$this->content_gender];
+            $gender = [MediaContentGender::from($this->content_gender)->label()];
         } else {
-            $gender = [MediaContentGender::FEMALE->value];
+            $gender = [MediaContentGender::FEMALE->label()];
         }
 
         return [
