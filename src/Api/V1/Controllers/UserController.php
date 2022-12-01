@@ -113,9 +113,9 @@ class UserController extends Controller
             }
 
             if ($user->payout_country_alpha2) {
-                $requestData = $request->only(['payout_country_alpha2']);
-            } else {
                 $requestData = $request->except(['payout_country_alpha2']);
+            } else {
+                $requestData = $request->all();
             }
 
             /* Update User Profile Information */
