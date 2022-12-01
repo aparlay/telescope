@@ -48,10 +48,10 @@ class MediaScoreChanged extends Notification
             $message .= PHP_EOL."- _*{$score['type']}: {$score['score']}*_ ";
         }
         if ($notifiable->status === MediaStatus::CONFIRMED->value) {
-            $message .= PHP_EOL.PHP_EOL."- _*Public Feed Approval: Confirmed*_ ";
+            $message .= PHP_EOL.PHP_EOL.'- _*Public Feed Approval: Confirmed*_ ';
         }
         if ($notifiable->status === MediaStatus::DENIED->value) {
-            $message .= PHP_EOL.PHP_EOL."- _*Public Feed Approval: Denied*_ ";
+            $message .= PHP_EOL.PHP_EOL.'- _*Public Feed Approval: Denied*_ ';
         }
 
         return (new SlackMessage())
