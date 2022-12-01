@@ -112,7 +112,6 @@ class UserController extends Controller
                 $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
 
-
             /* Update User Profile Information */
             $this->userService->getUser()->fill($request->all());
             if ($this->userService->getUser()->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
