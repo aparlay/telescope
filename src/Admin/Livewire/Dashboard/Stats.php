@@ -75,7 +75,7 @@ final class Stats extends BaseDashboardComponent
                 'value' => Arr::get($results, 'user_watched'),
             ],
             [
-                'label' => 'Video Watched',
+                'label' => 'Video Watched Duration',
                 'value' => round(\Carbon\CarbonInterval::seconds(Arr::get($results, 'user_duration'))->cascade()->totalHours) . 'H.',
             ],
             [
