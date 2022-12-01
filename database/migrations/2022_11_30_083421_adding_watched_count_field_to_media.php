@@ -16,6 +16,7 @@ return new class() extends Migration {
         foreach (Media::query()->whereNull('is_fake')->get() as $media) {
             /** @var Media $media */
             $media->watched_count = $media->visit_count;
+            $media->visit_count = 3*$media->visit_count;
             $media->saveQuietly();
         }
     }
