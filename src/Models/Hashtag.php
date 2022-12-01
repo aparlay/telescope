@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -125,7 +126,15 @@ class Hashtag extends BaseModel
             ->groupBy('content_gender')
             ->get(['content_gender'])
             ->pluck('content_gender')
+            ->map(function ($gender) {
+                return match($gender) {
+                    MediaContentGender::FEMALE->value => MediaContentGender::FEMALE->label(),
+                    MediaContentGender::MALE->value => MediaContentGender::MALE->label(),
+                    MediaContentGender::TRANSGENDER->value => MediaContentGender::TRANSGENDER->label(),
+                };
+            })
             ->toArray();
+
 
         return [
             '_id' => (string) $this->_id,

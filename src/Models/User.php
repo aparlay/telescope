@@ -359,7 +359,7 @@ class User extends \App\Models\User
             'poster' => $this->avatar,
             'username' => $this->username,
             'full_name' => $this->full_name,
-            'gender' => [$this->gender] ?? [UserGender::FEMALE->value],
+            'gender' => [$this->gender_label],
             'description' => $this->bio,
             'hashtags' => [],
             'score' => $this->scores['sort'],
@@ -429,6 +429,14 @@ class User extends \App\Models\User
     public function referralObj(): BelongsTo
     {
         return $this->belongsTo(self::class, 'referral_id');
+    }
+
+    /**
+     * @return string
+     */
+    public function getGenderLabelAttribute(): string
+    {
+        return $this->gender ? UserGender::from($this->gender)->label() : UserGender::FEMALE->label();
     }
 
     /**
