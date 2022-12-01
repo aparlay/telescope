@@ -126,13 +126,6 @@ class Hashtag extends BaseModel
             ->groupBy('content_gender')
             ->get(['content_gender'])
             ->pluck('content_gender')
-            ->map(function ($gender) {
-                return match($gender) {
-                    MediaContentGender::FEMALE->value => MediaContentGender::FEMALE->label(),
-                    MediaContentGender::MALE->value => MediaContentGender::MALE->label(),
-                    MediaContentGender::TRANSGENDER->value => MediaContentGender::TRANSGENDER->label(),
-                };
-            })
             ->toArray();
 
 
