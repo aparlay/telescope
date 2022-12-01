@@ -76,6 +76,7 @@ class WebhookController extends Controller
             if (strlen($emailId) === 24) {
                 $result = Email::query()->email($emailId)->sent()->update([
                     'server' => $request->input('hostname', ''),
+                    'error' => $message['error'] ?? null,
                     'status_label' => $message['status'],
                     'status' => match ($message['status']) {
                         'sent' => EmailStatus::DELIVERED->value,
@@ -87,6 +88,7 @@ class WebhookController extends Controller
             } else {
                 $result = Email::query()->to($message['to'])->sent()->update([
                     'server' => $request->input('hostname', ''),
+                    'error' => $message['error'] ?? null,
                     'status_label' => $message['status'],
                     'status' => match ($message['status']) {
                         'sent' => EmailStatus::DELIVERED->value,

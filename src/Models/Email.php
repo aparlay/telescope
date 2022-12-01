@@ -51,6 +51,7 @@ class Email extends BaseModel
         'status',
         'status_label',
         'type',
+        'error',
         'tracking',
         'created_at',
         'updated_at',
