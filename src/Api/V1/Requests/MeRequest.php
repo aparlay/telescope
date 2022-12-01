@@ -102,7 +102,7 @@ class MeRequest extends FormRequest
                 'username' => 'You cannot change your username any more.',
             ]);
         }
-        if (! auth()->guest() && !empty(auth()->user()->payout_country_alpha2) && $this->has('payout_country_alpha2')) {
+        if (! auth()->guest() && ! empty(auth()->user()->payout_country_alpha2) && $this->has('payout_country_alpha2')) {
             throw ValidationException::withMessages([
                 'username' => 'You cannot change your payout country any more.',
             ]);
