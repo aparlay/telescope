@@ -113,55 +113,16 @@ class UserController extends Controller
             }
 
             if ($user->payout_country_alpha2) {
-                $requestData = $request->except([
-                    'avatar',
-                    'username',
-                    'bio',
-                    'promo_link',
-                    'visibility',
-                    'country_alpha2',
-                    'setting.otp',
-                    'setting.show_adult_content',
-                    'setting.notifications.unread_message_alerts',
-                    'setting.notifications.news_and_updates',
-                    'setting.notifications.new_followers',
-                    'setting.notifications.new_subscribers',
-                    'setting.notifications.tips',
-                    'setting.notifications.likes',
-                    'setting.notifications.comments',
-                    'setting.payment.allow_unverified_cc',
-                    'setting.payment.block_unverified_cc',
-                    'setting.payment.block_cc_payments',
-                    'setting.payment.unverified_cc_spent_amount',
-                    'setting.filter_content_gender.female',
-                    'setting.filter_content_gender.male',
-                    'setting.filter_content_gender.transgender',
-                ]);
+                $requestData = $request->only(['payout_country_alpha2']);
             } else {
-                $requestData = $request->only([
-                    'avatar',
-                    'username',
-                    'bio',
-                    'promo_link',
-                    'visibility',
-                    'country_alpha2',
+                $requestData = $request->except([
                     'payout_country_alpha2',
-                    'setting.otp',
-                    'setting.show_adult_content',
-                    'setting.notifications.unread_message_alerts',
-                    'setting.notifications.news_and_updates',
-                    'setting.notifications.new_followers',
-                    'setting.notifications.new_subscribers',
-                    'setting.notifications.tips',
-                    'setting.notifications.likes',
-                    'setting.notifications.comments',
                     'setting.payment.allow_unverified_cc',
                     'setting.payment.block_unverified_cc',
                     'setting.payment.block_cc_payments',
                     'setting.payment.unverified_cc_spent_amount',
-                    'setting.filter_content_gender.female',
-                    'setting.filter_content_gender.male',
-                    'setting.filter_content_gender.transgender',
+                    'setting.payout.ban_payout',
+                    'setting.payout.auto_ban_payout',
                 ]);
             }
 
