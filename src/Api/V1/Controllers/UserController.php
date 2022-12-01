@@ -112,14 +112,8 @@ class UserController extends Controller
                 $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
 
-            if ($user->payout_country_alpha2) {
-                $requestData = $request->only(['payout_country_alpha2']);
-            } else {
-                $requestData = $request->except(['payout_country_alpha2']);
-            }
-
             /* Update User Profile Information */
-            $this->userService->getUser()->fill($requestData);
+            $this->userService->getUser()->fill($request->all());
             if ($this->userService->getUser()->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
                 $this->userService->getUser()->status = UserStatus::ACTIVE->value;
             }
