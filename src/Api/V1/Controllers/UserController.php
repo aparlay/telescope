@@ -115,15 +115,7 @@ class UserController extends Controller
             if ($user->payout_country_alpha2) {
                 $requestData = $request->only(['payout_country_alpha2']);
             } else {
-                $requestData = $request->except([
-                    'payout_country_alpha2',
-                    'setting.payment.allow_unverified_cc',
-                    'setting.payment.block_unverified_cc',
-                    'setting.payment.block_cc_payments',
-                    'setting.payment.unverified_cc_spent_amount',
-                    'setting.payout.ban_payout',
-                    'setting.payout.auto_ban_payout',
-                ]);
+                $requestData = $request->except(['payout_country_alpha2']);
             }
 
             /* Update User Profile Information */
