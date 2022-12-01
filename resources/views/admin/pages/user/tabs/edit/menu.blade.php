@@ -17,7 +17,9 @@
     <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" target="_blank" class="py-1 px-2 list-group-item list-group-item-action">
         <i class="fas fa-circle mr-1 text-blue"></i>Log-In As User
     </a>
-    <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Set Password</a>
+    <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#changePasswordModal">
+        <i class="fas fa-circle mr-1 text-blue"></i>Set Password
+    </a>
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Gallery</a>-->
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Adjustments</a>-->
     <a href="{{ route('chat.admin.chat.index', ['userId' => $user->_id]) }}" class="py-1 px-2 list-group-item list-group-item-action">

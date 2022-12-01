@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Listeners;
 
 use Aparlay\Core\Admin\Services\NoteService;
+use Aparlay\Core\Events\UserPasswordChangedEvent;
 use Aparlay\Core\Events\UserReceiveAlertEvent;
 use Aparlay\Core\Events\UserSettingChangedEvent;
 use Aparlay\Core\Events\UserStatusChangedEvent;
@@ -36,6 +37,14 @@ class AddNoteListener
         }
 
         if ($event instanceof UserSettingChangedEvent) {
+            $noteService->addNewNote(
+                $event->creator,
+                $event->user,
+                $event->type,
+            );
+        }
+
+        if ($event instanceof UserPasswordChangedEvent) {
             $noteService->addNewNote(
                 $event->creator,
                 $event->user,

@@ -119,6 +119,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:edit users'])
                 ->name('login_as_user');
             Route::name('update.')->group(function () {
+                Route::patch('/user/password/{user}', [UserController::class, 'setPassword'])
+                    ->middleware(['permission:edit users'])
+                    ->name('password');
                 Route::patch('user/status/{user}', [UserController::class, 'updateStatus'])
                     ->middleware(['permission:edit users'])
                     ->name('status');

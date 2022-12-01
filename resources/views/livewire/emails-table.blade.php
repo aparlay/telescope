@@ -26,21 +26,11 @@
 
                 <th class="col-md-2">
                     <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'" />
-                    <x-wire-dropdown-list
-                        :wire-model="'filter.type'"
-                        :options="\Aparlay\Core\Admin\Models\Email::getTypes()"
-                    />
                 </th>
-            <th class="col-md-1">
-                <div>
-                    <label for="">Status</label>
 
-                    <x-wire-dropdown-list
-                        :wire-model="'filter.status'"
-                        :options="\Aparlay\Core\Admin\Models\Email::getStatuses()"
-                    />
-                </div>
-            </th>
+                <th class="col-md-1">
+                    <label for="">Status</label>
+                </th>
 
                 <th class="col-md-2">
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
@@ -85,7 +75,7 @@
                     </td>
                 </tr>
             @endforeach
-        </thead>
+        </tbody>
     </table>
     {{ $models->links() }}
 </div>
