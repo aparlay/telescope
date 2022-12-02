@@ -106,7 +106,7 @@ class OtpService
     {
         /* @var Email $lastSentEmail */
         $lastSentEmail = Email::query()->to($otp->identity)->processed()->recentFirst()->first();
-        if ($lastSentEmail->status === EmailStatus::BOUNCED->value) {
+        if ($lastSentEmail != null && $lastSentEmail->status === EmailStatus::BOUNCED->value) {
             $otp->delete();
             throw ValidationException::withMessages([
                 'email' => $lastSentEmail->humanized_error,
