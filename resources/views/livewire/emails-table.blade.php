@@ -98,14 +98,14 @@
                 </td>
 
                 <td>
-                    <span class="badge bg-{{ EmailType::from($model->type)->badgeColor() }}"
-                          data-toggle="tooltip" data-placement="left" title="{{$model->error}}">
+                    <span class="badge bg-{{ EmailType::from($model->type)->badgeColor() }}">
                         {{ EmailType::from($model->type)->label() }}
                     </span>
                 </td>
 
                 <td>
-                    <span class="badge bg-{{ EmailStatus::from($model->status)->badgeColor() }}" data-slider-tooltip="">
+                    <span class="badge bg-{{ EmailStatus::from($model->status)->badgeColor() }}"
+                          data-toggle="tooltip" data-placement="left" title="{{$model->error}}">
                         {{ EmailStatus::from($model->status)->label() }}
                     </span>
                 </td>
@@ -120,3 +120,10 @@
     </table>
     {{ $models->links() }}
 </div>
+@push('js')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+    </script>
+@endpush
