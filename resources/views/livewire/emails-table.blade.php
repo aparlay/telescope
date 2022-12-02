@@ -20,9 +20,12 @@
                     <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
                 </th>
 
-                <th class="col-md-4">
-                    <x-sortable-column-header :sort="$sort" :fieldName="'email'" :fieldLabel="'Email'" />
-                </th>
+            <th class="col-md-2">
+                <div>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'to'" :fieldLabel="'to'" />
+                    <input class="form-control" type="text" wire:model="filter.to"/>
+                </div>
+            </th>
 
                 <th class="col-md-2">
                     <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'" />
@@ -51,21 +54,17 @@
                             <a href="{{$model->userObj->admin_url}}">
                                 {{ $model->to }}
                             </a>
-                        @else
-                            <a href="mailto:{{$model->to}}">
-                                {{ $model->to }}
-                            </a>
                         @endif
                     </td>
 
                     <td>
-                        <span class="badge bg-{{ EmailType::from($model->type)->badgeColor() }}">
-                            {{ EmailType::from($model->type)->label() }}
+                        <span class="badge bg-{{ EmailType::from($model->type)->badgeColor() }}"
+                            data-toggle="tooltip" data-placement="left" title="{{$model->error}}">{{ EmailType::from($model->type)->label() }}
                         </span>
                     </td>
 
                     <td>
-                        <span class="badge bg-{{ EmailStatus::from($model->status)->badgeColor() }}">
+                        <span class="badge bg-{{ EmailStatus::from($model->status)->badgeColor() }}" data-slider-tooltip="">
                             {{ EmailStatus::from($model->status)->label() }}
                         </span>
                     </td>
