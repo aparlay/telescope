@@ -60,8 +60,8 @@
                     </td>
 
                     <td>
-                        <span class="badge bg-{{ EmailType::from($model->type)->badgeColor() }}"
-                            data-toggle="tooltip" data-placement="left" title="{{$model->error}}">{{ EmailType::from($model->type)->label() }}
+                        <span class="badge bg-{{ EmailType::from($model->type)->badgeColor() }}">
+                            {{ EmailType::from($model->type)->label() }}
                         </span>
                     </td>
 
