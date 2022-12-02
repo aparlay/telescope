@@ -32,8 +32,8 @@ enum EmailStatus: int implements Enum
             self::SENT => 'info',
             self::DELIVERED => 'success',
             self::DEFERRED => 'warning',
-            self::BOUNCED => 'black',
-            self::FAILED => 'danger',
+            self::BOUNCED => 'danger',
+            self::FAILED => 'black',
         };
     }
 }
