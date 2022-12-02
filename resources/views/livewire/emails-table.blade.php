@@ -7,8 +7,11 @@
 <div class="user-table user-profile-table">
     <div class="filters">
         <div class="row">
-            <div @class(['col-md-12 mb-2', 'd-none' => $hiddenFields['username']])>
+            <div @class(['col-md-6 mb-2', 'd-none' => $hiddenFields['username']])>
                 <input class="form-control" type="text" placeholder="filter creator" wire:model="filter.username"/>
+            </div>
+            <div @class(['col-md-6 mb-2'])>
+                <input class="form-control" type="text" placeholder="filter email address" wire:model="filter.to"/>
             </div>
         </div>
     </div>
@@ -23,7 +26,6 @@
             <th class="col-md-2">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'to'" :fieldLabel="'to'" />
-                    <input class="form-control" type="text" wire:model="filter.to"/>
                 </div>
             </th>
 
