@@ -471,6 +471,27 @@
             </div>
         </div>
     </div>
+
+    <div id="changeUsernameModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="changeUserNameModalLabel">Please confirm to change username</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to change the username? Videos will be reprocessed.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal" id="confirmChangeUsername">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
