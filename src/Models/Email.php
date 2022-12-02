@@ -2,10 +2,12 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Services\EmailService;
 use Aparlay\Core\Database\Factories\EmailFactory;
 use Aparlay\Core\Models\Enums\EmailStatus;
 use Aparlay\Core\Models\Enums\EmailType;
 use Aparlay\Core\Models\Queries\EmailQueryBuilder;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,10 +21,13 @@ use MongoDB\BSON\ObjectId;
  * @property ObjectId      $_id
  * @property ObjectId|null $user_id
  * @property string        $to
- * @property string        $status_label
  * @property int           $status
+ * @property string        $status_label
+ * @property string        $error
  * @property int           $type
  * @property User          $userObj
+ *
+ * @property-read string   $humanized_error
  */
 class Email extends BaseModel
 {
@@ -109,6 +114,16 @@ class Email extends BaseModel
     public function newEloquentBuilder($query): EmailQueryBuilder
     {
         return new EmailQueryBuilder($query);
+    }
+
+    /**
+     * @return array
+     * @throws BindingResolutionException
+     */
+    public function getHumanizedErrorAttribute(): string
+    {
+        $emailService = app()->make(EmailService::class);
+        return $emailService->humanizeError($this);
     }
 
     /**
