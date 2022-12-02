@@ -123,6 +123,7 @@ class Email extends BaseModel
     public function getHumanizedErrorAttribute(): string
     {
         $emailService = app()->make(EmailService::class);
+
         return $emailService->humanizeError($this);
     }
 
