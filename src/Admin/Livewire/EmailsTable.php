@@ -32,7 +32,7 @@ class EmailsTable extends BaseIndexComponent
     {
         return [
             'username',
-            'email',
+            'to',
             'type',
             'status',
             'created_at',
@@ -46,6 +46,7 @@ class EmailsTable extends BaseIndexComponent
     {
         return [
             new FilterPartial('username', 'string', 'user.username'),
+            new FilterPartial('to', 'string', 'to'),
             new FilterExact('type', 'int'),
             new FilterExact('status', 'int'),
             new FilterDateRange('created_at', 'array', ['start', 'end']),

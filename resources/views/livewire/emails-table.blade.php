@@ -45,8 +45,8 @@
 
             <th class="col-md-2">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'email'" :fieldLabel="'Email'" />
-
+                    <x-sortable-column-header :sort="$sort" :fieldName="'to'" :fieldLabel="'to'" />
+                    <input class="form-control" type="text" wire:model="filter.to"/>
                 </div>
             </th>
 
@@ -88,10 +88,6 @@
                 <td>
                     @if ($model->userObj)
                     <a href="{{$model->userObj->admin_url}}">
-                        {{ $model->to }}
-                    </a>
-                    @else
-                    <a href="mailto:{{$model->to}}">
                         {{ $model->to }}
                     </a>
                     @else

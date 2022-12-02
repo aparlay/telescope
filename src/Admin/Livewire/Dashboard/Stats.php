@@ -71,6 +71,14 @@ final class Stats extends BaseDashboardComponent
                 'value' => Arr::get($results, 'media_confirmed'),
             ],
             [
+                'label' => 'Video Played',
+                'value' => Arr::get($results, 'user_watched'),
+            ],
+            [
+                'label' => 'Video Watched',
+                'value' => round(\Carbon\CarbonInterval::seconds(Arr::get($results, 'user_duration'))->cascade()->totalHours).'H.',
+            ],
+            [
                 'label' => 'Likes',
                 'value' => Arr::get($results, 'media_likes'),
             ],
