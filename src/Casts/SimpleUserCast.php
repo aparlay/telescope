@@ -107,13 +107,13 @@ class SimpleUserCast implements CastsAttributes
                     'is_verified' => $user->is_verified,
                 ];
 
-                Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);
+                Cache::store('octane')->put($cacheKey, json_encode($userArray), config('app.cache.tenMinutes'));
                 Cache::store('redis')->set($cacheKey, $userArray, config('app.cache.veryLongDuration'));
             }
         }
 
         if (Cache::store('octane')->get($cacheKey, false) === false) {
-            Cache::store('octane')->put($cacheKey, json_encode($userArray), 300);
+            Cache::store('octane')->put($cacheKey, json_encode($userArray), config('app.cache.tenMinutes'));
         }
 
         return $userArray;

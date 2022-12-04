@@ -15,7 +15,7 @@ class Country
             }
 
             $countries = json_encode($countries);
-            Cache::store('octane')->put('countries', $countries, 300);
+            Cache::store('octane')->put('countries', $countries, config('app.cache.tenMinutes'));
         }
 
         return json_decode($countries, true);
@@ -61,25 +61,25 @@ class Country
     private static function load()
     {
         foreach (\Aparlay\Core\Models\Country::query()->get() as $country) {
-            Cache::store('octane')->put('countries:'.$country->alpha2.':alpha2', $country->alpha2, 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':alpha3', $country->alpha3, 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':name', $country->name, 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:16', 'https://flagcdn.com/16x12/'.$country->alpha2.'.png', 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:24', 'https://flagcdn.com/24x18/'.$country->alpha2.'.png', 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:32', 'https://flagcdn.com/32x24/'.$country->alpha2.'.png', 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:48', 'https://flagcdn.com/48x36/'.$country->alpha2.'.png', 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:64', 'https://flagcdn.com/64x48/'.$country->alpha2.'.png', 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:128', 'https://flagcdn.com/128x96/'.$country->alpha2.'.png', 300);
+            Cache::store('octane')->put('countries:'.$country->alpha2.':alpha2', $country->alpha2, config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':alpha3', $country->alpha3, config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':name', $country->name, config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:16', 'https://flagcdn.com/16x12/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:24', 'https://flagcdn.com/24x18/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:32', 'https://flagcdn.com/32x24/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:48', 'https://flagcdn.com/48x36/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:64', 'https://flagcdn.com/64x48/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:128', 'https://flagcdn.com/128x96/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
 
-            Cache::store('octane')->put('countries:'.$country->alpha3.':alpha2', $country->alpha2, 300);
-            Cache::store('octane')->put('countries:'.$country->alpha3.':alpha3', $country->alpha3, 300);
-            Cache::store('octane')->put('countries:'.$country->alpha3.':name', $country->name, 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:16', 'https://flagcdn.com/16x12/'.$country->alpha2.'.png', 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:24', 'https://flagcdn.com/24x18/'.$country->alpha2.'.png', 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:32', 'https://flagcdn.com/32x24/'.$country->alpha2.'.png', 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:48', 'https://flagcdn.com/48x36/'.$country->alpha2.'.png', 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:64', 'https://flagcdn.com/64x48/'.$country->alpha2.'.png', 300);
-            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:128', 'https://flagcdn.com/128x96/'.$country->alpha2.'.png', 300);
+            Cache::store('octane')->put('countries:'.$country->alpha3.':alpha2', $country->alpha2, config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha3.':alpha3', $country->alpha3, config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha3.':name', $country->name, config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:16', 'https://flagcdn.com/16x12/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:24', 'https://flagcdn.com/24x18/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:32', 'https://flagcdn.com/32x24/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:48', 'https://flagcdn.com/48x36/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:64', 'https://flagcdn.com/64x48/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
+            Cache::store('octane')->put('countries:'.$country->alpha2.':flags:128', 'https://flagcdn.com/128x96/'.$country->alpha2.'.png', config('app.cache.tenMinutes'));
         }
     }
 
