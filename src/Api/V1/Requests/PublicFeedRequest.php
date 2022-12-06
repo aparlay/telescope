@@ -50,7 +50,7 @@ class PublicFeedRequest extends FormRequest
     {
         $contentGenders = [];
         $items = request()->input('filter_content_gender', 'female,male,transgender');
-        if (!empty($items)) {
+        if (! empty($items)) {
             foreach (explode(',', $items) as $item) {
                 if (! is_numeric($item)) {
                     $contentGenders[] = match ($item) {
@@ -64,7 +64,6 @@ class PublicFeedRequest extends FormRequest
                 }
             }
         }
-
 
         if (empty($contentGenders)) {
             if (auth()->guest()) {
