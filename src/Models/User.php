@@ -369,6 +369,7 @@ class User extends \App\Models\User
             'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
             'like_count' => $this->counters['likes'],
             'is_adult' => false,
+            'skin_score' => 0,
             'visit_count' => 0,
             'comment_count' => 0,
             '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
