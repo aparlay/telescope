@@ -49,17 +49,23 @@ class PublicFeedRequest extends FormRequest
     public function prepareForValidation()
     {
         $contentGenders = [];
-        foreach (explode(',', request()->input('filter_content_gender', 'female,male,transgender')) as $item) {
-            if (! is_numeric($item)) {
-                $contentGenders[] = match ($item) {
-                    MediaContentGender::FEMALE->label() => MediaContentGender::FEMALE->value,
-                    MediaContentGender::MALE->label() => MediaContentGender::MALE->value,
-                    MediaContentGender::TRANSGENDER->label() => MediaContentGender::TRANSGENDER->value,
-                };
-            } else {
-                $contentGenders[] = (int) $item;
+        $items = request()->input('filter_content_gender', 'female,male,transgender');
+        if (!empty($items)) {
+            foreach (explode(',', $items) as $item) {
+                if (! is_numeric($item)) {
+                    $contentGenders[] = match ($item) {
+                        MediaContentGender::FEMALE->label() => MediaContentGender::FEMALE->value,
+                        MediaContentGender::MALE->label() => MediaContentGender::MALE->value,
+                        MediaContentGender::TRANSGENDER->label() => MediaContentGender::TRANSGENDER->value,
+                        default => MediaContentGender::FEMALE->value,
+                    };
+                } else {
+                    $contentGenders[] = (int) $item;
+                }
             }
         }
+
+
         if (empty($contentGenders)) {
             if (auth()->guest()) {
                 $contentGenders = [0, 1, 2];
