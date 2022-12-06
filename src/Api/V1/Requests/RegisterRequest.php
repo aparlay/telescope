@@ -12,6 +12,7 @@ use Aparlay\Core\Models\Enums\UserVisibility;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use MongoDB\BSON\ObjectId;
@@ -60,6 +61,8 @@ class RegisterRequest extends FormRequest
      */
     public function prepareForValidation()
     {
+        $this->username = Str::of($this->username)->trim()->lower()->toString();
+
         /* Set email or phone basd on the usernmae format */
         if (str_contains($this->username, '@')) {
             $this->email = $this->username;
@@ -104,8 +107,8 @@ class RegisterRequest extends FormRequest
 
         /* Set the Default Values and required to be input parameters */
         $this->merge([
-            'username' => trim($this->username),
-            'email' => strtolower(trim($this->email)),
+            'username' => Str::of($this->username)->trim()->lower()->toString(),
+            'email' => Str::of($this->email)->trim()->lower()->toString(),
             'phone_number' => $this->phone_number,
             'avatar' => $this->avatar,
             'gender' => $this->gender,
