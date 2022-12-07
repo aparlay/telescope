@@ -87,6 +87,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property-read int           $visit_score
  * @property-read int           $comment_score
  * @property-read int           $sent_tips
+ * @property-read string        $content_gender_label
  *
  *
  * @method static |self|Builder creator(ObjectId|string $userId)
@@ -614,6 +615,14 @@ class Media extends BaseModel
         }
 
         $this->attributes['count_fields_updated_at'] = $attributeValue;
+    }
+
+    /**
+     * @return string
+     */
+    public function setContentGenderLabelAttribute(): string
+    {
+        return $this->content_gender ? MediaContentGender::from($this->content_gender)->label() : '';
     }
 
     /**

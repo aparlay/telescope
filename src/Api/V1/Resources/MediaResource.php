@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
-use Akaunting\Money\Currency;
 use Akaunting\Money\Money;
 use Illuminate\Http\Request;
 
@@ -63,6 +62,7 @@ class MediaResource extends JsonResource
             'is_visited' => $this->is_visited,
             'is_adult' => $this->is_adult,
             'skin_score' => $this->skin_score,
+            'content_gender' => $this->content_gender_label,
             'is_comments_enabled' => $this->is_comments_enabled ?? false,
             'like_count' => $this->like_count,
             'likes' => $likes,
