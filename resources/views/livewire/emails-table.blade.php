@@ -50,7 +50,7 @@
                 </div>
             </th>
 
-            <th class="col-md-2">
+            <th class="col-md-1">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'" />
                     <x-wire-dropdown-list
@@ -59,6 +59,11 @@
                     />
                 </div>
             </th>
+
+            <th class="col-md-1">
+                <span for="">Server</span>
+            </th>
+
             <th class="col-md-1">
                 <div>
                     <label for="">Status</label>
@@ -100,6 +105,12 @@
                 <td>
                     <span class="badge bg-{{ EmailType::from($model->type)->badgeColor() }}">
                         {{ EmailType::from($model->type)->label() }}
+                    </span>
+                </td>
+
+                <td>
+                    <span @class(['badge', 'bg-success' => $model->server === 'mail1', 'bg-warning' => $model->server === 'mail2']) >
+                        {{ $model->server }}
                     </span>
                 </td>
 
