@@ -95,12 +95,24 @@ class OtpService
 
     /**
      * Send OTP by email.
-     * @param User|Authenticatable $user
-     * @param object $otp
+     *
+     * @param  User|Authenticatable  $user
+     * @param  object                $otp
+     *
      * @return bool
+     * @throws \Exception
      */
     public function sendByEmail(User|Authenticatable $user, object $otp)
     {
+        /* @var Email $lastSentEmail */
+        $lastSentEmail = Email::query()->to($otp->identity)->processed()->recentFirst()->first();
+        if ($lastSentEmail != null && $lastSentEmail->status === EmailStatus::BOUNCED->value) {
+            $otp->delete();
+            throw ValidationException::withMessages([
+                'email' => $lastSentEmail->humanized_error,
+            ]);
+        }
+
         /** Prepare email request data and insert in Email table */
         $request = [
             'to' => $otp->identity,

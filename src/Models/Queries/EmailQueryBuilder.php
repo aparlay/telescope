@@ -77,4 +77,16 @@ class EmailQueryBuilder extends EloquentQueryBuilder
     {
         return $this->where('to', $email);
     }
+
+    /**
+     * @return self
+     */
+    public function processed(): self
+    {
+        return $this->whereIn('status', [
+            EmailStatus::DELIVERED->value,
+            EmailStatus::DEFERRED->value,
+            EmailStatus::BOUNCED->value,
+        ]);
+    }
 }

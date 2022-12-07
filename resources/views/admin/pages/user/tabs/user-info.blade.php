@@ -4,7 +4,7 @@
 @endphp
 
 <div class="tab-pane active" id="user-info">
-    <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data">
+    <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data" id="user-info-form">
         @csrf()
         @method('PUT')
         <div class="form-group row">

@@ -38,22 +38,26 @@
         <tr>
             <th @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'"/>
                     <input class="form-control" type="text" wire:model="filter.username"/>
                 </div>
             </th>
 
             <th class="col-md-2">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'to'" :fieldLabel="'to'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'to'" :fieldLabel="'to'"/>
                     <input class="form-control" type="text" wire:model="filter.to"/>
                 </div>
             </th>
 
             <th class="col-md-1">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'" />
-                    <x-wire-dropdown-list
+                    <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'"/>
+            </th>
+
+            <th class="col-md-1">
+                <label for="">Server</label>
+            <x-wire-dropdown-list
                         :wire-model="'filter.type'"
                         :options="\Aparlay\Core\Admin\Models\Email::getTypes()"
                     />
@@ -77,7 +81,7 @@
 
             <th class="col-md-2">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
                 </div>
             </th>
         </tr>
@@ -86,20 +90,20 @@
         @foreach($models as $model)
             <tr>
                 <td @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
-                    @if ($model->userObj)
-                        <x-username-avatar :user="$model->userObj"/>
-                    @endif
+                @if ($model->userObj)
+                    <x-username-avatar :user="$model->userObj"/>
+                @endif
                 </td>
+
                 <td>
-                    @if ($model->userObj)
-                    <a href="{{$model->userObj->admin_url}}">
-                        {{ $model->to }}
+                @if ($model->userObj)
+                    <a href="{{$model->userObj->admin_url}}">{{ $model->to }}
                     </a>
                     @else
                     <a href="mailto:{{$model->to}}">
                         {{ $model->to }}
                     </a>
-                    @endif
+                @endif
                 </td>
 
                 <td>
@@ -115,7 +119,8 @@
                 </td>
 
                 <td>
-                    <span class="badge bg-{{ EmailStatus::from($model->status)->badgeColor() }}">
+                    <span class="badge bg-{{ EmailStatus::from($model->status)->badgeColor() }}"
+                          data-toggle="tooltip" data-placement="left" title="{{$model->error}}">
                         {{ EmailStatus::from($model->status)->label() }}
                     </span>
                 </td>
@@ -123,10 +128,16 @@
                 <td>
                     {{ $model->created_at }}
                 </td>
-
             </tr>
         @endforeach
         </thead>
     </table>
     {{ $models->links() }}
 </div>
+@push('js')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+    </script>
+@endpush
