@@ -573,7 +573,9 @@ class Media extends BaseModel
      */
     public function getContentGenderLabelAttribute(): string
     {
-        return $this->content_gender ? MediaContentGender::from($this->content_gender)->label() : '';
+        return in_array($this->content_gender, MediaContentGender::getAllValues()) ?
+            MediaContentGender::from($this->content_gender)->label() :
+            '';
     }
 
     /**
