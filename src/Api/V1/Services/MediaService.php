@@ -24,6 +24,8 @@ use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Str;
 
+use function PHPUnit\Framework\matches;
+
 class MediaService
 {
     use HasUserTrait;
@@ -326,6 +328,15 @@ class MediaService
     ): LengthAwarePaginator {
         $sortCategory = $isGuest ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
         $query = Media::public()->confirmed()->genderContent($request->filter_content_gender)->sort($sortCategory);
+
+        switch ($request->show_adult_content) {
+            case UserSettingShowAdultContent::NEVER->value:
+                $query->withoutTopless();
+                break;
+            case UserSettingShowAdultContent::TOPLESS->value:
+                $query->withoutExplicit();
+                break;
+        };
 
         $originalQuery = $query;
         $originalData = $originalQuery

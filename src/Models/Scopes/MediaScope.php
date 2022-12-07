@@ -288,9 +288,29 @@ trait MediaScope
      *
      * @return mixed
      */
+    public function scopeWithoutExplicit(Builder $query): Builder
+    {
+        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$lt' => config('app.media.explicit_skin_score')]]]);
+    }
+
+    /**
+     * @param  Builder  $query
+     *
+     * @return mixed
+     */
     public function scopeTopless(Builder $query): Builder
     {
         return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$gte' => config('app.media.topless_skin_score')]]]);
+    }
+
+    /**
+     * @param  Builder  $query
+     *
+     * @return mixed
+     */
+    public function scopeWithoutTopless(Builder $query): Builder
+    {
+        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$lt' => config('app.media.topless_skin_score')]]]);
     }
 
     /**

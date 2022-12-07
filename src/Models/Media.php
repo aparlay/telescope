@@ -103,7 +103,9 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder genderContent(array|int $genderContent)
  * @method static |self|Builder public()
  * @method static |self|Builder explicit()
+ * @method static |self|Builder withoutExplicit()
  * @method static |self|Builder topless()
+ * @method static |self|Builder withoutTopless()
  * @method static |self|Builder private()
  */
 class Media extends BaseModel
