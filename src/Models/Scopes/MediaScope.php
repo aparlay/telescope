@@ -280,7 +280,7 @@ trait MediaScope
      */
     public function scopeExplicit(Builder $query): Builder
     {
-        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$gte' => config('app.media.explicit_skin_score')]]]);
+        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$gte' => config('app.media.explicit_skin_score', 9)]]]);
     }
 
     /**
@@ -290,7 +290,7 @@ trait MediaScope
      */
     public function scopeWithoutExplicit(Builder $query): Builder
     {
-        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$lt' => config('app.media.explicit_skin_score')]]]);
+        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$lt' => config('app.media.explicit_skin_score', 9)]]]);
     }
 
     /**
@@ -300,7 +300,7 @@ trait MediaScope
      */
     public function scopeTopless(Builder $query): Builder
     {
-        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$gte' => config('app.media.topless_skin_score')]]]);
+        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$gte' => config('app.media.topless_skin_score', 8)]]]);
     }
 
     /**
@@ -310,7 +310,7 @@ trait MediaScope
      */
     public function scopeWithoutTopless(Builder $query): Builder
     {
-        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$lt' => config('app.media.topless_skin_score')]]]);
+        return $query->where('scores', ['$elemMatch' => ['type' => 'skin', 'score' => ['$lt' => config('app.media.topless_skin_score', 8)]]]);
     }
 
     /**
