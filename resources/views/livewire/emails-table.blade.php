@@ -18,10 +18,10 @@
 
     <table class="table table-striped border bg-white">
         <thead>
-            <tr>
-                <th @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'"/>
-                </th>
+        <tr>
+            <th @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
+                <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'"/>
+            </th>
 
             <th class="col-md-2">
                 <div>
@@ -29,45 +29,45 @@
                 </div>
             </th>
 
-                <th class="col-md-1">
-                    <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'"/>
+            <th class="col-md-1">
+                <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'"/>
             </th>
 
             <th class="col-md-1">
                 <label for="">Server</label>
-                </th>
+            </th>
 
-                <th class="col-md-1">
-                    <label for="">Status</label>
-                </th>
+            <th class="col-md-1">
+                <label for="">Status</label>
+            </th>
 
-                <th class="col-md-2">
-                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
-                </th>
-            </tr>
+            <th class="col-md-2">
+                <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
+            </th>
+        </tr>
         </thead>
         <tbody>
-            @foreach($models as $model)
-                <tr>
-                    <td @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
-                        @if ($model->userObj)
-                            <x-username-avatar :user="$model->userObj"/>
-                        @endif
-                    </td>
+        @foreach($models as $model)
+            <tr>
+                <td @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
+                    @if ($model->userObj)
+                        <x-username-avatar :user="$model->userObj"/>
+                    @endif
+                </td>
 
-                    <td>
-                        @if ($model->userObj)
-                            <a href="{{$model->userObj->admin_url}}">
-                                {{ $model->to }}
-                            </a>
-                        @endif
-                    </td>
+                <td>
+                    @if ($model->userObj)
+                        <a href="{{$model->userObj->admin_url}}">
+                            {{ $model->to }}
+                        </a>
+                    @endif
+                </td>
 
-                    <td>
+                <td>
                         <span class="badge bg-{{ EmailType::from($model->type)->badgeColor() }}">
                             {{ EmailType::from($model->type)->label() }}
                         </span>
-                    </td>
+                </td>
 
                 <td>
                     <span>
@@ -75,18 +75,18 @@
                     </span>
                 </td>
 
-                    <td>
+                <td>
                         <span class="badge bg-{{ EmailStatus::from($model->status)->badgeColor() }}"
                               data-toggle="tooltip" data-placement="left" title="{{ $model->error }}">
                             {{ EmailStatus::from($model->status)->label() }}
                         </span>
-                    </td>
+                </td>
 
-                    <td>
-                        {{ $model->created_at }}
-                    </td>
-                </tr>
-            @endforeach
+                <td>
+                    {{ $model->created_at }}
+                </td>
+            </tr>
+        @endforeach
         </tbody>
     </table>
     {{ $models->links() }}
