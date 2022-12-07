@@ -569,6 +569,14 @@ class Media extends BaseModel
     }
 
     /**
+     * @return string
+     */
+    public function getContentGenderLabelAttribute(): string
+    {
+        return $this->content_gender ? MediaContentGender::from($this->content_gender)->label() : '';
+    }
+
+    /**
      * Get the user's full name.
      */
     public function getSentTipsAttribute(): int
@@ -615,14 +623,6 @@ class Media extends BaseModel
         }
 
         $this->attributes['count_fields_updated_at'] = $attributeValue;
-    }
-
-    /**
-     * @return string
-     */
-    public function setContentGenderLabelAttribute(): string
-    {
-        return $this->content_gender ? MediaContentGender::from($this->content_gender)->label() : '';
     }
 
     /**
