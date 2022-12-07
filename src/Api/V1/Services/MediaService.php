@@ -21,10 +21,11 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
-use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
-use Str;
 
 use function PHPUnit\Framework\matches;
+
+use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
+use Str;
 
 class MediaService
 {
@@ -336,7 +337,7 @@ class MediaService
             case UserSettingShowAdultContent::TOPLESS->value:
                 $query->withoutExplicit();
                 break;
-        };
+        }
 
         $originalQuery = $query;
         $originalData = $originalQuery
