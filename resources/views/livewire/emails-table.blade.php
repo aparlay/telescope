@@ -20,17 +20,21 @@
         <thead>
             <tr>
                 <th @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'"/>
                 </th>
 
             <th class="col-md-2">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'to'" :fieldLabel="'to'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'to'" :fieldLabel="'to'"/>
                 </div>
             </th>
 
-                <th class="col-md-2">
-                    <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'" />
+                <th class="col-md-1">
+                    <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'"/>
+            </th>
+
+            <th class="col-md-1">
+                <label for="">Server</label>
                 </th>
 
                 <th class="col-md-1">
@@ -38,7 +42,7 @@
                 </th>
 
                 <th class="col-md-2">
-                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
                 </th>
             </tr>
         </thead>
@@ -65,6 +69,12 @@
                         </span>
                     </td>
 
+                <td>
+                    <span>
+                        {{ $model->server }}
+                    </span>
+                </td>
+
                     <td>
                         <span class="badge bg-{{ EmailStatus::from($model->status)->badgeColor() }}"
                               data-toggle="tooltip" data-placement="left" title="{{ $model->error }}">
@@ -83,7 +93,7 @@
 </div>
 @push('js')
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
     </script>
