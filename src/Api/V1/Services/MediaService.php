@@ -324,19 +324,19 @@ class MediaService
         bool $isGuest = true,
         bool $isFirstPage = false,
     ): LengthAwarePaginator {
-        $query = Media::public()->confirmed();
+        $sortCategory = $isGuest ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
+        $query = Media::public()->confirmed()->genderContent($request->filter_content_gender)->sort($sortCategory);
 
         $originalQuery = $query;
-        $originalData = $originalQuery->paginate(5, ['*'], 'page', 1)->withQueryString();
+        $originalData = $originalQuery
+            ->paginate(5, ['*'], 'page', 1)
+            ->withQueryString();
 
-        $sortCategory = $isGuest ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
         if (! $isGuest && $isFirstPage) {
             $this->loadUserVisitedVideos((string) auth()->user()->_id, $request->uuid);
         }
 
         $data = $query->medias($this->notVisitedVideoIds($request->uuid, $request->show_adult_content))
-            ->sort($sortCategory)
-            ->genderContent($request->filter_content_gender)
             ->paginate(5)
             ->withQueryString();
 
