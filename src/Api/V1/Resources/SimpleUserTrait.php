@@ -87,7 +87,7 @@ trait SimpleUserTrait
     {
         if (! config('app.is_testing') && ! empty($user)) {
             $cacheKey = $this->cacheKeyPrefix.$user['_id'];
-            Cache::store('octane')->put($cacheKey, json_encode($user), config('app.cache.veryLongDuration'));
+            Cache::store('octane')->put($cacheKey, json_encode($user), config('app.cache.tenMinutes'));
         }
     }
 }

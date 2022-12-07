@@ -24,6 +24,7 @@ use MongoDB\BSON\ObjectId;
  * @property int           $status
  * @property string        $status_label
  * @property string        $error
+ * @property string        $dsn
  * @property int           $type
  * @property User          $userObj
  *
@@ -57,6 +58,7 @@ class Email extends BaseModel
         'status_label',
         'type',
         'error',
+        'dsn',
         'tracking',
         'created_at',
         'updated_at',

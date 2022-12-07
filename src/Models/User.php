@@ -817,7 +817,7 @@ class User extends \App\Models\User
             $user = self::user($userId)->firstOrFail();
             $lastOnlineAt = $user->last_online_at ?: $user->created_at;
             $lastOnlineAt = $lastOnlineAt->toDateTime()->getTimestamp();
-            Cache::store('octane')->put($cacheKey, $lastOnlineAt, 300);
+            Cache::store('octane')->put($cacheKey, $lastOnlineAt, config('app.cache.tenMinutes'));
         }
 
         return $lastOnlineAt;

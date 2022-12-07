@@ -549,7 +549,7 @@ class Media extends BaseModel
         MediaLike::cacheByUserId($userId);
         $result = MediaLike::checkMediaIsLikedByUser((string) $this->_id, (string) $userId);
 
-        Cache::store('octane')->set($cacheKey, $result, 300);
+        Cache::store('octane')->set($cacheKey, $result, config('app.cache.tenMinutes'));
 
         return $result;
     }

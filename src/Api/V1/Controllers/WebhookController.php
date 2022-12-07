@@ -74,9 +74,10 @@ class WebhookController extends Controller
         if (isset($message['status'])) {
             $emailId = str_replace(['<', '>', '@waptap.com'], '', $request->input('message_id', ''));
             if (strlen($emailId) === 24) {
-                $result = Email::query()->email($emailId)->sent()->update([
+                $result = Email::query()->email($emailId)->update([
                     'server' => $request->input('hostname', ''),
                     'error' => $message['error'] ?? null,
+                    'dsn' => $message['dsn'] ?? null,
                     'status_label' => $message['status'],
                     'status' => match ($message['status']) {
                         'sent' => EmailStatus::DELIVERED->value,
@@ -89,6 +90,7 @@ class WebhookController extends Controller
                 $result = Email::query()->to($message['to'])->sent()->update([
                     'server' => $request->input('hostname', ''),
                     'error' => $message['error'] ?? null,
+                    'dsn' => $message['dsn'] ?? null,
                     'status_label' => $message['status'],
                     'status' => match ($message['status']) {
                         'sent' => EmailStatus::DELIVERED->value,

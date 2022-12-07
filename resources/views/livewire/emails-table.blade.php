@@ -30,11 +30,15 @@
             </th>
 
             <th class="col-md-1">
-                <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'"/>
+                <label for="">Type</label>
+                <x-wire-dropdown-list
+                        :wire-model="'filter.type'"
+                        :options="\Aparlay\Core\Admin\Models\Email::getTypes()"
+                />
             </th>
 
             <th class="col-md-1">
-                <label for="">Server</label>
+                <span for="">Server</span>
             </th>
 
             <th class="col-md-1">
@@ -70,7 +74,7 @@
                 </td>
 
                 <td>
-                    <span>
+                    <span @class(['badge', 'bg-success' => $model->server === 'mail1', 'bg-warning' => $model->server === 'mail2']) >
                         {{ $model->server }}
                     </span>
                 </td>
