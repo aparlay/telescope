@@ -459,8 +459,8 @@ class MediaService
         }
 
         $notVisitedIds = match ($explicitVisibility) {
-            UserSettingShowAdultContent::NEVER->value => Redis::sdiff($mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey),
-            UserSettingShowAdultContent::TOPLESS->value => Redis::sdiff($toplessMediaIdsCacheKey, $cacheKey),
+            UserSettingShowAdultContent::NEVER->value => Redis::sdiff($mediaIdsCacheKey, $toplessMediaIdsCacheKey, $cacheKey),
+            UserSettingShowAdultContent::TOPLESS->value => Redis::sdiff($mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey),
             default => Redis::sdiff($mediaIdsCacheKey, $cacheKey),
         };
 
