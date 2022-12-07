@@ -53,6 +53,7 @@
             <th class="col-md-1">
                 <div>
                     <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'"/>
+                </div>
             </th>
 
             <th class="col-md-1">
@@ -61,7 +62,6 @@
                         :wire-model="'filter.type'"
                         :options="\Aparlay\Core\Admin\Models\Email::getTypes()"
                     />
-                </div>
             </th>
 
             <th class="col-md-1">
@@ -130,7 +130,7 @@
                 </td>
             </tr>
         @endforeach
-        </thead>
+        </tbody>
     </table>
     {{ $models->links() }}
 </div>
