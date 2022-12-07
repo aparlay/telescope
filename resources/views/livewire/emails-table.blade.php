@@ -28,7 +28,8 @@
             </div>
             <div class="col-md-2 ml-auto">
                 <label for="">Per Page</label>
-                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
+                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false"
+                                      :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
         </div>
     </div>
@@ -51,17 +52,11 @@
             </th>
 
             <th class="col-md-1">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'"/>
-                </div>
-            </th>
-
-            <th class="col-md-1">
-                <label for="">Server</label>
-            <x-wire-dropdown-list
+                <label for="">Type</label>
+                <x-wire-dropdown-list
                         :wire-model="'filter.type'"
                         :options="\Aparlay\Core\Admin\Models\Email::getTypes()"
-                    />
+                />
             </th>
 
             <th class="col-md-1">
@@ -73,8 +68,8 @@
                     <label for="">Status</label>
 
                     <x-wire-dropdown-list
-                        :wire-model="'filter.status'"
-                        :options="\Aparlay\Core\Admin\Models\Email::getStatuses()"
+                            :wire-model="'filter.status'"
+                            :options="\Aparlay\Core\Admin\Models\Email::getStatuses()"
                     />
                 </div>
             </th>
@@ -90,20 +85,20 @@
         @foreach($models as $model)
             <tr>
                 <td @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
-                @if ($model->userObj)
-                    <x-username-avatar :user="$model->userObj"/>
-                @endif
+                    @if ($model->userObj)
+                        <x-username-avatar :user="$model->userObj"/>
+                    @endif
                 </td>
 
                 <td>
-                @if ($model->userObj)
-                    <a href="{{$model->userObj->admin_url}}">{{ $model->to }}
-                    </a>
+                    @if ($model->userObj)
+                        <a href="{{$model->userObj->admin_url}}">{{ $model->to }}
+                        </a>
                     @else
-                    <a href="mailto:{{$model->to}}">
-                        {{ $model->to }}
-                    </a>
-                @endif
+                        <a href="mailto:{{$model->to}}">
+                            {{ $model->to }}
+                        </a>
+                    @endif
                 </td>
 
                 <td>
