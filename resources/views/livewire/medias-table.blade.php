@@ -119,11 +119,20 @@
                 <td>
                     <i class="fa fa-heart fa-fw text-danger" title="Number of Likes"></i> {{$media->like_count}} <br>
                     <i class="fa fa-eye fa-fw text-primary" title="Number of Visits"></i> {{$media->visit_count}} <br>
-                    <i class="fa fa-comments fa-fw text-warning" title="Number of Comments"></i> {{$media->comment_count}}
+                    <i class="fa fa-play fa-fw text-primary" title="Number of Play"></i> {{$media->watched_count}} <br>
+                    <i class="fa fa-clock fa-fw text-primary" title="Watch Duration"></i> {{ round(\Carbon\CarbonInterval::seconds($media->length_watched)->cascade()->totalHours) }}H. <br>
+                    <i class="fa fa-comments fa-fw text-warning" title="Number of Comments"></i> {{$media->comment_count}} <br>
+                    <i class="fa fa-money-bill-wave fa-fw text-info" title="Total Tips"></i> {{(int)$media->tips/100}}
                 </td>
                 <td>
                     <i class="fa fa-user-shield fa-fw text-scondary" title="Score for Registered"></i> {{$media->sort_scores['registered']}} <br>
                     <i class="fa fa-user-minus fa-fw text-info" title="Score for Guest"></i> {{$media->sort_scores['guest']}} <br>
+                    <hr class="my-1">
+                    <div class="text-sm-left">
+                    @foreach($media->scores as $score)
+                        {{$score['type']}}: {{$score['score']}} <br>
+                    @endforeach
+                    </div>
                 </td>
                 <td>
                     {{$media->created_at}}
