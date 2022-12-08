@@ -200,7 +200,7 @@ class MediaService
 
         $data = $query->public()
             ->confirmed()
-            ->gen()->recentFirst()
+            ->recentFirst()
             ->paginate(5)
             ->withQueryString();
 
