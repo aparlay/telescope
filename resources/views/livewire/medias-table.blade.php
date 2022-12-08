@@ -1,6 +1,7 @@
 @php
     use App\Models\Media;
     use Aparlay\Core\Models\Enums\MediaStatus;
+    use \Illuminate\Support\Arr;
 
 @endphp
 
@@ -8,7 +9,24 @@
     <div class="filters pb-3">
         <div class="row">
             <div class="col-md-6 pt-4">
-                <h4>Medias</h4>
+                <h4>Medias
+                    <button @class([
+                    'btn btn-sm',
+                    'btn-primary' => Arr::get($sort, 'sort_scores.guest') === 1,
+                    'btn-secondary' => Arr::get($sort, 'sort_scores.guest') !== 1])
+                            wire:model="sort.sort_scores.guest"
+                            wire:click="sort('sort_scores.guest', -1)">
+                        Ordered For Guest
+                    </button>
+                    <button @class([
+                    'btn btn-sm',
+                    'btn-primary' => Arr::get($sort, 'sort_scores.registered') === 1,
+                    'btn-secondary' => Arr::get($sort, 'sort_scores.registered') !== 1])
+                            wire:model="sort.sort_scores.registered"
+                            wire:click="sort('sort_scores.registered', -1)">
+                        Ordered For User
+                    </button>
+                </h4>
             </div>
 
             <div class="col-md-2">
@@ -29,7 +47,8 @@
             </div>
             <div class="col-md-2 ml-auto">
                 <label for="">Per Page</label>
-                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
+                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false"
+                                      :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
         </div>
     </div>
@@ -39,19 +58,19 @@
         <tr>
             <th class="col-md-2">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'file'" :fieldLabel="'Cover'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'file'" :fieldLabel="'Cover'"/>
                 </div>
-                </th>
+            </th>
             <td @class(['col-md-2', 'd-none' => $hiddenFields['creator_username']])>
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'creator.username'" :fieldLabel="'Creator'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'creator.username'" :fieldLabel="'Creator'"/>
                     <input class="form-control" type="text" wire:model="filter.creator_username"/>
                 </div>
             </td>
 
             <td class="col-md-1">
                 <div>
-                <x-sortable-column-header :sort="$sort" :fieldName="'status'" :fieldLabel="'Status'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'status'" :fieldLabel="'Status'"/>
                     <select class="form-control" wire:model="filter.status">
                         <option value="">Any</option>
                         @foreach(Media::getStatuses() as $value => $label)
@@ -62,19 +81,19 @@
             </td>
             <td class="col-md-1">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'like_count'" :fieldLabel="'Likes'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'like_count'" :fieldLabel="'Likes'"/>
                     <input class="form-control" type="text" wire:model="filter.like_count"/>
                 </div>
             </td>
             <td class="col-md-1">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'visit_count'" :fieldLabel="'Visits'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'visit_count'" :fieldLabel="'Visits'"/>
                     <input class="form-control" type="text" wire:model="filter.visit_count"/>
                 </div>
             </td>
             <td class="col-md-2">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
                 </div>
             </td>
             <td class="col-md-1">
@@ -99,18 +118,19 @@
                     </span>
                 </td>
                 <td>
-                     {{$media->like_count}}
+                    {{$media->like_count}}
                 </td>
                 <td>
-                     {{$media->visit_count}}
+                    {{$media->visit_count}}
                 </td>
                 <td>
-                     {{$media->created_at}}
+                    {{$media->created_at}}
                 </td>
                 <td>
                     <div class="col-md-6">
                         <div>
-                            <a class="btn btn-primary btn-sm" href="{{$media->admin_url}}" title="View"><i class="fas fa-eye"></i></a>
+                            <a class="btn btn-primary btn-sm" href="{{$media->admin_url}}" title="View"><i
+                                        class="fas fa-eye"></i></a>
                         </div>
                     </div>
                 </td>

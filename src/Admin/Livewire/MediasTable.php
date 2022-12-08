@@ -62,6 +62,8 @@ class MediasTable extends BaseIndexComponent
             'like_count',
             'visit_count',
             'created_at',
+            'sort_scores.guest',
+            'sort_scores.registered',
         ];
     }
 
