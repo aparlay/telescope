@@ -9,22 +9,24 @@
     <div class="filters pb-3">
         <div class="row">
             <div class="col-md-6 pt-4">
-                <h4>Medias
+                <h4>
+                    Medias
+
                     <button @class([
                     'btn btn-sm',
-                    'btn-primary' => Arr::get($sort, 'sort_scores.guest') === 1,
-                    'btn-secondary' => Arr::get($sort, 'sort_scores.guest') !== 1])
+                    'btn-info' => in_array(Arr::get($sort, 'sort_scores.guest'), [1, -1]),
+                    'btn-outline-info' => !in_array(Arr::get($sort, 'sort_scores.guest'), [1, -1])])
                             wire:model="sort.sort_scores.guest"
                             wire:click="sort('sort_scores.guest', -1)">
-                        Ordered For Guest
+                        Ordered For Guest {{ Arr::get($sort, 'sort_scores.guest') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.guest') == -1 ? '↓' : ''}}
                     </button>
                     <button @class([
-                    'btn btn-sm',
-                    'btn-primary' => Arr::get($sort, 'sort_scores.registered') === 1,
-                    'btn-secondary' => Arr::get($sort, 'sort_scores.registered') !== 1])
+                        'btn btn-sm',
+                        'btn-secondary' => in_array(Arr::get($sort, 'sort_scores.registered'), [1, -1]),
+                        'btn-outline-secondary' => !in_array(Arr::get($sort, 'sort_scores.registered'), [1, -1])])
                             wire:model="sort.sort_scores.registered"
                             wire:click="sort('sort_scores.registered', -1)">
-                        Ordered For User
+                        Ordered For User {{ Arr::get($sort, 'sort_scores.registered') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.registered') == -1 ? '↓' : ''}}
                     </button>
                 </h4>
             </div>
@@ -81,14 +83,12 @@
             </td>
             <td class="col-md-1">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'like_count'" :fieldLabel="'Likes'"/>
-                    <input class="form-control" type="text" wire:model="filter.like_count"/>
+                    <label for="">Stats</label>
                 </div>
             </td>
             <td class="col-md-1">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'visit_count'" :fieldLabel="'Visits'"/>
-                    <input class="form-control" type="text" wire:model="filter.visit_count"/>
+                    <label for="">Score</label>
                 </div>
             </td>
             <td class="col-md-2">
@@ -118,10 +118,22 @@
                     </span>
                 </td>
                 <td>
-                    {{$media->like_count}}
+                    <i class="fa fa-heart fa-fw text-danger" title="Number of Likes"></i> {{$media->like_count}} <br>
+                    <i class="fa fa-eye fa-fw text-primary" title="Number of Visits"></i> {{$media->visit_count}} <br>
+                    <i class="fa fa-play fa-fw text-primary" title="Number of Play"></i> {{$media->watched_count}} <br>
+                    <i class="fa fa-clock fa-fw text-primary" title="Watch Duration"></i> {{ round(\Carbon\CarbonInterval::seconds($media->length_watched)->cascade()->totalHours) }}H. <br>
+                    <i class="fa fa-comments fa-fw text-warning" title="Number of Comments"></i> {{$media->comment_count}} <br>
+                    <i class="fa fa-money-bill-wave fa-fw text-info" title="Total Tips"></i> {{(int)$media->tips/100}}
                 </td>
                 <td>
-                    {{$media->visit_count}}
+                    <i class="fa fa-user-shield fa-fw text-scondary" title="Score for Registered"></i> {{$media->sort_scores['registered']}} <br>
+                    <i class="fa fa-user-minus fa-fw text-info" title="Score for Guest"></i> {{$media->sort_scores['guest']}} <br>
+                    <hr class="my-1">
+                    <div class="text-sm-left">
+                    @foreach($media->scores as $score)
+                        {{$score['type']}}: {{$score['score']}} <br>
+                    @endforeach
+                    </div>
                 </td>
                 <td>
                     {{$media->created_at}}
