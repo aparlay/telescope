@@ -188,11 +188,9 @@ class MediaService extends AdminBaseService
 
         $media = $this->mediaRepository->update($data, $id);
 
-
         if (in_array($media->status, [MediaStatus::CONFIRMED->value, MediaStatus::DENIED->value])) {
             Notification::send($media, new MediaScoreChanged(auth()->user()));
         }
-
 
         return $this->calculateSortScores($media, 0);
     }
