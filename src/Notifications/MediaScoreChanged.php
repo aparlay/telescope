@@ -47,12 +47,14 @@ class MediaScoreChanged extends Notification
         foreach ($notifiable->scores as $score) {
             $message .= PHP_EOL."- _*{$score['type']}: {$score['score']}*_ ";
         }
-        if ($notifiable->status === MediaStatus::CONFIRMED->value) {
-            $message .= PHP_EOL.PHP_EOL.'- _*Public Feed Approval: Confirmed*_ ';
-        }
-        if ($notifiable->status === MediaStatus::DENIED->value) {
-            $message .= PHP_EOL.PHP_EOL.'- _*Public Feed Approval: Denied*_ ';
-        }
+
+        $message .= PHP_EOL."- _*Content Gender: {$notifiable->content_gender_label}*_ ";
+
+        $message .= match ($notifiable->status) {
+            MediaStatus::CONFIRMED->value => PHP_EOL.PHP_EOL.'- _*Public Feed Approval: Confirmed*_ ',
+            MediaStatus::DENIED->value => PHP_EOL.PHP_EOL.'- _*Public Feed Approval: Denied*_ ',
+            default => ''
+        };
 
         return (new SlackMessage())
             ->to(config('app.slack_video_pending'))

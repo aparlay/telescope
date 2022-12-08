@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Media;
-use Aparlay\Core\Admin\Models\MediaComment;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
@@ -189,7 +188,11 @@ class MediaService extends AdminBaseService
 
         $media = $this->mediaRepository->update($data, $id);
 
-        Notification::send($media, new MediaScoreChanged(auth()->user()));
+
+        if (in_array($media->status, [MediaStatus::CONFIRMED->value, MediaStatus::DENIED->value])) {
+            Notification::send($media, new MediaScoreChanged(auth()->user()));
+        }
+
 
         return $this->calculateSortScores($media, 0);
     }
