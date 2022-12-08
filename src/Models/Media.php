@@ -402,7 +402,7 @@ class Media extends BaseModel
 
         // do not let a model upload many media together and spam feed
         if ($oldness <= 21600) {
-            $todayUploadedMedias = Media::public()
+            $todayUploadedMedias = self::public()
                 ->confirmed()
                 ->creator($this->creator['_id'])
                 ->where('created_at', '>=', DT::utcDateTime(['d' => -1]))
