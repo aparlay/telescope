@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Api\V1\Resources;
 
 use Aparlay\Core\Api\V1\Models\UserNotification;
+use Aparlay\Core\Models\Enums\MediaContentGender;
+use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\User;
 use Illuminate\Http\Request;
@@ -64,13 +66,20 @@ class MeResource extends JsonResource
             'avatar' => $this->avatar,
             'setting' => [
                 'otp' => $this->setting['otp'] ?? false,
-                'show_adult_content' => $this->setting['show_adult_content'] ?? false,
+                'show_adult_content' => $this->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
+                'filter_content_gender' => $this->setting['filter_content_gender'] ?? [
+                    MediaContentGender::FEMALE->label() => true,
+                    MediaContentGender::MALE->label() => true,
+                    MediaContentGender::TRANSGENDER->label() => true,
+                ],
                 'notifications' => [
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? false,
                     'new_followers' => $this->setting['notifications']['new_followers'] ?? false,
                     'news_and_updates' => $this->setting['notifications']['news_and_updates'] ?? false,
-                    'tips' => $this->setting['notifications']['tips'] ?? false,
                     'new_subscribers' => $this->setting['notifications']['new_subscribers'] ?? false,
+                    'tips' => $this->setting['notifications']['tips'] ?? false,
+                    'likes' => $this->setting['notifications']['likes'] ?? false,
+                    'comments' => $this->setting['notifications']['comments'] ?? false,
                 ],
             ],
             'features' => [
@@ -78,7 +87,7 @@ class MeResource extends JsonResource
                 'demo' => $this->features['demo'] ?? false,
             ],
             'gender' => $this->gender,
-            'interested_in' => $this->interested_in,
+            'gender_label' => $this->gender_label,
             'status' => $this->status,
             'verification_status' => $this->verification_status,
             'verification_status_label' => $this->verification_status_label,

@@ -4,10 +4,8 @@ namespace Aparlay\Core\Api\V1\Requests;
 
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
-use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserGender;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;
@@ -50,7 +48,7 @@ class RegisterRequest extends FormRequest
             'phone_number' => ['nullable', 'numeric', 'digits:10', 'unique:users'],
             'password' => ['required', Password::min(8)->letters()->numbers()],
             'gender' => [Rule::in(array_keys(User::getGenders()))],
-            'username' => ['nullable', 'max:255'],
+            'username' => ['unique:users', 'min:2', 'max:30', 'alpha_dash'],
         ];
     }
 
@@ -117,7 +115,6 @@ class RegisterRequest extends FormRequest
             'password_hash' => Hash::make($this->password),
             'status' => UserStatus::PENDING->value,
             'visibility' => UserVisibility::PUBLIC->value,
-            'interested_in' => UserInterestedIn::FEMALE->value,
             'email_verified' => false,
             'phone_number_verified' => false,
             'type' => UserType::USER->value,
@@ -132,18 +129,30 @@ class RegisterRequest extends FormRequest
             'count_fields_updated_at' => [],
             'setting' => [
                 'otp' => config('app.otp.enabled'),
+                'show_adult_content' => 2,
+                'filter_content_gender' => [
+                    'female' => true,
+                    'male' => false,
+                    'transgender' => false,
+                ],
                 'notifications' => [
                     'unread_message_alerts' => false,
                     'new_followers' => false,
                     'news_and_updates' => false,
-                    'tips' => false,
                     'new_subscribers' => false,
+                    'tips' => false,
+                    'likes' => false,
+                    'comments' => false,
                 ],
                 'payment' => [
                     'allow_unverified_cc' => false,
                     'block_unverified_cc' => true,
                     'block_payments' => true,
                     'unverified_cc_spent_amount' => 0,
+                ],
+                'payout' => [
+                    'ban_payout' => false,
+                    'auto_ban_payout' => false,
                 ],
             ],
             'referral_id' => $this->referral_id,

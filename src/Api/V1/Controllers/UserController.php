@@ -9,11 +9,14 @@ use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UserService;
+use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -109,14 +112,8 @@ class UserController extends Controller
                 $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
 
-            $requestData = $request->all();
-
-            if ($user->payout_country_alpha2) {
-                $requestData = $request->except('payout_country_alpha2');
-            }
-
             /* Update User Profile Information */
-            $this->userService->getUser()->fill($requestData);
+            $this->userService->getUser()->fill($request->all());
             if ($this->userService->getUser()->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
                 $this->userService->getUser()->status = UserStatus::ACTIVE->value;
             }

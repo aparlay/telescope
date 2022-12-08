@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Models\Enums\MediaStatus;
-use Aparlay\Core\Models\Enums\MediaVisibility;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
+use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Scopes\MediaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -121,6 +119,21 @@ class Hashtag extends BaseModel
     public function toSearchableArray()
     {
         $media = Media::hashtag($this->tag)->public()->availableForFollower()->limit(500)->get()->random();
+        $genders = Media::select(['content_gender'])
+            ->hashtag($this->tag)
+            ->public()
+            ->availableForFollower()
+            ->groupBy('content_gender')
+            ->get(['content_gender'])
+            ->pluck('content_gender')
+            ->map(function ($gender) {
+                return match ($gender) {
+                    MediaContentGender::FEMALE->value => MediaContentGender::FEMALE->label(),
+                    MediaContentGender::MALE->value => MediaContentGender::MALE->label(),
+                    MediaContentGender::TRANSGENDER->value => MediaContentGender::TRANSGENDER->label(),
+                };
+            })
+            ->toArray();
 
         return [
             '_id' => (string) $this->_id,
@@ -131,11 +144,12 @@ class Hashtag extends BaseModel
             'description' => $this->tag,
             'hashtags' => [$this->tag],
             'score' => $this->sort_score,
-            'gender' => [],
+            'gender' => $genders,
             'country' => '',
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
-            'is_adult' => $media?->is_adult ?? false,
+            'is_adult' => false,
+            'skin_score' => 0,
             'last_online_at' => 0,
             'comment_count' => $this->comment_count,
             '_geo' => ['lat' => 0.0, 'lng' => 0.0],
