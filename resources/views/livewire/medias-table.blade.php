@@ -8,7 +8,26 @@
     <div class="filters pb-3">
         <div class="row">
             <div class="col-md-6 pt-4">
-                <h4>Medias</h4>
+                <h4>
+                    Medias
+
+                    <button @class([
+                    'btn btn-sm',
+                    'btn-primary' => Arr::get($sort, 'sort_scores.guest') === 1,
+                    'btn-secondary' => Arr::get($sort, 'sort_scores.guest') !== 1])
+                            wire:model="sort.sort_scores.guest"
+                            wire:click="sort('sort_scores.guest', -1)">
+                        Ordered For Guest
+                    </button>
+                    <button @class([
+                    'btn btn-sm',
+                    'btn-primary' => Arr::get($sort, 'sort_scores.registered') === 1,
+                    'btn-secondary' => Arr::get($sort, 'sort_scores.registered') !== 1])
+                            wire:model="sort.sort_scores.registered"
+                            wire:click="sort('sort_scores.registered', -1)">
+                        Ordered For User
+                    </button>
+                </h4>
             </div>
 
             <div class="col-md-2">
