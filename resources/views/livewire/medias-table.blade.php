@@ -48,7 +48,8 @@
             </div>
             <div class="col-md-2 ml-auto">
                 <label for="">Per Page</label>
-                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false" :options="[5 => 5, 10 => 10, 15 => 15]"/>
+                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false"
+                                      :options="[5 => 5, 10 => 10, 15 => 15]"/>
             </div>
         </div>
     </div>
@@ -58,19 +59,19 @@
         <tr>
             <th class="col-md-2">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'file'" :fieldLabel="'Cover'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'file'" :fieldLabel="'Cover'"/>
                 </div>
-                </th>
+            </th>
             <td @class(['col-md-2', 'd-none' => $hiddenFields['creator_username']])>
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'creator.username'" :fieldLabel="'Creator'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'creator.username'" :fieldLabel="'Creator'"/>
                     <input class="form-control" type="text" wire:model="filter.creator_username"/>
                 </div>
             </td>
 
             <td class="col-md-1">
                 <div>
-                <x-sortable-column-header :sort="$sort" :fieldName="'status'" :fieldLabel="'Status'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'status'" :fieldLabel="'Status'"/>
                     <select class="form-control" wire:model="filter.status">
                         <option value="">Any</option>
                         @foreach(Media::getStatuses() as $value => $label)
@@ -81,19 +82,17 @@
             </td>
             <td class="col-md-1">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'like_count'" :fieldLabel="'Likes'" />
-                    <input class="form-control" type="text" wire:model="filter.like_count"/>
+                    <label for="">Stats</label>
                 </div>
             </td>
             <td class="col-md-1">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'visit_count'" :fieldLabel="'Visits'" />
-                    <input class="form-control" type="text" wire:model="filter.visit_count"/>
+                    <label for="">Score</label>
                 </div>
             </td>
             <td class="col-md-2">
                 <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
                 </div>
             </td>
             <td class="col-md-1">
@@ -118,18 +117,22 @@
                     </span>
                 </td>
                 <td>
-                     {{$media->like_count}}
+                    <i class="fa fa-heart fa-fw text-danger"></i> {{$media->like_count}} <br>
+                    <i class="fa fa-eye fa-fw text-primary"></i> {{$media->visit_count}} <br>
+                    <i class="fa fa-comments fa-fw text-warning"></i> {{$media->comment_count}}
                 </td>
                 <td>
-                     {{$media->visit_count}}
+                    <i class="fa fa-user-shield fa-fw text-success"></i> {{$media->sort_scores['registered']}} <br>
+                    <i class="fa fa-user-minus fa-fw text-black"></i> {{$media->sort_scores['guest']}} <br>
                 </td>
                 <td>
-                     {{$media->created_at}}
+                    {{$media->created_at}}
                 </td>
                 <td>
                     <div class="col-md-6">
                         <div>
-                            <a class="btn btn-primary btn-sm" href="{{$media->admin_url}}" title="View"><i class="fas fa-eye"></i></a>
+                            <a class="btn btn-primary btn-sm" href="{{$media->admin_url}}" title="View"><i
+                                        class="fas fa-eye"></i></a>
                         </div>
                     </div>
                 </td>
