@@ -40,7 +40,6 @@ class UserFactory extends Factory
             'password_reset_token' => $this->faker->randomKey(),
             'features' => array_fill_keys(array_keys(User::getFeatures()), false),
             'gender' => $this->faker->randomElement(array_keys(User::getGenders())),
-            'interested_in' => $this->faker->randomElement(array_keys(User::getInterestedIns())),
             'type' => $this->faker->randomElement(array_keys(User::getTypes())),
             'status' => $this->faker->randomElement(array_keys(User::getStatuses())),
             'verification_status' => $this->faker->randomElement(array_keys(User::getVerificationStatuses())),
@@ -55,6 +54,12 @@ class UserFactory extends Factory
             ],
             'setting' => [
                 'otp' => false,
+                'show_adult_content' => 2,
+                'filter_content_gender' => [
+                    'female' => true,
+                    'male' => false,
+                    'transgender' => false,
+                ],
                 'notifications' => [
                     'unread_message_alerts' => true,
                     'news_and_updates' => true,

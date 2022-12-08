@@ -49,7 +49,7 @@
                                                                 <div id="skin_score_{{$score}}"
                                                                      class="btn-group btn-group-toggle skin_score_div"
                                                                      data-toggle="buttons" role="radiogroup">
-                                                                    <label class="btn btn-outline-secondary skin_score_lable">
+                                                                    <label class="btn btn-outline-secondary skin_score_label">
                                                                         <input type="radio"
                                                                                id="media_skin_score_{{$score}}"
                                                                                name="skin_score" value="{{ $score }}"
@@ -110,6 +110,19 @@
                                                                 </div>
                                                             @endif
                                                         @endforeach
+                                                    @endforeach
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Content Gender</b>
+                                                <div>
+                                                    @foreach (\Aparlay\Core\Models\Enums\MediaContentGender::getAllCases() as $value => $label)
+                                                        <div id="content_gender" class="btn-group btn-group-toggle beauty_score_div" data-toggle="buttons" role="radiogroup">
+                                                            <label class="btn btn-outline-secondary content_gender_label" for="media_content_gender_{{$value}}">
+                                                                <input type="radio" id="media_content_gender_{{$value}}" name="content_gender" value="{{ $value }}" data-index="{{ $value }}" autocomplete="off" @if($media->content_gender == $value) checked @endif>
+                                                                {{ $label }}
+                                                            </label>
+                                                        </div>
                                                     @endforeach
                                                 </div>
                                             </li>
@@ -274,10 +287,10 @@
                                                 Video</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-control custom-switch mt-2">
-                                                    <input type="hidden" name="visibility" value="0">
-                                                    <input type="checkbox" value="1" class="custom-control-input"
+                                                    <input type="hidden" name="visibility" value="1">
+                                                    <input type="checkbox" value="0" class="custom-control-input"
                                                            name="visibility"
-                                                           id="visibility" {!! ($media->visibility == 1) ? 'checked' : '' !!}>
+                                                           id="visibility" {!! ($media->visibility == 0) ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="visibility"></label>
                                                 </div>
                                             </div>

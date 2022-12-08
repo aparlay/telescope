@@ -31,7 +31,6 @@ class RegisterResource extends JsonResource
             'setting' => $this->setting,
             'features' => $this->features,
             'gender' => $this->gender,
-            'interested_in' => $this->interested_in,
             'visibility' => $this->visibility,
             'follower_count' => $this->stats['counters']['followers'],
             'following_count' => $this->stats['counters']['followings'],

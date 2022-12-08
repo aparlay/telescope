@@ -9,6 +9,7 @@ use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
@@ -73,6 +74,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Alert[]            $alertObjs
  * @property UserNotification[] $userNotificationObjs
  * @property array              $files_history
+ * @property int                $content_gender
  *
  * @property-read string        $slack_subject_admin_url
  * @property-read string        $slack_admin_url
@@ -86,6 +88,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property-read int           $visit_score
  * @property-read int           $comment_score
  * @property-read int           $sent_tips
+ * @property-read string        $content_gender_label
  *
  *
  * @method static |self|Builder creator(ObjectId|string $userId)
@@ -99,7 +102,12 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder notVisitedByDevice(string $deviceId)
  * @method static |self|Builder hashtag(string $tag)
  * @method static |self|Builder sort(string $category)
+ * @method static |self|Builder genderContent(array|int $genderContent)
  * @method static |self|Builder public()
+ * @method static |self|Builder explicit()
+ * @method static |self|Builder withoutExplicit()
+ * @method static |self|Builder topless()
+ * @method static |self|Builder withoutTopless()
  * @method static |self|Builder private()
  */
 class Media extends BaseModel
@@ -162,6 +170,7 @@ class Media extends BaseModel
         'sort_scores',
         'slug',
         'tips',
+        'content_gender',
         'created_by',
         'updated_by',
         'created_at',
@@ -180,6 +189,7 @@ class Media extends BaseModel
         'visit_count' => 0,
         'comment_count' => 0,
         'tips' => 0,
+        'content_gender' => 0,
         'sort_scores' => [
             'default' => 0,
             'guest' => 0,
@@ -201,6 +211,7 @@ class Media extends BaseModel
         'like_count' => 'integer',
         'visit_count' => 'integer',
         'comment_count' => 'integer',
+        'content_gender' => 'integer',
         'tips' => 'integer',
         'is_comments_enabled' => 'boolean',
     ];
@@ -249,12 +260,19 @@ class Media extends BaseModel
      */
     public function toSearchableArray()
     {
+        if (isset($this->content_gender)) {
+            $gender = [MediaContentGender::from($this->content_gender)->label()];
+        } else {
+            $gender = [MediaContentGender::FEMALE->label()];
+        }
+
         return [
             '_id' => (string) $this->_id,
             'type' => 'media',
             'poster' => $this->cover_url,
             'username' => $this->userObj->username ?? '',
             'full_name' => $this->userObj->full_name ?? '',
+            'gender' => $gender,
             'description' => $this->description,
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
@@ -263,6 +281,7 @@ class Media extends BaseModel
             'score' => $this->sort_scores['default'],
             'country' => $this->userObj->country_alpha2 ?? '',
             'is_adult' => $this->is_adult ?? false,
+            'skin_score' => $this->skin_score ?? 5,
             'last_online_at' => 0,
             '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
         ];
@@ -550,6 +569,16 @@ class Media extends BaseModel
         MediaVisit::cacheByUserId($userId);
 
         return MediaVisit::checkMediaIsVisitedByUser((string) $this->_id, (string) $userId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentGenderLabelAttribute(): string
+    {
+        return in_array($this->content_gender, MediaContentGender::getAllValues()) ?
+            MediaContentGender::from($this->content_gender)->label() :
+            '';
     }
 
     /**
@@ -866,5 +895,51 @@ class Media extends BaseModel
             ),
             default => __(':username liked your video.', ['username' => $mediaComments[0]->creatorObj->username])
         };
+    }
+
+    public static function CachePublicToplessMediaIds()
+    {
+        $toplessMediaIds = self::public()
+            ->confirmed()
+            ->public()
+            ->topless()
+            ->select('_id')
+            ->get()
+            ->pluck('_id')
+            ->toArray();
+        $toplessMediaIds = array_map('strval', $toplessMediaIds);
+        $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
+        Redis::sadd($toplessMediaIdsCacheKey, ...$toplessMediaIds);
+        Redis::expireat($toplessMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
+    }
+
+    public static function CachePublicExplicitMediaIds()
+    {
+        $explicitMediaIds = self::public()
+            ->confirmed()
+            ->public()
+            ->explicit()
+            ->select('_id')
+            ->get()
+            ->pluck('_id')
+            ->toArray();
+        $explicitMediaIds = array_map('strval', $explicitMediaIds);
+        $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
+        Redis::sadd($explicitMediaIdsCacheKey, ...$explicitMediaIds);
+        Redis::expireat($explicitMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
+    }
+
+    public static function CachePublicMediaIds()
+    {
+        $mediaIds = self::public()
+            ->confirmed()
+            ->select('_id')
+            ->get()
+            ->pluck('_id')
+            ->toArray();
+        $cacheKey = (new self())->getCollection().':ids';
+        $mediaIds = array_map('strval', $mediaIds);
+        Redis::sadd($cacheKey, ...$mediaIds);
+        Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
     }
 }

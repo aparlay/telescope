@@ -9,7 +9,6 @@ use Aparlay\Core\Database\Factories\UserFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserFeature;
 use Aparlay\Core\Models\Enums\UserGender;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
@@ -53,7 +52,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $gender
  * @property int         $visibility
  * @property int         $show_online_status
- * @property int         $interested_in
  * @property UTCDateTime $created_at
  * @property UTCDateTime $updated_at
  * @property array       $setting
@@ -101,6 +99,9 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read bool $is_tier3
  * @property-read bool $is_tier1
  * @property-read bool $is_risky
+ * @property-read bool $is_public
+ * @property-read bool $is_private
+ * @property-read bool $is_invisible
  * @property-read int $tip_commission_percentage
  * @property-read int $tip_referral_commission_percentage
  * @property-read int $subscription_commission_percentage
@@ -157,7 +158,6 @@ class User extends \App\Models\User
         'setting',
         'features',
         'gender',
-        'interested_in',
         'type',
         'status',
         'visibility',
@@ -195,7 +195,12 @@ class User extends \App\Models\User
         'verification_status' => 1, // unverified
         'setting' => [
             'otp' => false,
-            'show_adult_content' => false,
+            'show_adult_content' => 2,
+            'filter_content_gender' => [
+                'female' => true,
+                'male' => false,
+                'transgender' => false,
+            ],
             'notifications' => [
                 'unread_message_alerts' => true,
                 'news_and_updates' => true,
@@ -207,9 +212,13 @@ class User extends \App\Models\User
             ],
             'payment' => [
                 'allow_unverified_cc' => false,
-                'block_unverified_cc' => false,
-                'block_cc_payments' => false,
+                'block_unverified_cc' => true,
+                'block_cc_payments' => true,
                 'unverified_cc_spent_amount' => 0,
+            ],
+            'payout' => [
+                'ban_payout' => false,
+                'auto_ban_payout' => false,
             ],
         ],
         'features' => [
@@ -281,7 +290,6 @@ class User extends \App\Models\User
         'phone_number_verified' => 'boolean',
         'gender' => 'integer',
         'avatar' => 'string',
-        'interested_in' => 'integer',
         'visibility' => 'integer',
         'stats.counters.followers' => 'integer',
         'stats.counters.followings' => 'integer',
@@ -351,6 +359,7 @@ class User extends \App\Models\User
             'poster' => $this->avatar,
             'username' => $this->username,
             'full_name' => $this->full_name,
+            'gender' => [$this->gender_label],
             'description' => $this->bio,
             'hashtags' => [],
             'score' => $this->scores['sort'],
@@ -358,6 +367,7 @@ class User extends \App\Models\User
             'last_online_at' => $this->last_online_at ? $this->last_online_at->valueOf() : 0,
             'like_count' => $this->counters['likes'],
             'is_adult' => false,
+            'skin_score' => 0,
             'visit_count' => 0,
             'comment_count' => 0,
             '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
@@ -420,6 +430,14 @@ class User extends \App\Models\User
     public function referralObj(): BelongsTo
     {
         return $this->belongsTo(self::class, 'referral_id');
+    }
+
+    /**
+     * @return string
+     */
+    public function getGenderLabelAttribute(): string
+    {
+        return $this->gender ? UserGender::from($this->gender)->label() : UserGender::FEMALE->label();
     }
 
     /**
@@ -604,6 +622,16 @@ class User extends \App\Models\User
         return $this->visibility === UserVisibility::PUBLIC->value;
     }
 
+    public function getIsPrivateAttribute(): bool
+    {
+        return $this->visibility === UserVisibility::PRIVATE->value;
+    }
+
+    public function getIsInvisibleAttribute(): bool
+    {
+        return $this->visibility === UserVisibility::INVISIBLE_BY_ADMIN->value;
+    }
+
     /**
      * @param $attributeValue
      * @return void
@@ -720,19 +748,6 @@ class User extends \App\Models\User
             UserGender::MALE->value => UserGender::MALE->label(),
             UserGender::TRANSGENDER->value => UserGender::TRANSGENDER->label(),
             UserGender::NOT_MENTION->value => UserGender::NOT_MENTION->label(),
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public static function getInterestedIns(): array
-    {
-        return [
-            UserInterestedIn::FEMALE->value => UserInterestedIn::FEMALE->label(),
-            UserInterestedIn::MALE->value => UserInterestedIn::MALE->label(),
-            UserInterestedIn::TRANSGENDER->value => UserInterestedIn::TRANSGENDER->label(),
-            UserInterestedIn::COUPLE->value => UserInterestedIn::COUPLE->label(),
         ];
     }
 

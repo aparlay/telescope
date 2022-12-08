@@ -31,6 +31,26 @@ use OpenApi\Annotations as OA;
  *             type="string"
  *         )
  *     ),
+ *     @OA\Parameter(
+ *         name="show_adult_content",
+ *         in="query",
+ *         example="ask",
+ *         description="should we show adult content or filter them out? possible values for this field is 1,2,3,4,never,ask,topless,all",
+ *         required=false,
+ *         @OA\Schema(
+ *             type="string"
+ *         )
+ *     ),
+ *     @OA\Parameter(
+ *         name="filter_content_gender",
+ *         in="query",
+ *         example="female,male,0",
+ *         description="comma separated content gender values. default is all genders of contents for the guests and selected content gender for login users. possible values for this field is 0,1,2,female,male,transgender",
+ *         required=false,
+ *         @OA\Schema(
+ *             type="string"
+ *         )
+ *     ),
  *     @OA\Response(
  *         response=200,
  *         description="successful operation",

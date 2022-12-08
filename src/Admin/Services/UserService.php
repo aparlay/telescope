@@ -137,7 +137,6 @@ class UserService extends AdminBaseService
             'email',
             'bio',
             'gender',
-            'interested_in',
             'type',
             'status',
             'visibility',

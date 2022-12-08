@@ -28,12 +28,20 @@ return new class() extends Migration {
                 'password_hash' => '$2y$13$5rJM7d0o57g8IZeucGl.m.oCfK6MgiOcZfwYw73X2EW1W8x30lSNy',
                 'setting' => [
                     'otp' => false,
+                    'show_adult_content' => 2,
+                    'filter_content_gender' => [
+                        'female' => true,
+                        'male' => false,
+                        'transgender' => false,
+                    ],
                     'notifications' => [
-                        'unread_message_alerts' => false,
-                        'new_followers' => false,
-                        'news_and_updates' => false,
-                        'tips' => false,
-                        'new_subscribers' => false,
+                        'unread_message_alerts' => true,
+                        'news_and_updates' => true,
+                        'new_followers' => true,
+                        'new_subscribers' => true,
+                        'tips' => true,
+                        'likes' => true,
+                        'comments' => true,
                     ],
                     'payment' => [
                         'allow_unverified_cc' => false,
@@ -61,7 +69,6 @@ return new class() extends Migration {
                 'followings' => [],
                 'full_name' => 'Alua Support',
                 'gender' => 1,
-                'interested_in' => 1,
                 'likes' => [],
                 'medias' => [],
                 'phone_number' => null,

@@ -168,12 +168,9 @@ class MediaService extends AdminBaseService
      */
     public function updateScore($id, MediaUpdateScoreRequest $request)
     {
-        $data = $request->only([
-            'status',
-        ]);
-
-        $dataModified = [
+        $data = [
             'status' => $request->integer('status'),
+            'content_gender' => $request->integer('content_gender'),
             'scores' => [
                 [
                     'type' => 'skin',
@@ -189,8 +186,6 @@ class MediaService extends AdminBaseService
                 ],
             ],
         ];
-
-        $data = array_merge($data, $dataModified);
 
         $media = $this->mediaRepository->update($data, $id);
 
