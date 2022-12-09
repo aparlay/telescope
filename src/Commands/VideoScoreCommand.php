@@ -15,13 +15,13 @@ class VideoScoreCommand extends Command
     public function handle()
     {
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower()->orderBy('created_at', 'ASC');
-        foreach ($mediaQuery->get() as $media) {
+        foreach ($mediaQuery->lazy() as $media) {
             /** @var Media $media */
             $media->recalculateSortScores();
         }
 
         $rows = [];
-        foreach ($mediaQuery->orderBy('sort_scores.default', 'DESC')->get() as $media) {
+        foreach ($mediaQuery->orderBy('sort_scores.default', 'DESC')->lazy() as $media) {
             $rows[] = [
                 $media->_id,
                 $media->awesomeness_score,
