@@ -1,6 +1,7 @@
 @php
     use App\Models\Media;
     use Aparlay\Core\Models\Enums\MediaStatus;
+    use \Illuminate\Support\Arr;
 
 @endphp
 
@@ -17,15 +18,23 @@
                     'btn-outline-info' => !in_array(Arr::get($sort, 'sort_scores.guest'), [1, -1])])
                             wire:model="sort.sort_scores.guest"
                             wire:click="sort('sort_scores.guest', -1)">
-                        Ordered For Guest {{ Arr::get($sort, 'sort_scores.guest') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.guest') == -1 ? '↓' : ''}}
+                        Ordered By New Guest {{ Arr::get($sort, 'sort_scores.guest') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.guest') == -1 ? '↓' : ''}}
                     </button>
                     <button @class([
                         'btn btn-sm',
-                        'btn-secondary' => in_array(Arr::get($sort, 'sort_scores.registered'), [1, -1]),
-                        'btn-outline-secondary' => !in_array(Arr::get($sort, 'sort_scores.registered'), [1, -1])])
+                        'btn-dark' => in_array(Arr::get($sort, 'sort_scores.returned'), [1, -1]),
+                        'btn-outline-dark' => !in_array(Arr::get($sort, 'sort_scores.returned'), [1, -1])])
+                            wire:model="sort.sort_scores.returned"
+                            wire:click="sort('sort_scores.returned', -1)">
+                        Ordered By Returned {{ Arr::get($sort, 'sort_scores.returned') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.returned') == -1 ? '↓' : ''}}
+                    </button>
+                    <button @class([
+                        'btn btn-sm',
+                        'btn-primary' => in_array(Arr::get($sort, 'sort_scores.registered'), [1, -1]),
+                        'btn-outline-primary' => !in_array(Arr::get($sort, 'sort_scores.registered'), [1, -1])])
                             wire:model="sort.sort_scores.registered"
                             wire:click="sort('sort_scores.registered', -1)">
-                        Ordered For User {{ Arr::get($sort, 'sort_scores.registered') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.registered') == -1 ? '↓' : ''}}
+                        Ordered By Login {{ Arr::get($sort, 'sort_scores.registered') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.registered') == -1 ? '↓' : ''}}
                     </button>
                 </h4>
             </div>
@@ -125,13 +134,16 @@
                     <i class="fa fa-money-bill-wave fa-fw text-info" title="Total Tips"></i> {{(int)$media->tips/100}}
                 </td>
                 <td>
-                    <i class="fa fa-user-shield fa-fw text-scondary" title="Score for Registered"></i> {{$media->sort_scores['registered']}} <br>
-                    <i class="fa fa-user-minus fa-fw text-info" title="Score for Guest"></i> {{$media->sort_scores['guest']}} <br>
+                    <i class="fa fa-user-shield fa-fw text-primary" title="Score for Registered"></i> {{$media->sort_scores['registered']}} <br>
+                    <i class="fa fa-user-minus fa-fw text-info" title="Score for New Guest"></i> {{$media->sort_scores['guest']}} <br>
+                    <i class="fa fa-user-minus fa-fw text-dark" title="Score for Returned Guest"></i> {{$media->sort_scores['returned']}} <br>
                     <hr class="my-1">
                     <div class="text-sm-left">
-                    @foreach($media->scores as $score)
-                        {{$score['type']}}: {{$score['score']}} <br>
-                    @endforeach
+                        @if (is_array($media->scores))
+                            @foreach($media->scores as $score)
+                                {{$score['type']}}: {{$score['score']}} <br>
+                            @endforeach
+                        @endif
                     </div>
                 </td>
                 <td>

@@ -25,6 +25,7 @@ use MongoDB\BSON\ObjectId;
 use function PHPUnit\Framework\matches;
 
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
+use Ramsey\Uuid\Uuid;
 use Str;
 
 class MediaService
@@ -350,7 +351,13 @@ class MediaService
         bool $isGuest = true,
         bool $isFirstPage = false,
     ): LengthAwarePaginator {
-        $sortCategory = $isGuest ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
+        $sortCategory = MediaSortCategories::REGISTERED->value;
+
+        if ($isGuest) {
+            $sortCategory = Uuid::fromString($request->uuid)->getDateTime()->getTimestamp() > (time() - 86400) ?
+                MediaSortCategories::GUEST->value : MediaSortCategories::RETURNED->value;
+        }
+
         $query = Media::public()->confirmed()->genderContent($request->filter_content_gender)->sort($sortCategory);
 
         switch ($request->show_adult_content) {

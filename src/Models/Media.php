@@ -398,7 +398,20 @@ class Media extends BaseModel
      */
     public function getTimeScoreAttribute(): int
     {
-        $oldness = time() - $this->created_at->valueOf();
+        $oldness = time() - ($this->created_at->valueOf() / 1000);
+
+        // do not let a model upload many media together and spam feed
+        if ($oldness <= 21600) {
+            $todayUploadedMedias = self::public()
+                ->confirmed()
+                ->creator($this->creator['_id'])
+                ->where('created_at', '>=', DT::utcDateTime(['d' => -1]))
+                ->count();
+
+            if ($todayUploadedMedias > 2) {
+                return 5;
+            }
+        }
 
         // do not let a model upload many media together and spam feed
         if ($oldness <= 21600) {
