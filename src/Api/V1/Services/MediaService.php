@@ -357,7 +357,6 @@ class MediaService
                     $sortCategory = MediaSortCategories::GUEST->value;
                 }
             } catch(Exception $e) {
-
             }
         }
 
