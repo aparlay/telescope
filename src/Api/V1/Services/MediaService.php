@@ -351,10 +351,12 @@ class MediaService
         $sortCategory = MediaSortCategories::REGISTERED->value;
 
         if ($isGuest) {
-            $uuid = Uuid::fromString($request->uuid);
-            $sortCategory = MediaSortCategories::RETURNED->value;
-            if ($uuid->getVersion() == 7 && Uuid::fromString($request->uuid)->getDateTime()->getTimestamp() > (time() - 86400)) {
-                $sortCategory = MediaSortCategories::GUEST->value;
+            try {
+                $sortCategory = MediaSortCategories::RETURNED->value;
+                if (Uuid::fromString($request->uuid)->getDateTime()->getTimestamp() > (time() - 86400)) {
+                    $sortCategory = MediaSortCategories::GUEST->value;
+                }
+            } catch(Exception $e) {
             }
         }
 
