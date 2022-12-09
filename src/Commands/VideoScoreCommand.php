@@ -15,8 +15,7 @@ class VideoScoreCommand extends Command
     public function handle()
     {
         $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower()->orderBy('created_at', 'ASC');
-        foreach ($mediaQuery->lazy() as $media) {
-            /** @var Media $media */
+        foreach ($mediaQuery->lazy() as $media) {/** @var Media $media */
             $media->recalculateSortScores();
         }
 
@@ -35,7 +34,6 @@ class VideoScoreCommand extends Command
                 $media->sort_scores['returned'],
                 $media->sort_scores['registered'],
             ];
-            $media->save();
         }
 
         $headers = ['id', 'awesomeness', 'beauty', 'skin', 'time', 'like', 'watch', 'default', 'guest', 'returned', 'registered'];
