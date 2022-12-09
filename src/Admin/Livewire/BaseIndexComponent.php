@@ -78,7 +78,7 @@ abstract class BaseIndexComponent extends Component
      * @param $field
      * @return void
      */
-    public function sort($field)
+    public function sort($field, $order = 1)
     {
         $value = \Arr::get($this->sort, $field);
         if ($value === -1) {
@@ -86,7 +86,7 @@ abstract class BaseIndexComponent extends Component
 
             return;
         }
-        $newSort = ($value ?? -1) * -1;
+        $newSort = $order * ($value ?? -1) * -1;
         $this->sort = [];
         $this->sort[$field] = $newSort;
     }

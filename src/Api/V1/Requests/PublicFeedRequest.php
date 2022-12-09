@@ -84,6 +84,9 @@ class PublicFeedRequest extends FormRequest
         }
 
         $showAdultContent = request()->input('show_adult_content', null);
+        if (is_numeric($showAdultContent)) {
+            $showAdultContent = (int)$showAdultContent;
+        }
         $showAdultContent = match ($showAdultContent) {
             UserSettingShowAdultContent::NEVER->value => UserSettingShowAdultContent::NEVER->value,
             UserSettingShowAdultContent::ASK->value => UserSettingShowAdultContent::ASK->value,
