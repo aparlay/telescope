@@ -15,7 +15,12 @@ return new class() extends Migration {
     {
         $default = [
             'otp' => false,
-            'show_adult_content' => false,
+            'show_adult_content' => 2,
+            'filter_content_gender' => [
+                'female' => true,
+                'male' => false,
+                'transgender' => false,
+            ],
             'notifications' => [
                 'unread_message_alerts' => true,
                 'news_and_updates' => true,

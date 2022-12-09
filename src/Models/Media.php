@@ -755,7 +755,8 @@ class Media extends BaseModel
 
         $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
             ($this->beauty_score * (float) $config['beauty']) +
-            $promote;
+            ($this->skin_score * (float) $config['skin']) +
+            ($promote * (float) $config['promote']);
 
         $sortScore += ($this->time_score * (float) $config['time']);
         $sortScore += ($this->like_score * (float) $config['like']);
