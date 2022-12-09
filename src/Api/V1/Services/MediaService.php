@@ -351,8 +351,11 @@ class MediaService
         $sortCategory = MediaSortCategories::REGISTERED->value;
 
         if ($isGuest) {
-            $sortCategory = Uuid::fromString($request->uuid)->getDateTime()->getTimestamp() > (time() - 86400) ?
-                MediaSortCategories::GUEST->value : MediaSortCategories::RETURNED->value;
+            $uuid = Uuid::fromString($request->uuid);
+            $sortCategory = MediaSortCategories::RETURNED->value;
+            if ($uuid->getVersion() == 7 && Uuid::fromString($request->uuid)->getDateTime()->getTimestamp() > (time() - 86400)) {
+                $sortCategory = MediaSortCategories::GUEST->value;
+            }
         }
 
         $query = Media::public()->confirmed()->genderContent($request->filter_content_gender)->sort($sortCategory);
