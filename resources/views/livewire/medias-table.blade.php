@@ -148,8 +148,9 @@
                     <div class="text-sm-left">
                         @if (is_array($media->scores))
                             @foreach($media->scores as $score)
-                            {{$score['type']}}: {{$score['score']}} <br>
-                        @endforeach@endif
+                                {{$score['type']}}: {{$score['score']}} <br>
+                            @endforeach
+                        @endif
                     </div>
                 </td>
 
