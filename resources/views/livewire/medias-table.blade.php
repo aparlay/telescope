@@ -146,9 +146,10 @@
                        title="Score for Returned Guest"></i> {{$media->sort_scores['returned']}} <br>
                     <hr class="my-1">
                     <div class="text-sm-left">
-                        @foreach($media->scores as $score)
+                        @if (is_array($media->scores))
+                            @foreach($media->scores as $score)
                             {{$score['type']}}: {{$score['score']}} <br>
-                        @endforeach
+                        @endforeach@endif
                     </div>
                 </td>
 
