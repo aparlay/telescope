@@ -63,6 +63,7 @@ class MediasTable extends BaseIndexComponent
             'visit_count',
             'created_at',
             'sort_scores.guest',
+            'sort_scores.returned',
             'sort_scores.registered',
         ];
     }
