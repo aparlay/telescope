@@ -2,8 +2,8 @@
 
 namespace Aparlay\Core\Notifications;
 
-use Aparlay\Core\Models\Email;
 use Aparlay\Core\Jobs\Email as EmailJob;
+use Aparlay\Core\Models\Email;
 use Aparlay\Core\Models\Enums\EmailStatus;
 use Aparlay\Core\Models\Enums\EmailType;
 use Aparlay\Core\Models\User;

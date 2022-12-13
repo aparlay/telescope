@@ -36,8 +36,8 @@ class UserVerificationModal extends Component
         foreach ($this->documents as $document) {
             $alert = $document->alertObjs()->latest()->first();
             $isRejected = $document->status === UserDocumentStatus::REJECTED->value;
-            $this->documentsData[(string)$document->_id]['status'] = !$isRejected ? UserDocumentStatus::APPROVED->value : UserDocumentStatus::REJECTED->value;
-            $this->documentsData[(string)$document->_id]['reason'] = $alert ? $alert->reason : '';
+            $this->documentsData[(string) $document->_id]['status'] = ! $isRejected ? UserDocumentStatus::APPROVED->value : UserDocumentStatus::REJECTED->value;
+            $this->documentsData[(string) $document->_id]['reason'] = $alert ? $alert->reason : '';
         }
     }
 
@@ -99,11 +99,11 @@ class UserVerificationModal extends Component
 
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
-            $document->status = (int)$datum['status'];
+            $document->status = (int) $datum['status'];
             $reason = $datum['reason'] ?? '';
-            $isApproved = (int)$datum['status'] === UserDocumentStatus::APPROVED->value;
+            $isApproved = (int) $datum['status'] === UserDocumentStatus::APPROVED->value;
 
-            if (!$isApproved) {
+            if (! $isApproved) {
                 Alert::create([
                     'created_by' => new ObjectId($this->currentUser()->_id),
                     'entity._id' => new ObjectId($document->_id),
@@ -120,7 +120,7 @@ class UserVerificationModal extends Component
             $approvedTypes[$document->type] = ($approvedTypes[$document->type] ?? $isApproved) || $isApproved;
 
             $payload[$document->type] = [
-                'user_document_id' => (string)$document->_id,
+                'user_document_id' => (string) $document->_id,
                 'reason' => $reason,
                 'type' => $document->type,
                 'type_label' => $document->type_label,
@@ -157,7 +157,7 @@ class UserVerificationModal extends Component
 
         $payload['verification_status'] = $user->verification_status;
         if ($shouldSendNotification) {
-            $message = match ((int)$newVerificationStatus) {
+            $message = match ((int) $newVerificationStatus) {
                 UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
                 UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
                 default => ''
@@ -178,8 +178,8 @@ class UserVerificationModal extends Component
             }
             if (
                 in_array(
-                (int)$newVerificationStatus,
-                [UserVerificationStatus::REJECTED->value, UserVerificationStatus::VERIFIED->value]
+                    (int) $newVerificationStatus,
+                    [UserVerificationStatus::REJECTED->value, UserVerificationStatus::VERIFIED->value]
                 )
             ) {
                 $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
