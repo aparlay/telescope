@@ -199,10 +199,10 @@
 
         .btn a {
             background-color: #ffffff;
-            border: solid 1px #3498db;
+            border: solid 1px #ce2e98;
             border-radius: 5px;
             box-sizing: border-box;
-            color: #3498db;
+            color: #ce2e98;
             cursor: pointer;
             display: inline-block;
             font-size: 14px;
@@ -214,12 +214,12 @@
         }
 
         .btn-primary table td {
-            background-color: #3498db;
+            background-color: #ce2e98;
         }
 
         .btn-primary a {
-            background-color: #3498db;
-            border-color: #3498db;
+            background-color: #ce2e98;
+            border-color: #ce2e98;
             color: #ffffff;
         }
 
@@ -391,9 +391,11 @@
                                                 @endif
                                             </h2>
                                             <p>{{$body}}</p>
-                                            <a href="{{config('app.frontend_url')}}" target="_blank" style="align-items: center; background: #ce2e98; border: 1px solid #ce2e98; border-radius: 12px; color: #fff; display: flex; font-size: 16px; font-style: normal; font-weight: 700; justify-content: center; padding: 10.5px; text-align: center; width: 100%;">
-                                                <strong>Open Waptap</strong>
-                                            </a>
+                                            <div class="btn btn-primary" style="width: 100%;text-decoration: none">
+                                                <a href="{{config('app.frontend_url')}}" target="_blank" style="width: 100%;text-decoration: none">
+                                                    <strong>Open Waptap</strong>
+                                                </a>
+                                            </div>
                                             <hr/>
                                             <p class="undernote">
                                                 <b>If you did not make this request, please contact us at</b>
