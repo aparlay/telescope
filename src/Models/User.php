@@ -74,7 +74,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $stats
  * @property array       $last_location
  * @property string      $country_alpha2
- * @property string      $country_label
  * @property string      $country_flag
  * @property array       $country_flags
  * @property array       $text_search
@@ -109,6 +108,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read int $exclusive_content_commission_percentage
  * @property-read int $exclusive_content_referral_commission_percentage
  * @property-read array $counters
+ * @property-read string      $country_label
+ * @property-read string $verification_status_label
  *
  * @method static |self|Builder username(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user

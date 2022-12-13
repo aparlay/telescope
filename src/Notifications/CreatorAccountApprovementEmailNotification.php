@@ -79,6 +79,7 @@ class CreatorAccountApprovementEmailNotification extends Notification
         $message .= PHP_EOL.'_*User:*_ '.$notifiable->slack_admin_url;
         $message .= PHP_EOL.'_*Email:*_ '.$notifiable->email;
         $message .= PHP_EOL.'_*Country:*_ '.$notifiable->country_label;
+        $message .= PHP_EOL.PHP_EOL.'_*Result:*_ '.$notifiable->verification_status_label;
 
         return (new SlackMessage())
             ->to(config('app.slack_apply_for_verification'))
