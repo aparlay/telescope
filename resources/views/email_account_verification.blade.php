@@ -352,12 +352,12 @@
             }
 
             .btn-primary table td:hover {
-                background-color: #34495e !important;
+                background-color: #ce2e98 !important;
             }
 
             .btn-primary a:hover {
-                background-color: #34495e !important;
-                border-color: #34495e !important;
+                background-color: #ce2e98 !important;
+                border-color: #ce2e98 !important;
             }
         }
 
@@ -391,8 +391,8 @@
                                                 @endif
                                             </h2>
                                             <p>{{$body}}</p>
-                                            <div class="btn btn-primary" style="width: 100%;text-decoration: none">
-                                                <a href="{{config('app.frontend_url')}}" target="_blank" style="width: 100%;text-decoration: none">
+                                            <div class="btn btn-primary" style="width: 100%;text-decoration: none;text-align: center">
+                                                <a href="{{config('app.frontend_url')}}" target="_blank" style="width: 70%;text-decoration: none">
                                                     <strong>Open Waptap</strong>
                                                 </a>
                                             </div>
