@@ -108,7 +108,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read int $exclusive_content_commission_percentage
  * @property-read int $exclusive_content_referral_commission_percentage
  * @property-read array $counters
- * @property-read string      $country_label
+ * @property-read string $country_label
  * @property-read string $verification_status_label
  *
  * @method static |self|Builder username(string $username) get user
