@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Dto\UserDocumentDto;
+use Aparlay\Core\Api\V1\Notifications\UserAppliedForCreatorAccount;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Api\V1\Traits\ValidationErrorTrait;
 use Aparlay\Core\Constants\StorageType;
@@ -92,6 +93,8 @@ class UserDocumentService extends AbstractService
 
         $this->getUser()->verification_status = UserVerificationStatus::PENDING->value;
         $this->getUser()->save();
+
+        $this->getUser()->notify(new UserAppliedForCreatorAccount());
 
         return $this->getUser();
     }
