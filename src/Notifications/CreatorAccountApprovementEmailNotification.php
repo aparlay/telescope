@@ -40,7 +40,7 @@ class CreatorAccountApprovementEmailNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['slack', UserNotificationChannel::class];
+        return ['slack'];
     }
 
     /**
