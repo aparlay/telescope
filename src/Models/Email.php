@@ -37,6 +37,7 @@ class Email extends BaseModel
 
     public const TEMPLATE_EMAIL_VERIFICATION = 'email_verification';
     public const TEMPLATE_EMAIL_CONTACTUS = 'email_contactus';
+    public const TEMPLATE_EMAIL_ACCOUNT_VERIFICATION = 'email_account_verification';
 
     /**
      * The collection associated with the model.
@@ -152,6 +153,7 @@ class Email extends BaseModel
         return [
             EmailType::OTP->value => EmailType::OTP->label(),
             EmailType::CONTACT->value => EmailType::CONTACT->label(),
+            EmailType::ACCOUNT_VERIFICATION->value => EmailType::ACCOUNT_VERIFICATION->label(),
         ];
     }
 
@@ -163,6 +165,7 @@ class Email extends BaseModel
         return [
             EmailType::OTP->value => self::TEMPLATE_EMAIL_VERIFICATION,
             EmailType::CONTACT->value => self::TEMPLATE_EMAIL_CONTACTUS,
+            EmailType::ACCOUNT_VERIFICATION->value => self::TEMPLATE_EMAIL_ACCOUNT_VERIFICATION,
         ];
     }
 }

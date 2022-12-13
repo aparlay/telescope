@@ -690,6 +690,18 @@ class User extends \App\Models\User
     }
 
     /**
+     * Route notifications for the Slack channel.
+     *
+     * @param Notification $notification
+     *
+     * @return array
+     */
+    public function routeNotificationForMail($notification): array
+    {
+        return [$this->email => $this->username];
+    }
+
+    /**
      * @param  string  $attribute
      * @param  mixed  $item
      * @param  int|null  $length
