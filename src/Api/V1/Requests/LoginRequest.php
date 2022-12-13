@@ -6,6 +6,11 @@ use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
+/**
+ * @property string $username
+ * @property string $password
+ * @property string $otp
+ */
 class LoginRequest extends FormRequest
 {
     /**
