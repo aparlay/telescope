@@ -6,13 +6,13 @@ use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
-use Aparlay\Core\Models\Country;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
+use Aparlay\Core\Notifications\CreatorAccountApprovementEmailNotification;
 use Aparlay\Core\Notifications\CreatorAccountApprovementNotification;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
@@ -36,8 +36,8 @@ class UserVerificationModal extends Component
         foreach ($this->documents as $document) {
             $alert = $document->alertObjs()->latest()->first();
             $isRejected = $document->status === UserDocumentStatus::REJECTED->value;
-            $this->documentsData[(string) $document->_id]['status'] = ! $isRejected ? UserDocumentStatus::APPROVED->value : UserDocumentStatus::REJECTED->value;
-            $this->documentsData[(string) $document->_id]['reason'] = $alert ? $alert->reason : '';
+            $this->documentsData[(string)$document->_id]['status'] = !$isRejected ? UserDocumentStatus::APPROVED->value : UserDocumentStatus::REJECTED->value;
+            $this->documentsData[(string)$document->_id]['reason'] = $alert ? $alert->reason : '';
         }
     }
 
@@ -99,11 +99,11 @@ class UserVerificationModal extends Component
 
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
             $document = $user->userDocumentObjs()->find($documentId);
-            $document->status = (int) $datum['status'];
+            $document->status = (int)$datum['status'];
             $reason = $datum['reason'] ?? '';
-            $isApproved = (int) $datum['status'] === UserDocumentStatus::APPROVED->value;
+            $isApproved = (int)$datum['status'] === UserDocumentStatus::APPROVED->value;
 
-            if (! $isApproved) {
+            if (!$isApproved) {
                 Alert::create([
                     'created_by' => new ObjectId($this->currentUser()->_id),
                     'entity._id' => new ObjectId($document->_id),
@@ -120,7 +120,7 @@ class UserVerificationModal extends Component
             $approvedTypes[$document->type] = ($approvedTypes[$document->type] ?? $isApproved) || $isApproved;
 
             $payload[$document->type] = [
-                'user_document_id' => (string) $document->_id,
+                'user_document_id' => (string)$document->_id,
                 'reason' => $reason,
                 'type' => $document->type,
                 'type_label' => $document->type_label,
@@ -157,7 +157,7 @@ class UserVerificationModal extends Component
 
         $payload['verification_status'] = $user->verification_status;
         if ($shouldSendNotification) {
-            $message = match ((int) $newVerificationStatus) {
+            $message = match ((int)$newVerificationStatus) {
                 UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
                 UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
                 default => ''
@@ -165,8 +165,23 @@ class UserVerificationModal extends Component
             $payload['verification_status'] = $newVerificationStatus;
             $payload['verification_status_label'] = UserVerificationStatus::from($newVerificationStatus)->label();
 
-            if ($message) {
+
+            $email['subject'] = 'You have been verified!';
+            $email['content'] = 'Your Creator application has been reject! 😔';
+            $email['isVerified'] = false;
+            if ((int)$newVerificationStatus === UserVerificationStatus::VERIFIED->value) {
+                $email['isVerified'] = true;
+                $email['subject'] = 'You have been verified!';
+                $email['content'] = 'Congratulations you are now a verified creator!';
+            }
+            if (
+                in_array(
+                (int)$newVerificationStatus,
+                [UserVerificationStatus::REJECTED->value, UserVerificationStatus::VERIFIED->value]
+                )
+            ) {
                 $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
+                $user->notify(new CreatorAccountApprovementEmailNotification(...$emailData));
             }
         }
 
