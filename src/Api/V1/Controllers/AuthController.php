@@ -198,31 +198,10 @@ class AuthController extends Controller
         /** Through exception for suspended/banned/NotFound accounts */
         $user = auth()->user();
         $this->userService->isUserEligible($user);
-        $deviceId = $request->header('X-DEVICE-ID');
 
-        if ($this->userService->requireOtp()) {
-            if ($request->otp) {
-                $this->otpService->validateOtp($request->otp, $request->username);
-                $this->userService->verify();
-            }
-            /*
-            else {
-                $this->otpService->sendOtp($user, $deviceId);
-                $response = [];
-                if ($identityField === Login::IDENTITY_PHONE_NUMBER) {
-                    $response = [
-                        'message' => 'If you enter your phone number correctly you will receive an OTP sms soon.',
-                        'sms_numbers' => $user['phone_number'],
-                    ];
-                } elseif ($identityField === Login::IDENTITY_EMAIL) {
-                    $response = [
-                        'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
-                    ];
-                }
-
-                return $this->response($response, 'OTP has been sent.', Response::HTTP_I_AM_A_TEAPOT);
-            }
-            */
+        if ($this->userService->requireOtp() && $request->otp) {
+            $this->otpService->validateOtp($request->otp, $request->username);
+            $this->userService->verify();
         }
 
         /** Prepare and return the json response */
@@ -282,7 +261,7 @@ class AuthController extends Controller
 
         $this->otpService->sendOtp($user, $deviceId);
 
-        $loginRequest = new LoginRequest(['username' => $user->username, 'password' => $request->password]);
+        $loginRequest = new LoginRequest(['username' => $request->email, 'password' => $request->password]);
         $loginRequest->headers = $request->headers;
 
         return $this->login($loginRequest);
