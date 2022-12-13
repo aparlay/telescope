@@ -183,7 +183,7 @@ class UserVerificationModal extends Component
                 )
             ) {
                 $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
-                $user->notify(new CreatorAccountApprovementEmailNotification(...$emailData));
+                $user->notify(new CreatorAccountApprovementEmailNotification(...$email));
             }
         }
 
