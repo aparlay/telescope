@@ -387,7 +387,7 @@
                                             <h2>
                                                 {{$title}}
                                                 @if ($isVerified)
-                                                    <img src="{{config('app.email.images.verified_badge')}}" alt="verified" style="margin-left: 6px;" width="18" height="18">
+                                                    <img src="{{config('app.email.images.verified_badge')}}" alt="verified" style="margin-left: 6px;display: inline" width="18" height="18">
                                                 @endif
                                             </h2>
                                             <p>{{$body}}</p>
