@@ -380,7 +380,7 @@
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tr>
                                         <img src="{{ config('app.email.images.logo') }}" alt="{{ config('app.email.src_alt_name') }}" width="126"
-                                         height="96" border="0" style="margin: 20px auto">
+                                         height="96" border="0" style="margin: 20px auto; display: inline">
                                     </tr>
                                     <tr>
                                         <td>
