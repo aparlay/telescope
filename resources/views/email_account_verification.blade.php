@@ -379,7 +379,7 @@
                             <td class="wrapper">
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <img src="{{ config('app.email.logo') }}" alt="{{ config('app.email.src_alt_name') }}" width="126"
+                                        <img src="{{ config('app.email.images.logo') }}" alt="{{ config('app.email.src_alt_name') }}" width="126"
                                          height="96" border="0" style="margin: 20px auto">
                                     </tr>
                                     <tr>
@@ -387,7 +387,7 @@
                                             <h2>
                                                 {{$title}}
                                                 @if ($isVerified)
-                                                    <img src="https://app.waptap.dev/static/media/verified.e081f1353d24912c3c3d44e9515fa660.svg" alt="verified" style="margin-left: 6px;">
+                                                    <img src="{{config('app.email.images.verified_badge')}}" alt="verified" style="margin-left: 6px;" width="18" height="18">
                                                 @endif
                                             </h2>
                                             <p>{{$body}}</p>
