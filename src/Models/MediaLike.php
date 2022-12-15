@@ -168,6 +168,6 @@ class MediaLike extends BaseModel
     {
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
 
-        return (bool)Redis::sismember($cacheKey, $mediaId);
+        return (bool) Redis::sismember($cacheKey, $mediaId);
     }
 }
