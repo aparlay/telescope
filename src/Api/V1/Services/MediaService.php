@@ -134,7 +134,10 @@ class MediaService
      */
     public function deleteAllMediasBelongToUser(): void
     {
-        Media::creator($this->getUser()->_id)->update(['status' => MediaStatus::USER_DELETED->value]);
+        foreach (Media::creator($this->getUser()->_id)->lazy() as $media) {
+            $media->status = MediaStatus::USER_DELETED->value;
+            $media->save();
+        }
     }
 
     /**
