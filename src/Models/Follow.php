@@ -166,7 +166,7 @@ class Follow extends BaseModel
         $result = Redis::sismember($cacheKey, $creatorId);
         Cache::store('octane')->set($octaneCacheKey, $result, config('app.cache.tenMinutes'));
 
-        return (bool)$result;
+        return (bool) $result;
     }
 
     /**
