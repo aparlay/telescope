@@ -115,7 +115,7 @@
                                                     @foreach (\Aparlay\Core\Models\Enums\MediaContentGender::getAllCases() as $value => $label)
                                                         <div id="content_gender" class="btn-group btn-group-toggle beauty_score_div" data-toggle="buttons" role="radiogroup">
                                                             <label class="btn btn-outline-secondary content_gender_label" for="media_content_gender_{{$value}}">
-                                                                <input type="radio" id="media_content_gender_{{$value}}" name="content_gender" value="{{ $value }}" data-index="{{ $value }}" autocomplete="off" @if($media->content_gender == $value) checked @endif>
+                                                                <input type="radio" id="media_content_gender_{{$value}}" name="content_gender" value="{{ $media->skin_score && $media->beauty_score && $media->awesomeness_score ? $value : '' }}" data-index="{{ $value }}" autocomplete="off" @if($media->content_gender == $value) checked @endif>
                                                                 {{ $label }}
                                                             </label>
                                                         </div>
