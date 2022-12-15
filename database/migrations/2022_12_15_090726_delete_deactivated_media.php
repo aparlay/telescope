@@ -16,7 +16,10 @@ return new class extends Migration
     public function up()
     {
         foreach (User::where('status', UserStatus::DEACTIVATED->value)->lazy() as $user) {
-            Media::creator($user->_id)->update(['status' => MediaStatus::USER_DELETED->value]);
+            foreach (Media::creator($user->_id)->lazy() as $media) {
+                $media->status = MediaStatus::USER_DELETED->value;
+                $media->save();
+            }
         }
     }
 
