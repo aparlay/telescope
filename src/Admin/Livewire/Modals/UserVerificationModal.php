@@ -158,7 +158,7 @@ class UserVerificationModal extends Component
         $payload['verification_status'] = $user->verification_status;
         if ($shouldSendNotification) {
             $message = match ((int) $newVerificationStatus) {
-                UserVerificationStatus::REJECTED->value => 'Your Creator application has been reject! 😔',
+                UserVerificationStatus::REJECTED->value => 'Your Creator application has been rejected! 😔',
                 UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
                 default => ''
             };
