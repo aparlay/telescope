@@ -48,9 +48,9 @@ class MediaScoreChanged extends Notification
         foreach ($notifiable->scores as $score) {
             $fields[] = $score['type'].': '.$score['score'];
         }
-        $fields['gender'] = $notifiable->content_gender_label;
+        $fields[] = 'gender: '.$notifiable->content_gender_label;
 
-        $fields['feed'] = match ($notifiable->status) {
+        $fields[] = 'feed: '.match ($notifiable->status) {
             MediaStatus::CONFIRMED->value => 'Confirmed',
             MediaStatus::DENIED->value => 'Denied',
             default => ''
