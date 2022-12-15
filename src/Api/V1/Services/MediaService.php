@@ -134,11 +134,7 @@ class MediaService
      */
     public function deleteAllMediasBelongToUser(): void
     {
-        foreach (Media::user($this->getUser()->_id)->lazy() as $media) {
-            if ($media->status !== MediaStatus::USER_DELETED->value) {
-                $this->mediaRepository->update(['status' => MediaStatus::USER_DELETED->value], $media->_id);
-            }
-        }
+        Media::creator($this->getUser()->_id)->update(['status' => MediaStatus::USER_DELETED->value]);
     }
 
     /**
