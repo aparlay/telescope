@@ -46,7 +46,7 @@ class MediaScoreChanged extends Notification
         $message .= "is getting done by {$this->admin->slack_admin_url}.";
         $fields = [];
         foreach ($notifiable->scores as $score) {
-            $fields[] = $score['type'] . ': ' . $score['score'];
+            $fields[] = $score['type'].': '.$score['score'];
         }
         $fields['gender'] = $notifiable->content_gender_label;
 
@@ -55,7 +55,7 @@ class MediaScoreChanged extends Notification
             MediaStatus::DENIED->value => 'Denied',
             default => ''
         };
-        $message .= PHP_EOL . implode(', ', $fields);
+        $message .= PHP_EOL.implode(', ', $fields);
 
         return (new SlackMessage())
             ->to(config('app.slack_video_pending'))
