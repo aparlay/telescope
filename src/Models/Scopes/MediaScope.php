@@ -248,7 +248,7 @@ trait MediaScope
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
-        return $query->where('user_id', $userId);
+        return $query->where('creator._id', $userId);
     }
 
     /**
