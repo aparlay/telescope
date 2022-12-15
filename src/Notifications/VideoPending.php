@@ -38,7 +38,6 @@ class VideoPending extends Notification
     public function toSlack($notifiable)
     {
         $message = "New {$notifiable->slack_admin_url} is waiting for moderation.";
-        $message .= PHP_EOL.'_*Log:*_ '.PHP_EOL.implode("\n", $notifiable->processing_log);
 
         return (new SlackMessage())
             ->to(config('app.slack_video_pending'))

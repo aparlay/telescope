@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Notifications;
 
 use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -36,27 +37,31 @@ class MediaScoreChanged extends Notification
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  Media  $notifiable
      * @return SlackMessage
      */
     public function toSlack($notifiable)
     {
         $message = "Video {$notifiable->slack_admin_url} moderation ";
         $message .= "is getting done by {$this->admin->slack_admin_url}.";
-        $message .= PHP_EOL.'_*Scores:*_ '.PHP_EOL;
+
         foreach ($notifiable->scores as $score) {
-            $message .= PHP_EOL."- _*{$score['type']}: {$score['score']}*_ ";
+            $fields[$score['type']] = $score['score'];
         }
-        if ($notifiable->status === MediaStatus::CONFIRMED->value) {
-            $message .= PHP_EOL.PHP_EOL.'- _*Public Feed Approval: Confirmed*_ ';
-        }
-        if ($notifiable->status === MediaStatus::DENIED->value) {
-            $message .= PHP_EOL.PHP_EOL.'- _*Public Feed Approval: Denied*_ ';
-        }
+        $fields['Content Gender'] = $notifiable->content_gender_label;
+
+        $fields['Public Feed Approval'] = match ($notifiable->status) {
+            MediaStatus::CONFIRMED->value => 'Confirmed',
+            MediaStatus::DENIED->value => 'Denied',
+            default => ''
+        };
 
         return (new SlackMessage())
             ->to(config('app.slack_video_pending'))
             ->content($message)
+            ->attachment(function ($attachment) use ($fields, $notifiable) {
+                $attachment->title('Scores', $notifiable->admin_url)->fields($fields)->image($notifiable->cover_url);
+            })
             ->success();
     }
 

@@ -78,6 +78,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @property-read string        $slack_subject_admin_url
  * @property-read string        $slack_admin_url
+ * @property-read string        $admin_url
  * @property-read string        $cover_url
  * @property-read string        $file_url
  * @property-read int           $beauty_score
@@ -399,6 +400,19 @@ class Media extends BaseModel
     public function getTimeScoreAttribute(): int
     {
         $oldness = time() - ($this->created_at->valueOf() / 1000);
+
+        // do not let a model upload many media together and spam feed
+        if ($oldness <= 21600) {
+            $todayUploadedMedias = self::public()
+                ->confirmed()
+                ->creator($this->creator['_id'])
+                ->where('created_at', '>=', DT::utcDateTime(['d' => -1]))
+                ->count();
+
+            if ($todayUploadedMedias > 2) {
+                return 5;
+            }
+        }
 
         // do not let a model upload many media together and spam feed
         if ($oldness <= 21600) {
@@ -742,7 +756,8 @@ class Media extends BaseModel
 
         $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
             ($this->beauty_score * (float) $config['beauty']) +
-            $promote;
+            ($this->skin_score * (float) $config['skin']) +
+            ($promote * (float) $config['promote']);
 
         $sortScore += ($this->time_score * (float) $config['time']);
         $sortScore += ($this->like_score * (float) $config['like']);

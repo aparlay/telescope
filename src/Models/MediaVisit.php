@@ -154,6 +154,6 @@ class MediaVisit extends BaseModel
     {
         $cacheKey = (new self())->getCollection().':creator:'.$userId;
 
-        return Redis::sismember($cacheKey, $mediaId);
+        return (bool)Redis::sismember($cacheKey, $mediaId);
     }
 }

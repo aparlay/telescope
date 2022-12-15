@@ -21,10 +21,8 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
-
-use function PHPUnit\Framework\matches;
-
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
+use Ramsey\Uuid\Uuid;
 use Str;
 
 class MediaService
@@ -350,7 +348,18 @@ class MediaService
         bool $isGuest = true,
         bool $isFirstPage = false,
     ): LengthAwarePaginator {
-        $sortCategory = $isGuest ? MediaSortCategories::GUEST->value : MediaSortCategories::REGISTERED->value;
+        $sortCategory = MediaSortCategories::REGISTERED->value;
+
+        if ($isGuest) {
+            try {
+                $sortCategory = MediaSortCategories::RETURNED->value;
+                if (Uuid::fromString($request->uuid)->getDateTime()->getTimestamp() > (time() - 86400)) {
+                    $sortCategory = MediaSortCategories::GUEST->value;
+                }
+            } catch(Exception $e) {
+            }
+        }
+
         $query = Media::public()->confirmed()->genderContent($request->filter_content_gender)->sort($sortCategory);
 
         switch ($request->show_adult_content) {
