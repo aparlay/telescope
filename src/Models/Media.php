@@ -78,6 +78,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @property-read string        $slack_subject_admin_url
  * @property-read string        $slack_admin_url
+ * @property-read string        $admin_url
  * @property-read string        $cover_url
  * @property-read string        $file_url
  * @property-read int           $beauty_score
