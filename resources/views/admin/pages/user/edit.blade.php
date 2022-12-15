@@ -413,7 +413,6 @@
             </div>
         </div>
     </div>
-
     <div id="activateModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -443,14 +442,13 @@
             </div>
         </div>
     </div>
-
     <div id="changeUsernameModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header bg-warning">
                     <h5 class="modal-title" id="changeUserNameModalLabel">Please confirm to change username</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
@@ -458,15 +456,14 @@
                     <p>Are you sure you want to change the username? Videos will be reprocessed.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-warning" data-dismiss="modal" id="confirmChangeUsername">Confirm</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="confirmChangeUsername">Confirm</button>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-
-@section('js')
+@push('js')
     <script src="{{ URL::asset('admin/assets/js/ekko-lightbox.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
@@ -485,12 +482,11 @@
                 if ($(e.target).find('#username').val() === $originalUsername) {
                     e.target.submit();
                 } else {
-                    $('#changeUsernameModal').modal();
-                    $('#confirmChangeUsername').on('click', function() {
+                    if (window.confirm("Are you sure you want to change the username? Videos will be reprocessed.")) {
                         e.target.submit();
-                    });
+                    }
                 }
             });
         });
     </script>
-@endsection
+@endpush

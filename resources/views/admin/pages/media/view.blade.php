@@ -279,19 +279,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="feature_demo" class="col-sm-2 col-form-label">Private
-                                                Video</label>
-                                            <div class="col-sm-10">
-                                                <div class="custom-control custom-switch mt-2">
-                                                    <input type="hidden" name="visibility" value="1">
-                                                    <input type="checkbox" value="0" class="custom-control-input"
-                                                           name="visibility"
-                                                           id="visibility" {!! ($media->visibility == 0) ? 'checked' : '' !!}>
-                                                    <label class="custom-control-label" for="visibility"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row m-0">
                                             <label for="is_protected" class="col-sm-2 col-form-label">Delete
                                                 Protected</label>
                                             <div class="col-sm-10">
