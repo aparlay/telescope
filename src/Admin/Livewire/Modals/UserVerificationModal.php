@@ -169,17 +169,18 @@ class UserVerificationModal extends Component
                 'subject' => 'Oops there was a problem with your verification',
                 'title' => 'Verification Rejected',
                 'body' => 'Unfortunately there was a problem with your ID Verification. Please go back to ‘Request verification’ in the settings to see how to resolve this.',
-                'isVerified' => false
+                'isVerified' => false,
             ];
             if ((int) $newVerificationStatus === UserVerificationStatus::VERIFIED->value) {
                 $email = [
                     'subject' => 'Congratulations! Your account has been verified!',
                     'title' => 'Account verified!',
                     'body' => 'Congratulations your account has been verified. A pink checkmark is now visible next to your username.',
-                    'isVerified' => true
+                    'isVerified' => true,
                 ];
             }
-            if (in_array((int) $newVerificationStatus,
+            if (in_array(
+                (int) $newVerificationStatus,
                 [UserVerificationStatus::REJECTED->value, UserVerificationStatus::VERIFIED->value]
             )) {
                 $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
