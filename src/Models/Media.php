@@ -32,8 +32,6 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use Psr\SimpleCache\InvalidArgumentException;
 
-use function Deployer\import;
-
 /**
  * Class Media.
  *
