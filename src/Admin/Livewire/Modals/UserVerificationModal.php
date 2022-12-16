@@ -6,13 +6,13 @@ use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\Alert;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
-use Aparlay\Core\Models\Country;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
+use Aparlay\Core\Notifications\CreatorAccountApprovementEmailNotification;
 use Aparlay\Core\Notifications\CreatorAccountApprovementNotification;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
@@ -165,8 +165,24 @@ class UserVerificationModal extends Component
             $payload['verification_status'] = $newVerificationStatus;
             $payload['verification_status_label'] = UserVerificationStatus::from($newVerificationStatus)->label();
 
-            if ($message) {
+            $email['subject'] = 'Oops there was a problem with your verification';
+            $email['title'] = 'Verification Rejected';
+            $email['body'] = 'Unfortunately there was a problem with your ID Verification. Please go back to ‘Request verification’ in the settings to see how to resolve this.';
+            $email['isVerified'] = false;
+            if ((int) $newVerificationStatus === UserVerificationStatus::VERIFIED->value) {
+                $email['subject'] = 'Congratulations! Your account has been verified!';
+                $email['title'] = 'Account verified!';
+                $email['body'] = 'Congratulations your account has been verified. A pink checkmark is now visible next to your username.';
+                $email['isVerified'] = true;
+            }
+            if (
+                in_array(
+                    (int) $newVerificationStatus,
+                    [UserVerificationStatus::REJECTED->value, UserVerificationStatus::VERIFIED->value]
+                )
+            ) {
                 $user->notify(new CreatorAccountApprovementNotification($user, $message, $payload));
+                $user->notify(new CreatorAccountApprovementEmailNotification(...$email));
             }
         }
 
