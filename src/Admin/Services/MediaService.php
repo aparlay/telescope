@@ -147,7 +147,6 @@ class MediaService extends AdminBaseService
         $data = request()->only([
             'description',
             'status',
-            'visibility',
             'is_protected',
             'is_comments_enabled',
             'is_music_licensed',
