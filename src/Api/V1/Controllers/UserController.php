@@ -69,7 +69,6 @@ class UserController extends Controller
         if ($this->userService->deleteAccount(UserDeleteDTO::fromRequest($request))) {
             $mediaService = app()->make(MediaService::class);
             $mediaService->setUser($user);
-            $mediaService->deleteAllMediasBelongToUser();
 
             if (auth()->user()->getRememberToken()) {
                 auth()->logout();

@@ -128,19 +128,6 @@ class MediaService
     }
 
     /**
-     * @param  Media  $media
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     */
-    public function deleteAllMediasBelongToUser(): void
-    {
-        foreach (Media::creator($this->getUser()->_id)->lazy() as $media) {
-            $media->status = MediaStatus::USER_DELETED->value;
-            $media->save();
-        }
-    }
-
-    /**
      * @param  PublicFeedRequest  $request
      * @param  string             $type
      *

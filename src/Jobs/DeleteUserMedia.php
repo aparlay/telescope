@@ -8,21 +8,19 @@ use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
-class DeleteUserMedia implements ShouldBeUnique
+class DeleteUserMedia implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
-    public string $userId;
 
     /**
      * The number of times the job may be attempted.
@@ -48,10 +46,9 @@ class DeleteUserMedia implements ShouldBeUnique
      *
      * @throws Exception
      */
-    public function __construct(string $userId)
+    public function __construct(public string $userId)
     {
         $this->onQueue('low');
-        $this->userId = $userId;
         User::findOrFail(new ObjectId($userId));
     }
 
@@ -60,12 +57,10 @@ class DeleteUserMedia implements ShouldBeUnique
      */
     public function handle(): void
     {
-        Media::creator($this->userId)->chunk(200, function ($models) {
-            foreach ($models as $model) {
-                $model->status = MediaStatus::USER_DELETED->value;
-                $model->save();
-            }
-        });
+        foreach (Media::creator($this->userId)->lazy() as $media) {
+            $media->status = MediaStatus::USER_DELETED->value;
+            $media->save();
+        }
     }
 
     public function failed(Throwable $exception): void
