@@ -370,6 +370,7 @@ class User extends \App\Models\User
             'skin_score' => 0,
             'visit_count' => 0,
             'comment_count' => 0,
+            'searchable' => $this->username . ' ' . $this->full_name,
             '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
         ];
     }
