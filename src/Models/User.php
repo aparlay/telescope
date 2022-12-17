@@ -909,7 +909,7 @@ class User extends \App\Models\User
      */
     public function blockedCountry(string $countryAlpha2): bool
     {
-        return !empty($countryAlpha2) && Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
+        return ! empty($countryAlpha2) && Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
     }
 
     /**
