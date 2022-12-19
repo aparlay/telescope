@@ -69,10 +69,7 @@ class EmailEnvelope extends Mailable
         switch ($this->template) {
             case Email::TEMPLATE_EMAIL_VERIFICATION:
                 $template = 'default_view::email_verification';
-                $verificationTemplate = config(
-                    'app.email.templates.email_verification',
-                    'default_view::email_verification'
-                );
+                $verificationTemplate = config('app.email.templates.email_verification', 'default_view::email_verification');
                 if (view()->exists($verificationTemplate)) {
                     $template = 'email_verification';
                 }
@@ -80,9 +77,17 @@ class EmailEnvelope extends Mailable
 
             case Email::TEMPLATE_EMAIL_CONTACTUS:
                 $template = 'default_view::email_contactus';
-                $verificationTemplate = config('app.email.templates.email_contactus', 'default_view::email_contactus');
-                if (view()->exists($verificationTemplate)) {
-                    $template = 'default_view::email_contactus';
+                $contactUsTemplate = config('app.email.templates.email_contactus', 'default_view::email_contactus');
+                if (view()->exists($contactUsTemplate)) {
+                    $template = $contactUsTemplate;
+                }
+                break;
+
+            case Email::TEMPLATE_EMAIL_ACCOUNT_VERIFICATION:
+                $template = 'default_view::email_account_verification';
+                $accountVerificationTemplate = config('app.email.templates.email_account_verification', 'default_view::email_account_verification');
+                if (view()->exists($accountVerificationTemplate)) {
+                    $template = $accountVerificationTemplate;
                 }
                 break;
 
