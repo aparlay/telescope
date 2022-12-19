@@ -152,6 +152,7 @@ class Hashtag extends BaseModel
             'skin_score' => 0,
             'last_online_at' => 0,
             'comment_count' => $this->comment_count,
+            'searchable' => $this->tag,
             '_geo' => ['lat' => 0.0, 'lng' => 0.0],
         ];
     }
