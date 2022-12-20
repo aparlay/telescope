@@ -907,7 +907,7 @@ class User extends \App\Models\User
 
         return Block::query()->creator($user->_id)->user($this->_id)->exists() ||
             Block::query()->user($user->_id)->creator($this->_id)->exists() ||
-            $this->blockedCountry($user->country_alpha2);
+            $this->blockedCountry($user->country_alpha2 ?? '');
     }
 
     /**
@@ -917,7 +917,7 @@ class User extends \App\Models\User
      */
     public function blockedCountry(string $countryAlpha2): bool
     {
-        return Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
+        return ! empty($countryAlpha2) && Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
     }
 
     /**

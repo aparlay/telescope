@@ -380,14 +380,14 @@
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tr>
                                         <img src="{{ config('app.email.images.logo') }}" alt="{{ config('app.email.src_alt_name') }}" width="126"
-                                         height="96" border="0" style="margin: 20px auto">
+                                         height="96" border="0" style="margin: 20px auto;">
                                     </tr>
                                     <tr>
                                         <td>
                                             <h2>
                                                 {{$title}}
                                                 @if ($isVerified)
-                                                    <img src="{{config('app.email.images.verified_badge')}}" alt="verified" style="margin-left: 6px;display: inline" width="18" height="18">
+                                                    <img src="{{config('app.email.images.verified_badge')}}" alt="verified" style="margin-left: 6px;display: inline;" width="18" height="18">
                                                 @endif
                                             </h2>
                                             <p>{{$body}}</p>
