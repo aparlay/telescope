@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Policies;
 
-use Aparlay\Core\Models\Enums\UserType;
+use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
@@ -45,12 +45,11 @@ class UserPolicy
      */
     public function update(User | null $user)
     {
-        return (
-            ($user !== null && (string) auth()->user()->_id === (string) $user->_id) ||
-            auth()->user()->type === UserType::ADMIN->value
-        )
-        ? Response::allow()
-        : Response::deny(__('You can only update your account.'));
+        if ((string) auth()->user()->_id !== (string) $user->_id) {
+            Response::deny(__('You can only update your account.'));
+        }
+
+        return Response::allow();
     }
 
     /**
@@ -61,11 +60,14 @@ class UserPolicy
      */
     public function delete(User $user)
     {
-        return (
-            ($user !== null && (string) auth()->user()->_id === (string) $user->_id) ||
-            auth()->user()->type === UserType::ADMIN->value
-        )
-            ? Response::allow()
-            : Response::deny(__('You can only delete your account.'));
+        if ((string) auth()->user()->_id !== (string) $user->_id) {
+            Response::deny(__('You can only delete your account.'));
+        }
+
+        if (Media::user($user->_id)->protected()->first() !== null) {
+            Response::deny(__('User account is delete protected.'));
+        }
+
+        return Response::allow();
     }
 }

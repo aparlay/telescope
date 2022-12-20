@@ -110,6 +110,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder topless()
  * @method static |self|Builder withoutTopless()
  * @method static |self|Builder private()
+ * @method static |self|Builder protected()
+ * @method static |self|Builder licensed()
  */
 class Media extends BaseModel
 {

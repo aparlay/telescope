@@ -238,6 +238,11 @@ trait MediaScope
         return $query->where('is_music_licensed', true);
     }
 
+    public function scopeProtected(Builder $query): Builder
+    {
+        return $query->where('is_protected', true);
+    }
+
     /**
      * @param  Builder          $query
      * @param  ObjectId|string  $userId
