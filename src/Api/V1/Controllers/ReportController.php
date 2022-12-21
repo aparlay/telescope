@@ -57,7 +57,7 @@ class ReportController extends Controller
     {
         $reportDTO = ReportDTO::fromRequest($request);
         if (auth()->check()) {
-            $this->authorize('comment', [Report::class, $mediaComment->mediaObj->creatorObj]);
+            $this->authorize('comment', [Report::class, $media->creatorObj]);
             $reportDTO->created_by = $reportDTO->updated_by = auth()->user()->_id;
         }
 
