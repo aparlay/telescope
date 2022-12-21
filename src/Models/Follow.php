@@ -75,6 +75,11 @@ class Follow extends BaseModel
         'status' => 'integer',
     ];
 
+
+    protected $attributes = [
+        'status' => 1,
+    ];
+
     /**
      * Create a new factory instance for the model.
      */
