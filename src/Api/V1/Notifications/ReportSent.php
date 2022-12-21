@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Notifications;
 
+use Aparlay\Core\Api\V1\Models\Report;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
@@ -35,13 +36,13 @@ class ReportSent extends Notification implements ShouldQueue
     /**
      * Get the Slack representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param Report $notifiable
      *
      * @return SlackMessage
      */
     public function toSlack($notifiable)
     {
-        $message = $notifiable->creatorObj->slack_admin_url ?? 'A Guest user';
+        $message = $notifiable->userObj->slack_admin_url ?? 'A Guest user';
         $message .= ' reported '.$notifiable->slack_subject_admin_url;
         $message .= PHP_EOL.'_*Reason:*_ '.$notifiable->reason;
 
