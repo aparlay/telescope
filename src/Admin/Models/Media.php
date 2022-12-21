@@ -11,7 +11,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Media extends MediaBase implements Auditable
 {
     use MediaScope;
-    use \OwenIt\Auditing\Auditable;
+    use \Aparlay\Core\Admin\Models\Auditable;
 
     /**
      * Should the audit be strict?

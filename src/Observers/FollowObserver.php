@@ -51,6 +51,11 @@ class FollowObserver extends BaseModelObserver
             'username' => $model->creator['username'],
             'avatar' => $model->creator['avatar'],
         ], 10);
+
+        if (!isset($model->userObj->count_fields_updated_at)) {
+            $model->userObj->count_fields_updated_at = [];
+        }
+
         $model->userObj->count_fields_updated_at = array_merge(
             $model->userObj->count_fields_updated_at,
             ['followers' => DT::utcNow()]
@@ -105,6 +110,10 @@ class FollowObserver extends BaseModelObserver
             'username' => $model->creator['username'],
             'avatar' => $model->creator['avatar'],
         ]);
+
+        if (!isset($model->userObj->count_fields_updated_at)) {
+            $model->userObj->count_fields_updated_at = [];
+        }
 
         $model->userObj->count_fields_updated_at = array_merge(
             $model->userObj->count_fields_updated_at,

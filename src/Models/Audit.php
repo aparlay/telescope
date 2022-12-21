@@ -3,8 +3,19 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Casts\ObjectIdCast;
+use Aparlay\Core\Models\Enums\MediaContentGender;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Eloquent\Model;
+use MongoDB\BSON\UTCDateTime;
 
+/**
+ * @property array $old_values
+ * @property string $parsed_old
+ * @property array $new_values
+ * @property string $parsed_new
+ * @property UTCDateTime $created_at
+ */
 class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
 {
     use \OwenIt\Auditing\Audit;
@@ -42,12 +53,22 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
 
     public function getParsedOldAttribute(): string
     {
-        return is_array($this->old_values) ? implode(PHP_EOL, $this->parseValues($this->old_values)) : $this->old_values;
+        $result = [];
+        foreach (Arr::dot($this->parseValues($this->old_values)) as $title => $value) {
+            $result[] = Str::substr($title, strpos($title, '.')+1). ': '.$value;
+        }
+
+        return implode("\n", $result);
     }
 
     public function getParsedNewAttribute(): string
     {
-        return is_array($this->new_values) ? implode(PHP_EOL, $this->parseValues($this->new_values)) : $this->new_values;
+        $result = [];
+        foreach (Arr::dot($this->parseValues($this->new_values)) as $title => $value) {
+            $result[] = Str::substr($title, strpos($title, '.')). ': '.$value;
+        }
+
+        return implode("\n", $result);
     }
 
     private function parseValues(array $values): array
@@ -66,6 +87,12 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                 'is_protected' => ['Protected' => empty($value) ? 'False' : 'True'],
                 'is_comments_enabled' => ['Commentable' => empty($value) ? 'False' : 'True'],
                 'is_music_licensed' => ['Music Licensed' => empty($value) ? 'False' : 'True'],
+                'content_gender' => ['Content' => MediaContentGender::from($value)->label()],
+                'scores' => [
+                    'Skin' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'skin.score'),
+                    'Beauty' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'beauty.score'),
+                    'Awesomeness' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'awesomeness.score'),
+                ],
                 default => null
             };
 

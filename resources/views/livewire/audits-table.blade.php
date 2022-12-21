@@ -31,10 +31,10 @@
                     </td>
 
                     <td class="col-8 col-md-8 col-sm-6">
-                        <code>{!! json_encode($audit->old_values, JSON_PRETTY_PRINT) !!}</code>
+                        <code>{!! nl2br($audit->parsed_old) !!}</code>
                     </td>
                     <td class="col-8 col-md-8 col-sm-6">
-                        <code>{!! json_encode($audit->new_values, JSON_PRETTY_PRINT) !!}</code>
+                        <code>{!! nl2br($audit->parsed_new) !!}</code>
                     </td>
                     <td class="col-2 col-md-2 col-sm-3">
                         {{ $audit->created_at }}
