@@ -4,7 +4,6 @@ namespace Aparlay\Core\Admin\Components;
 
 class ArrayRedactor implements \OwenIt\Auditing\Contracts\AttributeRedactor
 {
-
     /**
      * @inheritDoc
      */

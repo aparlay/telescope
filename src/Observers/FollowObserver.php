@@ -52,7 +52,7 @@ class FollowObserver extends BaseModelObserver
             'avatar' => $model->creator['avatar'],
         ], 10);
 
-        if (!isset($model->userObj->count_fields_updated_at)) {
+        if (! isset($model->userObj->count_fields_updated_at)) {
             $model->userObj->count_fields_updated_at = [];
         }
 
@@ -111,7 +111,7 @@ class FollowObserver extends BaseModelObserver
             'avatar' => $model->creator['avatar'],
         ]);
 
-        if (!isset($model->userObj->count_fields_updated_at)) {
+        if (! isset($model->userObj->count_fields_updated_at)) {
             $model->userObj->count_fields_updated_at = [];
         }
 

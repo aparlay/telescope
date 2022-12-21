@@ -55,7 +55,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
     {
         $result = [];
         foreach (Arr::dot($this->parseValues($this->old_values)) as $title => $value) {
-            $result[] = Str::substr($title, strpos($title, '.')+1). ': '.$value;
+            $result[] = Str::substr($title, strpos($title, '.') + 1).': '.$value;
         }
 
         return implode("\n", $result);
@@ -65,7 +65,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
     {
         $result = [];
         foreach (Arr::dot($this->parseValues($this->new_values)) as $title => $value) {
-            $result[] = Str::substr($title, strpos($title, '.')). ': '.$value;
+            $result[] = Str::substr($title, strpos($title, '.')).': '.$value;
         }
 
         return implode("\n", $result);
@@ -96,7 +96,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                 default => null
             };
 
-            if (!empty($parsedValue)) {
+            if (! empty($parsedValue)) {
                 $parsedValues[] = $parsedValue;
             }
         }
