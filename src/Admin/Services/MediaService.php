@@ -187,7 +187,7 @@ class MediaService extends AdminBaseService
 
         $media = $this->mediaRepository->update($data, $id);
 
-        $media->addToSet('processing_log', 'Last Moderation Score set by @' . auth()->user()->username);
+        $media->addToSet('processing_log', 'Last Moderation Score set by @'.auth()->user()->username);
         $media->save();
 
         if (in_array($media->status, [MediaStatus::CONFIRMED->value, MediaStatus::DENIED->value])) {
