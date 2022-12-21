@@ -75,7 +75,6 @@ class Follow extends BaseModel
         'status' => 'integer',
     ];
 
-
     protected $attributes = [
         'status' => 1,
     ];
