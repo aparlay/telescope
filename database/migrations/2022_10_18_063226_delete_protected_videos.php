@@ -17,19 +17,19 @@ return new class() extends Migration {
     {
         foreach (User::where('verification_status', UserVerificationStatus::VERIFIED->value)->whereNull('is_fake')->lazy() as $user) {
             Media::where('creator._id', new ObjectId($user->_id))
-                ->orWhere('is_protected' , '!=', true)
-                ->orWhere('is_music_licensed' , '!=', true)
-                ->orWhere('status' , '!=', MediaStatus::CONFIRMED->value)
+                ->orWhere('is_protected', '!=', true)
+                ->orWhere('is_music_licensed', '!=', true)
+                ->orWhere('status', '!=', MediaStatus::CONFIRMED->value)
                 ->update([
                     'status' => MediaStatus::CONFIRMED->value,
                     'is_protected' => true,
-                    'is_music_licensed' => true
+                    'is_music_licensed' => true,
                 ]);
         }
         Media::where('is_protected', null)->update([
             'status' => MediaStatus::CONFIRMED->value,
             'is_protected' => false,
-            'is_music_licensed' => false
+            'is_music_licensed' => false,
         ]);
     }
 
