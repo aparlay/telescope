@@ -16,7 +16,7 @@ return new class() extends Migration {
     public function up()
     {
         foreach (User::where('verification_status', UserVerificationStatus::VERIFIED->value)->whereNull('is_fake')->get() as $user) {
-            foreach (Media::where('creator._id', new ObjectId($user->_id))->get() as $media) {
+            foreach (Media::where('creator._id', new ObjectId($user->_id))->whereNull('is_fake')->get() as $media) {
                 if ($media->is_protected !== true || $media->is_music_licensed !== true || $media->status !== MediaStatus::CONFIRMED->value) {
                     $media->status = MediaStatus::CONFIRMED->value;
                     $media->is_protected = true;
