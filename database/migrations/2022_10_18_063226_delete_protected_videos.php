@@ -15,8 +15,8 @@ return new class() extends Migration {
      */
     public function up()
     {
-        foreach (User::where('verification_status', UserVerificationStatus::VERIFIED->value)->whereNull('is_fake')->get() as $user) {
-            foreach (Media::where('creator._id', new ObjectId($user->_id))->whereNull('is_fake')->get() as $media) {
+        foreach (User::where('verification_status', UserVerificationStatus::VERIFIED->value)->whereNull('is_fake')->lazy() as $user) {
+            foreach (Media::where('creator._id', new ObjectId($user->_id))->whereNull('is_fake')->lazy() as $media) {
                 if ($media->is_protected !== true || $media->is_music_licensed !== true || $media->status !== MediaStatus::CONFIRMED->value) {
                     $media->status = MediaStatus::CONFIRMED->value;
                     $media->is_protected = true;
@@ -25,7 +25,7 @@ return new class() extends Migration {
                 }
             }
         }
-        foreach (Media::where('is_protected', null)->whereNull('is_fake')->get() as $media) {
+        foreach (Media::where('is_protected', null)->whereNull('is_fake')->lazy() as $media) {
             $media->is_protected = false;
             $media->is_music_licensed = false;
             $media->save();
