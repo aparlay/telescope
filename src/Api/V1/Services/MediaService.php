@@ -207,26 +207,14 @@ class MediaService
     {
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();
-        if (auth()->guest()) {
-            $query->confirmed()->public();
-        } elseif ((string) $userId === (string) auth()->user()->_id) {
+        if ((string) $userId === (string) auth()->user()->_id) {
             $query->with([
                 'alertObjs' => function ($query) {
                     $query->where('status', AlertStatus::NOT_VISITED->value);
                 },
             ])->availableForOwner();
         } else {
-            $isFollowed = Follow::query()
-                ->select(['user._id', '_id'])
-                ->creator(auth()->user()->_id)
-                ->user($userId)
-                ->accepted()
-                ->exists();
-            if (empty($isFollowed)) {
-                $query->confirmed()->public();
-            } else {
-                $query->availableForFollower();
-            }
+            $query->availableForOwner();
         }
 
         $data = $query->paginate(15);
