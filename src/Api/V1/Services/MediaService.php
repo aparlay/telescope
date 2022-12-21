@@ -207,7 +207,7 @@ class MediaService
     {
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();
-        if ((string) $userId === (string) auth()->user()->_id) {
+        if (isset(auth()->user()->_id) && (string) $userId === (string) auth()->user()->_id) {
             $query->with([
                 'alertObjs' => function ($query) {
                     $query->where('status', AlertStatus::NOT_VISITED->value);
