@@ -6,8 +6,8 @@ enum FollowStatus: int implements Enum
 {
     use EnumEnhancements;
 
-    case PENDING = 0;
     case ACCEPTED = 1;
+    case PENDING = 2;
 
     public function label(): string
     {
