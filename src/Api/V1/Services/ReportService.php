@@ -42,6 +42,12 @@ class ReportService extends AbstractService
         }
     }
 
+    /**
+     * @param  MediaComment  $comment
+     * @param  ReportDTO     $reportDTO
+     *
+     * @return Model|Report|null
+     */
     public function createCommentReport(MediaComment $comment, ReportDTO $reportDTO): Model|Report|null
     {
         try {
