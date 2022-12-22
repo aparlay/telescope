@@ -32,7 +32,7 @@ class User extends UserBase implements Auditable
      */
     protected $auditExclude = [
         'updated_by',
-        'password_hash'
+        'password_hash',
     ];
 
     protected $fillable = [
