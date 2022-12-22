@@ -13,7 +13,7 @@ return new class() extends Migration {
      */
     public function up()
     {
-        foreach (Media::query()->whereNull('is_fake')->get() as $media) {
+        foreach (Media::query()->where('is_fake', ['$exists' => false])->get() as $media) {
             /** @var Media $media */
             $media->watched_count = $media->visit_count;
             $media->visit_count = 3 * $media->visit_count;

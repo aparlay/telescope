@@ -112,7 +112,7 @@ return new class() extends Migration {
         Artisan::call('config:clear', []);
         Artisan::call('config:cache', []);
 
-        foreach (Media::query()->whereNull('is_fake')->get() as $media) {
+        foreach (Media::query()->where('is_fake', ['$exists' => false])->lazy() as $media) {
             /** @var Media $media */
             $media->recalculateSortScores();
             $media->drop('sort_score');
