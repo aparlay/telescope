@@ -26,7 +26,7 @@
             <a class="nav-link" data-toggle="tab" href="#notes-logs">Note Logs</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#notes-logs">Audit Logs</a>
+            <a class="nav-link" data-toggle="tab" href="#audit-logs">Audit Logs</a>
         </li>
     </ul>
 
@@ -41,7 +41,7 @@
         <div class="tab-pane container fade" id="notes-logs">
             <livewire:notes-table :userId="$user->_id" :category="NoteCategory::LOG->value"/>
         </div>
-        <div class="tab-pane container fade" id="notes-logs">
+        <div class="tab-pane container fade" id="audit-logs">
             <livewire:audits-table :auditableType="'User'" :auditableId="(string) $user->_id"/>
         </div>
     </div>
