@@ -13,6 +13,7 @@ use Aparlay\Core\Admin\Components\SortableColumnHeader;
 use Aparlay\Core\Admin\Components\UserNameAvatar;
 use Aparlay\Core\Admin\Components\UtcFormatter;
 use Aparlay\Core\Admin\Components\WireDropDownList;
+use Aparlay\Core\Admin\Livewire\AuditsTable;
 use Aparlay\Core\Admin\Livewire\Components\DateRangePicker;
 use Aparlay\Core\Admin\Livewire\Components\NotesCreate;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
@@ -209,6 +210,7 @@ class CoreServiceProvider extends ServiceProvider
             'emails-table' => EmailsTable::class,
             'notes-table' => NotesTable::class,
             'notes-create' => NotesCreate::class,
+            'audits-table' => AuditsTable::class,
             'modals' => Modals::class,
             'modals.media-comment-delete-modal' => MediaCommentDeleteModal::class,
             'modals.user-notes-delete-modal' => UserNoteDeleteModal::class,

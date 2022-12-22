@@ -205,6 +205,9 @@
                                 <li class="nav-items">
                                     <a href="#media-comments" class="nav-link" data-toggle="tab">Comments</a>
                                 </li>
+                                <li class="nav-items">
+                                    <a href="#media-audits" class="nav-link" data-toggle="tab">Audits</a>
+                                </li>
                             </ul>
                         </div>
                         <div class="card-body">
@@ -377,6 +380,10 @@
                                 <div class="tab-pane" id="media-comments">
                                     <!-- The timeline -->
                                     <livewire:media-comments-table :mediaId="(string) $media->_id"/>
+                                </div>
+                                <div class="tab-pane" id="media-audits">
+                                    <!-- The timeline -->
+                                    <livewire:audits-table :auditableType="'Media'" :auditableId="(string) $media->_id"/>
                                 </div>
 
                             </div>

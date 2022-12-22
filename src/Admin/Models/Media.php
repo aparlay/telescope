@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Models;
 
+use Aparlay\Core\Admin\Components\ArrayRedactor;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media as MediaBase;
 use Aparlay\Core\Models\Scopes\MediaScope;
@@ -10,7 +11,32 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Media extends MediaBase implements Auditable
 {
     use MediaScope;
-    use \OwenIt\Auditing\Auditable;
+    use \Aparlay\Core\Admin\Models\Auditable;
+
+    /**
+     * Should the audit be strict?
+     *
+     * @var bool
+     */
+    protected $auditStrict = true;
+
+    /**
+     * Attributes to exclude from the Audit.
+     *
+     * @var array
+     */
+    protected $auditExclude = [
+        'updated_by',
+    ];
+
+    /**
+     * Attribute modifiers.
+     *
+     * @var array
+     */
+    protected $attributeModifiers = [
+        'scores' => ArrayRedactor::class,
+    ];
 
     /**
      * @return string
