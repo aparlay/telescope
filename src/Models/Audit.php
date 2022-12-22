@@ -4,6 +4,8 @@ namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Casts\ObjectIdCast;
 use Aparlay\Core\Models\Enums\MediaContentGender;
+use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Models\Enums\MediaVisibility;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Eloquent\Model;
@@ -65,7 +67,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
     {
         $result = [];
         foreach (Arr::dot($this->parseValues($this->new_values)) as $title => $value) {
-            $result[] = Str::substr($title, strpos($title, '.')).': '.$value;
+            $result[] = Str::substr($title, strpos($title, '.') + 1).': '.$value;
         }
 
         return implode("\n", $result);
@@ -88,6 +90,15 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                 'is_comments_enabled' => ['Commentable' => empty($value) ? 'False' : 'True'],
                 'is_music_licensed' => ['Music Licensed' => empty($value) ? 'False' : 'True'],
                 'content_gender' => ['Content' => MediaContentGender::from($value)->label()],
+                'visibility' => ['Visibility' => MediaVisibility::from($value)->label()],
+                'status' => ['Stats' => MediaStatus::from($value)->label()],
+                'sort_scores' => [
+                    'Default' => Arr::get($value, 'default'),
+                    'Guest' => Arr::get($value, 'guest'),
+                    'Returned' => Arr::get($value, 'returned'),
+                    'Registered' => Arr::get($value, 'registered'),
+                    'paid' => Arr::get($value, 'paid'),
+                ],
                 'scores' => [
                     'Skin' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'skin.score'),
                     'Beauty' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'beauty.score'),

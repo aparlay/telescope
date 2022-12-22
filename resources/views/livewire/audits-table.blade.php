@@ -2,20 +2,20 @@
     use Aparlay\Core\Models\Enums\NoteCategory;
 @endphp
 
-<div class="">
+<div class="table-responsive">
     <table class="table table-striped border">
         <thead>
             <tr class="d-flex">
-                <th class="col-2 col-md-1 col-sm-2">
+                <th scope="col" class="col-2 col-md-2 col-sm-3">
                     <x-sortable-column-header :sort="$sort" :fieldName="'user'" :fieldLabel="'Created By'"/>
                 </th>
-                <th class="col-4 col-md-8 col-sm-6">
+                <th scope="col" class="col-4 col-md-4 col-sm-6">
                     <x-sortable-column-header :sort="$sort" :fieldName="'old_values'" :fieldLabel="'Old value'"/>
                 </th>
-                <th class="col-4 col-md-8 col-sm-6">
+                <th scope="col" class="col-4 col-md-4 col-sm-6">
                     <x-sortable-column-header :sort="$sort" :fieldName="'new_values'" :fieldLabel="'New value'"/>
                 </th>
-                <th class="col-4 col-md-2 col-sm-3">
+                <th scope="col" class="col-4 col-md-2 col-sm-3">
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
                 </th>
             </tr>
@@ -24,16 +24,16 @@
         <tbody>
             @foreach($audits as $audit)
                 <tr class="d-flex">
-                    <td class="col-1 col-md-1 col-sm-2">
+                    <td class="col-2 col-md-2 col-sm-3">
                         <a href="{{ $audit->user->admin_url }}" target="_blank">
                             {{ $audit->user['username'] }}
                         </a>
                     </td>
 
-                    <td class="col-8 col-md-8 col-sm-6">
+                    <td class="col-4 col-md-4 col-sm-6">
                         <code>{!! nl2br($audit->parsed_old) !!}</code>
                     </td>
-                    <td class="col-8 col-md-8 col-sm-6">
+                    <td class="col-4 col-md-4 col-sm-6">
                         <code>{!! nl2br($audit->parsed_new) !!}</code>
                     </td>
                     <td class="col-2 col-md-2 col-sm-3">
