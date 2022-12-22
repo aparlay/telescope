@@ -117,6 +117,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                     'Beauty' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'beauty.score'),
                     'Awesomeness' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'awesomeness.score'),
                 ],
+                'description' => ['Description' => $value],
                 default => null
             };
 
