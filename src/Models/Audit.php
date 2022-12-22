@@ -6,6 +6,7 @@ use Aparlay\Core\Casts\ObjectIdCast;
 use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Jenssegers\Mongodb\Eloquent\Model;
@@ -21,6 +22,18 @@ use MongoDB\BSON\UTCDateTime;
 class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
 {
     use \OwenIt\Auditing\Audit;
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // to keep entities in database without namespace
+        Relation::morphMap([
+            'Media' => Media::class,
+            'User' => User::class,
+            'Tip' => 'Aparlay\Payment\Models\Tip',
+        ]);
+    }
 
     /**
      * {@inheritdoc}
