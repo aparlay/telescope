@@ -314,7 +314,8 @@
                                                     <input type="hidden" name="is_comments_enabled" value="0">
                                                     <input type="checkbox" value="1" class="custom-control-input"
                                                            name="is_comments_enabled"
-                                                           id="is_comments_enabled" {!! ($media->is_comments_enabled === true) ? 'checked' : '' !!}>
+                                                           id="is_comments_enabled"
+                                                            {!! ($media->is_comments_enabled === true) ? 'checked' : '' !!}>
                                                     <label class="custom-control-label" for="is_comments_enabled"></label>
                                                 </div>
                                             </div>

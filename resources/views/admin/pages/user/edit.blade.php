@@ -307,19 +307,37 @@
                             </div>
 
                             <div class="card card-maroon card-outline">
-                                <div class="card-header" id="headingMainTen">
+                                <div class="card-header" id="headingMainEleven">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" data-toggle="collapse"
                                                 data-target="#payoutsTab" aria-expanded="false"
-                                                aria-controls="collapseMainTen">
+                                                aria-controls="collapseMainEleven">
                                             Payouts
                                         </button>
                                     </h5>
                                 </div>
-                                <div id="payoutsTab" class="collapse" aria-labelledby="headingMainTen"
+                                <div id="payoutsTab" class="collapse" aria-labelledby="headingMainEleven"
                                      data-parent="#accordion">
                                     <div class="card-body">
                                         @include('default_view::admin.pages.user.tabs.payouts', ['user' => $user])
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card-maroon card-outline">
+                                <div class="card-header" id="headingMainTwelve">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#auditsTab" aria-expanded="false"
+                                                aria-controls="collapseMainTen">
+                                            Log
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="auditsTab" class="collapse" aria-labelledby="headingMainTwelve"
+                                     data-parent="#accordion">
+                                    <div class="card-body">
+                                        @include('default_view::admin.pages.user.tabs.audits', ['user' => $user])
                                     </div>
                                 </div>
                             </div>
