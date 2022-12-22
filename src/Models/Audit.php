@@ -109,7 +109,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                     'OrSc. Default' => Arr::get($value, 'default'),
                     'OrSc. Guest' => Arr::get($value, 'guest'),
                     'OrSc. Returned' => Arr::get($value, 'returned'),
-                    'OrSc. Registered' => Arr::get($value, 'registered'),
+                    'OrSc. Login' => Arr::get($value, 'registered'),
                     'OrSc. paid' => Arr::get($value, 'paid'),
                 ],
                 'scores' => [
