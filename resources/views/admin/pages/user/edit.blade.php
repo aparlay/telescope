@@ -233,26 +233,6 @@
                             @include('default_view::admin.pages.user.tabs.wallets', ['user' => $user])
                         </div>
                     </div>
-
-                    <div class="card card-default collapsed-card">
-                        <div class="card-header">
-                            <h3 class="card-title text-uppercase">Logs</h3>
-                            <div class="card-tools">
-                                <button
-                                        type="button"
-                                        class="btn btn-tool"
-                                        data-card-widget="collapse"
-                                        data-expand-icon="fa-chevron-down"
-                                        data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="card-body">
-                                @include('default_view::admin.pages.user.tabs.audits', ['user' => $user])
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

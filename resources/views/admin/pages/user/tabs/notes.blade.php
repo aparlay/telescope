@@ -23,7 +23,10 @@
             <a class="nav-link" data-toggle="tab" href="#notes-notes">Notes</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#notes-logs">Logs</a>
+            <a class="nav-link" data-toggle="tab" href="#notes-logs">Note Logs</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#notes-logs">Audit Logs</a>
         </li>
     </ul>
 
@@ -37,6 +40,9 @@
         </div>
         <div class="tab-pane container fade" id="notes-logs">
             <livewire:notes-table :userId="$user->_id" :category="NoteCategory::LOG->value"/>
+        </div>
+        <div class="tab-pane container fade" id="notes-logs">
+            <livewire:audits-table :auditableType="'User'" :auditableId="(string) $user->_id"/>
         </div>
     </div>
 </div>
