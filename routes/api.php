@@ -32,7 +32,8 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
     Route::prefix('media')->name('media.')->group(function () {
         Route::put('/watched', [MediaController::class, 'watched'])->name('watched');
         Route::match(['put', 'patch'], '/{media}', [MediaController::class, 'update'])->name('update');
-        Route::post('/{media}/report', [ReportController::class, 'media'])->name('report');
+        Route::middleware(['cookies-auth', 'optional-auth'])
+            ->post('/{media}/report', [ReportController::class, 'media'])->name('report');
 
         /* Authentication Group */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
@@ -67,7 +68,8 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         Route::get('/{type}', [UserController::class, 'index'])
             ->where(['type' => '(likes|blocks|followers|followings|hashtags)'])->name('list');
 
-        Route::post('/{user}/report', [ReportController::class, 'user'])->name('report');
+        Route::middleware(['cookies-auth', 'optional-auth'])
+            ->post('/{user}/report', [ReportController::class, 'user'])->name('report');
         Route::middleware(['cookies-auth', 'optional-auth'])
             ->match(['head', 'get'], '/{user}/media', [MediaController::class, 'listByUser'])
             ->name('media.list');
