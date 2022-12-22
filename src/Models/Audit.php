@@ -106,11 +106,11 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                 'status' => ['Status' => MediaStatus::from($value)->label()],
                 'content_gender' => ['Gender' => MediaContentGender::from($value)->label()],
                 'sort_scores' => [
-                    'Ssc. Default' => Arr::get($value, 'default'),
-                    'Ssc. Guest' => Arr::get($value, 'guest'),
-                    'Ssc. Returned' => Arr::get($value, 'returned'),
-                    'Ssc. Registered' => Arr::get($value, 'registered'),
-                    'Ssc. paid' => Arr::get($value, 'paid'),
+                    'OrSc. Default' => Arr::get($value, 'default'),
+                    'OrSc. Guest' => Arr::get($value, 'guest'),
+                    'OrSc. Returned' => Arr::get($value, 'returned'),
+                    'OrSc. Registered' => Arr::get($value, 'registered'),
+                    'OrSc. paid' => Arr::get($value, 'paid'),
                 ],
                 'scores' => [
                     'Sc. Skin' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'skin.score'),
