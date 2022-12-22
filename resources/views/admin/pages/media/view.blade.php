@@ -206,7 +206,7 @@
                                     <a href="#media-comments" class="nav-link" data-toggle="tab">Comments</a>
                                 </li>
                                 <li class="nav-items">
-                                    <a href="#media-audits" class="nav-link" data-toggle="tab">Audits</a>
+                                    <a href="#media-audits" class="nav-link" data-toggle="tab">Log</a>
                                 </li>
                             </ul>
                         </div>

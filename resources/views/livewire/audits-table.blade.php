@@ -1,7 +1,3 @@
-@php
-    use Aparlay\Core\Models\Enums\NoteCategory;
-@endphp
-
 <div class="table-responsive">
     <table class="table table-striped border">
         <thead>
