@@ -149,11 +149,11 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                 'status' => ['Status' => UserStatus::from($value)->label()],
                 'verification_status' => ['ID Verif.' => UserVerificationStatus::from($value)->label()],
                 'visibility' => ['User Verif.' => UserVisibility::from($value)->label()],
-                'country_alpha2' => ['Country' => !empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
-                'payout_country_alpha2' => ['Payout Country' => !empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
+                'country_alpha2' => ['Country' => ! empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
+                'payout_country_alpha2' => ['Payout Country' => ! empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
                 'type' => ['Type' => UserType::from($value)->label()],
                 'promo_link' => ['Prom Link' => $value],
-                'referral_id' => ['Referrer' => !empty($value) ? User::user(array_values($value)[0])->first()?->username : ''],
+                'referral_id' => ['Referrer' => ! empty($value) ? User::user(array_values($value)[0])->first()?->username : ''],
                 default => null
             };
 
