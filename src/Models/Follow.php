@@ -161,7 +161,7 @@ class Follow extends BaseModel
     {
         $octaneCacheKey = md5('user:'.$userId.':followedBy:'.$creatorId);
         if (Cache::store('octane')->has($octaneCacheKey)) {
-            return (bool)Cache::store('octane')->get($octaneCacheKey);
+            return (bool) Cache::store('octane')->get($octaneCacheKey);
         }
 
         self::cacheByUserId($userId);
