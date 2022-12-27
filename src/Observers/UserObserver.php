@@ -124,6 +124,10 @@ class UserObserver extends BaseModelObserver
                     DeleteUserMedia::dispatch((string) $model->_id);
                     DeleteUserConnect::dispatch((string) $model->_id);
                     break;
+                case UserStatus::SUSPENDED->value:
+                    DeleteUserMedia::dispatch((string) $model->_id);
+                    DeleteUserConnect::dispatch((string) $model->_id);
+                    break;
                 case UserStatus::BLOCKED->value:
                     DeleteUserMedia::dispatch((string) $model->_id);
                     DeleteUserConnect::dispatch((string) $model->_id);
