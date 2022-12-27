@@ -12,11 +12,18 @@ use OwenIt\Auditing\Contracts\Auditable;
 class User extends UserBase implements Auditable
 {
     use UserScope;
-    use \OwenIt\Auditing\Auditable;
+    use \Aparlay\Core\Admin\Models\Auditable;
 
     public string $guard_name = 'admin';
 
     protected $hidden = ['password_hash', 'search'];
+
+    /**
+     * Should the audit be strict?
+     *
+     * @var bool
+     */
+    protected $auditStrict = true;
 
     /**
      * Attributes to exclude from the Audit.
@@ -24,6 +31,7 @@ class User extends UserBase implements Auditable
      * @var array
      */
     protected $auditExclude = [
+        'updated_by',
         'password_hash',
     ];
 

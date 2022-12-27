@@ -30,15 +30,6 @@ class Media extends MediaBase implements Auditable
     ];
 
     /**
-     * Attribute modifiers.
-     *
-     * @var array
-     */
-    protected $attributeModifiers = [
-        'scores' => ArrayRedactor::class,
-    ];
-
-    /**
      * @return string
      */
     public function getStatusColorAttribute()

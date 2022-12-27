@@ -35,6 +35,7 @@ return new class() extends Migration {
                             'beauty' => 0.25,
                             'skin' => -0.3,
                             'like' => 0.1,
+                            'promote' => 0,
                             'comment' => 0.1,
                             'visit' => 0.1,
                             'time' => 0.25,
@@ -44,6 +45,7 @@ return new class() extends Migration {
                             'beauty' => 0.3,
                             'skin' => -0.3,
                             'like' => 0.2,
+                            'promote' => 0,
                             'comment' => 0.1,
                             'visit' => 0.1,
                             'time' => 0.3,
@@ -53,6 +55,7 @@ return new class() extends Migration {
                             'beauty' => 0.25,
                             'skin' => 0.1,
                             'like' => 0.1,
+                            'promote' => 0,
                             'comment' => 0.1,
                             'visit' => 0.1,
                             'time' => 0.2,
@@ -62,6 +65,7 @@ return new class() extends Migration {
                             'beauty' => 0.25,
                             'skin' => 0.1,
                             'like' => 0.1,
+                            'promote' => 0,
                             'comment' => 0.1,
                             'visit' => 0.1,
                             'time' => 0.25,
@@ -71,6 +75,7 @@ return new class() extends Migration {
                             'beauty' => 0.25,
                             'skin' => 0.3,
                             'like' => 0.1,
+                            'promote' => 0,
                             'comment' => 0.1,
                             'visit' => 0.1,
                             'time' => 0.25,
@@ -107,7 +112,7 @@ return new class() extends Migration {
         Artisan::call('config:clear', []);
         Artisan::call('config:cache', []);
 
-        foreach (Media::query()->whereNull('is_fake')->get() as $media) {
+        foreach (Media::query()->where('is_fake', ['$exists' => false])->lazy() as $media) {
             /** @var Media $media */
             $media->recalculateSortScores();
             $media->drop('sort_score');

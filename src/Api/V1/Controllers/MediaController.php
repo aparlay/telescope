@@ -11,8 +11,11 @@ use Aparlay\Core\Api\V1\Requests\UpdateMediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
+use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UploadService;
+use Aparlay\Core\Api\V1\Services\UserService;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -46,10 +49,16 @@ class MediaController extends Controller
 
     /**
      * Display a listing of the resource.
-     */
+     *
+     * @throws BindingResolutionException
+*/
     public function listByUser(User $user): Response
     {
-        return $this->response(new MediaCollection($this->mediaService->getByUser($user)), '', Response::HTTP_OK);
+        if ((app()->make(UserService::class))->isUserEligible($user)) {
+            return $this->response(new MediaCollection($this->mediaService->getByUser($user)), '', Response::HTTP_OK);
+        }
+
+        return $this->error('Account not found!', [], Response::HTTP_NOT_FOUND);
     }
 
     /**

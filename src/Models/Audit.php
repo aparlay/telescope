@@ -3,9 +3,15 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Casts\ObjectIdCast;
+use Aparlay\Core\Helpers\Country as CountryHelper;
 use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
+use Aparlay\Core\Models\Enums\UserGender;
+use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserType;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -30,7 +36,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
         // to keep entities in database without namespace
         Relation::morphMap([
             'Media' => Media::class,
-            'User' => User::class,
+            'User' => \Aparlay\Core\Admin\Models\User::class,
             'Tip' => 'Aparlay\Payment\Models\Tip',
         ]);
     }
@@ -90,6 +96,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
     {
         return match ($this->auditable_type) {
             'Media' => $this->parseMediaValues($values),
+            'User' => $this->parseUserValues($values),
             default => $values
         };
     }
@@ -118,6 +125,35 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                     'MdSc. Awesomeness' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'awesomeness.score'),
                 ],
                 'description' => ['Description' => $value],
+                default => null
+            };
+
+            if (! empty($parsedValue)) {
+                $parsedValues[] = $parsedValue;
+            }
+        }
+
+        return $parsedValues;
+    }
+
+    private function parseUserValues(array $values): array
+    {
+        $parsedValues = [];
+        foreach ($values as $key => $value) {
+            $parsedValue = match ($key) {
+                'username' => ['Username' => $value],
+                'email' => ['Email' => $value],
+                'email_verified' => ['Email Verif.' => empty($value) ? 'False' : 'True'],
+                'bio' => ['Bio' => $value],
+                'gender' => ['Gender' => UserGender::from($value)->label()],
+                'status' => ['Status' => UserStatus::from($value)->label()],
+                'verification_status' => ['ID Verif.' => UserVerificationStatus::from($value)->label()],
+                'visibility' => ['User Verif.' => UserVisibility::from($value)->label()],
+                'country_alpha2' => ['Country' => ! empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
+                'payout_country_alpha2' => ['Payout Country' => ! empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
+                'type' => ['Type' => UserType::from($value)->label()],
+                'promo_link' => ['Prom Link' => $value],
+                'referral_id' => ['Referrer' => ! empty($value) ? User::user(array_values($value)[0])->first()?->username : ''],
                 default => null
             };
 
