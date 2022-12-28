@@ -11,6 +11,7 @@ class Permissions
     const LIST_WALLETS = 'approve wallets';
 
     const VIEW_CHATS = 'view chats';
+    const EDIT_CHATS = 'edit chats';
     const LIST_CHATS = 'list chats';
 
     const LIST_PAYERS = 'list payers';
