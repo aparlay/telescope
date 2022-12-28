@@ -140,7 +140,7 @@ return new class() extends Migration {
                     'username' => $aluaSupport->username,
                     'avatar' => $aluaSupport->avatar,
                     'is_verified' => $aluaSupport->is_verified,
-                    'categories' => [ChatCategory::SUPPORT->value],
+                    'categories' => [ChatCategory::SUPPORT->value, ChatCategory::INBOX->value],
                     'status' => [ChatStatus::ACTIVE->value],
                     'has_unread_message' => false,
                     'joined_at' => DT::utcNow(),
