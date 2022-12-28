@@ -157,12 +157,6 @@
                             @endif
                         </div>
                     </div>
-                    <livewire:direct-chat :userId="$user->_id"
-                                          :username="$user->username"
-                                          :adminUserId="auth()->user()->_id"
-                                          :adminUsername="auth()->user()->username"
-                                          :category="\Aparlay\Chat\Models\Enums\ChatCategory::SUPPORT->value"
-                                          :headerText="'Support Chat'"/>
                 </div>
                 <div class="col-md-9">
                     @include('default_view::admin.pages.user.tabs.statistics')
