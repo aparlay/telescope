@@ -137,6 +137,14 @@ class MediaController extends Controller
     {
         $this->mediaService->updateScore($media->_id, $request);
 
+        if ($this->mediaService->hasNextItemToReview($media->_id)) {
+            redirect()->route('core.admin.media.moderation-queue.next', ['mediaId' => $media->_id, 'direction' => 1])->with(['success' => 'Media updated successfully']);
+        }
+
+        if ($this->mediaService->hasPrevItemToReview($media->_id)) {
+            redirect()->route('core.admin.media.moderation-queue.next', ['mediaId' => $media->_id])->with(['success' => 'Media updated successfully']);
+        }
+
         return redirect()->back()->with(['success' => 'Media updated successfully']);
     }
 
