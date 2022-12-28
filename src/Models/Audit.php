@@ -153,7 +153,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                 'payout_country_alpha2' => ['Payout Country' => ! empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
                 'type' => ['Type' => UserType::from($value)->label()],
                 'promo_link' => ['Prom Link' => $value],
-                'referral_id' => ['Referrer' => ! empty($value) ? User::user($value)->first()?->username : ''],
+                'referral_id' => ['Referrer' => ! empty($value) ? $value : ''],
                 default => null
             };
 
