@@ -51,7 +51,7 @@ class MediaController extends Controller
      * Display a listing of the resource.
      *
      * @throws BindingResolutionException
-*/
+     */
     public function listByUser(User $user): Response
     {
         if ((app()->make(UserService::class))->isUserEligible($user)) {
