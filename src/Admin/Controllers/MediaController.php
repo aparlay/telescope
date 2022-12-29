@@ -142,7 +142,7 @@ class MediaController extends Controller
         }
 
         if ($this->mediaService->hasPrevItemToReview($media->_id)) {
-            redirect()->route('core.admin.media.moderation-queue.next', ['mediaId' => $media->_id])->with(['success' => 'Media updated successfully']);
+            redirect()->route('core.admin.media.moderation-queue.next', ['mediaId' => $media->_id, 'direction' => -1])->with(['success' => 'Media updated successfully']);
         }
 
         return redirect()->back()->with(['success' => 'Media updated successfully']);
