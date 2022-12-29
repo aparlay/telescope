@@ -21,6 +21,8 @@ abstract class BaseIndexComponent extends Component
     public array $sort = [];
     protected $model;
 
+    public string $dateFormat = 'm/d/Y H:i:s';
+
     public function mount()
     {
         $this->currentUser = $this->currentUser();
