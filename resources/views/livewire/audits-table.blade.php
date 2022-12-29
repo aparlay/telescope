@@ -39,5 +39,7 @@
             @endforeach
         </tbody>
     </table>
-    {{ $audits->links() }}
+    <div class="d-flex justify-content-center">
+        {{ $audits->links() }}
+    </div>
 </div>
