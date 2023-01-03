@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Events;
 
-use Aparlay\Core\Models\User;
+use Aparlay\Core\Api\V1\Models\UserNotification;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -41,10 +41,8 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
-        $user = User::find($this->userId);
-
         return [
-            'has_unread_notification' => $user->has_unread_notification,
+            'has_unread_notification' => UserNotification::query()->user($this->userId)->notVisited()->exists(),
         ];
     }
 }
