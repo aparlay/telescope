@@ -124,12 +124,13 @@ class UserNotificationService
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
         $hasUnreadNotifications = $this->getUser()->has_unread_notification;
+        $userNotificationQuery = UserNotification::query()->user($userId)->notVisited();
 
-        UserNotification::query()
-            ->user($userId)
-            ->notVisited()
-            ->whereInIds('_id', $notificationIds)
-            ->update(['status' => UserNotificationStatus::VISITED->value]);
+        if (!empty($notificationIds)) {
+            $userNotificationQuery->whereInIds('_id', $notificationIds);
+        }
+
+        $userNotificationQuery->update(['status' => UserNotificationStatus::VISITED->value]);
 
         UserNotificationUnreadStatusUpdatedEvent::dispatch(
             $userId,
