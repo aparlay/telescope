@@ -14,7 +14,7 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
     use InteractsWithSockets;
 
     public function __construct(
-        private User $user
+        private string $userId
     ) {
     }
 
@@ -23,7 +23,7 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
      */
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('users.'.$this->user->_id);
+        return new PrivateChannel('users.'.$this->userId);
     }
 
     /**
@@ -41,8 +41,10 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
+        $user = User::find($this->userId);
+
         return [
-            'has_unread_notification' => $this->user->has_unread_notification,
+            'has_unread_notification' => $user->has_unread_notification,
         ];
     }
 }

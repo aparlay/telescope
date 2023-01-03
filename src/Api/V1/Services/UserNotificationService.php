@@ -108,7 +108,7 @@ class UserNotificationService
 
             UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
                 $unreadStateChanges,
-                $userId
+                (string)$userId
             );
         }
 
@@ -137,7 +137,7 @@ class UserNotificationService
 
         UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
             $unreadStateChanged,
-            $this->getUser()
+            (string)$userId
         );
     }
 
@@ -159,7 +159,7 @@ class UserNotificationService
 
         UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
             $unreadStateChanged,
-            $this->getUser()
+            (string)$this->getUser()->_id
         );
 
         return $notification;
