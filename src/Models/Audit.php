@@ -120,9 +120,9 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                     'OrSc. paid' => Arr::get($value, 'paid'),
                 ],
                 'scores' => [
-                    'MdSc. Skin' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'skin.score'),
-                    'MdSc. Beauty' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'beauty.score'),
-                    'MdSc. Awesomeness' => Arr::get(Arr::keyBy(json_decode($value, true), 'type'), 'awesomeness.score'),
+                    'MdSc. Skin' => Arr::get(Arr::keyBy($value, 'type'), 'skin.score'),
+                    'MdSc. Beauty' => Arr::get(Arr::keyBy($value, 'type'), 'beauty.score'),
+                    'MdSc. Awesomeness' => Arr::get(Arr::keyBy($value, 'type'), 'awesomeness.score'),
                 ],
                 'description' => ['Description' => $value],
                 default => null
@@ -153,7 +153,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                 'payout_country_alpha2' => ['Payout Country' => ! empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
                 'type' => ['Type' => UserType::from($value)->label()],
                 'promo_link' => ['Prom Link' => $value],
-                'referral_id' => ['Referrer' => ! empty($value) ? User::user(array_values($value)[0])->first()?->username : ''],
+                'referral_id' => ['Referrer' => (! empty($value) && is_array($value)) ? User::user(array_values($value)[0])->first()?->username : ''],
                 default => null
             };
 

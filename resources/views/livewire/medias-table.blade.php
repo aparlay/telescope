@@ -166,5 +166,7 @@
         @endforeach
         </tbody>
     </table>
-    {{ $medias->links() }}
+    <div class="d-flex justify-content-center">
+        {{ $medias->links() }}
+    </div>
 </div>

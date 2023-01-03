@@ -83,5 +83,7 @@
         @endforeach
         </tbody>
     </table>
-    {{ $models->links() }}
+    <div class="d-flex justify-content-center">
+        {{ $models->links() }}
+    </div>
 </div>

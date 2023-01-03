@@ -94,5 +94,7 @@
         @endforeach
         </tbody>
     </table>
-    {{ $settings->links() }}
+    <div class="d-flex justify-content-center">
+        {{ $settings->links() }}
+    </div>
 </div>

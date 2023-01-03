@@ -6,14 +6,11 @@ use Aparlay\Core\Database\Factories\ReportFactory;
 use Aparlay\Core\Models\Enums\ReportStatus;
 use Aparlay\Core\Models\Enums\ReportType;
 use Aparlay\Core\Models\Queries\ReportQueryBuilder;
-use Aparlay\Core\Models\Queries\UserNotificationQueryBuilder;
-use Aparlay\Core\Models\Scopes\ReportScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
-use Jenssegers\Mongodb\Relations\BelongsTo;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -34,6 +31,7 @@ use MongoDB\BSON\ObjectId;
  * @property array    $links
  *
  * @property User $userObj
+ * @property User $creatorObj
  * @property MediaComment $mediaCommentObj
  * @property Media $mediaObj
  *

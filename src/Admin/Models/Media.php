@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Admin\Models;
 
-use Aparlay\Core\Admin\Components\ArrayRedactor;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media as MediaBase;
 use Aparlay\Core\Models\Scopes\MediaScope;

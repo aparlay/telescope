@@ -14,6 +14,7 @@ enum MediaStatus: int implements Enum
     case CONFIRMED = 5;
     case DENIED = 6;
     case IN_REVIEW = 7;
+    case USER_SUSPENDED = 8;
     case ADMIN_DELETED = 9;
     case USER_DELETED = 10;
 
@@ -28,6 +29,7 @@ enum MediaStatus: int implements Enum
             self::CONFIRMED => __('confirmed'),
             self::DENIED => __('denied'),
             self::IN_REVIEW => __('in review'),
+            self::USER_SUSPENDED => __('user suspended'),
             self::ADMIN_DELETED => __('admin deleted'),
             self::USER_DELETED => __('user deleted'),
         };
@@ -39,7 +41,7 @@ enum MediaStatus: int implements Enum
             self::QUEUED, self::UPLOADED => 'info',
             self::IN_PROGRESS, self::COMPLETED => 'warning',
             self::IN_REVIEW => 'dark',
-            self::FAILED, self::ADMIN_DELETED, self::USER_DELETED, self::DENIED => 'danger',
+            self::FAILED, self::USER_SUSPENDED, self::ADMIN_DELETED, self::USER_DELETED, self::DENIED => 'danger',
             self::CONFIRMED => 'success',
         };
     }
