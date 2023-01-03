@@ -126,7 +126,7 @@ class UserNotificationService
         $hasUnreadNotifications = $this->getUser()->has_unread_notification;
         $userNotificationQuery = UserNotification::query()->user($userId)->notVisited();
 
-        if (!empty($notificationIds)) {
+        if (! empty($notificationIds)) {
             $userNotificationQuery->whereInIds('_id', $notificationIds);
         }
 
