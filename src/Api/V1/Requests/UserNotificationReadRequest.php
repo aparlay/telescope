@@ -39,8 +39,7 @@ class UserNotificationReadRequest extends FormRequest
      */
     public function prepareForValidation()
     {
-
-        if (!is_array($this->user_notification_ids)) {
+        if (! is_array($this->user_notification_ids)) {
             throw ValidationException::withMessages([
                 'avatar' => 'The user notification ids field is required.',
             ]);
