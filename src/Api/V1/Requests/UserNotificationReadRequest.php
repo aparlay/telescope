@@ -38,16 +38,18 @@ class UserNotificationReadRequest extends FormRequest
      */
     public function prepareForValidation()
     {
-        $userNotificationIds = [];
-        foreach ($this->user_notification_ids as $index => $notificationId) {
-            if (! empty($notificationId) && strlen($notificationId) === 24 && strspn($notificationId, '0123456789ABCDEFabcdef') === 24) {
-                $userNotificationIds[$index] = new ObjectId($notificationId);
-            } else {
-                unset($userNotificationIds[$index]);
+        if (is_array($this->user_notification_ids)) {
+            $userNotificationIds = [];
+            foreach ($this->user_notification_ids as $index => $notificationId) {
+                if (! empty($notificationId) && strlen($notificationId) === 24 && strspn($notificationId, '0123456789ABCDEFabcdef') === 24) {
+                    $userNotificationIds[$index] = new ObjectId($notificationId);
+                } else {
+                    unset($userNotificationIds[$index]);
+                }
             }
+            $this->merge([
+                'user_notification_ids' => $userNotificationIds,
+            ]);
         }
-        $this->merge([
-            'user_notification_ids' => $userNotificationIds,
-        ]);
     }
 }
