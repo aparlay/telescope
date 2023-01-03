@@ -99,15 +99,16 @@ class UserNotificationService
             $userId = $this->getUser()->_id;
             $hasUnreadNotifications = $this->getUser()->has_unread_notification;
             $notification->update(['status' => UserNotificationStatus::VISITED->value]);
+            $unreadStateChanges = $this->getUser()->has_unread_notification !== $hasUnreadNotifications;
 
             dispatch(function () use ($userId) {
                 $unreadNotificationCount = UserNotification::query()->user($userId)->notVisited()->count();
                 $this->getUser()->setStatCounter('notifications', $unreadNotificationCount);
             });
 
-            UserNotificationUnreadStatusUpdatedEvent::dispatch(
-                $userId,
-                $hasUnreadNotifications
+            UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
+                $unreadStateChanges,
+                (string) $userId
             );
         }
 
@@ -132,10 +133,11 @@ class UserNotificationService
 
         $userNotificationQuery->update(['status' => UserNotificationStatus::VISITED->value]);
 
-        UserNotificationUnreadStatusUpdatedEvent::dispatch(
-            $userId,
-            $hasUnreadNotifications,
-            false
+        $unreadStateChanged = $this->getUser()->has_unread_notification !== $hasUnreadNotifications;
+
+        UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
+            $unreadStateChanged,
+            (string) $userId
         );
     }
 
@@ -153,10 +155,11 @@ class UserNotificationService
             $notification->update(['status' => UserNotificationStatus::NOT_VISITED->value]);
         }
 
-        UserNotificationUnreadStatusUpdatedEvent::dispatch(
-            $this->getUser()->_id,
-            $hasUnreadNotifications,
-            true
+        $unreadStateChanged = $this->getUser()->has_unread_notification !== $hasUnreadNotifications;
+
+        UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
+            $unreadStateChanged,
+            (string) $this->getUser()->_id
         );
 
         return $notification;
