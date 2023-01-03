@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -29,7 +30,7 @@ class UserNotificationReadRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_notification_ids' => ['required'],
+            'user_notification_ids' => ['nullable'],
         ];
     }
 
@@ -38,6 +39,13 @@ class UserNotificationReadRequest extends FormRequest
      */
     public function prepareForValidation()
     {
+
+        if (!is_array($this->user_notification_ids)) {
+            throw ValidationException::withMessages([
+                'avatar' => 'The user notification ids field is required.',
+            ]);
+        }
+
         $userNotificationIds = [];
         foreach ($this->user_notification_ids as $index => $notificationId) {
             if (! empty($notificationId) && strlen($notificationId) === 24 && strspn($notificationId, '0123456789ABCDEFabcdef') === 24) {
