@@ -42,7 +42,7 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'has_unread_notification' => UserNotification::query()->user($this->userId)->notVisited()->exists(),
+            'has_unread_notification' => (bool)UserNotification::query()->user($this->userId)->notVisited()->first(),
         ];
     }
 }
