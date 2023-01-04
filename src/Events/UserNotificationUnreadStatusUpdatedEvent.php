@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Events;
 
-use Aparlay\Core\Api\V1\Models\UserNotification;
+use Aparlay\Core\Models\UserNotification;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
