@@ -19,7 +19,7 @@ class FollowObserver extends BaseModelObserver
      */
     public function creating($model): void
     {
-        if (!isset($model->user['username'], $model->user['avatar'])) {
+        if (! isset($model->user['username'], $model->user['avatar'])) {
             $user = User::user($model->user['_id'])->first();
             $model->user = [
                 '_id' => new ObjectId($user->_id),
@@ -28,7 +28,7 @@ class FollowObserver extends BaseModelObserver
             ];
         }
 
-        if (!isset($model->creator['username'], $model->creator['avatar'])) {
+        if (! isset($model->creator['username'], $model->creator['avatar'])) {
             $creator = User::user($model->creator['_id'])->first();
             $model->creator = [
                 '_id' => new ObjectId($creator->_id),
