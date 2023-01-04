@@ -8,6 +8,7 @@ use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\UserFollowedNotification;
 use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class FollowObserver extends BaseModelObserver
 {
@@ -44,54 +45,53 @@ class FollowObserver extends BaseModelObserver
      * Handle the Follow "created" event.
      *
      * @param  Follow  $model
+     *
      * @return void
+     * @throws InvalidArgumentException
      */
     public function created($model): void
     {
-        $userObj = $model->userObj;
-        $creatorObj = $model->creatorObj;
-
         $followersCount = Follow::query()->user($model->user['_id'])->count();
-        $userObj->addToSet('followers', [
+        $model->userObj->addToSet('followers', [
             '_id' => new ObjectId($model->creator['_id']),
             'username' => $model->creator['username'],
             'avatar' => $model->creator['avatar'],
         ], 10);
 
-        if (! isset($userObj->count_fields_updated_at)) {
-            $userObj->count_fields_updated_at = [];
+        if (! isset($model->userObj->count_fields_updated_at)) {
+            $model->userObj->count_fields_updated_at = [];
         }
 
-        $userObj->count_fields_updated_at = array_merge(
-            $userObj->count_fields_updated_at,
+        $model->userObj->count_fields_updated_at = array_merge(
+            $model->userObj->count_fields_updated_at,
             ['followers' => DT::utcNow()]
         );
 
-        $stats = $userObj->stats;
+        $stats = $model->userObj->stats;
         $stats['counters']['followers'] = $followersCount;
-        $userObj->stats = $stats;
-        $userObj->save();
+        $model->userObj->stats = $stats;
+        $model->userObj->save();
 
         $followingCount = Follow::query()->creator($model->creator['_id'])->count();
-        $creatorObj->addToSet('followings', [
+        $model->creatorObj->addToSet('followings', [
             '_id' => new ObjectId($model->user['_id']),
             'username' => $model->user['username'],
             'avatar' => $model->user['avatar'],
         ]);
-        $creatorObj->count_fields_updated_at = array_merge(
-            $creatorObj->count_fields_updated_at,
+        $model->creatorObj->count_fields_updated_at = array_merge(
+            $model->creatorObj->count_fields_updated_at,
             ['followings' => DT::utcNow()]
         );
 
-        $stats = $creatorObj->stats;
+        $stats = $model->creatorObj->stats;
         $stats['counters']['followings'] = $followingCount;
-        $creatorObj->stats = $stats;
-        $creatorObj->save();
+        $model->creatorObj->stats = $stats;
+        $model->creatorObj->save();
 
-        $userObj->notify(
+        $model->userObj->notify(
             new UserFollowedNotification(
-                $creatorObj,
-                $userObj,
+                $model->creatorObj,
+                $model->userObj,
                 __(':username started following you.', ['username' => $model->creator['username']])
             )
         );
@@ -110,45 +110,42 @@ class FollowObserver extends BaseModelObserver
      */
     public function deleted($model): void
     {
-        $userObj = $model->userObj;
-        $creatorObj = $model->creatorObj;
-
         $followersCount = Follow::query()->user($model->user['_id'])->count();
-        $userObj->removeFromSet('followers', [
+        $model->userObj->removeFromSet('followers', [
             '_id' => new ObjectId($model->creator['_id']),
             'username' => $model->creator['username'],
             'avatar' => $model->creator['avatar'],
         ]);
 
-        if (! isset($userObj->count_fields_updated_at)) {
-            $userObj->count_fields_updated_at = [];
+        if (! isset($model->userObj->count_fields_updated_at)) {
+            $model->userObj->count_fields_updated_at = [];
         }
 
-        $userObj->count_fields_updated_at = array_merge(
-            $userObj->count_fields_updated_at,
+        $model->userObj->count_fields_updated_at = array_merge(
+            $model->userObj->count_fields_updated_at,
             ['followers' => DT::utcNow()]
         );
 
-        $stats = $userObj->stats;
+        $stats = $model->userObj->stats;
         $stats['counters']['followers'] = $followersCount;
-        $userObj->stats = $stats;
-        $userObj->save();
+        $model->userObj->stats = $stats;
+        $model->userObj->save();
 
         $followingCount = Follow::query()->creator($model->creator['_id'])->count();
-        $creatorObj->removeFromSet('followings', [
+        $model->creatorObj->removeFromSet('followings', [
             '_id' => new ObjectId($model->user['_id']),
             'username' => $model->user['username'],
             'avatar' => $model->user['avatar'],
         ]);
-        $creatorObj->count_fields_updated_at = array_merge(
-            $creatorObj->count_fields_updated_at,
+        $model->creatorObj->count_fields_updated_at = array_merge(
+            $model->creatorObj->count_fields_updated_at,
             ['followings' => DT::utcNow()]
         );
-        $stats = $creatorObj->stats;
+        $stats = $model->creatorObj->stats;
         $stats['counters']['followings'] = $followingCount;
-        $creatorObj->stats = $stats;
+        $model->creatorObj->stats = $stats;
 
-        $creatorObj->save();
+        $model->creatorObj->save();
 
         // Reset the Redis cache
         Follow::cacheByUserId($model->creator['_id'], true);
