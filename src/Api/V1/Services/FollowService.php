@@ -28,8 +28,16 @@ class FollowService
         $creator = $this->getUser();
         if (($follow = Follow::query()->creator($creator->_id)->user($user->_id)->first()) === null) {
             $follow = Follow::create([
-                'user' => ['_id' => new ObjectId($user->_id)],
-                'creator' => ['_id' => new ObjectId($creator->_id)],
+                'user' => [
+                    '_id' => new ObjectId($user->_id),
+                    'username' => $user->username,
+                    'avatar' => $user->avatar,
+                ],
+                'creator' => [
+                    '_id' => new ObjectId($creator->_id),
+                    'username' => $creator->username,
+                    'avatar' => $creator->avatar,
+                ]
             ]);
 
             $statusCode = Response::HTTP_CREATED;
