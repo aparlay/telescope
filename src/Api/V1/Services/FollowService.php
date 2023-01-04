@@ -37,7 +37,7 @@ class FollowService
                     '_id' => new ObjectId($creator->_id),
                     'username' => $creator->username,
                     'avatar' => $creator->avatar,
-                ]
+                ],
             ]);
 
             $statusCode = Response::HTTP_CREATED;
