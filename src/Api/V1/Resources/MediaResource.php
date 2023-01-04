@@ -39,7 +39,7 @@ class MediaResource extends JsonResource
         $alerts = [];
         if (isset(auth()->user()->_id) && (string) auth()->user()->_id === (string) $this->creator['_id']) {
             $tips = $this->tips;
-            $alerts = $this->alerts;
+            $alerts = $this->alertObjs;
         }
 
         // should hide adult content for guests or setting.show_adult_content = 1 or default is false

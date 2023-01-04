@@ -592,7 +592,7 @@ class User extends \App\Models\User
 
     public function getHasUnreadNotificationAttribute(): bool
     {
-        return (bool) UserNotification::query()->user($this->_id)->notVisited()->first();
+        return UserNotification::query()->user($this->_id)->notVisited()->exists();
     }
 
     public function getTipCommissionPercentageAttribute(): int
@@ -1065,5 +1065,15 @@ class User extends \App\Models\User
         $this->save();
 
         $this->refresh();
+    }
+
+
+
+    /**
+     * Get if this user followed by the given user.
+     */
+    public function isFollowedBy(ObjectId|string $userId): bool
+    {
+        return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
     }
 }
