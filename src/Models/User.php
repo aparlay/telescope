@@ -1059,4 +1059,14 @@ class User extends \App\Models\User
 
         $this->refresh();
     }
+
+
+
+    /**
+     * Get if this user followed by the given user.
+     */
+    public function isFollowedBy(ObjectId|string $userId): bool
+    {
+        return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
+    }
 }
