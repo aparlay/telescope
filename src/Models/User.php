@@ -1067,8 +1067,6 @@ class User extends \App\Models\User
         $this->refresh();
     }
 
-
-
     /**
      * Get if this user followed by the given user.
      */
