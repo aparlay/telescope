@@ -586,7 +586,7 @@ class User extends \App\Models\User
 
     public function getHasUnreadNotificationAttribute(): bool
     {
-        return (bool) UserNotification::query()->user($this->_id)->notVisited()->first();
+        return UserNotification::query()->user($this->_id)->notVisited()->exists();
     }
 
     public function getTipCommissionPercentageAttribute(): int
