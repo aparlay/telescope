@@ -126,13 +126,13 @@ class UserService extends AdminBaseService
         return $this->userRepository->getVisibilities();
     }
 
-    public function update($user)
+    public function update($user, $request)
     {
         if (request()->hasFile('avatar')) {
             $this->uploadAvatar($user);
         }
 
-        $data = request()->only([
+        $data = $request->only([
             'username',
             'email',
             'bio',
@@ -146,21 +146,21 @@ class UserService extends AdminBaseService
             'payout_country_alpha2',
         ]);
 
-        $data['referral_id'] = request()->input('referral_id') ? new ObjectId(request()->input('referral_id')) : null;
+        $data['referral_id'] = $request->input('referral_id') ? new ObjectId($request->input('referral_id')) : null;
 
         $dataBooleans = [
-            'email_verified' => request()->boolean('email_verified'),
+            'email_verified' => $request->boolean('email_verified'),
             'features' => [
-                'tips' => request()->boolean('features.tips'),
-                'demo' => request()->boolean('features.demo'),
+                'tips' => $request->boolean('features.tips'),
+                'demo' => $request->boolean('features.demo'),
             ],
         ];
 
         $data = array_merge($data, $dataBooleans);
-        $role = request()?->input('role');
+        $role = $request->input('role');
 
         if ($role && auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
-            $user->syncRoles(request()->input('role'));
+            $user->syncRoles($request->input('role'));
         }
 
         $user->fill($data);

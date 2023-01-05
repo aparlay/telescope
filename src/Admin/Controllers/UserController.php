@@ -114,7 +114,7 @@ class UserController extends Controller
      */
     public function update(User $user, UserUpdateRequest $request): RedirectResponse
     {
-        $this->userService->update($user);
+        $this->userService->update($user, $request);
 
         return back()->with('success', 'User updated successfully.');
     }
