@@ -10,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use Maklad\Permission\Models\Role;
+use MongoDB\BSON\ObjectId;
 
 class UserInfoUpdateRequest extends FormRequest
 {
@@ -66,5 +67,10 @@ class UserInfoUpdateRequest extends FormRequest
         throw new HttpResponseException(
             redirect()->back()->withErrors($errors)
         );
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge(['user_id' => request()->has('user_id') ? new ObjectId(request()->input('user_id')) : null]);
     }
 }
