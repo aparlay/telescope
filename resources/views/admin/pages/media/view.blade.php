@@ -260,7 +260,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="visits" class="col-sm-2 col-form-label">Watched Length</label>
+                                            <label for="visits" class="col-sm-2 col-form-label">Watched Duration</label>
                                             <div class="col-sm-10 mt-2">
                                                 <p>{{ round(\Carbon\CarbonInterval::seconds($media->length_watched)->cascade()->totalHours) }}H.</p>
                                             </div>

@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Media;
+use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Models\Enums\MediaStatus;
 
 class MediaRepository
@@ -157,6 +158,13 @@ class MediaRepository
         $model->fill($data)->save();
 
         return $model->refresh();
+    }
+
+    public function updateVisibility(User $creator, int $visibility)
+    {
+        return Media::query()
+            ->creator($creator->_id)
+            ->update(['visibility' => $visibility]);
     }
 
     public function delete($id)

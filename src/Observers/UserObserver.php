@@ -79,7 +79,7 @@ class UserObserver extends BaseModelObserver
         }
 
         // Reset the Redis cache
-        if ($model->_id) {
+        if ($model->_id && $model->isDirty(['username', 'avatar', 'is_verified'])) {
             SimpleUserCast::cacheByUserId($model->_id, true);
         }
 
@@ -145,8 +145,6 @@ class UserObserver extends BaseModelObserver
                 'visibility' => $model->is_public ? MediaVisibility::PUBLIC->value : MediaVisibility::PRIVATE->value,
             ]);
         }
-
-        $model->refresh();
     }
 
     public function saved($model)
