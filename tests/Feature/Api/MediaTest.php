@@ -591,8 +591,8 @@ class MediaTest extends ApiTestCase
      */
     public function getByUser()
     {
-        $user = User::factory()->create();
-        $userMediaOwner = User::factory()->create();
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $userMediaOwner = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         Media::factory()->count(2)->create(
             [
@@ -727,9 +727,10 @@ class MediaTest extends ApiTestCase
             'data.items.0._links.index.href' => 'string',
         ];
 
-        $aa = $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$userMediaOwner->_id.'/media')
-            ->assertStatus(200)
+        $r = $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get('/v1/user/'.$userMediaOwner->_id.'/media');
+
+        $r->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJsonStructure($expectJsonStructure)
@@ -738,10 +739,11 @@ class MediaTest extends ApiTestCase
             )
             ->assertJsonFragment(['total_count' => 2]);
 
-        $this->actingAs($user)
+        $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$userMediaOwner->_id.'/media')
-            ->assertStatus(200)
+            ->get('/v1/user/'.$userMediaOwner->_id.'/media');
+
+        $r->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
             ->assertJsonStructure($expectJsonStructure)
