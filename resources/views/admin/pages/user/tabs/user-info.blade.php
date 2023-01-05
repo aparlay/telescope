@@ -1,6 +1,7 @@
 @php
     use Illuminate\Support\Arr;
     use Aparlay\Core\Models\Enums\UserVerificationStatus;
+    use Aparlay\Core\Models\Enums\UserStatus;
 @endphp
 
 <div class="tab-pane active" id="user-info">
@@ -132,7 +133,9 @@
             <div class="col-sm-10">
                 <select name="status" id="status" class="form-control">
                     @foreach($user->getStatuses() as $key => $status)
-                        <option value="{{ $key }}" {!! $user->status == $key ? 'selected' : '' !!}>{{ $status }}</option>
+                        @if(!in_array($key, [UserStatus::SUSPENDED->value, UserStatus::BLOCKED->value]))
+                            <option value="{{ $key }}" {!! $user->status == $key ? 'selected' : '' !!}>{{ $status }}</option>
+                        @endif
                     @endforeach
                 </select>
             </div>
