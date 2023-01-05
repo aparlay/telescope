@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -41,7 +42,7 @@ class UserFactory extends Factory
             'features' => array_fill_keys(array_keys(User::getFeatures()), false),
             'gender' => $this->faker->randomElement(array_keys(User::getGenders())),
             'type' => $this->faker->randomElement(array_keys(User::getTypes())),
-            'status' => $this->faker->randomElement(array_keys(User::getStatuses())),
+            'status' => UserStatus::ACTIVE->value,
             'verification_status' => $this->faker->randomElement(array_keys(User::getVerificationStatuses())),
             'visibility' => $this->faker->randomElement(array_keys(User::getVisibilities())),
             'count_fields_updated_at' => [

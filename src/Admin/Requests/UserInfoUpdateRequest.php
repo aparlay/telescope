@@ -31,10 +31,11 @@ class UserInfoUpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => ['required'],
             'email' => [
                 'required',
                 'email:rfc,spoof,dns',
-                Rule::unique('users', 'email')->ignore($this->user->_id, '_id'),
+                Rule::unique('users', 'email')->ignore($this->user_id, '_id'),
                 'max:255',
             ],
             'verification_status' => [
