@@ -33,7 +33,6 @@ class CookiesAuthenticate
         if (auth()->check() &&
             $request->header('Authorization') !== null &&
             in_array(auth()->user()->status, [UserStatus::BLOCKED->value, UserStatus::SUSPENDED->value])) {
-
             auth()->logout(true);
 
             $cookie1 = Cookie::forget('__Secure_token');
