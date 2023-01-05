@@ -9,9 +9,10 @@ use Aparlay\Core\Events\UsernameChangedEvent;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\IP;
 use Aparlay\Core\Jobs\DeleteUserConnect;
-use Aparlay\Core\Jobs\DeleteUserMedia;
+use Aparlay\Core\Jobs\UpdateUserMediaStatus;
 use Aparlay\Core\Jobs\UpdateMedia;
 use Aparlay\Core\Jobs\UpdateUserCountry;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
@@ -108,7 +109,7 @@ class UserObserver extends BaseModelObserver
      * @return void
      * @throws Exception
      */
-    public function updated($model): void
+    public function updated(User $model): void
     {
         if ($model->wasChanged('username')) {
             UsernameChangedEvent::dispatch($model);
@@ -121,16 +122,20 @@ class UserObserver extends BaseModelObserver
             switch ($model->status) {
                 case UserStatus::DEACTIVATED->value:
                     $model->notify(new UserDeactivateAccount());
-                    DeleteUserMedia::dispatch((string) $model->_id);
+                    UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::USER_DELETED->value);
                     DeleteUserConnect::dispatch((string) $model->_id);
                     break;
                 case UserStatus::SUSPENDED->value:
-                    DeleteUserMedia::dispatch((string) $model->_id);
-                    DeleteUserConnect::dispatch((string) $model->_id);
+                    UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::USER_SUSPENDED->value);
                     break;
                 case UserStatus::BLOCKED->value:
-                    DeleteUserMedia::dispatch((string) $model->_id);
+                    UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::USER_DELETED->value);
                     DeleteUserConnect::dispatch((string) $model->_id);
+                    break;
+                case UserStatus::ACTIVE->value:
+                    if ($model->getOriginal('status') == UserStatus::SUSPENDED->value) {
+                        UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::DENIED->value);
+                    }
                     break;
             }
         }
