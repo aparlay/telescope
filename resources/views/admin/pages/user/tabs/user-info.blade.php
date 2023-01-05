@@ -7,6 +7,8 @@
     <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data" id="user-info-form">
         @csrf()
         @method('PUT')
+
+        <input type="hidden" id="user_id" name="user_id" value="{{ (string)$user->_id }}">
         <div class="form-group row">
             <label for="avatar" class="col-sm-2 col-form-label">Avatar</label>
             <div class="col-sm-10">

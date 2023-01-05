@@ -32,15 +32,16 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => ['required'],
             'email' => [
                 'required',
                 'email:rfc,spoof,dns',
-                Rule::unique('users', 'email')->ignore($this->user->_id, '_id'),
+                Rule::unique('users', 'email')->ignore($this->user_id, '_id'),
                 'max:255',
             ],
             'username' => [
                 'required',
-                Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
+                Rule::unique('users', 'username')->ignore($this->user_id, '_id'),
                 'min:3',
                 'max:30',
                 'alpha_dash',
@@ -81,6 +82,7 @@ class UserUpdateRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
+            'user_id' => new ObjectId($this->user_id),
             'referral_id' => $this->referral_id ? new ObjectId($this->referral_id) : null,
         ]);
     }
