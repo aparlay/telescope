@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
+use Aparlay\Chat\Api\V1\Services\ChatService;
 use Aparlay\Core\Api\V1\Dto\MediaDTO;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
@@ -170,7 +171,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->markAsVisited($visited);
+        $this->incrementMediaCounters($visited);
 
         return $data;
     }
@@ -194,7 +195,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->markAsVisited($visited);
+        $this->incrementMediaCounters($visited);
 
         return $data;
     }
@@ -224,7 +225,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->markAsVisited($visited);
+        $this->incrementMediaCounters($visited);
 
         return $data;
     }
@@ -356,9 +357,11 @@ class MediaService
             $this->loadUserVisitedVideos((string) auth()->user()->_id, $request->uuid);
         }
 
+        profiler_start('getPublicFeeds::withQueryString');
         $data = $query->medias($this->notVisitedVideoIds($request->uuid, $request->show_adult_content))
             ->paginate(5)
             ->withQueryString();
+        profiler_finish('getPublicFeeds::withQueryString');
 
         if ($data->isEmpty() || $data->total() <= 5) {
             $this->flushVisitedVideos($request->uuid);
@@ -371,9 +374,14 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->cacheVisitedVideoByUuid($visited, $request->uuid);
-        $this->markAsVisited($visited);
 
+        profiler_start('getPublicFeeds::cacheVisitedVideoByUuid');
+        $this->cacheVisitedVideoByUuid($visited, $request->uuid);
+        profiler_finish('getPublicFeeds::cacheVisitedVideoByUuid');
+
+        profiler_start('getPublicFeeds::markAsVisited');
+        $this->incrementMediaCounters($visited);
+        profiler_finish('getPublicFeeds::markAsVisited');
         return $data;
     }
 
@@ -381,12 +389,12 @@ class MediaService
      * @param array $userId
      * @return void
      */
-    public function markAsVisited(array $mediaIds): void
+    public function incrementMediaCounters(array $mediaIds): void
     {
         $mediaIds = array_map('strval', $mediaIds);
         dispatch(function () use ($mediaIds) {
             Media::medias($mediaIds)->increment('visit_count');
-        });
+        })->afterResponse();
     }
 
     /**
