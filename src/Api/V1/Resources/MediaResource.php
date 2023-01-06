@@ -37,14 +37,14 @@ class MediaResource extends JsonResource
             $visits[] = $this->createSimpleUser($visit);
         }
         */
-        $people = $this->createSimpleUser($this->people);
-        $likes = $this->createSimpleUser($this->likes);
+        $people = $this->createBatchSimpleUser($this->people);
+        $likes = $this->createBatchSimpleUser($this->likes);
         $visits = $this->createBatchSimpleUser($this->visits);
 
         /*
         [$people, $likes, $visits] = Octane::concurrently([
-            fn () => $this->createSimpleUser($this->people),
-            fn () => $this->createSimpleUser($this->likes),
+            fn () => $this->createBatchSimpleUser($this->people),
+            fn () => $this->createBatchSimpleUser($this->likes),
             fn () => $this->createBatchSimpleUser($this->visits),
         ]);
         */

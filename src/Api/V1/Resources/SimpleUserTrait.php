@@ -24,7 +24,7 @@ trait SimpleUserTrait
     {
         $routines = [];
         foreach ($users as $user) {
-            $routines[] = fn () => $this->simpleUser($user, $fields);
+            $routines[] = fn () => $this->createSimpleUser($user, $fields);
         }
 
         return Octane::concurrently($routines);
