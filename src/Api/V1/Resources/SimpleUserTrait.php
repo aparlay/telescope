@@ -10,11 +10,36 @@ use Laravel\Octane\Exceptions\TaskException;
 use Laravel\Octane\Exceptions\TaskTimeoutException;
 use Laravel\Octane\Facades\Octane;
 use MongoDB\BSON\ObjectId;
+use Swoole\Coroutine\WaitGroup;
 
 trait SimpleUserTrait
 {
     private string $cacheKeyPrefix = 'SimpleUserCast:';
     private array $simpleUser = [];
+
+    /**
+     * @param  array  $rawUsers
+     * @param  array  $fields
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function createBatchSimpleUser(array $rawUsers, array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked', 'is_verified']): array
+    {
+        $wg = new WaitGroup();
+        $users = [];
+        go(function () use ($wg, &$users, $rawUsers, $fields) {
+            $wg->add();
+            foreach ($rawUsers as $user) {
+                $users[] = $this->createSimpleUser($user, $fields);
+            }
+            $wg->done();
+        });
+
+        $wg->wait(5);
+
+        return $users;
+    }
 
     /**
      * Create the simple user attribute.
