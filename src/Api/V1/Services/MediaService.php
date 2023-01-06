@@ -325,7 +325,6 @@ class MediaService
         bool $isGuest = true,
         bool $isFirstPage = false,
     ): LengthAwarePaginator {
-
         profiler_start('MediaService::getPublicFeeds');
         $sortCategory = MediaSortCategories::REGISTERED->value;
 
@@ -385,6 +384,7 @@ class MediaService
         profiler_finish('MediaService::getPublicFeeds::incrementMediaCounters');
 
         profiler_finish('MediaService::getPublicFeeds');
+
         return $data;
     }
 
