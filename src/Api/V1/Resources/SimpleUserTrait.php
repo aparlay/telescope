@@ -24,11 +24,12 @@ trait SimpleUserTrait
     {
         $routines = [];
         foreach ($users as $user) {
-            $routines[] = fn() => $this->simpleUser($user, $fields);
+            $routines[] = fn () => $this->simpleUser($user, $fields);
         }
 
         return Octane::concurrently($routines);
     }
+
     /**
      * Create the simple user attribute.
      *
