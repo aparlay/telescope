@@ -148,16 +148,15 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
 });
 
-
-Octane::route('GET', '/metrics', function() {
-    return new Symfony\Component\HttpFoundation\Response((new SiteController)->metrics());
+Octane::route('GET', '/metrics', function () {
+    return new Symfony\Component\HttpFoundation\Response((new SiteController())->metrics());
 });
-Octane::route('POST', '/v1/webhook/pusher', function() {
-    return new Symfony\Component\HttpFoundation\Response((new WebhookController)->socket(request()));
+Octane::route('POST', '/v1/webhook/pusher', function () {
+    return new Symfony\Component\HttpFoundation\Response((new WebhookController())->socket(request()));
 });
-Octane::route('POST', '/v1/webhook/socket', function() {
-    return new Symfony\Component\HttpFoundation\Response((new WebhookController)->socket(request()));
+Octane::route('POST', '/v1/webhook/socket', function () {
+    return new Symfony\Component\HttpFoundation\Response((new WebhookController())->socket(request()));
 });
-Octane::route('POST', '/v1/email/status', function() {
-    return new Symfony\Component\HttpFoundation\Response((new WebhookController)->statusEmailUpdate(request()));
+Octane::route('POST', '/v1/email/status', function () {
+    return new Symfony\Component\HttpFoundation\Response((new WebhookController())->statusEmailUpdate(request()));
 });
