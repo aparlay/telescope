@@ -24,6 +24,7 @@ class DeviceId
         }
 
         profiler_finish('DeviceIdMiddleware::handle');
+
         return $next($request);
     }
 }

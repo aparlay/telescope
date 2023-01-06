@@ -47,6 +47,7 @@ class CookiesAuthenticate
         }
 
         profiler_finish('CookiesAuthenticateMiddleware::handle');
+
         return $next($request);
     }
 }
