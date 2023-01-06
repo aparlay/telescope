@@ -21,6 +21,7 @@ class DeviceId
         if (empty($request->header('X-DEVICE-ID'))) {
             throw ValidationException::withMessages(['device_id' => ['Device Id cannot be blank.']]);
         }
+
         return $next($request);
     }
 }
