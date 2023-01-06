@@ -18,10 +18,12 @@ class DeviceId
      */
     public function handle(Request $request, Closure $next)
     {
+        profiler_start('DeviceIdMiddleware::handle');
         if (empty($request->header('X-DEVICE-ID'))) {
             throw ValidationException::withMessages(['device_id' => ['Device Id cannot be blank.']]);
         }
 
+        profiler_finish('DeviceIdMiddleware::handle');
         return $next($request);
     }
 }
