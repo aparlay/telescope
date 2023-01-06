@@ -72,7 +72,7 @@ class BlockObserver extends BaseModelObserver
             fn () => BlockedUserDeleteFollow::dispatch((string) $model->user['_id'], (string) $model->creator['_id']),
             fn () => BlockedUserDeleteMediaLikes::dispatch((string) $model->creator['_id'], (string) $model->user['_id']),
             fn () => BlockedUserDeleteMediaLikes::dispatch((string) $model->user['_id'], (string) $model->creator['_id']),
-        ]);
+        ], 5000);
     }
 
     /**

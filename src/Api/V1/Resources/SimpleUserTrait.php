@@ -6,6 +6,9 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
 use Exception;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Octane\Exceptions\TaskException;
+use Laravel\Octane\Exceptions\TaskTimeoutException;
+use Laravel\Octane\Facades\Octane;
 use MongoDB\BSON\ObjectId;
 
 trait SimpleUserTrait
@@ -13,6 +16,19 @@ trait SimpleUserTrait
     private string $cacheKeyPrefix = 'SimpleUserCast:';
     private array $simpleUser = [];
 
+    /**
+     * @throws TaskTimeoutException
+     * @throws TaskException
+     */
+    public function createBatchSimpleUser(array $users, array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked', 'is_verified'])
+    {
+        $routines = [];
+        foreach ($users as $user) {
+            $routines[] = fn() => $this->simpleUser($user, $fields);
+        }
+
+        return Octane::concurrently($routines);
+    }
     /**
      * Create the simple user attribute.
      *
