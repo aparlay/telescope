@@ -17,20 +17,6 @@ trait SimpleUserTrait
     private array $simpleUser = [];
 
     /**
-     * @throws TaskTimeoutException
-     * @throws TaskException
-     */
-    public function createBatchSimpleUser(array $users, array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked', 'is_verified'])
-    {
-        $routines = [];
-        foreach ($users as $user) {
-            $routines[] = fn () => $this->createSimpleUser($user, $fields);
-        }
-
-        return Octane::concurrently($routines);
-    }
-
-    /**
      * Create the simple user attribute.
      *
      * @param string[] $fields

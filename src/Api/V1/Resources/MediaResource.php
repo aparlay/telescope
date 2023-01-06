@@ -21,7 +21,6 @@ class MediaResource extends JsonResource
      */
     public function toArray($request)
     {
-        /*
         $people = [];
         foreach ($this->people as $person) {
             $people[] = $this->createSimpleUser($person);
@@ -36,30 +35,12 @@ class MediaResource extends JsonResource
         foreach ($this->visits as $visit) {
             $visits[] = $this->createSimpleUser($visit);
         }
-        */
-        $people = $this->createBatchSimpleUser($this->people);
-        $likes = $this->createBatchSimpleUser($this->likes);
-        $visits = $this->createBatchSimpleUser($this->visits);
-
-        /*
-        [$people, $likes, $visits] = Octane::concurrently([
-            fn () => $this->createBatchSimpleUser($this->people),
-            fn () => $this->createBatchSimpleUser($this->likes),
-            fn () => $this->createBatchSimpleUser($this->visits),
-        ]);
-        */
 
         $tips = 0;
         $alerts = AlertResource::collection([]);
         if (isset(auth()->user()->_id) && (string) auth()->user()->_id === (string) $this->creator['_id']) {
-            /*
             $tips = $this->tips;
             $alerts = AlertResource::collection($this->alertObjs);
-            */
-            [$tips, $alerts] = Octane::concurrently([
-                fn () => $this->tips,
-                fn () => AlertResource::collection($this->alertObjs),
-            ]);
         }
 
         // should hide adult content for guests or setting.show_adult_content = 1 or default is false
