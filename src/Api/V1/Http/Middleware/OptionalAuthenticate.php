@@ -19,13 +19,11 @@ class OptionalAuthenticate extends Authenticate
      */
     public function handle($request, Closure $next, ...$guards)
     {
-        profiler_start('OptionalAuthenticateMiddleware::handle');
         try {
             $this->authenticate($request, $guards);
         } catch (AuthenticationException $e) {
             // dont do anything
         }
-        profiler_finish('OptionalAuthenticateMiddleware::handle');
 
         return $next($request);
     }

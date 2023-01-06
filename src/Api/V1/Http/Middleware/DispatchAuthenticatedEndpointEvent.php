@@ -17,9 +17,7 @@ class DispatchAuthenticatedEndpointEvent
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        profiler_start('DispatchAuthenticatedEndpointEventMiddleware::handle');
         DispatchAuthenticatedEndpointsEvent::dispatch();
-        profiler_finish('DispatchAuthenticatedEndpointEventMiddleware::handle');
 
         return $next($request);
     }

@@ -20,7 +20,6 @@ class CookiesAuthenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        profiler_start('CookiesAuthenticateMiddleware::handle');
         if ($request->header('Authorization') == null && Cookie::has('__Secure_token')) {
             try {
                 $rawToken = Cookie::get('__Secure_token');
@@ -45,8 +44,6 @@ class CookiesAuthenticate
                 ->cookie($cookie2)
                 ->cookie($cookie3);
         }
-
-        profiler_finish('CookiesAuthenticateMiddleware::handle');
 
         return $next($request);
     }

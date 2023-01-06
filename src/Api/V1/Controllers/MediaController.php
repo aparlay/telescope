@@ -35,7 +35,6 @@ class MediaController extends Controller
      */
     public function index(PublicFeedRequest $request): Response
     {
-        profiler_start('MediaController::index');
         if (($type = request()?->input('type')) !== null) {
             $collection = new MediaCollection($this->mediaService->getFeedByType($request, $type));
         } else {
@@ -44,7 +43,6 @@ class MediaController extends Controller
             $data = $this->mediaService->getPublicFeeds($request, $isGuest, $isFirstPage);
             $collection = new MediaFeedsCollection($data);
         }
-        profiler_finish('MediaController::index');
 
         return $this->response($collection, '', Response::HTTP_OK);
     }
