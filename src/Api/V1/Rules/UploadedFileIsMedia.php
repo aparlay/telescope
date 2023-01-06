@@ -38,7 +38,7 @@ class UploadedFileIsMedia implements Rule
             'video/3gpp2',
             'image/jpeg',
             'image/png',
-            'image/webp'
+            'image/webp',
         ]);
     }
 
