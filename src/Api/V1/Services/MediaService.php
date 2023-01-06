@@ -375,13 +375,9 @@ class MediaService
             $visited[] = $model->_id;
         }
 
-        profiler_start('getPublicFeeds::cacheVisitedVideoByUuid');
         $this->cacheVisitedVideoByUuid($visited, $request->uuid);
-        profiler_finish('getPublicFeeds::cacheVisitedVideoByUuid');
-
-        profiler_start('getPublicFeeds::markAsVisited');
         $this->incrementMediaCounters($visited);
-        profiler_finish('getPublicFeeds::markAsVisited');
+
         return $data;
     }
 
