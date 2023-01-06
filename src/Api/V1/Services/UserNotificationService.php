@@ -106,7 +106,6 @@ class UserNotificationService
                 $this->getUser()->setStatCounter('notifications', $unreadNotificationCount);
             })->afterResponse();
 
-
             UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
                 $unreadStateChanges,
                 (string) $userId
