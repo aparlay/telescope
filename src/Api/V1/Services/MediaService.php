@@ -357,11 +357,9 @@ class MediaService
             $this->loadUserVisitedVideos((string) auth()->user()->_id, $request->uuid);
         }
 
-        profiler_start('getPublicFeeds::withQueryString');
         $data = $query->medias($this->notVisitedVideoIds($request->uuid, $request->show_adult_content))
             ->paginate(5)
             ->withQueryString();
-        profiler_finish('getPublicFeeds::withQueryString');
 
         if ($data->isEmpty() || $data->total() <= 5) {
             $this->flushVisitedVideos($request->uuid);
