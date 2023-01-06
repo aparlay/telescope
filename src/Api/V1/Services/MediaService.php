@@ -325,6 +325,8 @@ class MediaService
         bool $isGuest = true,
         bool $isFirstPage = false,
     ): LengthAwarePaginator {
+
+        profiler_start('MediaService::getPublicFeeds');
         $sortCategory = MediaSortCategories::REGISTERED->value;
 
         if ($isGuest) {
@@ -357,9 +359,11 @@ class MediaService
             $this->loadUserVisitedVideos((string) auth()->user()->_id, $request->uuid);
         }
 
+        profiler_start('MediaService::getPublicFeeds::withQueryString');
         $data = $query->medias($this->notVisitedVideoIds($request->uuid, $request->show_adult_content))
             ->paginate(5)
             ->withQueryString();
+        profiler_finish('MediaService::getPublicFeeds::withQueryString');
 
         if ($data->isEmpty() || $data->total() <= 5) {
             $this->flushVisitedVideos($request->uuid);
@@ -373,9 +377,14 @@ class MediaService
             $visited[] = $model->_id;
         }
 
+        profiler_start('MediaService::getPublicFeeds::cacheVisitedVideoByUuid');
         $this->cacheVisitedVideoByUuid($visited, $request->uuid);
+        profiler_finish('MediaService::getPublicFeeds::cacheVisitedVideoByUuid');
+        profiler_start('MediaService::getPublicFeeds::incrementMediaCounters');
         $this->incrementMediaCounters($visited);
+        profiler_finish('MediaService::getPublicFeeds::incrementMediaCounters');
 
+        profiler_finish('MediaService::getPublicFeeds');
         return $data;
     }
 
