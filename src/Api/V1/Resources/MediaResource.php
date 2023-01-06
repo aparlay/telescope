@@ -21,23 +21,6 @@ class MediaResource extends JsonResource
      */
     public function toArray($request)
     {
-        /*
-        $people = [];
-        foreach ($this->people as $person) {
-            $people[] = $this->createSimpleUser($person);
-        }
-
-        $likes = [];
-        foreach ($this->likes as $like) {
-            $likes[] = $this->createSimpleUser($like);
-        }
-
-        $visits = [];
-        foreach ($this->visits as $visit) {
-            $visits[] = $this->createSimpleUser($visit);
-        }
-        */
-
         $people = $this->createBatchSimpleUser($this->people);
         $likes = $this->createBatchSimpleUser($this->likes);
         $visits = $this->createBatchSimpleUser($this->visits);

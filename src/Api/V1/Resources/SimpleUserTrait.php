@@ -24,19 +24,14 @@ trait SimpleUserTrait
      * @return array
      * @throws Exception
      */
-    public function createBatchSimpleUser(array $rawUsers, array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked', 'is_verified']): array
-    {
-        $wg = new WaitGroup();
+    public function createBatchSimpleUser(
+        array $rawUsers,
+        array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked', 'is_verified']
+    ): array {
         $users = [];
-        go(function () use ($wg, &$users, $rawUsers, $fields) {
-            $wg->add();
-            foreach ($rawUsers as $user) {
-                $users[] = $this->createSimpleUser($user, $fields);
-            }
-            $wg->done();
-        });
-
-        $wg->wait(5);
+        foreach ($rawUsers as $user) {
+            $users[] = $this->createSimpleUser($user, $fields);
+        }
 
         return $users;
     }
@@ -44,7 +39,7 @@ trait SimpleUserTrait
     /**
      * Create the simple user attribute.
      *
-     * @param string[] $fields
+     * @param  string[]  $fields
      *
      * @throws Exception
      */
@@ -52,7 +47,7 @@ trait SimpleUserTrait
         array $userArray,
         array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked', 'is_verified']
     ): array {
-        if (! isset($userArray['_id'])) {
+        if (!isset($userArray['_id'])) {
             return [];
         }
 
@@ -62,7 +57,7 @@ trait SimpleUserTrait
             $userData['avatar'] = $userArray['avatar'] ?? Cdn::avatar('default.jpg');
         }
 
-        if (! auth()->guest()) {
+        if (!auth()->guest()) {
             $userData['is_followed'] = $this->is_followed;
             $userData['is_online'] = empty($userArray['is_followed']) ? $this->is_online : $this->is_online_for_followers;
             $userData['is_liked'] = $this->is_liked;
@@ -83,7 +78,7 @@ trait SimpleUserTrait
     private function getSimpleUser(string|ObjectId $id): array
     {
         $cacheKey = $this->cacheKeyPrefix.$id;
-        if (! config('app.is_testing') && ($simpleUser = Cache::store('octane')->get($cacheKey, false)) !== false) {
+        if (!config('app.is_testing') && ($simpleUser = Cache::store('octane')->get($cacheKey, false)) !== false) {
             return json_decode($simpleUser, true); // cache already exists
         }
 
@@ -101,7 +96,7 @@ trait SimpleUserTrait
         $data = [];
         if (($user = User::user($id)->first()) !== null) {
             $data = [
-                '_id' => (string) $user->_id,
+                '_id' => (string)$user->_id,
                 'username' => $user->username,
                 'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),
                 'is_verified' => $user->is_verified,
@@ -113,7 +108,7 @@ trait SimpleUserTrait
 
     private function cacheSimpleUser($user): void
     {
-        if (! config('app.is_testing') && ! empty($user)) {
+        if (!config('app.is_testing') && !empty($user)) {
             $cacheKey = $this->cacheKeyPrefix.$user['_id'];
             Cache::store('octane')->put($cacheKey, json_encode($user), config('app.cache.tenMinutes'));
         }
