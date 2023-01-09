@@ -171,7 +171,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->incrementMediaCounters($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -195,7 +195,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->incrementMediaCounters($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -225,7 +225,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->incrementMediaCounters($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -374,7 +374,7 @@ class MediaService
         }
 
         $this->cacheVisitedVideoByUuid($visited, $request->uuid);
-        $this->incrementMediaCounters($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -383,7 +383,7 @@ class MediaService
      * @param array $userId
      * @return void
      */
-    public function incrementMediaCounters(array $mediaIds): void
+    public function incrementMediaVisitCounter(array $mediaIds): void
     {
         $mediaIds = array_map('strval', $mediaIds);
         dispatch(function () use ($mediaIds) {
