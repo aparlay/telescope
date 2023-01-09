@@ -2,8 +2,10 @@
 
 namespace Aparlay\Core\Api\V1\Http\Middleware;
 
+use Aparlay\Core\Models\Enums\UserStatus;
 use Closure;
 use Cookie;
+use Illuminate\Http\Response;
 use PHPOpenSourceSaver\JWTAuth\Token;
 
 class CookiesAuthenticate
@@ -25,6 +27,22 @@ class CookiesAuthenticate
             } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException $e) {
             }
             $request->headers->set('Authorization', 'Bearer '.$token);
+        }
+
+        // Log out suspended or blocked users
+        if (auth()->check() &&
+            $request->header('Authorization') !== null &&
+            in_array(auth()->user()->status, [UserStatus::BLOCKED->value, UserStatus::SUSPENDED->value])) {
+            auth()->logout(true);
+
+            $cookie1 = Cookie::forget('__Secure_token');
+            $cookie2 = Cookie::forget('__Secure_refresh_token');
+            $cookie3 = Cookie::forget('__Secure_username');
+
+            return response(json_encode(['message' => 'Account suspended or blocked']), Response::HTTP_UNAUTHORIZED, ['Content-Type' => 'application/json'])
+                ->cookie($cookie1)
+                ->cookie($cookie2)
+                ->cookie($cookie3);
         }
 
         return $next($request);

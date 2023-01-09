@@ -8,10 +8,8 @@ use Aparlay\Core\Jobs\BlockedUserDeleteFollow;
 use Aparlay\Core\Jobs\BlockedUserDeleteMediaLikes;
 use Aparlay\Core\Jobs\UnBlockedUserUnBlockMedia;
 use Aparlay\Core\Models\Block;
-use Aparlay\Core\Models\Follow;
-use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
+use Laravel\Octane\Facades\Octane;
 use MongoDB\BSON\ObjectId;
 
 class BlockObserver extends BaseModelObserver
@@ -68,12 +66,13 @@ class BlockObserver extends BaseModelObserver
         $model->creatorObj->stats = $stats;
         $model->creatorObj->save();
 
-        BlockedUserBlockMedia::dispatch((string) $model->creator['_id'], (string) $model->user['_id']);
-
-        BlockedUserDeleteFollow::dispatch((string) $model->creator['_id'], (string) $model->user['_id']);
-        BlockedUserDeleteFollow::dispatch((string) $model->user['_id'], (string) $model->creator['_id']);
-        BlockedUserDeleteMediaLikes::dispatch((string) $model->creator['_id'], (string) $model->user['_id']);
-        BlockedUserDeleteMediaLikes::dispatch((string) $model->user['_id'], (string) $model->creator['_id']);
+        Octane::concurrently([
+            fn () => BlockedUserBlockMedia::dispatch((string) $model->creator['_id'], (string) $model->user['_id']),
+            fn () => BlockedUserDeleteFollow::dispatch((string) $model->creator['_id'], (string) $model->user['_id']),
+            fn () => BlockedUserDeleteFollow::dispatch((string) $model->user['_id'], (string) $model->creator['_id']),
+            fn () => BlockedUserDeleteMediaLikes::dispatch((string) $model->creator['_id'], (string) $model->user['_id']),
+            fn () => BlockedUserDeleteMediaLikes::dispatch((string) $model->user['_id'], (string) $model->creator['_id']),
+        ], 5000);
     }
 
     /**

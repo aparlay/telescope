@@ -18,7 +18,8 @@
                     'btn-outline-info' => !in_array(Arr::get($sort, 'sort_scores.guest'), [1, -1])])
                             wire:model="sort.sort_scores.guest"
                             wire:click="sort('sort_scores.guest', -1)">
-                        Ordered By New Guest {{ Arr::get($sort, 'sort_scores.guest') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.guest') == -1 ? '↓' : ''}}
+                        Ordered By New
+                        Guest {{ Arr::get($sort, 'sort_scores.guest') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.guest') == -1 ? '↓' : ''}}
                     </button>
                     <button @class([
                         'btn btn-sm',
@@ -26,7 +27,8 @@
                         'btn-outline-dark' => !in_array(Arr::get($sort, 'sort_scores.returned'), [1, -1])])
                             wire:model="sort.sort_scores.returned"
                             wire:click="sort('sort_scores.returned', -1)">
-                        Ordered By Returned {{ Arr::get($sort, 'sort_scores.returned') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.returned') == -1 ? '↓' : ''}}
+                        Ordered By
+                        Returned {{ Arr::get($sort, 'sort_scores.returned') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.returned') == -1 ? '↓' : ''}}
                     </button>
                     <button @class([
                         'btn btn-sm',
@@ -34,7 +36,8 @@
                         'btn-outline-primary' => !in_array(Arr::get($sort, 'sort_scores.registered'), [1, -1])])
                             wire:model="sort.sort_scores.registered"
                             wire:click="sort('sort_scores.registered', -1)">
-                        Ordered By Login {{ Arr::get($sort, 'sort_scores.registered') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.registered') == -1 ? '↓' : ''}}
+                        Ordered By
+                        Login {{ Arr::get($sort, 'sort_scores.registered') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.registered') == -1 ? '↓' : ''}}
                     </button>
                 </h4>
             </div>
@@ -67,16 +70,12 @@
         <tbody>
         <tr>
             <th class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'file'" :fieldLabel="'Cover'"/>
-                </div>
+                <x-sortable-column-header :sort="$sort" :fieldName="'file'" :fieldLabel="'Cover'"/>
             </th>
-            <td @class(['col-md-2', 'd-none' => $hiddenFields['creator_username']])>
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'creator.username'" :fieldLabel="'Creator'"/>
-                    <input class="form-control" type="text" wire:model="filter.creator_username"/>
-                </div>
-            </td>
+
+            <th @class(['col-md-3', 'd-none' => $hiddenFields['creator_username']])>
+                <x-sortable-column-header :sort="$sort" :fieldName="'creator.username'" :fieldLabel="'Creator'"/>
+            </th>
 
             <td class="col-md-1">
                 <div>
@@ -94,7 +93,7 @@
                     <label for="">Stats</label>
                 </div>
             </td>
-            <td class="col-md-1">
+            <td class="col-md-2">
                 <div>
                     <label for="">Score</label>
                 </div>
@@ -104,12 +103,10 @@
                     <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
                 </div>
             </td>
-            <td class="col-md-1">
-                <div>
-                    <label for="">Details</label>
-                </div>
-            </td>
 
+            <th class="col-md-1 text-right">
+                <label for="">Actions</label>
+            </th>
         </tr>
 
         @foreach($medias as $media)
@@ -117,26 +114,36 @@
                 <td>
                     <x-media-cover :media="$media"/>
                 </td>
-                <td @class(['col-md-2', 'd-none' => $hiddenFields['creator_username']])>
+
+                <td @class(['d-none' => $hiddenFields['creator_username']])>
                     <x-username-avatar :user="$media->creatorObj"/>
                 </td>
+
                 <td>
-                    <span class="badge bg-{{ MediaStatus::from($media->status)->badgeColor() }}">
-                        {{ MediaStatus::from($media->status)->label() }}
-                    </span>
+                        <span class="badge bg-{{ MediaStatus::from($media->status)->badgeColor() }}">
+                            {{ MediaStatus::from($media->status)->label() }}
+                        </span>
                 </td>
+
                 <td>
                     <i class="fa fa-heart fa-fw text-danger" title="Number of Likes"></i> {{$media->like_count}} <br>
                     <i class="fa fa-eye fa-fw text-primary" title="Number of Visits"></i> {{$media->visit_count}} <br>
                     <i class="fa fa-play fa-fw text-primary" title="Number of Play"></i> {{$media->watched_count}} <br>
-                    <i class="fa fa-clock fa-fw text-primary" title="Watch Duration"></i> {{ round(\Carbon\CarbonInterval::seconds($media->length_watched)->cascade()->totalHours) }}H. <br>
-                    <i class="fa fa-comments fa-fw text-warning" title="Number of Comments"></i> {{$media->comment_count}} <br>
+                    <i class="fa fa-clock fa-fw text-primary"
+                       title="Watch Duration"></i> {{ round(\Carbon\CarbonInterval::seconds($media->length_watched)->cascade()->totalHours) }}
+                    H. <br>
+                    <i class="fa fa-comments fa-fw text-warning"
+                       title="Number of Comments"></i> {{$media->comment_count}} <br>
                     <i class="fa fa-money-bill-wave fa-fw text-info" title="Total Tips"></i> {{(int)$media->tips/100}}
                 </td>
+
                 <td>
-                    <i class="fa fa-user-shield fa-fw text-primary" title="Score for Registered"></i> {{$media->sort_scores['registered']}} <br>
-                    <i class="fa fa-user-minus fa-fw text-info" title="Score for New Guest"></i> {{$media->sort_scores['guest']}} <br>
-                    <i class="fa fa-user-minus fa-fw text-dark" title="Score for Returned Guest"></i> {{$media->sort_scores['returned']}} <br>
+                    <i class="fa fa-user-shield fa-fw text-primary"
+                       title="Score for Registered"></i> {{$media->sort_scores['registered']}} <br>
+                    <i class="fa fa-user-minus fa-fw text-info"
+                       title="Score for New Guest"></i> {{$media->sort_scores['guest']}} <br>
+                    <i class="fa fa-user-minus fa-fw text-dark"
+                       title="Score for Returned Guest"></i> {{$media->sort_scores['returned']}} <br>
                     <hr class="my-1">
                     <div class="text-sm-left">
                         @if (is_array($media->scores))
@@ -146,16 +153,14 @@
                         @endif
                     </div>
                 </td>
+
                 <td>
                     {{$media->created_at}}
                 </td>
-                <td>
-                    <div class="col-md-6">
-                        <div>
-                            <a class="btn btn-primary btn-sm" href="{{$media->admin_url}}" title="View"><i
-                                        class="fas fa-eye"></i></a>
-                        </div>
-                    </div>
+
+                <td class="text-right">
+                    <a class="btn btn-primary btn-sm" href="{{$media->admin_url}}" title="View"><i
+                                class="fas fa-eye"></i></a>
                 </td>
             </tr>
         @endforeach

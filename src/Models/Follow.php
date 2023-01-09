@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class Follow.
@@ -123,7 +124,7 @@ class Follow extends BaseModel
     /**
      * @param  ObjectId|string  $userId
      * @param  bool  $refresh
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function cacheByUserId(ObjectId | string $userId, bool $refresh = false): void
     {
@@ -155,7 +156,7 @@ class Follow extends BaseModel
      * @param  string  $creatorId
      * @param  string  $userId
      * @return bool
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function checkCreatorIsFollowedByUser(string $creatorId, string $userId): bool
     {

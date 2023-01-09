@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Note;
 use Aparlay\Core\Admin\Repositories\NoteRepository;
+use Aparlay\Core\Models\Enums\NoteCategory;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -26,6 +27,7 @@ class NoteService
                 'avatar' => $user->avatar,
             ],
             'type' => $type,
+            'category' => ($type === NoteType::OTHER->value ? NoteCategory::NOTE->value : NoteCategory::LOG->value),
         ]);
     }
 
@@ -90,6 +92,7 @@ class NoteService
                 'avatar' => $user->avatar,
             ],
             'type' => $type,
+            'category' => ($type === NoteType::OTHER->value ? NoteCategory::NOTE->value : NoteCategory::LOG->value),
             'message' => $message,
         ];
     }
