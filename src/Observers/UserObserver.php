@@ -19,7 +19,6 @@ use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
-use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Exception;
