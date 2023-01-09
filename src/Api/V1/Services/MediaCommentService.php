@@ -109,6 +109,7 @@ class MediaCommentService
     public function delete(MediaComment $mediaComment)
     {
         MediaCommentLike::query()->comment($mediaComment->_id)->delete();
+
         return $mediaComment->delete();
     }
 }
