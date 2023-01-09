@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Models\Block;
-use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
@@ -13,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use MongoDB\BSON\ObjectId;
 use Throwable;
 
 class DeleteUserComments implements ShouldQueue
