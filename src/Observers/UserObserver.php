@@ -8,6 +8,7 @@ use Aparlay\Core\Events\AvatarChangedEvent;
 use Aparlay\Core\Events\UsernameChangedEvent;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\IP;
+use Aparlay\Core\Jobs\DeleteUserComments;
 use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
 use Aparlay\Core\Jobs\UpdateMedia;
@@ -18,6 +19,7 @@ use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
+use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Exception;
@@ -131,6 +133,7 @@ class UserObserver extends BaseModelObserver
                 case UserStatus::BLOCKED->value:
                     DeleteUserMedia::dispatch((string) $model->_id);
                     DeleteUserConnect::dispatch((string) $model->_id);
+                    DeleteUserComments::dispatch((string) $model->_id);
                     break;
             }
         }
