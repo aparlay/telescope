@@ -104,7 +104,7 @@ class UserNotificationService
             dispatch(function () use ($userId) {
                 $unreadNotificationCount = UserNotification::query()->user($userId)->notVisited()->count();
                 $this->getUser()->setStatCounter('notifications', $unreadNotificationCount);
-            });
+            })->afterResponse();
 
             UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
                 $unreadStateChanges,
