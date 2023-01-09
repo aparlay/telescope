@@ -109,34 +109,6 @@ class MediaCommentService
     public function delete(MediaComment $mediaComment)
     {
         MediaCommentLike::query()->comment($mediaComment->_id)->delete();
-
-        if ($mediaComment->parentObj) {
-            $parentObj = $mediaComment->parentObj;
-            $mediaComment->delete();
-
-            if ($mediaComment->is_first) {
-                $newFirstReply = MediaComment::query()
-                    ->parent($parentObj->_id)
-                    ->oldest('_id')
-                    ->limit(1)
-                    ->first();
-
-                $parentObj->first_reply = null;
-
-                if ($newFirstReply) {
-                    $newFirstReply->is_first = true;
-                    $newFirstReply->save();
-                    $parentObj->first_reply = (new MediaCommentResource($newFirstReply))->resolve();
-                }
-            }
-
-            if ($parentObj->replies_count > 0) {
-                $parentObj->replies_count--;
-            }
-
-            return $parentObj->save();
-        }
-
         return $mediaComment->delete();
     }
 }
