@@ -417,19 +417,6 @@ class Media extends BaseModel
             }
         }
 
-        // do not let a model upload many media together and spam feed
-        if ($oldness <= 21600) {
-            $todayUploadedMedias = self::public()
-                ->confirmed()
-                ->creator($this->creator['_id'])
-                ->where('created_at', '>=', DT::utcDateTime(['d' => -1]))
-                ->count();
-
-            if ($todayUploadedMedias > 2) {
-                return 5;
-            }
-        }
-
         return match (true) {
             $oldness <= 21600 => 10,
             $oldness <= 43200 => 9,

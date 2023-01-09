@@ -37,11 +37,13 @@ class User extends UserBase implements Auditable
 
     protected $fillable = [
         'username',
+        'full_name',
         'email',
         'email_verified',
         'bio',
         'features',
         'gender',
+        'birthday',
         'type',
         'status',
         'visibility',
@@ -50,6 +52,8 @@ class User extends UserBase implements Auditable
         'verification_status',
         'country_alpha2',
         'payout_country_alpha2',
+        'setting',
+        'password_hash',
     ];
 
     /**

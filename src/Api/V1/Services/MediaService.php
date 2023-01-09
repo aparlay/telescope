@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
+use Aparlay\Chat\Api\V1\Services\ChatService;
 use Aparlay\Core\Api\V1\Dto\MediaDTO;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
@@ -186,10 +187,10 @@ class MediaService
 
         $data = $query->public()
             ->confirmed()
+            ->gen()
             ->recentFirst()
             ->paginate(5)
             ->withQueryString();
-
         $visited = [];
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
@@ -371,6 +372,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
+
         $this->cacheVisitedVideoByUuid($visited, $request->uuid);
         $this->incrementMediaVisitCounter($visited);
 

@@ -15,6 +15,7 @@ use Aparlay\Core\Admin\Components\UtcFormatter;
 use Aparlay\Core\Admin\Components\WireDropDownList;
 use Aparlay\Core\Admin\Livewire\AuditsTable;
 use Aparlay\Core\Admin\Livewire\Components\DateRangePicker;
+use Aparlay\Core\Admin\Livewire\Components\NotesCreate;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\Dashboard\Funnel;
 use Aparlay\Core\Admin\Livewire\Dashboard\Index;
@@ -208,6 +209,7 @@ class CoreServiceProvider extends ServiceProvider
             'settings-table' => SettingsTable::class,
             'emails-table' => EmailsTable::class,
             'notes-table' => NotesTable::class,
+            'notes-create' => NotesCreate::class,
             'audits-table' => AuditsTable::class,
             'modals' => Modals::class,
             'modals.media-comment-delete-modal' => MediaCommentDeleteModal::class,

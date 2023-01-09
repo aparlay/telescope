@@ -15,21 +15,22 @@ return new class() extends Migration {
      */
     public function up()
     {
-        foreach (User::where('verification_status', UserVerificationStatus::VERIFIED->value)->get() as $user) {
-            foreach (Media::where('creator._id', new ObjectId($user->_id))->get() as $media) {
-                if ($media->is_protected !== true || $media->is_music_licensed !== true || $media->status !== MediaStatus::CONFIRMED->value) {
-                    $media->status = MediaStatus::CONFIRMED->value;
-                    $media->is_protected = true;
-                    $media->is_music_licensed = true;
-                    $media->save();
-                }
-            }
+        foreach (User::where('verification_status', UserVerificationStatus::VERIFIED->value)->whereNull('is_fake')->lazy() as $user) {
+            Media::where('creator._id', new ObjectId($user->_id))
+                ->orWhere('is_protected', '!=', true)
+                ->orWhere('is_music_licensed', '!=', true)
+                ->orWhere('status', '!=', MediaStatus::CONFIRMED->value)
+                ->update([
+                    'status' => MediaStatus::CONFIRMED->value,
+                    'is_protected' => true,
+                    'is_music_licensed' => true,
+                ]);
         }
-        foreach (Media::where('is_protected', null)->get() as $media) {
-            $media->is_protected = false;
-            $media->is_music_licensed = false;
-            $media->save();
-        }
+        Media::where('is_protected', null)->update([
+            'status' => MediaStatus::CONFIRMED->value,
+            'is_protected' => false,
+            'is_music_licensed' => false,
+        ]);
     }
 
     /**
