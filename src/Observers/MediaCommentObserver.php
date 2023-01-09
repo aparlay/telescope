@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Api\V1\Resources\MediaCommentResource;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\User;
@@ -61,8 +62,39 @@ class MediaCommentObserver extends BaseModelObserver
      * @return void
      * @throws InvalidArgumentException
      */
-    public function deleted($model): void
+    public function deleted(MediaComment $model): void
     {
+        $replies = MediaComment::query()->parent($model->_id)->get();
+        if ($replies) {
+            foreach ($replies as $reply) {
+                $reply->delete();
+            }
+        }
+
+        $parentObj = $model->parentObj;
+        if ($parentObj) {
+            if ($model->is_first) {
+                $newFirstReply = MediaComment::query()
+                    ->parent($parentObj->_id)
+                    ->oldest('_id')
+                    ->limit(1)
+                    ->first();
+
+                $parentObj->first_reply = null;
+
+                if ($newFirstReply) {
+                    $newFirstReply->is_first = true;
+                    $newFirstReply->save();
+                    $parentObj->first_reply = (new MediaCommentResource($newFirstReply))->resolve();
+                }
+            }
+
+            if ($parentObj->replies_count > 0) {
+                $parentObj->replies_count--;
+            }
+            $parentObj->save();
+        }
+
         $media = $model->mediaObj;
         if ($media === null) {
             return;
