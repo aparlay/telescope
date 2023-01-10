@@ -68,12 +68,12 @@ class BlockObserver extends BaseModelObserver
         $model->creatorObj->stats = $stats;
         $model->creatorObj->save();
 
-        BlockedUserBlockMedia::dispatch((string) $model->creator['_id'], (string) $model->user['_id']);
+        BlockedUserBlockMedia::dispatchAfterResponse((string) $model->creator['_id'], (string) $model->user['_id']);
 
-        BlockedUserDeleteFollow::dispatch((string) $model->creator['_id'], (string) $model->user['_id']);
-        BlockedUserDeleteFollow::dispatch((string) $model->user['_id'], (string) $model->creator['_id']);
-        BlockedUserDeleteMediaLikes::dispatch((string) $model->creator['_id'], (string) $model->user['_id']);
-        BlockedUserDeleteMediaLikes::dispatch((string) $model->user['_id'], (string) $model->creator['_id']);
+        BlockedUserDeleteFollow::dispatchAfterResponse((string) $model->creator['_id'], (string) $model->user['_id']);
+        BlockedUserDeleteFollow::dispatchAfterResponse((string) $model->user['_id'], (string) $model->creator['_id']);
+        BlockedUserDeleteMediaLikes::dispatchAfterResponse((string) $model->creator['_id'], (string) $model->user['_id']);
+        BlockedUserDeleteMediaLikes::dispatchAfterResponse((string) $model->user['_id'], (string) $model->creator['_id']);
     }
 
     /**
@@ -100,6 +100,6 @@ class BlockObserver extends BaseModelObserver
         $model->creatorObj->stats = $stats;
         $model->creatorObj->save();
 
-        UnBlockedUserUnBlockMedia::dispatch((string) $model->creator['_id'], (string) $model->user['_id']);
+        UnBlockedUserUnBlockMedia::dispatchAfterResponse((string) $model->creator['_id'], (string) $model->user['_id']);
     }
 }
