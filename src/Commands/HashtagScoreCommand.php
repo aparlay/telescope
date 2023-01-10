@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Commands;
 
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\RecalculateHashtag;
 use Aparlay\Core\Models\Hashtag;
 use Aparlay\Core\Models\Media;
