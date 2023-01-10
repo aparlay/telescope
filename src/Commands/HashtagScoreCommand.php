@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Commands;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Jobs\RecalculateHashtag;
 use Aparlay\Core\Models\Hashtag;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
@@ -34,8 +35,6 @@ class HashtagScoreCommand extends Command
             });
 
         foreach ($tags as $tag => $counts) {
-            $msg5 = '<fg=yellow;options=bold>- adding new hashtag: #'.$tag.'</>'.PHP_EOL;
-            $this->line($msg5);
 
             $hashtag = Hashtag::firstOrCreate(['tag' => $tag]);
             $hashtag->like_count = Media::hashtag($tag)->sum('like_count');
@@ -43,6 +42,9 @@ class HashtagScoreCommand extends Command
             $hashtag->media_count = $count = Media::hashtag($tag)->count();
             $hashtag->sort_score = (Media::hashtag($tag)->sum('sort_scores.default') / $count);
             $hashtag->save();
+            $msg5 = '<fg=yellow;options=bold>- adding new hashtag: #'.$tag.':</> ' . $count . '</>'.PHP_EOL;
+            $this->line($msg5);
+            RecalculateHashtag::dispatch($tag);
         }
 
         return self::SUCCESS;
