@@ -98,6 +98,7 @@ use OpenApi\Annotations as OA;
  *             @OA\Property(
  *                  property="user_notification_ids",
  *                  type="array",
+ *                  description="send empty array to mark all of them as read",
  *                  @OA\Items(
  *                      type="string",
  *                      format="string",

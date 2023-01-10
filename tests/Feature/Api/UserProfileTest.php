@@ -19,7 +19,7 @@ class UserProfileTest extends ApiTestCase
      */
     public function invalidUsername()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $user = User::factory()->create(['status' => UserStatus::VERIFIED->value]);
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/me?_method=PATCH', ['username' => 'a'])
@@ -45,7 +45,7 @@ class UserProfileTest extends ApiTestCase
     public function usernameExist()
     {
         User::factory()->create(['username' => 'alua_user']);
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $user = User::factory()->create(['status' => UserStatus::VERIFIED->value]);
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/me?_method=PATCH', ['username' => 'alua_user'])

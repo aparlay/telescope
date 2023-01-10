@@ -8,6 +8,7 @@ use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\UserFollowedNotification;
 use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class FollowObserver extends BaseModelObserver
 {
@@ -19,20 +20,23 @@ class FollowObserver extends BaseModelObserver
      */
     public function creating($model): void
     {
-        $user = User::user($model->user['_id'])->first();
-        $creator = User::user($model->creator['_id'])->first();
+        if (! isset($model->user['username'], $model->user['avatar'])) {
+            $user = User::user($model->user['_id'])->first();
+            $model->user = [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ];
+        }
 
-        $model->user = [
-            '_id' => new ObjectId($user->_id),
-            'username' => $user->username,
-            'avatar' => $user->avatar,
-        ];
-
-        $model->creator = [
-            '_id' => new ObjectId($creator->_id),
-            'username' => $creator->username,
-            'avatar' => $creator->avatar,
-        ];
+        if (! isset($model->creator['username'], $model->creator['avatar'])) {
+            $creator = User::user($model->creator['_id'])->first();
+            $model->creator = [
+                '_id' => new ObjectId($creator->_id),
+                'username' => $creator->username,
+                'avatar' => $creator->avatar,
+            ];
+        }
 
         parent::creating($model);
     }
@@ -41,7 +45,9 @@ class FollowObserver extends BaseModelObserver
      * Handle the Follow "created" event.
      *
      * @param  Follow  $model
+     *
      * @return void
+     * @throws InvalidArgumentException
      */
     public function created($model): void
     {

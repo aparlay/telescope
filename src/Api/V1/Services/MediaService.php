@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Dto\MediaDTO;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
+use Aparlay\Core\Api\V1\Models\Scopes\MediaScope;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\MediaRepository;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
@@ -17,6 +18,7 @@ use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
+use Aparlay\Core\Models\Queries\MediaQueryBuilder;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Redis;
@@ -168,7 +170,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->markAsVisited($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -192,7 +194,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->markAsVisited($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -207,14 +209,14 @@ class MediaService
     {
         $userId = $user->_id;
         $query = Media::creator($userId)->recentFirst();
-        if (isset(auth()->user()->_id) && (string) $userId === (string) auth()->user()->_id) {
+        if (! auth()->guest() && (string) $userId === (string) auth()->user()->_id) {
             $query->with([
                 'alertObjs' => function ($query) {
                     $query->where('status', AlertStatus::NOT_VISITED->value);
                 },
             ])->availableForOwner();
         } else {
-            $query->availableForOwner();
+            $query->availableForFollower();
         }
 
         $data = $query->paginate(15);
@@ -222,7 +224,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->markAsVisited($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -370,7 +372,7 @@ class MediaService
             $visited[] = $model->_id;
         }
         $this->cacheVisitedVideoByUuid($visited, $request->uuid);
-        $this->markAsVisited($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -379,12 +381,12 @@ class MediaService
      * @param array $userId
      * @return void
      */
-    public function markAsVisited(array $mediaIds): void
+    public function incrementMediaVisitCounter(array $mediaIds): void
     {
         $mediaIds = array_map('strval', $mediaIds);
         dispatch(function () use ($mediaIds) {
             Media::medias($mediaIds)->increment('visit_count');
-        });
+        })->afterResponse();
     }
 
     /**

@@ -99,15 +99,16 @@ class UserNotificationService
             $userId = $this->getUser()->_id;
             $hasUnreadNotifications = $this->getUser()->has_unread_notification;
             $notification->update(['status' => UserNotificationStatus::VISITED->value]);
+            $unreadStateChanges = $this->getUser()->has_unread_notification !== $hasUnreadNotifications;
 
             dispatch(function () use ($userId) {
                 $unreadNotificationCount = UserNotification::query()->user($userId)->notVisited()->count();
                 $this->getUser()->setStatCounter('notifications', $unreadNotificationCount);
-            });
+            })->afterResponse();
 
-            UserNotificationUnreadStatusUpdatedEvent::dispatch(
-                $userId,
-                $hasUnreadNotifications
+            UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
+                $unreadStateChanges,
+                (string) $userId
             );
         }
 
@@ -124,17 +125,19 @@ class UserNotificationService
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
         $hasUnreadNotifications = $this->getUser()->has_unread_notification;
+        $userNotificationQuery = UserNotification::query()->user($userId)->notVisited();
 
-        UserNotification::query()
-            ->user($userId)
-            ->notVisited()
-            ->whereInIds('_id', $notificationIds)
-            ->update(['status' => UserNotificationStatus::VISITED->value]);
+        if (! empty($notificationIds)) {
+            $userNotificationQuery->whereInIds('_id', $notificationIds);
+        }
 
-        UserNotificationUnreadStatusUpdatedEvent::dispatch(
-            $userId,
-            $hasUnreadNotifications,
-            false
+        $userNotificationQuery->update(['status' => UserNotificationStatus::VISITED->value]);
+
+        $unreadStateChanged = $this->getUser()->has_unread_notification !== $hasUnreadNotifications;
+
+        UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
+            $unreadStateChanged,
+            (string) $userId
         );
     }
 
@@ -152,10 +155,11 @@ class UserNotificationService
             $notification->update(['status' => UserNotificationStatus::NOT_VISITED->value]);
         }
 
-        UserNotificationUnreadStatusUpdatedEvent::dispatch(
-            $this->getUser()->_id,
-            $hasUnreadNotifications,
-            true
+        $unreadStateChanged = $this->getUser()->has_unread_notification !== $hasUnreadNotifications;
+
+        UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
+            $unreadStateChanged,
+            (string) $this->getUser()->_id
         );
 
         return $notification;
