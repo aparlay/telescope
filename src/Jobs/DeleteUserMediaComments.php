@@ -13,7 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Throwable;
 
-class DeleteUserComments implements ShouldQueue
+class DeleteUserMediaComments implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -59,11 +59,9 @@ class DeleteUserComments implements ShouldQueue
      */
     public function handle()
     {
-        MediaComment::query()->where('creator._id', $this->userId)->chunk(200, function ($comments) {
-            foreach ($comments as $comment) {
-                $comment->delete();
-            }
-        });
+        foreach (MediaComment::query()->where('creator._id', $this->userId)->lazy() as $comment) {
+            $comment->delete();
+        }
     }
 
     public function failed(Throwable $exception)
