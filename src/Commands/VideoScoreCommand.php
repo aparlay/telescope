@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Commands;
 
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class VideoScoreCommand extends Command
 {
@@ -12,9 +12,12 @@ class VideoScoreCommand extends Command
 
     public $description = 'This command is responsible for update video score';
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function handle()
     {
-        $mediaQuery = Media::Where(['is_fake' => ['$exists' => false]])->availableForFollower()->orderBy('created_at', 'ASC');
+        $mediaQuery = Media::availableForFollower()->whereNull('is_fake')->orderBy('created_at', 'ASC');
         foreach ($mediaQuery->lazy() as $media) {/** @var Media $media */
             $media->recalculateSortScores();
         }
