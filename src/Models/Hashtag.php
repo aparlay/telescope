@@ -143,7 +143,7 @@ class Hashtag extends BaseModel
             'full_name' => $this->tag,
             'description' => $this->tag,
             'hashtags' => [$this->tag],
-            'score' => $this->sort_score,
+            'score' => $this->media_count,
             'gender' => $genders,
             'country' => '',
             'like_count' => $this->like_count,

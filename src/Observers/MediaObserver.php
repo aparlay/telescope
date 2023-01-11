@@ -97,13 +97,13 @@ class MediaObserver extends BaseModelObserver
         }
 
         if ($media->wasChanged(['status', 'visibility'])) {
-            foreach ($media->hashtags as $tag) {
-                RecalculateHashtag::dispatch($tag);
-            }
-
             Media::CachePublicExplicitMediaIds();
             Media::CachePublicToplessMediaIds();
             Media::CachePublicMediaIds();
+        }
+
+        foreach ($media->hashtags as $tag) {
+            RecalculateHashtag::dispatch($tag);
         }
     }
 
