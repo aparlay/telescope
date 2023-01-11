@@ -61,7 +61,7 @@ class MeRequest extends FormRequest
             'setting.notifications.*' => ['nullable', 'bool'],
             'setting.filter_content_gender.*' => ['nullable', 'bool'],
             'tags' => ['nullable', 'array'],
-            'tags.*' => ['string']
+            'tags.*' => ['string'],
         ];
     }
 
