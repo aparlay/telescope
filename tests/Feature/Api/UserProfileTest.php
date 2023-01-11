@@ -312,6 +312,7 @@ class UserProfileTest extends ApiTestCase
                     '_links' => [
                         'self' => ['href'],
                     ],
+                    'tags' => []
                 ],
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
@@ -369,6 +370,7 @@ class UserProfileTest extends ApiTestCase
                     'data._links' => 'array',
                     'data._links.self' => 'array',
                     'data._links.self.href' => 'string',
+                    'data.tags' => 'array',
                     'message' => 'string',
                 ])
             );
@@ -459,6 +461,7 @@ class UserProfileTest extends ApiTestCase
                         '_links' => [
                             'self' => ['href'],
                         ],
+                        'tags' => []
                     ],
                 ]
             )
@@ -484,6 +487,7 @@ class UserProfileTest extends ApiTestCase
                     'data._links' => 'array',
                     'data._links.self' => 'array',
                     'data._links.self.href' => 'string',
+                    'data.tags' => 'array',
                     'message' => 'string',
                 ])
             );
