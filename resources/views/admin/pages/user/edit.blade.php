@@ -299,7 +299,23 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="card card-maroon card-outline">
+                                <div class="card-header" id="headingComments">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                data-target="#collapseComments" aria-expanded="false"
+                                                aria-controls="collapseComments">
+                                            Comments
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseComments" class="collapse" aria-labelledby="headingComments"
+                                     data-parent="#accordion">
+                                    <div class="card-body">
+                                        <livewire:media-comments-table :userId="$user->_id"/>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="card card-maroon card-outline">
                                 <div class="card-header" id="headingMainEleven">
                                     <h5 class="mb-0">
