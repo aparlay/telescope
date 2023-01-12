@@ -12,6 +12,7 @@ use Aparlay\Core\Api\V1\Services\UserService;
 use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -135,5 +136,17 @@ class UserController extends Controller
         }
 
         return $this->error('Account not found!', [], Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @param  string  $username
+     *
+     * @return Response
+     */
+    public function showByUsername(string $username): Response
+    {
+        $user = User::username($username)->active()->firstOrFail();
+
+        return $this->show($user);
     }
 }

@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Services;
 
 use Aparlay\Core\Api\V1\Dto\UserDeleteDTO;
 use Aparlay\Core\Api\V1\Models\Login;
+use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Repositories\UserRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
@@ -16,9 +17,11 @@ use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Jenssegers\Agent\Agent;
+use MongoDB\BSON\ObjectId;
 
 class UserService
 {
