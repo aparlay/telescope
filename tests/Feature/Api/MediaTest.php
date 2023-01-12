@@ -104,6 +104,93 @@ class MediaTest extends ApiTestCase
                 ])
             );
     }
+    /**
+     * @test
+     */
+    public function getMediaSlug()
+    {
+        $media = Media::factory()->create([
+            'status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value,
+        ]);
+        $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->json('GET', '/v1/media/share/'.$media->slug, [])
+            ->assertStatus(200)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 200)
+            ->assertJsonStructure([
+                'data' => [
+                    '_id',
+                    'description',
+                    'hash',
+                    'size',
+                    'length',
+                    'mime_type',
+                    'visibility',
+                    'status',
+                    'hashtags',
+                    'people',
+                    'file',
+                    'cover',
+                    'creator' => [
+                        '_id',
+                        'username',
+                        'avatar',
+                    ],
+                    'is_liked',
+                    'is_visited',
+                    'like_count',
+                    'likes',
+                    'visit_count',
+                    'visits',
+                    'comment_count',
+                    'comments',
+                    'is_adult',
+                    'slug',
+                    'created_by',
+                    'updated_by',
+                    'created_at',
+                    'updated_at',
+                    '_links',
+                ],
+            ])->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType([
+                    'code' => 'integer',
+                    'status' => 'string',
+                    'uuid' => 'string',
+                    'data._id' => 'string',
+                    'data.description' => 'string',
+                    'data.hash' => 'string',
+                    'data.size' => 'integer',
+                    'data.length' => 'integer',
+                    'data.mime_type' => 'string',
+                    'data.visibility' => 'integer',
+                    'data.status' => 'integer',
+                    'data.hashtags' => 'array',
+                    'data.people' => 'array',
+                    'data.file' => 'string',
+                    'data.cover' => 'string',
+                    'data.creator' => 'array',
+                    'data.creator.avatar' => 'string',
+                    'data.creator.username' => 'string',
+                    'data.creator._id' => 'string',
+                    'data.is_liked' => 'boolean',
+                    'data.is_visited' => 'boolean',
+                    'data.like_count' => 'integer',
+                    'data.likes' => 'array',
+                    'data.visit_count' => 'integer',
+                    'data.visits' => 'array',
+                    'data.comment_count' => 'integer',
+                    'data.comments' => 'array',
+                    'data.is_adult' => 'boolean',
+                    'data.slug' => 'string',
+                    'data.created_by' => 'string',
+                    'data.updated_by' => 'string',
+                    'data.created_at' => 'integer',
+                    'data.updated_at' => 'integer',
+                    'data._links' => 'array',
+                ])
+            );
+    }
 
     /**
      * @test
