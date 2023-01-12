@@ -15,7 +15,7 @@ class AnalyticsSinceCommand extends Command implements Isolatable
 
     public function handle()
     {
-        $daysBefore = (int)$this->argument('days');
+        $daysBefore = (int) $this->argument('days');
         for ($i = -$daysBefore; $i <= 0; $i++) {
             $timestamp = strtotime($i.' days midnight');
             $startUtc = DT::timestampToUtc($timestamp);
