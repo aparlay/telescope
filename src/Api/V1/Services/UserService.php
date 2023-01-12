@@ -265,7 +265,7 @@ class UserService
         $cacheKey = 'route.map.media.'.$username;
         if (($userId = Cache::store('octane')->get($cacheKey)) === null) {
             $user = User::username($username)->active()->select(['_id'])->firstOrFail();
-            Cache::store('octane')->set($cacheKey, (string)$user->_id, config('app.cache.tenMinutes'));
+            Cache::store('octane')->set($cacheKey, (string) $user->_id, config('app.cache.tenMinutes'));
         }
 
         return new ObjectId($userId);

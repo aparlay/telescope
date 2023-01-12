@@ -147,6 +147,7 @@ class UserController extends Controller
     {
         $userId = $this->userService->getUserIdByUsername($username);
         $user = User::user($userId)->firstOrFail();
+
         return $this->show($user);
     }
 }

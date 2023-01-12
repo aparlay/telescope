@@ -532,7 +532,6 @@ class MediaService
         }
     }
 
-
     /**
      * @param  string  $slug
      *
@@ -544,7 +543,7 @@ class MediaService
         $cacheKey = 'route.map.media.'.$slug;
         if (($mediaId = Cache::store('octane')->get($cacheKey)) === null) {
             $media = Media::slug($slug)->select(['_id'])->firstOrFail();
-            Cache::store('octane')->set($cacheKey, (string)$media->_id, config('app.cache.tenMinutes'));
+            Cache::store('octane')->set($cacheKey, (string) $media->_id, config('app.cache.tenMinutes'));
         }
 
         return new ObjectId($mediaId);

@@ -160,6 +160,7 @@ class MediaController extends Controller
     {
         $mediaId = $this->mediaService->getMediaIdBySlug($slug);
         $media = Media::media($mediaId)->firstOrFail();
+
         return $this->show($media);
     }
 }
