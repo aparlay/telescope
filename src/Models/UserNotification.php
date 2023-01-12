@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Database\Factories\UserNotificationFactory;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\Queries\UserNotificationQueryBuilder;
@@ -165,6 +166,7 @@ class UserNotification extends BaseModel
         /** @var Media $media */
         $media = $this->entityObj;
         $this->message = $media->likesNotificationMessage();
+        $this->created_at = DT::utcNow();
 
         return $this->save();
     }
@@ -177,6 +179,7 @@ class UserNotification extends BaseModel
         /** @var Media $media */
         $media = $this->entityObj;
         $this->message = $media->commentsNotificationMessage();
+        $this->created_at = DT::utcNow();
 
         return $this->save();
     }
