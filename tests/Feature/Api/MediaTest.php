@@ -104,6 +104,7 @@ class MediaTest extends ApiTestCase
                 ])
             );
     }
+
     /**
      * @test
      */
