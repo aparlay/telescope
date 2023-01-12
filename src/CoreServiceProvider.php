@@ -35,7 +35,7 @@ use Aparlay\Core\Admin\Livewire\SettingsTable;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
-use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
+use Aparlay\Core\Commands\AnalyticsSinceCommand;
 use Aparlay\Core\Commands\CleanupCommand;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\DbBackupCommand;
@@ -120,7 +120,7 @@ class CoreServiceProvider extends ServiceProvider
                 MeilisearchSettingCommand::class,
                 WsCommand::class,
                 WarmupCacheCommand::class,
-                AnalyticsTwoMonthCommand::class,
+                AnalyticsSinceCommand::class,
                 AnalyticsDailyCommand::class,
                 CleanupCommand::class,
                 DbRestoreCommand::class,
