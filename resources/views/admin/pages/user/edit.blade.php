@@ -54,7 +54,6 @@
                             @include('default_view::admin.pages.user.tabs.edit.payouts', ['user' => $user])
                         </div>
                     </div>
-
                     <div class="card card-default collapsed-card">
                         <div class="card-header">
                             <h3 class="card-title text-uppercase">Chats</h3>
@@ -70,6 +69,24 @@
                         </div>
                         <div class="card-body">
                             <livewire:chats-table :userId="$user->_id"/>
+                        </div>
+                    </div>
+
+                    <div class="card card-maroon card-outline">
+                        <div class="card-header" id="headingComments">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse"
+                                        data-target="#collapseComments" aria-expanded="false"
+                                        aria-controls="collapseComments">
+                                    Comments
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseComments" class="collapse" aria-labelledby="headingComments"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                <livewire:media-comments-table :userId="$user->_id"/>
+                            </div>
                         </div>
                     </div>
 
