@@ -531,21 +531,4 @@ class MediaService
             MediaBatchWatched::dispatch($medias, $uuid);
         }
     }
-
-    /**
-     * @param  string  $slug
-     *
-     * @return ObjectId
-     * @throws InvalidArgumentExceptionAlias
-     */
-    public function getMediaIdBySlug(string $slug): ObjectId
-    {
-        $cacheKey = 'route.map.media.'.$slug;
-        if (($mediaId = Cache::store('octane')->get($cacheKey)) === null) {
-            $media = Media::slug($slug)->select(['_id'])->firstOrFail();
-            Cache::store('octane')->set($cacheKey, (string) $media->_id, config('app.cache.tenMinutes'));
-        }
-
-        return new ObjectId($mediaId);
-    }
 }

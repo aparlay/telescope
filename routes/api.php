@@ -60,14 +60,21 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         /* Optional Auth Group */
         Route::middleware(['cookies-auth', 'optional-auth'])->group(function () {
             Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
-            Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
             Route::match(['head', 'get'], '/share/{slug}', [MediaController::class, 'showBySlug'])->name('share.slug');
+            Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
         });
     });
 
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/{type}', [UserController::class, 'index'])
             ->where(['type' => '(likes|blocks|followers|followings|hashtags)'])->name('list');
+
+        /* Optional Auth Group */
+        Route::middleware(['cookies-auth', 'optional-auth'])->group(function () {
+            Route::match(['head', 'get'], '/share/{username}', [UserController::class, 'showByUsername'])->name('share.username');
+            Route::post('/{user}/report', [ReportController::class, 'user'])->name('report');
+            Route::match(['head', 'get'], '/{user}/media', [MediaController::class, 'listByUser'])->name('media.list');
+        });
 
         /* Authentication Group with user prifix */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
@@ -76,13 +83,6 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
             Route::put('/{user}/follow', [FollowController::class, 'store'])->name('follow');
             Route::delete('/{user}/follow', [FollowController::class, 'destroy'])->name('unfollow');
             Route::get('/{user}', [UserController::class, 'show'])->name('show')->withoutMiddleware(['auth:api']);
-        });
-
-        /* Optional Auth Group */
-        Route::middleware(['cookies-auth', 'optional-auth'])->group(function () {
-            Route::match(['head', 'post'], '/', [ReportController::class, 'user'])->name('report');
-            Route::match(['head', 'get'], '/share/{username}', [UserController::class, 'showByUsername'])->name('share.username');
-            Route::match(['head', 'get'], '/{user}/media', [MediaController::class, 'listByUser'])->name('media.list');
         });
     });
 

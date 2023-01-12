@@ -259,15 +259,4 @@ class UserService
             $this->userRepository->update(['user_agents' => $userAgents], $user->_id);
         }
     }
-
-    public function getUserIdByUsername(string $username)
-    {
-        $cacheKey = 'route.map.media.'.$username;
-        if (($userId = Cache::store('octane')->get($cacheKey)) === null) {
-            $user = User::username($username)->active()->select(['_id'])->firstOrFail();
-            Cache::store('octane')->set($cacheKey, (string) $user->_id, config('app.cache.tenMinutes'));
-        }
-
-        return new ObjectId($userId);
-    }
 }

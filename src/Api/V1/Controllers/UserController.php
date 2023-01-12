@@ -145,8 +145,7 @@ class UserController extends Controller
      */
     public function showByUsername(string $username): Response
     {
-        $userId = $this->userService->getUserIdByUsername($username);
-        $user = User::user($userId)->firstOrFail();
+        $user = User::username($username)->active()->firstOrFail();
 
         return $this->show($user);
     }
