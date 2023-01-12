@@ -14,6 +14,7 @@ use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UploadService;
 use Aparlay\Core\Api\V1\Services\UserService;
+use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -147,5 +148,18 @@ class MediaController extends Controller
         $this->mediaService->watchedMedia($medias, $uuid);
 
         return response('', 202, []);
+    }
+
+    /**
+     * @param  string|null  $slug
+     *
+     * @return Response
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function showBySlug(string $slug = null): Response
+    {
+        $mediaId = $this->mediaService->getMediaIdBySlug($slug);
+        $media = Media::media($mediaId)->firstOrFail();
+        return $this->show($media);
     }
 }

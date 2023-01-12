@@ -21,6 +21,7 @@ use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\Queries\MediaQueryBuilder;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
@@ -529,5 +530,23 @@ class MediaService
 
             MediaBatchWatched::dispatch($medias, $uuid);
         }
+    }
+
+
+    /**
+     * @param  string  $slug
+     *
+     * @return ObjectId
+     * @throws InvalidArgumentExceptionAlias
+     */
+    public function getMediaIdBySlug(string $slug): ObjectId
+    {
+        $cacheKey = 'route.map.media.'.$slug;
+        if (($mediaId = Cache::store('octane')->get($cacheKey)) === null) {
+            $media = Media::slug($slug)->select(['_id'])->firstOrFail();
+            Cache::store('octane')->set($cacheKey, (string)$media->_id, config('app.cache.tenMinutes'));
+        }
+
+        return new ObjectId($mediaId);
     }
 }
