@@ -428,9 +428,9 @@ use OpenApi\Annotations as OA;
  * @OA\Get (
  *     path="/v1/media/share/{slug}",
  *     tags={"Core | Media"},
- *     summary="view media",
+ *     summary="view media by slug",
  *     description="To view a media description you need to call this endpoint.",
- *     operationId="viewMedia",
+ *     operationId="viewMediaBySlug",
  *     @OA\Parameter(
  *         name="slug",
  *         in="path",

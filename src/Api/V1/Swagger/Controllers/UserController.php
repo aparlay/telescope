@@ -344,7 +344,7 @@ use OpenApi\Annotations as OA;
  *     tags={"Core | User"},
  *     summary="Get the user data",
  *     description="Fetch the user information.",
- *     operationId="userView",
+ *     operationId="userViewByUsername",
  *     @OA\Parameter(
  *         name="X-DEVICE-ID",
  *         in="header",
