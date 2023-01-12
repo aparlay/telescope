@@ -47,8 +47,7 @@ final class AnalyticsCalculatorService
         UTCDateTime $endAt,
         bool $saveResults = true,
         bool $ga = false
-    ): array
-    {
+    ): array {
         $availableMedia = Media::date(null, $endAt)->count();
 
         $date = date('Y-m-d', $startAt->toDateTime()->getTimestamp() + 20000);
