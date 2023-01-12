@@ -49,7 +49,9 @@ final class DashboardStatsService
                         'email_deferred' => ['$sum' => '$email.deferred'],
                         'email_bounced' => ['$sum' => '$email.bounced'],
 
-                        'user_registered' => ['$sum' => '$user.registered'],
+                        'user_registered_attempts' => ['$sum' => '$user.registered'],
+                        'user_registered_actives' => ['$sum' => '$user.active'],
+                        'user_id_verified' => ['$sum' => '$user.verified'],
                         'user_login' => ['$sum' => '$user.login'],
                         'user_verified' => ['$sum' => '$user.verified'],
                         'user_duration' => ['$sum' => '$user.duration'],

@@ -111,6 +111,9 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read string $country_label
  * @property-read string $verification_status_label
  *
+ * @method static |self|Builder date(UTCDateTime $startAt, UTCDateTime $endAt, string $field = 'created_at') filter by date
+ * @method static |self|Builder active() get activated user
+ * @method static |self|Builder idVerified() get id verified user
  * @method static |self|Builder username(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
  * @method static |self|Builder availableForFollower()    get available content for followers
