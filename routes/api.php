@@ -61,7 +61,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         Route::middleware(['cookies-auth', 'optional-auth'])->group(function () {
             Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
             Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
-            Route::match(['head', 'get'], '/share/{slug}', [MediaController::class, 'showBySlug'])->name('share.media.slug');
+            Route::match(['head', 'get'], '/share/{slug}', [MediaController::class, 'showBySlug'])->name('share.slug');
         });
     });
 
@@ -81,8 +81,8 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         /* Optional Auth Group */
         Route::middleware(['cookies-auth', 'optional-auth'])->group(function () {
             Route::match(['head', 'post'], '/', [ReportController::class, 'user'])->name('report');
+            Route::match(['head', 'get'], '/share/{username}', [UserController::class, 'showByUsername'])->name('share.username');
             Route::match(['head', 'get'], '/{user}/media', [MediaController::class, 'listByUser'])->name('media.list');
-            Route::match(['head', 'get'], '/share/{username}', [UserController::class, 'showByUsername'])->name('share.user.username');
         });
     });
 
