@@ -192,7 +192,7 @@ class User extends \App\Models\User
         'deleted_at',
         'last_online_at',
         'tracking',
-        'tags'
+        'tags',
     ];
 
     protected $attributes = [

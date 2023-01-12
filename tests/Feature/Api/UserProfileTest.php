@@ -433,7 +433,7 @@ class UserProfileTest extends ApiTestCase
                     '_links' => [
                         'self' => ['href'],
                     ],
-                    'tags' => []
+                    'tags' => [],
                 ],
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
@@ -582,7 +582,7 @@ class UserProfileTest extends ApiTestCase
                         '_links' => [
                             'self' => ['href'],
                         ],
-                        'tags' => []
+                        'tags' => [],
                     ],
                 ]
             )
