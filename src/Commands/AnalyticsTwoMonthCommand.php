@@ -21,7 +21,7 @@ class AnalyticsTwoMonthCommand extends Command implements Isolatable
             $endUtc = DT::timestampToUtc($timestamp + 86400);
 
             $analytics = app()->make(AnalyticsCalculatorService::class);
-            $analytics->calculateAnalytics($startUtc, $endUtc);
+            $analytics->calculateAnalytics($startUtc, $endUtc, true, false);
 
             $date = $startUtc->toDateTime()->format('Y-m-d');
 

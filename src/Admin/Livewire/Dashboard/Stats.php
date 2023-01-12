@@ -56,11 +56,16 @@ final class Stats extends BaseDashboardComponent
                 'value' => Arr::get($results, 'active_users'),
             ],
             [
-                'label' => 'Registrations',
-                'value' => Arr::get($results, 'user_registered'),
+                'label' => 'Registrations Atm.',
+                'value' => Arr::get($results, 'user_registered_attempt'),
+            ],
+            [
+                'label' => 'Registrations Act.',
+                'value' => Arr::get($results, 'user_registered_active'),
             ],
             [
                 'label' => 'Verifications',
+                'value' => Arr::get($results, 'user_id_verified'),
             ],
             [
                 'label' => 'Video Uploads',
