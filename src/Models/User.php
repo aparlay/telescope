@@ -197,6 +197,7 @@ class User extends \App\Models\User
         'setting' => [
             'otp' => false,
             'show_adult_content' => 2,
+            'allow_incoming_call' => true,
             'filter_content_gender' => [
                 'female' => true,
                 'male' => false,
