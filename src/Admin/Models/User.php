@@ -7,6 +7,7 @@ use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\User as UserBase;
+use Illuminate\Support\Str;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class User extends UserBase implements Auditable
@@ -133,5 +134,12 @@ class User extends UserBase implements Auditable
     public function adminlte_profile_url()
     {
         return 'profile/username';
+    }
+
+    public function getEmailTrimmedAttribute()
+    {
+        $atSignPosition = strpos($this->email, '@');
+
+        return Str::limit(Str::substr($this->email, 0, $atSignPosition)).'@'.Str::substr($this->email, $atSignPosition);
     }
 }

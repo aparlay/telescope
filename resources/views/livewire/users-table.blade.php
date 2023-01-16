@@ -4,6 +4,7 @@
     use Aparlay\Core\Models\Enums\UserStatus;
     use Aparlay\Core\Models\Enums\UserVerificationStatus;
     use Aparlay\Core\Models\Country;
+    use \Illuminate\Support\Str;
 @endphp
 
 <div class="user-table table-responsive">
@@ -102,11 +103,11 @@
                     <x-username-avatar :user="$user"/>
                 </td>
                 <td class="col-md-2">
-                    <a href="{{$user->admin_url}}">{{ $user->email }}</a>
+                    <a href="{{$user->admin_url}}">{{ $user->email_trimmed }}</a>
                 </td>
                 <td class="col-md-2">
                     <img src="{{ $user->country_flags['24'] }}" alt="{{ $user->country_alpha3 }}"
-                         class="mr-1 align-bottom">{{ $user->country_label }}
+                         class="mr-1 align-bottom">{{ Str::upper($user->country_alpha3) }}
                 </td>
                 <td class="col-md-1">
                     <span class="badge bg-{{ UserGender::from($user->gender)->badgeColor() }}">
