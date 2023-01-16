@@ -135,6 +135,7 @@ class User extends UserBase implements Auditable
     public function getEmailTrimmedAttribute()
     {
         $atSignPosition = strpos($this->email, '@');
+
         return Str::limit(Str::substr($this->email, 0, $atSignPosition)).'@'.Str::substr($this->email, $atSignPosition);
     }
 }
