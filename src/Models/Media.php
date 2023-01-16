@@ -291,6 +291,25 @@ class Media extends BaseModel
         ];
     }
 
+    public function searchIndexShouldBeUpdated(): bool
+    {
+        if ($this->isDirty([
+            'cover_url',
+            'content_gender',
+            'description',
+            'like_count',
+            'visit_count',
+            'comment_count',
+            'hashtags',
+            'sort_scores',
+            'scores',
+        ])) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Create a new factory instance for the model.
      */

@@ -85,29 +85,29 @@ use MongoDB\BSON\UTCDateTime;
  * @property bool        $has_unread_notification
  * @property UTCDateTime $last_online_at
  *
- * @property User $referralObj
- * @property Media[] $mediaObjs
+ * @property User        $referralObj
+ * @property Media[]     $mediaObjs
  *
  * @property-read string $admin_url
  * @property-read string $note_admin_url
  * @property-read string $slack_admin_url
- * @property-read bool $is_subscribable
- * @property-read bool $is_online
- * @property-read bool $is_verified
- * @property-read bool $is_online_for_followers
- * @property-read bool $is_tier3
- * @property-read bool $is_tier1
- * @property-read bool $is_risky
- * @property-read bool $is_public
- * @property-read bool $is_private
- * @property-read bool $is_invisible
- * @property-read int $tip_commission_percentage
- * @property-read int $tip_referral_commission_percentage
- * @property-read int $subscription_commission_percentage
- * @property-read int $subscription_referral_commission_percentage
- * @property-read int $exclusive_content_commission_percentage
- * @property-read int $exclusive_content_referral_commission_percentage
- * @property-read array $counters
+ * @property-read bool   $is_subscribable
+ * @property-read bool   $is_online
+ * @property-read bool   $is_verified
+ * @property-read bool   $is_online_for_followers
+ * @property-read bool   $is_tier3
+ * @property-read bool   $is_tier1
+ * @property-read bool   $is_risky
+ * @property-read bool   $is_public
+ * @property-read bool   $is_private
+ * @property-read bool   $is_invisible
+ * @property-read int    $tip_commission_percentage
+ * @property-read int    $tip_referral_commission_percentage
+ * @property-read int    $subscription_commission_percentage
+ * @property-read int    $subscription_referral_commission_percentage
+ * @property-read int    $exclusive_content_commission_percentage
+ * @property-read int    $exclusive_content_referral_commission_percentage
+ * @property-read array  $counters
  * @property-read string $country_label
  * @property-read string $verification_status_label
  *
@@ -347,7 +347,7 @@ class User extends \App\Models\User
     {
         return ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) &&
             in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
-            ! config('app.is_testing');
+            !config('app.is_testing');
     }
 
     /**
@@ -358,7 +358,7 @@ class User extends \App\Models\User
     public function toSearchableArray()
     {
         return [
-            '_id' => (string) $this->_id,
+            '_id' => (string)$this->_id,
             'type' => 'user',
             'poster' => $this->avatar,
             'username' => $this->username,
@@ -379,10 +379,31 @@ class User extends \App\Models\User
         ];
     }
 
+    public function searchIndexShouldBeUpdated(): bool
+    {
+        if ($this->isDirty([
+            'avatar',
+            'username',
+            'full_name',
+            'gender',
+            'bio',
+            'country_alpha2',
+            'scores',
+            'last_online_at',
+            'last_location',
+            'counters',
+        ])) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Qualify the given column name by the model's table.
      *
      * @param  string  $column
+     *
      * @return string
      */
     public function qualifyColumn($column)
@@ -481,15 +502,18 @@ class User extends \App\Models\User
 
     /**
      * Get the user risk.
-     * @todo this method implementation should change and rely on risk score
      *
      * @return bool
+     * @todo this method implementation should change and rely on risk score
+     *
      */
     public function getIsRiskyAttribute(): bool
     {
         return $this->setting['payment']['block_unverified_cc'] ||
             ($this->is_tier3) ||
-            ($this->setting['payment']['unverified_cc_spent_amount'] > config('payment.fraud.big_spender.maximum_total_amount'));
+            ($this->setting['payment']['unverified_cc_spent_amount'] > config(
+                    'payment.fraud.big_spender.maximum_total_amount'
+                ));
     }
 
     /**
@@ -522,7 +546,7 @@ class User extends \App\Models\User
         }
         $userId = auth()->user()->_id;
 
-        return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
+        return Follow::checkCreatorIsFollowedByUser((string)$this->_id, (string)$userId);
     }
 
     /**
@@ -535,6 +559,7 @@ class User extends \App\Models\User
 
     /**
      * @param $attributeValue
+     *
      * @return mixed
      */
     public function getCountFieldsUpdatedAtAttribute($attributeValue): mixed
@@ -584,7 +609,7 @@ class User extends \App\Models\User
 
     public function getHasUnreadChatAttribute(): bool
     {
-        return (bool) Chat::query()->unreadFor($this->_id)->first();
+        return (bool)Chat::query()->unreadFor($this->_id)->first();
     }
 
     public function getHasUnreadNotificationAttribute(): bool
@@ -639,6 +664,7 @@ class User extends \App\Models\User
 
     /**
      * @param $attributeValue
+     *
      * @return void
      */
     public function setCountFieldsUpdatedAtAttribute($attributeValue)
@@ -679,7 +705,7 @@ class User extends \App\Models\User
     /**
      * Route notifications for the Slack channel.
      *
-     * @param Notification $notification
+     * @param  Notification  $notification
      *
      * @return string
      */
@@ -691,7 +717,7 @@ class User extends \App\Models\User
     /**
      * Route notifications for the Slack channel.
      *
-     * @param Notification $notification
+     * @param  Notification  $notification
      *
      * @return array
      */
@@ -701,18 +727,19 @@ class User extends \App\Models\User
     }
 
     /**
-     * @param  string  $attribute
-     * @param  mixed  $item
+     * @param  string    $attribute
+     * @param  mixed     $item
      * @param  int|null  $length
+     *
      * @return void
      */
     public function addToSet(string $attribute, mixed $item, int $length = null): void
     {
-        if (! is_array($this->$attribute)) {
+        if (!is_array($this->$attribute)) {
             $this->$attribute = [];
         }
         $values = $this->$attribute;
-        if (! in_array($item, $values, false)) {
+        if (!in_array($item, $values, false)) {
             array_unshift($values, $item);
         }
 
@@ -725,12 +752,13 @@ class User extends \App\Models\User
 
     /**
      * @param  string  $attribute
-     * @param  mixed  $item
+     * @param  mixed   $item
+     *
      * @return void
      */
     public function removeFromSet(string $attribute, mixed $item): void
     {
-        if (! is_array($this->$attribute)) {
+        if (!is_array($this->$attribute)) {
             $this->$attribute = [];
         }
         $values = $this->$attribute;
@@ -839,7 +867,7 @@ class User extends \App\Models\User
 
         $cacheKey = config('app.cache.keys.online.none').':'.$currentWindow;
 
-        return Redis::sismember($cacheKey, (string) $userId);
+        return Redis::sismember($cacheKey, (string)$userId);
     }
 
     public static function isOnlineForFollowers($userId): bool
@@ -848,7 +876,7 @@ class User extends \App\Models\User
 
         $cacheKey = config('app.cache.keys.online.followings').':'.$currentWindow;
 
-        return Redis::sismember($cacheKey, (string) $userId);
+        return Redis::sismember($cacheKey, (string)$userId);
     }
 
     public static function isOnlineForAll($userId): bool
@@ -857,28 +885,30 @@ class User extends \App\Models\User
 
         $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
 
-        return Redis::sismember($cacheKey, (string) $userId);
+        return Redis::sismember($cacheKey, (string)$userId);
     }
 
     /**
      * @param  User|Authenticatable|ObjectId|string|null  $user
+     *
      * @return bool
      */
     public function equalTo(self|Authenticatable|ObjectId|string|null $user): bool
     {
         if ($user instanceof ObjectId) {
-            $userId = (string) $user;
+            $userId = (string)$user;
         } elseif ($user instanceof Authenticatable) {
-            $userId = (string) $user->_id;
+            $userId = (string)$user->_id;
         } else {
-            $userId = (string) $user;
+            $userId = (string)$user;
         }
 
-        return (string) $this->_id === $userId;
+        return (string)$this->_id === $userId;
     }
 
     /**
      * Get only class name without namespace.
+     *
      * @return bool|string
      */
     public static function shortClassName()
@@ -888,10 +918,12 @@ class User extends \App\Models\User
 
     /**
      * Get only class name without namespace.
+     *
      * @param  User|Authenticatable|ObjectId|string  $user
+     *
      * @return bool
      */
-    public function blockedUser(self | Authenticatable | ObjectId | string $user): bool
+    public function blockedUser(self|Authenticatable|ObjectId|string $user): bool
     {
         if (is_string($user)) {
             $user = new ObjectId($user);
@@ -908,16 +940,19 @@ class User extends \App\Models\User
 
     /**
      * Get only class name without namespace.
+     *
      * @param  string  $countryAlpha2
+     *
      * @return bool
      */
     public function blockedCountry(string $countryAlpha2): bool
     {
-        return ! empty($countryAlpha2) && Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
+        return !empty($countryAlpha2) && Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
     }
 
     /**
      * @param  int  $amount
+     *
      * @return bool
      */
     public function unverifiedCCSpentAmount(int $amount): bool
@@ -970,6 +1005,7 @@ class User extends \App\Models\User
 
     /**
      * @param $fields
+     *
      * @return void
      */
     public function fillStatsCountersField($fields): void
@@ -988,6 +1024,7 @@ class User extends \App\Models\User
 
     /**
      * @param $fields
+     *
      * @return void
      */
     public function fillStatsAmountsField($fields): void
@@ -1022,13 +1059,15 @@ class User extends \App\Models\User
     {
         $likeCount = MediaLike::query()->user($this->_id)->count();
         $this->like_count = $likeCount;
-        $this->likes = MediaLike::query()->user($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaLike $like) {
-            return [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ];
-        })->toArray();
+        $this->likes = MediaLike::query()->user($this->_id)->limit(10)->recentFirst()->get()->map(
+            function (MediaLike $like) {
+                return [
+                    '_id' => new ObjectId($like->creator['_id']),
+                    'username' => $like->creator['username'],
+                    'avatar' => $like->creator['avatar'],
+                ];
+            }
+        )->toArray();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['likes' => DT::utcNow()]
@@ -1068,6 +1107,6 @@ class User extends \App\Models\User
      */
     public function isFollowedBy(ObjectId|string $userId): bool
     {
-        return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
+        return Follow::checkCreatorIsFollowedByUser((string)$this->_id, (string)$userId);
     }
 }
