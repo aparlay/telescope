@@ -38,7 +38,7 @@ class MediaObserver extends BaseModelObserver
         if (! config('app.is_testing')) {
             Bus::chain([
                 new DeleteMediaMetadata($media->file),
-                (new UploadMedia($media->userObj->_id, $media->_id, $media->file))->delay(10)
+                (new UploadMedia($media->userObj->_id, $media->_id, $media->file))->delay(10),
             ])
             ->onQueue(config('app.server_specific_queue'))
             ->dispatch();

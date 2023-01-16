@@ -57,7 +57,7 @@ class DeleteMediaMetadata implements ShouldQueue
             $storage->path($this->file)]);
         $process->run();
 
-        if (!$process->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
     }

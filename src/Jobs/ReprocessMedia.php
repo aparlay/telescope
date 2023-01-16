@@ -71,7 +71,7 @@ class ReprocessMedia implements ShouldQueue
             if (($media = Media::find($this->media_id)) !== null && $storage->exists($media->file)) {
                 Bus::chain([
                     new DeleteMediaMetadata($media->file),
-                    (new UploadMedia($media->created_by, $media->_id, $media->file))->delay(10)
+                    (new UploadMedia($media->created_by, $media->_id, $media->file))->delay(10),
                 ])
                 ->onQueue(config('app.server_specific_queue'))
                 ->dispatch();

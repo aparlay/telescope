@@ -201,7 +201,7 @@ class MediaService extends AdminBaseService
         $this->mediaRepository->update(['file' => request()->input('file')], $media->_id);
         Bus::chain([
             new DeleteMediaMetadata(request()->input('file')),
-            new UploadMedia($media->creator['_id'], $media->_id, request()->input('file'))
+            new UploadMedia($media->creator['_id'], $media->_id, request()->input('file')),
         ])
         ->onQueue(config('app.server_specific_queue'))
         ->dispatch();
