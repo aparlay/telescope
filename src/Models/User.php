@@ -347,7 +347,7 @@ class User extends \App\Models\User
     {
         return ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) &&
             in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
-            !config('app.is_testing');
+            ! config('app.is_testing');
     }
 
     /**
@@ -358,7 +358,7 @@ class User extends \App\Models\User
     public function toSearchableArray()
     {
         return [
-            '_id' => (string)$this->_id,
+            '_id' => (string) $this->_id,
             'type' => 'user',
             'poster' => $this->avatar,
             'username' => $this->username,
@@ -505,15 +505,14 @@ class User extends \App\Models\User
      *
      * @return bool
      * @todo this method implementation should change and rely on risk score
-     *
      */
     public function getIsRiskyAttribute(): bool
     {
         return $this->setting['payment']['block_unverified_cc'] ||
             ($this->is_tier3) ||
             ($this->setting['payment']['unverified_cc_spent_amount'] > config(
-                    'payment.fraud.big_spender.maximum_total_amount'
-                ));
+                'payment.fraud.big_spender.maximum_total_amount'
+            ));
     }
 
     /**
@@ -546,7 +545,7 @@ class User extends \App\Models\User
         }
         $userId = auth()->user()->_id;
 
-        return Follow::checkCreatorIsFollowedByUser((string)$this->_id, (string)$userId);
+        return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
     }
 
     /**
@@ -609,7 +608,7 @@ class User extends \App\Models\User
 
     public function getHasUnreadChatAttribute(): bool
     {
-        return (bool)Chat::query()->unreadFor($this->_id)->first();
+        return (bool) Chat::query()->unreadFor($this->_id)->first();
     }
 
     public function getHasUnreadNotificationAttribute(): bool
@@ -735,11 +734,11 @@ class User extends \App\Models\User
      */
     public function addToSet(string $attribute, mixed $item, int $length = null): void
     {
-        if (!is_array($this->$attribute)) {
+        if (! is_array($this->$attribute)) {
             $this->$attribute = [];
         }
         $values = $this->$attribute;
-        if (!in_array($item, $values, false)) {
+        if (! in_array($item, $values, false)) {
             array_unshift($values, $item);
         }
 
@@ -758,7 +757,7 @@ class User extends \App\Models\User
      */
     public function removeFromSet(string $attribute, mixed $item): void
     {
-        if (!is_array($this->$attribute)) {
+        if (! is_array($this->$attribute)) {
             $this->$attribute = [];
         }
         $values = $this->$attribute;
@@ -867,7 +866,7 @@ class User extends \App\Models\User
 
         $cacheKey = config('app.cache.keys.online.none').':'.$currentWindow;
 
-        return Redis::sismember($cacheKey, (string)$userId);
+        return Redis::sismember($cacheKey, (string) $userId);
     }
 
     public static function isOnlineForFollowers($userId): bool
@@ -876,7 +875,7 @@ class User extends \App\Models\User
 
         $cacheKey = config('app.cache.keys.online.followings').':'.$currentWindow;
 
-        return Redis::sismember($cacheKey, (string)$userId);
+        return Redis::sismember($cacheKey, (string) $userId);
     }
 
     public static function isOnlineForAll($userId): bool
@@ -885,7 +884,7 @@ class User extends \App\Models\User
 
         $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
 
-        return Redis::sismember($cacheKey, (string)$userId);
+        return Redis::sismember($cacheKey, (string) $userId);
     }
 
     /**
@@ -896,14 +895,14 @@ class User extends \App\Models\User
     public function equalTo(self|Authenticatable|ObjectId|string|null $user): bool
     {
         if ($user instanceof ObjectId) {
-            $userId = (string)$user;
+            $userId = (string) $user;
         } elseif ($user instanceof Authenticatable) {
-            $userId = (string)$user->_id;
+            $userId = (string) $user->_id;
         } else {
-            $userId = (string)$user;
+            $userId = (string) $user;
         }
 
-        return (string)$this->_id === $userId;
+        return (string) $this->_id === $userId;
     }
 
     /**
@@ -947,7 +946,7 @@ class User extends \App\Models\User
      */
     public function blockedCountry(string $countryAlpha2): bool
     {
-        return !empty($countryAlpha2) && Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
+        return ! empty($countryAlpha2) && Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
     }
 
     /**
@@ -1107,6 +1106,6 @@ class User extends \App\Models\User
      */
     public function isFollowedBy(ObjectId|string $userId): bool
     {
-        return Follow::checkCreatorIsFollowedByUser((string)$this->_id, (string)$userId);
+        return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
     }
 }
