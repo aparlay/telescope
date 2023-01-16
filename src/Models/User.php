@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
@@ -52,8 +53,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $gender
  * @property int         $visibility
  * @property int         $show_online_status
- * @property UTCDateTime $created_at
- * @property UTCDateTime $updated_at
+ * @property Carbon      $created_at
+ * @property Carbon      $updated_at
  * @property array       $setting
  * @property array       $features
  * @property mixed       $authLogs
@@ -83,7 +84,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property string      $deactivation_reason
  * @property bool        $has_unread_chat
  * @property bool        $has_unread_notification
- * @property UTCDateTime $last_online_at
+ * @property Carbon      $last_online_at
  * @property array       $tags
  *
  * @property User $referralObj

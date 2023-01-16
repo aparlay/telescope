@@ -2,10 +2,6 @@
 
 namespace Aparlay\Core\Models\Queries;
 
-use Aparlay\Core\Models\Enums\AlertStatus;
-use Illuminate\Database\Eloquent\Builder;
-use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
 use Str;
 
 class CountryQueryBuilder extends EloquentQueryBuilder
