@@ -41,6 +41,7 @@ class MediaLikedNotification extends Notification
             'media' => [
                 '_id' => (string) $media->_id,
                 'cover' => $media->cover_url,
+                'slug' => $media->slug,
             ],
         ];
     }
