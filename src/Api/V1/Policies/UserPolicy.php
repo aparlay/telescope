@@ -65,7 +65,7 @@ class UserPolicy
         }
 
         if (Media::user($user->_id)->protected()->first() !== null) {
-            return Response::deny(__('User account is delete protected.'));
+            return Response::deny(__('You are not allowed to delete this. Please contact support for more information.'));
         }
 
         return Response::allow();
