@@ -274,7 +274,7 @@ class Media extends BaseModel
             'type' => 'media',
             'poster' => $this->cover_url,
             'username' => $this->userObj->username ?? '',
-            'full_name' => $this->userObj->full_name ?? '',
+            'full_name' => $this->slug ?? '',
             'gender' => $gender,
             'description' => $this->description,
             'like_count' => $this->like_count,
