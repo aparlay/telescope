@@ -61,7 +61,7 @@ class UserController extends Controller
      */
     public function destroy(Request $request): Response
     {
-        /* Check the update permission */
+        /* Check the delete permission */
         $this->authorize('delete', User::class);
 
         $user = auth()->user();
