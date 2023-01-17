@@ -46,7 +46,7 @@ class UserPolicy
     public function update(User | null $user)
     {
         if ((string) auth()->user()->_id !== (string) $user->_id) {
-            Response::deny(__('You can only update your account.'));
+            return Response::deny(__('You can only update your account.'));
         }
 
         return Response::allow();
@@ -61,11 +61,11 @@ class UserPolicy
     public function delete(User $user)
     {
         if ((string) auth()->user()->_id !== (string) $user->_id) {
-            Response::deny(__('You can only delete your account.'));
+            return Response::deny(__('You can only delete your account.'));
         }
 
         if (Media::user($user->_id)->protected()->first() !== null) {
-            Response::deny(__('User account is delete protected.'));
+            return Response::deny(__('You are not allowed to delete this. Please contact support for more information.'));
         }
 
         return Response::allow();

@@ -274,7 +274,7 @@ class Media extends BaseModel
             'type' => 'media',
             'poster' => $this->cover_url,
             'username' => $this->userObj->username ?? '',
-            'full_name' => $this->userObj->full_name ?? '',
+            'full_name' => $this->slug ?? '',
             'gender' => $gender,
             'description' => $this->description,
             'like_count' => $this->like_count,
@@ -289,6 +289,25 @@ class Media extends BaseModel
             'last_online_at' => 0,
             '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
         ];
+    }
+
+    public function searchIndexShouldBeUpdated(): bool
+    {
+        if ($this->isDirty([
+            'cover_url',
+            'content_gender',
+            'description',
+            'like_count',
+            'visit_count',
+            'comment_count',
+            'hashtags',
+            'sort_scores',
+            'scores',
+        ])) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
