@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Api\V1\Http\Middleware;
 
-use Illuminate\Routing\Middleware\ThrottleRequests;
-
 use function Elliptic\random_int;
+
+use Illuminate\Routing\Middleware\ThrottleRequests;
 
 class DeviceIdThrottle extends ThrottleRequests
 {
