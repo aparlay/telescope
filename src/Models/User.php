@@ -1096,11 +1096,14 @@ class User extends \App\Models\User
         }
         $this->medias = $medias;
 
-        $score = Media::creator($this->_id)->availableForOwner()->sum('sort_scores.default');
-        $count = Media::creator($this->_id)->availableForOwner()->count();
-
         $scores = $this->scores;
-        $scores['sort'] = ($count > 0) ? ($score / $count) : 0;
+        $scores['sort'] = 0;
+
+        $count = Media::creator($this->_id)->availableForOwner()->count();
+        if ($count > 0) {
+            $score = Media::creator($this->_id)->availableForOwner()->sum('sort_scores.default');
+            $scores['sort'] = $score / $count;
+        }
         $this->scores = $scores;
 
         $this->fillStatsCountersField(['medias' => Media::query()->creator($this->_id)->availableForOwner()->count()]);
