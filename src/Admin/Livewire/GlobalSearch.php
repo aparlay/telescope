@@ -20,7 +20,7 @@ final class GlobalSearch extends Component
 
     private function refreshResults()
     {
-        if (strlen($this->searchQuery) > 3) {
+        if (strlen($this->searchQuery)) {
             $this->results = GlobalSearchService::search($this->searchQuery);
             $this->dispatchBrowserEvent('search-results-updated');
         }
