@@ -140,6 +140,11 @@ class UserObserver extends BaseModelObserver
                         UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::DENIED->value);
                     }
                     break;
+                case UserStatus::ACTIVE->value:
+                    if ($model->getOriginal('status') == UserStatus::SUSPENDED->value) {
+                        UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::DENIED->value);
+                    }
+                    break;
             }
         }
 
