@@ -37,7 +37,6 @@ class UserScoreCommand extends Command
 
                     $user->update(['scores' => $scores]);
                 }
-
             });
 
         return self::SUCCESS;
