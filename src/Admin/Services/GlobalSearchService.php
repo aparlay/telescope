@@ -68,6 +68,7 @@ class GlobalSearchService
     private static function searchUsernames(string $searchQuery): Collection
     {
         $users = User::query()->where('username', 'LIKE', $searchQuery.'%')->limit(5)->get();
+
         return $users;
     }
 }
