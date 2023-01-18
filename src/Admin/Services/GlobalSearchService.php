@@ -21,6 +21,10 @@ class GlobalSearchService
             $users = [];
         }
 
+        if (mb_substr($searchQuery, 0, 1) === '@') {
+            $users = self::searchUsernames(trim($searchQuery, '@'));
+        }
+
         if (strlen($searchQuery) === 24 && strspn($searchQuery, '0123456789ABCDEFabcdef') === 24) {
             $orders = Order::query()->user($searchQuery)->limit(5)->get()->merge(
                 Order::query()->order($searchQuery)->get()
@@ -58,6 +62,12 @@ class GlobalSearchService
             );
         }
 
+        return $users;
+    }
+
+    private static function searchUsernames(string $searchQuery): Collection
+    {
+        $users = User::query()->where('username', 'LIKE', $searchQuery.'%')->limit(5)->get();
         return $users;
     }
 }
