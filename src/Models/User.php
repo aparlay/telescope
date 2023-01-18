@@ -345,9 +345,7 @@ class User extends \App\Models\User
      */
     public function shouldBeSearchable(): bool
     {
-        return isset($this->stats['counters']['medias']) &&
-            ($this->stats['counters']['medias'] > 0) &&
-            ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) &&
+        return ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) &&
             in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
             ! config('app.is_testing');
     }
@@ -1097,6 +1095,14 @@ class User extends \App\Models\User
             ];
         }
         $this->medias = $medias;
+
+        $score = Media::creator($this->_id)->availableForOwner()->sum('sort_scores.default');
+        $count = Media::creator($this->_id)->availableForOwner()->count();
+
+        $scores = $this->scores;
+        $scores['sort'] = ($count > 0) ? ($score / $count) : 0;
+        $this->scores = $scores;
+
         $this->fillStatsCountersField(['medias' => Media::query()->creator($this->_id)->availableForOwner()->count()]);
         $this->save();
 
