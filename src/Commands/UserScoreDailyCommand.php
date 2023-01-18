@@ -21,18 +21,25 @@ class UserScoreDailyCommand extends Command
             ->availableForFollower()
             ->each(function ($media) {
                 $user = $media->creatorObj;
-                $count = Media::creator($user->_id)->count();
-                $score = Media::creator($user->_id)->sum('sort_scores.default');
-
                 $scores = $user->scores;
-                $scores['sort'] = $score / $count;
+                $oldScore = $scores['sort'];
+                $scores['sort'] = 0;
 
-                $msg5 = '<fg=yellow;options=bold>';
-                $msg5 .= '  - total set to '.$user->scores['sort'].'</>';
-                $msg5 .= PHP_EOL;
-                $this->line($msg5);
+                $count = Media::creator($user->_id)->availableForOwner()->count();
+                if ($count > 0) {
+                    $score = Media::creator($user->_id)->availableForOwner()->sum('sort_scores.default');
+                    $scores['sort'] = $score / $count;
+                }
+                $user->scores = $scores;
 
-                $user->update(['scores' => $scores]);
+                if ($oldScore != $scores['sort']) {
+                    $msg5 = '<fg=yellow;options=bold>';
+                    $msg5 .= '  - total set to '.$user->scores['sort'].'</>';
+                    $msg5 .= PHP_EOL;
+                    $this->line($msg5);
+
+                    $user->update(['scores' => $scores]);
+                }
             });
 
         return self::SUCCESS;
