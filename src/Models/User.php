@@ -115,6 +115,7 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder active() get activated user
  * @method static |self|Builder idVerified() get id verified user
  * @method static |self|Builder username(string $username) get user
+ * @method static |self|Builder email(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
  * @method static |self|Builder availableForFollower()    get available content for followers
  */
