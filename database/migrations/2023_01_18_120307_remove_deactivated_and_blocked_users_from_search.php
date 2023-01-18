@@ -4,8 +4,7 @@ use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
