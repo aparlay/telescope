@@ -9,7 +9,7 @@ class DeviceIdThrottle extends ThrottleRequests
     protected function resolveRequestSignature($request)
     {
         if ($request->header('X-DEVICE-ID') == 'stress-test-4c55-acb3-952c2ae699f3') {
-            $deviceId = 'stress-test-4c55-acb3-'.random_int(1, 1000000);
+            $deviceId = 'stress-test-4c55-acb4-'.random_int(1, 1000000);
             $request->headers->set('X-DEVICE-ID', $deviceId);
 
             return $deviceId;
