@@ -157,13 +157,7 @@ class UserRepository
         $this->model->phone_number = ! empty($this->model->phone_number) ? 'del_'.$randString.'_'.$this->model->phone_number : null;
         $this->model->status = UserStatus::DEACTIVATED->value;
         $this->model->deactivation_reason = $reason;
-        if ($this->model->save()) {
-            $this->model->unsearchable();
-
-            return true;
-        }
-
-        return false;
+        return $this->model->save();
     }
 
     /**

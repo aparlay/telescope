@@ -8,6 +8,7 @@ use Aparlay\Core\Events\AvatarChangedEvent;
 use Aparlay\Core\Events\UsernameChangedEvent;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\IP;
+use Aparlay\Core\Jobs\DeleteUserLikes;
 use Aparlay\Core\Jobs\DeleteUserMediaComments;
 use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
@@ -122,17 +123,18 @@ class UserObserver extends BaseModelObserver
             switch ($model->status) {
                 case UserStatus::DEACTIVATED->value:
                     $model->notify(new UserDeactivateAccount());
-                    DeleteUserMedia::dispatch((string) $model->_id);
-                    DeleteUserConnect::dispatch((string) $model->_id);
-                    break;
-                case UserStatus::SUSPENDED->value:
-                    DeleteUserMedia::dispatch((string) $model->_id);
-                    DeleteUserConnect::dispatch((string) $model->_id);
-                    break;
-                case UserStatus::BLOCKED->value:
+                    $model->unsearchable();
                     DeleteUserMedia::dispatch((string) $model->_id);
                     DeleteUserConnect::dispatch((string) $model->_id);
                     DeleteUserMediaComments::dispatch((string) $model->_id);
+                    DeleteUserLikes::dispatch((string) $model->id);
+                    break;
+                case UserStatus::BLOCKED->value:
+                    $model->unsearchable();
+                    DeleteUserMedia::dispatch((string) $model->_id);
+                    DeleteUserConnect::dispatch((string) $model->_id);
+                    DeleteUserMediaComments::dispatch((string) $model->_id);
+                    DeleteUserLikes::dispatch((string) $model->id);
                     break;
             }
         }
