@@ -61,7 +61,7 @@ class DeleteUserMediaLikes implements ShouldQueue
      */
     public function handle()
     {
-        MediaLike::query()->user($this->userId)->chunk(200, function($models) {
+        MediaLike::query()->user($this->userId)->chunk(200, function ($models) {
             foreach ($models as $model) {
                 $model->delete();
             }
