@@ -16,7 +16,7 @@ use Illuminate\Queue\SerializesModels;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
-class DeleteUserLikes implements ShouldQueue
+class DeleteUserMediaLikes implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;

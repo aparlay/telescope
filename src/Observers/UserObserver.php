@@ -8,10 +8,10 @@ use Aparlay\Core\Events\AvatarChangedEvent;
 use Aparlay\Core\Events\UsernameChangedEvent;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\IP;
-use Aparlay\Core\Jobs\DeleteUserLikes;
 use Aparlay\Core\Jobs\DeleteUserMediaComments;
 use Aparlay\Core\Jobs\DeleteUserConnect;
 use Aparlay\Core\Jobs\DeleteUserMedia;
+use Aparlay\Core\Jobs\DeleteUserMediaLikes;
 use Aparlay\Core\Jobs\UpdateMedia;
 use Aparlay\Core\Jobs\UpdateUserCountry;
 use Aparlay\Core\Models\Enums\MediaVisibility;
@@ -127,14 +127,14 @@ class UserObserver extends BaseModelObserver
                     DeleteUserMedia::dispatch((string) $model->_id);
                     DeleteUserConnect::dispatch((string) $model->_id);
                     DeleteUserMediaComments::dispatch((string) $model->_id);
-                    DeleteUserLikes::dispatch((string) $model->id);
+                    DeleteUserMediaLikes::dispatch((string) $model->id);
                     break;
                 case UserStatus::BLOCKED->value:
                     $model->unsearchable();
                     DeleteUserMedia::dispatch((string) $model->_id);
                     DeleteUserConnect::dispatch((string) $model->_id);
                     DeleteUserMediaComments::dispatch((string) $model->_id);
-                    DeleteUserLikes::dispatch((string) $model->id);
+                    DeleteUserMediaLikes::dispatch((string) $model->id);
                     break;
             }
         }
