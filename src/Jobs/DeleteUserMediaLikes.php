@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Models\Block;
-use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
