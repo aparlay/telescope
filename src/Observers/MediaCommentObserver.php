@@ -64,12 +64,7 @@ class MediaCommentObserver extends BaseModelObserver
      */
     public function deleted(MediaComment $model): void
     {
-        $replies = MediaComment::query()->parent($model->_id)->get();
-        if ($replies) {
-            foreach ($replies as $reply) {
-                $reply->delete();
-            }
-        }
+        MediaComment::query()->parent($model->_id)->delete();
 
         $parentObj = $model->parentObj;
         if ($parentObj) {

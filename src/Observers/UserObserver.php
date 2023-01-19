@@ -8,8 +8,9 @@ use Aparlay\Core\Events\AvatarChangedEvent;
 use Aparlay\Core\Events\UsernameChangedEvent;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\IP;
-use Aparlay\Core\Jobs\DeleteUserComments;
+use Aparlay\Core\Jobs\DeleteUserMediaComments;
 use Aparlay\Core\Jobs\DeleteUserConnect;
+use Aparlay\Core\Jobs\DeleteUserMediaLikes;
 use Aparlay\Core\Jobs\UpdateMedia;
 use Aparlay\Core\Jobs\UpdateUserCountry;
 use Aparlay\Core\Jobs\UpdateUserMediaStatus;
@@ -20,7 +21,6 @@ use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
-use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Exception;
@@ -111,7 +111,7 @@ class UserObserver extends BaseModelObserver
      * @return void
      * @throws Exception
      */
-    public function updated(User $model): void
+    public function updated($model): void
     {
         if ($model->wasChanged('username')) {
             UsernameChangedEvent::dispatch($model);
@@ -124,21 +124,18 @@ class UserObserver extends BaseModelObserver
             switch ($model->status) {
                 case UserStatus::DEACTIVATED->value:
                     $model->notify(new UserDeactivateAccount());
+                    $model->unsearchable();
                     UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::USER_DELETED->value);
                     DeleteUserConnect::dispatch((string) $model->_id);
-                    break;
-                case UserStatus::SUSPENDED->value:
-                    UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::USER_SUSPENDED->value);
+                    DeleteUserMediaComments::dispatch((string) $model->_id);
+                    DeleteUserMediaLikes::dispatch((string) $model->id);
                     break;
                 case UserStatus::BLOCKED->value:
+                    $model->unsearchable();
                     UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::USER_DELETED->value);
                     DeleteUserConnect::dispatch((string) $model->_id);
-                    DeleteUserComments::dispatch((string) $model->_id);
-                    break;
-                case UserStatus::ACTIVE->value:
-                    if ($model->getOriginal('status') == UserStatus::SUSPENDED->value) {
-                        UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::DENIED->value);
-                    }
+                    DeleteUserMediaComments::dispatch((string) $model->_id);
+                    DeleteUserMediaLikes::dispatch((string) $model->id);
                     break;
                 case UserStatus::ACTIVE->value:
                     if ($model->getOriginal('status') == UserStatus::SUSPENDED->value) {
