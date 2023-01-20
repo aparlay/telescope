@@ -7,10 +7,11 @@ use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\UserNotification;
 use Aparlay\Core\Notifications\MediaLikedNotification;
-use Illuminate\Support\Facades\Cache;
-use Psr\SimpleCache\InvalidArgumentException;
 
 use function Clue\StreamFilter\fun;
+
+use Illuminate\Support\Facades\Cache;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class MediaLikeObserver extends BaseModelObserver
 {
