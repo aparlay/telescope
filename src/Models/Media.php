@@ -14,9 +14,6 @@ use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Scopes\MediaScope;
-
-use function Clue\StreamFilter\fun;
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -939,7 +936,10 @@ class Media extends BaseModel
                     'username2' => $mediaComments[1]->creatorObj->username,
                 ]
             ),
-            default => __(':username commented on your video.', ['username' => $mediaComments[0]->creatorObj->username]),
+            default => __(
+                ':username commented on your video.',
+                ['username' => $mediaComments[0]->creatorObj->username]
+            ),
         };
     }
 
