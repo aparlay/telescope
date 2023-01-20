@@ -34,7 +34,7 @@ class MediaCommentObserver extends BaseModelObserver
         }
 
         // no need to send notification when user is owner of the media
-        if ((string)$media->creatorObj->_id !== (string)$mediaComment->creatorObj->_id) {
+        if ((string) $media->creatorObj->_id !== (string) $mediaComment->creatorObj->_id) {
             if (empty($mediaComment->reply_to_user['_id'])) {
                 $receive = $media->creatorObj;
                 $message = $media->commentsNotificationMessage();
@@ -74,7 +74,7 @@ class MediaCommentObserver extends BaseModelObserver
         $mediaComments = MediaComment::query()->media($media->_id)->limit(2)->get();
         $ownerIsTheOnlyCommenter = (
             $mediaComments->count() == 1 &&
-            (string)$mediaComments->first()->creator['_id'] !== (string)$media->creator['_id']
+            (string) $mediaComments->first()->creator['_id'] !== (string) $media->creator['_id']
         );
         if ($mediaComments->count() === 0 || $ownerIsTheOnlyCommenter) {
             UserNotification::query()
