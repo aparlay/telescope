@@ -3,8 +3,6 @@
 namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\Email;
-use Aparlay\Core\Models\Enums\EmailStatus;
-use Aparlay\Core\Models\Enums\EmailType;
 use Illuminate\Support\Facades\Log;
 
 class EmailRepository
