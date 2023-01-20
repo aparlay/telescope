@@ -930,7 +930,7 @@ class Media extends BaseModel
                 break;
             }
         }
-        
+
         $mediaComments = array_values($mediaComments);
         $twoUserExists = isset($mediaComments[0]->creatorObj->username, $mediaComments[1]->creatorObj->username);
 
