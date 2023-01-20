@@ -34,7 +34,7 @@ class MediaLikeObserver extends BaseModelObserver
         Cache::store('octane')->delete($cacheKey);
 
         // no need to send notification when user is owner of the media
-        if ((string)$media->creatorObj->_id !== (string)$mediaLike->creatorObj->_id) {
+        if ((string) $media->creatorObj->_id !== (string) $mediaLike->creatorObj->_id) {
             $media->notify(
                 new MediaLikedNotification(
                     $mediaLike->creatorObj,
@@ -66,7 +66,7 @@ class MediaLikeObserver extends BaseModelObserver
         $mediaLikes = MediaLike::query()->media($media->_id)->limit(2)->get();
         $ownerIsTheOnlyLiker = (
             $mediaLikes->count() == 1 &&
-            (string)$mediaLikes->first()->creator['_id'] !== (string)$media->creator['_id']
+            (string) $mediaLikes->first()->creator['_id'] !== (string) $media->creator['_id']
         );
         if ($mediaLikes->count() === 0 || $ownerIsTheOnlyLiker) {
             UserNotification::query()
