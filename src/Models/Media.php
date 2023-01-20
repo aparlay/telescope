@@ -922,7 +922,7 @@ class Media extends BaseModel
         $mediaComments = MediaComment::query()
             ->with('creatorObj')
             ->media($this->_id)
-            ->whereIdNeq($this->creator['_id'], 'user_id')
+            ->whereIdNeq($this->creator['_id'], 'creator._id')
             ->recent()
             ->limit(2)
             ->get();
