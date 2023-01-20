@@ -32,6 +32,8 @@ use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use Psr\SimpleCache\InvalidArgumentException;
 
+use function Clue\StreamFilter\fun;
+
 /**
  * Class Media.
  *
@@ -867,8 +869,14 @@ class Media extends BaseModel
             ->with('creatorObj')
             ->media($this->_id)
             ->recent()
-            ->limit(2)
-            ->get();
+            ->limit(3)
+            ->get()
+            ->filter(function ($mediaLike, $key) {
+                // do not consider owner like
+                return (string)$mediaLike->creator['_id'] !== (string)$this->creator['_id'];
+            })
+            ->all();
+
         $twoUserExists = isset($mediaLikes[0]->creatorObj->username, $mediaLikes[1]->creatorObj->username);
 
         return match (true) {
@@ -900,8 +908,13 @@ class Media extends BaseModel
             ->with('creatorObj')
             ->media($this->_id)
             ->recent()
-            ->limit(2)
-            ->get();
+            ->limit(3)
+            ->get()
+            ->filter(function ($mediaComment, $key) {
+                // do not consider owner comment
+                return (string)$mediaComment->creator['_id'] !== (string)$this->creator['_id'];
+            })
+            ->all();
         $twoUserExists = isset($mediaComments[0]->creatorObj->username, $mediaComments[1]->creatorObj->username);
 
         return match (true) {
