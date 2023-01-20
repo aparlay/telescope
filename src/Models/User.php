@@ -276,6 +276,7 @@ class User extends \App\Models\User
                 'notifications' => 0,
             ],
         ],
+        'tags' => []
     ];
 
     /**

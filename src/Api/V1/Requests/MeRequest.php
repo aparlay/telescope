@@ -114,7 +114,7 @@ class MeRequest extends FormRequest
         $user = auth()->user();
         /* Set the Default Values and required to be input parameters */
         $this->merge([
-            'tags' => $this->tags ? array_values(array_slice(array_unique(array_merge($this->tags, ($user->tags ?? []))), 0, 50)) : $user->tags,
+            'tags' => $this->tags ? array_values(array_slice(array_unique(array_merge($this->tags, $user->tags)), 0, 50)) : $user->tags,
             'setting' => [
                 'otp' => $this->setting['otp'] ?? $user->setting['otp'] ?? false,
                 'show_adult_content' => $this->setting['show_adult_content'] ?? $user->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
