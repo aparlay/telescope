@@ -14,6 +14,9 @@ use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Scopes\MediaScope;
+
+use function Clue\StreamFilter\fun;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -31,8 +34,6 @@ use MathPHP\Statistics\Significance;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use Psr\SimpleCache\InvalidArgumentException;
-
-use function Clue\StreamFilter\fun;
 
 /**
  * Class Media.
@@ -884,7 +885,7 @@ class Media extends BaseModel
             ->get()
             ->filter(function ($mediaLike, $key) {
                 // do not consider owner like
-                return (string)$mediaLike->creator['_id'] !== (string)$this->creator['_id'];
+                return (string) $mediaLike->creator['_id'] !== (string) $this->creator['_id'];
             })
             ->all();
 
@@ -923,7 +924,7 @@ class Media extends BaseModel
             ->get()
             ->filter(function ($mediaComment, $key) {
                 // do not consider owner comment
-                return (string)$mediaComment->creator['_id'] !== (string)$this->creator['_id'];
+                return (string) $mediaComment->creator['_id'] !== (string) $this->creator['_id'];
             })
             ->all();
         $twoUserExists = isset($mediaComments[0]->creatorObj->username, $mediaComments[1]->creatorObj->username);
