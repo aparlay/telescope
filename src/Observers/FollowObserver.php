@@ -3,8 +3,11 @@
 namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\UserNotificationCategory;
+use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
+use Aparlay\Core\Models\UserNotification;
 use Aparlay\Core\Notifications\UserFollowedNotification;
 use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
@@ -151,5 +154,11 @@ class FollowObserver extends BaseModelObserver
         Follow::cacheByUserId($model->creator['_id'], true);
         $cacheKey = md5('user:'.$model->creator['_id'].':followedBy:'.$model->user['_id']);
         Cache::store('octane')->delete($cacheKey);
+
+        UserNotification::query()
+            ->category(UserNotificationCategory::FOLLOWS->value)
+            ->userEntity($model->creator['_id'])
+            ->user($model->user['_id'])
+            ->update(['status' => UserNotificationStatus::INVISIBLE->value]);
     }
 }

@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
+use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\UserNotification;
 use Aparlay\Core\Notifications\MediaLikedNotification;
@@ -60,7 +61,10 @@ class MediaLikeObserver extends BaseModelObserver
         $media->userObj->updateLikes();
 
         if ($media->like_count === 0) {
-            UserNotification::query()->category(UserNotificationCategory::LIKES->value)->mediaEntity($media->_id)->delete();
+            UserNotification::query()
+                ->category(UserNotificationCategory::LIKES->value)
+                ->mediaEntity($media->_id)
+                ->update(['status' => UserNotificationStatus::INVISIBLE->value]);
         }
 
         // Reset the Redis cache

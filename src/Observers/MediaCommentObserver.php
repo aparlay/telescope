@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
+use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\UserNotification;
@@ -45,7 +46,7 @@ class MediaCommentObserver extends BaseModelObserver
             $media->notify(
                 new MediaCommentedNotification(
                     $mediaComment->creatorObj,
-                    User::find($mediaComment->reply_to_user['_id']),
+                    User::user($mediaComment->reply_to_user['_id'])->first(),
                     $media,
                     $mediaComment,
                     __(':username replied to your comment.', ['username' => $mediaComment->creator['username']])
@@ -70,7 +71,10 @@ class MediaCommentObserver extends BaseModelObserver
         $media->updateComments();
 
         if ($media->comment_count === 0) {
-            UserNotification::query()->category(UserNotificationCategory::COMMENTS->value)->mediaEntity($media->_id)->delete();
+            UserNotification::query()
+                ->category(UserNotificationCategory::COMMENTS->value)
+                ->mediaEntity($media->_id)
+                ->update(['status' => UserNotificationStatus::INVISIBLE->value]);
         }
     }
 }
