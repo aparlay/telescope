@@ -73,7 +73,7 @@ class UserNotificationService
         }
 
         // combine likes and comments
-        if (in_array($data['category'], [UserNotificationCategory::FOLLOWS->value])) {
+        if ($data['category'] == UserNotificationCategory::FOLLOWS->value) {
             $userNotification = UserNotification::query()
                 ->entity($data['entity._id'], $data['entity._type'])
                 ->user($this->getUser()->_id)

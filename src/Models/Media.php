@@ -945,7 +945,7 @@ class Media extends BaseModel
                     'username2' => $mediaComments[1]->creatorObj->username,
                 ]
             ),
-            default => __(':username liked your video.', ['username' => $mediaComments[0]->creatorObj->username])
+            default => __(':username commented on your video.', ['username' => $mediaComments[0]->creatorObj->username])
         };
     }
 
