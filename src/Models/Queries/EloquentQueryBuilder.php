@@ -108,7 +108,7 @@ class EloquentQueryBuilder extends Builder
     {
         $id = $id instanceof ObjectId ? $id : new ObjectId($id);
 
-        return $this->whereNot($field, $id);
+        return $this->where($field, '!=', $id);
     }
 
     /**
