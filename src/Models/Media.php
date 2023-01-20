@@ -934,7 +934,7 @@ class Media extends BaseModel
                     'username2' => $mediaComments[1]->creatorObj->username,
                 ]
             ),
-            ($this->comment_count === 1) => __(':username commented on your video.', ['username' => $mediaComments[0]->creatorObj->username]),
+            isset($mediaComments[0]) => __(':username commented on your video.', ['username' => $mediaComments[0]->creatorObj->username]),
             default => ''
         };
     }
