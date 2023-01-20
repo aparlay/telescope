@@ -26,22 +26,24 @@ class MediaLikeObserver extends BaseModelObserver
             return;
         }
         $media->updateLikes();
-
-        $media->notify(
-            new MediaLikedNotification(
-                $mediaLike->creatorObj,
-                $media->creatorObj,
-                $media,
-                $media->likesNotificationMessage()
-            )
-        );
-
         $media->creatorObj->updateLikes();
 
         // Reset the Redis cache
         MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
         $cacheKey = md5('media:'.$media->_id.':likedBy:'.$mediaLike->creator['_id']);
         Cache::store('octane')->delete($cacheKey);
+
+        // no need to send notification when user is owner of the media
+        if ((string)$media->creatorObj->_id !== (string)$mediaLike->creatorObj->_id) {
+            $media->notify(
+                new MediaLikedNotification(
+                    $mediaLike->creatorObj,
+                    $media->creatorObj,
+                    $media,
+                    $media->likesNotificationMessage()
+                )
+            );
+        }
     }
 
     /**
@@ -60,7 +62,13 @@ class MediaLikeObserver extends BaseModelObserver
         $media->updateLikes();
         $media->userObj->updateLikes();
 
-        if ($media->like_count === 0) {
+        // we don't show notification if there is no liker or the only liker is the owner itself
+        $mediaLikes = MediaLike::query()->media($media->_id)->limit(2)->get();
+        $ownerIsTheOnlyLiker = (
+            $mediaLikes->count() == 1 &&
+            (string)$mediaLikes->first()->creator['_id'] !== (string)$media->creator['_id']
+        );
+        if ($mediaLikes->count() === 0 || $ownerIsTheOnlyLiker) {
             UserNotification::query()
                 ->category(UserNotificationCategory::LIKES->value)
                 ->mediaEntity($media->_id)
