@@ -919,14 +919,10 @@ class Media extends BaseModel
         $mediaComments = MediaComment::query()
             ->with('creatorObj')
             ->media($this->_id)
+            ->whereIdNeq($this->creator['_id'], 'user_id')
             ->recent()
-            ->limit(3)
-            ->get()
-            ->filter(function ($mediaComment, $key) {
-                // do not consider owner comment
-                return (string) $mediaComment->creator['_id'] !== (string) $this->creator['_id'];
-            })
-            ->all();
+            ->limit(2)
+            ->get();
         $twoUserExists = isset($mediaComments[0]->creatorObj->username, $mediaComments[1]->creatorObj->username);
 
         return match (true) {

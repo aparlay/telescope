@@ -5,7 +5,6 @@ namespace Aparlay\Core\Observers;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\MediaComment;
-use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\UserNotification;
 use Aparlay\Core\Notifications\MediaCommentedNotification;
@@ -71,12 +70,12 @@ class MediaCommentObserver extends BaseModelObserver
         $media->updateComments();
 
         // we don't show notification if there is no commenter or the only commenter is the owner itself
-        $mediaComments = MediaComment::query()->media($media->_id)->limit(2)->get();
-        $ownerIsTheOnlyCommenter = (
-            $mediaComments->count() == 1 &&
-            (string) $mediaComments->first()->creator['_id'] !== (string) $media->creator['_id']
-        );
-        if ($mediaComments->count() === 0 || $ownerIsTheOnlyCommenter) {
+        $mediaComments = MediaComment::query()
+            ->media($media->_id)
+            ->whereIdNeq($media->creator['_id'], 'user_id')
+            ->limit(2)
+            ->get();
+        if ($mediaComments->count() === 0) {
             UserNotification::query()
                 ->category(UserNotificationCategory::COMMENTS->value)
                 ->mediaEntity($media->_id)
