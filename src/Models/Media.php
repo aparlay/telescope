@@ -880,7 +880,7 @@ class Media extends BaseModel
         $mediaLikes = [];
         foreach (MediaLike::query()->media($this->_id)->recent()->lazy() as $mediaLike) {
             if ((string) $mediaLike->creator['_id'] !== (string) $this->creator['_id']) {
-                $mediaLikes[(string)$mediaLike->creator['_id']] = $mediaLike;
+                $mediaLikes[(string) $mediaLike->creator['_id']] = $mediaLike;
             }
 
             if (count($mediaLikes) > 1) {
@@ -923,7 +923,7 @@ class Media extends BaseModel
         $mediaComments = [];
         foreach (MediaComment::query()->with('creatorObj')->media($this->_id)->whereIdNeq($this->creator['_id'], 'user_id')->recent()->lazy() as $mediaComment) {
             if ((string) $mediaComment->creator['_id'] !== (string) $this->creator['_id']) {
-                $mediaComments[(string)$mediaComment->creator['_id']] = $mediaComment;
+                $mediaComments[(string) $mediaComment->creator['_id']] = $mediaComment;
             }
 
             if (count($mediaComments) > 1) {
