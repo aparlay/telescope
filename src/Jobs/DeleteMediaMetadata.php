@@ -19,7 +19,6 @@ class DeleteMediaMetadata implements ShouldQueue
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
-    public string $file;
 
     /**
      * The number of times the job may be attempted.
@@ -37,10 +36,8 @@ class DeleteMediaMetadata implements ShouldQueue
      * @return void
      * @throws Exception
      */
-    public function __construct(string $file)
-    {
-        $this->file = $file;
-    }
+    public function __construct(public string $file)
+    {}
 
     /**
      * Execute the job.
@@ -51,10 +48,7 @@ class DeleteMediaMetadata implements ShouldQueue
     public function handle()
     {
         $storage = Storage::disk('upload');
-        $process = new Process(['exiftool',
-            '-all=',
-            '-overwrite_original',
-            $storage->path($this->file)]);
+        $process = new Process(['exiftool', '-all=', '-overwrite_original', $storage->path($this->file)]);
         $process->run();
 
         if (! $process->isSuccessful()) {
