@@ -883,13 +883,16 @@ class Media extends BaseModel
                 $mediaLikes[(string) $mediaLike->creator['_id']] = $mediaLike;
             }
 
-            if (count($mediaLikes) > 1) {
+            if (count($mediaLikes) > 2) {
                 break;
             }
         }
 
         $mediaLikes = array_values($mediaLikes);
-        $twoUserExists = isset($mediaLikes[0]->creatorObj->username, $mediaLikes[1]->creatorObj->username);
+        $twoUserExists = isset(
+            $mediaLikes[0]->creatorObj->username,
+            $mediaLikes[1]->creatorObj->username,
+        );
 
         return match (true) {
             ($this->like_count > 2 && $twoUserExists) => __(
@@ -907,11 +910,10 @@ class Media extends BaseModel
                     'username2' => $mediaLikes[1]->creatorObj->username,
                 ]
             ),
-            isset($mediaLikes[0]->creatorObj->username) => __(
+            default => __(
                 ':username liked your video.',
                 ['username' => $mediaLikes[0]->creatorObj->username]
-            ),
-            default => ''
+            )
         };
     }
 
@@ -926,7 +928,7 @@ class Media extends BaseModel
                 $mediaComments[(string) $mediaComment->creator['_id']] = $mediaComment;
             }
 
-            if (count($mediaComments) > 1) {
+            if (count($mediaComments) > 2) {
                 break;
             }
         }
@@ -950,8 +952,7 @@ class Media extends BaseModel
                     'username2' => $mediaComments[1]->creatorObj->username,
                 ]
             ),
-            isset($mediaComments[0]) => __(':username commented on your video.', ['username' => $mediaComments[0]->creatorObj->username]),
-            default => ''
+            default => __(':username commented on your video.', ['username' => $mediaComments[0]->creatorObj->username]),
         };
     }
 
