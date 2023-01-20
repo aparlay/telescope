@@ -884,11 +884,11 @@ class Media extends BaseModel
             }
 
             if (count($mediaLikes) > 1) {
-                $mediaLikes = array_values($mediaLikes);
                 break;
             }
         }
 
+        $mediaLikes = array_values($mediaLikes);
         $twoUserExists = isset($mediaLikes[0]->creatorObj->username, $mediaLikes[1]->creatorObj->username);
 
         return match (true) {
@@ -927,10 +927,11 @@ class Media extends BaseModel
             }
 
             if (count($mediaComments) > 1) {
-                $mediaComments = array_values($mediaComments);
                 break;
             }
         }
+        
+        $mediaComments = array_values($mediaComments);
         $twoUserExists = isset($mediaComments[0]->creatorObj->username, $mediaComments[1]->creatorObj->username);
 
         return match (true) {
