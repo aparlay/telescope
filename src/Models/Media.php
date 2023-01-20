@@ -908,13 +908,18 @@ class Media extends BaseModel
      */
     public function commentsNotificationMessage(): string
     {
-        $mediaComments = MediaComment::query()
-            ->with('creatorObj')
-            ->media($this->_id)
-            ->whereIdNeq($this->creator['_id'], 'creator._id')
-            ->recent()
-            ->limit(2)
-            ->get();
+        $mediaComments = [];
+        foreach (MediaComment::query()->with('creatorObj')->media($this->_id)->whereIdNeq($this->creator['_id'], 'creator._id')->recent()->lazy() as $mediaComment) {
+            if ((string) $mediaComment->creator['_id'] !== (string) $this->creator['_id']) {
+                $mediaComments[(string) $mediaComment->creator['_id']] = $mediaComment;
+            }
+
+            if (count($mediaComments) > 2) {
+                break;
+            }
+        }
+
+        $mediaComments = array_values($mediaComments);
         $twoUserExists = isset(
             $mediaComments[0]->creatorObj->username,
             $mediaComments[1]->creatorObj->username
