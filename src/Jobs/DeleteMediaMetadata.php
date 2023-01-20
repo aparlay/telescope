@@ -37,7 +37,8 @@ class DeleteMediaMetadata implements ShouldQueue
      * @throws Exception
      */
     public function __construct(public string $file)
-    {}
+    {
+    }
 
     /**
      * Execute the job.
