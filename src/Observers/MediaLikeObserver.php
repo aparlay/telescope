@@ -10,6 +10,8 @@ use Aparlay\Core\Notifications\MediaLikedNotification;
 use Illuminate\Support\Facades\Cache;
 use Psr\SimpleCache\InvalidArgumentException;
 
+use function Clue\StreamFilter\fun;
+
 class MediaLikeObserver extends BaseModelObserver
 {
     /**
@@ -63,12 +65,16 @@ class MediaLikeObserver extends BaseModelObserver
         $media->userObj->updateLikes();
 
         // we don't show notification if there is no liker or the only liker is the owner itself
-        $mediaLikes = MediaLike::query()->media($media->_id)->limit(2)->get();
-        $ownerIsTheOnlyLiker = (
-            $mediaLikes->count() == 1 &&
-            (string) $mediaLikes->first()->creator['_id'] !== (string) $media->creator['_id']
-        );
-        if ($mediaLikes->count() === 0 || $ownerIsTheOnlyLiker) {
+        $mediaLikes = MediaLike::query()
+            ->media($media->_id)
+            ->limit(2)
+            ->get()
+            ->filter(function ($mediaLike, $key) use ($media) {
+                return (string) $mediaLike->creator['_id'] !== (string) $media->creator['_id'];
+            })
+            ->all();
+
+        if (count($mediaLikes) === 0) {
             UserNotification::query()
                 ->category(UserNotificationCategory::LIKES->value)
                 ->mediaEntity($media->_id)
