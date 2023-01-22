@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
@@ -70,8 +71,9 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
     public function handle()
     {
         $media = Media::media($this->mediaId)->firstOrFail();
-
-        $this->purge([$media->cover_url, $media->file_url]);
+        $fileUrl = Cdn::video($media->file);
+        $coverUrl = Cdn::cover($media->filename.'.jpg');
+        $this->purge([$coverUrl, $fileUrl]);
     }
 
     public function failed(Throwable $exception): void
