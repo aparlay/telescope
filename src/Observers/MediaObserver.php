@@ -88,7 +88,7 @@ class MediaObserver extends BaseModelObserver
      */
     public function saved($media): void
     {
-        if (in_array($media->status, [MediaStatus::USER_DELETED->value, MediaStatus::ADMIN_DELETED])
+        if (in_array($media->status, [MediaStatus::USER_DELETED->value, MediaStatus::ADMIN_DELETED->value])
             && $media->isDirty('status')) {
             $media->userObj->updateMedias();
 

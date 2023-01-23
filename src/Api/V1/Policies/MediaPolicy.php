@@ -36,7 +36,7 @@ class MediaPolicy
     {
         $userId = $user?->_id;
 
-        if (in_array($media->status, [MediaStatus::ADMIN_DELETED, MediaStatus::USER_DELETED])) {
+        if (in_array($media->status, [MediaStatus::ADMIN_DELETED->value, MediaStatus::USER_DELETED->value])) {
             return Response::deny(__('This content is not available for you.'));
         }
 
