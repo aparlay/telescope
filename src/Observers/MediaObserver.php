@@ -88,7 +88,8 @@ class MediaObserver extends BaseModelObserver
      */
     public function saved($media): void
     {
-        if ($media->status === MediaStatus::USER_DELETED->value && $media->isDirty('status')) {
+        if (in_array($media->status, [MediaStatus::USER_DELETED->value, MediaStatus::ADMIN_DELETED])
+            && $media->isDirty('status')) {
             $media->userObj->updateMedias();
 
             DeleteMediaLikes::dispatch((string) $media->_id)->onQueue('low');
