@@ -73,7 +73,7 @@ class PurgeMediaJob implements ShouldQueue
     {
         $media = Media::media($this->mediaId)->first();
         if ($media === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'The requested media with id not found: '.$this->media_id);
+            throw new Exception(__CLASS__.PHP_EOL.'The requested media with id not found: '.$this->mediaId);
         }
 
         if (Storage::disk('gc-videos')->fileExists($media->file)) {
