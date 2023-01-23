@@ -7,6 +7,7 @@ use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Jobs\DeleteMediaComments;
 use Aparlay\Core\Jobs\DeleteMediaLikes;
 use Aparlay\Core\Jobs\DeleteMediaUserNotifications;
+use Aparlay\Core\Jobs\PurgeMediaJob;
 use Aparlay\Core\Jobs\RecalculateHashtag;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
@@ -93,6 +94,7 @@ class MediaObserver extends BaseModelObserver
             DeleteMediaLikes::dispatch((string) $media->_id)->onQueue('low');
             DeleteMediaComments::dispatch((string) $media->_id)->onQueue('low');
             DeleteMediaUserNotifications::dispatch((string) $media->_id)->onQueue('low');
+            PurgeMediaJob::dispatch((string) $media->_id)->onQueue('low');
             $media->unsearchable();
         }
 

@@ -114,6 +114,7 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder username(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
  * @method static |self|Builder availableForFollower()    get available content for followers
+ * @method static |self|Builder admin()    get admin user
  */
 class User extends \App\Models\User
 {

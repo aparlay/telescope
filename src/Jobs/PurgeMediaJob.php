@@ -2,20 +2,28 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Models\Enums\MediaStatus;
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
+use Aparlay\Core\Notifications\ThirdPartyLogger;
+use ErrorException;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
+use Str;
 use Throwable;
 
-class UpdateUserMediaStatus implements ShouldQueue
+class PurgeMediaJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -37,33 +45,46 @@ class UpdateUserMediaStatus implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 300;
+    public $backoff = 10;
 
     /**
      * Create a new job instance.
      *
      * @return void
-     *
      * @throws Exception
      */
-    public function __construct(public string $userId, public int $status)
+    public function __construct(public string $mediaId)
     {
         $this->onQueue('low');
+    }
 
-        if (!in_array($this->status, MediaStatus::getAllValues())) {
-            throw new \InvalidArgumentException(_("Status is not supported"));
-        }
+    public function middleware()
+    {
+        return [new WithoutOverlapping($this->mediaId)];
     }
 
     /**
      * Execute the job.
+     *
+     * @return void
+     * @throws Exception
      */
-    public function handle(): void
+    public function handle()
     {
-        foreach (Media::creator($this->userId)->lazy() as $media) {
-            $media->status = $this->status;
-            $media->save();
+        $media = Media::media($this->mediaId)->first();
+        if ($media === null) {
+            throw new Exception(__CLASS__.PHP_EOL.'The requested media with id not found: '.$this->media_id);
         }
+
+        if (Storage::disk('gc-videos')->fileExists($media->file)) {
+            Storage::disk('gc-videos')->rename($media->file, $media->delete_prefix.$media->file);
+        }
+
+        if (Storage::disk('gc-covers')->fileExists($media->cover_file)) {
+            Storage::disk('gc-covers')->rename($media->cover_file, $media->delete_prefix.$media->cover_file);
+        }
+
+        BunnyCdnPurgeUrlJob::dispatch($this->mediaId);
     }
 
     public function failed(Throwable $exception): void
