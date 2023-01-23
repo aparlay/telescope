@@ -80,7 +80,17 @@ class MediaCommentObserver extends BaseModelObserver
                 if ($newFirstReply) {
                     $newFirstReply->is_first = true;
                     $newFirstReply->save();
-                    $parentObj->first_reply = (new MediaCommentResource($newFirstReply))->resolve();
+                    $parentObj->first_reply = [
+                        '_id' => (string) $newFirstReply->_id,
+                        'parent_id' => $newFirstReply->parent ? (string) $newFirstReply->parent['_id'] : null,
+                        'media_id' => (string) $newFirstReply->media_id,
+                        'text' => $newFirstReply->text,
+                        'likes_count' => $newFirstReply->likes_count ?? 0,
+                        'user_id' => (string) $newFirstReply->user_id,
+                        'username' => $newFirstReply->reply_to_user['username'] ?? null,
+                        'creator' => $newFirstReply->creator,
+                        'created_at' => $newFirstReply->created_at->valueOf()
+                    ];
                 }
             }
 

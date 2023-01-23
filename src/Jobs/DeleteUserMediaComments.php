@@ -59,7 +59,7 @@ class DeleteUserMediaComments implements ShouldQueue
      */
     public function handle()
     {
-        foreach (MediaComment::query()->where('creator._id', $this->userId)->lazy() as $comment) {
+        foreach (MediaComment::query()->creator($this->userId)->lazy() as $comment) {
             $comment->delete();
         }
     }
