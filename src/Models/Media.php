@@ -554,7 +554,7 @@ class Media extends BaseModel
      */
     public function getDeletePrefixAttribute(): string
     {
-        return substr(md5($this->file), 0, 5) . '_';
+        return substr(md5($this->file), 0, 5).'_';
     }
 
     /**

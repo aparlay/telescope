@@ -50,8 +50,8 @@ class UpdateUserMediaStatus implements ShouldQueue
     {
         $this->onQueue('low');
 
-        if (!in_array($this->status, MediaStatus::getAllValues())) {
-            throw new \InvalidArgumentException(_("Status is not supported"));
+        if (! in_array($this->status, MediaStatus::getAllValues())) {
+            throw new \InvalidArgumentException(_('Status is not supported'));
         }
     }
 
