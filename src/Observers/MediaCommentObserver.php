@@ -89,7 +89,7 @@ class MediaCommentObserver extends BaseModelObserver
                         'user_id' => (string) $newFirstReply->user_id,
                         'username' => $newFirstReply->reply_to_user['username'] ?? null,
                         'creator' => $newFirstReply->creator,
-                        'created_at' => $newFirstReply->created_at->valueOf()
+                        'created_at' => $newFirstReply->created_at->valueOf(),
                     ];
                 }
             }
