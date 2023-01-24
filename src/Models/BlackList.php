@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Models;
 
-use Aparlay\Core\Database\Factories\AnalyticFactory;
 use Aparlay\Core\Database\Factories\BlackListFactory;
 use Aparlay\Core\Models\Enums\BlackListType;
 use Aparlay\Core\Models\Queries\BlackListQueryBuilder;
@@ -12,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
 /**
- * Class Analytic.
+ * Class BlackList.
  *
  * @property null $user_id
  * @property User $userObj

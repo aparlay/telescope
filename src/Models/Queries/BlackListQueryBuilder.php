@@ -2,10 +2,7 @@
 
 namespace Aparlay\Core\Models\Queries;
 
-use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\BlackListType;
-use Illuminate\Database\Eloquent\Builder;
-use MongoDB\BSON\ObjectId;
 
 class BlackListQueryBuilder extends EloquentQueryBuilder
 {
