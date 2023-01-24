@@ -26,7 +26,6 @@ class UserSuspiciousCommand extends Command
                 });
         }
 
-
         return self::SUCCESS;
     }
 }

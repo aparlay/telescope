@@ -16,6 +16,7 @@ class BlackListQueryBuilder extends EloquentQueryBuilder
     {
         return $this->where('type', BlackListType::TEMPORARY_EMAIL_SERVICE->value);
     }
+
     /**
      * @return $this
      */
