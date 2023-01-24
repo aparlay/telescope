@@ -15,7 +15,7 @@ return new class() extends Migration {
     public function up()
     {
         foreach (User::where('status', UserStatus::BLOCKED->value)->lazy() as $user) {
-            if (MediaComment::query()->creator((string) $user->_id)->first()) {
+            if (MediaComment::query()->creator($user->_id)->first()) {
                 DeleteUserMediaComments::dispatch((string) $user->_id);
             }
         }
