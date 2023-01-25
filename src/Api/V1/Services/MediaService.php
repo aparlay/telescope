@@ -449,7 +449,6 @@ class MediaService
             ->map(function ($item, $key) {
                 return (string) $item;
             })
-            ->flatten()
             ->toArray();
 
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
