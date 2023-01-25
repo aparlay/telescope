@@ -490,7 +490,7 @@ class MediaService
         };
 
         $notVisitedTopMediaIds = array_intersect(
-            Redis::zrevrange($mediaIdsCacheKey.$sortCategory, 0, 1000),
+            Redis::zrevrange($mediaIdsCacheKey.':'.$sortCategory, 0, 1000),
             array_slice($notVisitedMediaIds, 0, 1000)
         );
 
