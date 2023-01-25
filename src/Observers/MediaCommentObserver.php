@@ -117,6 +117,11 @@ class MediaCommentObserver extends BaseModelObserver
                 ->category(UserNotificationCategory::COMMENTS->value)
                 ->mediaEntity($media->_id)
                 ->update(['status' => UserNotificationStatus::INVISIBLE->value]);
+        } else {
+            UserNotification::query()
+                ->category(UserNotificationCategory::COMMENTS->value)
+                ->mediaEntity($media->_id)
+                ->update(['message' => $media->commentsNotificationMessage()]);
         }
     }
 }
