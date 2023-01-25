@@ -107,12 +107,14 @@ class MediaCommentObserver extends BaseModelObserver
         $media->updateComments();
 
         // we don't show notification if there is no commenter or the only commenter is the owner itself
-        $mediaComments = MediaComment::query()
+        $lastMediaComment = MediaComment::query()
+            ->with('creatorObj')
             ->media($media->_id)
             ->whereIdNeq($media->creator['_id'], 'created_by')
-            ->limit(2)
-            ->get();
-        if ($mediaComments->count() === 0) {
+            ->recent()
+            ->first();
+
+        if ($lastMediaComment === null) {
             UserNotification::query()
                 ->category(UserNotificationCategory::COMMENTS->value)
                 ->mediaEntity($media->_id)
@@ -121,7 +123,10 @@ class MediaCommentObserver extends BaseModelObserver
             UserNotification::query()
                 ->category(UserNotificationCategory::COMMENTS->value)
                 ->mediaEntity($media->_id)
-                ->update(['message' => $media->commentsNotificationMessage()]);
+                ->update([
+                    'message' => $media->commentsNotificationMessage(),
+                    'payload.user' => $lastMediaComment->creator,
+                ]);
         }
     }
 }
