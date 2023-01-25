@@ -946,12 +946,12 @@ class Media extends BaseModel
             ->topless()
             ->select('_id')
             ->chunk(200, function ($medias) use ($toplessMediaIdsCacheKey) {
-                $toplessMediaIds = $medias->pluck('_id')->toArray();
-                $toplessMediaIds = array_map('strval', $toplessMediaIds);
-                Redis::sadd($toplessMediaIdsCacheKey, ...$toplessMediaIds);
+                $this->fillSortedSet($toplessMediaIdsCacheKey, $medias->toArray());
             });
 
-        Redis::expireat($toplessMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
+        foreach (MediaSortCategories::getAllValues() as $key) {
+            Redis::expireat($toplessMediaIdsCacheKey.':'.$key, now()->addDays(4)->getTimestamp());
+        }
     }
 
     public static function CachePublicExplicitMediaIds()
@@ -965,24 +965,43 @@ class Media extends BaseModel
             ->explicit()
             ->select('_id')
             ->chunk(200, function ($medias) use ($explicitMediaIdsCacheKey) {
-                $explicitMediaIds = $medias->pluck('_id')->toArray();
-                $explicitMediaIds = array_map('strval', $explicitMediaIds);
-                Redis::sadd($explicitMediaIdsCacheKey, ...$explicitMediaIds);
+                $this->fillSortedSet($explicitMediaIdsCacheKey, $medias->toArray());
             });
 
-        Redis::expireat($explicitMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
+        foreach (MediaSortCategories::getAllValues() as $key) {
+            Redis::expireat($explicitMediaIdsCacheKey.':'.$key, now()->addDays(4)->getTimestamp());
+        }
     }
 
     public static function CachePublicMediaIds()
     {
         $cacheKey = (new self())->getCollection().':ids';
         Redis::del($cacheKey);
-        self::public()->confirmed()->select('_id')->chunk(200, function ($medias) use ($cacheKey) {
-            $mediaIds = $medias->pluck('_id')->toArray();
-            $mediaIds = array_map('strval', $mediaIds);
-            Redis::sadd($cacheKey, ...$mediaIds);
-        });
+        self::public()
+            ->confirmed()
+            ->select(['_id', 'sort_scores'])
+            ->chunk(200, function ($medias) use ($cacheKey) {
+                $this->fillSortedSet($cacheKey, $medias->toArray());
+            });
 
-        Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
+        foreach (MediaSortCategories::getAllValues() as $key) {
+            Redis::expireat($cacheKey.':'.$key, now()->addDays(4)->getTimestamp());
+        }
+    }
+
+    public function fillSortedSet(string $cacheKey, array $medias)
+    {
+        $sortedSets = [];
+        foreach ($medias as $media) {
+            foreach (MediaSortCategories::getAllValues() as $sortCategoryValue) {
+                $sortedSets[$sortCategoryValue][] = $media['sort_scores'][$sortCategoryValue];
+                $sortedSets[$sortCategoryValue][] = (string)$media['_id'];
+            }
+        }
+        foreach ($sortedSets as $key => $items) {
+            if (!empty($items)) {
+                Redis::zadd($cacheKey.':'.$key, ...$items);
+            }
+        }
     }
 }
