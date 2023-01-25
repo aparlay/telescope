@@ -616,7 +616,7 @@ class MediaTest extends ApiTestCase
                 'code' => 403,
                 'status' => 'ERROR',
                 'data' => [],
-                'message' => 'Video is protected and you cannot delete it.',
+                'message' => 'You are not allowed to delete this. Please contact support for more information.',
             ]);
     }
 
@@ -625,6 +625,27 @@ class MediaTest extends ApiTestCase
      */
     public function deleteMedia()
     {
+        // Shortens a number and attaches K, M, B, etc. accordingly
+        function numberShorten($number, $precision = 1)
+        {
+            // Setup default $divisors if not provided
+            $divisors = [
+                1 => '',
+                pow(1000, 1) => __('k'),
+                pow(1000, 2) => __('m'),
+                pow(1000, 3) => __('b'),
+                pow(1000, 4) => __('t'),
+            ];
+
+            foreach ($divisors as $divisor => $shorthand) {
+                if (abs($number) < ($divisor * 1000)) {
+                    break;
+                }
+            }
+
+            return number_format($number / $divisor, $precision).$shorthand;
+        }
+
         $user = User::factory()->create(['media_count' => 2]);
         $otherUser = User::factory()->create();
         $media = Media::factory()->create(
