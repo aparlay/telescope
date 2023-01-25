@@ -937,47 +937,52 @@ class Media extends BaseModel
 
     public static function CachePublicToplessMediaIds()
     {
-        $toplessMediaIds = self::public()
+        $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
+        Redis::del($toplessMediaIdsCacheKey);
+
+        self::public()
             ->confirmed()
             ->public()
             ->topless()
             ->select('_id')
-            ->get()
-            ->pluck('_id')
-            ->toArray();
-        $toplessMediaIds = array_map('strval', $toplessMediaIds);
-        $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
-        Redis::sadd($toplessMediaIdsCacheKey, ...$toplessMediaIds);
+            ->chunk(200, function ($medias) use ($toplessMediaIdsCacheKey) {
+                $toplessMediaIds = $medias->pluck('_id')->toArray();
+                $toplessMediaIds = array_map('strval', $toplessMediaIds);
+                Redis::sadd($toplessMediaIdsCacheKey, ...$toplessMediaIds);
+            });
+
         Redis::expireat($toplessMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
     }
 
     public static function CachePublicExplicitMediaIds()
     {
-        $explicitMediaIds = self::public()
+        $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
+        Redis::del($explicitMediaIdsCacheKey);
+
+        self::public()
             ->confirmed()
             ->public()
             ->explicit()
             ->select('_id')
-            ->get()
-            ->pluck('_id')
-            ->toArray();
-        $explicitMediaIds = array_map('strval', $explicitMediaIds);
-        $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
-        Redis::sadd($explicitMediaIdsCacheKey, ...$explicitMediaIds);
+            ->chunk(200, function ($medias) use ($explicitMediaIdsCacheKey) {
+                $explicitMediaIds = $medias->pluck('_id')->toArray();
+                $explicitMediaIds = array_map('strval', $explicitMediaIds);
+                Redis::sadd($explicitMediaIdsCacheKey, ...$explicitMediaIds);
+            });
+
         Redis::expireat($explicitMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
     }
 
     public static function CachePublicMediaIds()
     {
-        $mediaIds = self::public()
-            ->confirmed()
-            ->select('_id')
-            ->get()
-            ->pluck('_id')
-            ->toArray();
         $cacheKey = (new self())->getCollection().':ids';
-        $mediaIds = array_map('strval', $mediaIds);
-        Redis::sadd($cacheKey, ...$mediaIds);
+        Redis::del($cacheKey);
+        self::public()->confirmed()->select('_id')->chunk(200, function ($medias) use ($cacheKey) {
+            $mediaIds = $medias->pluck('_id')->toArray();
+            $mediaIds = array_map('strval', $mediaIds);
+            Redis::sadd($cacheKey, ...$mediaIds);
+        });
+
         Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
     }
 }
