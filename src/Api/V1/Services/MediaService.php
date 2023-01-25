@@ -485,7 +485,7 @@ class MediaService
             default => Redis::sdiff($mediaIdsCacheKey, $cacheKey),
         };
 
-        return array_slice($notVisitedIds, 0, 500);
+        return array_slice($notVisitedIds, 0, 1000);
     }
 
     /**

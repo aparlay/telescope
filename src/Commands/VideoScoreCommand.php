@@ -26,6 +26,9 @@ class VideoScoreCommand extends Command
 
         $bar->finish();
 
+        Media::CachePublicExplicitMediaIds();
+        Media::CachePublicToplessMediaIds();
+        Media::CachePublicMediaIds();
         return self::SUCCESS;
     }
 }
