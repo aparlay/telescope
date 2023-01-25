@@ -353,7 +353,7 @@ class MediaService
             $this->loadUserVisitedVideos((string) auth()->user()->_id, $request->uuid);
         }
 
-        $data = $query->medias($this->topNotVisitedVideoIdsBySortCategory($request->uuid, $request->show_adult_content, $sortCategory))
+        $data = $query->medias($this->topNotVisitedVideoIds($request->uuid, $request->show_adult_content, $sortCategory))
             ->paginate(5)
             ->withQueryString();
 
@@ -467,7 +467,7 @@ class MediaService
      * @return array
      * @throws \RedisException
      */
-    public function topNotVisitedVideoIdsBySortCategory(string $uuid, int $explicitVisibility, string $sortCategory): array
+    public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory): array
     {
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         $explicitMediaIdsCacheKey = (new Media())->getCollection().':explicit:ids:'.$sortCategory;
@@ -486,13 +486,14 @@ class MediaService
             Media::CachePublicToplessMediaIds();
         }
 
-        $notVisitedIds = match ($explicitVisibility) {
-            UserSettingShowAdultContent::NEVER->value => Redis::zDiff([$mediaIdsCacheKey, $toplessMediaIdsCacheKey, $cacheKey]),
-            UserSettingShowAdultContent::TOPLESS->value => Redis::zDiff([$mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey]),
-            default => Redis::zDiff([$mediaIdsCacheKey, $cacheKey]),
+        $newCacheKey = $cacheKey . ':' . $sortCategory;
+        match ($explicitVisibility) {
+            UserSettingShowAdultContent::NEVER->value => Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $toplessMediaIdsCacheKey, $cacheKey]),
+            UserSettingShowAdultContent::TOPLESS->value => Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey]),
+            default => Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $cacheKey]),
         };
 
-        return array_slice($notVisitedIds, 0, 500);
+        return Redis::zrevrange($newCacheKey, 0, 500);
     }
 
     /**
