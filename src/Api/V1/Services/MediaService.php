@@ -492,12 +492,12 @@ class MediaService
 
         $newCacheKey = $cacheKey.':'.$sortCategory;
         match ($explicitVisibility) {
-            UserSettingShowAdultContent::NEVER->value => Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $toplessMediaIdsCacheKey, $cacheKey]),
-            UserSettingShowAdultContent::TOPLESS->value => Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey]),
-            default => Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $cacheKey]),
+            UserSettingShowAdultContent::NEVER->value => \Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $toplessMediaIdsCacheKey, $cacheKey]),
+            UserSettingShowAdultContent::TOPLESS->value => \Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey]),
+            default => \Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $cacheKey]),
         };
 
-        return Redis::zrevrange($newCacheKey, 0, 500);
+        return \Redis::zrevrange($newCacheKey, 0, 500);
     }
 
     /**
