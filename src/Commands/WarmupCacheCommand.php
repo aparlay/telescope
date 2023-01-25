@@ -20,6 +20,7 @@ class WarmupCacheCommand extends Command implements Isolatable
         Media::CachePublicExplicitMediaIds();
         Media::CachePublicToplessMediaIds();
         Media::CachePublicMediaIds();
+
         return self::SUCCESS;
     }
 }
