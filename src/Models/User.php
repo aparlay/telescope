@@ -115,6 +115,7 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder active() get activated user
  * @method static |self|Builder idVerified() get id verified user
  * @method static |self|Builder username(string $username) get user
+ * @method static |self|Builder email(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
  * @method static |self|Builder availableForFollower()    get available content for followers
  */
@@ -345,9 +346,7 @@ class User extends \App\Models\User
      */
     public function shouldBeSearchable(): bool
     {
-        return isset($this->stats['counters']['medias']) &&
-            ($this->stats['counters']['medias'] > 0) &&
-            ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) &&
+        return ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) &&
             in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
             ! config('app.is_testing');
     }
@@ -1097,6 +1096,17 @@ class User extends \App\Models\User
             ];
         }
         $this->medias = $medias;
+
+        $scores = $this->scores;
+        $scores['sort'] = 0;
+
+        $count = Media::creator($this->_id)->availableForOwner()->count();
+        if ($count > 0) {
+            $score = Media::creator($this->_id)->availableForOwner()->sum('sort_scores.default');
+            $scores['sort'] = $score / $count;
+        }
+        $this->scores = $scores;
+
         $this->fillStatsCountersField(['medias' => Media::query()->creator($this->_id)->availableForOwner()->count()]);
         $this->save();
 

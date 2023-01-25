@@ -23,8 +23,11 @@ class VideoScoreCommand extends Command
         }
 
         $rows = [];
+
+        $headers = ['id', 'awesomeness', 'beauty', 'skin', 'time', 'like', 'watch', 'default', 'guest', 'returned', 'registered'];
+        $this->line(implode(', ', $headers).PHP_EOL);
         foreach ($mediaQuery->orderBy('sort_scores.default', 'DESC')->lazy() as $media) {
-            $rows[] = [
+            $rows = [
                 $media->_id,
                 $media->awesomeness_score,
                 $media->beauty_score,
@@ -37,10 +40,8 @@ class VideoScoreCommand extends Command
                 $media->sort_scores['returned'],
                 $media->sort_scores['registered'],
             ];
+            $this->line(implode(', ', $rows).PHP_EOL);
         }
-
-        $headers = ['id', 'awesomeness', 'beauty', 'skin', 'time', 'like', 'watch', 'default', 'guest', 'returned', 'registered'];
-        $this->table($headers, $rows);
 
         return self::SUCCESS;
     }
