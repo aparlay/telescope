@@ -995,11 +995,11 @@ class Media extends BaseModel
         foreach ($medias as $media) {
             foreach (MediaSortCategories::getAllValues() as $sortCategoryValue) {
                 $sortedSets[$sortCategoryValue][] = $media['sort_scores'][$sortCategoryValue];
-                $sortedSets[$sortCategoryValue][] = (string)$media['_id'];
+                $sortedSets[$sortCategoryValue][] = (string) $media['_id'];
             }
         }
         foreach ($sortedSets as $key => $items) {
-            if (!empty($items)) {
+            if (! empty($items)) {
                 Redis::zadd($cacheKey.':'.$key, ...$items);
             }
         }

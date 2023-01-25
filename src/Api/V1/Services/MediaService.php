@@ -18,10 +18,10 @@ use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Ramsey\Uuid\Uuid;
+use Redis;
 use Str;
 
 class MediaService
@@ -414,7 +414,9 @@ class MediaService
             return;
         }
 
-        $mediaIds = array_map(function($v) { return [0, $v]; }, $mediaIds);
+        $mediaIds = array_map(function ($v) {
+            return [0, $v];
+        }, $mediaIds);
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         Redis::add($cacheKey, ...$mediaIds);
         Redis::expireat($cacheKey, now()->addDays(5)->getTimestamp());
@@ -450,7 +452,9 @@ class MediaService
             ->flatten()
             ->toArray();
 
-        $mediaIds = array_map(function($v) { return [0, $v]; }, $mediaIds);
+        $mediaIds = array_map(function ($v) {
+            return [0, $v];
+        }, $mediaIds);
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         Redis::zAdd($cacheKey, ...$mediaIds);
         Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
