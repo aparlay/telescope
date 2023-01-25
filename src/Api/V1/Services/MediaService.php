@@ -417,7 +417,9 @@ class MediaService
             return;
         }
 
-        $mediaIds = array_map(function($v) { return [0, $v]; }, $mediaIds);
+        $mediaIds = array_map(function ($v) {
+            return [0, $v];
+        }, $mediaIds);
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         Redis::add($cacheKey, ...$mediaIds);
         Redis::expireat($cacheKey, now()->addDays(5)->getTimestamp());
@@ -453,7 +455,9 @@ class MediaService
             ->flatten()
             ->toArray();
 
-        $mediaIds = array_map(function($v) { return [0, $v]; }, $mediaIds);
+        $mediaIds = array_map(function ($v) {
+            return [0, $v];
+        }, $mediaIds);
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
         Redis::zAdd($cacheKey, ...$mediaIds);
         Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());

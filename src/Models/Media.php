@@ -23,7 +23,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
+use \Redis;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -968,6 +968,10 @@ class Media extends BaseModel
         };
     }
 
+    /**
+     * @return void
+     * @throws \RedisException
+     */
     public static function CachePublicToplessMediaIds()
     {
         $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
@@ -979,7 +983,16 @@ class Media extends BaseModel
             ->topless()
             ->select('_id')
             ->chunk(200, function ($medias) use ($toplessMediaIdsCacheKey) {
-                $this->fillSortedSet($toplessMediaIdsCacheKey, $medias->toArray());
+                $sortedSets = [];
+                foreach ($medias as $media) {
+                    foreach (MediaSortCategories::getAllValues() as $sortCategoryValue) {
+                        $sortedSets[$sortCategoryValue][] = $media['sort_scores'][$sortCategoryValue];
+                        $sortedSets[$sortCategoryValue][] = (string)$media['_id'];
+                    }
+                }
+                foreach ($sortedSets as $key => $items) {
+                    Redis::zAdd($toplessMediaIdsCacheKey.':'.$key, ...$items);
+                }
             });
 
         foreach (MediaSortCategories::getAllValues() as $key) {
@@ -987,6 +1000,10 @@ class Media extends BaseModel
         }
     }
 
+    /**
+     * @return void
+     * @throws \RedisException
+     */
     public static function CachePublicExplicitMediaIds()
     {
         $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
@@ -998,7 +1015,16 @@ class Media extends BaseModel
             ->explicit()
             ->select('_id')
             ->chunk(200, function ($medias) use ($explicitMediaIdsCacheKey) {
-                $this->fillSortedSet($explicitMediaIdsCacheKey, $medias->toArray());
+                $sortedSets = [];
+                foreach ($medias as $media) {
+                    foreach (MediaSortCategories::getAllValues() as $sortCategoryValue) {
+                        $sortedSets[$sortCategoryValue][] = $media['sort_scores'][$sortCategoryValue];
+                        $sortedSets[$sortCategoryValue][] = (string)$media['_id'];
+                    }
+                }
+                foreach ($sortedSets as $key => $items) {
+                    Redis::zAdd($explicitMediaIdsCacheKey.':'.$key, ...$items);
+                }
             });
 
         foreach (MediaSortCategories::getAllValues() as $key) {
@@ -1006,6 +1032,10 @@ class Media extends BaseModel
         }
     }
 
+    /**
+     * @return void
+     * @throws \RedisException
+     */
     public static function CachePublicMediaIds()
     {
         $cacheKey = (new self())->getCollection().':ids';
@@ -1014,27 +1044,20 @@ class Media extends BaseModel
             ->confirmed()
             ->select(['_id', 'sort_scores'])
             ->chunk(200, function ($medias) use ($cacheKey) {
-                $this->fillSortedSet($cacheKey, $medias->toArray());
+                $sortedSets = [];
+                foreach ($medias as $media) {
+                    foreach (MediaSortCategories::getAllValues() as $sortCategoryValue) {
+                        $sortedSets[$sortCategoryValue][] = $media['sort_scores'][$sortCategoryValue];
+                        $sortedSets[$sortCategoryValue][] = (string)$media['_id'];
+                    }
+                }
+                foreach ($sortedSets as $key => $items) {
+                    Redis::zAdd($cacheKey.':'.$key, ...$items);
+                }
             });
 
         foreach (MediaSortCategories::getAllValues() as $key) {
             Redis::expireat($cacheKey.':'.$key, now()->addDays(4)->getTimestamp());
-        }
-    }
-
-    public function fillSortedSet(string $cacheKey, array $medias)
-    {
-        $sortedSets = [];
-        foreach ($medias as $media) {
-            foreach (MediaSortCategories::getAllValues() as $sortCategoryValue) {
-                $sortedSets[$sortCategoryValue][] = $media['sort_scores'][$sortCategoryValue];
-                $sortedSets[$sortCategoryValue][] = (string)$media['_id'];
-            }
-        }
-        foreach ($sortedSets as $key => $items) {
-            if (!empty($items)) {
-                Redis::zadd($cacheKey.':'.$key, ...$items);
-            }
         }
     }
 }
