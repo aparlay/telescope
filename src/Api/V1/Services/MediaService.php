@@ -20,10 +20,10 @@ use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
-use Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Ramsey\Uuid\Uuid;
+use Redis;
 use Str;
 
 class MediaService
