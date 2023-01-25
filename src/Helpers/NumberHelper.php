@@ -18,7 +18,7 @@ class NumberHelper
             pow(1000, 1) => 'k',
             pow(1000, 2) => 'm',
             pow(1000, 3) => 'b',
-            pow(1000, 4) => 't'
+            pow(1000, 4) => 't',
         ];
 
         foreach ($divisors as $divisor => $shorthand) {
@@ -27,6 +27,6 @@ class NumberHelper
             }
         }
 
-        return number_format(floor($number / $divisor)) . $shorthand . (($divisor > 1)?'+':'');
+        return number_format(floor($number / $divisor)).$shorthand.(($divisor > 1) ? '+' : '');
     }
 }
