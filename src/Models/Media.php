@@ -22,7 +22,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use \Redis;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -31,6 +30,7 @@ use MathPHP\Statistics\Significance;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use Psr\SimpleCache\InvalidArgumentException;
+use Redis;
 
 /**
  * Class Media.
@@ -954,7 +954,7 @@ class Media extends BaseModel
                 foreach ($medias as $media) {
                     foreach (MediaSortCategories::getAllValues() as $sortCategoryValue) {
                         $sortedSets[$sortCategoryValue][] = $media['sort_scores'][$sortCategoryValue];
-                        $sortedSets[$sortCategoryValue][] = (string)$media['_id'];
+                        $sortedSets[$sortCategoryValue][] = (string) $media['_id'];
                     }
                 }
                 foreach ($sortedSets as $key => $items) {
@@ -986,7 +986,7 @@ class Media extends BaseModel
                 foreach ($medias as $media) {
                     foreach (MediaSortCategories::getAllValues() as $sortCategoryValue) {
                         $sortedSets[$sortCategoryValue][] = $media['sort_scores'][$sortCategoryValue];
-                        $sortedSets[$sortCategoryValue][] = (string)$media['_id'];
+                        $sortedSets[$sortCategoryValue][] = (string) $media['_id'];
                     }
                 }
                 foreach ($sortedSets as $key => $items) {
@@ -1015,7 +1015,7 @@ class Media extends BaseModel
                 foreach ($medias as $media) {
                     foreach (MediaSortCategories::getAllValues() as $sortCategoryValue) {
                         $sortedSets[$sortCategoryValue][] = $media['sort_scores'][$sortCategoryValue];
-                        $sortedSets[$sortCategoryValue][] = (string)$media['_id'];
+                        $sortedSets[$sortCategoryValue][] = (string) $media['_id'];
                     }
                 }
                 foreach ($sortedSets as $key => $items) {
