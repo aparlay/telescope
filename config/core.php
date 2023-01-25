@@ -30,4 +30,9 @@ return [
             'PH', 'ID', 'MY', 'BR', 'CO', 'AR', 'PE', 'VE', 'CL', 'EC', 'BO', 'PY', 'UY', 'IN', 'VN', 'KH',
         ],
     ],
+    'id_verification' => [
+        'min_likes' => 1000,
+        'min_followers' => 100,
+        'min_medias' => 1,
+    ],
 ];
