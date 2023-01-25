@@ -6,7 +6,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use MongoDB\BSON\ObjectId;
 
-return new class() extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -22,7 +23,7 @@ return new class() extends Migration {
             'value' => [
                 'min_likes' => 1000,
                 'min_followers' => 100,
-                'min_media' => 1,
+                'min_medias' => 1
             ],
         ]);
     }

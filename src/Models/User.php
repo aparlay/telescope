@@ -279,7 +279,7 @@ class User extends \App\Models\User
                 'notifications' => 0,
             ],
         ],
-        'is_eligible_for_verification' => false,
+        'is_eligible_for_verification' => false
     ];
 
     /**
@@ -593,7 +593,7 @@ class User extends \App\Models\User
     {
         $hasMinLikes = $this->counters['likes'] >= config('core.id_verification.min_likes', 1000);
         $hasMinFollowers = $this->counters['followers'] >= config('core.id_verification.min_followers', 100);
-        $hasMinMedia = $this->counters['medias'] >= config('core.id_verification.min_followers', 1);
+        $hasMinMedia = $this->counters['medias'] >= config('core.id_verification.min_medias', 1);
 
         if (($hasMinLikes || $hasMinFollowers) && $hasMinMedia) {
             return true;
