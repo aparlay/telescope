@@ -33,6 +33,6 @@ return [
     'id_verification' => [
         'min_likes' => 1000,
         'min_followers' => 100,
-        'min_medias' => 1
-    ]
+        'min_medias' => 1,
+    ],
 ];

@@ -279,7 +279,7 @@ class User extends \App\Models\User
                 'notifications' => 0,
             ],
         ],
-        'is_eligible_for_verification' => false
+        'is_eligible_for_verification' => false,
     ];
 
     /**
