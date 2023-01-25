@@ -17,28 +17,14 @@ class VideoScoreCommand extends Command
      */
     public function handle()
     {
-        $headers = ['id', 'awesomeness', 'beauty', 'skin', 'time', 'like', 'watch', 'default', 'guest', 'returned', 'registered'];
-        $this->line(implode(', ', $headers).PHP_EOL);
-
         $mediaQuery = Media::availableForFollower()->whereNull('is_fake')->orderBy('created_at', 'ASC');
-        foreach ($mediaQuery->lazy() as $media) {/** @var Media $media */
+        $bar = $this->output->createProgressBar($mediaQuery->count());
+        foreach ($mediaQuery->lazy() as $media) {
             $media->recalculateSortScores();
-            $rows = [
-                $media->_id,
-                $media->awesomeness_score,
-                $media->beauty_score,
-                $media->skin_score,
-                $media->time_score,
-                $media->like_score,
-                $media->visit_score,
-                $media->sort_scores['default'],
-                $media->sort_scores['guest'],
-                $media->sort_scores['returned'],
-                $media->sort_scores['registered'],
-            ];
-            $this->line(implode(', ', $rows).PHP_EOL);
+            $bar->advance();
         }
 
+        $bar->finish();
         return self::SUCCESS;
     }
 }
