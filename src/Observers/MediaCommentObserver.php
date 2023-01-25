@@ -88,7 +88,7 @@ class MediaCommentObserver extends BaseModelObserver
                 ->mediaEntity($media->_id)
                 ->update([
                     'message' => $media->commentsNotificationMessage(),
-                    'payload.user' => $lastMediaComment->creator
+                    'payload.user' => $lastMediaComment->creator,
                 ]);
         }
     }
