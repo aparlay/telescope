@@ -9,6 +9,7 @@ use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Helpers\NumberHelper;
 use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
@@ -881,7 +882,7 @@ class Media extends BaseModel
                 [
                     'username1' => $mediaLikes[0]->creatorObj->username,
                     'username2' => $mediaLikes[1]->creatorObj->username,
-                    'count' => $this->like_count - 2,
+                    'count' => NumberHelper::shorten($this->like_count - 2),
                 ]
             ),
             ($this->like_count === 2 && $twoUserExists) => __(
@@ -914,7 +915,7 @@ class Media extends BaseModel
                 [
                     'username1' => $mediaComments[0]->creatorObj->username,
                     'username2' => $mediaComments[1]->creatorObj->username,
-                    'count' => $this->comment_count - 2,
+                    'count' => NumberHelper::shorten($this->comment_count - 2),
                 ]
             ),
             ($this->comment_count === 2 && $twoUserExists) => __(
