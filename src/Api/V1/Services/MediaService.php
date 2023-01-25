@@ -250,7 +250,7 @@ class MediaService
 
         if (! empty($uuid)) {
             $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
-            Redis::zAdd($cacheKey, 0, (string) $media->_id);
+            Redis::sadd($cacheKey, (string) $media->_id);
         }
     }
 
