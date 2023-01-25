@@ -486,7 +486,7 @@ class MediaService
             Media::CachePublicToplessMediaIds();
         }
 
-        $newCacheKey = $cacheKey . ':' . $sortCategory;
+        $newCacheKey = $cacheKey.':'.$sortCategory;
         match ($explicitVisibility) {
             UserSettingShowAdultContent::NEVER->value => Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $toplessMediaIdsCacheKey, $cacheKey]),
             UserSettingShowAdultContent::TOPLESS->value => Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey]),
