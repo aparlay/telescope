@@ -528,7 +528,7 @@ class MediaTest extends ApiTestCase
                 'code' => 403,
                 'status' => 'ERROR',
                 'data' => [],
-                'message' => 'Video is protected and you cannot delete it.',
+                'message' => 'You are not allowed to delete this. Please contact support for more information.',
             ]);
     }
 
