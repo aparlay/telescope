@@ -109,7 +109,7 @@ class MediaCommentObserver extends BaseModelObserver
         // we don't show notification if there is no commenter or the only commenter is the owner itself
         $mediaComments = MediaComment::query()
             ->media($media->_id)
-            ->whereIdNeq($media->creator['_id'], 'user_id')
+            ->whereIdNeq($media->creator['_id'], 'created_by')
             ->limit(2)
             ->get();
         if ($mediaComments->count() === 0) {
