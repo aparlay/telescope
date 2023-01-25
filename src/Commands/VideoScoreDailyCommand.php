@@ -27,6 +27,7 @@ class VideoScoreDailyCommand extends Command
         Media::CachePublicExplicitMediaIds();
         Media::CachePublicToplessMediaIds();
         Media::CachePublicMediaIds();
+
         return self::SUCCESS;
     }
 }
