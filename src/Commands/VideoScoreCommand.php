@@ -25,6 +25,7 @@ class VideoScoreCommand extends Command
         }
 
         $bar->finish();
+
         return self::SUCCESS;
     }
 }
