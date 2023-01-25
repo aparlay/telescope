@@ -424,7 +424,7 @@ class MediaService
         }
 
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
-        Redis::zAdd($cacheKey, ...$cacheMediaIds);
+        Redis::sAdd($cacheKey, ...$cacheMediaIds);
         Redis::expireat($cacheKey, now()->addDays(5)->getTimestamp());
     }
 
@@ -458,13 +458,8 @@ class MediaService
             ->flatten()
             ->toArray();
 
-        $cacheMediaIds = [];
-        foreach ($mediaIds as $mediaId) {
-            $cacheMediaIds[] = 0;
-            $cacheMediaIds[] = $mediaId;
-        }
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
-        Redis::zAdd($cacheKey, ...$cacheMediaIds);
+        Redis::sadd($cacheKey, ...$mediaIds);
         Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
     }
 
@@ -479,9 +474,9 @@ class MediaService
     public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory): array
     {
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
-        $explicitMediaIdsCacheKey = (new Media())->getCollection().':explicit:ids:'.$sortCategory;
-        $toplessMediaIdsCacheKey = (new Media())->getCollection().':topless:ids:'.$sortCategory;
-        $mediaIdsCacheKey = (new Media())->getCollection().':ids:'.$sortCategory;
+        $explicitMediaIdsCacheKey = (new Media())->getCollection().':explicit:ids';
+        $toplessMediaIdsCacheKey = (new Media())->getCollection().':topless:ids';
+        $mediaIdsCacheKey = (new Media())->getCollection().':ids';
 
         if (! Redis::exists($mediaIdsCacheKey)) {
             Media::CachePublicMediaIds();
@@ -495,14 +490,18 @@ class MediaService
             Media::CachePublicToplessMediaIds();
         }
 
-        $newCacheKey = $cacheKey.':'.$sortCategory;
-        match ($explicitVisibility) {
-            UserSettingShowAdultContent::NEVER->value => Redis::zInterStore($newCacheKey, [$mediaIdsCacheKey, $toplessMediaIdsCacheKey, $cacheKey], [0, -1]),
-            UserSettingShowAdultContent::TOPLESS->value => Redis::zInterStore($newCacheKey, [$mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey], [0, -1]),
-            default => Redis::zInterStore($newCacheKey, [$mediaIdsCacheKey, $cacheKey], [0, -1]),
+        $notVisitedMediaIds = match ($explicitVisibility) {
+            UserSettingShowAdultContent::NEVER->value => Redis::sdiff($mediaIdsCacheKey, $toplessMediaIdsCacheKey, $cacheKey),
+            UserSettingShowAdultContent::TOPLESS->value => Redis::sdiff($mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey),
+            default => Redis::sdiff($mediaIdsCacheKey, $cacheKey),
         };
 
-        return Redis::zrevrange($newCacheKey, 0, 500);
+        $notVisitedTopMediaIds = array_intersect(
+            Redis::zrevrange($mediaIdsCacheKey.$sortCategory, 0, 1000),
+            array_slice($notVisitedMediaIds, 0, 1000)
+        );
+
+        return array_slice($notVisitedTopMediaIds, 0, 100);
     }
 
     /**
