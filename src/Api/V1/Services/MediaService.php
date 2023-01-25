@@ -421,7 +421,7 @@ class MediaService
             return [0, $v];
         }, $mediaIds);
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
-        Redis::add($cacheKey, ...$mediaIds);
+        Redis::zAdd($cacheKey, ...$mediaIds);
         Redis::expireat($cacheKey, now()->addDays(5)->getTimestamp());
     }
 
