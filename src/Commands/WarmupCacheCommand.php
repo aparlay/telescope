@@ -26,7 +26,6 @@ class WarmupCacheCommand extends Command implements Isolatable
                     $media->storeInGeneralCaches();
                 }
             });
-
         return self::SUCCESS;
     }
 }
