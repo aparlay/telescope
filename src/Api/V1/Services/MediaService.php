@@ -316,6 +316,7 @@ class MediaService
      *
      * @return LengthAwarePaginator
      * @throws InvalidArgumentExceptionAlias
+     * @throws RedisException
      */
     public function getPublicFeeds(
         PublicFeedRequest $request,
