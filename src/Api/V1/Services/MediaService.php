@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Services;
 
-use Aparlay\Chat\Api\V1\Services\ChatService;
 use Aparlay\Core\Api\V1\Dto\MediaDTO;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaVisit;
@@ -19,11 +18,11 @@ use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Ramsey\Uuid\Uuid;
-use Redis;
+use RedisException;
 use Str;
 
 class MediaService
@@ -409,7 +408,7 @@ class MediaService
      * @param  string  $uuid
      *
      * @return void
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function cacheVisitedVideoByUuid(array $mediaIds, string $uuid): void
     {
@@ -430,7 +429,7 @@ class MediaService
      * @param  string  $uuid
      *
      * @return void
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function loadUserVisitedVideos(string $userId, string $uuid): void
     {
@@ -466,9 +465,10 @@ class MediaService
     /**
      * @param  string  $uuid
      * @param  int     $explicitVisibility
+     * @param  string  $sortCategory
      *
      * @return array
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory): array
     {
