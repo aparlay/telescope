@@ -285,7 +285,6 @@ class User extends \App\Models\User
             ],
         ],
         'tags' => [],
-        'is_eligible_for_verification' => false,
     ];
 
     /**
