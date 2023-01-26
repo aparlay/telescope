@@ -28,7 +28,7 @@ class MediaCommentService
             ->with(['parentObj'])
             ->whereNull('parent')
             ->media($media->_id)
-            ->oldest('_id')
+            ->recent()
             ->cursorPaginate(self::PER_PAGE);
     }
 
@@ -36,7 +36,7 @@ class MediaCommentService
     {
         return MediaComment::query()
             ->parent($mediaComment->_id)
-            ->oldest('_id')
+            ->recent()
             ->cursorPaginate(self::PER_PAGE);
     }
 
