@@ -30,6 +30,7 @@ class VideoScoreHourlyCommand extends Command
 
         $bar->finish();
         MediaForceSortPositionRecalculator::dispatch();
+
         return self::SUCCESS;
     }
 }

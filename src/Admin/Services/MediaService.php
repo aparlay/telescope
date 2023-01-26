@@ -152,7 +152,7 @@ class MediaService extends AdminBaseService
             'is_protected',
             'is_comments_enabled',
             'is_music_licensed',
-            'force_sort_positions'
+            'force_sort_positions',
         ]);
 
         $data['force_sort_positions'] = [
@@ -229,6 +229,7 @@ class MediaService extends AdminBaseService
         $media->save();
         $media->storeInGeneralCaches();
         MediaForceSortPositionRecalculator::dispatch();
+
         return $media;
     }
 

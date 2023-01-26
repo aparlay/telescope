@@ -471,11 +471,10 @@ class MediaService
     {
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
 
-        $newCacheKey = $cacheKey . ':' . $sortCategory;
-        if (Redis::exists())
-
-
-        $explicitMediaIdsCacheKey = (new Media())->getCollection().':explicit:ids:'.$sortCategory;
+        $newCacheKey = $cacheKey.':'.$sortCategory;
+        if (Redis::exists()) {
+            $explicitMediaIdsCacheKey = (new Media())->getCollection().':explicit:ids:'.$sortCategory;
+        }
         $toplessMediaIdsCacheKey = (new Media())->getCollection().':topless:ids:'.$sortCategory;
         $mediaIdsCacheKey = (new Media())->getCollection().':ids:'.$sortCategory;
         match ($explicitVisibility) {

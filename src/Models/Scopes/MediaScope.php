@@ -348,7 +348,7 @@ trait MediaScope
     public function scopeHasForceSortPosition(Builder $query, string $sortCategory): Builder
     {
         if (in_array($sortCategory, MediaSortCategories::getAllValues())) {
-            $query->where('force_sort_positions.' . $sortCategory, '>', 0);
+            $query->where('force_sort_positions.'.$sortCategory, '>', 0);
         }
 
         return $query;

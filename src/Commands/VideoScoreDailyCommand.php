@@ -31,6 +31,7 @@ class VideoScoreDailyCommand extends Command
 
         $bar->finish();
         MediaForceSortPositionRecalculator::dispatch();
+
         return self::SUCCESS;
     }
 }

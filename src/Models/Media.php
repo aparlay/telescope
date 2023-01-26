@@ -943,7 +943,7 @@ class Media extends BaseModel
     {
         $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
         foreach ($this->sort_scores as $category => $score) {
-            Redis::zAdd($toplessMediaIdsCacheKey.':'.$category, $this->sort_scores[$category], (string)$this->_id);
+            Redis::zAdd($toplessMediaIdsCacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
         }
     }
 
@@ -955,7 +955,7 @@ class Media extends BaseModel
     {
         $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
         foreach ($this->sort_scores as $category => $score) {
-            Redis::zAdd($explicitMediaIdsCacheKey.':'.$category, $this->sort_scores[$category], (string)$this->_id);
+            Redis::zAdd($explicitMediaIdsCacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
         }
     }
 
@@ -968,7 +968,7 @@ class Media extends BaseModel
         $cacheKey = (new self())->getCollection().':ids';
         foreach ($this->sort_scores as $category => $score) {
             if (is_numeric($this->sort_scores[$category])) {
-                Redis::zAdd($cacheKey.':'.$category, $this->sort_scores[$category], (string)$this->_id);
+                Redis::zAdd($cacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
             }
         }
     }
