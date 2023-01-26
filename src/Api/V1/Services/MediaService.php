@@ -18,10 +18,10 @@ use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Ramsey\Uuid\Uuid;
-use Redis;
 use Str;
 
 class MediaService
@@ -470,23 +470,14 @@ class MediaService
     public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory): array
     {
         $cacheKey = (new MediaVisit())->getCollection().':uuid:'.$uuid;
+
+        $newCacheKey = $cacheKey . ':' . $sortCategory;
+        if (Redis::exists())
+
+
         $explicitMediaIdsCacheKey = (new Media())->getCollection().':explicit:ids:'.$sortCategory;
         $toplessMediaIdsCacheKey = (new Media())->getCollection().':topless:ids:'.$sortCategory;
         $mediaIdsCacheKey = (new Media())->getCollection().':ids:'.$sortCategory;
-
-        if (! Redis::exists($mediaIdsCacheKey)) {
-            Media::CachePublicMediaIds();
-        }
-
-        if ($explicitVisibility === UserSettingShowAdultContent::NEVER->value && ! Redis::exists($explicitMediaIdsCacheKey)) {
-            Media::CachePublicExplicitMediaIds();
-        }
-
-        if ($explicitVisibility === UserSettingShowAdultContent::TOPLESS->value && ! Redis::exists($toplessMediaIdsCacheKey)) {
-            Media::CachePublicToplessMediaIds();
-        }
-
-        $newCacheKey = $cacheKey.':'.$sortCategory;
         match ($explicitVisibility) {
             UserSettingShowAdultContent::NEVER->value => Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $toplessMediaIdsCacheKey, $cacheKey]),
             UserSettingShowAdultContent::TOPLESS->value => Redis::zdiffstore($newCacheKey, [$mediaIdsCacheKey, $explicitMediaIdsCacheKey, $cacheKey]),

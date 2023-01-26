@@ -32,6 +32,7 @@ class MediaUpdateRequest extends FormRequest
             'is_protected' => ['required', 'boolean'],
             'is_music_licensed' => ['required', 'boolean'],
             'is_comments_enabled' => ['required', 'boolean'],
+            'force_sort_positions.*' => ['nullable', 'integer'],
             'status' => [
                 'required',
                 'integer',
