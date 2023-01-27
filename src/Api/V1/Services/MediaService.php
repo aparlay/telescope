@@ -559,7 +559,7 @@ class MediaService
     private function generateHashKeys(string $sortCategory, string $uuid): array
     {
         $mediaPrefix = config('database.redis.options.prefix').(new Media())->getCollection();
-        $mediaVisitPrefix = config('database.redis.options.prefix')(new MediaVisit())->getCollection();
+        $mediaVisitPrefix = config('database.redis.options.prefix').(new MediaVisit())->getCollection();
 
         $explicitMediaIdsCacheKey = $mediaPrefix.':explicit:ids:'.$sortCategory;
         $toplessMediaIdsCacheKey = $mediaPrefix.':topless:ids:'.$sortCategory;
