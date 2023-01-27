@@ -500,7 +500,7 @@ class MediaService
             ] = $this->generateHashKeys($sortCategory, $uuid);
 
             // adding explicitness filter to filter bucket
-            $filterBuckets[] = match ($explicitVisibility) {
+            $filterBuckets = match ($explicitVisibility) {
                 UserSettingShowAdultContent::NEVER->value => [$toplessMediaIdsCacheKey, $visitedVideoCacheKey],
                 UserSettingShowAdultContent::TOPLESS->value => [$explicitMediaIdsCacheKey, $visitedVideoCacheKey],
                 default => [$visitedVideoCacheKey]
