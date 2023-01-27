@@ -40,7 +40,7 @@ class MediasTable extends BaseIndexComponent
 
     public function buildQuery(): Builder
     {
-        if (!empty($this->sort['sort_scores.guest'])
+        if (! empty($this->sort['sort_scores.guest'])
             && $this->sort['sort_scores.guest'] === -1
             && empty($this->filter['status'])) {
             $this->filter['status'] = 5;
