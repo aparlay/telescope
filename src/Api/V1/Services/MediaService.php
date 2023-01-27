@@ -249,7 +249,7 @@ class MediaService
         }
 
         if (! empty($uuid)) {
-            $cacheKey = (new MediaVisit())->getCollection() . ':visited:uuid:' . $uuid;
+            $cacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
             Redis::zAdd($cacheKey, 0, (string) $media->_id);
         }
     }
@@ -397,7 +397,7 @@ class MediaService
         if (! auth()->guest()) {
             MediaVisit::query()->user(auth()->user()->_id)->delete();
         }
-        $cacheKey = (new MediaVisit())->getCollection() . ':visited:uuid:' . $uuid;
+        $cacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
         Redis::unlink($cacheKey);
     }
 
@@ -416,12 +416,12 @@ class MediaService
 
         $scoredMediaIds = [];
         foreach ($mediaIds as $key => $mediaId) {
-            $scoredMediaIds[]=0;
-            $scoredMediaIds[]=$mediaId;
+            $scoredMediaIds[] = 0;
+            $scoredMediaIds[] = $mediaId;
         }
 
-        if (!empty($scoredMediaIds)) {
-            $cacheKey = (new MediaVisit())->getCollection() . ':visited:uuid:' . $uuid;
+        if (! empty($scoredMediaIds)) {
+            $cacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
             Redis::zAdd($cacheKey, ...$scoredMediaIds);
             Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
         }
@@ -451,7 +451,7 @@ class MediaService
             ->merge($blockedMediaIds)
             ->flatten()
             ->map(function ($item, $key) {
-                return (string)$item;
+                return (string) $item;
             })
             ->flatten()
             ->toArray();
@@ -459,11 +459,11 @@ class MediaService
         $scoredMediaIds = [];
         foreach ($mediaIds as $key => $mediaId) {
             $scoredMediaIds[] = 0;
-            $scoredMediaIds[]=$mediaId;
+            $scoredMediaIds[] = $mediaId;
         }
 
-        if (!empty($scoredMediaIds)) {
-            $cacheKey = (new MediaVisit())->getCollection() . ':visited:uuid:' . $uuid;
+        if (! empty($scoredMediaIds)) {
+            $cacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
             Redis::zAdd($cacheKey, ...$scoredMediaIds);
             Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
         }
@@ -479,23 +479,25 @@ class MediaService
      */
     public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory): array
     {
-        $visitedVideoCacheKey = (new MediaVisit())->getCollection() . ':visited:uuid:' . $uuid;
+        $visitedVideoCacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
 
-        $notVisitedTopVideosCacheKey = (new MediaVisit())->getCollection() . ':new:uuid:' . $uuid .':'. $sortCategory . ':' . $explicitVisibility;
-        if (!Redis::exists($notVisitedTopVideosCacheKey)) {
+        $notVisitedTopVideosCacheKey = (new MediaVisit())->getCollection().':new:uuid:'.$uuid.':'.$sortCategory.':'.$explicitVisibility;
+        if (! Redis::exists($notVisitedTopVideosCacheKey)) {
             // cache not exists
-            $prefix = config('database.redis.options.prefix') . (new Media())->getCollection();
+            $prefix = config('database.redis.options.prefix').(new Media())->getCollection();
             $explicitMediaIdsCacheKey = $prefix.':explicit:ids:'.$sortCategory;
             $toplessMediaIdsCacheKey = $prefix.':topless:ids:'.$sortCategory;
             $mediaIdsCacheKey = $prefix.':ids:'.$sortCategory;
-            $notVisitedTopVideosCacheKey = config('database.redis.options.prefix') . $notVisitedTopVideosCacheKey;
+            $notVisitedTopVideosCacheKey = config('database.redis.options.prefix').$notVisitedTopVideosCacheKey;
             switch ($explicitVisibility) {
                 case UserSettingShowAdultContent::NEVER->value:
                     Redis::rawCommand(
                         'ZDIFFSTORE',
                         $notVisitedTopVideosCacheKey,
                         3,
-                        $mediaIdsCacheKey, $toplessMediaIdsCacheKey, $visitedVideoCacheKey
+                        $mediaIdsCacheKey,
+                        $toplessMediaIdsCacheKey,
+                        $visitedVideoCacheKey
                     );
                     break;
 
@@ -504,7 +506,9 @@ class MediaService
                         'ZDIFFSTORE',
                         $notVisitedTopVideosCacheKey,
                         3,
-                        $mediaIdsCacheKey, $explicitMediaIdsCacheKey, $visitedVideoCacheKey
+                        $mediaIdsCacheKey,
+                        $explicitMediaIdsCacheKey,
+                        $visitedVideoCacheKey
                     );
                     break;
                 default:
@@ -512,9 +516,10 @@ class MediaService
                         'ZDIFFSTORE',
                         $notVisitedTopVideosCacheKey,
                         2,
-                        $mediaIdsCacheKey, $visitedVideoCacheKey
+                        $mediaIdsCacheKey,
+                        $visitedVideoCacheKey
                     );
-            };
+            }
 
             Redis::expireAt($notVisitedTopVideosCacheKey, now()->addHour()->getTimestamp());
         }
