@@ -101,7 +101,7 @@ class PublicFeedRequest extends FormRequest
         $showAdultContent = $showAdultContent ?? (auth()->guest() ? 1 : auth()->user()->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value);
 
         $this->merge([
-            'uuid' => request()->cookie('__Secure_uuid', request()->header('X-DEVICE-ID', '')),
+            'uuid' => request()->cookie('__Secure_uuid', request()->input('__Secure_uuid', '')),
             'is_first_page' => (request()->integer('page') === 0),
             'show_adult_content' => $showAdultContent,
             'filter_content_gender' => $contentGenders,

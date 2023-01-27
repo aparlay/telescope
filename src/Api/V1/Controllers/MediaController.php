@@ -142,7 +142,7 @@ class MediaController extends Controller
      */
     public function watched(Request $request): Response
     {
-        $uuid = $request->cookie('__Secure_uuid', $request->header('X-DEVICE-ID', ''));
+        $uuid = $request->cookie('__Secure_uuid', $request->input('__Secure_uuid', ''));
         $medias = $request->all();
         $this->mediaService->watchedMedia($medias, $uuid);
 
