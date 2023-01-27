@@ -480,14 +480,13 @@ class MediaService
      * @param  string  $uuid
      * @param  int     $explicitVisibility
      * @param  string  $sortCategory
+     * @param  array   $contentGender
      *
      * @return array
-     * @throws RedisException
      */
     public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory, array $contentGender): array
     {
-
-        $notVisitedTopVideosCacheKey = (new MediaVisit())->getCollection().':new:uuid:'.$uuid.':'.$sortCategory.':'.$explicitVisibility;
+        $notVisitedTopVideosCacheKey = 'public_feed:uuid:'.crc32($uuid.':'.$sortCategory.':'.$explicitVisibility.':'.implode('', $contentGender));
         if (Redis::exists($notVisitedTopVideosCacheKey) < 1) {
             // cache not exists
             [
