@@ -578,8 +578,7 @@ class MediaService
             $femaleMediaIdsCacheKey,
             $maleMediaIdsCacheKey,
             $transgenderMediaIdsCacheKey,
-            $visitedVideoCacheKey
+            $visitedVideoCacheKey,
         ];
     }
-
 }

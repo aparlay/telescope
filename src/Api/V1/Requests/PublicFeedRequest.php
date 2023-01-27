@@ -83,7 +83,7 @@ class PublicFeedRequest extends FormRequest
             }
         }
 
-        if (!empty($contentGenders)) {
+        if (! empty($contentGenders)) {
             asort($contentGenders);
         }
 
