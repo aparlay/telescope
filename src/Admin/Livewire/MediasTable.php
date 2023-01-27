@@ -40,6 +40,12 @@ class MediasTable extends BaseIndexComponent
 
     public function buildQuery(): Builder
     {
+        if (!empty($this->sort['sort_scores.guest'])
+            && $this->sort['sort_scores.guest'] === -1
+            && empty($this->filter['status'])) {
+            $this->filter['status'] = 5;
+        }
+
         $query = parent::buildQuery();
         $query->with(['creatorObj']);
         if (! empty($this->creatorId)) {
