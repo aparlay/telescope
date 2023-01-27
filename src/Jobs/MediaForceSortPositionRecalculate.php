@@ -75,14 +75,14 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                         ->select(['sort_scores.'.$category])
                         ->get()
                         ->pluck('sort_scores.'.$category)
-                        ->avg() ?? $sortScores[$category] + PHP_FLOAT_MIN) - PHP_FLOAT_MIN;
+                        ->avg() ?? $sortScores[$category]) + PHP_FLOAT_MIN;
                 } else {
                     $sortScores[$category] = (Media::public()
                             ->where('_id', '!=', new ObjectId($media->_id))
                             ->confirmed()
                             ->sort($category)
                             ->first()
-                            ->sort_scores[$category] ?? $sortScores[$category] + PHP_FLOAT_MIN) - PHP_FLOAT_MIN;
+                            ->sort_scores[$category] ?? $sortScores[$category]) + PHP_FLOAT_MIN;
                 }
 
                 $media->sort_scores = $sortScores;
