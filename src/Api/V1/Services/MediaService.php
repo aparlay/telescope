@@ -517,7 +517,7 @@ class MediaService
 
             $cacheKey = config('database.redis.options.prefix').$notVisitedTopVideosCacheKey;
             $args = [$cacheKey, count($filterBuckets) + 1, $mediaIdsCacheKey, ...$filterBuckets];
-            Redis::rawCommand('ZDIFFSTORE',  ...$args);
+            Redis::rawCommand('ZDIFFSTORE', ...$args);
             Redis::expireAt($notVisitedTopVideosCacheKey, now()->addHour()->getTimestamp());
         }
 
