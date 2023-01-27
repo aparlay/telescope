@@ -490,14 +490,13 @@ class MediaService
             $mediaIdsCacheKey = $prefix.':ids:'.$sortCategory;
             switch ($explicitVisibility) {
                 case UserSettingShowAdultContent::NEVER->value:
-                    Redis::rawCommand(
-                        'ZDIFFSTORE',
-                        config('database.redis.options.prefix').$notVisitedTopVideosCacheKey,
+                    Redis::zinterstor($notVisitedTopVideosCacheKey,
                         3,
                         $mediaIdsCacheKey,
                         $toplessMediaIdsCacheKey,
                         $visitedVideoCacheKey
                     );
+                    Redis::eval($luaScriptZdiffstore, 2, 'first-counter', 'second-counter');
                     break;
 
                 case UserSettingShowAdultContent::TOPLESS->value:
