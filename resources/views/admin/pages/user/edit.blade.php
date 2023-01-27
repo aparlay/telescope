@@ -65,11 +65,29 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
                             <livewire:chats-table :userId="$user->_id"/>
+                        </div>
+                    </div>
+
+                    <div class="card card-default collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Comments</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-down"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <livewire:media-comments-table :userId="$user->_id"/>
                         </div>
                     </div>
 
@@ -83,7 +101,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -101,7 +119,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -118,7 +136,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -136,7 +154,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -154,7 +172,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -172,7 +190,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -190,7 +208,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -207,7 +225,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -226,7 +244,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
