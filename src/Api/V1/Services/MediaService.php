@@ -490,7 +490,8 @@ class MediaService
             $mediaIdsCacheKey = $prefix.':ids:'.$sortCategory;
             switch ($explicitVisibility) {
                 case UserSettingShowAdultContent::NEVER->value:
-                    Redis::zinterstor($notVisitedTopVideosCacheKey,
+                    Redis::zinterstor(
+                        $notVisitedTopVideosCacheKey,
                         3,
                         $mediaIdsCacheKey,
                         $toplessMediaIdsCacheKey,
