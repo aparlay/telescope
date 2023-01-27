@@ -82,7 +82,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                             ->confirmed()
                             ->sort($category)
                             ->first()
-                            ->sort_scores[$category] ?? $sortScores[$category] + PHP_FLOAT_MIN) + PHP_FLOAT_MIN;
+                            ->sort_scores[$category] ?? $sortScores[$category]) + PHP_FLOAT_MIN;
                 }
 
                 $media->sort_scores = $sortScores;
