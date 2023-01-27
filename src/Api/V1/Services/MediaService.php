@@ -13,6 +13,7 @@ use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\MediaBatchWatched;
 use Aparlay\Core\Models\Enums\AlertStatus;
+use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
@@ -353,8 +354,12 @@ class MediaService
             $this->loadUserVisitedVideos((string) auth()->user()->_id, $request->uuid);
         }
 
-        $mediaIds = $this->topNotVisitedVideoIds($request->uuid, $request->show_adult_content, $sortCategory);
-        Log::warning($mediaIds);
+        $mediaIds = $this->topNotVisitedVideoIds(
+            $request->uuid,
+            $request->show_adult_content,
+            $sortCategory,
+            $request->filter_content_gender
+        );
         $data = $query->medias($mediaIds)->paginate(5)->withQueryString();
 
         if ($data->isEmpty() || $data->total() <= 5) {
@@ -477,50 +482,40 @@ class MediaService
      * @return array
      * @throws \RedisException
      */
-    public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory): array
+    public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory, array $contentGender): array
     {
-        $visitedVideoCacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
 
         $notVisitedTopVideosCacheKey = (new MediaVisit())->getCollection().':new:uuid:'.$uuid.':'.$sortCategory.':'.$explicitVisibility;
         if (Redis::exists($notVisitedTopVideosCacheKey) < 1) {
             // cache not exists
-            $prefix = config('database.redis.options.prefix').(new Media())->getCollection();
-            $explicitMediaIdsCacheKey = $prefix.':explicit:ids:'.$sortCategory;
-            $toplessMediaIdsCacheKey = $prefix.':topless:ids:'.$sortCategory;
-            $mediaIdsCacheKey = $prefix.':ids:'.$sortCategory;
-            switch ($explicitVisibility) {
-                case UserSettingShowAdultContent::NEVER->value:
-                    Redis::rawCommand(
-                        'ZDIFFSTORE',
-                        config('database.redis.options.prefix').
-                        $notVisitedTopVideosCacheKey,
-                        3,
-                        $mediaIdsCacheKey,
-                        $toplessMediaIdsCacheKey,
-                        $visitedVideoCacheKey
-                    );
-                    break;
+            [
+                $explicitMediaIdsCacheKey,
+                $toplessMediaIdsCacheKey,
+                $mediaIdsCacheKey,
+                $femaleMediaIdsCacheKey,
+                $maleMediaIdsCacheKey,
+                $transgenderMediaIdsCacheKey,
+                $visitedVideoCacheKey
+            ] = $this->generateHashKeys($sortCategory, $uuid);
 
-                case UserSettingShowAdultContent::TOPLESS->value:
-                    Redis::rawCommand(
-                        'ZDIFFSTORE',
-                        config('database.redis.options.prefix').$notVisitedTopVideosCacheKey,
-                        3,
-                        $mediaIdsCacheKey,
-                        $explicitMediaIdsCacheKey,
-                        $visitedVideoCacheKey
-                    );
-                    break;
-                default:
-                    Redis::rawCommand(
-                        'ZDIFFSTORE',
-                        config('database.redis.options.prefix').$notVisitedTopVideosCacheKey,
-                        2,
-                        $mediaIdsCacheKey,
-                        $visitedVideoCacheKey
-                    );
+            // adding explicitness filter to filter bucket
+            $filterBuckets[] = match ($explicitVisibility) {
+                UserSettingShowAdultContent::NEVER->value => [$toplessMediaIdsCacheKey, $visitedVideoCacheKey],
+                UserSettingShowAdultContent::TOPLESS->value => [$explicitMediaIdsCacheKey, $visitedVideoCacheKey],
+                default => [$visitedVideoCacheKey]
+            };
+
+            // adding content filter to filter bucket
+            foreach (array_diff(MediaContentGender::getAllValues(), $contentGender) as $gender) {
+                $filterBuckets[] = match ($gender) {
+                    MediaContentGender::FEMALE->value => $femaleMediaIdsCacheKey,
+                    MediaContentGender::MALE->value => $maleMediaIdsCacheKey,
+                    MediaContentGender::TRANSGENDER->value => $transgenderMediaIdsCacheKey,
+                };
             }
 
+            $cacheKey = config('database.redis.options.prefix').$notVisitedTopVideosCacheKey;
+            Redis::rawCommand('ZDIFFSTORE', $cacheKey, count($filterBuckets) + 1, $mediaIdsCacheKey, ...$filterBuckets);
             Redis::expireAt($notVisitedTopVideosCacheKey, now()->addHour()->getTimestamp());
         }
 
@@ -555,4 +550,35 @@ class MediaService
             MediaBatchWatched::dispatch($medias, $uuid);
         }
     }
+
+    /**
+     * @param  string  $sortCategory
+     * @param  string  $uuid
+     *
+     * @return string[]
+     */
+    private function generateHashKeys(string $sortCategory, string $uuid): array
+    {
+        $mediaPrefix = config('database.redis.options.prefix').(new Media())->getCollection();
+        $mediaVisitPrefix = config('database.redis.options.prefix')(new MediaVisit())->getCollection();
+
+        $explicitMediaIdsCacheKey = $mediaPrefix.':explicit:ids:'.$sortCategory;
+        $toplessMediaIdsCacheKey = $mediaPrefix.':topless:ids:'.$sortCategory;
+        $mediaIdsCacheKey = $mediaPrefix.':ids:'.$sortCategory;
+        $femaleMediaIdsCacheKey = $mediaPrefix.':ids:female';
+        $maleMediaIdsCacheKey = $mediaPrefix.':ids:male';
+        $transgenderMediaIdsCacheKey = $mediaPrefix.':ids:transgender';
+        $visitedVideoCacheKey = $mediaVisitPrefix.':visited:uuid:'.$uuid;
+
+        return [
+            $explicitMediaIdsCacheKey,
+            $toplessMediaIdsCacheKey,
+            $mediaIdsCacheKey,
+            $femaleMediaIdsCacheKey,
+            $maleMediaIdsCacheKey,
+            $transgenderMediaIdsCacheKey,
+            $visitedVideoCacheKey
+        ];
+    }
+
 }
