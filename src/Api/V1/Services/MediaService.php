@@ -484,6 +484,7 @@ class MediaService
         $visitedVideoCacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
 
         $notVisitedTopVideosCacheKey = (new MediaVisit())->getCollection().':new:uuid:'.$uuid.':'.$sortCategory.':'.$explicitVisibility;
+        $notVisitedTopVideosCacheKey = config('database.redis.options.prefix').$notVisitedTopVideosCacheKey;
         if (! Redis::exists($notVisitedTopVideosCacheKey)) {
             // cache not exists
             $prefix = config('database.redis.options.prefix').(new Media())->getCollection();
