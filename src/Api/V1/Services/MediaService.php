@@ -484,7 +484,6 @@ class MediaService
      */
     public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory, array $contentGender): array
     {
-
         $notVisitedTopVideosCacheKey = (new MediaVisit())->getCollection().':new:uuid:'.$uuid.':'.$sortCategory.':'.$explicitVisibility;
         if (Redis::exists($notVisitedTopVideosCacheKey) < 1) {
             // cache not exists
@@ -577,8 +576,7 @@ class MediaService
             $femaleMediaIdsCacheKey,
             $maleMediaIdsCacheKey,
             $transgenderMediaIdsCacheKey,
-            $visitedVideoCacheKey
+            $visitedVideoCacheKey,
         ];
     }
-
 }
