@@ -1005,6 +1005,42 @@ class Media extends BaseModel
         }
     }
 
+    /**
+     * @return void
+     * @throws \RedisException
+     */
+    private function cacheInFemaleConentMediaIds()
+    {
+        if ($this->content_gender === MediaContentGender::FEMALE->value) {
+            $cacheKey = (new self())->getCollection().':ids:female';
+            Redis::zAdd($cacheKey, 0, (string) $this->_id);
+        }
+    }
+
+    /**
+     * @return void
+     * @throws \RedisException
+     */
+    private function cacheInMaleConentMediaIds()
+    {
+        if ($this->content_gender === MediaContentGender::MALE->value) {
+            $cacheKey = (new self())->getCollection().':ids:female';
+            Redis::zAdd($cacheKey, 0, (string) $this->_id);
+        }
+    }
+
+    /**
+     * @return void
+     * @throws \RedisException
+     */
+    private function cacheInTransgenderConentMediaIds()
+    {
+        if ($this->content_gender === MediaContentGender::FEMALE->value) {
+            $cacheKey = (new self())->getCollection().':ids:transgender';
+            Redis::zAdd($cacheKey, 0, (string) $this->_id);
+        }
+    }
+
     public function storeInGeneralCaches(): self
     {
         if ($this->status !== MediaStatus::CONFIRMED->value || $this->visibility !== MediaVisibility::PUBLIC->value) {
@@ -1019,6 +1055,10 @@ class Media extends BaseModel
         if ($this->skin_score >= config('app.media.explicit_skin_score')) {
             $this->cacheInPublicExplicitMediaIds();
         }
+
+        $this->cacheInFemaleConentMediaIds();
+        $this->cacheInMaleConentMediaIds();
+        $this->cacheInTransgenderConentMediaIds();
 
         return $this;
     }

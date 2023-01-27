@@ -83,6 +83,10 @@ class PublicFeedRequest extends FormRequest
             }
         }
 
+        if (!empty($contentGenders)) {
+            asort($contentGenders);
+        }
+
         $showAdultContent = request()->input('show_adult_content', null);
         if (is_numeric($showAdultContent)) {
             $showAdultContent = (int) $showAdultContent;
