@@ -18,7 +18,7 @@
                     data-card-widget="collapse"
                     data-expand-icon="fa-chevron-down"
                     data-collapse-icon="fa-chevron-up"
-                ><i class="fas fa-chevron-up"></i></button>
+                ><i class="fas fa-chevron-down"></i></button>
             </div>
         </div>
         <div class="card-body py-1">
