@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Models\Scopes;
 
 use Aparlay\Core\Models\Enums\MediaContentGender;
+use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\MediaVisit;
@@ -336,5 +337,20 @@ trait MediaScope
         }
 
         return $query->whereIn('content_gender', $genders);
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  string   $sortCategory
+     *
+     * @return Builder
+     */
+    public function scopeHasForceSortPosition(Builder $query, string $sortCategory): Builder
+    {
+        if (in_array($sortCategory, MediaSortCategories::getAllValues())) {
+            $query->where('force_sort_positions.'.$sortCategory, '>', 0);
+        }
+
+        return $query;
     }
 }

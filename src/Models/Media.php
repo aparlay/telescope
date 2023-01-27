@@ -69,6 +69,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property bool               $is_protected
  * @property array              $scores
  * @property array              $sort_scores
+ * @property array              $force_sort_positions
  * @property User               $userObj
  * @property User               $creatorObj
  * @property Alert[]            $alertObjs
@@ -177,6 +178,7 @@ class Media extends BaseModel
         'creator',
         'scores',
         'sort_scores',
+        'force_sort_positions',
         'slug',
         'tips',
         'content_gender',
@@ -746,8 +748,6 @@ class Media extends BaseModel
         }
 
         $this->sort_scores = $sortScores;
-        $this->save();
-        $this->refresh();
 
         return $this;
     }
@@ -971,83 +971,55 @@ class Media extends BaseModel
      * @return void
      * @throws \RedisException
      */
-    public static function CachePublicToplessMediaIds()
+    private function cacheInPublicToplessMediaIds()
     {
         $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
-        Redis::del($toplessMediaIdsCacheKey);
-
-        self::public()
-            ->confirmed()
-            ->public()
-            ->topless()
-            ->select('_id')
-            ->chunk(200, function ($medias) use ($toplessMediaIdsCacheKey) {
-                $mediaIds = [];
-                foreach ($medias as $media) {
-                    $mediaIds[] = (string) $media['_id'];
-                }
-
-                Redis::sAdd($toplessMediaIdsCacheKey, ...$mediaIds);
-            });
-
-        Redis::expireat($toplessMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
+        foreach ($this->sort_scores as $category => $score) {
+            Redis::zAdd($toplessMediaIdsCacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
+        }
     }
 
     /**
      * @return void
      * @throws \RedisException
      */
-    public static function CachePublicExplicitMediaIds()
+    private function cacheInPublicExplicitMediaIds()
     {
         $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
-        Redis::del($explicitMediaIdsCacheKey);
-
-        self::public()
-            ->confirmed()
-            ->public()
-            ->explicit()
-            ->select('_id')
-            ->chunk(200, function ($medias) use ($explicitMediaIdsCacheKey) {
-                $mediaIds = [];
-                foreach ($medias as $media) {
-                    $mediaIds[] = (string) $media['_id'];
-                }
-
-                Redis::sAdd($explicitMediaIdsCacheKey, ...$mediaIds);
-            });
-
-        Redis::expireat($explicitMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
+        foreach ($this->sort_scores as $category => $score) {
+            Redis::zAdd($explicitMediaIdsCacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
+        }
     }
 
     /**
      * @return void
      * @throws \RedisException
      */
-    public static function CachePublicMediaIds()
+    private function cacheInPublicMediaIds()
     {
         $cacheKey = (new self())->getCollection().':ids';
-        Redis::del($cacheKey);
-        self::public()
-            ->confirmed()
-            ->select(['_id', 'sort_scores'])
-            ->chunk(200, function ($medias) use ($cacheKey) {
-                $sortedSets = $mediaIds = [];
-                foreach ($medias as $media) {
-                    $mediaIds[] = (string) $media['_id'];
-                    foreach (MediaSortCategories::getAllValues() as $sortCategoryValue) {
-                        $sortedSets[$sortCategoryValue][] = $media['sort_scores'][$sortCategoryValue];
-                        $sortedSets[$sortCategoryValue][] = (string) $media['_id'];
-                    }
-                }
-                foreach ($sortedSets as $key => $items) {
-                    Redis::zAdd($cacheKey.':'.$key, ...$items);
-                }
-                Redis::sAdd($cacheKey, ...$mediaIds);
-            });
-
-        foreach (MediaSortCategories::getAllValues() as $key) {
-            Redis::expireat($cacheKey.':'.$key, now()->addDays(4)->getTimestamp());
+        foreach ($this->sort_scores as $category => $score) {
+            if (is_numeric($this->sort_scores[$category])) {
+                Redis::zAdd($cacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
+            }
         }
-        Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
+    }
+
+    public function storeInGeneralCaches(): self
+    {
+        if ($this->status !== MediaStatus::CONFIRMED->value || $this->visibility !== MediaVisibility::PUBLIC->value) {
+            return $this;
+        }
+
+        $this->cacheInPublicMediaIds();
+
+        if ($this->skin_score >= config('app.media.topless_skin_score')) {
+            $this->cacheInPublicToplessMediaIds();
+        }
+        if ($this->skin_score >= config('app.media.explicit_skin_score')) {
+            $this->cacheInPublicExplicitMediaIds();
+        }
+
+        return $this;
     }
 }
