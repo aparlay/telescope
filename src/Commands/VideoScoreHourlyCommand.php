@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Commands;
 
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Jobs\MediaForceSortPositionRecalculator;
+use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
 
@@ -29,7 +29,7 @@ class VideoScoreHourlyCommand extends Command
         }
 
         $bar->finish();
-        MediaForceSortPositionRecalculator::dispatch();
+        MediaForceSortPositionRecalculate::dispatch();
 
         return self::SUCCESS;
     }

@@ -1,7 +1,7 @@
 <?php
 
 use Aparlay\Core\Constants\Roles;
-use Aparlay\Core\Jobs\MediaForceSortPositionRecalculator;
+use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\Setting;
 use Illuminate\Database\Migrations\Migration;
@@ -128,7 +128,7 @@ return new class() extends Migration {
             $table->index(['status', 'sort_scores.registered', 'visibility'], null, ['background' => true]);
             $table->index(['status', 'sort_scores.paid', 'visibility'], null, ['background' => true]);
         });
-        MediaForceSortPositionRecalculator::dispatch();
+        MediaForceSortPositionRecalculate::dispatch();
     }
 
     /**

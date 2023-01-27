@@ -9,7 +9,7 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Admin\Requests\MediaUpdateRequest;
 use Aparlay\Core\Admin\Requests\MediaUpdateScoreRequest;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Jobs\MediaForceSortPositionRecalculator;
+use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
@@ -228,7 +228,7 @@ class MediaService extends AdminBaseService
         $media->recalculateSortScores();
         $media->save();
         $media->storeInGeneralCaches();
-        MediaForceSortPositionRecalculator::dispatch();
+        MediaForceSortPositionRecalculate::dispatch();
 
         return $media;
     }

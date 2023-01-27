@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
-class MediaForceSortPositionRecalculator implements ShouldQueue
+class MediaForceSortPositionRecalculate implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -85,7 +85,6 @@ class MediaForceSortPositionRecalculator implements ShouldQueue
                             ->sort_scores[$category] ?? $sortScores[$category] + PHP_FLOAT_MIN) - PHP_FLOAT_MIN;
                 }
 
-                Log::warning("Media: {$media->_id} for {$category}\n".var_export($media->sort_scores, true)."\n".var_export($sortScores, true));
                 $media->sort_scores = $sortScores;
                 $media->save();
                 $media->storeInGeneralCaches();

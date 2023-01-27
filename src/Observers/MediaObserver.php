@@ -7,7 +7,7 @@ use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Jobs\DeleteMediaComments;
 use Aparlay\Core\Jobs\DeleteMediaLikes;
 use Aparlay\Core\Jobs\DeleteMediaUserNotifications;
-use Aparlay\Core\Jobs\MediaForceSortPositionRecalculator;
+use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Jobs\RecalculateHashtag;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;

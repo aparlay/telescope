@@ -2,7 +2,7 @@
 
 namespace Aparlay\Core\Commands;
 
-use Aparlay\Core\Jobs\MediaForceSortPositionRecalculator;
+use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -29,8 +29,10 @@ class VideoScoreCommand extends Command
             $bar->advance();
         }
         $bar->finish();
+        $this->line('');
+        $this->line('All done.');
 
-        MediaForceSortPositionRecalculator::dispatch();
+        MediaForceSortPositionRecalculate::dispatch();
 
         return self::SUCCESS;
     }
