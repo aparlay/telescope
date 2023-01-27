@@ -482,18 +482,17 @@ class MediaService
         $visitedVideoCacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
 
         $notVisitedTopVideosCacheKey = (new MediaVisit())->getCollection().':new:uuid:'.$uuid.':'.$sortCategory.':'.$explicitVisibility;
-        if (! Redis::exists($notVisitedTopVideosCacheKey)) {
+        if (Redis::zCard($notVisitedTopVideosCacheKey) < 1) {
             // cache not exists
             $prefix = config('database.redis.options.prefix').(new Media())->getCollection();
             $explicitMediaIdsCacheKey = $prefix.':explicit:ids:'.$sortCategory;
             $toplessMediaIdsCacheKey = $prefix.':topless:ids:'.$sortCategory;
             $mediaIdsCacheKey = $prefix.':ids:'.$sortCategory;
-            $notVisitedTopVideosCacheKey = config('database.redis.options.prefix').$notVisitedTopVideosCacheKey;
             switch ($explicitVisibility) {
                 case UserSettingShowAdultContent::NEVER->value:
                     Redis::rawCommand(
                         'ZDIFFSTORE',
-                        $notVisitedTopVideosCacheKey,
+                        config('database.redis.options.prefix').$notVisitedTopVideosCacheKey,
                         3,
                         $mediaIdsCacheKey,
                         $toplessMediaIdsCacheKey,
@@ -504,7 +503,7 @@ class MediaService
                 case UserSettingShowAdultContent::TOPLESS->value:
                     Redis::rawCommand(
                         'ZDIFFSTORE',
-                        $notVisitedTopVideosCacheKey,
+                        config('database.redis.options.prefix').$notVisitedTopVideosCacheKey,
                         3,
                         $mediaIdsCacheKey,
                         $explicitMediaIdsCacheKey,
@@ -514,7 +513,7 @@ class MediaService
                 default:
                     Redis::rawCommand(
                         'ZDIFFSTORE',
-                        $notVisitedTopVideosCacheKey,
+                        config('database.redis.options.prefix').$notVisitedTopVideosCacheKey,
                         2,
                         $mediaIdsCacheKey,
                         $visitedVideoCacheKey
