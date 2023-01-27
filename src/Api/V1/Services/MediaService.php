@@ -484,7 +484,7 @@ class MediaService
         $visitedVideoCacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
 
         $notVisitedTopVideosCacheKey = (new MediaVisit())->getCollection().':new:uuid:'.$uuid.':'.$sortCategory.':'.$explicitVisibility;
-        if (Redis::zCard($notVisitedTopVideosCacheKey) < 1) {
+        if (Redis::exists($notVisitedTopVideosCacheKey) < 1) {
             // cache not exists
             $prefix = config('database.redis.options.prefix').(new Media())->getCollection();
             $explicitMediaIdsCacheKey = $prefix.':explicit:ids:'.$sortCategory;
@@ -494,7 +494,8 @@ class MediaService
                 case UserSettingShowAdultContent::NEVER->value:
                     Redis::rawCommand(
                         'ZDIFFSTORE',
-                        config('database.redis.options.prefix').$notVisitedTopVideosCacheKey,
+                        config('database.redis.options.prefix').
+                        $notVisitedTopVideosCacheKey,
                         3,
                         $mediaIdsCacheKey,
                         $toplessMediaIdsCacheKey,
