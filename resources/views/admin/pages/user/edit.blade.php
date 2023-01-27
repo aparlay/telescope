@@ -64,7 +64,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -72,21 +72,21 @@
                         </div>
                     </div>
 
-                    <div class="card card-maroon card-outline">
-                        <div class="card-header" id="headingComments">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" data-toggle="collapse"
-                                        data-target="#collapseComments" aria-expanded="false"
-                                        aria-controls="collapseComments">
-                                    Comments
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseComments" class="collapse" aria-labelledby="headingComments"
-                             data-parent="#accordion">
-                            <div class="card-body">
-                                <livewire:media-comments-table :userId="$user->_id"/>
+                    <div class="card card-default collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Comments</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
+                        </div>
+                        <div class="card-body">
+                            <livewire:media-comments-table :userId="$user->_id"/>
                         </div>
                     </div>
 
@@ -100,7 +100,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -118,7 +118,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -135,7 +135,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -153,7 +153,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -171,7 +171,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -189,7 +189,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -207,7 +207,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -224,7 +224,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -243,7 +243,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
