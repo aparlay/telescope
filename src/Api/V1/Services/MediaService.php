@@ -478,9 +478,9 @@ class MediaService
      * @param  string  $uuid
      * @param  int     $explicitVisibility
      * @param  string  $sortCategory
+     * @param  array   $contentGender
      *
      * @return array
-     * @throws \RedisException
      */
     public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory, array $contentGender): array
     {
