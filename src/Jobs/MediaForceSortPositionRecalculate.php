@@ -70,7 +70,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                         ->where('_id', '!=', new ObjectId($media->_id))
                         ->confirmed()
                         ->sort($category)
-                        ->hasForceSortPosition($category)
+                        ->hasNoForceSortPosition($category)
                         ->limit(2)
                         ->offset($media->force_sort_positions[$category] - 2)
                         ->select(['sort_scores.'.$category])
@@ -84,7 +84,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                     $media = Media::public()
                         ->where('_id', '!=', new ObjectId($media->_id))
                         ->confirmed()
-                        ->hasForceSortPosition($category)
+                        ->hasNoForceSortPosition($category)
                         ->sort($category)
                         ->first();
 
