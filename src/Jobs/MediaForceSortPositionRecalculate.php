@@ -100,6 +100,11 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 $position++;
             }
 
+            foreach ($neighborMedias->lazy() as $neighborMedia) {
+                $medias[$position] = $neighborMedia;
+                $position++;
+            }
+
             $lowestScore = $bottomScore - $stepScore;
             while ($position-- > 1) {
                 $sortScores = $medias[$position]->sort_scores;
