@@ -90,7 +90,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
 
                     $score = $neighborMedia->sort_scores[$category];
                 }
-                $sortScores[$category] = $score + 1;
+                $sortScores[$category] = $score + 0.0001;
                 $media->sort_scores = $sortScores;
                 $media->save();
                 $media->storeInGeneralCaches();
