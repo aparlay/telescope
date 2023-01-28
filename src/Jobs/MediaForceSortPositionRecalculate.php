@@ -100,7 +100,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 $position++;
             }
 
-            foreach ($neighborMedias->lazy() as $neighborMedia) {
+            foreach ($neighborMedias->all() as $neighborMedia) {
                 $medias[$position] = $neighborMedia;
                 $position++;
             }
