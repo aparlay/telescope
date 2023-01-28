@@ -88,7 +88,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 ->get();
             $topScore = $neighborMedias->first()->sort_scores[$category];
             $bottomScore = $neighborMedias->first()->sort_scores[$category];
-            $stepScore = 0.00001; //($topScore-$bottomScore) / (count($neighborMedias)+count($forcedMedias));
+            $stepScore = 0.00001;
 
             $position = 1;
             while ($position <= $forcedPositionMax) {
