@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
+use function Clue\StreamFilter\fun;
+
 class MediaForceSortPositionRecalculate implements ShouldQueue
 {
     use Dispatchable;
@@ -68,7 +70,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 ->select(['_id'])
                 ->get()
                 ->pluck(['_id'])
-                ->map(fn ($mediaId) => new ObjectId($mediaId))
+                ->map(fn($mediaId) => new ObjectId($mediaId))
                 ->toArray();
             if (empty($forcedPositionMediaIds)) {
                 continue;
@@ -78,7 +80,6 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 ->hasForceSortPosition($category)
                 ->orderBy('force_sort_positions.'.$category)
                 ->get();
-
             $forcedPositionMax = $forcedMedias->last()->force_sort_positions[$category];
 
             $neighborMedias = Media::public()
@@ -92,14 +93,14 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
             $stepScore = 0.00001; //($topScore-$bottomScore) / (count($neighborMedias)+count($forcedMedias));
 
             $position = 1;
-            while ($position <= $forcedPositionMax) {
+            while ($position<=$forcedPositionMax) {
                 foreach ($forcedMedias as $forcedMedia) {
-                    if ($position === (int) $forcedMedia->force_sort_positions[$category]) {
+                    if ($position === (int)$forcedMedia->force_sort_positions[$category]) {
                         $medias[$position] = $forcedMedia;
                     }
                 }
 
-                if (! isset($medias[$position])) {
+                if (!isset($medias[$position])) {
                     $medias[$position] = $neighborMedias->shift();
                 }
 
