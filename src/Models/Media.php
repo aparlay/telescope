@@ -1035,7 +1035,7 @@ class Media extends BaseModel
      */
     private function cacheInTransgenderConentMediaIds()
     {
-        if ($this->content_gender === MediaContentGender::FEMALE->value) {
+        if ($this->content_gender === MediaContentGender::TRANSGENDER->value) {
             $cacheKey = (new self())->getCollection().':ids:transgender';
             Redis::zAdd($cacheKey, 0, (string) $this->_id);
         }
