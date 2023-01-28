@@ -83,7 +83,6 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                     $neighborMedia = Media::public()
                         ->where('_id', '!=', new ObjectId($media->_id))
                         ->confirmed()
-                        ->hasNoForceSortPosition($category)
                         ->sort($category)
                         ->first();
 
