@@ -1009,7 +1009,7 @@ class Media extends BaseModel
      * @return void
      * @throws \RedisException
      */
-    private function cacheInFemaleConentMediaIds()
+    private function cacheInFemaleContentMediaIds(): void
     {
         if ($this->content_gender === MediaContentGender::FEMALE->value) {
             $cacheKey = (new self())->getCollection().':ids:female';
@@ -1021,7 +1021,7 @@ class Media extends BaseModel
      * @return void
      * @throws \RedisException
      */
-    private function cacheInMaleConentMediaIds()
+    private function cacheInMaleContentMediaIds(): void
     {
         if ($this->content_gender === MediaContentGender::MALE->value) {
             $cacheKey = (new self())->getCollection().':ids:male';
@@ -1033,7 +1033,7 @@ class Media extends BaseModel
      * @return void
      * @throws \RedisException
      */
-    private function cacheInTransgenderConentMediaIds()
+    private function cacheInTransgenderContentMediaIds(): void
     {
         if ($this->content_gender === MediaContentGender::TRANSGENDER->value) {
             $cacheKey = (new self())->getCollection().':ids:transgender';
@@ -1041,6 +1041,9 @@ class Media extends BaseModel
         }
     }
 
+    /**
+     * @throws \RedisException
+     */
     public function storeInGeneralCaches(): self
     {
         if ($this->status !== MediaStatus::CONFIRMED->value || $this->visibility !== MediaVisibility::PUBLIC->value) {
@@ -1056,9 +1059,9 @@ class Media extends BaseModel
             $this->cacheInPublicExplicitMediaIds();
         }
 
-        $this->cacheInFemaleConentMediaIds();
-        $this->cacheInMaleConentMediaIds();
-        $this->cacheInTransgenderConentMediaIds();
+        $this->cacheInFemaleContentMediaIds();
+        $this->cacheInMaleContentMediaIds();
+        $this->cacheInTransgenderContentMediaIds();
 
         return $this;
     }
