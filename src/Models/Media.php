@@ -939,7 +939,7 @@ class Media extends BaseModel
      * @return void
      * @throws \RedisException
      */
-    private function cacheInPublicToplessMediaIds()
+    private function cacheInPublicToplessMediaIds(): void
     {
         $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
         foreach ($this->sort_scores as $category => $score) {
@@ -951,7 +951,7 @@ class Media extends BaseModel
      * @return void
      * @throws \RedisException
      */
-    private function cacheInPublicExplicitMediaIds()
+    private function cacheInPublicExplicitMediaIds(): void
     {
         $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
         foreach ($this->sort_scores as $category => $score) {
@@ -963,7 +963,7 @@ class Media extends BaseModel
      * @return void
      * @throws \RedisException
      */
-    private function cacheInPublicMediaIds()
+    private function cacheInPublicMediaIds(): void
     {
         $cacheKey = (new self())->getCollection().':ids';
         foreach ($this->sort_scores as $category => $score) {
