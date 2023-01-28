@@ -62,9 +62,9 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
             $mediaQuery = Media::availableForFollower()
                 ->hasForceSortPosition($category)
                 ->orderBy('force_sort_positions.'.$category);
-            foreach ($mediaQuery->lazy() as $media) {
+
+            foreach ($mediaQuery->get() as $media) {
                 /** @var Media $media */
-                $sortScores = $media->sort_scores;
                 if ($media->force_sort_positions[$category] >= 2) {
                     $neighborMedias = Media::public()
                         ->where('_id', '!=', new ObjectId($media->_id))
@@ -88,6 +88,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
 
                     $score = $neighborMedia->sort_scores[$category];
                 }
+                $sortScores = $media->sort_scores;
                 $sortScores[$category] = $score + 0.0001;
                 $media->sort_scores = $sortScores;
                 $media->save();
