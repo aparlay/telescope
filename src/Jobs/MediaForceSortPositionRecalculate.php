@@ -80,11 +80,11 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
 
             $neighborMedias = Media::public()
                 ->confirmed()
-                ->sort($category)
+                ->sort($category) // desc
                 ->whereNotIn('_id', $forcedPositionMediaIds)
                 ->limit($forcedPositionMax)
                 ->get();
-            $topScore = $neighborMedias->first()->sort_scores[$category];
+
             $bottomScore = $neighborMedias->first()->sort_scores[$category];
             $stepScore = 0.00001;
 
