@@ -7,6 +7,9 @@ use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
+
+use function Clue\StreamFilter\fun;
+
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,8 +19,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 use Throwable;
-
-use function Clue\StreamFilter\fun;
 
 class MediaForceSortPositionRecalculate implements ShouldQueue
 {
@@ -67,7 +68,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 ->select(['_id'])
                 ->get()
                 ->pluck(['_id'])
-                ->map(fn($mediaId) => new ObjectId($mediaId))
+                ->map(fn ($mediaId) => new ObjectId($mediaId))
                 ->toArray();
             if (empty($forcedPositionMediaIds)) {
                 continue;
@@ -90,14 +91,14 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
             $stepScore = 0.00001; //($topScore-$bottomScore) / (count($neighborMedias)+count($forcedMedias));
 
             $position = 1;
-            while ($position<=$forcedPositionMax) {
+            while ($position <= $forcedPositionMax) {
                 foreach ($forcedMedias as $forcedMedia) {
-                    if ($position === (int)$forcedMedia->force_sort_positions[$category]) {
+                    if ($position === (int) $forcedMedia->force_sort_positions[$category]) {
                         $medias[$position] = $forcedMedia;
                     }
                 }
 
-                if (!isset($medias[$position])) {
+                if (! isset($medias[$position])) {
                     $medias[$position] = $neighborMedias->shift();
                 }
 
