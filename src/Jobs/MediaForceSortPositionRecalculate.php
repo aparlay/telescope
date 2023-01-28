@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
+use function Clue\StreamFilter\fun;
+
 class MediaForceSortPositionRecalculate implements ShouldQueue
 {
     use Dispatchable;
@@ -59,40 +61,59 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
     public function handle(): void
     {
         foreach (MediaSortCategories::getAllValues() as $category) {
-            $mediaQuery = Media::availableForFollower()
+            $forcedPositionMediaIds = Media::availableForFollower()
                 ->hasForceSortPosition($category)
-                ->orderBy('force_sort_positions.'.$category);
+                ->orderBy('force_sort_positions.'.$category)
+                ->select(['_id'])
+                ->get()
+                ->pluck(['_id'])
+                ->map(fn($mediaId) => new ObjectId($mediaId))
+                ->toArray();
+            if (empty($forcedPositionMediaIds)) {
+                continue;
+            }
 
-            foreach ($mediaQuery->get() as $media) {
-                /** @var Media $media */
-                if ($media->force_sort_positions[$category] >= 2) {
-                    $neighborMedias = Media::public()
-                        ->where('_id', '!=', new ObjectId($media->_id))
-                        ->confirmed()
-                        ->sort($category)
-                        ->limit(2)
-                        ->offset($media->force_sort_positions[$category] - 2)
-                        ->select(['sort_scores.'.$category])
-                        ->get();
-                    $score = 0;
-                    foreach ($neighborMedias as $neighborMedia) {
-                        $score += $neighborMedia->sort_scores[$category];
+            $forcedMedias = Media::availableForFollower()
+                ->hasForceSortPosition($category)
+                ->orderBy('force_sort_positions.'.$category)
+                ->get();
+
+            $forcedPositionMax = $forcedMedias->last()->force_sort_positions[$category];
+
+            $neighborMedias = Media::public()
+                ->confirmed()
+                ->sort($category)
+                ->whereNotIn('_id', $forcedPositionMediaIds)
+                ->limit($forcedPositionMax)
+                ->get();
+            $topScore = $neighborMedias->first()->sort_scores[$category];
+            $bottomScore = $neighborMedias->first()->sort_scores[$category];
+            $stepScore = 0.00001; //($topScore-$bottomScore) / (count($neighborMedias)+count($forcedMedias));
+
+
+            $position = 1;
+            while ($position<=$forcedPositionMax) {
+                foreach ($forcedMedias as $forcedMedia) {
+                    if ($position === (int)$forcedMedia->force_sort_positions[$category]) {
+                        $medias[$position] = $forcedMedia;
                     }
-                    $score /= 2;
-                } else {
-                    $neighborMedia = Media::public()
-                        ->where('_id', '!=', new ObjectId($media->_id))
-                        ->confirmed()
-                        ->sort($category)
-                        ->first();
-
-                    $score = $neighborMedia->sort_scores[$category];
                 }
-                $sortScores = $media->sort_scores;
-                $sortScores[$category] = $score + 0.0001;
-                $media->sort_scores = $sortScores;
-                $media->save();
-                $media->storeInGeneralCaches();
+
+                if (!isset($medias[$position])) {
+                    $medias[$position] = $neighborMedias->shift();
+                }
+
+                $position++;
+            }
+
+            $lowestScore = $bottomScore - $stepScore;
+            while ($position-- > 1) {
+                $sortScores = $medias[$position]->sort_scores;
+                $lowestScore += $stepScore;
+                $sortScores[$category] = $lowestScore;
+                $medias[$position]->sort_scores = $sortScores;
+                $medias[$position]->save();
+                $medias[$position]->storeInGeneralCaches();
             }
         }
     }
