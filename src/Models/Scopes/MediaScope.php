@@ -368,5 +368,4 @@ trait MediaScope
 
         return $query;
     }
-
 }
