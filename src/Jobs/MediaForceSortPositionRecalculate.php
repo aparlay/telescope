@@ -60,8 +60,8 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
     {
         foreach (MediaSortCategories::getAllValues() as $category) {
             $mediaQuery = Media::availableForFollower()
-                ->orderBy('force_sort_positions.'.$category)
-                ->hasForceSortPosition($category);
+                ->hasForceSortPosition($category)
+                ->orderBy('force_sort_positions.'.$category);
             foreach ($mediaQuery->lazy() as $media) {
                 /** @var Media $media */
                 $sortScores = $media->sort_scores;
@@ -70,6 +70,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                         ->where('_id', '!=', new ObjectId($media->_id))
                         ->confirmed()
                         ->sort($category)
+                        ->hasForceSortPosition($category)
                         ->limit(2)
                         ->offset($media->force_sort_positions[$category] - 2)
                         ->select(['sort_scores.'.$category])
@@ -80,9 +81,10 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                     $sortScores[$category] = (Media::public()
                             ->where('_id', '!=', new ObjectId($media->_id))
                             ->confirmed()
+                            ->hasForceSortPosition($category)
                             ->sort($category)
                             ->first()
-                            ->sort_scores[$category] ?? $sortScores[$category]) + PHP_FLOAT_MIN;
+                            ->sort_scores[$category] ?? $sortScores[$category]) + 1;
                 }
 
                 $media->sort_scores = $sortScores;

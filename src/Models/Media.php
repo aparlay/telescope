@@ -96,6 +96,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder creator(ObjectId|string $userId)
  * @method static |self|Builder user(ObjectId|string $userId)
  * @method static |self|Builder availableForFollower()
+ * @method static |self|Builder hasForceSortPosition($category)
+ * @method static |self|Builder hasNoForceSortPosition($category)
  * @method static |self|Builder availableForOwner()
  * @method static |self|Builder confirmed()
  * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
