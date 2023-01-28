@@ -86,6 +86,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
             $stepScore = 0.00001;
 
             $position = 1;
+            $neighborMedias = $neighborMedias->toArray();
             while ($position <= $forcedPositionMax) {
                 foreach ($forcedMedias as $forcedMedia) {
                     if ($position === (int) $forcedMedia->force_sort_positions[$category]) {
@@ -94,13 +95,13 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 }
 
                 if (! isset($medias[$position])) {
-                    $medias[$position] = $neighborMedias->shift();
+                    $medias[$position] = array_shift($neighborMedias);
                 }
 
                 $position++;
             }
 
-            foreach ($neighborMedias->all() as $neighborMedia) {
+            foreach ($neighborMedias as $neighborMedia) {
                 $medias[$position] = $neighborMedia;
                 $position++;
             }
