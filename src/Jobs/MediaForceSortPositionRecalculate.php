@@ -6,9 +6,6 @@ use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
-
-use function Clue\StreamFilter\fun;
-
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
