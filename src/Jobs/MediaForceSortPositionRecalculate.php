@@ -81,14 +81,14 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                     }
                     $score /= 2;
                 } else {
-                    $media = Media::public()
+                    $neighborMedia = Media::public()
                         ->where('_id', '!=', new ObjectId($media->_id))
                         ->confirmed()
                         ->hasNoForceSortPosition($category)
                         ->sort($category)
                         ->first();
 
-                    $score = $media->sort_scores[$category];
+                    $score = $neighborMedia->sort_scores[$category];
                 }
                 $sortScores[$category] = $score + 1;
                 $media->sort_scores = $sortScores;
