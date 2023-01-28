@@ -66,7 +66,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 /** @var Media $media */
                 $sortScores = $media->sort_scores;
                 if ($media->force_sort_positions[$category] >= 2) {
-                    $sortScores[$category] = (Media::public()
+                    $neighborMedias = Media::public()
                         ->where('_id', '!=', new ObjectId($media->_id))
                         ->confirmed()
                         ->sort($category)
@@ -74,19 +74,23 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                         ->limit(2)
                         ->offset($media->force_sort_positions[$category] - 2)
                         ->select(['sort_scores.'.$category])
-                        ->get()
-                        ->pluck('sort_scores.'.$category)
-                        ->avg() ?? $sortScores[$category]) + 1;
+                        ->get();
+                    $score = 0;
+                    foreach ($neighborMedias as $neighborMedia) {
+                        $score += $neighborMedia->sort_scores[$category];
+                    }
+                    $score /= 2;
                 } else {
-                    $sortScores[$category] = (Media::public()
-                            ->where('_id', '!=', new ObjectId($media->_id))
-                            ->confirmed()
-                            ->hasForceSortPosition($category)
-                            ->sort($category)
-                            ->first()
-                            ->sort_scores[$category] ?? $sortScores[$category]) + 1;
-                }
+                    $media = Media::public()
+                        ->where('_id', '!=', new ObjectId($media->_id))
+                        ->confirmed()
+                        ->hasForceSortPosition($category)
+                        ->sort($category)
+                        ->first();
 
+                    $score = $media->sort_scores[$category];
+                }
+                $sortScores[$category] = $score + 1;
                 $media->sort_scores = $sortScores;
                 $media->save();
                 $media->storeInGeneralCaches();
