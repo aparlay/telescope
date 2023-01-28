@@ -32,7 +32,7 @@ class VideoScoreCommand extends Command
         $this->line('');
         $this->line('All done.');
 
-        MediaForceSortPositionRecalculate::dispatch();
+        //MediaForceSortPositionRecalculate::dispatch();
 
         return self::SUCCESS;
     }
