@@ -353,4 +353,20 @@ trait MediaScope
 
         return $query;
     }
+
+    /**
+     * @param  Builder  $query
+     * @param  string   $sortCategory
+     *
+     * @return Builder
+     */
+    public function scopeHasNoForceSortPosition(Builder $query, string $sortCategory): Builder
+    {
+        if (in_array($sortCategory, MediaSortCategories::getAllValues())) {
+            $query->whereIn('force_sort_positions.'.$sortCategory, [0, null]);
+        }
+
+        return $query;
+    }
+
 }

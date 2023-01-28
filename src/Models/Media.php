@@ -100,6 +100,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder user(ObjectId|string $userId)
  * @method static |self|Builder media(ObjectId|string $userId)
  * @method static |self|Builder availableForFollower()
+ * @method static |self|Builder hasForceSortPosition($category)
+ * @method static |self|Builder hasNoForceSortPosition($category)
  * @method static |self|Builder availableForOwner()
  * @method static |self|Builder confirmed()
  * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
@@ -971,7 +973,7 @@ class Media extends BaseModel
      * @return void
      * @throws \RedisException
      */
-    private function cacheInPublicToplessMediaIds()
+    private function cacheInPublicToplessMediaIds(): void
     {
         $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
         foreach ($this->sort_scores as $category => $score) {
@@ -983,7 +985,7 @@ class Media extends BaseModel
      * @return void
      * @throws \RedisException
      */
-    private function cacheInPublicExplicitMediaIds()
+    private function cacheInPublicExplicitMediaIds(): void
     {
         $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
         foreach ($this->sort_scores as $category => $score) {
@@ -995,7 +997,7 @@ class Media extends BaseModel
      * @return void
      * @throws \RedisException
      */
-    private function cacheInPublicMediaIds()
+    private function cacheInPublicMediaIds(): void
     {
         $cacheKey = (new self())->getCollection().':ids';
         foreach ($this->sort_scores as $category => $score) {
