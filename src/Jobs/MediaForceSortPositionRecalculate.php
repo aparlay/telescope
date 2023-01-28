@@ -2,21 +2,16 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
-
-use function Clue\StreamFilter\fun;
-
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
