@@ -56,7 +56,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
      */
     public function handle(): void
     {
-        foreach (\Aparlay\Core\Models\Enums\MediaSortCategories::getAllValues() as $category) {
+        foreach (MediaSortCategories::getAllValues() as $category) {
             /*
              $forcedPositionMediaIds = Media::availableForFollower()
                 ->hasForceSortPosition($category)
@@ -117,24 +117,39 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 $medias[$position]->storeInGeneralCaches();
             }
              */
-            $forcedMedias = \Aparlay\Core\Models\Media::availableForFollower()
+            $forcedPositionMediaIds = Media::availableForFollower()
+                ->hasForceSortPosition($category)
+                ->orderBy('force_sort_positions.'.$category)
+                ->select(['_id'])
+                ->get()
+                ->pluck(['_id'])
+                ->toArray();
+            if (empty($forcedPositionMediaIds)) {
+                continue;
+            }
+            $forcedMedias = Media::availableForFollower()
                 ->hasForceSortPosition($category)
                 ->orderBy('force_sort_positions.'.$category)
                 ->get();
             foreach ($forcedMedias as $forcedMedia) {
                 $position = $forcedMedia->force_sort_positions[$category];
-                $locatedMediaInPosition = \Aparlay\Core\Models\Media::public()
+                $locatedMediaInPosition = Media::public()
                     ->confirmed()
                     ->sort($category) // desc
-                    ->offset($position - 1)
+                    ->whereNotIn('_id', collect($forcedPositionMediaIds)->map(fn ($mediaId) => new ObjectId($mediaId))->toArray())
+                    ->offset($position-1)
                     ->first();
                 $sortScores = $forcedMedia->sort_scores;
-                $sortScores[$category] = $locatedMediaInPosition->sort_scores[$category] + 0.0000001;
-                print_r([$sortScores[$category], $locatedMediaInPosition->sort_scores[$category]]);
+                $sortScores[$category] = $locatedMediaInPosition->sort_scores[$category]+0.0000001;
                 $forcedMedia->sort_scores = $sortScores;
                 $forcedMedia->save();
                 $forcedMedia->storeInGeneralCaches();
+
+                if (($key = array_search((string)$forcedMedia->_id, $forcedPositionMediaIds)) !== false) {
+                    unset($forcedPositionMediaIds[$key]);
+                }
             }
+
         }
     }
 
