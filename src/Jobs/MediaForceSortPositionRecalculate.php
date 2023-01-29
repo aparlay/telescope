@@ -56,7 +56,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
      */
     public function handle(): void
     {
-        foreach (MediaSortCategories::getAllValues() as $category) {
+        foreach (\Aparlay\Core\Models\Enums\MediaSortCategories::getAllValues() as $category) {
             /*
              $forcedPositionMediaIds = Media::availableForFollower()
                 ->hasForceSortPosition($category)
@@ -117,20 +117,20 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 $medias[$position]->storeInGeneralCaches();
             }
              */
-            $forcedMedias = Media::availableForFollower()
+            $forcedMedias = \Aparlay\Core\Models\Media::availableForFollower()
                 ->hasForceSortPosition($category)
                 ->orderBy('force_sort_positions.'.$category)
                 ->get();
             foreach ($forcedMedias as $forcedMedia) {
                 $position = $forcedMedia->force_sort_positions[$category];
-                $locatedMediaInPosition = Media::public()
+                $locatedMediaInPosition = \Aparlay\Core\Models\Media::public()
                     ->confirmed()
                     ->sort($category) // desc
-                    ->hasNoForceSortPosition($category)
                     ->offset($position - 1)
                     ->first();
                 $sortScores = $forcedMedia->sort_scores;
                 $sortScores[$category] = $locatedMediaInPosition->sort_scores[$category] + 0.0000001;
+                print_r([$sortScores[$category], $locatedMediaInPosition->sort_scores[$category]]);
                 $forcedMedia->sort_scores = $sortScores;
                 $forcedMedia->save();
                 $forcedMedia->storeInGeneralCaches();
