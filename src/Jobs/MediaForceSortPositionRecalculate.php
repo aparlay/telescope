@@ -57,7 +57,8 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
     public function handle(): void
     {
         foreach (MediaSortCategories::getAllValues() as $category) {
-            $forcedPositionMediaIds = Media::availableForFollower()
+            /*
+             $forcedPositionMediaIds = Media::availableForFollower()
                 ->hasForceSortPosition($category)
                 ->orderBy('force_sort_positions.'.$category)
                 ->select(['_id'])
@@ -115,6 +116,26 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 $medias[$position]->save();
                 $medias[$position]->storeInGeneralCaches();
             }
+             */
+            $forcedMedias = Media::availableForFollower()
+                ->hasForceSortPosition($category)
+                ->orderBy('force_sort_positions.'.$category)
+                ->get();
+            foreach ($forcedMedias as $forcedMedia) {
+                $position = $forcedMedia->force_sort_positions[$category];
+                $locatedMediaInPosition = Media::public()
+                    ->confirmed()
+                    ->sort($category) // desc
+                    ->hasNoForceSortPosition($category)
+                    ->offset($position-1)
+                    ->first();
+                $sortScores = $forcedMedia->sort_scores;
+                $sortScores[$category] = $locatedMediaInPosition->sort_scores[$category]+0.0000001;
+                $forcedMedia->sort_scores = $sortScores;
+                $forcedMedia->save();
+                $forcedMedia->storeInGeneralCaches();
+            }
+
         }
     }
 
