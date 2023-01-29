@@ -37,11 +37,11 @@ class MediaUpdateRequest extends FormRequest
                 'nullable',
                 'integer',
                 function ($attribute, $value, $fail) {
-                    if ((int)$this->force_sort_positions['guest'] > 0) {
+                    if ((int) $this->force_sort_positions['guest'] > 0) {
                         $isOtherMedia = Media::where('_id', '!=', $this->media_id)
                             ->where(
                                 'force_sort_positions.guest',
-                                (int)$this->force_sort_positions['guest']
+                                (int) $this->force_sort_positions['guest']
                             )
                             ->first();
                         if ($isOtherMedia) {
@@ -54,11 +54,11 @@ class MediaUpdateRequest extends FormRequest
                 'nullable',
                 'integer',
                 function ($attribute, $value, $fail) {
-                    if ((int)$this->force_sort_positions['returned'] > 0) {
+                    if ((int) $this->force_sort_positions['returned'] > 0) {
                         $isOtherMedia = Media::where('_id', '!=', $this->media_id)
                             ->where(
                                 'force_sort_positions.returned',
-                                (int)$this->force_sort_positions['returned']
+                                (int) $this->force_sort_positions['returned']
                             )
                             ->first();
                         if ($isOtherMedia) {
@@ -71,11 +71,11 @@ class MediaUpdateRequest extends FormRequest
                 'nullable',
                 'integer',
                 function ($attribute, $value, $fail) {
-                    if ((int)$this->force_sort_positions['registered'] > 0) {
+                    if ((int) $this->force_sort_positions['registered'] > 0) {
                         $isOtherMedia = Media::where('_id', '!=', $this->media_id)
                             ->where(
                                 'force_sort_positions.registered',
-                                (int)$this->force_sort_positions['registered']
+                                (int) $this->force_sort_positions['registered']
                             )
                             ->first();
                         if ($isOtherMedia) {
