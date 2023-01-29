@@ -145,9 +145,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                 $forcedMedia->save();
                 $forcedMedia->storeInGeneralCaches();
 
-                if (($key = array_search((string) $forcedMedia->_id, $forcedPositionMediaIds)) !== false) {
-                    unset($forcedPositionMediaIds[$key]);
-                }
+                $forcedPositionMediaIds = array_diff($forcedPositionMediaIds, [(string) $forcedMedia->_id]);
             }
         }
     }
