@@ -137,19 +137,18 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                     ->confirmed()
                     ->sort($category) // desc
                     ->whereNotIn('_id', collect($forcedPositionMediaIds)->map(fn ($mediaId) => new ObjectId($mediaId))->toArray())
-                    ->offset($position-1)
+                    ->offset($position - 1)
                     ->first();
                 $sortScores = $forcedMedia->sort_scores;
-                $sortScores[$category] = $locatedMediaInPosition->sort_scores[$category]+0.0000001;
+                $sortScores[$category] = $locatedMediaInPosition->sort_scores[$category] + 0.0000001;
                 $forcedMedia->sort_scores = $sortScores;
                 $forcedMedia->save();
                 $forcedMedia->storeInGeneralCaches();
 
-                if (($key = array_search((string)$forcedMedia->_id, $forcedPositionMediaIds)) !== false) {
+                if (($key = array_search((string) $forcedMedia->_id, $forcedPositionMediaIds)) !== false) {
                     unset($forcedPositionMediaIds[$key]);
                 }
             }
-
         }
     }
 
