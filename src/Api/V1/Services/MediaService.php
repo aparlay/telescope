@@ -404,6 +404,7 @@ class MediaService
         }
         $cacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
         Redis::unlink($cacheKey);
+        Redis::unlink(Redis::keys('public_feed:uuid:'.$uuid.':*'));
     }
 
     /**
@@ -484,7 +485,7 @@ class MediaService
      */
     public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory, array $contentGender): array
     {
-        $notVisitedTopVideosCacheKey = 'public_feed:uuid:'.crc32($uuid.':'.$sortCategory.':'.$explicitVisibility.':'.implode('', $contentGender));
+        $notVisitedTopVideosCacheKey = 'public_feed:uuid:'.$uuid.':'.crc32($sortCategory.':'.$explicitVisibility.':'.implode('', $contentGender));
         if (Redis::exists($notVisitedTopVideosCacheKey) < 1) {
             // cache not exists
             [
