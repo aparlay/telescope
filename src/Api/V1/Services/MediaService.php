@@ -404,7 +404,7 @@ class MediaService
         }
         $cacheKey = (new MediaVisit())->getCollection().':visited:uuid:'.$uuid;
         Redis::unlink($cacheKey);
-        Redis::unlink(Redis::keys('public_feed:uuid:'.$uuid.':*'));
+        //Redis::unlink(Redis::keys('public_feed:uuid:'.$uuid.':*'));
     }
 
     /**
