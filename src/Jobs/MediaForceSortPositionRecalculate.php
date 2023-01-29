@@ -57,66 +57,6 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
     public function handle(): void
     {
         foreach (MediaSortCategories::getAllValues() as $category) {
-            /*
-             $forcedPositionMediaIds = Media::availableForFollower()
-                ->hasForceSortPosition($category)
-                ->orderBy('force_sort_positions.'.$category)
-                ->select(['_id'])
-                ->get()
-                ->pluck(['_id'])
-                ->map(fn ($mediaId) => new ObjectId($mediaId))
-                ->toArray();
-            if (empty($forcedPositionMediaIds)) {
-                continue;
-            }
-
-            $forcedMedias = Media::availableForFollower()
-                ->hasForceSortPosition($category)
-                ->orderBy('force_sort_positions.'.$category)
-                ->get();
-            $forcedPositionMax = $forcedMedias->last()->force_sort_positions[$category];
-
-            $neighborMedias = Media::public()
-                ->confirmed()
-                ->sort($category) // desc
-                ->whereNotIn('_id', $forcedPositionMediaIds)
-                ->limit($forcedPositionMax)
-                ->get();
-
-            $bottomScore = $neighborMedias->first()->sort_scores[$category];
-            $stepScore = 0.00001;
-
-            $position = 1;
-            $neighborMedias = $neighborMedias->toArray();
-            while ($position <= $forcedPositionMax) {
-                foreach ($forcedMedias as $forcedMedia) {
-                    if ($position === (int) $forcedMedia->force_sort_positions[$category]) {
-                        $medias[$position] = $forcedMedia;
-                    }
-                }
-
-                if (! isset($medias[$position])) {
-                    $medias[$position] = array_shift($neighborMedias);
-                }
-
-                $position++;
-            }
-
-            foreach ($neighborMedias as $neighborMedia) {
-                $medias[$position] = $neighborMedia;
-                $position++;
-            }
-
-            $lowestScore = $bottomScore - $stepScore;
-            while ($position-- > 1) {
-                $sortScores = $medias[$position]->sort_scores;
-                $lowestScore += $stepScore;
-                $sortScores[$category] = $lowestScore;
-                $medias[$position]->sort_scores = $sortScores;
-                $medias[$position]->save();
-                $medias[$position]->storeInGeneralCaches();
-            }
-             */
             $forcedPositionMediaIds = Media::availableForFollower()
                 ->hasForceSortPosition($category)
                 ->orderBy('force_sort_positions.'.$category)
@@ -140,7 +80,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
                     ->offset($position - 1)
                     ->first();
                 $sortScores = $forcedMedia->sort_scores;
-                $sortScores[$category] = $locatedMediaInPosition->sort_scores[$category] + 0.0000001;
+                $sortScores[$category] = $locatedMediaInPosition->sort_scores[$category] + (0.0000001*count($forcedPositionMediaIds));
                 $forcedMedia->sort_scores = $sortScores;
                 $forcedMedia->save();
                 $forcedMedia->storeInGeneralCaches();
@@ -157,3 +97,4 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
         }
     }
 }
+
