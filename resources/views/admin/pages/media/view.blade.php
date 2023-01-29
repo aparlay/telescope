@@ -320,6 +320,8 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <input type="hidden" id="user_id" name="user_id" value="{{ (string)$media->_id }}">
                                         <div class="form-group row m-0">
                                             <label for="force_sort_positions.guests" class="col-sm-4 col-form-label">Force Position Guests</label>
                                             <div class="col-sm-8">
