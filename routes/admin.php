@@ -98,8 +98,6 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             });
         });
 
-
-
         /* User Routes */
         Route::name('user.')->group(function () {
             Route::get('user', [UserController::class, 'index'])
