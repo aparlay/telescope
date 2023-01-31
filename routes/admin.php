@@ -86,6 +86,13 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('media/{media}/reupload', [MediaController::class, 'reupload'])
                 ->middleware(['permission:upload medias'])
                 ->name('reupload');
+
+        });
+
+        Route::middleware(['admin-auth:admin'])->name('media-comment.')->group(function () {
+            Route::get('media-comment/{comment}', [\Aparlay\Core\Admin\Controllers\MediaCommentController::class, 'view'])
+                ->middleware(['permission:show medias'])
+                ->name('view');
         });
 
         /* User Routes */
