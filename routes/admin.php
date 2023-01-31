@@ -4,6 +4,7 @@ use Aparlay\Core\Admin\Controllers\AlertController;
 use Aparlay\Core\Admin\Controllers\AuthController;
 use Aparlay\Core\Admin\Controllers\DashboardController;
 use Aparlay\Core\Admin\Controllers\EmailController;
+use Aparlay\Core\Admin\Controllers\MediaCommentController;
 use Aparlay\Core\Admin\Controllers\MediaController;
 use Aparlay\Core\Admin\Controllers\NoteController;
 use Aparlay\Core\Admin\Controllers\RoleController;
@@ -87,13 +88,17 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
                 ->middleware(['permission:upload medias'])
                 ->name('reupload');
 
+            Route::middleware(['admin-auth:admin'])->name('comment.')->group(function () {
+                Route::get('media/comment/{comment}', [MediaCommentController::class, 'view'])
+                    ->middleware(['permission:show medias'])
+                    ->name('view');
+                Route::delete('media/comment/{comment}', [MediaCommentController::class, 'delete'])
+                    ->middleware(['permission:queue medias-moderation'])
+                    ->name('delete');
+            });
         });
 
-        Route::middleware(['admin-auth:admin'])->name('media-comment.')->group(function () {
-            Route::get('media-comment/{comment}', [\Aparlay\Core\Admin\Controllers\MediaCommentController::class, 'view'])
-                ->middleware(['permission:show medias'])
-                ->name('view');
-        });
+
 
         /* User Routes */
         Route::name('user.')->group(function () {

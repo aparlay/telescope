@@ -14,15 +14,18 @@ class MediaCommentController extends Controller
         $this->mediaCommentService = $mediaCommentService;
     }
 
-    /**
-     * @throws \ErrorException
-     */
-    public function index()
-    {
-    }
-
     public function view(MediaComment $comment)
     {
         return view('default_view::admin.pages.media-comment.view', compact('comment'));
+    }
+
+    /**
+     * @throws \ErrorException
+     */
+    public function delete(MediaComment $comment)
+    {
+        $this->mediaCommentService->delete($comment->_id);
+
+        return redirect()->route('core.admin.media.view', ['media' => $comment->mediaObj->_id]);
     }
 }

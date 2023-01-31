@@ -7,7 +7,7 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Tip Details</h1>
+            <h1 class="m-0">Media Comment</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -25,46 +25,56 @@
 
                 <div class="col-md-4">
                     @include('default_view::admin.parts.messages')
-                    <form method="POST"
-                          action="{{ route('core.admin.media.view', ['media' => $comment->mediaObj->_id]) }}">
-                        @csrf
-                        @method('PUT')
-                        <div class="card card-outline card-primary">
-                            <div class="card-body box-profile ">
-                                <ul class="list-group list-group-unbordered mb-3">
-                                    <li class="list-group-item">
-                                        <b>Text</b><br/>
-                                        {{$comment->text}}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b>Creator</b>
-                                        <a class="float-right"
-                                           href='{{$comment->creatorObj->admin_url}}'>{{$comment->creator['username']}}</a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b>Media</b>
-                                        <a class="float-right"
-                                           href='{{$comment->mediaObj->admin_url}}'>{{$comment->mediaObj['file']}}</a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b>Media creator</b>
-                                        <a class="float-right"
-                                           href='{{$comment->mediaObj->creatorObj->admin_url}}'>{{$comment->mediaObj->creatorObj->username}}</a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b>Created Date</b>
-                                        <span class="float-right">{{$comment->created_at}}</span>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <b>Update Date</b>
-                                        <span class="float-right">{{$comment->updated_at}}</span>
-                                    </li>
-                                </ul>
+                    <div class="card card-outline card-primary">
+                        <div class="card-body box-profile ">
+                            <ul class="list-group list-group-unbordered mb-3">
+                                <li class="list-group-item">
+                                    <b>Text</b><br/>
+                                    {{$comment->text}}
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Creator</b>
+                                    <a class="float-right"
+                                       href='{{$comment->creatorObj->admin_url}}'>{{$comment->creator['username']}}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Media</b>
+                                    <a class="float-right"
+                                       href='{{$comment->mediaObj->admin_url}}'>{{$comment->mediaObj['file']}}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Media creator</b>
+                                    <a class="float-right"
+                                       href='{{$comment->mediaObj->creatorObj->admin_url}}'>{{$comment->mediaObj->creatorObj->username}}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Created Date</b>
+                                    <span class="float-right">{{$comment->created_at}}</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Update Date</b>
+                                    <span class="float-right">{{$comment->updated_at}}</span>
+                                </li>
+                            </ul>
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <form method="POST"
+                                          action="{{ route('core.admin.media.comment.delete', ['comment' => $comment->_id]) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-block btn-danger" data-toggle="modal" data-target="#banModal">
+                                            <strong>Delete</strong>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
