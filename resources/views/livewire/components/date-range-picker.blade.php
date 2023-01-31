@@ -55,7 +55,7 @@
             @if($exportable)
                 <div class="pl-2">
                     <button wire:click="$emit('export-excel')" type="button" class="btn btn-default">
-                        .xls
+                        .csv
                     </button>
                 </div>
             @endif
