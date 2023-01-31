@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-md-6 pt-4">
                 <h4>
-                    Medias
+                    Media
 
                     <button @class([
                     'btn btn-sm',
