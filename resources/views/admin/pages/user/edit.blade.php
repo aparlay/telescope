@@ -400,6 +400,16 @@
                     });
                 }
             });
+
+            $('.user-profile-card button.card-edit').on('click', function() {
+                let card = $(this).data('edit');
+                console.log(card);
+                $('#' + card + ' button.card-edit').addClass('d-none');
+                $('#' + card + ' .data-show').addClass('d-none');
+
+                $('#' + card + ' button.card-save').removeClass('d-none');
+                $('#' + card + ' .data-edit').removeClass('d-none');
+            });
         });
     </script>
 @endpush
