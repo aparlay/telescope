@@ -61,7 +61,7 @@ class ReprocessMedia implements ShouldQueue
             if ($b2->fileExists($this->file)) {
                 if (! $mediaServer->exists($b2File)) {
                     $copiedToMediaServer = $mediaServer->writeStream($b2File, $b2->readStream($this->file));
-                    throw_if(!$copiedToMediaServer, new Exception(__CLASS__.PHP_EOL.'Nighter video file nor media object found!'));
+                    throw_if(! $copiedToMediaServer, new Exception(__CLASS__.PHP_EOL.'Nighter video file nor media object found!'));
                 }
 
                 ProcessMedia::dispatch($this->media_id, $b2File)->onQueue('low');
