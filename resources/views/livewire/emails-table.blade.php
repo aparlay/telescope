@@ -4,137 +4,72 @@
     use Aparlay\Core\Models\Enums\EmailType;
 @endphp
 
-<div class="user-table">
-    <div class="filters pb-3">
+<div class="user-table user-profile-table">
+    <div class="filters">
         <div class="row">
-            <div class="col-md-6 pt-4">
-                <h4>Emails</h4>
-            </div>
-            <div class="col-md-2">
-                <label for="">Start Date</label>
-                <x-date-picker
-                        wire:model.lazy="filter.created_at.start"
-                        autocomplete="off"
-                        placeholder="Start"
-                />
-            </div>
-            <div class="col-md-2">
-                <label for="">End Date</label>
-                <x-date-picker
-                        wire:model.lazy="filter.created_at.end"
-                        autocomplete="off"
-                        placeholder="End"
-                />
-            </div>
-            <div class="col-md-2 ml-auto">
-                <label for="">Per Page</label>
-                <x-wire-dropdown-list :wire-model="'perPage'" :show-any="false"
-                                      :options="[5 => 5, 10 => 10, 15 => 15]"/>
+            <div @class(['col-md-12 mb-2', 'd-none' => $hiddenFields['username']])>
+                <input class="form-control" type="text" placeholder="filter creator" wire:model="filter.username"/>
             </div>
         </div>
     </div>
 
-    <table class="table table-striped border bg-white">
-        <thead>
-        <tr>
-            <th @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'"/>
-                    <input class="form-control" type="text" wire:model="filter.username"/>
-                </div>
-            </th>
-
-            <th class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'to'" :fieldLabel="'to'"/>
-                    <input class="form-control" type="text" wire:model="filter.to"/>
-                </div>
-            </th>
-
-            <th class="col-md-1">
-                <label for="">Type</label>
-                <x-wire-dropdown-list
-                        :wire-model="'filter.type'"
-                        :options="\Aparlay\Core\Admin\Models\Email::getTypes()"
-                />
-            </th>
-
-            <th class="col-md-1">
-                <span for="">Server</span>
-            </th>
-
-            <th class="col-md-1">
-                <div>
-                    <label for="">Status</label>
-
-                    <x-wire-dropdown-list
-                            :wire-model="'filter.status'"
-                            :options="\Aparlay\Core\Admin\Models\Email::getStatuses()"
-                    />
-                </div>
-            </th>
-
-            <th class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
-                </div>
-            </th>
-        </tr>
-        </thead>
+    <table class="table table-striped">
         <tbody>
-        @foreach($models as $model)
             <tr>
-                <td @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
-                    @if ($model->userObj)
-                        <x-username-avatar :user="$model->userObj"/>
-                    @endif
-                </td>
+                <th @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
+                    <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
+                </th>
 
-                <td>
-                    @if ($model->userObj)
-                        <a href="{{$model->userObj->admin_url}}">{{ $model->to }}
-                        </a>
-                    @else
-                        <a href="mailto:{{$model->to}}">
-                            {{ $model->to }}
-                        </a>
-                    @endif
-                </td>
+                <th class="col-md-4">
+                    <x-sortable-column-header :sort="$sort" :fieldName="'email'" :fieldLabel="'Email'" />
+                </th>
 
-                <td>
-                    <span class="badge bg-{{ EmailType::from($model->type)->badgeColor() }}">
-                        {{ EmailType::from($model->type)->label() }}
-                    </span>
-                </td>
+                <th class="col-md-2">
+                    <x-sortable-column-header :sort="$sort" :fieldName="'type'" :fieldLabel="'Type'" />
+                </th>
+                <th class="col-md-1">
+                    <label for="">Status</label>
+                </th>
 
-                <td>
-                    <span @class(['badge', 'bg-success' => $model->server === 'mail1', 'bg-warning' => $model->server === 'mail2']) >
-                        {{ $model->server }}
-                    </span>
-                </td>
-
-                <td>
-                    <span class="badge bg-{{ EmailStatus::from($model->status)->badgeColor() }}"
-                          data-toggle="tooltip" data-placement="left" title="{{$model->error}}">
-                        {{ EmailStatus::from($model->status)->label() }}
-                    </span>
-                </td>
-
-                <td>
-                    {{ $model->created_at }}
-                </td>
+                <th class="col-md-2">
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'" />
+                </th>
             </tr>
-        @endforeach
+
+            @foreach($models as $model)
+                <tr>
+                    <td @class(['col-md-3', 'd-none' => $hiddenFields['username']])>
+                        @if ($model->userObj)
+                            <x-username-avatar :user="$model->userObj"/>
+                        @endif
+                    </td>
+                    <td>
+                        @if ($model->userObj)
+                        <a href="{{$model->userObj->admin_url}}">
+                            {{ $model->userObj->email }}
+                        </a>
+                        @endif
+                    </td>
+
+                    <td>
+                        <span class="badge bg-{{ EmailType::from($model->type)->badgeColor() }}">
+                            {{ EmailType::from($model->type)->label() }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="badge bg-{{ EmailStatus::from($model->status)->badgeColor() }}">
+                            {{ EmailStatus::from($model->status)->label() }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ $model->created_at }}
+                    </td>
+
+                </tr>
+            @endforeach
         </tbody>
     </table>
-    <div class="d-flex justify-content-center">
-        {{ $models->links() }}
-    </div>
+    {{ $models->links() }}
 </div>
-@push('js')
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
-    </script>
-@endpush
