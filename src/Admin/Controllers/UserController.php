@@ -6,10 +6,12 @@ use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Requests\MediaUploadRequest;
 use Aparlay\Core\Admin\Requests\UserGeneralUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserPasswordRequest;
 use Aparlay\Core\Admin\Requests\UserPayoutsUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserSettingsRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
-use Aparlay\Core\Admin\Requests\UserUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserVisibilityRequest;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Admin\Services\UploadService;
 use Aparlay\Core\Admin\Services\UserService;
@@ -179,6 +181,45 @@ class UserController extends Controller
         }
 
         return back()->with('error', 'Update status failed.');
+    }
+
+    public function updateVisibility(User $user, UserVisibilityRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $visibility = (int) $request->input('visibility');
+
+        if ($this->userService->updateVisibility($user->_id, $visibility)) {
+            return back()->with('success', 'Set user '.ucfirst(User::getVisibilities()[$visibility]).' successfully.');
+        }
+
+        return back()->with('error', 'Update visibility failed.');
+    }
+
+    public function updatePayoutSettings(User $user, UserSettingsRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $settings = $request->input('setting');
+
+        if ($this->userService->updatePayoutSettings($user->_id, $settings['payout'])) {
+            return back()->with('success', 'Set user settings successfully.');
+        }
+
+        return back()->with('error', 'Update settings failed.');
+    }
+
+    public function setPassword(User $user, UserPasswordRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $password = $request->input('password');
+
+        if ($this->userService->setPassword($user->_id, $password)) {
+            return back()->with('success', 'Set user password successfully.');
+        }
+
+        return back()->with('error', 'Set password failed.');
     }
 
     public function upload(MediaUploadRequest $request)

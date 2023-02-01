@@ -10,13 +10,17 @@ use Aparlay\Core\Admin\Requests\UserPayoutsUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Constants\Roles;
+use Aparlay\Core\Events\UserPasswordChangedEvent;
+use Aparlay\Core\Events\UserSettingChangedEvent;
 use Aparlay\Core\Events\UserStatusChangedEvent;
+use Aparlay\Core\Events\UserVisibilityChangedEvent;
 use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
+use Hash;
 use Illuminate\Support\Facades\Storage;
-use MongoDB\BSON\ObjectId;
 
 class UserService extends AdminBaseService
 {
@@ -262,5 +266,78 @@ class UserService extends AdminBaseService
         UserStatusChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType);
 
         return $this->userRepository->update(['status' => $userStatus], $id);
+    }
+
+    /**
+     * @param mixed $userId
+     * @param int $userVisibility
+     * @return bool
+     */
+    public function updateVisibility(mixed $userId, int $userVisibility): bool
+    {
+        $user = $this->find($userId);
+
+        $noteType = match ($userVisibility) {
+            UserVisibility::PUBLIC->value => NoteType::PUBLIC->value,
+            UserVisibility::PRIVATE->value => NoteType::PRIVATE->value,
+            UserVisibility::INVISIBLE_BY_ADMIN->value => NoteType::INVISIBLE_BY_ADMIN->value,
+            default => null
+        };
+
+        UserVisibilityChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType);
+
+        return $this->userRepository->update(['visibility' => $userVisibility], $userId);
+    }
+
+    /**
+     * @param mixed $userId
+     * @param array $userSettings
+     * @return bool
+     */
+    public function updatePayoutSettings(mixed $userId, array $payoutSettings): bool
+    {
+        $user = $this->find($userId);
+
+        $success = true;
+        $noteType = null;
+
+        foreach ($payoutSettings as $key => $value) {
+            if ($success) {
+                $setting = $user['setting'];
+                $setting['payout'][$key] = (bool) $value;
+                $success = $this->userRepository->update(['setting' => $setting], $userId);
+
+                switch($key) {
+                    case 'ban_payout':
+                        $noteType = ($value ? NoteType::SET_BAN_PAYOUT->value : NoteType::UNSET_BAN_PAYOUT->value);
+                        break;
+
+                    case 'auto_ban_payout':
+                        $noteType = ($value ? NoteType::SET_AUTO_BAN_PAYOUT->value : NoteType::UNSET_AUTO_BAN_PAYOUT->value);
+                        break;
+                }
+            }
+        }
+
+        UserSettingChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType);
+
+        return $success;
+    }
+
+    /**
+     * @param mixed $userId
+     * @param string $password
+     * @return bool
+     */
+    public function setPassword(mixed $userId, string $password): bool
+    {
+        $user = $this->find($userId);
+        $noteType = NoteType::SET_PASSWORD->value;
+
+        $success = $this->userRepository->update(['password_hash' => Hash::make($password)], $userId);
+
+        UserPasswordChangedEvent::dispatchIf($success, $this->getUser(), $user, $noteType);
+
+        return $success;
     }
 }

@@ -1,3 +1,9 @@
+@php
+    use Aparlay\Core\Models\Enums\UserStatus;
+    use Aparlay\Core\Models\Enums\UserVisibility;
+    use Aparlay\Chat\Models\Enums\ChatCategory;
+@endphp
+
 <div class="row text-center">
     <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-fluid">
 </div>
@@ -11,10 +17,14 @@
     <a href="{{ route('core.admin.user.login_as_user', ['user' => $user->_id]) }}" target="_blank" class="py-1 px-2 list-group-item list-group-item-action">
         <i class="fas fa-circle mr-1 text-blue"></i>Log-In As User
     </a>
-    <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Set Password</a>
+    <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#changePasswordModal">
+        <i class="fas fa-circle mr-1 text-blue"></i>Set Password
+    </a>
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Gallery</a>-->
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Adjustments</a>-->
-    <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>View Chats (n)</a>
+    <a href="{{ route('chat.admin.chat.index', ['userId' => $user->_id]) }}" class="py-1 px-2 list-group-item list-group-item-action">
+        <i class="fas fa-circle mr-1 text-blue"></i>View Chats (n)
+    </a>
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Un-Hide Chats</a>-->
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Flush Unread Messages</a>
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Logs</a>
@@ -30,7 +40,7 @@
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Give Final Warning</a>-->
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Validation Freeze</a>
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Freeze</a>-->
-    @if($user->status == \Aparlay\Core\Models\Enums\UserStatus::SUSPENDED->value)
+    @if($user->status == UserStatus::SUSPENDED->value)
         <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#activateModal">
             <i class="fas fa-circle mr-1 text-blue"></i>Reactivate
         </a>
@@ -41,15 +51,39 @@
     @endif
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Ban Send Photo</a>-->
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Ban Intro</a>-->
-    <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Ban Auto Payouts</a>
-    <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Ban Payouts</a>
+    @if(false == $user->setting['payout']['auto_ban_payout'])
+        <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#set-auto-ban-payout-modal">
+            <i class="fas fa-circle mr-1 text-blue"></i>Set Auto Ban Payout
+        </a>
+    @else
+        <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#unset-auto-ban-payout-modal">
+            <i class="fas fa-circle mr-1 text-blue"></i>Unset Auto Ban Payout
+        </a>
+    @endif
+    @if(false == $user->setting['payout']['ban_payout'])
+        <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#set-ban-payout-modal">
+            <i class="fas fa-circle mr-1 text-blue"></i>Set Ban Payout
+        </a>
+    @else
+        <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#unset-ban-payout-modal">
+            <i class="fas fa-circle mr-1 text-blue"></i>Unset Ban Payout
+        </a>
+    @endif
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Enable 14 Day Payout Freeze</a>-->
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Region Blacklist</a>-->
-    <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Make Invisible</a>
+    @if($user->visibility == UserVisibility::PUBLIC->value)
+        <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#invisibleModal">
+            <i class="fas fa-circle mr-1 text-blue"></i>Make Invisible
+        </a>
+    @else
+        <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#publicModal">
+            <i class="fas fa-circle mr-1 text-blue"></i>Make Public
+        </a>
+    @endif
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Allow Screenshots</a>-->
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action text-red disabled"><i class="fas fa-circle mr-1 text-red"></i>Delete Account</a>
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action text-red disabled"><i class="fas fa-circle mr-1 text-red"></i>Delete Account w/ Timer</a>
-    @if($user->status == \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value)
+    @if($user->status == UserStatus::BLOCKED->value)
         <a href="#" class="py-1 px-2 list-group-item list-group-item-action text-green" data-toggle="modal" data-target="#activateModal">
             <i class="fas fa-circle mr-1 text-green"></i>Reactivate
         </a>
@@ -92,5 +126,5 @@
     :username="$user->username"
     :adminUserId="auth()->user()->_id"
     :adminUsername="auth()->user()->username"
-    :category="\Aparlay\Chat\Models\Enums\ChatCategory::SUPPORT->value"
+    :category="ChatCategory::SUPPORT->value"
     :headerText="'Support Chat'"/>

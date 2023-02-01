@@ -45,6 +45,8 @@ class User extends UserBase implements Auditable
         'verification_status',
         'country_alpha2',
         'payout_country_alpha2',
+        'setting',
+        'password_hash',
     ];
 
     /**
