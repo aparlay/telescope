@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="card-body py-1">
-            <div class="tab-pane active" id="user-info">
+            <div class="tab-pane active">
                 <div class="form-group row m-0">
                     <label for="id" class="col-sm-2 col-form-label">User ID</label>
                     <div class="col-sm-10">
@@ -158,7 +158,7 @@
                     <label for="ip_country_alpha2" class="col-sm-2 col-form-label">IP Country</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
-                            <p>--</p>
+                            {{ $user->country_label }}
                         </div>
                     </div>
                 </div>

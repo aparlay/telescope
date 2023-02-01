@@ -18,11 +18,11 @@
                     data-card-widget="collapse"
                     data-expand-icon="fa-chevron-down"
                     data-collapse-icon="fa-chevron-up"
-                ><i class="fas fa-chevron-up"></i></button>
+                ><i class="fas fa-chevron-down"></i></button>
             </div>
         </div>
         <div class="card-body py-1">
-            <div class="tab-pane active" id="user-info">
+            <div class="tab-pane active">
                 <div class="form-group row m-0">
                     <label for="bank_transfer" class="col-sm-2 col-form-label">Bank Transfer</label>
                     <div class="col-sm-10">

@@ -2,6 +2,7 @@
     use Aparlay\Core\Models\Enums\UserStatus;
     use Aparlay\Core\Models\Enums\UserVisibility;
     use Aparlay\Chat\Models\Enums\ChatCategory;
+    use Aparlay\Chat\Admin\Models\Chat;
 @endphp
 
 <div class="row text-center">
@@ -23,7 +24,7 @@
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Gallery</a>-->
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Adjustments</a>-->
     <a href="{{ route('chat.admin.chat.index', ['userId' => $user->_id]) }}" class="py-1 px-2 list-group-item list-group-item-action">
-        <i class="fas fa-circle mr-1 text-blue"></i>View Chats (n)
+        <i class="fas fa-circle mr-1 text-blue"></i>View Chats ({{ Chat::query()->participants((string) $user->_id)->count() }})
     </a>
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Un-Hide Chats</a>-->
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Flush Unread Messages</a>

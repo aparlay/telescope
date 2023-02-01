@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="card-body py-1">
-            <div class="tab-pane active" id="user-info">
+            <div class="tab-pane active">
                 <div class="form-group row m-0">
                     <label for="username" class="col-sm-2 col-form-label">Username</label>
                     <div class="col-sm-10 form-element">

@@ -1,8 +1,3 @@
-@php
-    use Aparlay\Core\Models\Enums\UserStatus;
-    use Aparlay\Core\Models\Enums\UserVisibility;
-@endphp
-
 @extends('adminlte::page')
 @section('title', 'User Profile')
 @section('plugins.Datatables', true)
@@ -70,11 +65,29 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
                             <livewire:chats-table :userId="$user->_id"/>
+                        </div>
+                    </div>
+
+                    <div class="card card-default collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Comments</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-down"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <livewire:media-comments-table :userId="$user->_id"/>
                         </div>
                     </div>
 
@@ -88,7 +101,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -106,7 +119,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -123,7 +136,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -141,7 +154,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -159,7 +172,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -177,7 +190,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -195,7 +208,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -212,12 +225,12 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
-                            @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
                             @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
+                            @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
                         </div>
                     </div>
 
@@ -231,7 +244,7 @@
                                     data-card-widget="collapse"
                                     data-expand-icon="fa-chevron-down"
                                     data-collapse-icon="fa-chevron-up"
-                                ><i class="fas fa-chevron-up"></i></button>
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -278,7 +291,7 @@
                       method="POST">
                     @csrf
                     @method('PATCH')
-                    <input type="hidden" value="{{ UserStatus::BLOCKED->value }}"
+                    <input type="hidden" value="{{ \Aparlay\Core\Models\Enums\UserStatus::BLOCKED->value }}"
                            name="status">
                     <div class="modal-header bg-danger">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Block User</h5>
@@ -308,7 +321,7 @@
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="status"
-                           value="{{ UserStatus::SUSPENDED->value }}">
+                           value="{{ \Aparlay\Core\Models\Enums\UserStatus::SUSPENDED->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Suspend</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -338,7 +351,7 @@
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="status"
-                           value="{{ UserStatus::ACTIVE->value }}">
+                           value="{{ \Aparlay\Core\Models\Enums\UserStatus::ACTIVE->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Reactivate</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -367,7 +380,7 @@
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="visibility"
-                    value="{{ UserVisibility::INVISIBLE_BY_ADMIN->value }}">
+                    value="{{ \Aparlay\Core\Models\Enums\UserVisibility::INVISIBLE_BY_ADMIN->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Make invisible</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -394,7 +407,7 @@
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="visibility"
-                           value="{{ UserVisibility::PUBLIC->value }}">
+                           value="{{ \Aparlay\Core\Models\Enums\UserVisibility::PUBLIC->value }}">
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="exampleModalLiveLabel">Make public</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -505,7 +518,7 @@
 
             $('.user-profile-card button.card-edit').on('click', function() {
                 let card = $(this).data('edit');
-                console.log(card);
+
                 $('#' + card + ' button.card-edit').addClass('d-none');
                 $('#' + card + ' .data-show').addClass('d-none');
 
