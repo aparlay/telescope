@@ -7,8 +7,8 @@
     @csrf()
     @method('PUT')
     <div class="card user-profile-card" id="user-profile">
-        <div class="card-header">
-            <h3 class="card-title">Profile</h3>
+        <div class="card-header py-0">
+            <h3 class="card-title p-2">Profile</h3>
             <div class="card-tools">
                 <button type="button" class="btn text-blue card-edit" data-edit="user-profile">Edit <i class="fas fa-pen"></i></button>
                 <button type="submit" class="btn text-blue card-save d-none">Save <i class="fas fa-save"></i></button>
@@ -21,9 +21,9 @@
                 ><i class="fas fa-chevron-up"></i></button>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body py-1">
             <div class="tab-pane active" id="user-info">
-                <div class="form-group row">
+                <div class="form-group row m-0">
                     <label for="username" class="col-sm-2 col-form-label">Username</label>
                     <div class="col-sm-10 form-element">
                         <div class="mt-2 pl-4 data-show">
@@ -32,7 +32,7 @@
                         <input type="text" class="form-control data-edit d-none" id="username" name="username" value="{{ $user->username }}">
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="form-group row m-0">
                     <label for="bio" class="col-sm-2 col-form-label">Bio</label>
                     <div class="col-sm-10 form-element">
                         <div class="mt-2 pl-4 data-show">
@@ -41,7 +41,7 @@
                         <textarea class="form-control w-100 data-edit d-none" name="bio" id="bio" rows="3">{{ $user->bio }}</textarea>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="form-group row m-0">
                     <label for="promo_link" class="col-sm-2 col-form-label">Promo Link</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4 data-show">

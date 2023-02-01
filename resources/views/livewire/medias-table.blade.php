@@ -1,18 +1,9 @@
 @php
     use App\Models\Media;
     use Aparlay\Core\Models\Enums\MediaStatus;
-
 @endphp
 
 <div class="medias-table user-profile-table mt-2">
-    <div @class(['filters mb-2', 'd-none' => $hiddenFields['creator_username']])>
-        <div class="row">
-            <div class="col-md-12">
-                <input class="form-control" type="text" placeholder="filter creator" wire:model="filter.creator_username"/>
-            </div>
-        </div>
-    </div>
-
     <table class="table table-striped">
         <tbody>
             <tr>

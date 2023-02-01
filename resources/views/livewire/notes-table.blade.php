@@ -11,7 +11,21 @@
         </div>
     </div>
 
-    <table class="table table-striped">
+<!--
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link py-1 active" aria-current="page" href="#">All</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link py-1" href="#">Notes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link py-1" href="#">Logs</a>
+        </li>
+    </ul>
+-->
+
+    <table class="table table-striped border">
         <thead>
             <tr>
                 <th class="col-1 col-md-1 col-sm-2">
@@ -38,6 +52,9 @@
                         </a>
                     </td>
                     <td class="col-8 col-md-8 col-sm-6">
+                        <span class="badge bg-{{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->label() == 'other' ? 'warning' : 'secondary' }}">
+                            {{ \Aparlay\Core\Models\Enums\NoteType::from($note->type)->label() == 'other' ? 'note' : 'log' }}
+                        </span>
                         {!! $note->message !!}
                     </td>
                     <td class="col-2 col-md-2 col-sm-3">
