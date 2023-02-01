@@ -4,6 +4,9 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Repositories\UserRepository;
+use Aparlay\Core\Admin\Requests\UserGeneralUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Constants\Roles;
 use Aparlay\Core\Events\UserStatusChangedEvent;
@@ -126,17 +129,37 @@ class UserService extends AdminBaseService
         return $this->userRepository->getVisibilities();
     }
 
-    public function update($user, $request)
+    public function updateProfile(User $user, UserProfileUpdateRequest $request): User
     {
-        if (request()->hasFile('avatar')) {
+        $data = $request->only([
+            'username',
+            'bio',
+            'promo_link',
+        ]);
+
+        $role = $request->input('role');
+
+        if ($role && auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
+            $user->syncRoles($request->input('role'));
+        }
+
+        $user->fill($data);
+        $user->save();
+
+        return $user;
+    }
+
+    public function updateInfo(User $user, UserInfoUpdateRequest $request): User
+    {
+        if ($request->hasFile('avatar')) {
             $this->uploadAvatar($user);
         }
 
         $data = $request->only([
-            'username',
             'email',
             'bio',
             'gender',
+            'interested_in',
             'type',
             'status',
             'visibility',
@@ -150,13 +173,34 @@ class UserService extends AdminBaseService
 
         $dataBooleans = [
             'email_verified' => $request->boolean('email_verified'),
+        ];
+
+        $data = array_merge($data, $dataBooleans);
+        $role = $request->input('role');
+
+        if ($role && auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
+            $user->syncRoles($request->input('role'));
+        }
+
+        $user->fill($data);
+        $user->save();
+
+        return $user;
+    }
+
+    public function updateGeneral(User $user, UserGeneralUpdateRequest $request): User
+    {
+        if ($request->hasFile('avatar')) {
+            $this->uploadAvatar($user);
+        }
+
+        $data = [
             'features' => [
                 'tips' => $request->boolean('features.tips'),
                 'demo' => $request->boolean('features.demo'),
             ],
         ];
 
-        $data = array_merge($data, $dataBooleans);
         $role = $request->input('role');
 
         if ($role && auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
