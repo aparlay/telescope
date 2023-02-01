@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\NoteCategory;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Note;
 use Aparlay\Core\Models\User;
@@ -35,8 +36,8 @@ class NoteFactory extends Factory
             NoteType::WARNING_MESSAGE->value,
             NoteType::BAN_ALL_CC_PAYMENT->value,
             NoteType::UNBAN_ALL_CC_PAYMENT->value,
-
         ]);
+        $category = NoteCategory::LOG->value;
 
         return [
             'creator' => [
@@ -50,6 +51,7 @@ class NoteFactory extends Factory
                 'avatar' => $user['avatar'],
             ],
             'type' => $type,
+            'category' => $category,
             'message' => $this->faker->sentence(5),
             'status' => $this->faker->numberBetween($min = 0, $max = 1),
             'created_by' => new ObjectId($creator['_id']),

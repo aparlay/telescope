@@ -16,6 +16,15 @@ class NoteQueryBuilder extends EloquentQueryBuilder
     }
 
     /**
+     * @param int $category
+     * @return self
+     */
+    public function category(int $category): self
+    {
+        return $this->where('category', $category);
+    }
+
+    /**
      * @return self
      */
     public function isNotDeleted(): self

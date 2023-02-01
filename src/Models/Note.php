@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Database\Factories\NoteFactory;
+use Aparlay\Core\Models\Enums\NoteCategory;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Queries\NoteQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,6 +24,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property UTCDateTime        $created_at
  * @property UTCDateTime        $updated_at
  * @property int                $type
+ * @property int                $category
  * @property int                $status
  * @property array              $creator
  * @property array              $user
@@ -52,6 +54,7 @@ class Note extends BaseModel
     protected $fillable = [
         '_id',
         'type',
+        'category',
         'message',
         'user',
         'creator',
@@ -130,6 +133,17 @@ class Note extends BaseModel
             NoteType::BAN_ALL_CC_PAYMENT->value => NoteType::BAN_ALL_CC_PAYMENT->label(),
             NoteType::UNBAN_ALL_CC_PAYMENT->value => NoteType::UNBAN_ALL_CC_PAYMENT->label(),
             NoteType::OTHER->value => NoteType::OTHER->label(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getCategories(): array
+    {
+        return [
+            NoteCategory::LOG->value => NoteCategory::LOG->label(),
+            NoteCategory::NOTE->value => NoteCategory::NOTE->label(),
         ];
     }
 }
