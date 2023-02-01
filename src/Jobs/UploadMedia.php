@@ -35,7 +35,7 @@ class UploadMedia implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
