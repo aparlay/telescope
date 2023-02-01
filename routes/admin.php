@@ -109,27 +109,32 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('user/{user}', [UserController::class, 'view'])
                 ->middleware(['permission:show users'])
                 ->name('view');
-            Route::put('user/profile/{user}', [UserController::class, 'updateProfile'])
-                ->middleware(['permission:edit users'])
-                ->name('updateProfile');
-            Route::put('user/info/{user}', [UserController::class, 'updateInfo'])
-                ->middleware(['permission:edit users'])
-                ->name('updateInfo');
-            Route::put('user/general/{user}', [UserController::class, 'updateGeneral'])
-                ->middleware(['permission:edit users'])
-                ->name('updateGeneral');
             Route::match(['get', 'post'], 'user/upload-media', [UserController::class, 'uploadMedia'])
                 ->middleware(['permission:upload medias'])
                 ->name('media.upload');
-            Route::patch('user/{user}', [UserController::class, 'updateStatus'])
-                ->middleware(['permission:edit users'])
-                ->name('update.status');
             Route::post('user/media/upload', [UserController::class, 'upload'])
                 ->middleware(['permission:upload medias'])
                 ->name('media.save-upload');
             Route::get('user/login/{user}', [UserController::class, 'loginAsUser'])
                 ->middleware(['permission:edit users'])
                 ->name('login_as_user');
+            Route::name('update.')->group(function () {
+                Route::patch('user/{user}', [UserController::class, 'updateStatus'])
+                    ->middleware(['permission:edit users'])
+                    ->name('status');
+                Route::put('user/profile/{user}', [UserController::class, 'updateProfile'])
+                    ->middleware(['permission:edit users'])
+                    ->name('profile');
+                Route::put('user/info/{user}', [UserController::class, 'updateInfo'])
+                    ->middleware(['permission:edit users'])
+                    ->name('userinfo');
+                Route::put('user/general/{user}', [UserController::class, 'updateGeneral'])
+                    ->middleware(['permission:edit users'])
+                    ->name('general');
+                Route::put('user/payouts/{user}', [UserController::class, 'updatePayouts'])
+                    ->middleware(['permission:edit users'])
+                    ->name('payouts');
+            });
         });
 
         Route::name('alert.')->group(function () {
