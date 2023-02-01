@@ -602,9 +602,9 @@ class User extends \App\Models\User
 
     public function getIsEligibleForVerificationAttribute(): bool
     {
-        $hasMinLikes = $this->counters['likes'] >= config('core.id_verification.min_likes', 1000);
-        $hasMinFollowers = $this->counters['followers'] >= config('core.id_verification.min_followers', 100);
-        $hasMinMedia = $this->counters['medias'] >= config('core.id_verification.min_medias', 1);
+        $hasMinLikes = $this->counters['likes'] >= config('core.id_verification_thresholds.min_likes', 1000);
+        $hasMinFollowers = $this->counters['followers'] >= config('core.id_verification_thresholds.min_followers', 100);
+        $hasMinMedia = $this->counters['medias'] >= config('core.id_verification_thresholds.min_medias', 1);
 
         if (($hasMinLikes || $hasMinFollowers) && $hasMinMedia) {
             return true;

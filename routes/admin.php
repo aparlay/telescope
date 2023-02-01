@@ -4,6 +4,7 @@ use Aparlay\Core\Admin\Controllers\AlertController;
 use Aparlay\Core\Admin\Controllers\AuthController;
 use Aparlay\Core\Admin\Controllers\DashboardController;
 use Aparlay\Core\Admin\Controllers\EmailController;
+use Aparlay\Core\Admin\Controllers\MediaCommentController;
 use Aparlay\Core\Admin\Controllers\MediaController;
 use Aparlay\Core\Admin\Controllers\NoteController;
 use Aparlay\Core\Admin\Controllers\RoleController;
@@ -86,6 +87,15 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::post('media/{media}/reupload', [MediaController::class, 'reupload'])
                 ->middleware(['permission:upload medias'])
                 ->name('reupload');
+
+            Route::middleware(['admin-auth:admin'])->name('comment.')->group(function () {
+                Route::get('media/comment/{comment}', [MediaCommentController::class, 'view'])
+                    ->middleware(['permission:show medias'])
+                    ->name('view');
+                Route::delete('media/comment/{comment}', [MediaCommentController::class, 'delete'])
+                    ->middleware(['permission:queue medias-moderation'])
+                    ->name('delete');
+            });
         });
 
         /* User Routes */

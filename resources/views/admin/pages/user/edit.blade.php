@@ -228,8 +228,8 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
                             @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
+                            @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
                         </div>
                     </div>
 

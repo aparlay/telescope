@@ -159,7 +159,7 @@
                     <label for="ip_country_alpha2" class="col-sm-2 col-form-label">IP Country</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
-                            <p>--</p>
+                            {{ $user->country_label }}
                         </div>
                     </div>
                 </div>

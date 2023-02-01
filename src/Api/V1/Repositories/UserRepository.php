@@ -43,11 +43,6 @@ class UserRepository
     public function isUserEligible(): bool
     {
         switch ($this->model->status) {
-            case UserStatus::SUSPENDED->value:
-
-                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user is suspended.');
-
-                // no break
             case UserStatus::BLOCKED->value:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user has been banned.');
