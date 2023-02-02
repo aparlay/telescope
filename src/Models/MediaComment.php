@@ -161,7 +161,7 @@ class MediaComment extends BaseModel
      */
     public function getSlackAdminUrlAttribute(): string
     {
-        return "<{$this->admin_url}|comment> By {$this->userObj->slack_admin_url}";
+        return "<{$this->admin_url}|comment> By {$this->creatorObj->slack_admin_url}";
     }
 
     /**
