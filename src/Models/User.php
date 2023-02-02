@@ -307,6 +307,8 @@ class User extends \App\Models\User
         'stats.counters.subscribers' => 'integer',
         'stats.counters.chats' => 'integer',
         'stats.counters.notifications' => 'integer',
+        'settings.payout.ban_payout' => 'boolean',
+        'settings.payout.auto_ban_payout' => 'boolean',
         'type' => 'integer',
         'verification_status' => 'integer',
     ];
@@ -816,6 +818,7 @@ class User extends \App\Models\User
         return [
             UserVisibility::PRIVATE->value => UserVisibility::PRIVATE->label(),
             UserVisibility::PUBLIC->value => UserVisibility::PUBLIC->label(),
+            UserVisibility::INVISIBLE_BY_ADMIN->value => UserVisibility::INVISIBLE_BY_ADMIN->label(),
         ];
     }
 
