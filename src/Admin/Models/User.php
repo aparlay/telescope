@@ -12,7 +12,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class User extends UserBase implements Auditable
 {
     use UserScope;
-    use \OwenIt\Auditing\Auditable;
+    use \Aparlay\Core\Admin\Models\Auditable;
 
     public string $guard_name = 'admin';
 
