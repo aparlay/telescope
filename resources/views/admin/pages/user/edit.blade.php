@@ -227,39 +227,6 @@
                                     data-collapse-icon="fa-chevron-up"
                                 ><i class="fas fa-chevron-down"></i></button>
                             </div>
-                            <div class="card card-maroon card-outline">
-                                <div class="card-header" id="headingComments">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link collapsed" data-toggle="collapse"
-                                                data-target="#collapseComments" aria-expanded="false"
-                                                aria-controls="collapseComments">
-                                            Comments
-                                        </button>
-                                    </h5>
-                                </div>
-                                <div id="collapseComments" class="collapse" aria-labelledby="headingComments"
-                                     data-parent="#accordion">
-                                    <div class="card-body">
-                                        <livewire:media-comments-table :userId="$user->_id"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card card-maroon card-outline">
-                                <div class="card-header" id="headingMainEleven">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link collapsed" data-toggle="collapse"
-                                                data-target="#payoutsTab" aria-expanded="false"
-                                                aria-controls="collapseMainEleven">
-                                            Payouts
-                                        </button>
-                                    </h5>
-                                </div>
-                                <div id="payoutsTab" class="collapse" aria-labelledby="headingMainEleven"
-                                     data-parent="#accordion">
-                                    <div class="card-body">
-                                        @include('default_view::admin.pages.user.tabs.payouts', ['user' => $user])
-                                    </div>
-                                </div>
                         </div>
                         <div class="card-body">
                             @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
