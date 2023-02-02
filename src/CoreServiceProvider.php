@@ -15,6 +15,7 @@ use Aparlay\Core\Admin\Components\UtcFormatter;
 use Aparlay\Core\Admin\Components\WireDropDownList;
 use Aparlay\Core\Admin\Livewire\AuditsTable;
 use Aparlay\Core\Admin\Livewire\Components\DateRangePicker;
+use Aparlay\Core\Admin\Livewire\Components\NotesCreate;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\Dashboard\Funnel;
 use Aparlay\Core\Admin\Livewire\Dashboard\Index;
@@ -35,7 +36,7 @@ use Aparlay\Core\Admin\Livewire\SettingsTable;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
-use Aparlay\Core\Commands\AnalyticsTwoMonthCommand;
+use Aparlay\Core\Commands\AnalyticsSinceCommand;
 use Aparlay\Core\Commands\CleanupCommand;
 use Aparlay\Core\Commands\CoreCommand;
 use Aparlay\Core\Commands\DbBackupCommand;
@@ -120,7 +121,7 @@ class CoreServiceProvider extends ServiceProvider
                 MeilisearchSettingCommand::class,
                 WsCommand::class,
                 WarmupCacheCommand::class,
-                AnalyticsTwoMonthCommand::class,
+                AnalyticsSinceCommand::class,
                 AnalyticsDailyCommand::class,
                 CleanupCommand::class,
                 DbRestoreCommand::class,
@@ -208,6 +209,7 @@ class CoreServiceProvider extends ServiceProvider
             'settings-table' => SettingsTable::class,
             'emails-table' => EmailsTable::class,
             'notes-table' => NotesTable::class,
+            'notes-create' => NotesCreate::class,
             'audits-table' => AuditsTable::class,
             'modals' => Modals::class,
             'modals.media-comment-delete-modal' => MediaCommentDeleteModal::class,

@@ -156,4 +156,20 @@ class Hashtag extends BaseModel
             '_geo' => ['lat' => 0.0, 'lng' => 0.0],
         ];
     }
+
+    public function searchIndexShouldBeUpdated(): bool
+    {
+        if ($this->isDirty([
+            'tag',
+            'media_count',
+            'like_count',
+            'visit_count',
+            'visit_count',
+            'comment_count',
+        ])) {
+            return true;
+        }
+
+        return false;
+    }
 }

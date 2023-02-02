@@ -15,23 +15,32 @@ class UserScoreCommand extends Command
 
     public function handle()
     {
-        User::Where(['is_fake' => ['$exists' => false]])
-            ->enable()
-            ->each(function ($user) {
-                $count = Media::creator($user->_id)->count();
-                if ($count > 0) {
-                    $score = Media::creator($user->_id)->sum('sort_scores.default');
-                    $scores = $user->scores;
-                    $scores['sort'] = $score / $count;
+        $userQuery = User::enable()->whereNull('is_fake');
+        $bar = $this->output->createProgressBar($userQuery->count());
+        foreach ($userQuery->lazy() as $user) {
+            $scores = $user->scores;
+            $oldScore = $scores['sort'];
+            $scores['sort'] = 0;
 
-                    $msg5 = '<fg=yellow;options=bold>';
-                    $msg5 .= '  - total set to '.$user->scores['sort'].'</>';
-                    $msg5 .= PHP_EOL;
-                    $this->line($msg5);
+            $count = Media::creator($user->_id)->availableForOwner()->count();
+            if ($count > 0) {
+                $score = Media::creator($user->_id)->availableForOwner()->sum('sort_scores.default');
+                $scores['sort'] = $score / $count;
+            }
+            $user->scores = $scores;
 
-                    $user->update(['scores' => $scores]);
-                }
-            });
+            if ($oldScore != $scores['sort']) {
+                $msg5 = '<fg=yellow;options=bold>';
+                $msg5 .= '  - total set to '.$user->scores['sort'].'</>';
+                $msg5 .= PHP_EOL;
+                $this->line($msg5);
+
+                $user->update(['scores' => $scores]);
+            }
+            $bar->advance();
+        }
+
+        $bar->finish();
 
         return self::SUCCESS;
     }

@@ -42,8 +42,12 @@ final class AnalyticsCalculatorService
      * @throws ApiException
      * @throws \RedisException
      */
-    public function calculateAnalytics(UTCDateTime $startAt, UTCDateTime $endAt, bool $saveResults = true): array
-    {
+    public function calculateAnalytics(
+        UTCDateTime $startAt,
+        UTCDateTime $endAt,
+        bool $saveResults = true,
+        bool $ga = false
+    ): array {
         $availableMedia = Media::date(null, $endAt)->count();
 
         $date = date('Y-m-d', $startAt->toDateTime()->getTimestamp() + 20000);
@@ -74,8 +78,9 @@ final class AnalyticsCalculatorService
             ],
             'user' => [
                 'registered' => User::date($startAt, $endAt)->count(),
+                'active' => User::date($startAt, $endAt)->active()->count(),
                 'login' => User::date($startAt, $endAt, 'last_online_at')->count(),
-                'verified' => User::date($startAt, $endAt)->active()->count(),
+                'verified' => User::date($startAt, $endAt)->idVerified()->count(),
                 'unique' => Redis::sCard('tracking:users:unique:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
                 'returned' => Redis::sCard('tracking:users:returned:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
                 'duration' => (int) Redis::get('tracking:media:duration:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
@@ -96,7 +101,10 @@ final class AnalyticsCalculatorService
                 'tips' => Tip::query()->date($startAt, $endAt)->count(),
                 'tips_amount' => Tip::query()->date($startAt, $endAt)->sum('amount'),
             ],
-            'google_analytics' => [
+        ];
+
+        if ($ga) {
+            $analytics['google_analytics'] = [
                 'active_users' => $this->reportActiveUsers(
                     date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
                     date('Y-m-d', $endAt->toDateTime()->getTimestamp())
@@ -113,8 +121,8 @@ final class AnalyticsCalculatorService
                     date('Y-m-d', $startAt->toDateTime()->getTimestamp()),
                     date('Y-m-d', $endAt->toDateTime()->getTimestamp())
                 ),
-            ],
-        ];
+            ];
+        }
 
         if ($saveResults) {
             Analytic::query()->updateOrCreate([

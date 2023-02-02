@@ -3,9 +3,12 @@
 namespace Aparlay\Core\Listeners;
 
 use Aparlay\Core\Admin\Services\NoteService;
+use Aparlay\Core\Events\UserPasswordChangedEvent;
 use Aparlay\Core\Events\UserReceiveAlertEvent;
+use Aparlay\Core\Events\UserSettingChangedEvent;
 use Aparlay\Core\Events\UserStatusChangedEvent;
 use Aparlay\Core\Events\UserVerificationStatusChangedEvent;
+use Aparlay\Core\Events\UserVisibilityChangedEvent;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Payment\Events\RiskyCreditCardDetectedEvent;
 use Aparlay\Payment\Events\RiskyOrderDetectedEvent;
@@ -18,6 +21,30 @@ class AddNoteListener
         $noteService = app()->make(NoteService::class);
 
         if ($event instanceof UserStatusChangedEvent) {
+            $noteService->addNewNote(
+                $event->creator,
+                $event->user,
+                $event->type,
+            );
+        }
+
+        if ($event instanceof UserVisibilityChangedEvent) {
+            $noteService->addNewNote(
+                $event->creator,
+                $event->user,
+                $event->type,
+            );
+        }
+
+        if ($event instanceof UserSettingChangedEvent) {
+            $noteService->addNewNote(
+                $event->creator,
+                $event->user,
+                $event->type,
+            );
+        }
+
+        if ($event instanceof UserPasswordChangedEvent) {
             $noteService->addNewNote(
                 $event->creator,
                 $event->user,

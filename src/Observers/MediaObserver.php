@@ -102,8 +102,10 @@ class MediaObserver extends BaseModelObserver
             Media::CachePublicMediaIds();
         }
 
-        foreach ($media->hashtags as $tag) {
-            RecalculateHashtag::dispatch($tag);
+        if ($media->wasChanged(['hashtags'])) {
+            foreach ($media->hashtags as $tag) {
+                RecalculateHashtag::dispatch($tag);
+            }
         }
     }
 
