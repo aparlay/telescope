@@ -20,7 +20,7 @@ class DeleteMediaMetadata implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
 
-    public array $extensionsToRemove = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg', 'svgz', 'cgm', 'djv', 'djvu', 'ico', 'ief','jpe', 'pbm', 'pgm', 'pnm', 'ppm', 'ras', 'rgb', 'tif', 'tiff', 'wbmp', 'xbm', 'xpm', 'xwd'];
+    public array $extensionsToRemove = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg', 'svgz', 'cgm', 'djv', 'djvu', 'ico', 'ief', 'jpe', 'pbm', 'pgm', 'pnm', 'ppm', 'ras', 'rgb', 'tif', 'tiff', 'wbmp', 'xbm', 'xpm', 'xwd'];
 
     /**
      * The number of times the job may be attempted.
@@ -50,7 +50,7 @@ class DeleteMediaMetadata implements ShouldQueue
      */
     public function handle()
     {
-        if (!in_array(pathinfo($this->file, PATHINFO_EXTENSION), $this->extensionsToRemove)) {
+        if (! in_array(pathinfo($this->file, PATHINFO_EXTENSION), $this->extensionsToRemove)) {
             return;
         }
 
