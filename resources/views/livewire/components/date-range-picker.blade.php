@@ -63,11 +63,11 @@
     </div>
 
     @push('css')
-        <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.css') }}">
+        <link rel="stylesheet" href="{{ asset('vendor/daterangepicker/daterangepicker.css') }}">
     @endpush
     @push('js')
-        <script src="{{ asset('vendor/adminlte/plugins/moment/moment.min.js') }}"></script>
-        <script src="{{ asset('vendor/adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
+        <script src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
 
         <script>
             window.addEventListener('livewire:load', (e) => {
