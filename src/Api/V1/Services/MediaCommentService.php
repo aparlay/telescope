@@ -53,7 +53,7 @@ class MediaCommentService
         $defaultData = [
             'text' => $text,
             'media_id' => new ObjectId($media->_id),
-            'user_id' => new ObjectId($creator->_id),
+            'user_id' => new ObjectId($media->creator['_id']),
             'creator' => [
                 '_id' => new ObjectId($creator->_id),
                 'username' => $creator->username,

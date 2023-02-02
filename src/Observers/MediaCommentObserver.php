@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
+use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\UserNotification;
@@ -31,24 +32,23 @@ class MediaCommentObserver extends BaseModelObserver
             return;
         }
 
-        if (empty($mediaComment->reply_to_user['_id'])) {
+        // no need to send notification when user is owner of the media
+        if ((string) $media->creatorObj->_id !== (string) $mediaComment->creatorObj->_id) {
+            if (empty($mediaComment->reply_to_user['_id'])) {
+                $receive = $media->creatorObj;
+                $message = $media->commentsNotificationMessage();
+            } else {
+                $receive = User::user($mediaComment->reply_to_user['_id'])->first();
+                $message = __(':username replied to your comment.', ['username' => $mediaComment->creator['username']]);
+            }
+
             $media->notify(
                 new MediaCommentedNotification(
                     $mediaComment->creatorObj,
-                    $media->creatorObj,
+                    $receive,
                     $media,
                     $mediaComment,
-                    $media->commentsNotificationMessage(),
-                )
-            );
-        } else {
-            $media->notify(
-                new MediaCommentedNotification(
-                    $mediaComment->creatorObj,
-                    User::find($mediaComment->reply_to_user['_id']),
-                    $media,
-                    $mediaComment,
-                    __(':username replied to your comment.', ['username' => $mediaComment->creator['username']])
+                    $message
                 )
             );
         }
@@ -69,8 +69,27 @@ class MediaCommentObserver extends BaseModelObserver
         }
         $media->updateComments();
 
-        if ($media->comment_count === 0) {
-            UserNotification::query()->category(UserNotificationCategory::COMMENTS->value)->mediaEntity($media->_id)->delete();
+        // we don't show notification if there is no commenter or the only commenter is the owner itself
+        $lastMediaComment = MediaComment::query()
+            ->with('creatorObj')
+            ->media($media->_id)
+            ->whereIdNeq($media->creator['_id'], 'created_by')
+            ->recent()
+            ->first();
+
+        if ($lastMediaComment === null) {
+            UserNotification::query()
+                ->category(UserNotificationCategory::COMMENTS->value)
+                ->mediaEntity($media->_id)
+                ->update(['status' => UserNotificationStatus::INVISIBLE->value]);
+        } else {
+            UserNotification::query()
+                ->category(UserNotificationCategory::COMMENTS->value)
+                ->mediaEntity($media->_id)
+                ->update([
+                    'message' => $media->commentsNotificationMessage(),
+                    'payload.user' => $lastMediaComment->creator,
+                ]);
         }
     }
 }

@@ -101,6 +101,18 @@ class EloquentQueryBuilder extends Builder
 
     /**
      * @param  string  $field
+     * @param  ObjectId|string  $id
+     * @return $this
+     */
+    public function whereIdNeq(ObjectId|string $id, string $field = '_id'): self
+    {
+        $id = $id instanceof ObjectId ? $id : new ObjectId($id);
+
+        return $this->where($field, '!=', $id);
+    }
+
+    /**
+     * @param  string  $field
      * @param  array  $ids
      * @return self
      */
