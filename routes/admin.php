@@ -109,21 +109,41 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('user/{user}', [UserController::class, 'view'])
                 ->middleware(['permission:show users'])
                 ->name('view');
-            Route::put('user/{user}', [UserController::class, 'update'])
-                ->middleware(['permission:edit users'])
-                ->name('update');
             Route::match(['get', 'post'], 'user/upload-media', [UserController::class, 'uploadMedia'])
-                    ->middleware(['permission:upload medias'])
-                    ->name('media.upload');
-            Route::patch('user/{user}', [UserController::class, 'updateStatus'])
-                ->middleware(['permission:edit users'])
-                ->name('update.status');
+                ->middleware(['permission:upload medias'])
+                ->name('media.upload');
             Route::post('user/media/upload', [UserController::class, 'upload'])
                 ->middleware(['permission:upload medias'])
                 ->name('media.save-upload');
             Route::get('user/login/{user}', [UserController::class, 'loginAsUser'])
                 ->middleware(['permission:edit users'])
                 ->name('login_as_user');
+            Route::name('update.')->group(function () {
+                Route::patch('/user/password/{user}', [UserController::class, 'setPassword'])
+                    ->middleware(['permission:edit users'])
+                    ->name('password');
+                Route::patch('user/status/{user}', [UserController::class, 'updateStatus'])
+                    ->middleware(['permission:edit users'])
+                    ->name('status');
+                Route::patch('user/visibility/{user}', [UserController::class, 'updateVisibility'])
+                    ->middleware(['permission:edit users'])
+                    ->name('visibility');
+                Route::patch('user/payoutsettings/{user}', [UserController::class, 'updatePayoutSettings'])
+                    ->middleware(['permission:edit users'])
+                    ->name('payoutsettings');
+                Route::put('user/profile/{user}', [UserController::class, 'updateProfile'])
+                    ->middleware(['permission:edit users'])
+                    ->name('profile');
+                Route::put('user/info/{user}', [UserController::class, 'updateInfo'])
+                    ->middleware(['permission:edit users'])
+                    ->name('userinfo');
+                Route::put('user/general/{user}', [UserController::class, 'updateGeneral'])
+                    ->middleware(['permission:edit users'])
+                    ->name('general');
+                Route::put('user/payouts/{user}', [UserController::class, 'updatePayouts'])
+                    ->middleware(['permission:edit users'])
+                    ->name('payouts');
+            });
         });
 
         Route::name('alert.')->group(function () {
