@@ -21,10 +21,6 @@ class GlobalSearchService
             $users = [];
         }
 
-        if (mb_substr($searchQuery, 0, 1) === '@') {
-            $users = self::searchUsernames(trim($searchQuery, '@'));
-        }
-
         if (strlen($searchQuery) === 24 && strspn($searchQuery, '0123456789ABCDEFabcdef') === 24) {
             $orders = Order::query()->user($searchQuery)->limit(5)->get()->merge(
                 Order::query()->order($searchQuery)->get()
@@ -54,6 +50,10 @@ class GlobalSearchService
 
     private static function searchUsers(string $searchQuery): Collection
     {
+        if (mb_substr($searchQuery, 0, 1) === '@') {
+            return User::query()->where('username', 'LIKE', trim($searchQuery, '@').'%')->limit(5)->get();
+        }
+
         $users = User::query()->textSearch($searchQuery)->limit(5)->get();
 
         if (filter_var($searchQuery, FILTER_VALIDATE_IP) !== false) {
@@ -61,13 +61,6 @@ class GlobalSearchService
                 $users
             );
         }
-
-        return $users;
-    }
-
-    private static function searchUsernames(string $searchQuery): Collection
-    {
-        $users = User::query()->where('username', 'LIKE', $searchQuery.'%')->limit(5)->get();
 
         return $users;
     }

@@ -340,7 +340,6 @@
             </div>
         </div>
     </div>
-
     <div id="activateModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->

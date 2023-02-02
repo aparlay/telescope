@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Helpers\Country;
+use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
