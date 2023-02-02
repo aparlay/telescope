@@ -77,11 +77,11 @@ class PurgeMediaJob implements ShouldQueue
         }
 
         if (Storage::disk('gc-videos')->fileExists($media->file)) {
-            Storage::disk('gc-videos')->rename($media->file, $media->delete_prefix.$media->file);
+            Storage::disk('gc-videos')->move($media->file, $media->delete_prefix.$media->file);
         }
 
         if (Storage::disk('gc-covers')->fileExists($media->cover_file)) {
-            Storage::disk('gc-covers')->rename($media->cover_file, $media->delete_prefix.$media->cover_file);
+            Storage::disk('gc-covers')->move($media->cover_file, $media->delete_prefix.$media->cover_file);
         }
 
         BunnyCdnPurgeUrlJob::dispatch($this->mediaId);
