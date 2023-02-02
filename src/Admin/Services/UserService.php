@@ -172,7 +172,7 @@ class UserService extends AdminBaseService
 
         $dataBooleans = [
             'email_verified' => $request->boolean('email_verified'),
-            'visibility' => (int) $request->boolean('visibility')
+            'visibility' => (int) $request->boolean('visibility'),
         ];
 
         $data = array_merge($data, $dataBooleans);
