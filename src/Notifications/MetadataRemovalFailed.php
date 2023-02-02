@@ -21,7 +21,8 @@ class MetadataRemovalFailed extends Notification
 
     public function toSlack($notifiable): SlackMessage
     {
-        $message = 'Metadata removal failed for file ' . pathinfo($this->file, PATHINFO_FILENAME) . '.' . pathinfo($this->file, PATHINFO_EXTENSION);
+        $message = 'Metadata removal failed for file '.pathinfo($this->file, PATHINFO_FILENAME).'.'.pathinfo($this->file, PATHINFO_EXTENSION);
+
         return (new SlackMessage())
             ->to(config('app.slack_job_error'))
             ->content($message)
