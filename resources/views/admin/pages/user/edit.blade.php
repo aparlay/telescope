@@ -495,7 +495,6 @@
     <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/uploadMedia.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
-    @livewireScripts
     <livewire:modals/>
     <script src="/js/admin.js"></script>
 
