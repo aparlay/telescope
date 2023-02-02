@@ -122,10 +122,3 @@
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Is Staff Mo</a>
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Debug Enabled</a>
 </div>
-
-<livewire:direct-chat :userId="$user->_id"
-    :username="$user->username"
-    :adminUserId="auth()->user()->_id"
-    :adminUsername="auth()->user()->username"
-    :category="ChatCategory::SUPPORT->value"
-    :headerText="'Support Chat'"/>
