@@ -1,6 +1,7 @@
 @php
     use Aparlay\Chat\Models\Chat;
     use Aparlay\Core\Models\MediaComment;
+    use Aparlay\Core\Models\Enums\UserVerificationStatus;
 @endphp
 @extends('adminlte::page')
 @section('title', 'User Profile')
@@ -68,9 +69,11 @@
                                 <li class="nav-item d-none">
                                     <a class="nav-link" data-toggle="tab" href="#tab-cards">Cards</a>
                                 </li>
-                                <li class="nav-item d-none">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-verification">Verification</a>
-                                </li>
+                                @if(in_array($user->verification_status, [UserVerificationStatus::PENDING->value, UserVerificationStatus::UNDER_REVIEW->value]))
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tab-verification">Verification</a>
+                                    </li>
+                                @endif
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane container active" id="tab-info">
@@ -95,9 +98,11 @@
                                 <div class="d-none tab-pane container fade" id="tab-cards">
                                     @include('default_view::admin.pages.user.tabs.cards', ['user' => $user])
                                 </div>
-                                <div class="tab-pane container fade" id="tab-verification">
-{{--                                    @include('default_view::admin.components.user-verification')--}}
-                                </div>
+                                @if(in_array($user->verification_status, [UserVerificationStatus::PENDING->value, UserVerificationStatus::UNDER_REVIEW->value]))
+                                    <div class="tab-pane container fade" id="tab-verification">
+                                        <livewire:user-verification :userId="$user->_id"/>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
