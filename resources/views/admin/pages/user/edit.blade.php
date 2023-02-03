@@ -43,10 +43,6 @@
                     @include('default_view::admin.pages.user.tabs.edit.menu')
                 </div>
                 <div class="col-md-9 pl-2">
-                    <div class="">
-                        @include('default_view::admin.pages.user.tabs.edit.statistics')
-                    </div>
-
                     <div class="card card-default">
                         <div class="card-body">
                             <ul class="nav nav-tabs">
