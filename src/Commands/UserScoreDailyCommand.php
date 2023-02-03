@@ -16,32 +16,31 @@ class UserScoreDailyCommand extends Command
 
     public function handle()
     {
-        Media::where('is_fake', ['$exists' => false])
-            ->date(DT::utcDateTime(['d' => -6]), DT::utcDateTime(['d' => -1]))
-            ->availableForFollower()
-            ->each(function ($media) {
-                $user = $media->creatorObj;
-                $scores = $user->scores;
-                $oldScore = $scores['sort'];
-                $scores['sort'] = 0;
+        $userQuery = User::enable()
+            ->date(DT::utcDateTime(['d' => -1]), null, 'updated_at')
+            ->whereNull('is_fake');
+        $bar = $this->output->createProgressBar($userQuery->count());
+        foreach ($userQuery->lazy() as $user) {
+            $scores = $user->scores;
+            $oldScore = $scores['sort'];
+            $scores['sort'] = 0;
 
-                $count = Media::creator($user->_id)->availableForOwner()->count();
-                if ($count > 0) {
-                    $score = Media::creator($user->_id)->availableForOwner()->sum('sort_scores.default');
-                    $scores['sort'] = $score / $count;
-                }
-                $user->scores = $scores;
+            $count = Media::creator($user->_id)->availableForOwner()->count();
+            if ($count > 0) {
+                $score = Media::creator($user->_id)->availableForOwner()->sum('sort_scores.default');
+                $scores['sort'] = $score / $count;
+            }
+            $user->scores = $scores;
 
-                if ($oldScore != $scores['sort']) {
-                    $msg5 = '<fg=yellow;options=bold>';
-                    $msg5 .= '  - total set to '.$user->scores['sort'].'</>';
-                    $msg5 .= PHP_EOL;
-                    $this->line($msg5);
+            if ($oldScore != $scores['sort']) {
 
-                    $user->update(['scores' => $scores]);
-                }
-            });
+                $user->update(['scores' => $scores]);
+            }
+            $bar->advance();
+        }
 
+        $bar->finish();
+        $this->line('');
         return self::SUCCESS;
     }
 }
