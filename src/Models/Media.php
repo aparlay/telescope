@@ -9,6 +9,7 @@ use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\MediaFactory;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Helpers\NumberHelper;
 use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
@@ -874,13 +875,22 @@ class Media extends BaseModel
      */
     public function likesNotificationMessage(): string
     {
-        $mediaLikes = MediaLike::query()
-            ->with('creatorObj')
-            ->media($this->_id)
-            ->recent()
-            ->limit(2)
-            ->get();
-        $twoUserExists = isset($mediaLikes[0]->creatorObj->username, $mediaLikes[1]->creatorObj->username);
+        $mediaLikes = [];
+        foreach (MediaLike::query()->media($this->_id)->recent()->lazy() as $mediaLike) {
+            if ((string) $mediaLike->creator['_id'] !== (string) $this->creator['_id']) {
+                $mediaLikes[(string) $mediaLike->creator['_id']] = $mediaLike;
+            }
+
+            if (count($mediaLikes) > 2) {
+                break;
+            }
+        }
+
+        $mediaLikes = array_values($mediaLikes);
+        $twoUserExists = isset(
+            $mediaLikes[0]->creatorObj->username,
+            $mediaLikes[1]->creatorObj->username,
+        );
 
         return match (true) {
             ($this->like_count > 2 && $twoUserExists) => __(
@@ -888,7 +898,7 @@ class Media extends BaseModel
                 [
                     'username1' => $mediaLikes[0]->creatorObj->username,
                     'username2' => $mediaLikes[1]->creatorObj->username,
-                    'count' => $this->like_count - 2,
+                    'count' => NumberHelper::shorten($this->like_count - 2),
                 ]
             ),
             ($this->like_count === 2 && $twoUserExists) => __(
@@ -898,7 +908,10 @@ class Media extends BaseModel
                     'username2' => $mediaLikes[1]->creatorObj->username,
                 ]
             ),
-            default => __(':username liked your video.', ['username' => $mediaLikes[0]->creatorObj->username])
+            default => __(
+                ':username liked your video.',
+                ['username' => $mediaLikes[0]->creatorObj->username]
+            )
         };
     }
 
@@ -907,13 +920,22 @@ class Media extends BaseModel
      */
     public function commentsNotificationMessage(): string
     {
-        $mediaComments = MediaComment::query()
-            ->with('creatorObj')
-            ->media($this->_id)
-            ->recent()
-            ->limit(2)
-            ->get();
-        $twoUserExists = isset($mediaComments[0]->creatorObj->username, $mediaComments[1]->creatorObj->username);
+        $mediaComments = [];
+        foreach (MediaComment::query()->with('creatorObj')->media($this->_id)->whereIdNeq($this->creator['_id'], 'creator._id')->recent()->lazy() as $mediaComment) {
+            if ((string) $mediaComment->creator['_id'] !== (string) $this->creator['_id']) {
+                $mediaComments[(string) $mediaComment->creator['_id']] = $mediaComment;
+            }
+
+            if (count($mediaComments) > 2) {
+                break;
+            }
+        }
+
+        $mediaComments = array_values($mediaComments);
+        $twoUserExists = isset(
+            $mediaComments[0]->creatorObj->username,
+            $mediaComments[1]->creatorObj->username
+        );
 
         return match (true) {
             ($this->comment_count > 2 && $twoUserExists) => __(
@@ -921,7 +943,7 @@ class Media extends BaseModel
                 [
                     'username1' => $mediaComments[0]->creatorObj->username,
                     'username2' => $mediaComments[1]->creatorObj->username,
-                    'count' => $this->comment_count - 2,
+                    'count' => NumberHelper::shorten($this->comment_count - 2),
                 ]
             ),
             ($this->comment_count === 2 && $twoUserExists) => __(
@@ -931,7 +953,10 @@ class Media extends BaseModel
                     'username2' => $mediaComments[1]->creatorObj->username,
                 ]
             ),
-            default => __(':username liked your video.', ['username' => $mediaComments[0]->creatorObj->username])
+            default => __(
+                ':username commented on your video.',
+                ['username' => $mediaComments[0]->creatorObj->username]
+            ),
         };
     }
 

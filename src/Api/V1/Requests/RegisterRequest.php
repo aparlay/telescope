@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Requests;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\BlackList;
 use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 use MongoDB\BSON\ObjectId;
 
 /**
@@ -103,6 +105,13 @@ class RegisterRequest extends FormRequest
             };
 
             $this->avatar = Cdn::avatar($filename);
+        }
+
+        $domain = Str::after($this->email, '@');
+        if (BlackList::query()->temporaryEmailService()->payload($domain)->first()) {
+            throw ValidationException::withMessages([
+                'username' => 'Sorry, you cannot register with a temporary email address.',
+            ]);
         }
 
         /* Set the Default Values and required to be input parameters */
