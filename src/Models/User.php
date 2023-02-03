@@ -114,7 +114,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read string $verification_status_label
  * @property-read bool   $is_eligible_for_verification
  *
- * @method static |self|Builder date(UTCDateTime $startAt, UTCDateTime $endAt, string $field = 'created_at') filter by date
+ * @method static |self|Builder date(?UTCDateTime $startAt, ?UTCDateTime $endAt, string $field = 'created_at') filter by date
  * @method static |self|Builder active() get activated user
  * @method static |self|Builder idVerified() get id verified user
  * @method static |self|Builder username(string $username) get user
