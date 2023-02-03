@@ -17,26 +17,26 @@
 
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#notes-all">All</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#notes-notes">Notes</a>
+            <a class="nav-link active" data-toggle="tab" href="#notes-notes">Notes</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#notes-logs">Logs</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#notes-audit">Audit</a>
+        </li>
     </ul>
 
-    
+
     <div class="tab-content">
-        <div class="tab-pane container active" id="notes-all">
-            <livewire:notes-table :userId="$user->_id"/>
-        </div>
-        <div class="tab-pane container fade" id="notes-notes">
+        <div class="tab-pane container active" id="notes-notes">
             <livewire:notes-table :userId="$user->_id" :category="NoteCategory::NOTE->value"/>
         </div>
         <div class="tab-pane container fade" id="notes-logs">
             <livewire:notes-table :userId="$user->_id" :category="NoteCategory::LOG->value"/>
+        </div>
+        <div class="tab-pane container fade" id="notes-audit">
+            <livewire:audits-table :auditableType="'User'" :auditableId="(string) $user->_id"/>
         </div>
     </div>
 </div>
