@@ -33,7 +33,6 @@ class UserScoreDailyCommand extends Command
             $user->scores = $scores;
 
             if ($oldScore != $scores['sort']) {
-
                 $user->update(['scores' => $scores]);
             }
             $bar->advance();
@@ -41,6 +40,7 @@ class UserScoreDailyCommand extends Command
 
         $bar->finish();
         $this->line('');
+
         return self::SUCCESS;
     }
 }
