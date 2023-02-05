@@ -3,6 +3,7 @@
     use Aparlay\Core\Models\Enums\UserVisibility;
     use Aparlay\Chat\Models\Enums\ChatCategory;
     use Aparlay\Chat\Admin\Models\Chat;
+    use Aparlay\Core\Models\Enums\UserVerificationStatus;
 @endphp
 
 <div class="row text-center">
@@ -10,8 +11,12 @@
 </div>
 
 <div class="row">
-    <div class="col-12">
-        <span class="mb-2 text-muted"><b>{{ "@" . $user->username }}</b></span>
+    <div class="col-12 mb-2">
+        <span class="mb-2 text-muted"><b>{{ "@" . $user->username }}</b>
+            @if($user->verification_status === UserVerificationStatus::VERIFIED->value)
+                <img src="{{ asset('admin/assets/img/verify-16.png') }}" alt="Verified">
+            @endif
+        </span>
     </div>
     <div class="col-6 border-right" style="font-size: 14px">
         <span class="text-muted text-small">Profile Views: <span class="float-right">{{ $user->profile_views ?? 0 }}</span></span><br>
