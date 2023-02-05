@@ -36,7 +36,7 @@
             <livewire:notes-table :userId="$user->_id" :category="NoteCategory::LOG->value"/>
         </div>
         <div class="tab-pane container fade" id="notes-audit">
-            <livewire:audits-table :userId="$user->_id"/>
+            <livewire:audits-table :auditableType="'User'" :auditableId="(string) $user->_id"/>
         </div>
     </div>
 </div>
