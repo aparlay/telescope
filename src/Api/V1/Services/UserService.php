@@ -10,12 +10,14 @@ use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\DeleteAvatar;
+use Aparlay\Core\Jobs\DeleteMediaMetadata;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\UserGender;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Jenssegers\Agent\Agent;
@@ -90,7 +92,14 @@ class UserService
             $avatarUrl = str_replace('api.waptap.com', 'api1.waptap.com', Storage::disk('public')->url('avatars/'.$avatar));
             $this->userRepository->update(['avatar' => $avatarUrl], $user->_id);
 
-            UploadAvatar::dispatchIf(! config('app.is_testing'), (string) $user->_id, 'avatars/'.$avatar)->delay(10);
+            if (! config('app.is_testing')) {
+                Bus::chain([
+                    new DeleteMediaMetadata(basename('avatars/'.$avatar)),
+                    (new UploadAvatar((string) $user->_id, 'avatars/'.$avatar))->delay(10)
+                ])
+                ->onQueue(config('app.server_specific_queue'))
+                ->dispatch();
+            }
             DeleteAvatar::dispatchIf(! str_contains($oldFileName, 'default_'), basename($oldFileName))->delay(100);
         }
 
