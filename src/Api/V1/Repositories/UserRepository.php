@@ -59,6 +59,34 @@ class UserRepository
     }
 
     /**
+     * Check user's login eligibility
+     *
+     * @return bool
+     */
+    public function isUserEligibleForLogin(): bool
+    {
+        switch ($this->model->status) {
+            case UserStatus::BLOCKED->value:
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user banned.');
+
+            // no break
+            case UserStatus::DEACTIVATED->value:
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user account not found.');
+
+            // no break
+            case UserStatus::SUSPENDED->value:
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user suspended.');
+
+            // no break
+            default:
+                return true;
+        }
+    }
+
+    /**
      * Responsible to check if OTP is required to sent to the user, based on user_status and otp settings.
      *
      * @return bool

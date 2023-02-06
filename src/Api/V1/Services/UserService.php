@@ -171,6 +171,19 @@ class UserService
     }
 
     /**
+     * Check user's login eligibility
+     *
+     * @param  User|Authenticatable  $user
+     * @return bool
+     */
+    public function isUserEligibleForLogin(User|Authenticatable $user): bool
+    {
+        $this->userRepository = new UserRepository($user);
+
+        return $this->userRepository->isUserEligibleForLogin();
+    }
+
+    /**
      * Responsible for delete user account.
      *
      * @param  UserDeleteDTO  $userDeleteDTO

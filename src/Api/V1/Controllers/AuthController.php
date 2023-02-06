@@ -123,7 +123,7 @@ class AuthController extends Controller
         }
 
         /* Through exception for suspended/banned/NotFound accounts */
-        $this->userService->isUserEligible($user);
+        $this->userService->isUserEligibleForLogin($user);
 
         /* Validate the OTP or Throw exception if OTP is incorrect */
         if ($this->userService->requireOtp()) {
@@ -153,7 +153,7 @@ class AuthController extends Controller
 
         if (! empty($user)) {
             /* Through exception for suspended/banned/NotFound accounts */
-            $this->userService->isUserEligible($user);
+            $this->userService->isUserEligibleForLogin($user);
 
             // Send the OTP or Throw exception if send OTP limit is reached
             $this->otpService->sendOtp($user, $request->header('X-DEVICE-ID'));
@@ -197,7 +197,7 @@ class AuthController extends Controller
 
         /** Through exception for suspended/banned/NotFound accounts */
         $user = auth()->user();
-        $this->userService->isUserEligible($user);
+        $this->userService->isUserEligibleForLogin($user);
 
         if ($this->userService->requireOtp() && $request->otp) {
             $this->otpService->validateOtp($request->otp, $request->username);
