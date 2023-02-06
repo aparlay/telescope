@@ -50,8 +50,9 @@ class DeleteMediaMetadata implements ShouldQueue
     public function handle()
     {
         $storage = Storage::disk('upload');
-        if (!$storage->exists($this->file)) {
-            Log::error('File not found: ' .$storage->path($this->file));
+        if (! $storage->exists($this->file)) {
+            Log::error('File not found: '.$storage->path($this->file));
+
             return;
         }
 
