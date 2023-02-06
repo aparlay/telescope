@@ -9,13 +9,11 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Admin\Requests\MediaUpdateRequest;
 use Aparlay\Core\Admin\Requests\MediaUpdateScoreRequest;
 use Aparlay\Core\Helpers\DT;
-use Aparlay\Core\Jobs\DeleteMediaMetadata;
 use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Notifications\MediaScoreChanged;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
@@ -210,12 +208,7 @@ class MediaService extends AdminBaseService
     public function reupload($media)
     {
         $this->mediaRepository->update(['file' => request()->input('file')], $media->_id);
-        Bus::chain([
-            new DeleteMediaMetadata(request()->input('file')),
-            new UploadMedia($media->creator['_id'], $media->_id, request()->input('file')),
-        ])
-        ->onQueue(config('app.server_specific_queue'))
-        ->dispatch();
+        UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'));
     }
 
     /**
