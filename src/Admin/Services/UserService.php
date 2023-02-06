@@ -245,7 +245,7 @@ class UserService extends AdminBaseService
 
             if (! config('app.is_testing')) {
                 Bus::chain([
-                    new DeleteMediaMetadata(basename('avatars/'.$avatar), 'public'),
+                    new DeleteMediaMetadata('avatars/'.$avatar, 'public'),
                     (new UploadAvatar((string) $user->_id, 'avatars/'.$avatar))->delay(10),
                 ])
                 ->onQueue(config('app.server_specific_queue'))
