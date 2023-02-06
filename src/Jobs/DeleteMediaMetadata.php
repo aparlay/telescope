@@ -36,7 +36,7 @@ class DeleteMediaMetadata implements ShouldQueue
      * @return void
      * @throws Exception
      */
-    public function __construct(public string $file)
+    public function __construct(public string $file, public string $disk = 'upload')
     {
         $this->onQueue(config('app.server_specific_queue'));
     }
@@ -49,7 +49,7 @@ class DeleteMediaMetadata implements ShouldQueue
      */
     public function handle()
     {
-        $storage = Storage::disk('upload');
+        $storage = Storage::disk($this->disk);
         if (! $storage->exists($this->file)) {
             Log::error('File not found: '.$storage->path($this->file));
 
