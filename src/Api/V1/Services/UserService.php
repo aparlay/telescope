@@ -18,8 +18,8 @@ use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Jenssegers\Agent\Agent;
@@ -98,7 +98,7 @@ class UserService
             if (! config('app.is_testing')) {
                 Bus::chain([
                     new DeleteMediaMetadata(basename('avatars/'.$avatar)),
-                    (new UploadAvatar((string) $user->_id, 'avatars/'.$avatar))->delay(10)
+                    (new UploadAvatar((string) $user->_id, 'avatars/'.$avatar))->delay(10),
                 ])
                 ->onQueue(config('app.server_specific_queue'))
                 ->dispatch();
