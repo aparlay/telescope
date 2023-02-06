@@ -50,13 +50,11 @@ class DeleteMediaMetadata implements ShouldQueue
     public function handle()
     {
         $storage = Storage::disk('upload');
-        if (! $storage->exists($this->file)) {
-            Log::debug('File not found: '.$storage->path($this->file));
-
+        if (!$storage->exists($this->file)) {
+            Log::error('File not found: ' .$storage->path($this->file));
             return;
         }
 
-        Log::debug('Remove Metadata: '.$storage->path($this->file));
         $process = new Process(['exiftool', '-all=', '-overwrite_original', $storage->path($this->file)]);
         $process->run();
 
