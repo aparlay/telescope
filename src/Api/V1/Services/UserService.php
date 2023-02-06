@@ -159,7 +159,7 @@ class UserService
     }
 
     /**
-     * Check user's login eligibility
+     * Check user's login eligibility.
      *
      * @param  User|Authenticatable  $user
      * @return bool

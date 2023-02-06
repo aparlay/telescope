@@ -59,7 +59,7 @@ class UserRepository
     }
 
     /**
-     * Check user's login eligibility
+     * Check user's login eligibility.
      *
      * @return bool
      */
@@ -70,17 +70,17 @@ class UserRepository
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user banned.');
 
-            // no break
+                // no break
             case UserStatus::DEACTIVATED->value:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user account not found.');
 
-            // no break
+                // no break
             case UserStatus::SUSPENDED->value:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user suspended.');
 
-            // no break
+                // no break
             default:
                 return true;
         }
