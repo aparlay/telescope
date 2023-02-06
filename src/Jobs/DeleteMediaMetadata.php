@@ -4,12 +4,12 @@ namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
-use Aparlay\Core\Notifications\MetadataRemovalFailed;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 use Throwable;
@@ -19,8 +19,6 @@ class DeleteMediaMetadata implements ShouldQueue
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
-
-    public array $extensionsToRemove = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg', 'svgz', 'cgm', 'djv', 'djvu', 'ico', 'ief', 'jpe', 'pbm', 'pgm', 'pnm', 'ppm', 'ras', 'rgb', 'tif', 'tiff', 'wbmp', 'xbm', 'xpm', 'xwd'];
 
     /**
      * The number of times the job may be attempted.
@@ -40,6 +38,7 @@ class DeleteMediaMetadata implements ShouldQueue
      */
     public function __construct(public string $file)
     {
+        $this->onQueue(config('app.server_specific_queue'));
     }
 
     /**
@@ -50,16 +49,19 @@ class DeleteMediaMetadata implements ShouldQueue
      */
     public function handle()
     {
-        if (! in_array(pathinfo($this->file, PATHINFO_EXTENSION), $this->extensionsToRemove)) {
+        $storage = Storage::disk('upload');
+        if (!$storage->exists($this->file)) {
+            Log::debug('File not found: ' .$storage->path($this->file));
             return;
         }
 
-        $storage = Storage::disk('upload');
+        Log::debug('Remove Metadata: ' .$storage->path($this->file));
         $process = new Process(['exiftool', '-all=', '-overwrite_original', $storage->path($this->file)]);
         $process->run();
 
-        if (! $process->isSuccessful() && ($user = User::admin()->first()) !== null) {
-            $user->notify(new MetadataRemovalFailed($this->file));
+        if (! $process->isSuccessful()) {
+            Log::error('Metadata removal failed for file '.$this->file);
+            Log::error($process->getErrorOutput());
         }
     }
 
