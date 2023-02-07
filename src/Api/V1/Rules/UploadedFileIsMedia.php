@@ -31,12 +31,15 @@ class UploadedFileIsMedia implements Rule
 
         return in_array($mimeType, [
             'video/x-msvideo',
+            'video/quicktime',
+            'video/x-m4v',
             'video/mp4',
+            'video/webm',
             'video/mpeg',
             'video/ogg',
             'video/3gpp',
             'video/3gpp2',
-            'video/quicktime',
+
             'image/jpeg',
             'image/png',
             'image/webp',
