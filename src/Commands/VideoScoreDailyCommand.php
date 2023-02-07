@@ -32,10 +32,6 @@ class VideoScoreDailyCommand extends Command
         $bar->finish();
         MediaForceSortPositionRecalculate::dispatch();
 
-        Media::CachePublicExplicitMediaIds();
-        Media::CachePublicToplessMediaIds();
-        Media::CachePublicMediaIds();
-
         return self::SUCCESS;
     }
 }

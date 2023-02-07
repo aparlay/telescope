@@ -37,10 +37,6 @@ class VideoScoreCommand extends Command
 
         MediaForceSortPositionRecalculate::dispatch();
 
-        Media::CachePublicExplicitMediaIds();
-        Media::CachePublicToplessMediaIds();
-        Media::CachePublicMediaIds();
-
         return self::SUCCESS;
     }
 }
