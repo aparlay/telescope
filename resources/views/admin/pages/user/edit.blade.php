@@ -2,6 +2,7 @@
     use Aparlay\Chat\Models\Chat;
     use Aparlay\Core\Models\MediaComment;
     use Aparlay\Core\Models\Enums\UserVerificationStatus;
+    use Aparlay\Core\Models\Media;
 @endphp
 @extends('adminlte::page')
 @section('title', 'User Profile')
@@ -51,7 +52,7 @@
                                     <a class="nav-link active" data-toggle="tab" href="#tab-info">Info</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-media">Media <span class="badge badge-primary">{{ $user->stats['counters']['medias'] }}</span></a>
+                                    <a class="nav-link" data-toggle="tab" href="#tab-media">Media <span class="badge badge-primary">{{ Media::query()->creator((string) $user->_id)->count() }}</span></a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#tab-comments">Comments <span class="badge badge-primary">{{ MediaComment::query()->creator((string) $user->_id)->count() }}</span></a>
@@ -80,7 +81,6 @@
                                 </div>
                                 <div class="tab-pane container fade" id="tab-media">
                                     @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
-                                    @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
                                 </div>
                                 <div class="tab-pane container fade" id="tab-comments">
                                     <livewire:media-comments-table :userId="$user->_id"/>
