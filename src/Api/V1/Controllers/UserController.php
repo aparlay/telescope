@@ -147,6 +147,10 @@ class UserController extends Controller
     {
         $user = User::username($username)->active()->firstOrFail();
 
+        if ($this->userService->isUserEligible($user)) {
+            return $this->response(new UserResource($user));
+        }
+
         return $this->show($user);
     }
 }

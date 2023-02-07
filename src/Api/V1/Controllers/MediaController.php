@@ -159,6 +159,7 @@ class MediaController extends Controller
     public function showBySlug(string $slug = null): Response
     {
         $media = Media::slug($slug)->firstOrFail();
+        $this->mediaService->incrementMediaVisitCounter([$media->_id]);
 
         return $this->show($media);
     }
