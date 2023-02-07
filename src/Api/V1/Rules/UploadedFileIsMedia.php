@@ -36,6 +36,7 @@ class UploadedFileIsMedia implements Rule
             'video/ogg',
             'video/3gpp',
             'video/3gpp2',
+            'video/quicktime',
             'image/jpeg',
             'image/png',
             'image/webp',
