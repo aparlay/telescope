@@ -56,7 +56,7 @@ class UserMedia extends BaseIndexComponent
     {
         return view('default_view::admin.pages.user.tabs.media-categories.user-media', [
             'medias' => $this->index(),
-            'user' => User::find($this->creatorId)
+            'user' => User::find($this->creatorId),
         ]);
     }
 }

@@ -225,7 +225,7 @@ class CoreServiceProvider extends ServiceProvider
             'dashboard.funnel' => Funnel::class,
             'dashboard.table' => Table::class,
             'dashboard.top-credit-balance' => TopCreditBalance::class,
-            'user-media' => UserMedia::class
+            'user-media' => UserMedia::class,
         ];
 
         foreach ($components as $name => $class) {
