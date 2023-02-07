@@ -123,7 +123,6 @@ class UserObserver extends BaseModelObserver
         if ($model->wasChanged('status') && $model->status != $model->getOriginal('status')) {
             switch ($model->status) {
                 case UserStatus::DEACTIVATED->value:
-                    $model->notify(new UserDeactivateAccount());
                     $model->unsearchable();
                     UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::USER_DELETED->value);
                     DeleteUserConnect::dispatch((string) $model->_id);
