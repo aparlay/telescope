@@ -11,6 +11,7 @@
             <h3 class="card-title p-2">Profile</h3>
             <div class="card-tools">
                 <button type="button" class="btn text-blue card-edit" data-edit="user-profile">Edit <i class="fas fa-pen"></i></button>
+                <button type="button" class="btn text-danger card-cancel d-none" data-edit="user-profile">Cancel <i class="fas fa-times"></i></button>
                 <button type="submit" class="btn text-blue card-save d-none">Save <i class="fas fa-save"></i></button>
                 <button
                     type="button"

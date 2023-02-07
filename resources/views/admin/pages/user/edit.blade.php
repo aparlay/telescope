@@ -500,8 +500,20 @@
                 $('#' + card + ' .data-show').addClass('d-none');
 
                 $('#' + card + ' button.card-save').removeClass('d-none');
+                $('#' + card + ' button.card-cancel').removeClass('d-none');
                 $('#' + card + ' .data-edit').removeClass('d-none');
             });
+
+            $('.user-profile-card button.card-cancel').on('click', function() {
+                let card = $(this).data('edit');
+
+                $('#' + card + ' button.card-edit').removeClass('d-none');
+                $('#' + card + ' .data-show').removeClass('d-none');
+
+                $('#' + card + ' button.card-save').addClass('d-none');
+                $('#' + card + ' button.card-cancel').addClass('d-none');
+                $('#' + card + ' .data-edit').addClass('d-none');
+            })
         });
     </script>
 @endsection
