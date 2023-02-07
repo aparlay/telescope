@@ -60,6 +60,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         /* Optional Auth Group */
         Route::middleware(['cookies-auth', 'optional-auth'])->group(function () {
             Route::match(['head', 'get'], '/', [MediaController::class, 'index'])->name('list');
+            Route::match(['head', 'get'], '/share/{slug}', [MediaController::class, 'showBySlug'])->name('share.slug');
             Route::match(['head', 'get'], '/{media}', [MediaController::class, 'show'])->name('show');
         });
     });
@@ -68,11 +69,12 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
         Route::get('/{type}', [UserController::class, 'index'])
             ->where(['type' => '(likes|blocks|followers|followings|hashtags)'])->name('list');
 
-        Route::middleware(['cookies-auth', 'optional-auth'])
-            ->post('/{user}/report', [ReportController::class, 'user'])->name('report');
-        Route::middleware(['cookies-auth', 'optional-auth'])
-            ->match(['head', 'get'], '/{user}/media', [MediaController::class, 'listByUser'])
-            ->name('media.list');
+        /* Optional Auth Group */
+        Route::middleware(['cookies-auth', 'optional-auth'])->group(function () {
+            Route::match(['head', 'get'], '/share/{username}', [UserController::class, 'showByUsername'])->name('share.username');
+            Route::post('/{user}/report', [ReportController::class, 'user'])->name('report');
+            Route::match(['head', 'get'], '/{user}/media', [MediaController::class, 'listByUser'])->name('media.list');
+        });
 
         /* Authentication Group with user prifix */
         Route::middleware(['auth:api', 'cookies-auth'])->group(function () {
