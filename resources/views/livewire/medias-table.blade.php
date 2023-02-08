@@ -18,8 +18,7 @@
                     'btn-outline-info' => !in_array(Arr::get($sort, 'sort_scores.guest'), [1, -1])])
                             wire:model="sort.sort_scores.guest"
                             wire:click="sort('sort_scores.guest', -1)">
-                        Ordered By New
-                        Guest {{ Arr::get($sort, 'sort_scores.guest') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.guest') == -1 ? '↓' : ''}}
+                        Order By New Guest {{ Arr::get($sort, 'sort_scores.guest') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.guest') == -1 ? '↓' : ''}}
                     </button>
                     <button @class([
                         'btn btn-sm',
@@ -27,8 +26,7 @@
                         'btn-outline-dark' => !in_array(Arr::get($sort, 'sort_scores.returned'), [1, -1])])
                             wire:model="sort.sort_scores.returned"
                             wire:click="sort('sort_scores.returned', -1)">
-                        Ordered By
-                        Returned {{ Arr::get($sort, 'sort_scores.returned') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.returned') == -1 ? '↓' : ''}}
+                        Order By Returned {{ Arr::get($sort, 'sort_scores.returned') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.returned') == -1 ? '↓' : ''}}
                     </button>
                     <button @class([
                         'btn btn-sm',
@@ -36,8 +34,7 @@
                         'btn-outline-primary' => !in_array(Arr::get($sort, 'sort_scores.registered'), [1, -1])])
                             wire:model="sort.sort_scores.registered"
                             wire:click="sort('sort_scores.registered', -1)">
-                        Ordered By
-                        Login {{ Arr::get($sort, 'sort_scores.registered') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.registered') == -1 ? '↓' : ''}}
+                        Order By Login {{ Arr::get($sort, 'sort_scores.registered') == 1 ? '↑' : ''}}{{ Arr::get($sort, 'sort_scores.registered') == -1 ? '↓' : ''}}
                     </button>
                 </h4>
             </div>
