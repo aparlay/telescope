@@ -10,9 +10,7 @@ use Aparlay\Core\Models\Enums\EmailStatus;
 use Aparlay\Core\Models\Enums\EmailType;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\ContactUs;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use MongoDB\BSON\ObjectId;
 
 class ContactUsController extends Controller
 {
@@ -37,12 +35,10 @@ class ContactUsController extends Controller
         $email = EmailRepository::create($request);
         Email::dispatch((string) $email->_id, config('mail.support_email'), 'Contact Us notification', EmailModel::TEMPLATE_EMAIL_CONTACTUS, $data);
 
-        if (! config('app.is_testing')) {
-            $user = User::admin()->first();
-            $user->notify(
-                new ContactUs($data['email'], $data['name'], 'Contact Us notification', $data['message'])
-            );
-        }
+        $user = User::admin()->first();
+        $user->notify(
+            new ContactUs($data['email'], $data['name'], 'Contact Us notification', $data['message'])
+        );
 
         return $this->response([], Response::HTTP_OK);
     }
