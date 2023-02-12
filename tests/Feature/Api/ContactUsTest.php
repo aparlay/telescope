@@ -31,7 +31,8 @@ class ContactUsTest extends ApiTestCase
 
         $user = User::admin()->first();
         Notification::assertSentTo(
-            [$user], ContactUs::class
+            [$user],
+            ContactUs::class
         );
     }
 }
