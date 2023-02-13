@@ -1,7 +1,3 @@
-@php
-    use Aparlay\Chat\Models\Chat;
-    use Aparlay\Core\Models\MediaComment;
-@endphp
 @extends('adminlte::page')
 @section('title', 'User Profile')
 @section('plugins.Datatables', true)
@@ -48,57 +44,50 @@
                     </div>
 
                     <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Info</h3>
+                        </div>
                         <div class="card-body">
-                            <ul class="nav nav-tabs">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#tab-info">Info</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-media">Media <span class="badge badge-primary">{{ $user->stats['counters']['medias'] }}</span></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-comments">Comments <span class="badge badge-primary">{{ MediaComment::query()->creator((string) $user->_id)->count() }}</span></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-chats">Chats <span class="badge badge-primary">{{ Chat::query()->activeFor((string) $user->_id)->participants((string) $user->_id)->count() }}</span></a>
-                                </li>
-                                <li class="nav-item d-none">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-payments">Payouts</a>
-                                </li>
-                                <li class="nav-item d-none">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-cards">Cards</a>
-                                </li>
-                                <li class="nav-item d-none">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-verification">Verification</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane container active" id="tab-info">
-                                    @include('default_view::admin.pages.user.tabs.edit.profile', ['user' => $user])
-                                    @include('default_view::admin.pages.user.tabs.edit.user-info', ['user' => $user])
-                                    @include('default_view::admin.pages.user.tabs.edit.general', ['user' => $user])
-                                    @include('default_view::admin.pages.user.tabs.edit.payouts', ['user' => $user])
-                                </div>
-                                <div class="tab-pane container fade" id="tab-media">
-                                    @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
-                                    @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
-                                </div>
-                                <div class="tab-pane container fade" id="tab-comments">
-                                    <livewire:media-comments-table :userId="$user->_id"/>
-                                </div>
-                                <div class="tab-pane container fade" id="tab-chats">
-                                    <livewire:chats-table :userId="$user->_id"/>
-                                </div>
-                                <div class="d-none tab-pane container fade" id="tab-payments">
-                                    @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
-                                </div>
-                                <div class="d-none tab-pane container fade" id="tab-cards">
-                                    @include('default_view::admin.pages.user.tabs.cards', ['user' => $user])
-                                </div>
-                                <div class="tab-pane container fade" id="tab-verification">
-{{--                                    @include('default_view::admin.components.user-verification')--}}
-                                </div>
+                            @include('default_view::admin.pages.user.tabs.edit.profile', ['user' => $user])
+                            @include('default_view::admin.pages.user.tabs.edit.user-info', ['user' => $user])
+                            @include('default_view::admin.pages.user.tabs.edit.general', ['user' => $user])
+                            @include('default_view::admin.pages.user.tabs.edit.payouts', ['user' => $user])
+                        </div>
+                    </div>
+
+                    <div class="card card-default collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Chats</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-down"></i></button>
                             </div>
+                        </div>
+                        <div class="card-body">
+                            <livewire:chats-table :userId="$user->_id"/>
+                        </div>
+                    </div>
+
+                    <div class="card card-default collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Comments</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-down"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <livewire:media-comments-table :userId="$user->_id"/>
                         </div>
                     </div>
 
@@ -139,6 +128,42 @@
 
                     <div class="card card-default collapsed-card">
                         <div class="card-header">
+                            <h3 class="card-title text-uppercase">Payouts</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-down"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @include('default_view::admin.pages.user.tabs.payouts', ['user' => $user])
+                        </div>
+                    </div>
+
+                    <div class="card card-default collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Cards</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-down"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @include('default_view::admin.pages.user.tabs.cards', ['user' => $user])
+                        </div>
+                    </div>
+
+                    <div class="card card-default collapsed-card">
+                        <div class="card-header">
                             <h3 class="card-title text-uppercase">Payments</h3>
                             <div class="card-tools">
                                 <button
@@ -151,6 +176,7 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            @include('default_view::admin.pages.user.tabs.payment', ['user' => $user])
                         </div>
                     </div>
 
@@ -186,6 +212,25 @@
                             </div>
                         </div>
                         <div class="card-body">
+                        </div>
+                    </div>
+
+                    <div class="card card-default collapsed-card">
+                        <div class="card-header">
+                            <h3 class="card-title text-uppercase">Media</h3>
+                            <div class="card-tools">
+                                <button
+                                    type="button"
+                                    class="btn btn-tool"
+                                    data-card-widget="collapse"
+                                    data-expand-icon="fa-chevron-down"
+                                    data-collapse-icon="fa-chevron-up"
+                                ><i class="fas fa-chevron-down"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @include('default_view::admin.pages.user.tabs.medias', ['user' => $user])
+                            @include('default_view::admin.pages.user.tabs.upload', ['user' => $user])
                         </div>
                     </div>
 
