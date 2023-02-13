@@ -1,6 +1,7 @@
 @php
     use Illuminate\Support\Arr;
     use Aparlay\Core\Models\Enums\UserVerificationStatus;
+    use Aparlay\Core\Models\Block;
 @endphp
 
 <form action="{{ route('core.admin.user.update.userinfo', ['user' => $user->_id]) }}" class="form-horizontal" method="post">
@@ -146,7 +147,7 @@
                     <label class="col-sm-2 col-form-label">Fraud Tier</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
-                            <p>--</p>
+                            <p>{{ \Aparlay\Core\Helpers\Country::getTier($user->country_alpha2) }}</p>
                         </div>
                     </div>
                 </div>
@@ -223,7 +224,13 @@
                     <label class="col-sm-2 col-form-label">Blocked Users</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
-                            <p>--</p>
+                            @if($user->stats['counters']['blocks'])
+                                @foreach(Block::query()->creator((string) $user->_id)->get() as $block)
+                                    <a class="badge badge-danger mr-1" href="{{ route('core.admin.user.view', $block->user_id) }}">{{ $block->userObj->username }}</a>
+                                @endforeach
+                            @else
+                                <p>None</p>
+                            @endif
                         </div>
                     </div>
                 </div>
