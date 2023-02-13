@@ -19,9 +19,9 @@
         </span>
     </div>
     <div class="col-6 border-right" style="font-size: 14px">
-        <span class="text-muted text-small">Profile Views: <span class="float-right">{{ $user->profile_views ?? 0 }}</span></span><br>
-        <hr class="my-1">
         <span class="text-muted text-small">Likes: <span class="float-right">{{ $user->stats['counters']['likes'] ?? 0 }}</span></span><br>
+        <hr class="my-1">
+        <span class="text-muted text-small">Following: <span class="float-right">{{ $user->stats['counters']['following'] ?? 0 }}</span></span><br>
         <hr class="my-1">
         <span class="text-muted text-small">Followers: <span class="float-right">{{ $user->stats['counters']['followers'] ?? 0 }}</span></span><br>
     </div>
