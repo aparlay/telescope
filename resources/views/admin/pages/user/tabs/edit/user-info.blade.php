@@ -213,7 +213,7 @@
                         <div class="mt-2 pl-4">
                             @if($user->stats['counters']['blocks'])
                                 @foreach(Block::query()->creator((string) $user->_id)->get() as $block)
-                                    <a class="badge badge-danger mr-1" href="{{ route('core.admin.user.view', $block->user_id) }}">{{ $block->userObj->username }}</a>
+                                    <a class="badge badge-danger mr-1" href="{{ route('core.admin.user.view', $block->userObj) }}">{{ $block->userObj->username }}</a>
                                 @endforeach
                             @else
                                 <p>None</p>
