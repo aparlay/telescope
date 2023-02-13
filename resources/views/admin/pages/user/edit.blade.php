@@ -52,13 +52,13 @@
                                     <a class="nav-link active" data-toggle="tab" href="#tab-info">Info</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-media">Media <span class="badge badge-primary">{{ Media::query()->creator((string) $user->_id)->count() }}</span></a>
+                                    <a class="nav-link" data-toggle="tab" href="#tab-media">Media</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-comments">Comments <span class="badge badge-primary">{{ MediaComment::query()->creator((string) $user->_id)->count() }}</span></a>
+                                    <a class="nav-link" data-toggle="tab" href="#tab-comments">Comments</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tab-chats">Chats <span class="badge badge-primary">{{ Chat::query()->activeFor((string) $user->_id)->participants((string) $user->_id)->count() }}</span></a>
+                                    <a class="nav-link" data-toggle="tab" href="#tab-chats">Chats</a>
                                 </li>
                                 <li class="nav-item d-none">
                                     <a class="nav-link" data-toggle="tab" href="#tab-payments">Payouts</a>
