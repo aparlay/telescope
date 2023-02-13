@@ -30,17 +30,13 @@ class UserScoreCommand extends Command
             $user->scores = $scores;
 
             if ($oldScore != $scores['sort']) {
-                $msg5 = '<fg=yellow;options=bold>';
-                $msg5 .= '  - total set to '.$user->scores['sort'].'</>';
-                $msg5 .= PHP_EOL;
-                $this->line($msg5);
-
                 $user->update(['scores' => $scores]);
             }
             $bar->advance();
         }
 
         $bar->finish();
+        $this->line('');
 
         return self::SUCCESS;
     }

@@ -19,6 +19,7 @@ return new class() extends Migration {
                 'ban_payout' => false,
                 'auto_ban_payout' => false,
             ];
+            $user->setting = $setting;
             $user->saveQuietly();
         }
     }

@@ -78,7 +78,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('download-original/{media}/{hash}', [MediaController::class, 'downloadOriginal'])
                 ->middleware(['permission:edit medias'])
                 ->name('downloadOriginal');
-            Route::get('recalculate-sort-score/{media}', [MediaController::class, 'recalculateSortScore'])
+            Route::get('recalculate-sort-score/{media}', [MediaController::class, 'recalculateSortScores'])
                 ->middleware(['permission:edit medias'])
                 ->name('recalculateSortScore');
             Route::get('pending/media/{page}', [MediaController::class, 'pending'])

@@ -241,7 +241,7 @@ class UserService extends AdminBaseService
             $oldFileName = $user->avatar;
             $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/'.$avatar)], $user->_id);
 
-            UploadAvatar::dispatchIf(! config('app.is_testing'), (string) $user->_id, 'avatars/'.$avatar)->delay(10);
+            UploadAvatar::dispatch((string) $user->_id, 'avatars/'.$avatar)->delay(10);
             DeleteAvatar::dispatchIf(! str_contains($oldFileName, 'default_'), basename($oldFileName))->delay(100);
         }
 
