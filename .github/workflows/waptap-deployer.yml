@@ -30,7 +30,7 @@ jobs:
           port: ${{ secrets.WAPTAP_DEV_SERVER_PORT }}
           username: ${{ secrets.WAPTAP_DEV_SERVER_USER }}
           key: ${{ secrets.ACTION_SSH_KEY }}
-          script: cd /var/www/aparlay/waptap/ && /var/www/aparlay/waptap/deploy.sh
+          script: cd /var/www/aparlay/waptap/ && /var/www/aparlay/deploy.sh
       - name: Slack Notify Done
         uses: rtCamp/action-slack-notify@v2.1.2
         env:
