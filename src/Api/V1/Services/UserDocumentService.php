@@ -122,10 +122,6 @@ class UserDocumentService extends AbstractService
             ],
         ]);
 
-        if (config('app.is_testing')) {
-            return $userDocument;
-        }
-
         $this->uploadDocument($documentDto->file, $userDocument);
 
         if ($user->verification_status === UserVerificationStatus::VERIFIED->value) {
