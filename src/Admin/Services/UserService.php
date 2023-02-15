@@ -186,10 +186,10 @@ class UserService extends AdminBaseService
             $user->type = $role ? UserType::ADMIN->value : UserType::USER->value;
             $user->syncRoles(($role ?: []));
 
-            if ($originalRole !== $user->roles()->first()) {
+            if ($originalRole?->name !== $user->roles()->first()?->name) {
                 (new SlackMessage())
                     ->to(config('app.slack_support'))
-                    ->content(auth()->user()->username." changed role for {$user->username}!".PHP_EOL."From _{$originalRole->name}_ to _{$role}_")
+                    ->content(auth()->user()->username." changed role for {$user->username}!".PHP_EOL."From _".($originalRole ? $originalRole->name : 'None')."_ to _{$role}_")
                     ->success();
             }
         }
