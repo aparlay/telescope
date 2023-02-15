@@ -189,7 +189,7 @@ class UserService extends AdminBaseService
             if ($originalRole?->name !== $user->roles()->first()?->name) {
                 (new SlackMessage())
                     ->to(config('app.slack_support'))
-                    ->content(auth()->user()->username." changed role for {$user->username}!".PHP_EOL."From _".($originalRole ? $originalRole->name : 'None')."_ to _{$role}_")
+                    ->content(auth()->user()->username." changed role for {$user->username}!".PHP_EOL.'From _'.($originalRole ? $originalRole->name : 'None')."_ to _{$role}_")
                     ->success();
             }
         }
