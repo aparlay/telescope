@@ -19,6 +19,7 @@ use Aparlay\Core\Jobs\DeleteMediaMetadata;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Hash;
 use Illuminate\Support\Facades\Bus;
@@ -177,10 +178,11 @@ class UserService extends AdminBaseService
         ];
 
         $data = array_merge($data, $dataBooleans);
-        $role = $request->input('role');
 
-        if ($role && auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
-            $user->syncRoles($request->input('role'));
+        if (auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
+            $role = $request->input('role');
+            $user->type = $role ? UserType::ADMIN->value : UserType::USER->value;
+            $user->syncRoles(($role ?: []));
         }
 
         $user->fill($data);
