@@ -22,8 +22,8 @@ use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Hash;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
