@@ -2,6 +2,8 @@
     use Illuminate\Support\Arr;
     use Aparlay\Core\Models\Enums\UserVerificationStatus;
     use Aparlay\Core\Models\Block;
+    use Maklad\Permission\Models\Role;
+    use Aparlay\Core\Constants\Roles;
 @endphp
 
 <form action="{{ route('core.admin.user.update.userinfo', ['user' => $user->_id]) }}" class="form-horizontal" method="post">
@@ -67,6 +69,22 @@
                         </select>
                     </div>
                 </div>
+                @if(auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR))
+                    <div class="form-group row m-0">
+                        <label for="role" class="col-sm-2 col-form-label">Role</label>
+                        <div class="col-sm-10">
+                            <div class="mt-2 pl-4 data-show">
+                                <p>{{ ucfirst($user->roles()->first()?->name) }}</p>
+                            </div>
+                            <select name="role" id="role" class="form-control data-edit d-none">
+                                <option value="">None</option>
+                                @foreach(Role::all() as $role)
+                                    <option value="{{ $role->name }}" {!! $user->hasRole($role) ? 'selected' : '' !!}>{{ Str::ucfirst($role->name) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @endif
                 <div class="form-group row m-0">
                     <label class="col-sm-2 col-form-label">Created At</label>
                     <div class="col-sm-10">
@@ -107,7 +125,7 @@
                             <p>{{ $user->email_verified ? 'Yes' : 'No' }}</p>
                         </div>
                         <div class="custom-control custom-switch mt-2 ml-2 data-edit d-none">
-                            <input type="checkbox" value="1" name="email_verified" class="custom-control-input" id="email_verified" disabled="disabled" readonly="readonly" {!! $user->email_verified ? 'checked' : '' !!}>
+                            <input type="checkbox" value="1" name="email_verified" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
                             <label class="custom-control-label" for="email_verified"></label>
                         </div>
                     </div>
