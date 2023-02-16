@@ -110,8 +110,9 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read array  $counters
  * @property-read string $country_label
  * @property-read string $verification_status_label
+ * @property-read bool   $is_eligible_for_verification
  *
- * @method static |self|Builder date(UTCDateTime $startAt, UTCDateTime $endAt, string $field = 'created_at') filter by date
+ * @method static |self|Builder date(?UTCDateTime $startAt, ?UTCDateTime $endAt, string $field = 'created_at') filter by date
  * @method static |self|Builder active() get activated user
  * @method static |self|Builder idVerified() get id verified user
  * @method static |self|Builder username(string $username) get user
@@ -588,6 +589,19 @@ class User extends \App\Models\User
     public function getVerificationStatusLabelAttribute(): string
     {
         return $this->verification_status ? UserVerificationStatus::from($this->verification_status)->label() : '';
+    }
+
+    public function getIsEligibleForVerificationAttribute(): bool
+    {
+        $hasMinLikes = $this->counters['likes'] >= config('core.id_verification_thresholds.min_likes', 1000);
+        $hasMinFollowers = $this->counters['followers'] >= config('core.id_verification_thresholds.min_followers', 100);
+        $hasMinMedia = $this->counters['medias'] >= config('core.id_verification_thresholds.min_medias', 1);
+
+        if (($hasMinLikes || $hasMinFollowers) && $hasMinMedia) {
+            return true;
+        }
+
+        return false;
     }
 
     public function getStatusLabelAttribute()

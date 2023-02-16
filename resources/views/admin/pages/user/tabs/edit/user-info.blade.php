@@ -1,6 +1,9 @@
 @php
     use Illuminate\Support\Arr;
     use Aparlay\Core\Models\Enums\UserVerificationStatus;
+    use Aparlay\Core\Models\Block;
+    use Maklad\Permission\Models\Role;
+    use Aparlay\Core\Constants\Roles;
 @endphp
 
 <form action="{{ route('core.admin.user.update.userinfo', ['user' => $user->_id]) }}" class="form-horizontal" method="post">
@@ -11,6 +14,7 @@
             <h3 class="card-title p-2">User Information</h3>
             <div class="card-tools">
                 <button type="button" class="btn text-blue card-edit" data-edit="user-info">Edit <i class="fas fa-pen"></i></button>
+                <button type="button" class="btn text-danger card-cancel d-none" data-edit="user-info">Cancel <i class="fas fa-times"></i></button>
                 <button type="submit" class="btn text-blue card-save d-none">Save <i class="fas fa-save"></i></button>
                 <button
                     type="button"
@@ -65,6 +69,34 @@
                         </select>
                     </div>
                 </div>
+                @if(auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR))
+                    <div class="form-group row m-0">
+                        <label for="role" class="col-sm-2 col-form-label">Role</label>
+                        <div class="col-sm-10">
+                            <div class="mt-2 pl-4 data-show">
+                                <p>{{ ucfirst($user->roles()->first()?->name) }}</p>
+                            </div>
+                            <select name="role" id="role" class="form-control data-edit d-none">
+                                <option value="">None</option>
+                                @foreach(Role::all() as $role)
+                                    <option value="{{ $role->name }}" {!! $user->hasRole($role) ? 'selected' : '' !!}>{{ Str::ucfirst($role->name) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @endif
+                <div class="form-group row m-0">
+                    <label for="visibility" class="col-sm-2 col-form-label">Public Profile</label>
+                    <div class="col-sm-10">
+                        <div class="mt-2 pl-4 data-show">
+                            <p>{{ $user->visibility ? 'Yes' : 'No' }}</p>
+                        </div>
+                        <div class="custom-control custom-switch mt-2 ml-2 data-edit d-none">
+                            <input type="checkbox" value="1" name="visibility" class="custom-control-input" id="visibility" {!! $user->visibility ? 'checked' : '' !!}>
+                            <label class="custom-control-label" for="visibility"></label>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group row m-0">
                     <label class="col-sm-2 col-form-label">Created At</label>
                     <div class="col-sm-10">
@@ -105,7 +137,7 @@
                             <p>{{ $user->email_verified ? 'Yes' : 'No' }}</p>
                         </div>
                         <div class="custom-control custom-switch mt-2 ml-2 data-edit d-none">
-                            <input type="checkbox" value="1" name="email_verified" class="custom-control-input" id="email_verified" disabled="disabled" readonly="readonly" {!! $user->email_verified ? 'checked' : '' !!}>
+                            <input type="checkbox" value="1" name="email_verified" class="custom-control-input" id="email_verified" {!! $user->email_verified ? 'checked' : '' !!}>
                             <label class="custom-control-label" for="email_verified"></label>
                         </div>
                     </div>
@@ -132,7 +164,7 @@
                     <label class="col-sm-2 col-form-label">Fraud Tier</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
-                            <p>--</p>
+                            <p>{{ \Aparlay\Core\Helpers\Country::getTier($user->country_alpha2) }}</p>
                         </div>
                     </div>
                 </div>
@@ -209,7 +241,13 @@
                     <label class="col-sm-2 col-form-label">Blocked Users</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
-                            <p>--</p>
+                            @if($user->stats['counters']['blocks'])
+                                @foreach(Block::query()->creator((string) $user->_id)->get() as $block)
+                                    <a class="badge badge-danger mr-1" href="{{ route('core.admin.user.view', $block->userObj) }}">{{ $block->userObj->username }}</a>
+                                @endforeach
+                            @else
+                                <p>None</p>
+                            @endif
                         </div>
                     </div>
                 </div>

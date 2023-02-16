@@ -19,7 +19,7 @@ return new class() extends Migration {
         });
 
         foreach (MediaComment::query()->lazy() as $mediaComment) {
-            $mediaComment->update(['user_id' => new ObjectId($mediaComment->mediaObj->creator['_id'])]);
+            $mediaComment->update(['user_id' => new ObjectId($mediaComment->mediaObj->creator['_id'] ?? $mediaComment->mediaObj->created_by)]);
         }
     }
 
