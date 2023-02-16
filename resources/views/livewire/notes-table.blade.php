@@ -7,11 +7,6 @@
         <tbody>
             @foreach($notes as $note)
                 <tr>
-                    <td class="col-1 col-md-1 col-sm-2">
-                        <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
-                            {{ $note->creator['username'] }}
-                        </a>
-                    </td>
                     <td class="col-8 col-md-8 col-sm-6">
                         <span class="badge bg-{{ NoteCategory::from($note->category)->badgeColor() }}">
                             {{ NoteCategory::from($note->category)->label() }}

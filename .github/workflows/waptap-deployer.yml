@@ -1,0 +1,44 @@
+name: Deployer
+
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+
+jobs:
+  deploy_dev:
+    if: github.ref == 'refs/heads/development'
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Slack Notify Start
+        uses: rtCamp/action-slack-notify@v2.1.2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.WAPTAP_SLACK_WEBHOOK }}
+          SLACK_CHANNEL: api-core
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_TITLE: Start Deploying To Waptap Development Server
+          SLACK_USERNAME: Auto Deployer
+          SLACK_ICON_EMOJI: ":rocket:"
+          SLACK_LINK_NAMES: true
+          SLACK_FOOTER: Aparlay Ltd.
+      - name: executing remote ssh commands using private key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.WAPTAP_DEV_SERVER_HOST }}
+          port: ${{ secrets.WAPTAP_DEV_SERVER_PORT }}
+          username: ${{ secrets.WAPTAP_DEV_SERVER_USER }}
+          key: ${{ secrets.ACTION_SSH_KEY }}
+          script: cd /var/www/aparlay/waptap/ && /var/www/aparlay/deploy.sh
+      - name: Slack Notify Done
+        uses: rtCamp/action-slack-notify@v2.1.2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.WAPTAP_SLACK_WEBHOOK }}
+          SLACK_CHANNEL: api-core
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_TITLE: Deploying To Waptap Development Server Completed
+          SLACK_USERNAME: Auto Deployer
+          SLACK_ICON_EMOJI: ":rocket:"
+          SLACK_LINK_NAMES: true
+          SLACK_FOOTER: Aparlay Ltd.

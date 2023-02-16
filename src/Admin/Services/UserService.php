@@ -18,8 +18,11 @@ use Aparlay\Core\Jobs\DeleteAvatar;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Hash;
+use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
@@ -172,13 +175,23 @@ class UserService extends AdminBaseService
 
         $dataBooleans = [
             'email_verified' => $request->boolean('email_verified'),
+            'visibility' => (int) $request->boolean('visibility'),
         ];
 
         $data = array_merge($data, $dataBooleans);
-        $role = $request->input('role');
 
-        if ($role && auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
-            $user->syncRoles($request->input('role'));
+        if (auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
+            $role = $request->input('role');
+            $originalRole = $user->roles()->first();
+            $user->type = $role ? UserType::ADMIN->value : UserType::USER->value;
+            $user->syncRoles(($role ?: []));
+
+            if ($originalRole?->name !== $user->roles()->first()?->name) {
+                (new SlackMessage())
+                    ->to(config('app.slack_support'))
+                    ->content(auth()->user()->username." changed role for {$user->username}!".PHP_EOL.'From _'.($originalRole ? $originalRole->name : 'None')."_ to _{$role}_")
+                    ->success();
+            }
         }
 
         $user->fill($data);

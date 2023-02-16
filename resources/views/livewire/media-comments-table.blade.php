@@ -43,12 +43,16 @@
                 </div>
             </th>
 
+            <th class="col-md-2">
+                Created At
+            </th>
+
             <th>
                 Text
             </th>
 
-            <th class="col-md-2">
-                Created At
+            <th @class(['d-none' => !$hiddenFields['creator_username']])>
+                Media
             </th>
 
             <th class="col-md-1">
@@ -66,11 +70,15 @@
                 </td>
 
                 <td>
-                    {{ $model->text }}
+                    {{ $model->created_at  }}
                 </td>
 
                 <td>
-                    {{ $model->created_at  }}
+                    {{ $model->text }}
+                </td>
+
+                <td @class(['d-none' => !$hiddenFields['creator_username']])>
+                    <a href="{{ route('core.admin.media.view', (string) $model->_id) }}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                 </td>
 
                 <td>
