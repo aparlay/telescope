@@ -6,9 +6,6 @@
     <table class="table table-striped border">
         <thead>
             <tr>
-                <th class="col-2 col-md-2 col-sm-2">
-                    <x-sortable-column-header :sort="$sort" :fieldName="'created_by'" :fieldLabel="'Created By'"/>
-                </th>
                 <th class="col-7 col-md-7 col-sm-6">
                     <x-sortable-column-header :sort="$sort" :fieldName="'message'" :fieldLabel="'Notes'"/>
                 </th>
@@ -24,11 +21,6 @@
         <tbody>
             @foreach($notes as $note)
                 <tr>
-                    <td class="col-1 col-md-1 col-sm-2">
-                        <a href="{{ $note->creatorObj->admin_url }}" target="_blank">
-                            {{ $note->creator['username'] }}
-                        </a>
-                    </td>
                     <td class="col-8 col-md-8 col-sm-6">
                         <span class="badge bg-{{ NoteCategory::from($note->category)->badgeColor() }}">
                             {{ NoteCategory::from($note->category)->label() }}
