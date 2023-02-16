@@ -55,6 +55,21 @@ class Country
     }
 
     /**
+     * @param string $alpha2
+     * @return int
+     */
+    public static function getTier(string $alpha2): int
+    {
+        foreach (config('core.tiers') as $tier => $countries) {
+            if (in_array(strtoupper($alpha2), $countries)) {
+                return (int) $tier;
+            }
+        }
+
+        return 2;
+    }
+
+    /**
      * @return void
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */

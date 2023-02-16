@@ -438,7 +438,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-warning">
                     <h5 class="modal-title" id="changeUserNameModalLabel">Please confirm to change username</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
@@ -446,8 +446,8 @@
                     <p>Are you sure you want to change the username? Videos will be reprocessed.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-warning" data-dismiss="modal" id="confirmChangeUsername">Confirm</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warning" id="confirmChangeUsername">Confirm</button>
                 </div>
             </div>
         </div>
@@ -462,7 +462,7 @@
                     @method('PATCH')
                     <div class="modal-header bg-warning">
                         <h5 class="modal-title" id="changePasswordModalLabel">Please set a new password</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -482,7 +482,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-warning">Confirm</button>
                     </div>
                 </form>
@@ -508,7 +508,7 @@
                 if ($(e.target).find('#username').val() === $originalUsername) {
                     e.target.submit();
                 } else {
-                    $('#changeUsernameModal').modal();
+                    $('#changeUsernameModal').modal('show');
                     $('#confirmChangeUsername').on('click', function() {
                         e.target.submit();
                     });
@@ -522,8 +522,20 @@
                 $('#' + card + ' .data-show').addClass('d-none');
 
                 $('#' + card + ' button.card-save').removeClass('d-none');
+                $('#' + card + ' button.card-cancel').removeClass('d-none');
                 $('#' + card + ' .data-edit').removeClass('d-none');
             });
+
+            $('.user-profile-card button.card-cancel').on('click', function() {
+                let card = $(this).data('edit');
+
+                $('#' + card + ' button.card-edit').removeClass('d-none');
+                $('#' + card + ' .data-show').removeClass('d-none');
+
+                $('#' + card + ' button.card-save').addClass('d-none');
+                $('#' + card + ' button.card-cancel').addClass('d-none');
+                $('#' + card + ' .data-edit').addClass('d-none');
+            })
         });
     </script>
 @endpush
