@@ -36,6 +36,7 @@ use Aparlay\Core\Admin\Livewire\SettingsTable;
 use Aparlay\Core\Admin\Livewire\UserMedia;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
+use Aparlay\Core\Admin\Livewire\UserVerification;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
 use Aparlay\Core\Commands\AnalyticsSinceCommand;
 use Aparlay\Core\Commands\CleanupCommand;
@@ -202,6 +203,7 @@ class CoreServiceProvider extends ServiceProvider
             'users-table' => UsersTable::class,
             'users-moderation-table' => UsersModerationTable::class,
             'modals.user-verification-modal' => UserVerificationModal::class,
+            'user-verification' => UserVerification::class,
             'date-picker' => DatePicker::class,
             'user-moderation-button' => UserModerationButton::class,
             'medias-table' => MediasTable::class,
