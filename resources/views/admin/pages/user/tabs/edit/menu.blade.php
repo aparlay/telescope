@@ -3,14 +3,35 @@
     use Aparlay\Core\Models\Enums\UserVisibility;
     use Aparlay\Chat\Models\Enums\ChatCategory;
     use Aparlay\Chat\Admin\Models\Chat;
+    use Aparlay\Core\Models\Enums\UserVerificationStatus;
 @endphp
 
 <div class="row text-center">
-    <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-fluid">
+    <img src="{{ $user->avatar }}?aspect_ratio=1:1&width=150" alt="" class="img-fluid w-100">
 </div>
 
 <div class="row">
-    <span class="my-2">{{ "@" . $user->username }}</span>
+    <div class="col-12 mb-2">
+        <span class="mb-2 text-muted"><b>{{ "@" . $user->username }}</b>
+            @if($user->verification_status === UserVerificationStatus::VERIFIED->value)
+                <img src="{{ asset('admin/assets/img/verify-16.png') }}" alt="Verified">
+            @endif
+        </span>
+    </div>
+    <div class="col-6 border-right" style="font-size: 14px">
+        <span class="text-muted text-small">Likes: <span class="float-right">{{ $user->stats['counters']['likes'] ?? 0 }}</span></span><br>
+        <hr class="my-1">
+        <span class="text-muted text-small">Following: <span class="float-right">{{ $user->stats['counters']['following'] ?? 0 }}</span></span><br>
+        <hr class="my-1">
+        <span class="text-muted text-small">Followers: <span class="float-right">{{ $user->stats['counters']['followers'] ?? 0 }}</span></span><br>
+    </div>
+    <div class="col-6" style="font-size: 14px;">
+        <span class="text-muted text-small">Tips Out: <span class="float-right">{{ money((int)($user->stats['amounts']['spent']['tips'] ?? 0), 'USD') }}</span></span><br>
+        <hr class="my-1">
+        <span class="text-muted text-small">Tips In: <span class="float-right">{{ money((int)($user->stats['amounts']['spent']['tips'] ?? 0), 'USD') }}</span></span><br>
+        <hr class="my-1">
+        <span class="text-muted text-small">Payouts: <span class="float-right">{{ money((int)($user->stats['amounts']['earned']['referral']['subscriptions'] ?? 0), 'USD') }}</span></span>
+    </div>
 </div>
 
 <div class="row card card-default list-group">
