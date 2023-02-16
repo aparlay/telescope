@@ -93,15 +93,6 @@
     @endif
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Enable 14 Day Payout Freeze</a>-->
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Region Blacklist</a>-->
-    @if($user->visibility == UserVisibility::PUBLIC->value)
-        <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#invisibleModal">
-            <i class="fas fa-circle mr-1 text-blue"></i>Make Invisible
-        </a>
-    @else
-        <a href="#" class="py-1 px-2 list-group-item list-group-item-action" data-toggle="modal" data-target="#publicModal">
-            <i class="fas fa-circle mr-1 text-blue"></i>Make Public
-        </a>
-    @endif
     <!--<a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Allow Screenshots</a>-->
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action text-red disabled"><i class="fas fa-circle mr-1 text-red"></i>Delete Account</a>
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action text-red disabled"><i class="fas fa-circle mr-1 text-red"></i>Delete Account w/ Timer</a>

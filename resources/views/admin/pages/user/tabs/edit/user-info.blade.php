@@ -86,6 +86,18 @@
                     </div>
                 @endif
                 <div class="form-group row m-0">
+                    <label for="visibility" class="col-sm-2 col-form-label">Public Profile</label>
+                    <div class="col-sm-10">
+                        <div class="mt-2 pl-4 data-show">
+                            <p>{{ $user->visibility ? 'Yes' : 'No' }}</p>
+                        </div>
+                        <div class="custom-control custom-switch mt-2 ml-2 data-edit d-none">
+                            <input type="checkbox" value="1" name="visibility" class="custom-control-input" id="visibility" {!! $user->visibility ? 'checked' : '' !!}>
+                            <label class="custom-control-label" for="visibility"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row m-0">
                     <label class="col-sm-2 col-form-label">Created At</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
