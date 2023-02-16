@@ -33,6 +33,7 @@ use Aparlay\Core\Admin\Livewire\Modals\UserNoteDeleteModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\NotesTable;
 use Aparlay\Core\Admin\Livewire\SettingsTable;
+use Aparlay\Core\Admin\Livewire\UserMedia;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
@@ -222,6 +223,7 @@ class CoreServiceProvider extends ServiceProvider
             'dashboard.funnel' => Funnel::class,
             'dashboard.table' => Table::class,
             'dashboard.top-credit-balance' => TopCreditBalance::class,
+            'user-media' => UserMedia::class,
         ];
 
         foreach ($components as $name => $class) {
