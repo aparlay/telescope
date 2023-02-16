@@ -4,20 +4,6 @@
 
 <div class="">
     <table class="table table-striped border">
-        <thead>
-            <tr>
-                <th class="col-7 col-md-7 col-sm-6">
-                    <x-sortable-column-header :sort="$sort" :fieldName="'message'" :fieldLabel="'Notes'"/>
-                </th>
-                <th class="col-2 col-md-2 col-sm-3">
-                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Created At'"/>
-                </th>
-                <th class="col-1 text-right">
-                    <label for="">Action</label>
-                </th>
-            </tr>
-        </thead>
-
         <tbody>
             @foreach($notes as $note)
                 <tr>
