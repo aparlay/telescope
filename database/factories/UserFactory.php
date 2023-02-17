@@ -78,7 +78,6 @@ class UserFactory extends Factory
                 ],
             ],
             'subscriptions' => [],
-            'subscription_plan' => [],
             'user_agents' => [],
             'stats' => [
                 'amounts' => [
