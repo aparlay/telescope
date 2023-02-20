@@ -15,10 +15,10 @@ use Illuminate\Validation\ValidationException;
 
 /**
  * @property string $username
- * @property int $visibility
+ * @property int    $visibility
  * @property string $country_alpha2
  * @property string $payout_country_alpha2
- * @property array $setting
+ * @property array  $setting
  */
 class MeRequest extends FormRequest
 {
@@ -43,7 +43,10 @@ class MeRequest extends FormRequest
 
         return [
             'avatar' => [
-                'nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:10485760',
+                'nullable',
+                'image',
+                'mimes:png,jpg,jpeg,gif',
+                'max:10485760',
             ],
             'bio' => ['nullable', 'string', 'min:3', 'max:200'],
             'promo_link' => ['nullable', 'url'],
@@ -164,7 +167,7 @@ class MeRequest extends FormRequest
                     'allow_unverified_cc' => $user->setting['payment']['allow_unverified_cc'] ?? false,
                     'block_unverified_cc' => $user->setting['payment']['block_unverified_cc'] ?? true,
                     'block_cc_payments' => $user->setting['payment']['block_cc_payments'] ?? true,
-                    'unverified_cc_spent_amount' => (int) ($user->setting['payment']['unverified_cc_spent_amount'] ??
+                    'unverified_cc_spent_amount' => (int)($user->setting['payment']['unverified_cc_spent_amount'] ??
                         0),
                 ],
                 'payout' => [
