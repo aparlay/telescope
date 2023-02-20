@@ -104,9 +104,7 @@ class MeRequest extends FormRequest
             ]);
         }
 
-        if (! auth()->guest() && auth()->user()->is_invisible
-            && isset($this->visibility)
-        ) {
+        if (!auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
             throw ValidationException::withMessages([
                 'visibility' => 'Your account is invisible by administrator, you cannot change it to public/private.',
             ]);
@@ -116,7 +114,7 @@ class MeRequest extends FormRequest
             $this->merge(['username' => trim($this->username)]);
         }
 
-        if (! auth()->guest()
+        if (!auth()->guest()
             && auth()->user()->status === UserStatus::ACTIVE->value
             && $this->has('username')
         ) {
@@ -124,7 +122,8 @@ class MeRequest extends FormRequest
                 'username' => 'You cannot change your username any more.',
             ]);
         }
-        if (! auth()->guest() && ! empty(auth()->user()->payout_country_alpha2)
+        if (!auth()->guest()
+            && !empty(auth()->user()->payout_country_alpha2)
             && $this->has('payout_country_alpha2')
         ) {
             throw ValidationException::withMessages([
@@ -167,7 +166,7 @@ class MeRequest extends FormRequest
                     'allow_unverified_cc' => $user->setting['payment']['allow_unverified_cc'] ?? false,
                     'block_unverified_cc' => $user->setting['payment']['block_unverified_cc'] ?? true,
                     'block_cc_payments' => $user->setting['payment']['block_cc_payments'] ?? true,
-                    'unverified_cc_spent_amount' => (int) ($user->setting['payment']['unverified_cc_spent_amount'] ??
+                    'unverified_cc_spent_amount' => (int)($user->setting['payment']['unverified_cc_spent_amount'] ??
                         0),
                 ],
                 'payout' => [
