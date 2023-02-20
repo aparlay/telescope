@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -21,7 +20,7 @@ return new class extends Migration
             'support' => [
                 'create notes',
                 'list users-moderation',
-            ]
+            ],
         ];
 
         foreach ($newPermissions as $roleName => $permissions) {
