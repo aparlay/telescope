@@ -27,7 +27,6 @@ class UserVerificationModal extends Component
     public $documents = [];
 
     public $documentsData;
-
     protected $listeners = ['refreshUserDocuments' => '$refresh'];
 
     public function mount($userId)

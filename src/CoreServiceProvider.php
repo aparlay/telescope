@@ -202,8 +202,8 @@ class CoreServiceProvider extends ServiceProvider
         $components = [
             'users-table' => UsersTable::class,
             'users-moderation-table' => UsersModerationTable::class,
-            'user-verification' => UserVerification::class,
             'modals.user-verification-modal' => UserVerificationModal::class,
+            'user-verification' => UserVerification::class,
             'date-picker' => DatePicker::class,
             'user-moderation-button' => UserModerationButton::class,
             'medias-table' => MediasTable::class,

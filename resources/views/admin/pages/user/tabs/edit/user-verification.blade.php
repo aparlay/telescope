@@ -5,7 +5,6 @@
     use Illuminate\Support\Arr;
     use Aparlay\Core\Models\Enums\UserDocumentType;
     use Aparlay\Core\Models\UserDocument;
-
     $documentVerificationStatus = [
        UserDocumentStatus::APPROVED->value => UserDocumentStatus::APPROVED->label(),
        UserDocumentStatus::REJECTED->value => UserDocumentStatus::REJECTED->label(),

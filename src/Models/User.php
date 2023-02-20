@@ -84,7 +84,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property string      $deactivation_reason
  * @property bool        $has_unread_chat
  * @property bool        $has_unread_notification
- * @property Carbon      $last_online_at
+ * @property Carbon|UTCDateTime $last_online_at
  * @property array       $tags
  *
  * @property User        $referralObj
