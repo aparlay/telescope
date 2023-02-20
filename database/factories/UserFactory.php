@@ -78,7 +78,7 @@ class UserFactory extends Factory
                 ],
                 'subscriptions' => [
 
-                ]
+                ],
             ],
             'subscriptions' => [],
             'user_agents' => [],
