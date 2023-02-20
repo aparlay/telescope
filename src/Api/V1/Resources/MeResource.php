@@ -86,6 +86,7 @@ class MeResource extends JsonResource
             ],
             'features' => [
                 'tips' => $this->features['tips'] ?? false,
+                'subscriptions' => $this->subscriptions['tips'] ?? false,
                 'demo' => $this->features['demo'] ?? false,
             ],
             'gender' => $this->gender,

@@ -44,6 +44,19 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group row m-0">
+                    <label for="feature_subscriptions" class="col-sm-2 col-form-label">Feature Subscriptions</label>
+                    <div class="col-sm-10">
+                        <div class="mt-2 pl-4 data-show">
+                            <p>{{ Arr::get($user->features, 'subscriptions') ? 'Yes' : 'No' }}</p>
+                        </div>
+                        <div class="custom-control custom-switch mt-2 ml-2 data-edit d-none">
+                            <input type="checkbox" value="1" class="custom-control-input" name="features[subscriptions]" id="feature_subscriptions" {!! Arr::get($user->features, 'subscriptions') ? 'checked' : '' !!}>
+                            <label class="custom-control-label" for="feature_subscriptions"></label>
+                        </div>
+                    </div>
+                </div>
 <!--
                 <div class="form-group row m-0">
                     <label for="feature_demo" class="col-sm-2 col-form-label">Feature Demo User</label>
