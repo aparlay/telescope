@@ -68,7 +68,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $default_setting
  * @property array       $count_fields_updated_at
  * @property array       $subscriptions
- * @property array       $subscription_plan
  * @property array       $user_agents
  * @property array       $subscribed_to
  * @property array       $stats
@@ -243,7 +242,6 @@ class User extends \App\Models\User
             'risk' => 0,
         ],
         'subscriptions' => [],
-        'subscription_plan' => [],
         'user_agents' => [],
         'search' => [],
         'subscribed_to' => [],
@@ -516,8 +514,8 @@ class User extends \App\Models\User
         return $this->setting['payment']['block_unverified_cc'] ||
             ($this->is_tier3) ||
             ($this->setting['payment']['unverified_cc_spent_amount'] > config(
-                'payment.fraud.big_spender.maximum_total_amount'
-            ));
+                    'payment.fraud.big_spender.maximum_total_amount'
+                ));
     }
 
     /**
@@ -551,14 +549,6 @@ class User extends \App\Models\User
         $userId = auth()->user()->_id;
 
         return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsSubscribableAttribute(): bool
-    {
-        return isset($this->subscription_plan['amount'], $this->subscription_plan['currency'], $this->subscription_plan['days']);
     }
 
     /**
