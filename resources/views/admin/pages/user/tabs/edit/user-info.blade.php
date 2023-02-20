@@ -164,7 +164,11 @@
                     <label class="col-sm-2 col-form-label">Fraud Tier</label>
                     <div class="col-sm-10">
                         <div class="mt-2 pl-4">
-                            <p>{{ \Aparlay\Core\Helpers\Country::getTier($user->country_alpha2) }}</p>
+                            @if($user->country_alpha2)
+                                <p>{{ \Aparlay\Core\Helpers\Country::getTier($user->country_alpha2) }}</p>
+                            @else
+                                <p>-</p>
+                            @endif
                         </div>
                     </div>
                 </div>
