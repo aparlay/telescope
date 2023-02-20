@@ -82,7 +82,7 @@ class MeResource extends JsonResource
                 'subscriptions' => [
                     'is_signed_paid_content_policy' => $this->setting['subscriptions']['is_signed_paid_content_policy'] ?? false,
                     'is_signed_refund_policy' => $this->setting['subscriptions']['is_signed_refund_policy'] ?? false,
-                ]
+                ],
             ],
             'features' => [
                 'tips' => $this->features['tips'] ?? false,
@@ -125,8 +125,8 @@ class MeResource extends JsonResource
             'country_alpha2' => $this->country_alpha2,
             'country_label' => $this->country_label,
             'country_flags' => $this->country_flags,
-            $this->mergeWhen($this->is_tier1, fn() => ['is_tier1' => true]),
-            $this->mergeWhen($this->is_tier3, fn() => ['is_tier3' => true]),
+            $this->mergeWhen($this->is_tier1, fn () => ['is_tier1' => true]),
+            $this->mergeWhen($this->is_tier3, fn () => ['is_tier3' => true]),
         ];
     }
 }
