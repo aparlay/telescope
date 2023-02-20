@@ -101,7 +101,7 @@ class MeRequest extends FormRequest
             ]);
         }
 
-        if (!auth()->guest() && auth()->user()->is_invisible
+        if (! auth()->guest() && auth()->user()->is_invisible
             && isset($this->visibility)
         ) {
             throw ValidationException::withMessages([
@@ -113,7 +113,7 @@ class MeRequest extends FormRequest
             $this->merge(['username' => trim($this->username)]);
         }
 
-        if (!auth()->guest()
+        if (! auth()->guest()
             && auth()->user()->status === UserStatus::ACTIVE->value
             && $this->has('username')
         ) {
@@ -121,7 +121,7 @@ class MeRequest extends FormRequest
                 'username' => 'You cannot change your username any more.',
             ]);
         }
-        if (!auth()->guest() && !empty(auth()->user()->payout_country_alpha2)
+        if (! auth()->guest() && ! empty(auth()->user()->payout_country_alpha2)
             && $this->has('payout_country_alpha2')
         ) {
             throw ValidationException::withMessages([
