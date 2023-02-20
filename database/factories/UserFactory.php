@@ -76,6 +76,9 @@ class UserFactory extends Factory
                     'block_cc_payments' => false,
                     'unverified_cc_spent_amount' => 0,
                 ],
+                'subscriptions' => [
+
+                ]
             ],
             'subscriptions' => [],
             'user_agents' => [],

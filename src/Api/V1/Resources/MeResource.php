@@ -2,10 +2,8 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
-use Aparlay\Core\Api\V1\Models\UserNotification;
 use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -68,10 +66,10 @@ class MeResource extends JsonResource
                 'otp' => $this->setting['otp'] ?? false,
                 'show_adult_content' => $this->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
                 'filter_content_gender' => $this->setting['filter_content_gender'] ?? [
-                    MediaContentGender::FEMALE->label() => true,
-                    MediaContentGender::MALE->label() => true,
-                    MediaContentGender::TRANSGENDER->label() => true,
-                ],
+                        MediaContentGender::FEMALE->label() => true,
+                        MediaContentGender::MALE->label() => true,
+                        MediaContentGender::TRANSGENDER->label() => true,
+                    ],
                 'notifications' => [
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? false,
                     'new_followers' => $this->setting['notifications']['new_followers'] ?? false,
@@ -81,6 +79,10 @@ class MeResource extends JsonResource
                     'likes' => $this->setting['notifications']['likes'] ?? false,
                     'comments' => $this->setting['notifications']['comments'] ?? false,
                 ],
+                'subscriptions' => [
+                    'is_signed_paid_content_policy' => $this->setting['subscriptions']['is_signed_paid_content_policy'] ?? false,
+                    'is_signed_refund_policy' => $this->setting['subscriptions']['is_signed_refund_policy'] ?? false,
+                ]
             ],
             'features' => [
                 'tips' => $this->features['tips'] ?? false,
@@ -123,8 +125,8 @@ class MeResource extends JsonResource
             'country_alpha2' => $this->country_alpha2,
             'country_label' => $this->country_label,
             'country_flags' => $this->country_flags,
-            $this->mergeWhen($this->is_tier1, fn () => ['is_tier1' => true]),
-            $this->mergeWhen($this->is_tier3, fn () => ['is_tier3' => true]),
+            $this->mergeWhen($this->is_tier1, fn() => ['is_tier1' => true]),
+            $this->mergeWhen($this->is_tier3, fn() => ['is_tier3' => true]),
         ];
     }
 }
