@@ -15,10 +15,10 @@ use Illuminate\Validation\ValidationException;
 
 /**
  * @property string $username
- * @property int    $visibility
+ * @property int $visibility
  * @property string $country_alpha2
  * @property string $payout_country_alpha2
- * @property array  $setting
+ * @property array $setting
  */
 class MeRequest extends FormRequest
 {
@@ -59,6 +59,8 @@ class MeRequest extends FormRequest
             'setting.show_adult_content' => ['nullable', 'integer'],
             'setting.notifications.*' => ['nullable', 'bool'],
             'setting.filter_content_gender.*' => ['nullable', 'bool'],
+            'setting.subscriptions.is_signed_paid_content_policy' => ['nullable', 'bool'],
+            'setting.subscriptions.is_signed_refund_policy' => ['nullable', 'bool'],
         ];
     }
 
@@ -87,7 +89,7 @@ class MeRequest extends FormRequest
             ]);
         }
 
-        if (! auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
+        if (!auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
             throw ValidationException::withMessages([
                 'visibility' => 'Your account is invisible by administrator, you cannot change it to public/private.',
             ]);
@@ -97,12 +99,12 @@ class MeRequest extends FormRequest
             $this->merge(['username' => trim($this->username)]);
         }
 
-        if (! auth()->guest() && auth()->user()->status === UserStatus::ACTIVE->value && $this->has('username')) {
+        if (!auth()->guest() && auth()->user()->status === UserStatus::ACTIVE->value && $this->has('username')) {
             throw ValidationException::withMessages([
                 'username' => 'You cannot change your username any more.',
             ]);
         }
-        if (! auth()->guest() && ! empty(auth()->user()->payout_country_alpha2) && $this->has('payout_country_alpha2')) {
+        if (!auth()->guest() && !empty(auth()->user()->payout_country_alpha2) && $this->has('payout_country_alpha2')) {
             throw ValidationException::withMessages([
                 'username' => 'You cannot change your payout country any more.',
             ]);
@@ -119,6 +121,10 @@ class MeRequest extends FormRequest
                     'male' => $this->setting['filter_content_gender']['male'] ?? $user->setting['filter_content_gender']['male'] ?? false,
                     'transgender' => $this->setting['filter_content_gender']['transgender'] ?? $user->setting['filter_content_gender']['transgender'] ?? false,
                 ],
+                'subscriptions' => [
+                    'is_signed_paid_content_policy' => $this->setting['subscriptions']['is_signed_paid_content_policy'] ?? $user->setting['subscriptions']['is_signed_paid_content_policy'] ?? false,
+                    'is_signed_refund_policy' => $this->setting['subscriptions']['is_signed_refund_policy'] ?? $user->setting['subscriptions']['is_signed_refund_policy'] ?? false,
+                ],
                 'notifications' => [
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? $user->setting['notifications']['unread_message_alerts'] ?? true,
                     'new_followers' => $this->setting['notifications']['new_followers'] ?? $user->setting['notifications']['new_followers'] ?? true,
@@ -132,7 +138,7 @@ class MeRequest extends FormRequest
                     'allow_unverified_cc' => $user->setting['payment']['allow_unverified_cc'] ?? false,
                     'block_unverified_cc' => $user->setting['payment']['block_unverified_cc'] ?? true,
                     'block_cc_payments' => $user->setting['payment']['block_cc_payments'] ?? true,
-                    'unverified_cc_spent_amount' => (int) ($user->setting['payment']['unverified_cc_spent_amount'] ?? 0),
+                    'unverified_cc_spent_amount' => (int)($user->setting['payment']['unverified_cc_spent_amount'] ?? 0),
                 ],
                 'payout' => [
                     'ban_payout' => $user->setting['payout']['ban_payout'] ?? false,
