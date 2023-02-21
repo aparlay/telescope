@@ -409,7 +409,7 @@ class UserProfileTest extends ApiTestCase
                     'features' => [
                         'tips',
                         'demo',
-                        'subscriptions'
+                        'subscriptions',
                     ],
                     'gender',
                     'status',

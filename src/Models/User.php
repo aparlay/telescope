@@ -515,8 +515,8 @@ class User extends \App\Models\User
         return $this->setting['payment']['block_unverified_cc'] ||
             ($this->is_tier3) ||
             ($this->setting['payment']['unverified_cc_spent_amount'] > config(
-                    'payment.fraud.big_spender.maximum_total_amount'
-                ));
+                'payment.fraud.big_spender.maximum_total_amount'
+            ));
     }
 
     /**
