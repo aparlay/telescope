@@ -16,7 +16,7 @@ return new class() extends Migration {
             $text_search[] = $user->username;
             $text_search[] = $user->email;
             $text_search[] = $user->phone_number;
-            $user->text_search = array_filter(array_map('strtolower', $text_search));
+            $user->text_search = array_values(array_filter(array_map('strtolower', $text_search)));
             $user->saveQuietly();
         }
     }
