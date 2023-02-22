@@ -3,8 +3,7 @@
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      *
@@ -19,7 +18,7 @@ return new class extends Migration
             $text_search[] = $user->phone_number;
             $user->text_search = array_filter(array_map('strtolower', $text_search));
             $user->saveQuietly();
-        };
+        }
     }
 
     /**
