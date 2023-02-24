@@ -14,7 +14,7 @@ class DT
 
     /**
      * This is used instead of ::utcNow() or something different because
-     * it allows to time-travel in the tests
+     * it allows to time-travel in the tests.
      * @param $offset_in_seconds
      * @return UTCDateTime
      */
