@@ -80,13 +80,13 @@ class MeResource extends JsonResource
                     'comments' => $this->setting['notifications']['comments'] ?? false,
                 ],
                 'subscriptions' => [
-                    'is_signed_paid_content_policy' => $this->setting['subscriptions']['is_signed_paid_content_policy'] ?? false,
-                    'is_signed_refund_policy' => $this->setting['subscriptions']['is_signed_refund_policy'] ?? false,
+                    'is_paid_content_policy_signed' => $this->setting['subscriptions']['is_paid_content_policy_signed'] ?? false,
+                    'is_refund_policy_signed' => $this->setting['subscriptions']['is_refund_policy_signed'] ?? false,
                 ],
             ],
             'features' => [
                 'tips' => $this->features['tips'] ?? false,
-                'subscriptions' => $this->subscriptions['tips'] ?? false,
+                'subscriptions' => $this->features['subscriptions'] ?? false,
                 'demo' => $this->features['demo'] ?? false,
             ],
             'gender' => $this->gender,

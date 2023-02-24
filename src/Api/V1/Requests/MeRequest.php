@@ -74,8 +74,8 @@ class MeRequest extends FormRequest
             'setting.show_adult_content' => ['nullable', 'integer'],
             'setting.notifications.*' => ['nullable', 'bool'],
             'setting.filter_content_gender.*' => ['nullable', 'bool'],
-            'setting.subscriptions.is_signed_paid_content_policy' => ['nullable', 'bool'],
-            'setting.subscriptions.is_signed_refund_policy' => ['nullable', 'bool'],
+            'setting.subscriptions.is_paid_content_policy_signed' => ['nullable', 'bool'],
+            'setting.subscriptions.is_refund_policy_signed' => ['nullable', 'bool'],
         ];
     }
 
@@ -148,8 +148,8 @@ class MeRequest extends FormRequest
                             $user->setting['filter_content_gender']['transgender'] ?? false,
                 ],
                 'subscriptions' => [
-                    'is_signed_paid_content_policy' => $this->setting['subscriptions']['is_signed_paid_content_policy'] ?? $user->setting['subscriptions']['is_signed_paid_content_policy'] ?? false,
-                    'is_signed_refund_policy' => $this->setting['subscriptions']['is_signed_refund_policy'] ?? $user->setting['subscriptions']['is_signed_refund_policy'] ?? false,
+                    'is_paid_content_policy_signed' => $this->setting['subscriptions']['is_paid_content_policy_signed'] ?? $user->setting['subscriptions']['is_paid_content_policy_signed'] ?? false,
+                    'is_refund_policy_signed' => $this->setting['subscriptions']['is_refund_policy_signed'] ?? $user->setting['subscriptions']['is_refund_policy_signed'] ?? false,
                 ],
                 'notifications' => [
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ??
