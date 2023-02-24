@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
-use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Country;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
@@ -15,10 +13,10 @@ use Illuminate\Validation\ValidationException;
 
 /**
  * @property string $username
- * @property int $visibility
+ * @property int    $visibility
  * @property string $country_alpha2
  * @property string $payout_country_alpha2
- * @property array $setting
+ * @property array  $setting
  */
 class MeRequest extends FormRequest
 {
