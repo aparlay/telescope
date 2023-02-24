@@ -130,7 +130,7 @@ class User extends \App\Models\User
     use CountryFields;
 
     public const FEATURE_TIPS = 'tips';
-    public const FEATURE_SUBSCRIPTIONS = 'tips';
+    public const FEATURE_SUBSCRIPTIONS = 'subscriptions';
     public const FEATURE_DEMO = 'demo';
 
     public const ROLE_SUPER_ADMINISTRATOR = 'super-administrator';
