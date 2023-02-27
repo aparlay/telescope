@@ -38,7 +38,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property bool        $is_protected
  * @property array       $default_setting
  * @property array       $count_fields_updated_at
- * @property array       $subscriptions
  * @property array       $user_agents
  * @property array       $stats
  * @property array       $last_location
