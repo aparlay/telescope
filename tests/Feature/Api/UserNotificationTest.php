@@ -2,9 +2,9 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
-use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\UserNotification;
 use Illuminate\Testing\Fluent\AssertableJson;
