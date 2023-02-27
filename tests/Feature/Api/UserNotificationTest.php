@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Tests\Feature\Api;
 
+use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\User;
@@ -17,10 +18,12 @@ class UserNotificationTest extends ApiTestCase
     public function index()
     {
         $user = User::factory()->create();
+        $media = Media::factory()->create();
         $userNotification = UserNotification::factory()->create([
-            'category' => UserNotificationCategory::SYSTEM->value,
-            'entity._type' => User::shortClassName(),
-            'entity._id' => new ObjectId($user->_id),
+            'category' => UserNotificationCategory::LIKES->value,
+            'entity._type' => Media::shortClassName(),
+            'entity._id' => new ObjectId($media->_id),
+            'user_id' => new ObjectId($user->_id),
         ]);
 
         $response = $this->actingAs($userNotification->userObj)

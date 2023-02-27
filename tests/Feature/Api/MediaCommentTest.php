@@ -251,10 +251,14 @@ class MediaCommentTest extends ApiTestCase
 
     public function testCreateMediaCommentReply()
     {
-        $user = User::query()->first();
-        $mediaComment = MediaComment::query()->first();
+        $users = User::query()->limit(2)->get();
+        $media = Media::query()->first();
+        $mediaComment = MediaComment::factory()->create([
+            'media_id' => new ObjectId($media->_id),
+            'user_id' => new ObjectId($users[0]->_id),
+        ]);
 
-        $r = $this->actingAs($user)
+        $r = $this->actingAs($users[1])
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post("/v1/media/{$mediaComment->media_id}/comment/{$mediaComment->_id}/reply", [
                 'text' => $this->faker->realText(),
