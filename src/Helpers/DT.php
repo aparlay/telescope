@@ -16,17 +16,6 @@ class DT
         return new UTCDatetime(Carbon::now()->valueOf());
     }
 
-    /**
-     * This is used instead of ::utcNow() or something different because
-     * it allows to time-travel in the tests.
-     * @param $offset_in_seconds
-     * @return UTCDateTime
-     */
-    public static function utcDT($offset_in_seconds = 0): UTCDateTime
-    {
-        return new UTCDatetime(($offset_in_seconds * 1000) + Carbon::now()->valueOf());
-    }
-
     public static function milliSecNow(): float
     {
         return (new Carbon())->valueOf();
