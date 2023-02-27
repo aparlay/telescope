@@ -104,7 +104,6 @@ class MediaCommentTest extends ApiTestCase
         ];
         $mediaComment->saveQuietly();
 
-
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->get("/v1/media/{$mediaComment->media_id}/comment/{$mediaCommentParent->_id}/reply");
@@ -318,7 +317,7 @@ class MediaCommentTest extends ApiTestCase
         return MediaComment::factory()->create([
             'media_id' => new ObjectId($media->_id),
             'user_id' => new ObjectId($user->_id),
-            'likes_count' => 0
+            'likes_count' => 0,
         ]);
     }
 }
