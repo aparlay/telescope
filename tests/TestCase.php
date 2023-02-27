@@ -16,7 +16,7 @@ abstract class TestCase extends Orchestra
      */
     protected $faker;
 
-    protected static $isSeeded = false;
+    protected static $isCoreSeeded = false;
 
     public function setUp(): void
     {
@@ -32,9 +32,9 @@ abstract class TestCase extends Orchestra
             fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
-        if (! static::$isSeeded) {
-            Artisan::call('db:seed', ['--class' => '\Aparlay\Payout\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
-            static::$isSeeded = true;
+        if (! static::$isCoreSeeded) {
+            Artisan::call('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
+            static::$isCoreSeeded = true;
         }
     }
 
