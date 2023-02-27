@@ -104,9 +104,7 @@ class MeRequest extends FormRequest
             ]);
         }
 
-        if (! auth()->guest() && auth()->user()->is_invisible
-            && isset($this->visibility)
-        ) {
+        if (! auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
             throw ValidationException::withMessages([
                 'visibility' => 'Your account is invisible by administrator, you cannot change it to public/private.',
             ]);
@@ -124,7 +122,8 @@ class MeRequest extends FormRequest
                 'username' => 'You cannot change your username any more.',
             ]);
         }
-        if (! auth()->guest() && ! empty(auth()->user()->payout_country_alpha2)
+        if (! auth()->guest()
+            && ! empty(auth()->user()->payout_country_alpha2)
             && $this->has('payout_country_alpha2')
         ) {
             throw ValidationException::withMessages([
