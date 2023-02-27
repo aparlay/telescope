@@ -41,9 +41,7 @@ class DT
         $pastTimestampString[] = ($config['m'] ?? 0).' minutes';
         $pastTimestampString[] = ($config['s'] ?? 0).' seconds';
 
-        $pastTimestamp = Carbon::parse(implode(' ', $pastTimestampString))->timestamp;
-
-        return new UTCDatetime($pastTimestamp * 1000);
+        return new UTCDatetime(Carbon::parse(implode(' ', $pastTimestampString))->valueOf());
     }
 
     /**
