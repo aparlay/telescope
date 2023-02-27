@@ -351,10 +351,6 @@ class MediaTest extends ApiTestCase
      */
     public function createMediaByStreamUpload()
     {
-        /**
-         * @see https://trello.com/c/vph2Ja7i/147-failing-test
-         */
-        return;
         $activeUser = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $nonActiveUser = User::factory()->create(['status' => UserStatus::PENDING->value]);
         $taggedUser = User::factory()->create();
