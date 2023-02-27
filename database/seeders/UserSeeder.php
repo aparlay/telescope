@@ -23,7 +23,8 @@ class UserSeeder extends Seeder
         User::factory()->count(20)->create();
         User::factory()->count(5)->create(['type' => UserType::ADMIN->value]);
 
-        if (App::environment('local')) {
+        //Benas 2023-02-27 without 'testing' OrderSeeder fails to run
+        if (App::environment('local', 'testing')) {
             $this->createTestUser();
         }
     }

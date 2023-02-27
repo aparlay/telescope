@@ -7,9 +7,13 @@ use MongoDB\BSON\UTCDateTime;
 
 class DT
 {
+    /**
+     * In this function we are using Carbon, so we could time-travel in tests
+     * @return UTCDateTime
+     */
     public static function utcNow(): UTCDateTime
     {
-        return new UTCDatetime();
+        return new UTCDatetime(Carbon::now()->valueOf());
     }
 
     /**
@@ -34,6 +38,7 @@ class DT
     }
 
     /**
+     * In this function we are using Carbon, so we could time-travel in tests
      * @param $config
      * @return UTCDateTime
      */
@@ -47,7 +52,7 @@ class DT
         $pastTimestampString[] = ($config['m'] ?? 0).' minutes';
         $pastTimestampString[] = ($config['s'] ?? 0).' seconds';
 
-        $pastTimestamp = strtotime(implode(' ', $pastTimestampString));
+        $pastTimestamp = Carbon::parse(implode(' ', $pastTimestampString))->timestamp;
 
         return new UTCDatetime($pastTimestamp * 1000);
     }
