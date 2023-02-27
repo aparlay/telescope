@@ -8,7 +8,7 @@ use MongoDB\BSON\UTCDateTime;
 class DT
 {
     /**
-     * In this function we are using Carbon, so we could time-travel in tests
+     * In this function we are using Carbon, so we could time-travel in tests.
      * @return UTCDateTime
      */
     public static function utcNow(): UTCDateTime
@@ -38,7 +38,7 @@ class DT
     }
 
     /**
-     * In this function we are using Carbon, so we could time-travel in tests
+     * In this function we are using Carbon, so we could time-travel in tests.
      * @param $config
      * @return UTCDateTime
      */
