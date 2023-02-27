@@ -24,7 +24,7 @@ class UserNotificationTest extends ApiTestCase
             'entity._type' => Media::shortClassName(),
             'entity._id' => new ObjectId($media->_id),
             'user_id' => new ObjectId($user->_id),
-            'status' => UserNotificationStatus::NOT_VISITED->value
+            'status' => UserNotificationStatus::NOT_VISITED->value,
         ]);
 
         $response = $this->actingAs($userNotification->userObj)
