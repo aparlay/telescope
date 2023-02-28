@@ -24,7 +24,7 @@ class SitemapCommand extends Command
     public function handle()
     {
         $sitemap = SitemapGenerator::create(config('app.frontend_url'))->getSitemap();
-        $total = User::count();
+        $total = User::where('status', UserStatus::ACTIVE->value)->count();
         $bar = $this->output->createProgressBar($total);
         $i = 1;
         do {
