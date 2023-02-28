@@ -4,6 +4,7 @@ namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -123,6 +124,19 @@ class UserFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'email_verified_at' => null,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that user is verified.
+     * @return UserFactory
+     */
+    public function verified()
+    {
+        return $this->state(function(){
+            return [
+                'verification_status' => UserVerificationStatus::VERIFIED->value
             ];
         });
     }
