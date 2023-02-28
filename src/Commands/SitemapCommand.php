@@ -29,7 +29,6 @@ class SitemapCommand extends Command
             $offset = 0;
             do {
                 foreach ($this->getUserChunk($letter, $offset) as $user) {
-
                 }
             } while ($counts > 10000);
         }
@@ -38,7 +37,7 @@ class SitemapCommand extends Command
             // here we add one extra link, but you can add as many as you'd like
             ->add(
                 Url::create(config('app.frontend_url').'/@'.$user->username)
-                    ->addImage($user->avatar, '@'.$user->username. ' profile page')
+                    ->addImage($user->avatar, '@'.$user->username.' profile page')
                     ->setPriority(0.5)
             )
             ->writeToFile($sitemapPath);
@@ -47,6 +46,7 @@ class SitemapCommand extends Command
             ->add('/pages_sitemap.xml')
             ->add('/posts_sitemap.xml')
             ->writeToFile(public_path('xml/sitemap.xml'));
+
         return self::SUCCESS;
     }
 
