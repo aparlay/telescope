@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Commands;
 
+use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,7 @@ class SitemapCommand extends Command
             return $collection->aggregate([
                 [
                     '$match' => [
+                        'status' => UserStatus::ACTIVE->value,
                         'username' => ['$gt' => $this->lastUsername],
                     ],
                 ],
