@@ -27,7 +27,7 @@ class SitemapIndexCommand extends Command implements Isolatable
             $bar->advance();
         }
 
-        $sitemap->writeToFile(public_path('xml/sitemap.xml'));
+        $sitemap->writeToFile(public_path('sitemap.xml'));
         $bar->finish();
         $this->comment(PHP_EOL);
 
