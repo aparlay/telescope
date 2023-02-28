@@ -4,11 +4,12 @@ namespace Aparlay\Core\Commands;
 
 use Aparlay\Core\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\Isolatable;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Sitemap\SitemapGenerator;
 use Spatie\Sitemap\SitemapIndex;
 
-class SitemapIndexCommand extends Command
+class SitemapIndexCommand extends Command implements Isolatable
 {
     public $signature = 'core:sitemap-index';
 
@@ -18,6 +19,7 @@ class SitemapIndexCommand extends Command
     {
         $files = glob(public_path('xml/').'pages_*.xml');
         $bar = $this->output->createProgressBar(count($files));
+        $bar->start();
 
         $sitemap = SitemapIndex::create();
         foreach ($files as $filename) {
@@ -27,6 +29,7 @@ class SitemapIndexCommand extends Command
 
         $sitemap->writeToFile(public_path('xml/sitemap.xml'));
         $bar->finish();
+        $this->comment(PHP_EOL);
 
         return self::SUCCESS;
     }
