@@ -177,7 +177,7 @@ class MeRequest extends FormRequest
                 'fcm_tokens' => array_merge(
                     array_values($user->setting['fcm_tokens'] ?? []),
                     array_values($this->setting['fcm_tokens'] ?? [])
-                )
+                ),
             ],
         ]);
     }
