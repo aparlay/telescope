@@ -4,11 +4,14 @@ namespace Aparlay\Core\Tests\Feature\Api;
 
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
+use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaCommentLike;
 use Aparlay\Core\Models\Report;
 use Aparlay\Core\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
 
@@ -64,9 +67,10 @@ class MediaCommentTest extends ApiTestCase
 
     public function testFetchMediaComments()
     {
-        $user = User::query()->first();
-        $mediaComment = MediaComment::query()->first();
-        $media = $mediaComment->mediaObj;
+        $user = $this->createTestUser();
+        $mediaCreator = $this->createTestUser();
+        $media = $this->createTestMedia($mediaCreator);
+        $this->createTestComment($user, $media);
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -83,13 +87,26 @@ class MediaCommentTest extends ApiTestCase
 
     public function testFetchMediaCommentReplies()
     {
-        $user = User::query()->first();
-        $mediaComment = MediaComment::query()->whereNotNull('parent')->first();
-        $parentId = $mediaComment->parent['_id'];
+        $user = $this->createTestUser();
+        $replyToUser = $this->createTestUser();
+
+        $mediaCreator = $this->createTestUser();
+        $media = $this->createTestMedia($mediaCreator);
+        $mediaCommentParent = $this->createTestComment($user, $media);
+        $mediaComment = $this->createTestComment($user, $media);
+        $mediaComment->parent = [
+            '_id' => new ObjectId($mediaCommentParent->_id),
+        ];
+        $mediaComment->reply_to_user = [
+            '_id' => new ObjectId($replyToUser->_id),
+            'username' => $replyToUser->username,
+            'avatar' => $replyToUser->avatar,
+        ];
+        $mediaComment->saveQuietly();
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get("/v1/media/{$mediaComment->media_id}/comment/{$parentId}/reply");
+            ->get("/v1/media/{$mediaComment->media_id}/comment/{$mediaCommentParent->_id}/reply");
 
         $r->assertStatus(200);
 
@@ -102,8 +119,10 @@ class MediaCommentTest extends ApiTestCase
 
     public function testReportComment()
     {
-        $user = User::query()->first();
-        $mediaComment = MediaComment::query()->first();
+        $user = $this->createTestUser();
+        $mediaCreator = $this->createTestUser();
+        $media = $this->createTestMedia($mediaCreator);
+        $mediaComment = $this->createTestComment($user, $media);
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -136,10 +155,10 @@ class MediaCommentTest extends ApiTestCase
      */
     public function testLikeMediaComment()
     {
-        $user = User::query()->first();
-        $mediaComment = MediaComment::query()->first();
-        $mediaComment->likes_count = 0;
-        $mediaComment->save();
+        $user = $this->createTestUser();
+        $mediaCreator = $this->createTestUser();
+        $media = $this->createTestMedia($mediaCreator);
+        $mediaComment = $this->createTestComment($user, $media);
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -190,21 +209,9 @@ class MediaCommentTest extends ApiTestCase
 
     public function testCreateMediaComment()
     {
-        $user = User::query()->first();
-        $mediaCreator = User::factory()->create(['like_count' => 0]);
-        $media = \Aparlay\Core\Models\Media::factory()->for($mediaCreator, 'userObj')->create([
-            'is_comments_enabled' => true,
-            'is_protected' => false,
-            'created_by' => $mediaCreator->_id,
-            'like_count' => 0,
-            'status' => MediaStatus::COMPLETED->value,
-            'visibility' => MediaVisibility::PUBLIC->value,
-            'creator' => [
-                '_id' => $mediaCreator->_id,
-                'username' => $mediaCreator->username,
-                'avatar' => $mediaCreator->avatar,
-            ],
-        ]);
+        $user = $this->createTestUser();
+        $mediaCreator = $this->createTestUser();
+        $media = $this->createTestMedia($mediaCreator);
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -224,21 +231,11 @@ class MediaCommentTest extends ApiTestCase
 
     public function testCreateMediaCommentReplyFailed()
     {
-        $user = User::query()->first();
+        $user = $this->createTestUser();
         $mediaCreator = User::factory()->create(['like_count' => 0]);
-        $media = \Aparlay\Core\Models\Media::factory()->for($mediaCreator, 'userObj')->create([
-            'is_comments_enabled' => false,
-            'is_protected' => false,
-            'created_by' => $mediaCreator->_id,
-            'like_count' => 0,
-            'status' => MediaStatus::COMPLETED->value,
-            'visibility' => MediaVisibility::PUBLIC->value,
-            'creator' => [
-                '_id' => $mediaCreator->_id,
-                'username' => $mediaCreator->username,
-                'avatar' => $mediaCreator->avatar,
-            ],
-        ]);
+        $media = $this->createTestMedia($mediaCreator);
+        $media->is_comments_enabled = false;
+        $media->saveQuietly();
 
         $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -251,14 +248,12 @@ class MediaCommentTest extends ApiTestCase
 
     public function testCreateMediaCommentReply()
     {
-        $users = User::query()->limit(2)->get();
-        $media = Media::query()->first();
-        $mediaComment = MediaComment::factory()->create([
-            'media_id' => new ObjectId($media->_id),
-            'user_id' => new ObjectId($users[0]->_id),
-        ]);
+        $mediaOwner = $this->createTestUser();
+        $media = $this->createTestMedia($mediaOwner);
+        $user = $this->createTestUser();
+        $mediaComment = $this->createTestComment($user, $media);
 
-        $r = $this->actingAs($users[1])
+        $r = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post("/v1/media/{$mediaComment->media_id}/comment/{$mediaComment->_id}/reply", [
                 'text' => $this->faker->realText(),
@@ -288,5 +283,41 @@ class MediaCommentTest extends ApiTestCase
         $r->assertJson(
             fn (AssertableJson $json) => $json->whereAllType($types)
         );
+    }
+
+    private function createTestUser()
+    {
+        return User::factory()->create([
+            'type' => UserType::USER->value,
+            'password_hash' => Hash::make('waptap'),
+            'status' => UserStatus::ACTIVE->value,
+            'email' => uniqid().'@waptap.com',
+        ]);
+    }
+
+    private function createTestMedia($user)
+    {
+        return Media::factory()->for($user, 'userObj')->create([
+            'is_comments_enabled' => true,
+            'is_protected' => false,
+            'created_by' => $user->_id,
+            'like_count' => 0,
+            'status' => MediaStatus::COMPLETED->value,
+            'visibility' => MediaVisibility::PUBLIC->value,
+            'creator' => [
+                '_id' => $user->_id,
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ],
+        ]);
+    }
+
+    private function createTestComment($user, $media)
+    {
+        return MediaComment::factory()->create([
+            'media_id' => new ObjectId($media->_id),
+            'user_id' => new ObjectId($user->_id),
+            'likes_count' => 0,
+        ]);
     }
 }
