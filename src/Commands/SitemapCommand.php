@@ -3,12 +3,12 @@
 namespace Aparlay\Core\Commands;
 
 use Aparlay\Core\Models\User;
-use Flow\FileOpenException;
-use Flow\Uploader;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Jenssegers\Mongodb\Collection;
+use MongoDB\BSON\ObjectId;
 use Spatie\Sitemap\SitemapGenerator;
-use Spatie\Sitemap\SitemapIndex;
+use Spatie\Sitemap\Tags\Url;
 
 class SitemapCommand extends Command
 {
@@ -16,46 +16,63 @@ class SitemapCommand extends Command
 
     public $description = 'Generate sitemap';
 
+    public $limit = 10000;
+
     private $lastUsername = '';
 
     public function handle()
     {
-        foreach (range('a', 'z') as $letter) {
-            $counts = User::query()->where('username', 'regexp', '/^'.$letter.'.*/')->count();
-            if ($counts === 0) {
-                continue;
+        $sitemap = SitemapGenerator::create(config('app.frontend_url'))->getSitemap();
+        $total = User::count();
+        $bar = $this->output->createProgressBar($total);
+        $i = 1;
+        do {
+            $users = $this->getUserChunk();
+            $count = count($users);
+            foreach ($users as $user) {
+                $sitemap->add(
+                    Url::create(config('app.frontend_url').'/@'.$user['username'])
+                        ->setPriority(0.5)
+                );
             }
+            $bar->advance($count/$total);
+            $sitemap->writeToFile(public_path('xml/pages_'.($i*$this->limit).'.xml'));
+            $i++;
+        } while ($count === $this->limit);
 
-            $offset = 0;
-            do {
-                foreach ($this->getUserChunk($letter, $offset) as $user) {
-                }
-            } while ($counts > 10000);
-        }
-        SitemapGenerator::create(config('app.frontend_url'))
-            ->getSitemap()
-            // here we add one extra link, but you can add as many as you'd like
-            ->add(
-                Url::create(config('app.frontend_url').'/@'.$user->username)
-                    ->addImage($user->avatar, '@'.$user->username.' profile page')
-                    ->setPriority(0.5)
-            )
-            ->writeToFile($sitemapPath);
-
-        SitemapIndex::create()
-            ->add('/pages_sitemap.xml')
-            ->add('/posts_sitemap.xml')
-            ->writeToFile(public_path('xml/sitemap.xml'));
+        $bar->finish();
 
         return self::SUCCESS;
     }
 
-    private function getUserChunk($limit = 0)
+    private function getUserChunk()
     {
-        return User::query()->select(['username'])
-            ->where('username', '>', $this->lastUsername)
-            ->orderBy('username')
-            ->limit($limit)
-            ->get(['username']);
+        $users = User::raw(function (Collection $collection) {
+            return $collection->aggregate([
+                [
+                    '$match' => [
+                        'username' => ['$gt' => $this->lastUsername],
+                    ],
+                ],
+                [
+                    '$project' => [
+                        '_id' => 0,
+                        'username' => 1,
+                    ],
+                ],
+                [
+                    '$sort' => [
+                        'username' => 1,
+                    ],
+                ],
+                [
+                    '$limit' =>$this->limit,
+                ],
+            ]);
+        })->toArray();
+
+        $this->lastUsername = end($users)['username'];
+
+        return $users;
     }
 }
