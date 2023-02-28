@@ -5,13 +5,12 @@ namespace Aparlay\Core\Commands;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Console\Isolatable;
 use Jenssegers\Mongodb\Collection;
-use MongoDB\BSON\ObjectId;
 use Spatie\Sitemap\SitemapGenerator;
 use Spatie\Sitemap\Tags\Url;
 
-class SitemapCommand extends Command
+class SitemapCommand extends Command implements Isolatable
 {
     public $signature = 'core:sitemap';
 
@@ -26,6 +25,7 @@ class SitemapCommand extends Command
         $sitemap = SitemapGenerator::create(config('app.frontend_url'))->getSitemap();
         $total = User::where('status', UserStatus::ACTIVE->value)->count();
         $bar = $this->output->createProgressBar($total);
+        $bar->start();
         $i = 1;
         do {
             $users = $this->getUserChunk();
@@ -42,6 +42,7 @@ class SitemapCommand extends Command
         } while ($count === $this->limit);
 
         $bar->finish();
+        $this->comment(PHP_EOL);
 
         return self::SUCCESS;
     }
