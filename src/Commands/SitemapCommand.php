@@ -35,8 +35,8 @@ class SitemapCommand extends Command
                         ->setPriority(0.5)
                 );
             }
-            $bar->advance($count/$total);
-            $sitemap->writeToFile(public_path('xml/pages_'.($i*$this->limit).'.xml'));
+            $bar->advance($count / $total);
+            $sitemap->writeToFile(public_path('xml/pages_'.($i * $this->limit).'.xml'));
             $i++;
         } while ($count === $this->limit);
 

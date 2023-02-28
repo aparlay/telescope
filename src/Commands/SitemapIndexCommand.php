@@ -16,7 +16,7 @@ class SitemapIndexCommand extends Command
 
     public function handle()
     {
-        $files = glob(public_path('xml/')."pages_*.xml");
+        $files = glob(public_path('xml/').'pages_*.xml');
         $bar = $this->output->createProgressBar(count($files));
 
         $sitemap = SitemapIndex::create();
