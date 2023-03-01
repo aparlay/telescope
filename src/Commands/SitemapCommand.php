@@ -26,11 +26,11 @@ class SitemapCommand extends Command implements Isolatable
     {
         $this->lastUserId = User::query()->orderBy('_id')->first(['_id'])->_id;
         $this->lastMediaId = Media::query()->orderBy('_id')->first(['_id'])->_id;
-        $this->info("Generating media sitemap");
+        $this->info('Generating media sitemap');
         $this->addMediaUrls();
-        $this->info("Generating user sitemap");
+        $this->info('Generating user sitemap');
         $this->addUserUrls();
-        $this->info("Generating index sitemap");
+        $this->info('Generating index sitemap');
         $this->generateIndex();
         $this->comment(PHP_EOL);
 
@@ -61,7 +61,7 @@ class SitemapCommand extends Command implements Isolatable
         } while ($count === $this->limit);
 
         $bar->finish();
-        $this->info("");
+        $this->info('');
     }
 
     private function addMediaUrls()
@@ -87,7 +87,7 @@ class SitemapCommand extends Command implements Isolatable
         } while ($count === $this->limit);
 
         $bar->finish();
-        $this->info("");
+        $this->info('');
     }
 
     private function getUserChunk()
