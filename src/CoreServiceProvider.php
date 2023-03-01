@@ -50,7 +50,6 @@ use Aparlay\Core\Commands\ResetUserCountersCommand;
 use Aparlay\Core\Commands\RoleCommand;
 use Aparlay\Core\Commands\ServerMonitorCommand;
 use Aparlay\Core\Commands\SitemapCommand;
-use Aparlay\Core\Commands\SitemapIndexCommand;
 use Aparlay\Core\Commands\UserScoreCommand;
 use Aparlay\Core\Commands\UserScoreDailyCommand;
 use Aparlay\Core\Commands\VideoReprocessCommand;
@@ -133,7 +132,6 @@ class CoreServiceProvider extends ServiceProvider
                 ResetMediaCountersCommand::class,
                 ResetUserCountersCommand::class,
                 SitemapCommand::class,
-                SitemapIndexCommand::class,
             ]);
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
