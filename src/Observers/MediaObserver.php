@@ -33,7 +33,7 @@ class MediaObserver extends BaseModelObserver
             $creatorUser->updateMedias();
         }
 
-        UploadMedia::dispatchIf(!config('app.is_testing'), $media->userObj->_id, $media->_id, $media->file)->delay(10);
+        UploadMedia::dispatchIf(! config('app.is_testing'), $media->userObj->_id, $media->_id, $media->file)->delay(10);
     }
 
     /**

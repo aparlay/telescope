@@ -26,6 +26,7 @@ trait CreatesApplication
         $app->make('config')->set('database.default', 'testing');
         $app->make('config')->set('database.default', 'testing');
         $this->baseUrl = env('TEST_DOMAIN');
+
         return $app;
     }
 }
