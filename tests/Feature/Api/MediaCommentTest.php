@@ -12,11 +12,18 @@ use Aparlay\Core\Models\MediaCommentLike;
 use Aparlay\Core\Models\Report;
 use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Testing\Fluent\AssertableJson;
 use MongoDB\BSON\ObjectId;
 
 class MediaCommentTest extends ApiTestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        Queue::fake();
+    }
+
     const MEDIA_COMMENT_TYPES = [
         'code' => 'integer',
         'status' => 'string',
