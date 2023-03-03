@@ -435,7 +435,7 @@ class User extends \App\Models\User
     }
 
     /**
-     * Specifies the user's FCM tokens
+     * Specifies the user's FCM tokens.
      *
      * @return string|array
      */
@@ -445,7 +445,7 @@ class User extends \App\Models\User
     }
 
     /**
-     * Specifies the user's APN tokens
+     * Specifies the user's APN tokens.
      *
      * @return string|array
      */

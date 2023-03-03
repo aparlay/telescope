@@ -1,6 +1,7 @@
 <?php
 
 namespace Aparlay\Core\Models;
+
 /**
  * @property string $endpoint
  * @property string|null $public_key
