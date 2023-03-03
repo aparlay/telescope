@@ -16,6 +16,7 @@ use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\Traits\CountryFields;
+use Aparlay\Core\Models\Traits\HasPushSubscriptions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -33,7 +34,6 @@ use Laravel\Scout\Searchable;
 use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
-use NotificationChannels\WebPush\HasPushSubscriptions;
 
 /**
  * User model.
@@ -1013,6 +1013,7 @@ class User extends \App\Models\User
             UserNotificationCategory::SUBSCRIPTIONS->value => $this->setting['notifications']['new_subscribers'] ?? true,
             UserNotificationCategory::FOLLOWS->value => $this->setting['notifications']['new_followers'] ?? true,
             UserNotificationCategory::SYSTEM->value => true, //$this->setting['notifications']['news_and_updates'] ?? true,
+            UserNotificationCategory::UNREAD_MESSAGE->value => true, //$this->setting['notifications']['unread_message'] ?? true,
             default => false
         };
     }

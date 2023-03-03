@@ -41,6 +41,8 @@ class PushSubscription extends BaseModel
         'public_key',
         'auth_token',
         'content_encoding',
+        'entity._id',
+        'entity._type',
     ];
 
     /**
@@ -50,7 +52,7 @@ class PushSubscription extends BaseModel
      */
     public function subscribable()
     {
-        return $this->morphTo();
+        return $this->morphTo('entity.');
     }
 
     /**

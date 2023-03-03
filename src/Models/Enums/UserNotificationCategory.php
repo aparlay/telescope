@@ -11,6 +11,7 @@ enum UserNotificationCategory: int implements Enum
     case TIPS = 3;
     case FOLLOWS = 4;
     case SUBSCRIPTIONS = 5;
+    case UNREAD_MESSAGE = 6;
     case SYSTEM = 10;
 
     public function label(): string
@@ -21,6 +22,7 @@ enum UserNotificationCategory: int implements Enum
             self::TIPS => __('tips'),
             self::SUBSCRIPTIONS => __('subscriptions'),
             self::FOLLOWS => __('follows'),
+            self::UNREAD_MESSAGE => __('unread message'),
             self::SYSTEM => __('system'),
         };
     }
@@ -33,6 +35,7 @@ enum UserNotificationCategory: int implements Enum
             self::TIPS => 'blue',
             self::SUBSCRIPTIONS => 'default',
             self::FOLLOWS => 'success',
+            self::UNREAD_MESSAGE => 'black',
             self::SYSTEM => 'danger',
         };
     }
