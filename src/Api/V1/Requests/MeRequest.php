@@ -82,6 +82,7 @@ class MeRequest extends FormRequest
             'push_subscription.endpoint' => ['nullable', 'string'],
             'push_subscription.keys.auth' => ['nullable', 'string'],
             'push_subscription.keys.p256dh' => ['nullable', 'string'],
+            'push_unsubscription.endpoint' => ['nullable', 'string'],
         ];
     }
 
