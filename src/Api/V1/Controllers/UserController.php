@@ -121,6 +121,9 @@ class UserController extends Controller
                     $request->push_subscription['keys']['auth'],
                 );
             }
+            if ($request->has('push_unsubscription') && ! empty($request->push_unsubscription['endpoint'])) {
+                $this->userService->getUser()->deletePushSubscription($request->push_unsubscription['endpoint']);
+            }
 
             /* Update User Profile Information */
             $this->userService->getUser()->fill($request->all());
