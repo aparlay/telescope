@@ -111,6 +111,13 @@ class UserController extends Controller
             if ($request->has('avatar') && empty($request->avatar)) {
                 $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
+            if ($request->has('fcm_subscription') && !empty($request->fcm_subscription)) {
+                $this->userService->getUser()->updatePushSubscription(
+                    $request->fcm_subscription['endpoint'],
+                    $request->fcm_subscription['keys']['p256dh'],
+                    $request->fcm_subscription['keys']['auth'],
+                );
+            }
 
             /* Update User Profile Information */
             $this->userService->getUser()->fill($request->all());

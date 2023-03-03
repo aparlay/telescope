@@ -76,7 +76,9 @@ class MeRequest extends FormRequest
             'setting.show_adult_content' => ['nullable', 'integer'],
             'setting.notifications.*' => ['nullable', 'bool'],
             'setting.filter_content_gender.*' => ['nullable', 'bool'],
-            'setting.fcm_tokens.*' => ['nullable', 'string'],
+            'fcm_subscription.endpoint' => ['nullable', 'string'],
+            'fcm_subscription.keys.auth' => ['nullable', 'string'],
+            'fcm_subscription.keys.p256dh' => ['nullable', 'string'],
         ];
     }
 
@@ -174,10 +176,6 @@ class MeRequest extends FormRequest
                     'ban_payout' => $user->setting['payout']['ban_payout'] ?? false,
                     'auto_ban_payout' => $user->setting['payout']['auto_ban_payout'] ?? false,
                 ],
-                'fcm_tokens' => array_merge(
-                    array_values($user->setting['fcm_tokens'] ?? []),
-                    array_values($this->setting['fcm_tokens'] ?? [])
-                ),
             ],
         ]);
     }

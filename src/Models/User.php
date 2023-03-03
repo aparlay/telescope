@@ -33,6 +33,7 @@ use Laravel\Scout\Searchable;
 use Maklad\Permission\Traits\HasRoles;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 
 /**
  * User model.
@@ -130,6 +131,7 @@ class User extends \App\Models\User
     use HasRoles;
     use Searchable;
     use CountryFields;
+    use HasPushSubscriptions;
 
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_DEMO = 'demo';
@@ -430,6 +432,26 @@ class User extends \App\Models\User
     protected static function newFactory(): Factory
     {
         return UserFactory::new();
+    }
+
+    /**
+     * Specifies the user's FCM tokens
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return $this->push_notification_tokens['fcm'] ?? [];
+    }
+
+    /**
+     * Specifies the user's APN tokens
+     *
+     * @return string|array
+     */
+    public function routeNotificationForApn()
+    {
+        return $this->push_notification_tokens['apn'] ?? [];
     }
 
     /**
