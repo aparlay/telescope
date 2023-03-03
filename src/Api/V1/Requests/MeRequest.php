@@ -80,8 +80,8 @@ class MeRequest extends FormRequest
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string'],
             'push_subscription.endpoint' => ['nullable', 'string'],
-            'push_subscription.token' => ['nullable', 'string'],
-            'push_subscription.key' => ['nullable', 'string'],
+            'push_subscription.keys.auth' => ['nullable', 'string'],
+            'push_subscription.keys.p256dh' => ['nullable', 'string'],
         ];
     }
 
