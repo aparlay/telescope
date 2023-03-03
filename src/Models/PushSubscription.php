@@ -2,6 +2,9 @@
 
 namespace Aparlay\Core\Models;
 
+use Aparlay\Core\Api\V1\Models\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
+
 /**
  * @property string $endpoint
  * @property string|null $public_key
@@ -17,6 +20,17 @@ class PushSubscription extends BaseModel
      * @var string
      */
     protected $collection = 'push_subscriptions';
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // to keep entities in database without namespace
+        Relation::morphMap([
+            'User' => User::class,
+        ]);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
