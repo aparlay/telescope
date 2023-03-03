@@ -86,10 +86,15 @@ trait HasPushSubscriptions
      */
     public function routeNotificationForWebPush()
     {
+        Log::info($this->_id);
+        Log::info($this->getMorphClass());
         Log::info(PushSubscription::query()
-            ->where('entity._id', $this->_id)
+            ->where('entity._id', new ObjectId($this->_id))
             ->where('entity._type', $this->getMorphClass())
             ->get());
-        return $this->pushSubscriptions;
+        return PushSubscription::query()
+            ->where('entity._id', new ObjectId($this->_id))
+            ->where('entity._type', $this->getMorphClass())
+            ->get();
     }
 }

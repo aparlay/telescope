@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
@@ -50,7 +51,7 @@ class PushSubscription extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function subscribable()
+    public function entityObj(): MorphTo|\Jenssegers\Mongodb\Relations\MorphTo
     {
         return $this->morphTo('entity.');
     }
