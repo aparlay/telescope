@@ -3,9 +3,9 @@
 namespace Aparlay\Core\Listeners;
 
 use Aparlay\Chat\Api\V1\Models\Message;
+use Aparlay\Chat\Events\UserChatUnreadStatusUpdatedEvent;
 use Aparlay\Chat\Models\Chat;
 use Aparlay\Chat\Models\Enums\MessageStatus;
-use Aparlay\Chat\Events\UserChatUnreadStatusUpdatedEvent;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserWsState;
 use Aparlay\Core\Models\User;
