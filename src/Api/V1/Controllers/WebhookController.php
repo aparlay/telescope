@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Controllers;
 
 use Aparlay\Core\Api\V1\Models\Email;
 use Aparlay\Core\Events\SocketClientEvent;
+use Aparlay\Core\Events\SocketClientStateEvent;
 use Aparlay\Core\Models\Enums\EmailStatus;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -31,6 +32,7 @@ class WebhookController extends Controller
                 true
             )) : [];
             SocketClientEvent::dispatchIf(($event['name'] === 'client_event'), $event);
+            SocketClientStateEvent::dispatchIf(($event['name'] === 'client_state'), $event);
         }
 
         return response('', 200, []);

@@ -14,6 +14,7 @@ use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
+use Aparlay\Core\Models\Enums\UserWsState;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\Traits\CountryFields;
 use Aparlay\Core\Models\Traits\HasPushSubscriptions;
@@ -86,6 +87,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property bool        $has_unread_chat
  * @property bool        $has_unread_notification
  * @property Carbon|UTCDateTime $last_online_at
+ * @property string      $ws_state
  *
  * @property User        $referralObj
  * @property Media[]     $mediaObjs
@@ -113,6 +115,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read string $country_label
  * @property-read string $verification_status_label
  * @property-read bool   $is_eligible_for_verification
+ * @property-read bool   $is_ws_state_active
+ * @property-read bool   $is_ws_state_inactive
  *
  * @method static |self|Builder date(?UTCDateTime $startAt, ?UTCDateTime $endAt, string $field = 'created_at') filter by date
  * @method static |self|Builder active() get activated user
@@ -192,11 +196,12 @@ class User extends \App\Models\User
         'deactivation_reason',
         'oauth',
         'two_factor',
+        'tracking',
+        'ws_state',
+        'last_online_at',
         'created_at',
         'updated_at',
         'deleted_at',
-        'last_online_at',
-        'tracking',
     ];
 
     protected $attributes = [
@@ -1161,5 +1166,15 @@ class User extends \App\Models\User
     public function isFollowedBy(ObjectId|string $userId): bool
     {
         return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
+    }
+
+    public function getIsWsStateActiveAttribute()
+    {
+        return $this->ws_state === UserWsState::ACTIVE->value;
+    }
+
+    public function getIsWsStateInctiveAttribute()
+    {
+        return $this->ws_state === UserWsState::INACTIVE->value;
     }
 }
