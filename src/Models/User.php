@@ -559,6 +559,9 @@ class User extends \App\Models\User
      */
     public function getCountFieldsUpdatedAtAttribute($attributeValue): mixed
     {
+        if ($attributeValue === null) {
+            $attributeValue = [];
+        }
         foreach ($attributeValue as $field => $value) {
             /* MongoDB\BSON\UTCDateTime $value */
             $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value->toDateTime()->getTimestamp() : $value;
