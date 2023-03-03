@@ -122,7 +122,7 @@ class UserController extends Controller
                 );
             }
             if ($request->has('push_unsubscription') && ! empty($request->push_unsubscription['endpoint'])) {
-                //$this->userService->getUser()->deletePushSubscription($request->push_unsubscription['endpoint']);
+                $this->userService->getUser()->deletePushSubscription($request->push_unsubscription['endpoint']);
             }
 
             /* Update User Profile Information */
