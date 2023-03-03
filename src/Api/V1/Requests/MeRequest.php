@@ -77,8 +77,8 @@ class MeRequest extends FormRequest
             'setting.notifications.*' => ['nullable', 'bool'],
             'setting.filter_content_gender.*' => ['nullable', 'bool'],
             'push_subscription.endpoint' => ['nullable', 'string'],
-            'push_subscription.token' => ['nullable', 'string'],
-            'push_subscription.key' => ['nullable', 'string'],
+            'push_subscription.keys.auth' => ['nullable', 'string'],
+            'push_subscription.keys.p256dh' => ['nullable', 'string'],
         ];
     }
 
