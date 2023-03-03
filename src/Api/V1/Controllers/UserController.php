@@ -114,11 +114,11 @@ class UserController extends Controller
             if ($request->has('push_subscription') &&
                 ! empty($request->push_subscription['endpoint']) &&
                 ! empty($request->push_subscription['keys']['p256dh']) &&
-                ! empty($request->push_subscription['token']['auth'])) {
+                ! empty($request->push_subscription['keys']['auth'])) {
                 $this->userService->getUser()->updatePushSubscription(
                     $request->push_subscription['endpoint'],
                     $request->push_subscription['keys']['p256dh'],
-                    $request->push_subscription['token']['auth'],
+                    $request->push_subscription['keys']['auth'],
                 );
             }
 
