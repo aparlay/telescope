@@ -1170,7 +1170,7 @@ class User extends \App\Models\User
 
     public function getIsWsStateActiveAttribute()
     {
-        return !$this->is_ws_state_inactive;
+        return ! $this->is_ws_state_inactive;
     }
 
     public function getIsWsStateInctiveAttribute()
