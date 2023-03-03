@@ -76,9 +76,9 @@ class MeRequest extends FormRequest
             'setting.show_adult_content' => ['nullable', 'integer'],
             'setting.notifications.*' => ['nullable', 'bool'],
             'setting.filter_content_gender.*' => ['nullable', 'bool'],
-            'fcm_subscription.endpoint' => ['nullable', 'string'],
-            'fcm_subscription.keys.auth' => ['nullable', 'string'],
-            'fcm_subscription.keys.p256dh' => ['nullable', 'string'],
+            'push_subscription.endpoint' => ['nullable', 'string'],
+            'push_subscription.token' => ['nullable', 'string'],
+            'push_subscription.key' => ['nullable', 'string'],
         ];
     }
 
