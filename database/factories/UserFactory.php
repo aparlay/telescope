@@ -134,9 +134,9 @@ class UserFactory extends Factory
      */
     public function verified()
     {
-        return $this->state(function(){
+        return $this->state(function () {
             return [
-                'verification_status' => UserVerificationStatus::VERIFIED->value
+                'verification_status' => UserVerificationStatus::VERIFIED->value,
             ];
         });
     }
