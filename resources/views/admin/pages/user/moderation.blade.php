@@ -9,7 +9,7 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Users Moderation</h1>
+            <h1 class="m-0">ID Verifications</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -33,7 +33,6 @@
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
-    @livewireScripts
     <livewire:modals/>
     <script src="/js/admin.js"></script>
 @endsection

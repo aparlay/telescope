@@ -513,7 +513,6 @@
     </div>
 @endsection
 @push('js')
-    @livewireScripts
     <livewire:modals/>
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ URL::asset('admin/assets/js/flow/flow.min.js') }}"></script>

@@ -8,7 +8,10 @@ use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
 
 class UserDocumentTest extends ApiTestCase
@@ -82,6 +85,10 @@ class UserDocumentTest extends ApiTestCase
      */
     public function testCreate()
     {
+        Bus::fake();
+        Event::fake();
+        Storage::fake('upload');
+
         $user = User::factory()->create();
 
         $idCardFile = UploadedFile::fake()->create('id_card.jpg', 100);

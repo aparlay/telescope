@@ -70,6 +70,10 @@ class UserDocumentService extends AbstractService
             abort(423, __('Your application is already under review'));
         }
 
+        if (! $user->is_eligible_for_verification) {
+            abort(423, __('You are currently not eligible for ID verification'));
+        }
+
         if (! $videoSelfie) {
             abort(423, __('You need to upload selfie at first'));
         }
@@ -117,10 +121,6 @@ class UserDocumentService extends AbstractService
                 'avatar' => $user->avatar,
             ],
         ]);
-
-        if (config('app.is_testing')) {
-            return $userDocument;
-        }
 
         $this->uploadDocument($documentDto->file, $userDocument);
 

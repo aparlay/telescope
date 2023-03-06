@@ -18,7 +18,6 @@ use Aparlay\Core\Models\Enums\UserShowOnlineStatus;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
-use Aparlay\Core\Models\MediaVisit;
 use Aparlay\Core\Models\User;
 use Exception;
 
@@ -87,7 +86,7 @@ class UserObserver extends BaseModelObserver
             $text_search[] = $model->username;
             $text_search[] = $model->email;
             $text_search[] = $model->phone_number;
-            $model->text_search = $text_search;
+            $model->text_search = array_values(array_filter(array_map('strtolower', $text_search)));
         }
 
         if ($model->isDirty(['country_alpha2'])) {
@@ -120,7 +119,6 @@ class UserObserver extends BaseModelObserver
         if ($model->wasChanged('status') && $model->status != $model->getOriginal('status')) {
             switch ($model->status) {
                 case UserStatus::DEACTIVATED->value:
-                    $model->notify(new UserDeactivateAccount());
                     DeleteUserMedia::dispatch((string) $model->_id);
                     DeleteUserConnect::dispatch((string) $model->_id);
                     break;

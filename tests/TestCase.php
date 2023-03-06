@@ -16,30 +16,27 @@ abstract class TestCase extends Orchestra
      */
     protected $faker;
 
-    protected static $isSeeded = false;
+    protected static $seedCoreDB = false;
+    protected static $truncateCoreDB = false;
 
     public function setUp(): void
     {
         parent::setUp();
+        $this->baseUrl = env('TEST_DOMAIN');
 
         $this->faker = app('Faker');
-
-        $this->app->make('config')->set('database.default', 'testing');
-        $this->app->make('config')->set('app.is_testing', true);
-        $this->app->make('config')->set('app.debug', false);
 
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
 
-        if (! static::$isSeeded) {
-            Artisan::call('db:seed', ['--class' => '\Aparlay\Payout\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
-            static::$isSeeded = true;
+        if (static::$truncateCoreDB) {
+            Artisan::call('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseTruncate', '--database' => 'testing']);
+            static::$truncateCoreDB = false;
         }
-    }
-
-    public function getEnvironmentSetUp($app)
-    {
-        config()->set('database.default', 'testing');
+        if (static::$seedCoreDB) {
+            Artisan::call('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
+            static::$seedCoreDB = false;
+        }
     }
 }

@@ -338,6 +338,92 @@ use OpenApi\Annotations as OA;
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     ),
  * )
+ *
+ * @OA\Get(
+ *     path="/v1/user/share/{username}",
+ *     tags={"Core | User"},
+ *     summary="Get the user data",
+ *     description="Fetch the user information.",
+ *     operationId="userViewByUsername",
+ *     @OA\Parameter(
+ *         name="X-DEVICE-ID",
+ *         in="header",
+ *         description="unique id of the device user is going to send this request it can be segment.com anonymousId.",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="string"
+ *         )
+ *     ),
+ *     @OA\Parameter(
+ *         name="username",
+ *         in="path",
+ *         description="user username.",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="string"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="successful operation",
+ *         @OA\Header(
+ *             header="X-Rate-Limit-Limit",
+ *             description="the maximum number of allowed requests during a period",
+ *             @OA\Schema(
+ *                 type="integer",
+ *                 format="int32"
+ *             )
+ *         ),
+ *         @OA\Header(
+ *             header="X-Rate-Limit-Remaining",
+ *             description="the remaining number of allowed requests within the current period",
+ *             @OA\Schema(
+ *                 type="integer",
+ *                 format="int32"
+ *             )
+ *         ),
+ *         @OA\Header(
+ *             header="X-Rate-Limit-Reset",
+ *             description="the number of seconds to wait before having maximum number of allowed requests again",
+ *             @OA\Schema(
+ *                 type="integer",
+ *                 format="int32"
+ *             )
+ *         ),
+ *         @OA\JsonContent(
+ *              @OA\Property(
+ *                  property="data",
+ *                  type="object",
+ *                  ref="#/components/schemas/User"
+ *              ),
+ *              @OA\Property(
+ *                  property="status",
+ *                  type="string",
+ *                  example="OK"
+ *              ),
+ *              @OA\Property(
+ *                  property="code",
+ *                  type="integer",
+ *                  example=200
+ *              )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Unauthorized",
+ *         @OA\JsonContent(ref="#/components/schemas/401"),
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="DATA VALIDATION FAILED",
+ *         @OA\JsonContent(ref="#/components/schemas/422"),
+ *     ),
+ *     @OA\Response(
+ *         response=429,
+ *         description="TOO MANY REQUESTS",
+ *         @OA\JsonContent(ref="#/components/schemas/429"),
+ *     ),
+ * )
  */
 class UserController
 {

@@ -37,6 +37,10 @@ class GlobalSearchService
             $medias = Media::query()->media($searchQuery)->limit(5)->get();
         }
 
+        if (strlen($searchQuery) === 6) {
+            $medias = Media::query()->slug($searchQuery)->limit(5)->get();
+        }
+
         $result = [];
 
         $result['User'] = $users;
@@ -50,6 +54,10 @@ class GlobalSearchService
 
     private static function searchUsers(string $searchQuery): Collection
     {
+        if (mb_substr($searchQuery, 0, 1) === '@') {
+            return User::query()->where('username', 'LIKE', trim($searchQuery, '@').'%')->limit(5)->get();
+        }
+
         $users = User::query()->textSearch($searchQuery)->limit(5)->get();
 
         if (filter_var($searchQuery, FILTER_VALIDATE_IP) !== false) {

@@ -4,8 +4,10 @@ namespace Aparlay\Core\Models\Scopes;
 
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\UTCDateTime;
@@ -21,7 +23,7 @@ trait UserScope
     public function scopeTextSearch(Builder $query, string $text): Builder
     {
         return empty($text) ? $query :
-            $query->where('text_search', 'regex', new Regex('.*'.$text.'.*', 'i'));
+            $query->where('text_search', 'regex', new Regex('^'.Str::lower($text).'.*'));
     }
 
     /**
@@ -139,6 +141,11 @@ trait UserScope
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', UserStatus::ACTIVE->value);
+    }
+
+    public function scopeIdVerified(Builder $query): Builder
+    {
+        return $query->where('verification_status', UserVerificationStatus::VERIFIED->value);
     }
 
     /**

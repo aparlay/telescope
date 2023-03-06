@@ -27,6 +27,7 @@ class UserVerificationModal extends Component
     public $documents = [];
 
     public $documentsData;
+    protected $listeners = ['refreshUserDocuments' => '$refresh'];
 
     public function mount($userId)
     {
@@ -188,6 +189,7 @@ class UserVerificationModal extends Component
             }
         }
 
+        $this->emit('refreshUserDocuments');
         $this->dispatchBrowserEvent('hideModal');
         $this->emit('updateParent');
     }

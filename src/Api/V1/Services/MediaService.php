@@ -21,6 +21,7 @@ use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\Queries\MediaQueryBuilder;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
@@ -485,7 +486,7 @@ class MediaService
             default => Redis::sdiff($mediaIdsCacheKey, $cacheKey),
         };
 
-        return array_slice($notVisitedIds, 0, 500);
+        return array_slice($notVisitedIds, 0, 1800);
     }
 
     /**

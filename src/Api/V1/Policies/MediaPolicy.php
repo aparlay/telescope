@@ -96,7 +96,7 @@ class MediaPolicy
         }
 
         if ($media->is_protected) {
-            return Response::deny(__('Video is protected and you cannot delete it.'));
+            return Response::deny(__('You are not allowed to delete this. Please contact support for more information.'));
         }
 
         return Response::allow();

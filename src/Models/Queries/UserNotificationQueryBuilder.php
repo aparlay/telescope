@@ -23,9 +23,9 @@ class UserNotificationQueryBuilder extends EloquentQueryBuilder
         return $this->status(UserNotificationStatus::NOT_VISITED->value);
     }
 
-    public function status(int $status): self
+    public function status(int|array $status): self
     {
-        return $this->where('status', $status);
+        return is_array($status) ? $this->whereIn('status', $status) : $this->where('status', $status);
     }
 
     public function likes(): self
@@ -106,5 +106,13 @@ class UserNotificationQueryBuilder extends EloquentQueryBuilder
     public function userEntity(ObjectId|string $userId): self
     {
         return $this->entity($userId, 'User');
+    }
+
+    /**
+     * @return self
+     */
+    public function visible(): self
+    {
+        return $this->status([UserNotificationStatus::VISITED->value, UserNotificationStatus::NOT_VISITED->value]);
     }
 }
