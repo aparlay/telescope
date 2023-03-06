@@ -11,10 +11,10 @@ use Aparlay\Core\Api\V1\Requests\UpdateMediaRequest;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
-use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UploadService;
 use Aparlay\Core\Api\V1\Services\UserService;
+use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -81,7 +81,7 @@ class MediaController extends Controller
      */
     public function show(Media $media): Response
     {
-        $this->mediaService->markAsVisited([$media->_id]);
+        $this->mediaService->incrementMediaVisitCounter([$media->_id]);
 
         return $this->response(new MediaResource($media));
     }
@@ -148,5 +148,19 @@ class MediaController extends Controller
         $this->mediaService->watchedMedia($medias, $uuid);
 
         return response('', 202, []);
+    }
+
+    /**
+     * @param  string|null  $slug
+     *
+     * @return Response
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function showBySlug(string $slug = null): Response
+    {
+        $media = Media::slug($slug)->firstOrFail();
+        $this->mediaService->incrementMediaVisitCounter([$media->_id]);
+
+        return $this->show($media);
     }
 }

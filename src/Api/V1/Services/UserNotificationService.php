@@ -42,7 +42,7 @@ class UserNotificationService
             $query->category($filteredCategory);
         }
 
-        $notifications = $query->latest('created_at')->paginate();
+        $notifications = $query->visible()->latest('created_at')->paginate();
 
         $notificationIds = collect($notifications->items())->pluck('_id')->toArray();
         $this->readAll($userId, $notificationIds);
@@ -63,7 +63,17 @@ class UserNotificationService
         $data['entity._id'] = new ObjectId($data['entity_id']);
         $data['entity._type'] = $data['entity_type'];
 
+        // combine likes and comments
         if (in_array($data['category'], [UserNotificationCategory::COMMENTS->value, UserNotificationCategory::LIKES->value])) {
+            $userNotification = UserNotification::query()
+                ->entity($data['entity._id'], $data['entity._type'])
+                ->user($this->getUser()->_id)
+                ->category($data['category'])
+                ->first();
+        }
+
+        // combine likes and comments
+        if ($data['category'] == UserNotificationCategory::FOLLOWS->value) {
             $userNotification = UserNotification::query()
                 ->entity($data['entity._id'], $data['entity._type'])
                 ->user($this->getUser()->_id)
@@ -104,7 +114,7 @@ class UserNotificationService
             dispatch(function () use ($userId) {
                 $unreadNotificationCount = UserNotification::query()->user($userId)->notVisited()->count();
                 $this->getUser()->setStatCounter('notifications', $unreadNotificationCount);
-            });
+            })->afterResponse();
 
             UserNotificationUnreadStatusUpdatedEvent::dispatchIf(
                 $unreadStateChanges,

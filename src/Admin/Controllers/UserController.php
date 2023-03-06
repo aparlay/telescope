@@ -4,8 +4,14 @@ namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Requests\MediaUploadRequest;
+use Aparlay\Core\Admin\Requests\UserGeneralUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserPasswordRequest;
+use Aparlay\Core\Admin\Requests\UserPayoutsUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserProfileUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserSettingsRequest;
 use Aparlay\Core\Admin\Requests\UserStatusRequest;
-use Aparlay\Core\Admin\Requests\UserUpdateRequest;
+use Aparlay\Core\Admin\Requests\UserVisibilityRequest;
 use Aparlay\Core\Admin\Services\MediaService;
 use Aparlay\Core\Admin\Services\UploadService;
 use Aparlay\Core\Admin\Services\UserService;
@@ -109,12 +115,48 @@ class UserController extends Controller
 
     /**
      * @param User $user
-     * @param UserUpdateRequest $request
+     * @param UserProfileUpdateRequest $request
      * @return RedirectResponse
      */
-    public function update(User $user, UserUpdateRequest $request): RedirectResponse
+    public function updateProfile(User $user, UserProfileUpdateRequest $request): RedirectResponse
     {
-        $this->userService->update($user, $request);
+        $this->userService->updateProfile($user, $request);
+
+        return back()->with('success', 'User updated successfully.');
+    }
+
+    /**
+     * @param User $user
+     * @param UserInfoUpdateRequest $request
+     * @return RedirectResponse
+     */
+    public function updateInfo(User $user, UserInfoUpdateRequest $request): RedirectResponse
+    {
+        $this->userService->updateInfo($user, $request);
+
+        return back()->with('success', 'User updated successfully.');
+    }
+
+    /**
+     * @param User $user
+     * @param UserGeneralUpdateRequest $request
+     * @return RedirectResponse
+     */
+    public function updateGeneral(User $user, UserGeneralUpdateRequest $request): RedirectResponse
+    {
+        $this->userService->updateGeneral($user, $request);
+
+        return back()->with('success', 'User updated successfully.');
+    }
+
+    /**
+     * @param User $user
+     * @param UserPayoutsUpdateRequest $request
+     * @return RedirectResponse
+     */
+    public function updatePayouts(User $user, UserPayoutsUpdateRequest $request): RedirectResponse
+    {
+        $this->userService->updatePayouts($user, $request);
 
         return back()->with('success', 'User updated successfully.');
     }
@@ -139,6 +181,45 @@ class UserController extends Controller
         }
 
         return back()->with('error', 'Update status failed.');
+    }
+
+    public function updateVisibility(User $user, UserVisibilityRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $visibility = (int) $request->input('visibility');
+
+        if ($this->userService->updateVisibility($user->_id, $visibility)) {
+            return back()->with('success', 'Set user '.ucfirst(User::getVisibilities()[$visibility]).' successfully.');
+        }
+
+        return back()->with('error', 'Update visibility failed.');
+    }
+
+    public function updatePayoutSettings(User $user, UserSettingsRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $settings = $request->input('setting');
+
+        if ($this->userService->updatePayoutSettings($user->_id, $settings['payout'])) {
+            return back()->with('success', 'Set user settings successfully.');
+        }
+
+        return back()->with('error', 'Update settings failed.');
+    }
+
+    public function setPassword(User $user, UserPasswordRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $password = $request->input('password');
+
+        if ($this->userService->setPassword($user->_id, $password)) {
+            return back()->with('success', 'Set user password successfully.');
+        }
+
+        return back()->with('error', 'Set password failed.');
     }
 
     public function upload(MediaUploadRequest $request)

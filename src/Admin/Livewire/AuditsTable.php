@@ -64,8 +64,8 @@ class AuditsTable extends BaseIndexComponent
     public function render()
     {
         return view('default_view::livewire.audits-table', [
-           'audits' => $this->index(),
-           'hiddenFields' => [],
+            'audits' => $this->index(),
+            'hiddenFields' => [],
         ]);
     }
 }

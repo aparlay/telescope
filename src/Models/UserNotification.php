@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Database\Factories\UserNotificationFactory;
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\Queries\UserNotificationQueryBuilder;
@@ -149,22 +150,27 @@ class UserNotification extends BaseModel
     public function regenerateMessage(): void
     {
         if ($this->category === UserNotificationCategory::LIKES->value) {
-            $this->regenerateLikeMessage();
+            $this->regenerateLikeNotification();
         }
 
         if ($this->category === UserNotificationCategory::COMMENTS->value) {
-            $this->regenerateCommentMessage();
+            $this->regenerateCommentNotification();
+        }
+
+        if ($this->category === UserNotificationCategory::FOLLOWS->value) {
+            $this->regenerateFollowNotification();
         }
     }
 
     /**
      * @return bool
      */
-    private function regenerateLikeMessage(): bool
+    private function regenerateLikeNotification(): bool
     {
         /** @var Media $media */
         $media = $this->entityObj;
         $this->message = $media->likesNotificationMessage();
+        $this->created_at = DT::utcNow();
 
         return $this->save();
     }
@@ -172,11 +178,22 @@ class UserNotification extends BaseModel
     /**
      * @return bool
      */
-    private function regenerateCommentMessage(): bool
+    private function regenerateCommentNotification(): bool
     {
         /** @var Media $media */
         $media = $this->entityObj;
         $this->message = $media->commentsNotificationMessage();
+        $this->created_at = DT::utcNow();
+
+        return $this->save();
+    }
+
+    /**
+     * @return bool
+     */
+    private function regenerateFollowNotification(): bool
+    {
+        $this->created_at = DT::utcNow();
 
         return $this->save();
     }

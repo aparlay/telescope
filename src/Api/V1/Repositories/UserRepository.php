@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Notifications\UserDeactivateAccount;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User as BaseUser;
 use Illuminate\Http\Response;
@@ -182,6 +183,7 @@ class UserRepository
         $this->model->deactivation_reason = $reason;
         if ($this->model->save()) {
             $this->model->unsearchable();
+            $this->model->notify(new UserDeactivateAccount());
 
             return true;
         }

@@ -28,7 +28,7 @@ class MediaCommentService
             ->with(['parentObj'])
             ->whereNull('parent')
             ->media($media->_id)
-            ->oldest('_id')
+            ->recent()
             ->cursorPaginate(self::PER_PAGE);
     }
 
@@ -36,7 +36,7 @@ class MediaCommentService
     {
         return MediaComment::query()
             ->parent($mediaComment->_id)
-            ->oldest('_id')
+            ->recent()
             ->cursorPaginate(self::PER_PAGE);
     }
 
@@ -53,7 +53,7 @@ class MediaCommentService
         $defaultData = [
             'text' => $text,
             'media_id' => new ObjectId($media->_id),
-            'user_id' => new ObjectId($creator->_id),
+            'user_id' => new ObjectId($media->creator['_id']),
             'creator' => [
                 '_id' => new ObjectId($creator->_id),
                 'username' => $creator->username,

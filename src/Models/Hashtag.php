@@ -143,17 +143,33 @@ class Hashtag extends BaseModel
             'full_name' => $this->tag,
             'description' => $this->tag,
             'hashtags' => [$this->tag],
-            'score' => $this->sort_score,
+            'score' => $this->media_count,
             'gender' => $genders,
             'country' => '',
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
-            'is_adult' => false,
-            'skin_score' => 0,
+            'is_adult' => $media?->is_adult ?? false,
+            'skin_score' => $media?->skin_score ?? 5,
             'last_online_at' => 0,
             'comment_count' => $this->comment_count,
             'searchable' => $this->tag,
             '_geo' => ['lat' => 0.0, 'lng' => 0.0],
         ];
+    }
+
+    public function searchIndexShouldBeUpdated(): bool
+    {
+        if ($this->isDirty([
+            'tag',
+            'media_count',
+            'like_count',
+            'visit_count',
+            'visit_count',
+            'comment_count',
+        ])) {
+            return true;
+        }
+
+        return false;
     }
 }

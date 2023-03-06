@@ -3,6 +3,10 @@
 namespace Aparlay\Core\Observers;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Jobs\BlockedUserBlockMedia;
+use Aparlay\Core\Jobs\BlockedUserDeleteFollow;
+use Aparlay\Core\Jobs\BlockedUserDeleteMediaLikes;
+use Aparlay\Core\Jobs\UnBlockedUserUnBlockMedia;
 use Aparlay\Core\Models\Block;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
@@ -20,20 +24,23 @@ class BlockObserver extends BaseModelObserver
      */
     public function creating($model): void
     {
-        $user = User::user($model->user['_id'])->first();
-        $creator = User::user($model->creator['_id'])->first();
+        if (! isset($model->user['username'], $model->user['avatar'])) {
+            $user = User::user($model->user['_id'])->first();
+            $model->user = [
+                '_id' => new ObjectId($user->_id),
+                'username' => $user->username,
+                'avatar' => $user->avatar,
+            ];
+        }
 
-        $model->user = [
-            '_id' => new ObjectId($user->_id),
-            'username' => $user->username,
-            'avatar' => $user->avatar,
-        ];
-
-        $model->creator = [
-            '_id' => new ObjectId($creator->_id),
-            'username' => $creator->username,
-            'avatar' => $creator->avatar,
-        ];
+        if (! isset($model->creator['username'], $model->creator['avatar'])) {
+            $creator = User::user($model->creator['_id'])->first();
+            $model->creator = [
+                '_id' => new ObjectId($creator->_id),
+                'username' => $creator->username,
+                'avatar' => $creator->avatar,
+            ];
+        }
 
         parent::creating($model);
     }
@@ -61,31 +68,12 @@ class BlockObserver extends BaseModelObserver
         $model->creatorObj->stats = $stats;
         $model->creatorObj->save();
 
-        if (($follow = Follow::query()->creator($model->creator['_id'])->user($model->user['_id'])->first()) !== null) {
-            $follow->delete();
-        }
+        BlockedUserBlockMedia::dispatchAfterResponse((string) $model->creator['_id'], (string) $model->user['_id']);
 
-        if (($follow = Follow::query()->creator($model->user['_id'])->user($model->creator['_id'])->first()) !== null) {
-            $follow->delete();
-        }
-
-        foreach (Media::creator($model->user['_id'])->get() as $media) {
-            $media->addToSet('blocked_user_ids', new ObjectId($model->creator['_id']));
-            $media->save();
-        }
-
-        foreach (Media::creator($model->creator['_id'])->get() as $media) {
-            $media->addToSet('blocked_user_ids', new ObjectId($model->user['_id']));
-            $media->save();
-        }
-
-        foreach (MediaLike::query()->creator($model->user['_id'])->user($model->creator['_id'])->get() as $mediaLike) {
-            $mediaLike->delete();
-        }
-
-        foreach (MediaLike::query()->creator($model->creator['_id'])->user($model->user['_id'])->get() as $mediaLike) {
-            $mediaLike->delete();
-        }
+        BlockedUserDeleteFollow::dispatchAfterResponse((string) $model->creator['_id'], (string) $model->user['_id']);
+        BlockedUserDeleteFollow::dispatchAfterResponse((string) $model->user['_id'], (string) $model->creator['_id']);
+        BlockedUserDeleteMediaLikes::dispatchAfterResponse((string) $model->creator['_id'], (string) $model->user['_id']);
+        BlockedUserDeleteMediaLikes::dispatchAfterResponse((string) $model->user['_id'], (string) $model->creator['_id']);
     }
 
     /**
@@ -112,14 +100,6 @@ class BlockObserver extends BaseModelObserver
         $model->creatorObj->stats = $stats;
         $model->creatorObj->save();
 
-        foreach (Media::creator($model->user['_id'])->get() as $media) {
-            $media->removeFromSet('blocked_user_ids', new ObjectId($model->creator['_id']));
-            $media->save();
-        }
-
-        foreach (Media::creator($model->creator['_id'])->get() as $media) {
-            $media->removeFromSet('blocked_user_ids', new ObjectId($model->user['_id']));
-            $media->save();
-        }
+        UnBlockedUserUnBlockMedia::dispatchAfterResponse((string) $model->creator['_id'], (string) $model->user['_id']);
     }
 }

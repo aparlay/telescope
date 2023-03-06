@@ -34,9 +34,7 @@ class MediaObserver extends BaseModelObserver
             $creatorUser->updateMedias();
         }
 
-        if (! config('app.is_testing')) {
-            UploadMedia::dispatch($media->userObj->_id, $media->_id, $media->file)->delay(10);
-        }
+        UploadMedia::dispatchIf(! config('app.is_testing'), $media->userObj->_id, $media->_id, $media->file)->delay(10);
     }
 
     /**
@@ -100,13 +98,15 @@ class MediaObserver extends BaseModelObserver
         }
 
         if ($media->wasChanged(['status', 'visibility'])) {
-            foreach ($media->hashtags as $tag) {
-                RecalculateHashtag::dispatch($tag);
-            }
-
             Media::CachePublicExplicitMediaIds();
             Media::CachePublicToplessMediaIds();
             Media::CachePublicMediaIds();
+        }
+
+        if ($media->wasChanged(['hashtags'])) {
+            foreach ($media->hashtags as $tag) {
+                RecalculateHashtag::dispatch($tag);
+            }
         }
     }
 

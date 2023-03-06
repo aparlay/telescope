@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Requests;
 
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ContactUsRequest extends BaseFormRequest
 {
@@ -13,18 +14,12 @@ class ContactUsRequest extends BaseFormRequest
      */
     public function rules()
     {
-        if (! config('app.is_testing')) {
-            $recaptChaRule = ['required', 'recaptcha'];
-        } else {
-            $recaptChaRule = ['nullable'];
-        }
-
         return [
             'topic' => ['required', 'string'],
             'name' => ['required', 'string'],
             'email' => ['required', 'string'],
             'message' => ['required', 'string'],
-            'g-recaptcha-response' => $recaptChaRule,
+            'g-recaptcha-response' => [Rule::excludeIf(config('app.is_testing')), 'required', 'recaptcha'],
         ];
     }
 

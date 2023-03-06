@@ -56,9 +56,9 @@ use MongoDB\BSON\UTCDateTime;
  *
  * @property-read string $admin_url
  * @property-read string $slack_admin_url
- * @property-read bool $is_subscribable
- * @property-read bool $is_online
- * @property-read bool $is_online_for_followers
+ * @property-read bool   $is_subscribable
+ * @property-read bool   $is_online
+ * @property-read bool   $is_online_for_followers
  */
 class User extends UserBase
 {

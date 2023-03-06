@@ -41,5 +41,4 @@
     <script src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('admin/assets/js/adminDatatables.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
-    @livewireScripts
 @endsection

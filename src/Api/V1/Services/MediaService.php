@@ -21,6 +21,7 @@ use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\Queries\MediaQueryBuilder;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
@@ -170,7 +171,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->markAsVisited($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -194,7 +195,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->markAsVisited($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -224,7 +225,7 @@ class MediaService
         foreach ($data->items() as $model) {
             $visited[] = $model->_id;
         }
-        $this->markAsVisited($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -372,7 +373,7 @@ class MediaService
             $visited[] = $model->_id;
         }
         $this->cacheVisitedVideoByUuid($visited, $request->uuid);
-        $this->markAsVisited($visited);
+        $this->incrementMediaVisitCounter($visited);
 
         return $data;
     }
@@ -381,12 +382,12 @@ class MediaService
      * @param array $userId
      * @return void
      */
-    public function markAsVisited(array $mediaIds): void
+    public function incrementMediaVisitCounter(array $mediaIds): void
     {
         $mediaIds = array_map('strval', $mediaIds);
         dispatch(function () use ($mediaIds) {
             Media::medias($mediaIds)->increment('visit_count');
-        });
+        })->afterResponse();
     }
 
     /**
@@ -485,7 +486,7 @@ class MediaService
             default => Redis::sdiff($mediaIdsCacheKey, $cacheKey),
         };
 
-        return array_slice($notVisitedIds, 0, 500);
+        return array_slice($notVisitedIds, 0, 1800);
     }
 
     /**

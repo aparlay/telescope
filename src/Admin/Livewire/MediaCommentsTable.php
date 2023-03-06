@@ -21,6 +21,8 @@ class MediaCommentsTable extends BaseIndexComponent
 
     public $mediaId;
 
+    public $userId;
+
     public function updateParent()
     {
         $this->render();
