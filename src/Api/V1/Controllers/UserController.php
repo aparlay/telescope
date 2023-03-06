@@ -12,6 +12,7 @@ use Aparlay\Core\Api\V1\Services\UserService;
 use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -61,7 +62,7 @@ class UserController extends Controller
      */
     public function destroy(Request $request): Response
     {
-        /* Check the update permission */
+        /* Check the delete permission */
         $this->authorize('delete', User::class);
 
         $user = auth()->user();
@@ -135,5 +136,21 @@ class UserController extends Controller
         }
 
         return $this->error('Account not found!', [], Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @param  string  $username
+     *
+     * @return Response
+     */
+    public function showByUsername(string $username): Response
+    {
+        $user = User::username($username)->active()->firstOrFail();
+
+        if ($this->userService->isUserEligible($user)) {
+            return $this->response(new UserResource($user));
+        }
+
+        return $this->show($user);
     }
 }

@@ -144,7 +144,7 @@ class MediaService extends AdminBaseService
      */
     public function update($id, MediaUpdateRequest $request)
     {
-        $data = request()->only([
+        $data = $request->only([
             'description',
             'status',
             'is_protected',

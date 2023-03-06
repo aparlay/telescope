@@ -3,10 +3,6 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 table-responsive">
-                    <livewire:credit-cards-table :userId="(string)$user->_id"/>
-                </div>
-
-                <div class="col-12 table-responsive">
                     <livewire:tips-table :creatorId="(string)$user->_id" :headerText="'Sent Tips'"/>
                 </div>
 

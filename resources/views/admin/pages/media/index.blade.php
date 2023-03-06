@@ -15,7 +15,7 @@
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ route('core.admin.dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Media @if($moderation) moderation @endif</a></li>
+                <li class="breadcrumb-item"><a href="#">Media</a></li>
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
@@ -28,7 +28,27 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 table-responsive">
-                    <livewire:medias-table/>
+                <div class="card card-default">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#medias-all">All</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#medias-moderation">Ready for Review</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane container active" id="medias-all">
+                                <livewire:medias-table/>
+                            </div>
+                            <div class="tab-pane container fade" id="medias-moderation">
+                                <livewire:medias-moderation-table/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -39,7 +59,6 @@
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
-    @livewireScripts
     <livewire:modals/>
     <script src="/js/admin.js"></script>
 @endsection

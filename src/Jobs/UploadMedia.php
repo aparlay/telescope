@@ -35,7 +35,7 @@ class UploadMedia implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -86,7 +86,7 @@ class UploadMedia implements ShouldQueue
             throw new Exception(__CLASS__.PHP_EOL.'File not exists '.$this->file);
         }
 
-        $newFilename = md5_file($storage->path($this->file)).'.'.pathinfo($this->file, PATHINFO_EXTENSION);
+        $newFilename = md5($this->user_id.md5_file($storage->path($this->file))).'.'.pathinfo($this->file, PATHINFO_EXTENSION);
         $filePath = $storage->path($this->file);
         $media->hash = sha1_file($filePath);
         $media->size = $storage->size($this->file);
