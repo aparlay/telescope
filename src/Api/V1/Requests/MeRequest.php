@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Requests;
 
-use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Country;
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
@@ -141,7 +139,9 @@ class MeRequest extends FormRequest
         $user = auth()->user();
         /* Set the Default Values and required to be input parameters */
         $this->merge([
-            'tags' => $this->tags ? array_values(array_slice(array_unique(array_merge($this->tags, $user->tags)), 0, 50)) : $user->tags,
+            'tags' => $this->tags ? array_values(
+                array_slice(array_unique(array_merge($this->tags, $user->tags)), 0, 50)
+            ) : $user->tags,
             'setting' => [
                 'otp' => $this->setting['otp'] ?? $user->setting['otp'] ?? false,
                 'show_adult_content' => $this->setting['show_adult_content'] ??
@@ -174,8 +174,7 @@ class MeRequest extends FormRequest
                     'allow_unverified_cc' => $user->setting['payment']['allow_unverified_cc'] ?? false,
                     'block_unverified_cc' => $user->setting['payment']['block_unverified_cc'] ?? true,
                     'block_cc_payments' => $user->setting['payment']['block_cc_payments'] ?? true,
-                    'unverified_cc_spent_amount' => (int) ($user->setting['payment']['unverified_cc_spent_amount'] ??
-                        0),
+                    'unverified_cc_spent_amount' => (int)($user->setting['payment']['unverified_cc_spent_amount'] ?? 0),
                 ],
                 'payout' => [
                     'ban_payout' => $user->setting['payout']['ban_payout'] ?? false,
