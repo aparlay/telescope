@@ -174,7 +174,7 @@ class MeRequest extends FormRequest
                     'allow_unverified_cc' => $user->setting['payment']['allow_unverified_cc'] ?? false,
                     'block_unverified_cc' => $user->setting['payment']['block_unverified_cc'] ?? true,
                     'block_cc_payments' => $user->setting['payment']['block_cc_payments'] ?? true,
-                    'unverified_cc_spent_amount' => (int)($user->setting['payment']['unverified_cc_spent_amount'] ?? 0),
+                    'unverified_cc_spent_amount' => (int) ($user->setting['payment']['unverified_cc_spent_amount'] ?? 0),
                 ],
                 'payout' => [
                     'ban_payout' => $user->setting['payout']['ban_payout'] ?? false,
