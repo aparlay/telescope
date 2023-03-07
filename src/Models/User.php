@@ -85,6 +85,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property bool        $has_unread_chat
  * @property bool        $has_unread_notification
  * @property Carbon|UTCDateTime $last_online_at
+ * @property array       $tags
  *
  * @property User        $referralObj
  * @property Media[]     $mediaObjs
@@ -195,6 +196,7 @@ class User extends \App\Models\User
         'deleted_at',
         'last_online_at',
         'tracking',
+        'tags',
     ];
 
     protected $attributes = [
@@ -281,6 +283,7 @@ class User extends \App\Models\User
                 'notifications' => 0,
             ],
         ],
+        'tags' => [],
     ];
 
     /**

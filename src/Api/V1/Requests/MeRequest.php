@@ -19,6 +19,7 @@ use Illuminate\Validation\ValidationException;
  * @property string $country_alpha2
  * @property string $payout_country_alpha2
  * @property array  $setting
+ * @property ?array $tags
  */
 class MeRequest extends FormRequest
 {
@@ -76,6 +77,8 @@ class MeRequest extends FormRequest
             'setting.show_adult_content' => ['nullable', 'integer'],
             'setting.notifications.*' => ['nullable', 'bool'],
             'setting.filter_content_gender.*' => ['nullable', 'bool'],
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['string'],
         ];
     }
 
@@ -134,6 +137,7 @@ class MeRequest extends FormRequest
         $user = auth()->user();
         /* Set the Default Values and required to be input parameters */
         $this->merge([
+            'tags' => $this->tags ? array_values(array_slice(array_unique(array_merge($this->tags, $user->tags)), 0, 50)) : $user->tags,
             'setting' => [
                 'otp' => $this->setting['otp'] ?? $user->setting['otp'] ?? false,
                 'show_adult_content' => $this->setting['show_adult_content'] ??
