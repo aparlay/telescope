@@ -44,11 +44,6 @@ class UserRepository
     public function isUserEligible(): bool
     {
         switch ($this->model->status) {
-            case UserStatus::SUSPENDED->value:
-
-                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user is suspended.');
-
-                // no break
             case UserStatus::BLOCKED->value:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user has been banned.');
@@ -57,6 +52,34 @@ class UserRepository
             case UserStatus::DEACTIVATED->value:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'User account not found.');
+
+                // no break
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * Check user's login eligibility.
+     *
+     * @return bool
+     */
+    public function isUserEligibleForLogin(): bool
+    {
+        switch ($this->model->status) {
+            case UserStatus::BLOCKED->value:
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user banned.');
+
+                // no break
+            case UserStatus::DEACTIVATED->value:
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user account not found.');
+
+                // no break
+            case UserStatus::SUSPENDED->value:
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user suspended.');
 
                 // no break
             default:

@@ -85,6 +85,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property bool        $has_unread_chat
  * @property bool        $has_unread_notification
  * @property Carbon|UTCDateTime $last_online_at
+ * @property array       $tags
  *
  * @property User        $referralObj
  * @property Media[]     $mediaObjs
@@ -120,6 +121,7 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder email(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
  * @method static |self|Builder availableForFollower()    get available content for followers
+ * @method static |self|Builder admin()    get admin user
  * @method static |self|Builder enable()
  */
 class User extends \App\Models\User
@@ -195,6 +197,7 @@ class User extends \App\Models\User
         'deleted_at',
         'last_online_at',
         'tracking',
+        'tags',
     ];
 
     protected $attributes = [
@@ -281,6 +284,7 @@ class User extends \App\Models\User
                 'notifications' => 0,
             ],
         ],
+        'tags' => [],
     ];
 
     /**
