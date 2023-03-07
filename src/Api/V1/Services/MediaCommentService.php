@@ -28,7 +28,7 @@ class MediaCommentService
             ->with(['parentObj'])
             ->whereNull('parent')
             ->media($media->_id)
-            ->oldest('_id')
+            ->recent()
             ->cursorPaginate(self::PER_PAGE);
     }
 
@@ -36,7 +36,7 @@ class MediaCommentService
     {
         return MediaComment::query()
             ->parent($mediaComment->_id)
-            ->oldest('_id')
+            ->recent()
             ->cursorPaginate(self::PER_PAGE);
     }
 
@@ -53,7 +53,7 @@ class MediaCommentService
         $defaultData = [
             'text' => $text,
             'media_id' => new ObjectId($media->_id),
-            'user_id' => new ObjectId($creator->_id),
+            'user_id' => new ObjectId($media->creator['_id']),
             'creator' => [
                 '_id' => new ObjectId($creator->_id),
                 'username' => $creator->username,
@@ -109,33 +109,6 @@ class MediaCommentService
     public function delete(MediaComment $mediaComment)
     {
         MediaCommentLike::query()->comment($mediaComment->_id)->delete();
-
-        if ($mediaComment->parentObj) {
-            $parentObj = $mediaComment->parentObj;
-            $mediaComment->delete();
-
-            if ($mediaComment->is_first) {
-                $newFirstReply = MediaComment::query()
-                    ->parent($parentObj->_id)
-                    ->oldest('_id')
-                    ->limit(1)
-                    ->first();
-
-                $parentObj->first_reply = null;
-
-                if ($newFirstReply) {
-                    $newFirstReply->is_first = true;
-                    $newFirstReply->save();
-                    $parentObj->first_reply = (new MediaCommentResource($newFirstReply))->resolve();
-                }
-            }
-
-            if ($parentObj->replies_count > 0) {
-                $parentObj->replies_count--;
-            }
-
-            return $parentObj->save();
-        }
 
         return $mediaComment->delete();
     }

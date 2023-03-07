@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
@@ -83,40 +84,45 @@ use MongoDB\BSON\UTCDateTime;
  * @property string      $deactivation_reason
  * @property bool        $has_unread_chat
  * @property bool        $has_unread_notification
- * @property UTCDateTime $last_online_at
+ * @property Carbon|UTCDateTime $last_online_at
+ * @property array       $tags
  *
- * @property User $referralObj
- * @property Media[] $mediaObjs
+ * @property User        $referralObj
+ * @property Media[]     $mediaObjs
  *
  * @property-read string $admin_url
  * @property-read string $note_admin_url
  * @property-read string $slack_admin_url
- * @property-read bool $is_subscribable
- * @property-read bool $is_online
- * @property-read bool $is_verified
- * @property-read bool $is_online_for_followers
- * @property-read bool $is_tier3
- * @property-read bool $is_tier1
- * @property-read bool $is_risky
- * @property-read bool $is_public
- * @property-read bool $is_private
- * @property-read bool $is_invisible
- * @property-read int $tip_commission_percentage
- * @property-read int $tip_referral_commission_percentage
- * @property-read int $subscription_commission_percentage
- * @property-read int $subscription_referral_commission_percentage
- * @property-read int $exclusive_content_commission_percentage
- * @property-read int $exclusive_content_referral_commission_percentage
- * @property-read array $counters
+ * @property-read bool   $is_subscribable
+ * @property-read bool   $is_online
+ * @property-read bool   $is_verified
+ * @property-read bool   $is_online_for_followers
+ * @property-read bool   $is_tier3
+ * @property-read bool   $is_tier1
+ * @property-read bool   $is_risky
+ * @property-read bool   $is_public
+ * @property-read bool   $is_private
+ * @property-read bool   $is_invisible
+ * @property-read int    $tip_commission_percentage
+ * @property-read int    $tip_referral_commission_percentage
+ * @property-read int    $subscription_commission_percentage
+ * @property-read int    $subscription_referral_commission_percentage
+ * @property-read int    $exclusive_content_commission_percentage
+ * @property-read int    $exclusive_content_referral_commission_percentage
+ * @property-read array  $counters
  * @property-read string $country_label
  * @property-read string $verification_status_label
+ * @property-read bool   $is_eligible_for_verification
  *
- * @method static |self|Builder date(UTCDateTime $startAt, UTCDateTime $endAt, string $field = 'created_at') filter by date
+ * @method static |self|Builder date(?UTCDateTime $startAt, ?UTCDateTime $endAt, string $field = 'created_at') filter by date
  * @method static |self|Builder active() get activated user
  * @method static |self|Builder idVerified() get id verified user
  * @method static |self|Builder username(string $username) get user
+ * @method static |self|Builder email(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
  * @method static |self|Builder availableForFollower()    get available content for followers
+ * @method static |self|Builder admin()    get admin user
+ * @method static |self|Builder enable()
  */
 class User extends \App\Models\User
 {
@@ -191,6 +197,7 @@ class User extends \App\Models\User
         'deleted_at',
         'last_online_at',
         'tracking',
+        'tags',
     ];
 
     protected $attributes = [
@@ -277,6 +284,7 @@ class User extends \App\Models\User
                 'notifications' => 0,
             ],
         ],
+        'tags' => [],
     ];
 
     /**
@@ -305,6 +313,8 @@ class User extends \App\Models\User
         'stats.counters.subscribers' => 'integer',
         'stats.counters.chats' => 'integer',
         'stats.counters.notifications' => 'integer',
+        'settings.payout.ban_payout' => 'boolean',
+        'settings.payout.auto_ban_payout' => 'boolean',
         'type' => 'integer',
         'verification_status' => 'integer',
     ];
@@ -379,10 +389,31 @@ class User extends \App\Models\User
         ];
     }
 
+    public function searchIndexShouldBeUpdated(): bool
+    {
+        if ($this->isDirty([
+            'avatar',
+            'username',
+            'full_name',
+            'gender',
+            'bio',
+            'country_alpha2',
+            'scores',
+            'last_online_at',
+            'last_location',
+            'counters',
+        ])) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Qualify the given column name by the model's table.
      *
      * @param  string  $column
+     *
      * @return string
      */
     public function qualifyColumn($column)
@@ -481,15 +512,17 @@ class User extends \App\Models\User
 
     /**
      * Get the user risk.
-     * @todo this method implementation should change and rely on risk score
      *
      * @return bool
+     * @todo this method implementation should change and rely on risk score
      */
     public function getIsRiskyAttribute(): bool
     {
         return $this->setting['payment']['block_unverified_cc'] ||
             ($this->is_tier3) ||
-            ($this->setting['payment']['unverified_cc_spent_amount'] > config('payment.fraud.big_spender.maximum_total_amount'));
+            ($this->setting['payment']['unverified_cc_spent_amount'] > config(
+                'payment.fraud.big_spender.maximum_total_amount'
+            ));
     }
 
     /**
@@ -535,10 +568,14 @@ class User extends \App\Models\User
 
     /**
      * @param $attributeValue
+     *
      * @return mixed
      */
     public function getCountFieldsUpdatedAtAttribute($attributeValue): mixed
     {
+        if ($attributeValue === null) {
+            $attributeValue = [];
+        }
         foreach ($attributeValue as $field => $value) {
             /* MongoDB\BSON\UTCDateTime $value */
             $attributeValue[$field] = ($value instanceof UTCDateTime) ? $value->toDateTime()->getTimestamp() : $value;
@@ -560,6 +597,19 @@ class User extends \App\Models\User
     public function getVerificationStatusLabelAttribute(): string
     {
         return $this->verification_status ? UserVerificationStatus::from($this->verification_status)->label() : '';
+    }
+
+    public function getIsEligibleForVerificationAttribute(): bool
+    {
+        $hasMinLikes = $this->counters['likes'] >= config('core.id_verification_thresholds.min_likes', 1000);
+        $hasMinFollowers = $this->counters['followers'] >= config('core.id_verification_thresholds.min_followers', 100);
+        $hasMinMedia = $this->counters['medias'] >= config('core.id_verification_thresholds.min_medias', 1);
+
+        if (($hasMinLikes || $hasMinFollowers) && $hasMinMedia) {
+            return true;
+        }
+
+        return false;
     }
 
     public function getStatusLabelAttribute()
@@ -639,6 +689,7 @@ class User extends \App\Models\User
 
     /**
      * @param $attributeValue
+     *
      * @return void
      */
     public function setCountFieldsUpdatedAtAttribute($attributeValue)
@@ -679,7 +730,7 @@ class User extends \App\Models\User
     /**
      * Route notifications for the Slack channel.
      *
-     * @param Notification $notification
+     * @param  Notification  $notification
      *
      * @return string
      */
@@ -691,7 +742,7 @@ class User extends \App\Models\User
     /**
      * Route notifications for the Slack channel.
      *
-     * @param Notification $notification
+     * @param  Notification  $notification
      *
      * @return array
      */
@@ -701,9 +752,10 @@ class User extends \App\Models\User
     }
 
     /**
-     * @param  string  $attribute
-     * @param  mixed  $item
+     * @param  string    $attribute
+     * @param  mixed     $item
      * @param  int|null  $length
+     *
      * @return void
      */
     public function addToSet(string $attribute, mixed $item, int $length = null): void
@@ -725,7 +777,8 @@ class User extends \App\Models\User
 
     /**
      * @param  string  $attribute
-     * @param  mixed  $item
+     * @param  mixed   $item
+     *
      * @return void
      */
     public function removeFromSet(string $attribute, mixed $item): void
@@ -787,6 +840,7 @@ class User extends \App\Models\User
         return [
             UserVisibility::PRIVATE->value => UserVisibility::PRIVATE->label(),
             UserVisibility::PUBLIC->value => UserVisibility::PUBLIC->label(),
+            UserVisibility::INVISIBLE_BY_ADMIN->value => UserVisibility::INVISIBLE_BY_ADMIN->label(),
         ];
     }
 
@@ -862,6 +916,7 @@ class User extends \App\Models\User
 
     /**
      * @param  User|Authenticatable|ObjectId|string|null  $user
+     *
      * @return bool
      */
     public function equalTo(self|Authenticatable|ObjectId|string|null $user): bool
@@ -879,6 +934,7 @@ class User extends \App\Models\User
 
     /**
      * Get only class name without namespace.
+     *
      * @return bool|string
      */
     public static function shortClassName()
@@ -888,10 +944,12 @@ class User extends \App\Models\User
 
     /**
      * Get only class name without namespace.
+     *
      * @param  User|Authenticatable|ObjectId|string  $user
+     *
      * @return bool
      */
-    public function blockedUser(self | Authenticatable | ObjectId | string $user): bool
+    public function blockedUser(self|Authenticatable|ObjectId|string $user): bool
     {
         if (is_string($user)) {
             $user = new ObjectId($user);
@@ -908,7 +966,9 @@ class User extends \App\Models\User
 
     /**
      * Get only class name without namespace.
+     *
      * @param  string  $countryAlpha2
+     *
      * @return bool
      */
     public function blockedCountry(string $countryAlpha2): bool
@@ -918,6 +978,7 @@ class User extends \App\Models\User
 
     /**
      * @param  int  $amount
+     *
      * @return bool
      */
     public function unverifiedCCSpentAmount(int $amount): bool
@@ -970,6 +1031,7 @@ class User extends \App\Models\User
 
     /**
      * @param $fields
+     *
      * @return void
      */
     public function fillStatsCountersField($fields): void
@@ -988,6 +1050,7 @@ class User extends \App\Models\User
 
     /**
      * @param $fields
+     *
      * @return void
      */
     public function fillStatsAmountsField($fields): void
@@ -1022,13 +1085,15 @@ class User extends \App\Models\User
     {
         $likeCount = MediaLike::query()->user($this->_id)->count();
         $this->like_count = $likeCount;
-        $this->likes = MediaLike::query()->user($this->_id)->limit(10)->recentFirst()->get()->map(function (MediaLike $like) {
-            return [
-                '_id' => new ObjectId($like->creator['_id']),
-                'username' => $like->creator['username'],
-                'avatar' => $like->creator['avatar'],
-            ];
-        })->toArray();
+        $this->likes = MediaLike::query()->user($this->_id)->limit(10)->recentFirst()->get()->map(
+            function (MediaLike $like) {
+                return [
+                    '_id' => new ObjectId($like->creator['_id']),
+                    'username' => $like->creator['username'],
+                    'avatar' => $like->creator['avatar'],
+                ];
+            }
+        )->toArray();
         $this->count_fields_updated_at = array_merge(
             $this->count_fields_updated_at,
             ['likes' => DT::utcNow()]
@@ -1057,6 +1122,17 @@ class User extends \App\Models\User
             ];
         }
         $this->medias = $medias;
+
+        $scores = $this->scores;
+        $scores['sort'] = 0;
+
+        $count = Media::creator($this->_id)->availableForOwner()->count();
+        if ($count > 0) {
+            $score = Media::creator($this->_id)->availableForOwner()->sum('sort_scores.default');
+            $scores['sort'] = $score / $count;
+        }
+        $this->scores = $scores;
+
         $this->fillStatsCountersField(['medias' => Media::query()->creator($this->_id)->availableForOwner()->count()]);
         $this->save();
 

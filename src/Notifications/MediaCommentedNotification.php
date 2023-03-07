@@ -42,6 +42,7 @@ class MediaCommentedNotification extends Notification
             'media' => [
                 '_id' => (string) $media->_id,
                 'cover' => $media->cover_url,
+                'slug' => $media->slug,
             ],
             'comment' => [
                 '_id' => (string) $comment->_id,

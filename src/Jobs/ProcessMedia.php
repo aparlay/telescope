@@ -40,7 +40,7 @@ class ProcessMedia implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -84,7 +84,7 @@ class ProcessMedia implements ShouldQueue
      */
     public function handle()
     {
-        Redis::funnel(__CLASS__)->releaseAfter(180)->limit(1)
+        Redis::funnel(__CLASS__)->releaseAfter(300)->limit(1)
             ->then(function () {
                 $this->processVideo();
             }, function () {

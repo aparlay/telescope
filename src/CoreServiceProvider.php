@@ -15,6 +15,7 @@ use Aparlay\Core\Admin\Components\UtcFormatter;
 use Aparlay\Core\Admin\Components\WireDropDownList;
 use Aparlay\Core\Admin\Livewire\AuditsTable;
 use Aparlay\Core\Admin\Livewire\Components\DateRangePicker;
+use Aparlay\Core\Admin\Livewire\Components\NotesCreate;
 use Aparlay\Core\Admin\Livewire\Components\UserModerationButton;
 use Aparlay\Core\Admin\Livewire\Dashboard\Funnel;
 use Aparlay\Core\Admin\Livewire\Dashboard\Index;
@@ -32,8 +33,10 @@ use Aparlay\Core\Admin\Livewire\Modals\UserNoteDeleteModal;
 use Aparlay\Core\Admin\Livewire\Modals\UserVerificationModal;
 use Aparlay\Core\Admin\Livewire\NotesTable;
 use Aparlay\Core\Admin\Livewire\SettingsTable;
+use Aparlay\Core\Admin\Livewire\UserMedia;
 use Aparlay\Core\Admin\Livewire\UsersModerationTable;
 use Aparlay\Core\Admin\Livewire\UsersTable;
+use Aparlay\Core\Admin\Livewire\UserVerification;
 use Aparlay\Core\Commands\AnalyticsDailyCommand;
 use Aparlay\Core\Commands\AnalyticsSinceCommand;
 use Aparlay\Core\Commands\CleanupCommand;
@@ -46,6 +49,7 @@ use Aparlay\Core\Commands\ResetMediaCountersCommand;
 use Aparlay\Core\Commands\ResetUserCountersCommand;
 use Aparlay\Core\Commands\RoleCommand;
 use Aparlay\Core\Commands\ServerMonitorCommand;
+use Aparlay\Core\Commands\SitemapCommand;
 use Aparlay\Core\Commands\UserScoreCommand;
 use Aparlay\Core\Commands\UserScoreDailyCommand;
 use Aparlay\Core\Commands\VideoReprocessCommand;
@@ -127,6 +131,7 @@ class CoreServiceProvider extends ServiceProvider
                 DbBackupCommand::class,
                 ResetMediaCountersCommand::class,
                 ResetUserCountersCommand::class,
+                SitemapCommand::class,
             ]);
         } else {
             app()->make(\Aparlay\Core\Api\V1\Http\Kernel::class);
@@ -200,6 +205,7 @@ class CoreServiceProvider extends ServiceProvider
             'users-table' => UsersTable::class,
             'users-moderation-table' => UsersModerationTable::class,
             'modals.user-verification-modal' => UserVerificationModal::class,
+            'user-verification' => UserVerification::class,
             'date-picker' => DatePicker::class,
             'user-moderation-button' => UserModerationButton::class,
             'medias-table' => MediasTable::class,
@@ -208,6 +214,7 @@ class CoreServiceProvider extends ServiceProvider
             'settings-table' => SettingsTable::class,
             'emails-table' => EmailsTable::class,
             'notes-table' => NotesTable::class,
+            'notes-create' => NotesCreate::class,
             'audits-table' => AuditsTable::class,
             'modals' => Modals::class,
             'modals.media-comment-delete-modal' => MediaCommentDeleteModal::class,
@@ -220,6 +227,7 @@ class CoreServiceProvider extends ServiceProvider
             'dashboard.funnel' => Funnel::class,
             'dashboard.table' => Table::class,
             'dashboard.top-credit-balance' => TopCreditBalance::class,
+            'user-media' => UserMedia::class,
         ];
 
         foreach ($components as $name => $class) {

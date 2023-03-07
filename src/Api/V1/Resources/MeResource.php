@@ -115,6 +115,7 @@ class MeResource extends JsonResource
             '_links' => [
                 'self' => ['href' => url("/v1/user/view?id={$this->_id}")],
             ],
+            'is_eligible_for_verification' => $this->is_eligible_for_verification,
             'is_verified' => $this->is_verified,
             'country_alpha3' => $this->country_alpha3,
             'payout_country_label' => $this->payout_country_label,
@@ -122,6 +123,7 @@ class MeResource extends JsonResource
             'country_alpha2' => $this->country_alpha2,
             'country_label' => $this->country_label,
             'country_flags' => $this->country_flags,
+            'tags' => $this->tags,
             $this->mergeWhen($this->is_tier1, fn () => ['is_tier1' => true]),
             $this->mergeWhen($this->is_tier3, fn () => ['is_tier3' => true]),
         ];

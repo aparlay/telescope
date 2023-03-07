@@ -93,7 +93,7 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function userProfile()
+    public function userProfileById()
     {
         $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $userDeactivated = User::factory()->create(['status' => UserStatus::DEACTIVATED->value]);
@@ -101,6 +101,127 @@ class UserProfileTest extends ApiTestCase
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->get('/v1/user/'.$user->_id)
+            ->assertStatus(200)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 200)
+            ->assertJsonStructure(
+                [
+                    'data' => [
+                        '_id',
+                        'username',
+                        'bio',
+                        'full_name',
+                        'avatar',
+                        'visibility',
+                        'is_followed',
+                        'is_blocked',
+                        'promo_link',
+                        'follower_count',
+                        'following_count',
+                        'like_count',
+                        'created_at',
+                        'updated_at',
+                        '_links' => [
+                            'self' => ['href'],
+                        ],
+                    ],
+                ]
+            )->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType([
+                    'code' => 'integer',
+                    'uuid' => 'string',
+                    'status' => 'string',
+                    'data._id' => 'string',
+                    'data.username' => 'string',
+                    'data.bio' => 'string',
+                    'data.full_name' => 'string',
+                    'data.avatar' => 'string',
+                    'data.visibility' => 'integer',
+                    'data.is_followed' => 'boolean',
+                    'data.is_blocked' => 'boolean',
+                    'data.promo_link' => 'null|string',
+                    'data.follower_count' => 'integer',
+                    'data.following_count' => 'integer',
+                    'data.like_count' => 'integer',
+                    'data.created_at' => 'integer',
+                    'data.updated_at' => 'integer',
+                    'data._links' => 'array',
+                    'data._links.self' => 'array',
+                    'data._links.self.href' => 'string',
+                ])
+            );
+
+        $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get('/v1/user/'.$userDeactivated->_id)
+            ->assertStatus(423);
+
+        $this->actingAs($userViewer)
+            ->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get('/v1/user/'.$user->_id)
+            ->assertStatus(200)
+            ->assertJsonPath('status', 'OK')
+            ->assertJsonPath('code', 200)
+            ->assertJsonStructure(
+                [
+                    'data' => [
+                        '_id',
+                        'username',
+                        'bio',
+                        'full_name',
+                        'avatar',
+                        'visibility',
+                        'is_followed',
+                        'is_blocked',
+                        'promo_link',
+                        'follower_count',
+                        'following_count',
+                        'like_count',
+                        'created_at',
+                        'updated_at',
+                        '_links' => [
+                            'self' => ['href'],
+                        ],
+                    ],
+                ]
+            )->assertJson(
+                fn (AssertableJson $json) => $json->whereAllType([
+                    'code' => 'integer',
+                    'status' => 'string',
+                    'uuid' => 'string',
+                    'data._id' => 'string',
+                    'data.username' => 'string',
+                    'data.bio' => 'string',
+                    'data.full_name' => 'string',
+                    'data.avatar' => 'string',
+                    'data.visibility' => 'integer',
+                    'data.is_followed' => 'boolean',
+                    'data.is_blocked' => 'boolean',
+                    'data.promo_link' => 'null|string',
+                    'data.follower_count' => 'integer',
+                    'data.following_count' => 'integer',
+                    'data.like_count' => 'integer',
+                    'data.created_at' => 'integer',
+                    'data.updated_at' => 'integer',
+                    'data._links' => 'array',
+                    'data._links.self' => 'array',
+                    'data._links.self.href' => 'string',
+                ])
+            );
+    }
+
+    /**
+     * Get user profile.
+     *
+     * @test
+     */
+    public function userProfileByUsername()
+    {
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $userDeactivated = User::factory()->create(['status' => UserStatus::DEACTIVATED->value]);
+        $userViewer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+
+        $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get('/v1/user/share/'.$user->username)
             ->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
@@ -312,6 +433,7 @@ class UserProfileTest extends ApiTestCase
                     '_links' => [
                         'self' => ['href'],
                     ],
+                    'tags' => [],
                 ],
             ])->assertJson(
                 fn (AssertableJson $json) => $json->whereAllType([
@@ -369,6 +491,7 @@ class UserProfileTest extends ApiTestCase
                     'data._links' => 'array',
                     'data._links.self' => 'array',
                     'data._links.self.href' => 'string',
+                    'data.tags' => 'array',
                     'message' => 'string',
                 ])
             );
@@ -459,6 +582,7 @@ class UserProfileTest extends ApiTestCase
                         '_links' => [
                             'self' => ['href'],
                         ],
+                        'tags' => [],
                     ],
                 ]
             )
@@ -484,6 +608,7 @@ class UserProfileTest extends ApiTestCase
                     'data._links' => 'array',
                     'data._links.self' => 'array',
                     'data._links.self.href' => 'string',
+                    'data.tags' => 'array',
                     'message' => 'string',
                 ])
             );

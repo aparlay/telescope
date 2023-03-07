@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Repositories;
 
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Api\V1\Notifications\UserDeactivateAccount;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\User as BaseUser;
 use Illuminate\Http\Response;
@@ -43,11 +44,6 @@ class UserRepository
     public function isUserEligible(): bool
     {
         switch ($this->model->status) {
-            case UserStatus::SUSPENDED->value:
-
-                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user is suspended.');
-
-                // no break
             case UserStatus::BLOCKED->value:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'The user has been banned.');
@@ -56,6 +52,34 @@ class UserRepository
             case UserStatus::DEACTIVATED->value:
 
                 abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'User account not found.');
+
+                // no break
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * Check user's login eligibility.
+     *
+     * @return bool
+     */
+    public function isUserEligibleForLogin(): bool
+    {
+        switch ($this->model->status) {
+            case UserStatus::BLOCKED->value:
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user banned.');
+
+                // no break
+            case UserStatus::DEACTIVATED->value:
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user account not found.');
+
+                // no break
+            case UserStatus::SUSPENDED->value:
+
+                abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Cannot login, user suspended.');
 
                 // no break
             default:
@@ -159,6 +183,7 @@ class UserRepository
         $this->model->deactivation_reason = $reason;
         if ($this->model->save()) {
             $this->model->unsearchable();
+            $this->model->notify(new UserDeactivateAccount());
 
             return true;
         }

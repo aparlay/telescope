@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
@@ -28,8 +29,6 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public string $media_id;
-
     /**
      * The number of times the job may be attempted.
      */
@@ -53,16 +52,14 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
      * @return void
      * @throws Exception
      */
-    public function __construct(string|ObjectId $mediaId)
+    public function __construct(public string $mediaId)
     {
         $this->onQueue('low');
-
-        $this->media_id = (string) $mediaId;
     }
 
     public function middleware()
     {
-        return [new WithoutOverlapping($this->media_id)];
+        return [new WithoutOverlapping($this->mediaId)];
     }
 
     /**
@@ -73,12 +70,10 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
      */
     public function handle()
     {
-        $media = Media::media($this->media_id)->first();
-        if ($media === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'Bunny CDN Url Purge not found the requested media with id '.$this->media_id);
-        }
-
-        $this->purge([$media->cover_url, $media->file_url]);
+        $media = Media::media($this->mediaId)->firstOrFail();
+        $fileUrl = Cdn::video($media->file);
+        $coverUrl = Cdn::cover($media->filename.'.jpg');
+        $this->purge([$coverUrl, $fileUrl]);
     }
 
     public function failed(Throwable $exception): void

@@ -19,29 +19,24 @@ class User extends UserBase implements Auditable
     protected $hidden = ['password_hash', 'search'];
 
     /**
-     * Should the audit be strict?
-     *
-     * @var bool
-     */
-    protected $auditStrict = true;
-
-    /**
      * Attributes to exclude from the Audit.
      *
      * @var array
      */
     protected $auditExclude = [
-        'updated_by',
         'password_hash',
     ];
 
     protected $fillable = [
         'username',
+        'full_name',
         'email',
         'email_verified',
         'bio',
         'features',
         'gender',
+        'birthday',
+        'interested_in',
         'type',
         'status',
         'visibility',
@@ -50,6 +45,8 @@ class User extends UserBase implements Auditable
         'verification_status',
         'country_alpha2',
         'payout_country_alpha2',
+        'setting',
+        'password_hash',
     ];
 
     /**
@@ -61,6 +58,7 @@ class User extends UserBase implements Auditable
         'type' => 'integer',
         'status' => 'integer',
         'gender' => 'integer',
+        'interested_in' => 'integer',
         'visibility' => 'integer',
         'verification_status' => 'integer',
     ];

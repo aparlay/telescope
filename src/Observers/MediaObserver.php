@@ -8,6 +8,7 @@ use Aparlay\Core\Jobs\DeleteMediaComments;
 use Aparlay\Core\Jobs\DeleteMediaLikes;
 use Aparlay\Core\Jobs\DeleteMediaMetadata;
 use Aparlay\Core\Jobs\DeleteMediaUserNotifications;
+use Aparlay\Core\Jobs\PurgeMediaJob;
 use Aparlay\Core\Jobs\RecalculateHashtag;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
@@ -94,12 +95,14 @@ class MediaObserver extends BaseModelObserver
      */
     public function saved($media): void
     {
-        if ($media->status === MediaStatus::USER_DELETED->value && $media->isDirty('status')) {
+        if (in_array($media->status, [MediaStatus::USER_DELETED->value, MediaStatus::ADMIN_DELETED->value])
+            && $media->isDirty('status')) {
             $media->userObj->updateMedias();
 
             DeleteMediaLikes::dispatch((string) $media->_id)->onQueue('low');
             DeleteMediaComments::dispatch((string) $media->_id)->onQueue('low');
             DeleteMediaUserNotifications::dispatch((string) $media->_id)->onQueue('low');
+            PurgeMediaJob::dispatch((string) $media->_id)->onQueue('low');
             $media->unsearchable();
         }
 
@@ -109,8 +112,10 @@ class MediaObserver extends BaseModelObserver
             Media::CachePublicMediaIds();
         }
 
-        foreach ($media->hashtags as $tag) {
-            RecalculateHashtag::dispatch($tag);
+        if ($media->wasChanged(['hashtags'])) {
+            foreach ($media->hashtags as $tag) {
+                RecalculateHashtag::dispatch($tag);
+            }
         }
     }
 
