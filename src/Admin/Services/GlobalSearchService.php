@@ -37,6 +37,10 @@ class GlobalSearchService
             $medias = Media::query()->media($searchQuery)->limit(5)->get();
         }
 
+        if (strlen($searchQuery) === 6) {
+            $medias = Media::query()->slug($searchQuery)->limit(5)->get();
+        }
+
         $result = [];
 
         $result['User'] = $users;
