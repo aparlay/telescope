@@ -19,11 +19,11 @@ use Aparlay\Core\Jobs\DeleteMediaMetadata;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\UserStatus;
-use Illuminate\Support\Facades\Bus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Hash;
 use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -257,12 +257,12 @@ class UserService extends AdminBaseService
             $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/'.$avatar)], $user->_id);
 
             Bus::chain([
-                function() use ($avatar) {
+                function () use ($avatar) {
                     DeleteMediaMetadata::dispatchIf(! config('app.is_testing'), 'avatars/'.$avatar, 'public');
                 },
-                function() use ($user, $avatar) {
+                function () use ($user, $avatar) {
                     UploadAvatar::dispatchIf(! config('app.is_testing'), (string) $user->_id, 'avatars/'.$avatar)->delay(10);
-                }
+                },
             ])
             ->onQueue(config('app.server_specific_queue'))
             ->dispatch();

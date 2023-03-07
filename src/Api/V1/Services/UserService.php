@@ -18,8 +18,8 @@ use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Jenssegers\Agent\Agent;
@@ -94,14 +94,14 @@ class UserService
             $oldFileName = $user->avatar;
             $avatarUrl = str_replace('api.waptap.com', 'api1.waptap.com', Storage::disk('public')->url('avatars/'.$avatar));
             $this->userRepository->update(['avatar' => $avatarUrl], $user->_id);
-            
+
             Bus::chain([
-                function() use ($avatar) {
+                function () use ($avatar) {
                     DeleteMediaMetadata::dispatchIf(! config('app.is_testing'), 'avatars/'.$avatar, 'public');
                 },
-                function() use ($user, $avatar) {
+                function () use ($user, $avatar) {
                     UploadAvatar::dispatchIf(! config('app.is_testing'), (string) $user->_id, 'avatars/'.$avatar)->delay(10);
-                }
+                },
             ])
             ->onQueue(config('app.server_specific_queue'))
             ->dispatch();
