@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Policies;
 use Aparlay\Core\Api\V1\Models\Follow;
 use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
+use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -34,6 +35,10 @@ class MediaPolicy
     public function view(User|Authenticatable|null $user, Media $media): Response|bool
     {
         $userId = $user?->_id;
+
+        if (in_array($media->status, [MediaStatus::ADMIN_DELETED->value, MediaStatus::USER_DELETED->value])) {
+            return Response::deny(__('This content is not available for you.'));
+        }
 
         if ($media->visibility === MediaVisibility::PUBLIC->value) {
             return Response::allow();

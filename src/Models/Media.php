@@ -65,7 +65,6 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property ObjectId           $created_by
  * @property Carbon             $created_at
  * @property Carbon             $updated_at
- * @property mixed              $filename
  * @property array              $links
  * @property bool               $is_protected
  * @property array              $scores
@@ -79,6 +78,9 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @property-read string        $slack_subject_admin_url
  * @property-read string        $slack_admin_url
+ * @property-read string        $filename
+ * @property-read string        $cover_file
+ * @property-read string        $delete_prefix
  * @property-read string        $admin_url
  * @property-read string        $cover_url
  * @property-read string        $file_url
@@ -116,6 +118,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder private()
  * @method static |self|Builder protected()
  * @method static |self|Builder licensed()
+ * @method static |self|Builder media(ObjectId|string $mediaId)
  */
 class Media extends BaseModel
 {
@@ -554,6 +557,22 @@ class Media extends BaseModel
     public function getFilenameAttribute(): string
     {
         return basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION));
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeletePrefixAttribute(): string
+    {
+        return substr(md5($this->file), 0, 5).'_';
+    }
+
+    /**
+     * @return string
+     */
+    public function getCoverFileAttribute(): string
+    {
+        return $this->filename.'.jpg';
     }
 
     /**

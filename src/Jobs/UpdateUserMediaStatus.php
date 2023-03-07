@@ -15,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 use MongoDB\BSON\ObjectId;
 use Throwable;
 
-class DeleteUserMedia implements ShouldQueue
+class UpdateUserMediaStatus implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -46,10 +46,13 @@ class DeleteUserMedia implements ShouldQueue
      *
      * @throws Exception
      */
-    public function __construct(public string $userId)
+    public function __construct(public string $userId, public int $status)
     {
         $this->onQueue('low');
-        User::findOrFail(new ObjectId($userId));
+
+        if (! in_array($this->status, MediaStatus::getAllValues())) {
+            throw new \InvalidArgumentException(_('Status is not supported'));
+        }
     }
 
     /**
@@ -58,7 +61,7 @@ class DeleteUserMedia implements ShouldQueue
     public function handle(): void
     {
         foreach (Media::creator($this->userId)->lazy() as $media) {
-            $media->status = MediaStatus::USER_DELETED->value;
+            $media->status = $this->status;
             $media->save();
         }
     }
