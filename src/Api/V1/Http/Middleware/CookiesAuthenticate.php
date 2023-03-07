@@ -30,8 +30,8 @@ class CookiesAuthenticate
         }
 
         // Log out suspended or blocked users
-        if (auth()->check() &&
-            $request->header('Authorization') !== null &&
+        if ($request->header('Authorization') !== null &&
+            auth()->check() &&
             in_array(auth()->user()->status, [UserStatus::BLOCKED->value, UserStatus::SUSPENDED->value])) {
             auth()->logout(true);
 
