@@ -21,8 +21,6 @@ class DeleteUserMediaLikes implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public string $userId;
-
     /**
      * The number of times the job may be attempted.
      */
@@ -47,11 +45,9 @@ class DeleteUserMediaLikes implements ShouldQueue
      *
      * @throws Exception
      */
-    public function __construct(string $userId)
+    public function __construct(public string $userId)
     {
         $this->onQueue('low');
-        $this->userId = $userId;
-        User::findOrFail(new ObjectId($userId));
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Observers;
 
-use Aparlay\Core\Api\V1\Notifications\UserDeactivateAccount;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Events\AvatarChangedEvent;
 use Aparlay\Core\Events\UsernameChangedEvent;
@@ -130,7 +129,7 @@ class UserObserver extends BaseModelObserver
                     break;
                 case UserStatus::BLOCKED->value:
                     $model->unsearchable();
-                    UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::USER_DELETED->value);
+                    UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::ADMIN_DELETED->value);
                     DeleteUserConnect::dispatch((string) $model->_id);
                     DeleteUserMediaComments::dispatch((string) $model->_id);
                     DeleteUserMediaLikes::dispatch((string) $model->id);
