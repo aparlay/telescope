@@ -31,8 +31,11 @@ class WebhookController extends Controller
                 $event['data'],
                 true
             )) : [];
-            SocketClientEvent::dispatchIf(($event['name'] === 'client_event'), $event);
-            SocketClientStateEvent::dispatchIf(($event['name'] === 'client_state'), $event);
+
+            if (($event['name'] === 'client_event')) {
+                SocketClientEvent::dispatchIf(($event['event'] !== 'client-state'), $event);
+                SocketClientStateEvent::dispatchIf(($event['event'] === 'client-state'), $event);
+            }
         }
 
         return response('', 200, []);
