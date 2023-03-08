@@ -6,6 +6,7 @@ use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Scopes\UserScope;
+use Aparlay\Core\Models\Traits\HasPushSubscriptions;
 use Aparlay\Core\Models\User as UserBase;
 use Illuminate\Support\Str;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -14,6 +15,7 @@ class User extends UserBase implements Auditable
 {
     use UserScope;
     use \Aparlay\Core\Admin\Models\Auditable;
+    use HasPushSubscriptions;
 
     public string $guard_name = 'admin';
 
