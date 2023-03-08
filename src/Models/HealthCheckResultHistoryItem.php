@@ -25,7 +25,9 @@ class HealthCheckResultHistoryItem extends BaseModel
 
     protected $guarded = [];
 
-    /** @var array<string,string> */
+    /**
+     * @var array<string,string>
+     */
     public $casts = [
         'meta' => 'array',
         'started_failing_at' => 'timestamp',

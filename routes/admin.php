@@ -220,7 +220,6 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             ->middleware(['permission:create notes'])
             ->name('store');
         });
-
     });
 
     /* Login Routes */
