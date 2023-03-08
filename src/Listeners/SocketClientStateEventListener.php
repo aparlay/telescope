@@ -27,8 +27,8 @@ class SocketClientStateEventListener implements ShouldQueue
             return;
         }
 
-        if (($user = User::query()->user($userId)->first()) !== null && $user->is_ws_state_active) {
-            $user->ws_state = 'inactive';
+        if (($user = User::query()->user($userId)->first()) !== null && $user->ws_state !== $state) {
+            $user->ws_state = $state;
             $user->saveQuietly();
         }
     }
