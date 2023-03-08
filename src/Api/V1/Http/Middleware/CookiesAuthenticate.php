@@ -6,7 +6,6 @@ use Aparlay\Core\Models\Enums\UserStatus;
 use Closure;
 use Cookie;
 use Illuminate\Http\Response;
-use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenBlacklistedException;
 use PHPOpenSourceSaver\JWTAuth\Token;
 
 class CookiesAuthenticate

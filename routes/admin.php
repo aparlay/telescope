@@ -11,6 +11,7 @@ use Aparlay\Core\Admin\Controllers\RoleController;
 use Aparlay\Core\Admin\Controllers\SettingController;
 use Aparlay\Core\Admin\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Spatie\Health\Http\Controllers\HealthCheckResultsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -219,6 +220,7 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             ->middleware(['permission:create notes'])
             ->name('store');
         });
+
     });
 
     /* Login Routes */
@@ -227,3 +229,5 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
         Route::post('login', [AuthController::class, 'postLogin'])->name('login.post');
     });
 });
+
+Route::get('health', HealthCheckResultsController::class);
