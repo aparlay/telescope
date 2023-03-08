@@ -268,6 +268,42 @@
         </div>
     </div>
 
+    <div id="pushNotificationsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form action="{{ route('core.admin.user.test.push-notifications', ['user' => $user->_id])  }}"
+                      method="POST">
+                    @csrf
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="exampleModalLiveLabel">Send Push Notifications</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="push_notification_type" class="col-sm-4 col-form-label">Notification type</label>
+                            <div class="col-sm-8">
+                                <select name="push_notification_type" id="push_notification" class="form-control data-edit">
+                                    <option value="{{ \Aparlay\Chat\Notifications\NewUnreadMessage::class }}">{{ Str::afterLast(\Aparlay\Chat\Notifications\NewUnreadMessage::class, '\\') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <p>Are you sure you want to send this notification to user?</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        <button type="submit" class="btn btn-warning">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div id="suspendModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->

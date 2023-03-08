@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Requests\MediaUploadRequest;
+use Aparlay\Core\Admin\Requests\PushNotificationRequest;
 use Aparlay\Core\Admin\Requests\UserGeneralUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserPasswordRequest;
@@ -22,6 +23,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
 use Maklad\Permission\Models\Role;
 
 class UserController extends Controller
@@ -181,6 +183,26 @@ class UserController extends Controller
         }
 
         return back()->with('error', 'Update status failed.');
+    }
+
+    /**
+     * @param User $user
+     * @param PushNotificationRequest $request
+     * @return RedirectResponse
+     */
+    public function pushNotifications(User $user, PushNotificationRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $notification = request()->input('push_notification_type');
+
+        if (class_exists($notification) && $user->routeNotificationForWebPush()->count()) {
+            $user->notify(new $notification((string)$user->_id, ''));
+
+            return back()->with('success', 'Notification '.Str::afterLast($notification, '\\').' sent successfully.');
+        }
+
+        return back()->with('error', 'There is no web push subscribed device for the given user.');
     }
 
     public function updateVisibility(User $user, UserVisibilityRequest $request): RedirectResponse
