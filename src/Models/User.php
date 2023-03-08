@@ -1025,8 +1025,7 @@ class User extends \App\Models\User
             UserNotificationCategory::TIPS->value => $this->setting['notifications']['tips'] ?? true,
             UserNotificationCategory::SUBSCRIPTIONS->value => $this->setting['notifications']['new_subscribers'] ?? true,
             UserNotificationCategory::FOLLOWS->value => $this->setting['notifications']['new_followers'] ?? true,
-            UserNotificationCategory::SYSTEM->value => true, //$this->setting['notifications']['news_and_updates'] ?? true,
-            UserNotificationCategory::UNREAD_MESSAGE->value => true, //$this->setting['notifications']['unread_message'] ?? true,
+            UserNotificationCategory::SYSTEM->value, UserNotificationCategory::UNREAD_MESSAGE->value => true, //$this->setting['notifications']['news_and_updates'] ?? true, $this->setting['notifications']['unread_message'] ?? true,
             default => false
         };
     }
