@@ -19,6 +19,7 @@ use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\Queries\MediaQueryBuilder;
+use Aparlay\Core\Models\Subscription;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
@@ -142,8 +143,67 @@ class MediaService
         return match ($type) {
             'following' => $this->getFollowingFeed($request),
             'new' => $this->getNewFeed($request),
+            'subscriber' => $this->getSubscriber($request),
+            'subscriptions' => $this->getSubscriptions($request),
             default => $this->getFollowingFeed($request),
         };
+    }
+
+    /**
+     * @param  PublicFeedRequest  $request
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getSubscriptions(PublicFeedRequest $request): LengthAwarePaginator
+    {
+        $query = Media::query();
+
+        $ids = Subscription::query()
+            ->creator(auth()->user()->_id)
+            ->select('user._id')
+            ->get()
+            ->pluck('user._id')
+            ->all();
+
+        $data = $query
+            ->private()
+            ->where('creator._id', ['$in' => $ids])
+            ->recentFirst()
+            ->paginate(3)
+            ->withQueryString();
+
+        $visited = [];
+        foreach ($data->items() as $model) {
+            $visited[] = $model->_id;
+        }
+        $this->incrementMediaVisitCounter($visited);
+
+        return $data;
+    }
+
+    /**
+     * @param  PublicFeedRequest  $request
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getSubscriber(PublicFeedRequest $request): LengthAwarePaginator
+    {
+        $query = Media::query();
+
+        $data = $query
+            ->private()
+            ->creator(auth()->user()->_id)
+            ->recentFirst()
+            ->paginate(3)
+            ->withQueryString();
+
+        $visited = [];
+        foreach ($data->items() as $model) {
+            $visited[] = $model->_id;
+        }
+        $this->incrementMediaVisitCounter($visited);
+
+        return $data;
     }
 
     /**
