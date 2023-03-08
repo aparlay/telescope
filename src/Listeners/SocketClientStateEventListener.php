@@ -16,7 +16,8 @@ class SocketClientStateEventListener implements ShouldQueue
 {
     public function handle($event)
     {
-        if (in_array($event->payload['state'], UserWsState::getAllValues())) {
+        $state = $event->payload['data']['state'] ?? '';
+        if (in_array($state, UserWsState::getAllValues())) {
             return;
         }
 
