@@ -158,7 +158,7 @@ class MediaService
     {
         $query = Media::query();
 
-        $ids = Subscription::query()
+        $subscribedModelIds = Subscription::query()
             ->creator(auth()->user()->_id)
             ->select('user._id')
             ->get()
@@ -167,10 +167,55 @@ class MediaService
 
         $data = $query
             ->private()
-            ->where('creator._id', ['$in' => $ids])
+            ->where('creator._id', ['$in' => $subscribedModelIds])
             ->recentFirst()
             ->paginate(3)
             ->withQueryString();
+
+        /**
+         * Based on chat with Ramin
+         * I've decided to use 2 separate methods
+         */
+
+        if($subscribedModelIds){
+            $user = auth()->user();
+            $injectUserIds = [];
+
+            //Following = Posts from FMs the user has followed.
+            foreach ($user['followings'] as $following) {
+                $injectUserIds[] = $following['_id'];
+            }
+
+            //Suggested models = posts from the top 20 FMs on discover.
+            $topModelIds = User::query()
+                ->orderBy('score', -1)
+                ->select('_id')
+                ->limit(20)
+                ->get()
+                ->pluck('_id')
+                ->all();
+
+            foreach($topModelIds as $topModelId){
+                $injectUserIds[] = $topModelId;
+            }
+
+            foreach($injectUserIds as &$injectUserId){
+                if(!$injectUserId instanceof ObjectId){
+                    $injectUserId = new ObjectId($injectUserId);
+                }
+            }
+
+            //Don't show blurred content from subscribed models
+            $injectUserIds = array_filter($injectUserIds, function($_id) use($subscribedModelIds){
+                return !in_array($_id, $subscribedModelIds);
+            });
+
+            $blurredContent = Media::query()->private()->where('creator._id', ['$in' => $injectUserIds])->first();
+
+            $data->push($blurredContent);
+        } else {
+            throw new Exception('TODO. Query only blurred');
+        }
 
         $visited = [];
         foreach ($data->items() as $model) {
