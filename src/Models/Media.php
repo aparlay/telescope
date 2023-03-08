@@ -118,7 +118,6 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder private()
  * @method static |self|Builder protected()
  * @method static |self|Builder licensed()
- * @method static |self|Builder media(ObjectId|string $mediaId)
  */
 class Media extends BaseModel
 {

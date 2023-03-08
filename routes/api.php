@@ -16,6 +16,7 @@ use Aparlay\Core\Api\V1\Controllers\UserNotificationController;
 use Aparlay\Core\Api\V1\Controllers\VersionController;
 use Aparlay\Core\Api\V1\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
+use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -141,7 +142,7 @@ Route::middleware(['api', 'format-response', 'device-id', 'device-id-throttle'])
     Route::get('/cache', [SiteController::class, 'cache'])
         ->name('site.cache')
         ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
-    Route::get('/health', [SiteController::class, 'health'])
+    Route::get('/app-health', [SiteController::class, 'health'])
         ->name('site.health')
         ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
 
@@ -165,3 +166,5 @@ Route::post('/v1/webhook/socket', [WebhookController::class, 'socket'])
 Route::post('/v1/email/status', [WebhookController::class, 'statusEmailUpdate'])
     ->name('webhook.status-email-update')
     ->withoutMiddleware(['device-id', \App\Http\Middleware\Tracker::class]);
+
+Route::get('/v1/health', HealthCheckJsonResultsController::class);
