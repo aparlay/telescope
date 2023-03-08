@@ -3,7 +3,7 @@
 namespace Aparlay\Core\Models\Traits;
 
 use Aparlay\Core\Models\PushSubscription;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use MongoDB\BSON\ObjectId;
 
 trait HasPushSubscriptions
@@ -50,7 +50,7 @@ trait HasPushSubscriptions
             'auth_token' => $token,
             'content_encoding' => $contentEncoding,
             'entity._id' => new ObjectId($this->_id),
-            'entity._type' => $this->getMorphClass(),
+            'entity._type' => Str::afterLast($this->getMorphClass(), '\\'),
         ]);
     }
 
@@ -63,7 +63,7 @@ trait HasPushSubscriptions
     public function ownsPushSubscription($subscription)
     {
         return (string) $subscription->entity['_id'] === (string) $this->getKey() &&
-                        $subscription->entity['_type'] === $this->getMorphClass();
+                        $subscription->entity['_type'] === Str::afterLast($this->getMorphClass(), '\\');
     }
 
     /**
@@ -86,7 +86,7 @@ trait HasPushSubscriptions
     {
         return PushSubscription::query()
             ->where('entity._id', new ObjectId($this->_id))
-            ->where('entity._type', $this->getMorphClass())
+            ->where('entity._type', Str::afterLast($this->getMorphClass(), '\\'))
             ->get();
     }
 }
