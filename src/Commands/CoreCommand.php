@@ -33,8 +33,8 @@ class CoreCommand extends Command
             }
         }*/
 
-        $model = \Aparlay\Core\Models\User::find('603c7355dd67632fba3a02c2');
-        $model->notify(new \Aparlay\Chat\Notifications\NewUnreadMessage('603c7355dd67632fba3a02c2', ''));
+        $model = \Aparlay\Core\Models\User::find('62d928c9f4ce3d5957044382');
+        $model->notify(new \Aparlay\Chat\Notifications\NewUnreadMessage('62d928c9f4ce3d5957044382', ''));
 
         $this->comment('All done');
 
