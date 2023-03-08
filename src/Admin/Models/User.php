@@ -14,7 +14,6 @@ class User extends UserBase implements Auditable
 {
     use UserScope;
     use \Aparlay\Core\Admin\Models\Auditable;
-    use HasPushSubscriptions;
 
     public string $guard_name = 'admin';
 

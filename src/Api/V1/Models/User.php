@@ -63,5 +63,4 @@ use MongoDB\BSON\UTCDateTime;
  */
 class User extends UserBase
 {
-    use HasPushSubscriptions;
 }
