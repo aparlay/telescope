@@ -291,7 +291,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <p>Are you sure you want to send this notification to user?</p>
+                            <p>Are you sure you want to send this notification to this user?</p>
                         </div>
                     </div>
                     <div class="modal-footer">

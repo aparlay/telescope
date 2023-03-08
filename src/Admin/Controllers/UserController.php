@@ -182,7 +182,7 @@ class UserController extends Controller
             return back()->with('success', 'User '.ucfirst(User::getStatuses()[$status]).' successfully.');
         }
 
-        return back()->with('error', 'Update status failed.');
+        return back()->with('danger', 'Update status failed.');
     }
 
     /**
@@ -202,7 +202,7 @@ class UserController extends Controller
             return back()->with('success', 'Notification '.Str::afterLast($notification, '\\').' sent successfully.');
         }
 
-        return back()->with('error', 'There is no web push subscribed device for the given user.');
+        return back()->with('danger', 'There is no web push subscribed device for the given user.');
     }
 
     public function updateVisibility(User $user, UserVisibilityRequest $request): RedirectResponse
@@ -215,7 +215,7 @@ class UserController extends Controller
             return back()->with('success', 'Set user '.ucfirst(User::getVisibilities()[$visibility]).' successfully.');
         }
 
-        return back()->with('error', 'Update visibility failed.');
+        return back()->with('danger', 'Update visibility failed.');
     }
 
     public function updatePayoutSettings(User $user, UserSettingsRequest $request): RedirectResponse
@@ -228,7 +228,7 @@ class UserController extends Controller
             return back()->with('success', 'Set user settings successfully.');
         }
 
-        return back()->with('error', 'Update settings failed.');
+        return back()->with('danger', 'Update settings failed.');
     }
 
     public function setPassword(User $user, UserPasswordRequest $request): RedirectResponse
@@ -241,7 +241,7 @@ class UserController extends Controller
             return back()->with('success', 'Set user password successfully.');
         }
 
-        return back()->with('error', 'Set password failed.');
+        return back()->with('danger', 'Set password failed.');
     }
 
     public function upload(MediaUploadRequest $request)
