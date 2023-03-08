@@ -192,12 +192,11 @@ class UserController extends Controller
      */
     public function pushNotifications(User $user, PushNotificationRequest $request): RedirectResponse
     {
-        $this->userService->setUser(auth()->user());
+        $this->userService->setUser($user);
 
         $notification = request()->input('push_notification_type');
-
         if (class_exists($notification) && $user->routeNotificationForWebPush()->count()) {
-            $user->notify(new $notification((string) $user->_id, ''));
+            $user->notify(new $notification(''));
 
             return back()->with('success', 'Notification '.Str::afterLast($notification, '\\').' sent successfully.');
         }
