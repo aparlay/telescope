@@ -69,7 +69,7 @@ class ReprocessMedia implements ShouldQueue
             }
 
             if (($media = Media::find($this->media_id)) !== null && $storage->exists($media->file)) {
-                UploadMedia::dispatch($media->creator['_id'], $media->_id, request()->input('file'));
+                UploadMedia::dispatch($media->creator['_id'], $media->_id, $media->file);
 
                 return;
             }
