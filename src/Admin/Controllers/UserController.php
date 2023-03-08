@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Requests\MediaUploadRequest;
+use Aparlay\Core\Admin\Requests\PushNotificationRequest;
 use Aparlay\Core\Admin\Requests\UserGeneralUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserInfoUpdateRequest;
 use Aparlay\Core\Admin\Requests\UserPasswordRequest;
@@ -22,6 +23,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
 use Maklad\Permission\Models\Role;
 
 class UserController extends Controller
@@ -180,7 +182,27 @@ class UserController extends Controller
             return back()->with('success', 'User '.ucfirst(User::getStatuses()[$status]).' successfully.');
         }
 
-        return back()->with('error', 'Update status failed.');
+        return back()->with('danger', 'Update status failed.');
+    }
+
+    /**
+     * @param User $user
+     * @param PushNotificationRequest $request
+     * @return RedirectResponse
+     */
+    public function pushNotifications(User $user, PushNotificationRequest $request): RedirectResponse
+    {
+        $this->userService->setUser(auth()->user());
+
+        $notification = request()->input('push_notification_type');
+
+        if (class_exists($notification) && $user->routeNotificationForWebPush()->count()) {
+            $user->notify(new $notification((string) $user->_id, ''));
+
+            return back()->with('success', 'Notification '.Str::afterLast($notification, '\\').' sent successfully.');
+        }
+
+        return back()->with('danger', 'There is no web push subscribed device for the given user.');
     }
 
     public function updateVisibility(User $user, UserVisibilityRequest $request): RedirectResponse
@@ -193,7 +215,7 @@ class UserController extends Controller
             return back()->with('success', 'Set user '.ucfirst(User::getVisibilities()[$visibility]).' successfully.');
         }
 
-        return back()->with('error', 'Update visibility failed.');
+        return back()->with('danger', 'Update visibility failed.');
     }
 
     public function updatePayoutSettings(User $user, UserSettingsRequest $request): RedirectResponse
@@ -206,7 +228,7 @@ class UserController extends Controller
             return back()->with('success', 'Set user settings successfully.');
         }
 
-        return back()->with('error', 'Update settings failed.');
+        return back()->with('danger', 'Update settings failed.');
     }
 
     public function setPassword(User $user, UserPasswordRequest $request): RedirectResponse
@@ -219,7 +241,7 @@ class UserController extends Controller
             return back()->with('success', 'Set user password successfully.');
         }
 
-        return back()->with('error', 'Set password failed.');
+        return back()->with('danger', 'Set password failed.');
     }
 
     public function upload(MediaUploadRequest $request)
