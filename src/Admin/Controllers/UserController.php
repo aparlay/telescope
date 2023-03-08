@@ -197,7 +197,7 @@ class UserController extends Controller
         $notification = request()->input('push_notification_type');
 
         if (class_exists($notification) && $user->routeNotificationForWebPush()->count()) {
-            $user->notify(new $notification((string)$user->_id, ''));
+            $user->notify(new $notification((string) $user->_id, ''));
 
             return back()->with('success', 'Notification '.Str::afterLast($notification, '\\').' sent successfully.');
         }
