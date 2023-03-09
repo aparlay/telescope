@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Notifications;
 
-use Aparlay\Core\Models\User;
-use Kutia\Larafirebase\Messages\FirebaseMessage;
 use MongoDB\BSON\ObjectId;
 
 trait UserNotificationArray
