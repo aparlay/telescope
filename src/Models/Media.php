@@ -718,6 +718,12 @@ class Media extends BaseModel
         return Cdn::video($this->is_completed ? $this->file : 'default.mp4');
     }
 
+    public function getSignedFileUrlAttribute()
+    {
+        throw new \Exception('TODO');
+        return Cdn::video($this->is_completed ? $this->file : 'default.mp4');
+    }
+
     public function getCoverUrlAttribute()
     {
         return Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg');
