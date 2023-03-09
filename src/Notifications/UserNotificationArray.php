@@ -51,17 +51,4 @@ trait UserNotificationArray
             'payload' => $this->payload,
         ];
     }
-
-    /**
-     * Get the firebase representation of the notification.
-     */
-    public function toFirebase($notifiable)
-    {
-        $user = User::findOrFail($this->user_id);
-
-        return (new FirebaseMessage())
-            ->withTitle('New notification')
-            ->withBody($this->message)
-            ->asNotification($user->setting['fcm_tokens']); // OR ->asMessage($deviceTokens);
-    }
 }
