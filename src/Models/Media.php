@@ -240,6 +240,13 @@ class Media extends BaseModel
     protected $appends = [];
 
     /**
+     * Controls whether returned media should be blurred.
+     * This is used for private feed suggestions.
+     * @var bool
+     */
+    public $blurred = false;
+
+    /**
      * Get the name of the index associated with the model.
      *
      * @return string
@@ -714,6 +721,11 @@ class Media extends BaseModel
     }
 
     public function getFileUrlAttribute()
+    {
+        return Cdn::video($this->is_completed ? $this->file : 'default.mp4');
+    }
+
+    public function getFileBlurredUrlAttribute()
     {
         return Cdn::video($this->is_completed ? $this->file : 'default.mp4');
     }

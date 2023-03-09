@@ -183,6 +183,10 @@ class MediaService
             return !in_array($_id, $subscribedModelIds);
         });
 
+        //Without this array keys are 1 2 3 4 5 7
+        //and $in doesn't work.
+        $injectUserIds = array_values($injectUserIds);
+
         return Media::query()
             ->private()
             ->recentFirst()
@@ -212,7 +216,11 @@ class MediaService
                 ->recentFirst()
                 ->paginate(3)
                 ->withQueryString();
-            $data->push($blurredMediaQuery->first());
+            $blurredMedia = $blurredMediaQuery->first();
+            if($blurredMedia){
+                $data->push($blurredMedia);
+            }
+
         } else {
             $data = $blurredMediaQuery
                 ->paginate(3)
@@ -220,7 +228,17 @@ class MediaService
         }
 
         $visited = [];
-        foreach ($data->items() as $model) {
+        foreach ($data->items() as & $model) {
+            if($subscribedModelIds){
+                if(!in_array($model->creator['_id'], $subscribedModelIds)){
+                    //only posts from not subscribedModelIds are blurred
+                    $model->blurred = true;
+                }
+            } else {
+                //everything is blurred
+                $model->blurred = true;
+            }
+
             $visited[] = $model->_id;
         }
         $this->incrementMediaVisitCounter($visited);
