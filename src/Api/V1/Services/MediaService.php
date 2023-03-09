@@ -201,6 +201,7 @@ class MediaService
     public function getSubscriptions(PublicFeedRequest $request): LengthAwarePaginator
     {
         $subscribedModelIds = Subscription::query()
+            ->valid()
             ->creator(auth()->user()->_id)
             ->select('user._id')
             ->get()
