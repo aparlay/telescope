@@ -28,7 +28,7 @@ trait UserNotificationArray
      */
     public function via($notifiable)
     {
-        return [UserNotificationChannel::class, 'firebase'];
+        return [UserNotificationChannel::class];
     }
 
     /**
