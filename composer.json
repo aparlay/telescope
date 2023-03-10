@@ -70,6 +70,7 @@
         "google/protobuf": "^3.17",
         "grpc/grpc": "^1.38",
         "guzzlehttp/guzzle": "^7.0.1",
+        "intervention/image": "*",
         "jenssegers/mongodb": "^3.8",
         "laravel/framework": "^9.2",
         "laravel/horizon": "^5.7",
