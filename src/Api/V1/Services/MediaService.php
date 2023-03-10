@@ -22,6 +22,7 @@ use Aparlay\Core\Models\Queries\MediaQueryBuilder;
 use Aparlay\Core\Models\Subscription;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
@@ -200,13 +201,7 @@ class MediaService
      */
     public function getSubscriptions(PublicFeedRequest $request): LengthAwarePaginator
     {
-        $subscribedModelIds = Subscription::query()
-            ->valid()
-            ->creator(auth()->user()->_id)
-            ->select('user._id')
-            ->get()
-            ->pluck('user._id')
-            ->all();
+        $subscribedModelIds = Arr::pluck(auth()->user()->subscriptions, 'user_id');
         $blurredMediaQuery = $this->getBlurredMediaQuery($subscribedModelIds);
 
         if($subscribedModelIds){
