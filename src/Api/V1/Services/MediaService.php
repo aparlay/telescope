@@ -217,7 +217,9 @@ class MediaService
                 ->recentFirst()
                 ->paginate(3)
                 ->withQueryString();
-            $blurredMedia = $blurredMediaQuery->first();
+            $blurredMedia = $blurredMediaQuery
+                ->offset(request()->get('page', 1) - 1)
+                ->first();
             if($blurredMedia){
                 $data->push($blurredMedia);
             }
