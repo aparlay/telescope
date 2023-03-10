@@ -16,6 +16,7 @@ class SubscriptionQueryBuilder extends EloquentQueryBuilder
      */
     public function valid()
     {
+        throw new \Exception('Not used yet');
         return $this
             ->where('status', [
                 '$in' => [
