@@ -733,6 +733,7 @@ class Media extends BaseModel
     public function getSignedFileUrlAttribute()
     {
         throw new \Exception('TODO');
+
         return Cdn::video($this->is_completed ? $this->file : 'default.mp4');
     }
 

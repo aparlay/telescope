@@ -169,19 +169,19 @@ class MediaService
             ->pluck('_id')
             ->all();
 
-        foreach($topModelIds as $topModelId){
+        foreach ($topModelIds as $topModelId) {
             $injectUserIds[] = $topModelId;
         }
 
-        foreach($injectUserIds as &$injectUserId){
-            if(!$injectUserId instanceof ObjectId){
+        foreach ($injectUserIds as &$injectUserId) {
+            if (! $injectUserId instanceof ObjectId) {
                 $injectUserId = new ObjectId($injectUserId);
             }
         }
 
         //Don't show blurred content from subscribed models
-        $injectUserIds = array_filter($injectUserIds, function($_id) use($subscribedModelIds){
-            return !in_array($_id, $subscribedModelIds);
+        $injectUserIds = array_filter($injectUserIds, function ($_id) use ($subscribedModelIds) {
+            return ! in_array($_id, $subscribedModelIds);
         });
 
         //Without this array keys are 1 2 3 4 5 7
@@ -204,7 +204,7 @@ class MediaService
         $subscribedModelIds = Arr::pluck(auth()->user()->subscriptions, 'user_id');
         $blurredMediaQuery = $this->getBlurredMediaQuery($subscribedModelIds);
 
-        if($subscribedModelIds){
+        if ($subscribedModelIds) {
             $query = Media::query();
             $data = $query
                 ->private()
@@ -215,10 +215,9 @@ class MediaService
             $blurredMedia = $blurredMediaQuery
                 ->offset(request()->get('page', 1) - 1)
                 ->first();
-            if($blurredMedia){
+            if ($blurredMedia) {
                 $data->push($blurredMedia);
             }
-
         } else {
             $data = $blurredMediaQuery
                 ->paginate(3)
@@ -226,9 +225,9 @@ class MediaService
         }
 
         $visited = [];
-        foreach ($data->items() as & $model) {
-            if($subscribedModelIds){
-                if(!in_array($model->creator['_id'], $subscribedModelIds)){
+        foreach ($data->items() as &$model) {
+            if ($subscribedModelIds) {
+                if (! in_array($model->creator['_id'], $subscribedModelIds)) {
                     //only posts from not subscribedModelIds are blurred
                     $model->blurred = true;
                 }
