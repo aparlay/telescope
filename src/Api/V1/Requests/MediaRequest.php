@@ -49,7 +49,7 @@ class MediaRequest extends FormRequest
     public function prepareForValidation()
     {
         $visibility = request()->input('visibility', 'public');
-        if (!is_numeric($visibility)) {
+        if (! is_numeric($visibility)) {
             $visibility = match ($visibility) {
                 MediaVisibility::PRIVATE->label() => MediaVisibility::PRIVATE->value,
                 MediaVisibility::PUBLIC->label() => MediaVisibility::PUBLIC->value,

@@ -776,7 +776,7 @@ class Media extends BaseModel
      */
     public function fileUrlFor(?User $user = null): string
     {
-        if (!$this->is_private || !$this->isLockedFor($user)) {
+        if (! $this->is_private || ! $this->isLockedFor($user)) {
             return $this->file_url;
         }
 
@@ -790,7 +790,7 @@ class Media extends BaseModel
      */
     public function coverUrlFor(?User $user = null): string
     {
-        if (!$this->is_private || !$this->isLockedFor($user)) {
+        if (! $this->is_private || ! $this->isLockedFor($user)) {
             return $this->cover_url;
         }
 
@@ -805,7 +805,7 @@ class Media extends BaseModel
     public function isLockedFor(?User $user = null): bool
     {
         // content is public no need check more
-        if (!$this->is_private) {
+        if (! $this->is_private) {
             return false;
         }
 
@@ -815,11 +815,11 @@ class Media extends BaseModel
         }
 
         // user is owner no need to check more
-        if ((string)$user->_id !== (string)$this->creator['_id']) {
+        if ((string) $user->_id !== (string) $this->creator['_id']) {
             return true;
         }
 
-        return (collect($user->subscriptions)->where('user_id', $this->creator['_id'])->first() === null);
+        return collect($user->subscriptions)->where('user_id', $this->creator['_id'])->first() === null;
     }
 
     /**

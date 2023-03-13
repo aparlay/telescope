@@ -70,7 +70,7 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
             $image = $media->filename.'.jpg';
 
             if (Storage::disk(StorageType::GC_COVERS)->fileMissing($image)) {
-                Log::error("Failed find to {$image} in ".StorageType::GC_COVERS." storage");
+                Log::error("Failed find to {$image} in ".StorageType::GC_COVERS.' storage');
 
                 return;
             }
@@ -81,7 +81,7 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
                 Log::debug('image to blur file already exists '.$image);
             }
 
-            $blurredImage = Uuid::uuid4() . '.jpg';
+            $blurredImage = Uuid::uuid4().'.jpg';
             Image::load($storage->path($image))->blur(15)->quality(70)->save($storage->path($blurredImage));
             UploadFileJob::dispatch(
                 $image,
