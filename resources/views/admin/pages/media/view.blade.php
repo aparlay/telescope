@@ -217,63 +217,63 @@
                                           class="form-horizontal" method="POST">
                                         @csrf()
                                         <div class="form-group row m-0">
-                                            <label for="id" class="col-sm-2 col-form-label">ID</label>
-                                            <div class="col-sm-10 mt-2">
+                                            <label for="id" class="col-sm-4 col-form-label">ID</label>
+                                            <div class="col-sm-8 mt-2">
                                                 <p>{{ $media->_id }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="bio" class="col-sm-2 col-form-label">Description</label>
-                                            <div class="col-sm-10">
+                                            <label for="bio" class="col-sm-4 col-form-label">Description</label>
+                                            <div class="col-sm-8">
                                                 <textarea name="description" id="description" cols="30" rows="3"
                                                           class="form-control">{{ $media->description }}</textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="size" class="col-sm-2 col-form-label">Size</label>
-                                            <div class="col-sm-10 mt-2">
+                                            <label for="size" class="col-sm-4 col-form-label">Size</label>
+                                            <div class="col-sm-8 mt-2">
                                                 <p>{{ $size->fileSize($media->size) }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="length" class="col-sm-2 col-form-label">Length</label>
-                                            <div class="col-sm-10 mt-2">
+                                            <label for="length" class="col-sm-4 col-form-label">Length</label>
+                                            <div class="col-sm-8 mt-2">
                                                 <p>{{ $media->round_length }} Sec</p>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="likes" class="col-sm-2 col-form-label">Likes</label>
-                                            <div class="col-sm-10 mt-2">
+                                            <label for="likes" class="col-sm-4 col-form-label">Likes</label>
+                                            <div class="col-sm-8 mt-2">
                                                 <p>{{ $media->like_count }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="visits" class="col-sm-2 col-form-label">Visits</label>
-                                            <div class="col-sm-10 mt-2">
+                                            <label for="visits" class="col-sm-4 col-form-label">Visits</label>
+                                            <div class="col-sm-8 mt-2">
                                                 <p>{{ $media->visit_count }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="visits" class="col-sm-2 col-form-label">Watched #</label>
-                                            <div class="col-sm-10 mt-2">
+                                            <label for="visits" class="col-sm-4 col-form-label">Watched #</label>
+                                            <div class="col-sm-8 mt-2">
                                                 <p>{{ $media->watched_count }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="visits" class="col-sm-2 col-form-label">Watched Length</label>
-                                            <div class="col-sm-10 mt-2">
+                                            <label for="visits" class="col-sm-4 col-form-label">Watched Duration</label>
+                                            <div class="col-sm-8 mt-2">
                                                 <p>{{ round(\Carbon\CarbonInterval::seconds($media->length_watched)->cascade()->totalHours) }}H.</p>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="created-by" class="col-sm-2 col-form-label">Created By</label>
-                                            <div class="col-sm-10 mt-2">
+                                            <label for="created-by" class="col-sm-4 col-form-label">Created By</label>
+                                            <div class="col-sm-8 mt-2">
                                                 <a href="/user/{{ $media->created_by }}">{{ $media->creator['username'] }}</a>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="status" class="col-sm-2 col-form-label">Status</label>
-                                            <div class="col-sm-10">
+                                            <label for="status" class="col-sm-4 col-form-label">Status</label>
+                                            <div class="col-sm-8">
                                                 <select name="status" id="status" class="form-control">
                                                     @foreach(\App\Models\Media::getStatuses() as $key => $label)
                                                         <option value="{{ $key }}" {!! $media->status == $key ? 'selected' : '' !!}>{{ $label }}</option>
@@ -282,9 +282,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="is_protected" class="col-sm-2 col-form-label">Delete
+                                            <label for="is_protected" class="col-sm-4 col-form-label">Delete
                                                 Protected</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-8">
                                                 <div class="custom-control custom-switch mt-2">
                                                     <input type="hidden" name="is_protected" value="0">
                                                     <input type="checkbox" value="1" class="custom-control-input"
@@ -295,9 +295,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="is_music_licensed" class="col-sm-2 col-form-label">Music
+                                            <label for="is_music_licensed" class="col-sm-4 col-form-label">Music
                                                 Licensed</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-8">
                                                 <div class="custom-control custom-switch mt-2">
                                                     <input type="hidden" name="is_music_licensed" value="0">
                                                     <input type="checkbox" value="1" class="custom-control-input"
@@ -308,8 +308,8 @@
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="is_music_licensed" class="col-sm-2 col-form-label">Comment Enable</label>
-                                            <div class="col-sm-10">
+                                            <label for="is_music_licensed" class="col-sm-4 col-form-label">Comment Enable</label>
+                                            <div class="col-sm-8">
                                                 <div class="custom-control custom-switch mt-2">
                                                     <input type="hidden" name="is_comments_enabled" value="0">
                                                     <input type="checkbox" value="1" class="custom-control-input"
@@ -320,16 +320,45 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <input type="hidden" id="user_id" name="user_id" value="{{ (string)$media->_id }}">
                                         <div class="form-group row m-0">
-                                            <label for="updated-at" class="col-sm-2 col-form-label">Updated At</label>
-                                            <div class="col-sm-10 mt-2">
+                                            <label for="force_sort_positions.guests" class="col-sm-4 col-form-label">Force Position Guests</label>
+                                            <div class="col-sm-8">
+                                                <input type="number" value="{{ $media->force_sort_positions[\Aparlay\Core\Models\Enums\MediaSortCategories::GUEST->value] ?? 0 }}"
+                                                       class="form-control"
+                                                       name="force_sort_positions[{{\Aparlay\Core\Models\Enums\MediaSortCategories::GUEST->value}}]"
+                                                       id="force_sort_positions.guests">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row m-0">
+                                            <label for="force_sort_positions.returned" class="col-sm-4 col-form-label">Force Position Returned</label>
+                                            <div class="col-sm-8">
+                                                <input type="number" value="{{ $media->force_sort_positions[\Aparlay\Core\Models\Enums\MediaSortCategories::RETURNED->value] ?? 0 }}"
+                                                       class="form-control"
+                                                       name="force_sort_positions[{{\Aparlay\Core\Models\Enums\MediaSortCategories::RETURNED->value}}]"
+                                                       id="force_sort_positions.returned">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row m-0">
+                                            <label for="force_sort_positions.registered" class="col-sm-4 col-form-label">Force Position Registered</label>
+                                            <div class="col-sm-8">
+                                                <input type="number" value="{{ $media->force_sort_positions[\Aparlay\Core\Models\Enums\MediaSortCategories::REGISTERED->value] ?? 0 }}"
+                                                       class="form-control"
+                                                       name="force_sort_positions[{{\Aparlay\Core\Models\Enums\MediaSortCategories::REGISTERED->value}}]"
+                                                       id="force_sort_positions.registered">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row m-0">
+                                            <label for="updated-at" class="col-sm-4 col-form-label">Updated At</label>
+                                            <div class="col-sm-8 mt-2">
                                                 <p>{{ $media->updated_at }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group row m-0">
-                                            <label for="processing-log" class="col-sm-2 col-form-label">Processing
+                                            <label for="processing-log" class="col-sm-4 col-form-label">Processing
                                                 Log</label>
-                                            <div class="col-sm-10 mt-2">
+                                            <div class="col-sm-8 mt-2">
                                                 @isset($media->processing_log)
                                                     @foreach($media->processing_log as $log)
                                                         <p>{{ $log }}</p>

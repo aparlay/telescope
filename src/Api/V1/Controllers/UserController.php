@@ -111,6 +111,19 @@ class UserController extends Controller
             if ($request->has('avatar') && empty($request->avatar)) {
                 $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
+            if ($request->has('push_subscription') &&
+                ! empty($request->push_subscription['endpoint']) &&
+                ! empty($request->push_subscription['keys']['p256dh']) &&
+                ! empty($request->push_subscription['keys']['auth'])) {
+                $this->userService->getUser()->updatePushSubscription(
+                    $request->push_subscription['endpoint'],
+                    $request->push_subscription['keys']['p256dh'],
+                    $request->push_subscription['keys']['auth'],
+                );
+            }
+            if ($request->has('push_unsubscription') && ! empty($request->push_unsubscription['endpoint'])) {
+                $this->userService->getUser()->deletePushSubscription($request->push_unsubscription['endpoint']);
+            }
 
             /* Update User Profile Information */
             $this->userService->getUser()->fill($request->all());

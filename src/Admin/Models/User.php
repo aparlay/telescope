@@ -6,17 +6,27 @@ use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Scopes\UserScope;
+use Aparlay\Core\Models\Traits\HasPushSubscriptions;
 use Aparlay\Core\Models\User as UserBase;
+use Illuminate\Support\Str;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class User extends UserBase implements Auditable
 {
     use UserScope;
     use \Aparlay\Core\Admin\Models\Auditable;
+    use HasPushSubscriptions;
 
     public string $guard_name = 'admin';
 
     protected $hidden = ['password_hash', 'search'];
+
+    /**
+     * Should the audit be strict?
+     *
+     * @var bool
+     */
+    protected $auditStrict = true;
 
     /**
      * Attributes to exclude from the Audit.
@@ -24,6 +34,7 @@ class User extends UserBase implements Auditable
      * @var array
      */
     protected $auditExclude = [
+        'updated_by',
         'password_hash',
     ];
 
@@ -36,7 +47,6 @@ class User extends UserBase implements Auditable
         'features',
         'gender',
         'birthday',
-        'interested_in',
         'type',
         'status',
         'visibility',
@@ -58,7 +68,6 @@ class User extends UserBase implements Auditable
         'type' => 'integer',
         'status' => 'integer',
         'gender' => 'integer',
-        'interested_in' => 'integer',
         'visibility' => 'integer',
         'verification_status' => 'integer',
     ];
@@ -127,5 +136,12 @@ class User extends UserBase implements Auditable
     public function adminlte_profile_url()
     {
         return 'profile/username';
+    }
+
+    public function getEmailTrimmedAttribute()
+    {
+        $atSignPosition = strpos($this->email, '@');
+
+        return Str::limit(Str::substr($this->email, 0, $atSignPosition)).'@'.Str::substr($this->email, $atSignPosition);
     }
 }

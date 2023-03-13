@@ -42,58 +42,58 @@
 
     <table class="table table-striped bg-white border">
         <thead>
-        <tr class="d-flex">
-            <th class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
-                    <input class="form-control" type="text" wire:model="filter.username"/>
-                </div>
-            </th>
-            <th class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'email'" :fieldLabel="'Email'" />
-                    <input class="form-control" type="text" wire:model="filter.email"/>
-                </div>
-            </th>
-            <th class="col-md-2">
-                <div>
-                    <x-sortable-column-header :sort="$sort" :fieldName="'country'" :fieldLabel="'Country'" />
+            <tr class="d-flex">
+                <th class="col-md-2">
+                    <div>
+                        <x-sortable-column-header :sort="$sort" :fieldName="'username'" :fieldLabel="'Username'" />
+                        <input class="form-control" type="text" wire:model="filter.username"/>
+                    </div>
+                </th>
+                <th class="col-md-2">
+                    <div>
+                        <x-sortable-column-header :sort="$sort" :fieldName="'email'" :fieldLabel="'Email'" />
+                        <input class="form-control" type="text" wire:model="filter.email"/>
+                    </div>
+                </th>
+                <th class="col-md-2">
+                    <div>
+                        <x-sortable-column-header :sort="$sort" :fieldName="'country'" :fieldLabel="'Country'" />
 
-                    <x-wire-dropdown-list
-                            :wire-model="'filter.country'"
-                            :options="\Aparlay\Core\Models\Country::query()->get()->pluck('name', 'alpha2')->all()"
-                    />
-                </div>
-            </th>
-            <th class="col-md-1">
-                <div>
-                    <label for="">Gender</label>
-                    <x-wire-dropdown-list :wire-model="'filter.gender'" :options="User::getGenders()"/>
-                </div>
-            </th>
-            <th class="col-md-1">
-                <div>
-                    <label for="">Status</label>
-                    <x-wire-dropdown-list :wire-model="'filter.status'" :options="User::getStatuses()"/>
-                </div>
-            </th>
-            <th class="col-md-1">
-                <div>
-                    <label for="">Verif. Status</label>
-                    <x-wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
-                </div>
-            </th>
+                        <x-wire-dropdown-list
+                                :wire-model="'filter.country'"
+                                :options="\Aparlay\Core\Models\Country::query()->get()->pluck('name', 'alpha2')->all()"
+                        />
+                    </div>
+                </th>
+                <th class="col-md-1">
+                    <div>
+                        <label for="">Gender</label>
+                        <x-wire-dropdown-list :wire-model="'filter.gender'" :options="User::getGenders()"/>
+                    </div>
+                </th>
+                <th class="col-md-1">
+                    <div>
+                        <label for="">Status</label>
+                        <x-wire-dropdown-list :wire-model="'filter.status'" :options="User::getStatuses()"/>
+                    </div>
+                </th>
+                <th class="col-md-1">
+                    <div>
+                        <label for="">Verif. Status</label>
+                        <x-wire-dropdown-list :wire-model="'filter.verification_status'" :options="User::getVerificationStatuses()"/>
+                    </div>
+                </th>
 
-            <th class="col-md-2">
-                <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Reg. Date'" />
-            </th>
+                <th class="col-md-2">
+                    <x-sortable-column-header :sort="$sort" :fieldName="'created_at'" :fieldLabel="'Reg. Date'" />
+                </th>
 
-            <th class="col-md-1">
-                <div>
-                    <label for="">Profile</label>
-                </div>
-            </th>
-        </tr>
+                <th class="col-md-1">
+                    <div>
+                        <label for="">Profile</label>
+                    </div>
+                </th>
+            </tr>
         </thead>
         <tbody>
 

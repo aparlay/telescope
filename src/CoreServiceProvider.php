@@ -61,7 +61,6 @@ use Aparlay\Core\Commands\WarmupCacheCommand;
 use Aparlay\Core\Commands\WsCommand;
 use Aparlay\Core\Helpers\ConfigHelper;
 use Aparlay\Core\Helpers\IP;
-use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
@@ -81,7 +80,7 @@ class CoreServiceProvider extends ServiceProvider
     public function register()
     {
         if ($this->app->isLocal()) {
-            $this->app->register(IdeHelperServiceProvider::class);
+            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
         $this->app->register(\Aparlay\Core\Api\V1\Providers\AuthServiceProvider::class);
         $this->app->register(\Aparlay\Core\Api\V1\Providers\EventServiceProvider::class);

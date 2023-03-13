@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Resources;
 
 use Akaunting\Money\Money;
 use Illuminate\Http\Request;
+use Laravel\Octane\Facades\Octane;
 
 class MediaResource extends JsonResource
 {
@@ -20,26 +21,15 @@ class MediaResource extends JsonResource
      */
     public function toArray($request)
     {
-        $people = [];
-        foreach ($this->people as $person) {
-            $people[] = $this->createSimpleUser($person);
-        }
-
-        $likes = [];
-        foreach ($this->likes as $like) {
-            $likes[] = $this->createSimpleUser($like);
-        }
-
-        $visits = [];
-        foreach ($this->visits as $visit) {
-            $visits[] = $this->createSimpleUser($visit);
-        }
+        $people = $this->createBatchSimpleUser($this->people);
+        $likes = $this->createBatchSimpleUser($this->likes);
+        $visits = $this->createBatchSimpleUser($this->visits);
 
         $tips = 0;
-        $alerts = [];
+        $alerts = AlertResource::collection([]);
         if (isset(auth()->user()->_id) && (string) auth()->user()->_id === (string) $this->creator['_id']) {
-            $tips = $this->tips;
-            $alerts = $this->alertObjs;
+            // $tips = $this->tips;
+            $alerts = AlertResource::collection($this->alertObjs);
         }
 
         // should hide adult content for guests or setting.show_adult_content = 1 or default is false
@@ -76,14 +66,14 @@ class MediaResource extends JsonResource
             'sent_tips_formatted' => Money::USD((int) $this->sent_tips)->format(),
             'comments' => [],
             'slug' => $this->slug,
-            'alerts' => AlertResource::collection($alerts),
+            'alerts' => $alerts,
             'created_by' => (string) $this->created_by,
             'updated_by' => (string) $this->updated_by,
             'created_at' => $this->created_at->valueOf(),
             'updated_at' => $this->updated_at->valueOf(),
             '_links' => [
                 'self' => ['href' => route('core.api.v1.media.show', ['media' => $this])],
-                'index' => ['href' => route('core.api.v1.user.media.list', ['user' => $this->creator['_id']])],
+                'index' => ['href' => route('core.api.v1.user.media.list', ['user' => $this->creator['_id'] ?? '63941176c16288c7da0e97c5'])],
             ],
         ];
     }

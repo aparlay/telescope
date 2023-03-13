@@ -65,11 +65,11 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property ObjectId           $created_by
  * @property Carbon             $created_at
  * @property Carbon             $updated_at
- * @property mixed              $filename
  * @property array              $links
  * @property bool               $is_protected
  * @property array              $scores
  * @property array              $sort_scores
+ * @property array              $force_sort_positions
  * @property User               $userObj
  * @property User               $creatorObj
  * @property Alert[]            $alertObjs
@@ -79,6 +79,9 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @property-read string        $slack_subject_admin_url
  * @property-read string        $slack_admin_url
+ * @property-read string        $filename
+ * @property-read string        $cover_file
+ * @property-read string        $delete_prefix
  * @property-read string        $admin_url
  * @property-read string        $cover_url
  * @property-read string        $file_url
@@ -97,6 +100,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @method static |self|Builder user(ObjectId|string $userId)
  * @method static |self|Builder media(ObjectId|string $userId)
  * @method static |self|Builder availableForFollower()
+ * @method static |self|Builder hasForceSortPosition($category)
+ * @method static |self|Builder hasNoForceSortPosition($category)
  * @method static |self|Builder availableForOwner()
  * @method static |self|Builder confirmed()
  * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
@@ -175,6 +180,7 @@ class Media extends BaseModel
         'creator',
         'scores',
         'sort_scores',
+        'force_sort_positions',
         'slug',
         'tips',
         'content_gender',
@@ -434,19 +440,6 @@ class Media extends BaseModel
     {
         $oldness = time() - $this->created_at->getTimestamp();
 
-        // do not let a model upload many media together and spam feed
-        if ($oldness <= 21600) {
-            $todayUploadedMedias = self::public()
-                ->confirmed()
-                ->creator($this->creator['_id'])
-                ->where('created_at', '>=', DT::utcDateTime(['d' => -1]))
-                ->count();
-
-            if ($todayUploadedMedias > 2) {
-                return 5;
-            }
-        }
-
         return match (true) {
             $oldness <= 21600 => 10,
             $oldness <= 43200 => 9,
@@ -561,6 +554,22 @@ class Media extends BaseModel
     public function getFilenameAttribute(): string
     {
         return basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION));
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeletePrefixAttribute(): string
+    {
+        return substr(md5($this->file), 0, 5).'_';
+    }
+
+    /**
+     * @return string
+     */
+    public function getCoverFileAttribute(): string
+    {
+        return $this->filename.'.jpg';
     }
 
     /**
@@ -760,8 +769,6 @@ class Media extends BaseModel
         }
 
         $this->sort_scores = $sortScores;
-        $this->save();
-        $this->refresh();
 
         return $this;
     }
@@ -981,54 +988,102 @@ class Media extends BaseModel
         };
     }
 
-    public static function CachePublicToplessMediaIds()
+    /**
+     * @return void
+     * @throws \RedisException
+     */
+    private function cacheInPublicToplessMediaIds(): void
     {
         $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
-        Redis::del($toplessMediaIdsCacheKey);
-
-        self::public()
-            ->confirmed()
-            ->public()
-            ->topless()
-            ->select('_id')
-            ->chunk(200, function ($medias) use ($toplessMediaIdsCacheKey) {
-                $toplessMediaIds = $medias->pluck('_id')->toArray();
-                $toplessMediaIds = array_map('strval', $toplessMediaIds);
-                Redis::sadd($toplessMediaIdsCacheKey, ...$toplessMediaIds);
-            });
-
-        Redis::expireat($toplessMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
+        foreach ($this->sort_scores as $category => $score) {
+            Redis::zAdd($toplessMediaIdsCacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
+        }
     }
 
-    public static function CachePublicExplicitMediaIds()
+    /**
+     * @return void
+     * @throws \RedisException
+     */
+    private function cacheInPublicExplicitMediaIds(): void
     {
         $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
-        Redis::del($explicitMediaIdsCacheKey);
-
-        self::public()
-            ->confirmed()
-            ->public()
-            ->explicit()
-            ->select('_id')
-            ->chunk(200, function ($medias) use ($explicitMediaIdsCacheKey) {
-                $explicitMediaIds = $medias->pluck('_id')->toArray();
-                $explicitMediaIds = array_map('strval', $explicitMediaIds);
-                Redis::sadd($explicitMediaIdsCacheKey, ...$explicitMediaIds);
-            });
-
-        Redis::expireat($explicitMediaIdsCacheKey, now()->addDays(4)->getTimestamp());
+        foreach ($this->sort_scores as $category => $score) {
+            Redis::zAdd($explicitMediaIdsCacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
+        }
     }
 
-    public static function CachePublicMediaIds()
+    /**
+     * @return void
+     * @throws \RedisException
+     */
+    private function cacheInPublicMediaIds(): void
     {
         $cacheKey = (new self())->getCollection().':ids';
-        Redis::del($cacheKey);
-        self::public()->confirmed()->select('_id')->chunk(200, function ($medias) use ($cacheKey) {
-            $mediaIds = $medias->pluck('_id')->toArray();
-            $mediaIds = array_map('strval', $mediaIds);
-            Redis::sadd($cacheKey, ...$mediaIds);
-        });
+        foreach ($this->sort_scores as $category => $score) {
+            if (is_numeric($this->sort_scores[$category])) {
+                Redis::zAdd($cacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
+            }
+        }
+    }
 
-        Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
+    /**
+     * @return void
+     * @throws \RedisException
+     */
+    private function cacheInFemaleContentMediaIds(): void
+    {
+        if ($this->content_gender === MediaContentGender::FEMALE->value) {
+            $cacheKey = (new self())->getCollection().':ids:female';
+            Redis::zAdd($cacheKey, 0, (string) $this->_id);
+        }
+    }
+
+    /**
+     * @return void
+     * @throws \RedisException
+     */
+    private function cacheInMaleContentMediaIds(): void
+    {
+        if ($this->content_gender === MediaContentGender::MALE->value) {
+            $cacheKey = (new self())->getCollection().':ids:male';
+            Redis::zAdd($cacheKey, 0, (string) $this->_id);
+        }
+    }
+
+    /**
+     * @return void
+     * @throws \RedisException
+     */
+    private function cacheInTransgenderContentMediaIds(): void
+    {
+        if ($this->content_gender === MediaContentGender::TRANSGENDER->value) {
+            $cacheKey = (new self())->getCollection().':ids:transgender';
+            Redis::zAdd($cacheKey, 0, (string) $this->_id);
+        }
+    }
+
+    /**
+     * @throws \RedisException
+     */
+    public function storeInGeneralCaches(): self
+    {
+        if ($this->status !== MediaStatus::CONFIRMED->value || $this->visibility !== MediaVisibility::PUBLIC->value) {
+            return $this;
+        }
+
+        $this->cacheInPublicMediaIds();
+
+        if ($this->skin_score >= config('app.media.topless_skin_score')) {
+            $this->cacheInPublicToplessMediaIds();
+        }
+        if ($this->skin_score >= config('app.media.explicit_skin_score')) {
+            $this->cacheInPublicExplicitMediaIds();
+        }
+
+        $this->cacheInFemaleContentMediaIds();
+        $this->cacheInMaleContentMediaIds();
+        $this->cacheInTransgenderContentMediaIds();
+
+        return $this;
     }
 }

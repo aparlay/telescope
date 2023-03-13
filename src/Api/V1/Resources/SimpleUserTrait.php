@@ -6,7 +6,11 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Helpers\Cdn;
 use Exception;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Octane\Exceptions\TaskException;
+use Laravel\Octane\Exceptions\TaskTimeoutException;
+use Laravel\Octane\Facades\Octane;
 use MongoDB\BSON\ObjectId;
+use Swoole\Coroutine\WaitGroup;
 
 trait SimpleUserTrait
 {
@@ -14,9 +18,28 @@ trait SimpleUserTrait
     private array $simpleUser = [];
 
     /**
+     * @param  array  $rawUsers
+     * @param  array  $fields
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function createBatchSimpleUser(
+        array $rawUsers,
+        array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked', 'is_verified']
+    ): array {
+        $users = [];
+        foreach ($rawUsers as $user) {
+            $users[] = $this->createSimpleUser($user, $fields);
+        }
+
+        return $users;
+    }
+
+    /**
      * Create the simple user attribute.
      *
-     * @param string[] $fields
+     * @param  string[]  $fields
      *
      * @throws Exception
      */

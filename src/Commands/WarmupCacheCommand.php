@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Commands;
 
+use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\WarmupSimpleUserCacheJob;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
@@ -17,9 +18,14 @@ class WarmupCacheCommand extends Command implements Isolatable
     {
         $this->info('Warming up simple user cache');
         WarmupSimpleUserCacheJob::dispatch();
-        Media::CachePublicExplicitMediaIds();
-        Media::CachePublicToplessMediaIds();
-        Media::CachePublicMediaIds();
+        Media::where('is_fake', ['$exists' => false])
+            ->availableForFollower()
+            ->chunk(200, function ($models) {
+                foreach ($models as $media) {
+                    /** @var Media $media */
+                    $media->storeInGeneralCaches();
+                }
+            });
 
         return self::SUCCESS;
     }

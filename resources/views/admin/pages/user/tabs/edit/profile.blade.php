@@ -25,6 +25,7 @@
         <div class="card-body py-1">
             <div class="tab-pane active">
                 <div class="form-group row m-0">
+                    <input type="hidden" id="user_id" name="user_id" value="{{ (string)$user->_id }}">
                     <label for="username" class="col-sm-2 col-form-label">Username</label>
                     <div class="col-sm-10 form-element">
                         <div class="mt-2 pl-4 data-show">

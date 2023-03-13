@@ -26,9 +26,10 @@
                         </a>
                     </td>
                 </tr>
-
             @endforeach
         </tbody>
     </table>
-    {{ $notes->links() }}
+    <div class="d-flex justify-content-center">
+        {{ $notes->links() }}
+    </div>
 </div>
