@@ -69,31 +69,29 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
             $storage = Storage::disk('upload');
             $image = $media->filename.'.jpg';
 
-            if (Storage::disk(StorageType::GC_COVERS)->fileMissing($image)) {
-                Log::error("Failed find to {$image} in ".StorageType::GC_COVERS.' storage');
+            if (Storage::disk(StorageType::GC_GALLERIES)->fileMissing($image)) {
+                Log::error("Failed find to {$image} in ".StorageType::GC_GALLERIES.' storage');
 
                 return;
             }
 
             if ($storage->fileMissing($image)) {
-                $storage->writeStream($image, Storage::disk(StorageType::GC_COVERS)->readStream($image));
-            } else {
-                Log::debug('image to blur file already exists '.$image);
+                $storage->writeStream($image, Storage::disk(StorageType::GC_GALLERIES)->readStream($image));
             }
 
             $blurredImage = Uuid::uuid4().'.jpg';
             Image::load($storage->path($image))->blur(15)->quality(70)->save($storage->path($blurredImage));
             UploadFileJob::dispatch(
-                $image,
+                $blurredImage,
                 'upload',
-                collect([StorageType::GC_COVERS]),
+                collect([StorageType::GC_GALLERIES]),
                 $blurredImage
             );
             $media->image_blurred = $blurredImage;
             $media->saveQuietly();
 
-            //$storage->delete($blurredImage);
-            //$storage->delete($image);
+            $storage->delete($blurredImage);
+            $storage->delete($image);
         } catch (Throwable $throwable) {
             Log::error('Unable to save file: '.$throwable->getMessage());
         }
