@@ -79,7 +79,6 @@ class BlurCoverJob extends AbstractJob implements ShouldQueue
                 $storage->writeStream($image, Storage::disk(StorageType::GC_COVERS)->readStream($image));
             }
 
-
             $blurredImage = Uuid::uuid4().'.jpg';
             Image::load($storage->path($image))->blur(15)->quality(70)->save($storage->path($blurredImage));
             Storage::disk(StorageType::GC_COVERS)->writeStream($blurredImage, $storage->readStream($blurredImage));
