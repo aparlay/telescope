@@ -766,7 +766,7 @@ class Media extends BaseModel
 
     public function getImageBlurredUrlAttribute()
     {
-        return Cdn::cover($this->is_completed ? $this->image_blurred : 'default.jpg');
+        return Cdn::cover(($this->is_completed && !empty($this->image_blurred)) ? $this->image_blurred : 'default.jpg');
     }
 
     /**
