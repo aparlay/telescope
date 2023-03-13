@@ -81,12 +81,7 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
 
             $blurredImage = Uuid::uuid4().'.jpg';
             Image::load($storage->path($image))->blur(15)->quality(70)->save($storage->path($blurredImage));
-            UploadFileJob::dispatch(
-                $blurredImage,
-                'upload',
-                collect([StorageType::GC_GALLERIES]),
-                $blurredImage
-            );
+            Storage::disk(StorageType::GC_GALLERIES)->writeStream($blurredImage, $storage->readStream($blurredImage));
             $media->image_blurred = $blurredImage;
             $media->saveQuietly();
 
