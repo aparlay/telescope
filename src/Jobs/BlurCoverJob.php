@@ -86,8 +86,8 @@ class BlurCoverJob extends AbstractJob implements ShouldQueue
             UploadFileJob::dispatch(
                 $image,
                 'upload',
-                collect([StorageType::GC_GALLERIES]),
-                $storagePath.$blurredImage
+                collect([StorageType::GC_COVERS]),
+                $blurredImage
             );
         } catch (Throwable $throwable) {
             Log::error('Unable to save file: '.$throwable->getMessage());
