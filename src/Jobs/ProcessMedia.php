@@ -291,6 +291,7 @@ class ProcessMedia implements ShouldQueue
 
         $media->file = $mp4ConvertedFile;
         $media->status = $keepStatus ?? MediaStatus::COMPLETED->value;
+
         $touchWithTrue = [
             'status' => true,
             'length' => true,
@@ -303,5 +304,6 @@ class ProcessMedia implements ShouldQueue
         $media->notify(new VideoPending());
         MediaProcessingCompletedEvent::dispatch($media);
         BunnyCdnPurgeUrlJob::dispatch((string) $media->_id);
+        BlurCoverJob::dispatchIf($media->is_processing_completed && $media->is_private, (string) $media->_id);
     }
 }

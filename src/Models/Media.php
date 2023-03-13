@@ -24,6 +24,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use MathPHP\Exception\BadDataException;
 use MathPHP\Exception\OutOfBoundsException;
@@ -41,6 +42,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property string             $description
  * @property string             $location
  * @property string             $hash
+ * @property string             $image_blurred
  * @property string             $file
  * @property string             $mime_type
  * @property int                $size
@@ -85,6 +87,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property-read string        $admin_url
  * @property-read string        $cover_url
  * @property-read string        $file_url
+ * @property-read string        $image_blurred_url
  * @property-read int           $beauty_score
  * @property-read int           $awesomeness_score
  * @property-read int           $skin_score
@@ -94,6 +97,10 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property-read int           $comment_score
  * @property-read int           $sent_tips
  * @property-read string        $content_gender_label
+ * @property-read bool          $is_private
+ * @property-read bool          $is_video
+ * @property-read bool          $is_image
+ * @property-read bool          $is_processing_completed
  *
  *
  * @method static |self|Builder creator(ObjectId|string $userId)
@@ -153,6 +160,7 @@ class Media extends BaseModel
         'location',
         'hash',
         'file',
+        'image_blurred',
         'files_history',
         'mime_type',
         'size',
@@ -227,6 +235,7 @@ class Media extends BaseModel
         'content_gender' => 'integer',
         'tips' => 'integer',
         'is_comments_enabled' => 'boolean',
+        'image_blurred' => 'string',
     ];
 
     /**
@@ -244,13 +253,6 @@ class Media extends BaseModel
      * @var array
      */
     protected $appends = [];
-
-    /**
-     * Controls whether returned media should be blurred.
-     * This is used for private feed suggestions.
-     * @var bool
-     */
-    public $blurred = false;
 
     /**
      * Get the name of the index associated with the model.
@@ -588,6 +590,14 @@ class Media extends BaseModel
     }
 
     /**
+     * @return bool
+     */
+    public function getIsPrivateAttribute(): bool
+    {
+        return $this->visibility === MediaVisibility::PRIVATE->value;
+    }
+
+    /**
      * Get the user's full name.
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
@@ -729,26 +739,87 @@ class Media extends BaseModel
         ];
     }
 
+    public function getIsProcessingCompletedAttribute(): bool
+    {
+        return $this->status === MediaStatus::COMPLETED->value;
+    }
+
+    public function getIsVideoAttribute(): bool
+    {
+        return Str::contains($this->mime_type, 'video');
+    }
+
+    public function getIsImageAttribute(): bool
+    {
+        return Str::contains($this->mime_type, 'image');
+    }
+
     public function getFileUrlAttribute()
     {
-        return Cdn::video($this->is_completed ? $this->file : 'default.mp4');
-    }
-
-    public function getFileBlurredUrlAttribute()
-    {
-        return Cdn::video($this->is_completed ? $this->file : 'default.mp4');
-    }
-
-    public function getSignedFileUrlAttribute()
-    {
-        throw new \Exception('TODO');
-
         return Cdn::video($this->is_completed ? $this->file : 'default.mp4');
     }
 
     public function getCoverUrlAttribute()
     {
         return Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg');
+    }
+
+    public function getImageBlurredUrlAttribute()
+    {
+        return Cdn::cover($this->is_completed ? $this->image_blurred : 'default.jpg');
+    }
+
+    /**
+     * @param  User|null  $user
+     *
+     * @return string
+     */
+    public function fileUrlFor(?User $user = null): string
+    {
+        if (!$this->is_private || !$this->isLockedFor($user)) {
+            return $this->file_url;
+        }
+
+        return '';
+    }
+
+    /**
+     * @param  User|null  $user
+     *
+     * @return string
+     */
+    public function coverUrlFor(?User $user = null): string
+    {
+        if (!$this->is_private || !$this->isLockedFor($user)) {
+            return $this->cover_url;
+        }
+
+        return $this->image_blurred_url;
+    }
+
+    /**
+     * @param  User|null  $user
+     *
+     * @return bool
+     */
+    public function isLockedFor(?User $user = null): bool
+    {
+        // content is public no need check more
+        if (!$this->is_private) {
+            return false;
+        }
+
+        // content is private but no user no need check more
+        if (is_null($user)) {
+            return true;
+        }
+
+        // user is owner no need to check more
+        if ((string)$user->_id !== (string)$this->creator['_id']) {
+            return true;
+        }
+
+        return (collect($user->subscriptions)->where('user_id', $this->creator['_id'])->first() === null);
     }
 
     /**
