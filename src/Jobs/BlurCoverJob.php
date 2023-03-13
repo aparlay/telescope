@@ -81,14 +81,19 @@ class BlurCoverJob extends AbstractJob implements ShouldQueue
                 Log::debug('image to blur file already exists '.$image);
             }
 
-            Image::load($storage->path($image))->blur(15)->save();
             $blurredImage = Uuid::uuid4().'.jpg';
+            Image::load($storage->path($image))->blur(15)->quality(70)->save($storage->path($blurredImage));
             UploadFileJob::dispatch(
                 $image,
                 'upload',
                 collect([StorageType::GC_COVERS]),
                 $blurredImage
             );
+            $media->image_blurred = $blurredImage;
+            $media->saveQuietly();
+
+            $storage->delete($blurredImage);
+            $storage->delete($image);
         } catch (Throwable $throwable) {
             Log::error('Unable to save file: '.$throwable->getMessage());
         }
