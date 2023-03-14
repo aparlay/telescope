@@ -66,6 +66,7 @@ class BlurCoverJob extends AbstractJob implements ShouldQueue
         }
 
         try {
+            $storage = Storage::disk('upload');
             $image = $media->filename.'.jpg';
 
             if (Storage::disk(StorageType::GC_COVERS)->fileMissing($image)) {
@@ -74,18 +75,23 @@ class BlurCoverJob extends AbstractJob implements ShouldQueue
                 return;
             }
 
-            if (($stream = fopen(Cdn::cover($image.'?blur=100'), 'r')) === false) {
-                Log::error("Failed find to {$image} in ".StorageType::GC_COVERS.' storage');
+            if (! $stream = fopen(Cdn::cover($image.'?blur=100'), 'r')) {
+                Log::error("Failed to open {$image} in ".StorageType::GC_COVERS.' storage');
 
                 return;
             }
 
-            $blurredImage = Uuid::uuid4().'.jpg';
-            Storage::disk(StorageType::GC_COVERS)->writeStream($blurredImage, $stream);
 
-            fclose($stream);
+            $blurredImage = Uuid::uuid4().'.jpg';
+            if ($storage->fileMissing($blurredImage)) {
+                $storage->put($blurredImage, $stream);
+            }
+
+            Storage::disk(StorageType::GC_COVERS)->writeStream($blurredImage, $storage->readStream($blurredImage));
             $media->image_blurred = $blurredImage;
             $media->saveQuietly();
+
+            $storage->delete($blurredImage);
         } catch (Throwable $throwable) {
             Log::error('Unable to save file: '.$throwable->getMessage());
         }
