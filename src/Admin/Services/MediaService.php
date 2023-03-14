@@ -9,7 +9,9 @@ use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Admin\Requests\MediaUpdateRequest;
 use Aparlay\Core\Admin\Requests\MediaUpdateScoreRequest;
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Jobs\UploadMedia;
+use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Notifications\MediaScoreChanged;
 use Illuminate\Support\Facades\Notification;
@@ -150,7 +152,16 @@ class MediaService extends AdminBaseService
             'is_protected',
             'is_comments_enabled',
             'is_music_licensed',
+            'force_sort_positions',
         ]);
+
+        $data['force_sort_positions'] = [
+            MediaSortCategories::DEFAULT->value => $request->integer('force_sort_positions.'.MediaSortCategories::DEFAULT->value),
+            MediaSortCategories::GUEST->value => $request->integer('force_sort_positions.'.MediaSortCategories::GUEST->value),
+            MediaSortCategories::RETURNED->value => $request->integer('force_sort_positions.'.MediaSortCategories::RETURNED->value),
+            MediaSortCategories::REGISTERED->value => $request->integer('force_sort_positions.'.MediaSortCategories::REGISTERED->value),
+            MediaSortCategories::PAID->value => $request->integer('force_sort_positions.'.MediaSortCategories::PAID->value),
+        ];
 
         $media = $this->mediaRepository->update($data, $id);
 
@@ -215,6 +226,9 @@ class MediaService extends AdminBaseService
         }
 
         $media->recalculateSortScores();
+        $media->save();
+        $media->storeInGeneralCaches();
+        MediaForceSortPositionRecalculate::dispatch();
 
         return $media;
     }

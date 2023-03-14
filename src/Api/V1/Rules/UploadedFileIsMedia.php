@@ -4,7 +4,6 @@ namespace Aparlay\Core\Api\V1\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\ValidationException;
 
 class UploadedFileIsMedia implements Rule
 {

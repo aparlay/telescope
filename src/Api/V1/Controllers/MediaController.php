@@ -8,6 +8,7 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Requests\PublicFeedRequest;
 use Aparlay\Core\Api\V1\Requests\UpdateMediaRequest;
+use Aparlay\Core\Api\V1\Resources\AlertResource;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
@@ -39,9 +40,8 @@ class MediaController extends Controller
         } else {
             $isGuest = auth()->guest();
             $isFirstPage = request()->integer('page') === 0;
-            $collection = new MediaFeedsCollection(
-                $this->mediaService->getPublicFeeds($request, $isGuest, $isFirstPage)
-            );
+            $data = $this->mediaService->getPublicFeeds($request, $isGuest, $isFirstPage);
+            $collection = new MediaFeedsCollection($data);
         }
 
         return $this->response($collection, '', Response::HTTP_OK);
@@ -143,7 +143,7 @@ class MediaController extends Controller
      */
     public function watched(Request $request): Response
     {
-        $uuid = $request->cookie('__Secure_uuid', $request->header('X-DEVICE-ID', ''));
+        $uuid = $request->cookie('__Secure_uuid', $request->input('__Secure_uuid', ''));
         $medias = $request->all();
         $this->mediaService->watchedMedia($medias, $uuid);
 

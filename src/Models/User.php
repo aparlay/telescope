@@ -14,8 +14,10 @@ use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
+use Aparlay\Core\Models\Enums\UserWsState;
 use Aparlay\Core\Models\Scopes\UserScope;
 use Aparlay\Core\Models\Traits\CountryFields;
+use Aparlay\Core\Models\Traits\HasPushSubscriptions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -53,8 +55,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $gender
  * @property int         $visibility
  * @property int         $show_online_status
- * @property UTCDateTime $created_at
- * @property UTCDateTime $updated_at
+ * @property Carbon      $created_at
+ * @property Carbon      $updated_at
  * @property array       $setting
  * @property array       $features
  * @property mixed       $authLogs
@@ -83,6 +85,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property bool        $has_unread_chat
  * @property bool        $has_unread_notification
  * @property Carbon|UTCDateTime $last_online_at
+ * @property array       $tags
+ * @property string      $ws_state
  *
  * @property User        $referralObj
  * @property Media[]     $mediaObjs
@@ -110,6 +114,8 @@ use MongoDB\BSON\UTCDateTime;
  * @property-read string $country_label
  * @property-read string $verification_status_label
  * @property-read bool   $is_eligible_for_verification
+ * @property-read bool   $is_ws_state_active
+ * @property-read bool   $is_ws_state_inactive
  *
  * @method static |self|Builder date(?UTCDateTime $startAt, ?UTCDateTime $endAt, string $field = 'created_at') filter by date
  * @method static |self|Builder active() get activated user
@@ -118,6 +124,7 @@ use MongoDB\BSON\UTCDateTime;
  * @method static |self|Builder email(string $username) get user
  * @method static |self|Builder user(ObjectId|string $userId)    get user
  * @method static |self|Builder availableForFollower()    get available content for followers
+ * @method static |self|Builder admin()    get admin user
  * @method static |self|Builder enable()
  */
 class User extends \App\Models\User
@@ -128,6 +135,7 @@ class User extends \App\Models\User
     use HasRoles;
     use Searchable;
     use CountryFields;
+    use HasPushSubscriptions;
 
     public const FEATURE_TIPS = 'tips';
     public const FEATURE_SUBSCRIPTIONS = 'subscriptions';
@@ -189,11 +197,13 @@ class User extends \App\Models\User
         'deactivation_reason',
         'oauth',
         'two_factor',
+        'tracking',
+        'ws_state',
+        'tags',
+        'last_online_at',
         'created_at',
         'updated_at',
         'deleted_at',
-        'last_online_at',
-        'tracking',
     ];
 
     protected $attributes = [
@@ -203,6 +213,7 @@ class User extends \App\Models\User
         'setting' => [
             'otp' => false,
             'show_adult_content' => 2,
+            'allow_incoming_call' => true,
             'filter_content_gender' => [
                 'female' => true,
                 'male' => false,
@@ -279,6 +290,7 @@ class User extends \App\Models\User
                 'notifications' => 0,
             ],
         ],
+        'tags' => [],
     ];
 
     /**
@@ -428,6 +440,26 @@ class User extends \App\Models\User
     protected static function newFactory(): Factory
     {
         return UserFactory::new();
+    }
+
+    /**
+     * Specifies the user's FCM tokens.
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return $this->push_notification_tokens['fcm'] ?? [];
+    }
+
+    /**
+     * Specifies the user's APN tokens.
+     *
+     * @return string|array
+     */
+    public function routeNotificationForApn()
+    {
+        return $this->push_notification_tokens['apn'] ?? [];
     }
 
     /**
@@ -983,7 +1015,7 @@ class User extends \App\Models\User
             UserNotificationCategory::TIPS->value => $this->setting['notifications']['tips'] ?? true,
             UserNotificationCategory::SUBSCRIPTIONS->value => $this->setting['notifications']['new_subscribers'] ?? true,
             UserNotificationCategory::FOLLOWS->value => $this->setting['notifications']['new_followers'] ?? true,
-            UserNotificationCategory::SYSTEM->value => true, //$this->setting['notifications']['news_and_updates'] ?? true,
+            UserNotificationCategory::SYSTEM->value, UserNotificationCategory::UNREAD_MESSAGE->value => true, //$this->setting['notifications']['news_and_updates'] ?? true, $this->setting['notifications']['unread_message'] ?? true,
             default => false
         };
     }
@@ -1131,5 +1163,15 @@ class User extends \App\Models\User
     public function isFollowedBy(ObjectId|string $userId): bool
     {
         return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
+    }
+
+    public function getIsWsStateActiveAttribute()
+    {
+        return ! $this->is_ws_state_inactive;
+    }
+
+    public function getIsWsStateInactiveAttribute()
+    {
+        return $this->ws_state === UserWsState::INACTIVE->value;
     }
 }

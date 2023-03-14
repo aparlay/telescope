@@ -6,7 +6,10 @@ use Aparlay\Core\Api\V1\Notifications\UserDeleteMedia;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Jobs\DeleteMediaComments;
 use Aparlay\Core\Jobs\DeleteMediaLikes;
+use Aparlay\Core\Jobs\DeleteMediaMetadata;
 use Aparlay\Core\Jobs\DeleteMediaUserNotifications;
+use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
+use Aparlay\Core\Jobs\PurgeMediaJob;
 use Aparlay\Core\Jobs\RecalculateHashtag;
 use Aparlay\Core\Jobs\UploadMedia;
 use Aparlay\Core\Models\Enums\MediaStatus;
@@ -14,6 +17,7 @@ use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Redis;
 
 class MediaObserver extends BaseModelObserver
@@ -33,7 +37,14 @@ class MediaObserver extends BaseModelObserver
             $creatorUser->updateMedias();
         }
 
-        UploadMedia::dispatchIf(! config('app.is_testing'), $media->userObj->_id, $media->_id, $media->file)->delay(10);
+        if (! config('app.is_testing')) {
+            Bus::chain([
+                new DeleteMediaMetadata($media->file),
+                (new UploadMedia($media->userObj->_id, $media->_id, $media->file))->delay(10),
+            ])
+            ->onQueue(config('app.server_specific_queue'))
+            ->dispatch();
+        }
     }
 
     /**
@@ -85,25 +96,29 @@ class MediaObserver extends BaseModelObserver
      */
     public function saved($media): void
     {
-        if ($media->status === MediaStatus::USER_DELETED->value && $media->isDirty('status')) {
+        if (in_array($media->status, [MediaStatus::USER_DELETED->value, MediaStatus::ADMIN_DELETED->value])
+            && $media->isDirty('status')) {
             $media->userObj->updateMedias();
 
             DeleteMediaLikes::dispatch((string) $media->_id)->onQueue('low');
             DeleteMediaComments::dispatch((string) $media->_id)->onQueue('low');
             DeleteMediaUserNotifications::dispatch((string) $media->_id)->onQueue('low');
+            PurgeMediaJob::dispatch((string) $media->_id)->onQueue('low');
             $media->unsearchable();
-        }
-
-        if ($media->wasChanged(['status', 'visibility'])) {
-            Media::CachePublicExplicitMediaIds();
-            Media::CachePublicToplessMediaIds();
-            Media::CachePublicMediaIds();
         }
 
         if ($media->wasChanged(['hashtags'])) {
             foreach ($media->hashtags as $tag) {
                 RecalculateHashtag::dispatch($tag);
             }
+        }
+
+        $media->storeInGeneralCaches();
+
+        if ($media->wasChanged(['sort_scores']) &&
+            $media->status === MediaStatus::CONFIRMED->value &&
+            $media->visibility === MediaVisibility::PUBLIC->value) {
+            $media->storeInGeneralCaches();
         }
     }
 

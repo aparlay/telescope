@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Commands;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
 use Illuminate\Http\Response;
@@ -15,18 +16,21 @@ class VideoScoreDailyCommand extends Command
 
     public function handle()
     {
-        Media::where('is_fake', ['$exists' => false])
+        $mediaQuery = Media::where('is_fake', ['$exists' => false])
             ->date(DT::utcDateTime(['d' => -6]), DT::utcDateTime(['d' => -1]))
-            ->availableForFollower()
-            ->chunk(200, function ($models) {
-                foreach ($models as $media) {
-                    $media->recalculateSortScores();
-                }
-            });
+            ->availableForFollower();
+        $bar = $this->output->createProgressBar($mediaQuery->count());
+        foreach ($mediaQuery->lazy() as $media) {
+            /** @var Media $media */
+            $media->recalculateSortScores();
+            $media->save();
+            $media->refresh();
+            $media->storeInGeneralCaches();
+            $bar->advance();
+        }
 
-        Media::CachePublicExplicitMediaIds();
-        Media::CachePublicToplessMediaIds();
-        Media::CachePublicMediaIds();
+        $bar->finish();
+        MediaForceSortPositionRecalculate::dispatch();
 
         return self::SUCCESS;
     }

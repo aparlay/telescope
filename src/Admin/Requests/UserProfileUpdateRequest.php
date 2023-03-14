@@ -2,10 +2,12 @@
 
 namespace Aparlay\Core\Admin\Requests;
 
+use Aparlay\Core\Admin\Models\Setting;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
+use MongoDB\BSON\ObjectId;
 
 class UserProfileUpdateRequest extends FormRequest
 {
@@ -27,9 +29,10 @@ class UserProfileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => ['required'],
             'username' => [
                 'required',
-                Rule::unique('users', 'username')->ignore($this->user->_id, '_id'),
+                Rule::unique('users', 'username')->ignore($this->user_id, '_id'),
                 'min:3',
                 'max:30',
                 'alpha_dash',
@@ -50,5 +53,10 @@ class UserProfileUpdateRequest extends FormRequest
         throw new HttpResponseException(
             redirect()->back()->withErrors($errors)
         );
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge(['user_id' => request()->has('user_id') ? new ObjectId(request()->input('user_id')) : null]);
     }
 }

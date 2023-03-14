@@ -100,7 +100,8 @@ class UploadMedia implements ShouldQueue
         }
         $mediaServer->setVisibility($newFilename, Filesystem::VISIBILITY_PUBLIC);
 
-        ProcessMedia::dispatch($this->media_id, $newFilename);
+        ProcessMedia::dispatchIf($media->is_video, $this->media_id, $newFilename);
+        BlurImageJob::dispatchIf($media->is_image && $media->is_private, $this->media_id);
 
         BackblazeVideoUploader::dispatch($this->user_id, $this->media_id, $this->file);
 

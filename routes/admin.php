@@ -11,6 +11,7 @@ use Aparlay\Core\Admin\Controllers\RoleController;
 use Aparlay\Core\Admin\Controllers\SettingController;
 use Aparlay\Core\Admin\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Spatie\Health\Http\Controllers\HealthCheckResultsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,6 +129,9 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
             Route::get('user/login/{user}', [UserController::class, 'loginAsUser'])
                 ->middleware(['permission:edit users'])
                 ->name('login_as_user');
+            Route::post('user/test/{user}/push-notifications', [UserController::class, 'pushNotifications'])
+                ->middleware(['permission:edit users'])
+                ->name('test.push-notifications');
             Route::name('update.')->group(function () {
                 Route::patch('/user/password/{user}', [UserController::class, 'setPassword'])
                     ->middleware(['permission:edit users'])
@@ -227,3 +231,5 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
         Route::post('login', [AuthController::class, 'postLogin'])->name('login.post');
     });
 });
+
+Route::get('health', HealthCheckResultsController::class);

@@ -119,6 +119,13 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                     'OrSc. Login' => Arr::get($value, 'registered'),
                     'OrSc. paid' => Arr::get($value, 'paid'),
                 ],
+                'force_sort_positions' => [
+                    'FoScPos. Default' => Arr::get($value, 'default'),
+                    'FoScPos. Guest' => Arr::get($value, 'guest'),
+                    'FoScPos. Returned' => Arr::get($value, 'returned'),
+                    'FoScPos. Login' => Arr::get($value, 'registered'),
+                    'FoScPos. paid' => Arr::get($value, 'paid'),
+                ],
                 'scores' => [
                     'MdSc. Skin' => Arr::get(Arr::keyBy($value, 'type'), 'skin.score'),
                     'MdSc. Beauty' => Arr::get(Arr::keyBy($value, 'type'), 'beauty.score'),

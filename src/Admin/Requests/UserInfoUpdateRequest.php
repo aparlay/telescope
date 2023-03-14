@@ -33,10 +33,11 @@ class UserInfoUpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => ['required'],
             'email' => [
                 'required',
                 'email:rfc,spoof,dns',
-                Rule::unique('users', 'email')->ignore($this->user->_id, '_id'),
+                Rule::unique('users', 'email')->ignore($this->user_id, '_id'),
                 'max:255',
             ],
             'verification_status' => [
@@ -48,7 +49,6 @@ class UserInfoUpdateRequest extends FormRequest
             'gender' => [Rule::in(array_keys(User::getGenders()))],
             'type' => [Rule::in(array_keys(User::getTypes())), 'integer'],
             'status' => [Rule::in(array_keys(User::getStatuses()))],
-            'interested_in' => ['nullable', 'array'],
             'visibility' => [Rule::in(array_keys(User::getVisibilities()))],
             'role' => ['nullable', Rule::in(Role::where('guard_name', 'admin')->pluck('name'))],
             'email_verified' => ['nullable', 'boolean'],
@@ -68,5 +68,10 @@ class UserInfoUpdateRequest extends FormRequest
         throw new HttpResponseException(
             redirect()->back()->withErrors($errors)
         );
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge(['user_id' => request()->has('user_id') ? new ObjectId(request()->input('user_id')) : null]);
     }
 }

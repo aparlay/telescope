@@ -8,10 +8,8 @@ use Aparlay\Core\Jobs\BlockedUserDeleteFollow;
 use Aparlay\Core\Jobs\BlockedUserDeleteMediaLikes;
 use Aparlay\Core\Jobs\UnBlockedUserUnBlockMedia;
 use Aparlay\Core\Models\Block;
-use Aparlay\Core\Models\Follow;
-use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
+use Laravel\Octane\Facades\Octane;
 use MongoDB\BSON\ObjectId;
 
 class BlockObserver extends BaseModelObserver

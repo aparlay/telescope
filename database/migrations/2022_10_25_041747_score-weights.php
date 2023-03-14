@@ -1,6 +1,7 @@
 <?php
 
 use Aparlay\Core\Constants\Roles;
+use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\Setting;
 use Illuminate\Database\Migrations\Migration;
@@ -115,6 +116,9 @@ return new class() extends Migration {
         foreach (Media::query()->where('is_fake', ['$exists' => false])->lazy() as $media) {
             /** @var Media $media */
             $media->recalculateSortScores();
+            $media->save();
+            $media->refresh();
+            $media->storeInGeneralCaches();
             $media->drop('sort_score');
         }
         Schema::table((new Media())->getCollection(), function (Blueprint $table) {
@@ -124,6 +128,7 @@ return new class() extends Migration {
             $table->index(['status', 'sort_scores.registered', 'visibility'], null, ['background' => true]);
             $table->index(['status', 'sort_scores.paid', 'visibility'], null, ['background' => true]);
         });
+        MediaForceSortPositionRecalculate::dispatch();
     }
 
     /**

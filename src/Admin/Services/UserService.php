@@ -15,6 +15,7 @@ use Aparlay\Core\Events\UserSettingChangedEvent;
 use Aparlay\Core\Events\UserStatusChangedEvent;
 use Aparlay\Core\Events\UserVisibilityChangedEvent;
 use Aparlay\Core\Jobs\DeleteAvatar;
+use Aparlay\Core\Jobs\DeleteMediaMetadata;
 use Aparlay\Core\Jobs\UploadAvatar;
 use Aparlay\Core\Models\Enums\NoteType;
 use Aparlay\Core\Models\Enums\UserStatus;
@@ -22,7 +23,7 @@ use Aparlay\Core\Models\Enums\UserType;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Hash;
 use Illuminate\Notifications\Messages\SlackMessage;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
@@ -162,7 +163,6 @@ class UserService extends AdminBaseService
         $data = $request->only([
             'email',
             'gender',
-            'interested_in',
             'type',
             'birthday',
             'status',
@@ -254,7 +254,14 @@ class UserService extends AdminBaseService
             $oldFileName = $user->avatar;
             $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/'.$avatar)], $user->_id);
 
-            UploadAvatar::dispatch((string) $user->_id, 'avatars/'.$avatar)->delay(10);
+            if (! config('app.is_testing')) {
+                Bus::chain([
+                    new DeleteMediaMetadata('avatars/'.$avatar, 'public'),
+                    (new UploadAvatar((string) $user->_id, 'avatars/'.$avatar))->delay(10),
+                ])
+                ->onQueue(config('app.server_specific_queue'))
+                ->dispatch();
+            }
             DeleteAvatar::dispatchIf(! str_contains($oldFileName, 'default_'), basename($oldFileName))->delay(100);
         }
 

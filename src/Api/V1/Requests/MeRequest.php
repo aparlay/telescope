@@ -17,6 +17,7 @@ use Illuminate\Validation\ValidationException;
  * @property string $country_alpha2
  * @property string $payout_country_alpha2
  * @property array  $setting
+ * @property ?array $tags
  */
 class MeRequest extends FormRequest
 {
@@ -76,6 +77,12 @@ class MeRequest extends FormRequest
             'setting.filter_content_gender.*' => ['nullable', 'bool'],
             'setting.subscriptions.is_paid_content_policy_signed' => ['nullable', 'bool'],
             'setting.subscriptions.is_refund_policy_signed' => ['nullable', 'bool'],
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['string'],
+            'push_subscription.endpoint' => ['nullable', 'string'],
+            'push_subscription.keys.auth' => ['nullable', 'string'],
+            'push_subscription.keys.p256dh' => ['nullable', 'string'],
+            'push_unsubscription.endpoint' => ['nullable', 'string'],
         ];
     }
 
@@ -134,6 +141,9 @@ class MeRequest extends FormRequest
         $user = auth()->user();
         /* Set the Default Values and required to be input parameters */
         $this->merge([
+            'tags' => $this->tags ? array_values(
+                array_slice(array_unique(array_merge($this->tags, $user->tags)), 0, 50)
+            ) : $user->tags,
             'setting' => [
                 'otp' => $this->setting['otp'] ?? $user->setting['otp'] ?? false,
                 'show_adult_content' => $this->setting['show_adult_content'] ??
@@ -170,8 +180,7 @@ class MeRequest extends FormRequest
                     'allow_unverified_cc' => $user->setting['payment']['allow_unverified_cc'] ?? false,
                     'block_unverified_cc' => $user->setting['payment']['block_unverified_cc'] ?? true,
                     'block_cc_payments' => $user->setting['payment']['block_cc_payments'] ?? true,
-                    'unverified_cc_spent_amount' => (int) ($user->setting['payment']['unverified_cc_spent_amount'] ??
-                        0),
+                    'unverified_cc_spent_amount' => (int) ($user->setting['payment']['unverified_cc_spent_amount'] ?? 0),
                 ],
                 'payout' => [
                     'ban_payout' => $user->setting['payout']['ban_payout'] ?? false,
