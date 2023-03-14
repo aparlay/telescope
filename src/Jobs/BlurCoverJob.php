@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Constants\StorageType;
+use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
@@ -15,7 +16,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
-use Spatie\Image\Image;
 use Throwable;
 
 /**
@@ -66,7 +66,6 @@ class BlurCoverJob extends AbstractJob implements ShouldQueue
         }
 
         try {
-            $storage = Storage::disk('upload');
             $image = $media->filename.'.jpg';
 
             if (Storage::disk(StorageType::GC_COVERS)->fileMissing($image)) {
@@ -75,23 +74,17 @@ class BlurCoverJob extends AbstractJob implements ShouldQueue
                 return;
             }
 
-            if ($storage->fileMissing($image)) {
-                $storage->writeStream($image, Storage::disk(StorageType::GC_COVERS)->readStream($image));
+            if (($stream = fopen(Cdn::cover($image.'?blur=100'), 'r')) === false) {
+                Log::error("Failed find to {$image} in ".StorageType::GC_COVERS.' storage');
+                return;
             }
 
             $blurredImage = Uuid::uuid4().'.jpg';
-            Image::load($storage->path($image))
-                ->useImageDriver('imagick')
-                ->optimize()
-                ->blur(60)
-                ->quality(50)
-                ->save($storage->path($blurredImage));
-            Storage::disk(StorageType::GC_COVERS)->writeStream($blurredImage, $storage->readStream($blurredImage));
+            Storage::disk(StorageType::GC_COVERS)->writeStream($blurredImage, $stream);
+
+            fclose($stream);
             $media->image_blurred = $blurredImage;
             $media->saveQuietly();
-
-            $storage->delete($blurredImage);
-            $storage->delete($image);
         } catch (Throwable $throwable) {
             Log::error('Unable to save file: '.$throwable->getMessage());
         }
