@@ -87,6 +87,7 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
             if ($storage->fileMissing($blurredImage)) {
                 $storage->put($blurredImage, $stream);
             }
+            fclose($stream);
 
             Storage::disk(StorageType::GC_GALLERIES)->writeStream($blurredImage, $storage->readStream($blurredImage));
             $media->image_blurred = $blurredImage;
