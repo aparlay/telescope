@@ -77,6 +77,7 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
 
             if (($stream = fopen(Cdn::cover($image.'?blur=100'), 'r')) === false) {
                 Log::error("Failed find to {$image} in ".StorageType::GC_GALLERIES.' storage');
+
                 return;
             }
 
