@@ -82,7 +82,6 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
                 return;
             }
 
-
             $blurredImage = Uuid::uuid4().'.jpg';
             if ($storage->fileMissing($blurredImage)) {
                 $storage->put($blurredImage, $stream);
