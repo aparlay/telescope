@@ -15,5 +15,4 @@ namespace Aparlay\Core\Api\V1\Swagger\Parameters;
  */
 class XDeviceId
 {
-
 }

@@ -14,5 +14,4 @@ namespace Aparlay\Core\Api\V1\Swagger\Headers;
  */
 class XRateLimitLimit
 {
-
 }
