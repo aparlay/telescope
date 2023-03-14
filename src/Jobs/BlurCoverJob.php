@@ -83,7 +83,7 @@ class BlurCoverJob extends AbstractJob implements ShouldQueue
             Image::load($storage->path($image))
                 ->useImageDriver('imagick')
                 ->optimize()
-                ->blur(40)
+                ->blur(60)
                 ->quality(50)
                 ->save($storage->path($blurredImage));
             Storage::disk(StorageType::GC_COVERS)->writeStream($blurredImage, $storage->readStream($blurredImage));
