@@ -6,6 +6,7 @@ use Aparlay\Core\Api\V1\Notifications\UserDeleteMedia;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Jobs\DeleteMediaComments;
 use Aparlay\Core\Jobs\DeleteMediaLikes;
+use Aparlay\Core\Jobs\DeleteMediaMetadata;
 use Aparlay\Core\Jobs\DeleteMediaUserNotifications;
 use Aparlay\Core\Jobs\PurgeMediaJob;
 use Aparlay\Core\Jobs\RecalculateHashtag;
@@ -15,6 +16,7 @@ use Aparlay\Core\Models\Enums\MediaVisibility;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Redis;
 
 class MediaObserver extends BaseModelObserver
@@ -34,7 +36,14 @@ class MediaObserver extends BaseModelObserver
             $creatorUser->updateMedias();
         }
 
-        UploadMedia::dispatchIf(! config('app.is_testing'), $media->userObj->_id, $media->_id, $media->file)->delay(10);
+        if (! config('app.is_testing')) {
+            Bus::chain([
+                new DeleteMediaMetadata($media->file),
+                (new UploadMedia($media->userObj->_id, $media->_id, $media->file))->delay(10),
+            ])
+            ->onQueue(config('app.server_specific_queue'))
+            ->dispatch();
+        }
     }
 
     /**
