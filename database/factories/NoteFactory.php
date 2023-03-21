@@ -57,7 +57,7 @@ class NoteFactory extends Factory
             'created_by' => new ObjectId($creator['_id']),
             'updated_by' =>  new ObjectId($creator['_id']),
             'created_at' => DT::utcNow(),
-            'updated_t' =>  DT::utcNow(),
+            'updated_at' =>  DT::utcNow(),
         ];
     }
 }
