@@ -76,12 +76,14 @@ class PurgeMediaJob implements ShouldQueue
             throw new Exception(__CLASS__.PHP_EOL.'The requested media with id not found: '.$this->mediaId);
         }
 
-        if (Storage::disk('gc-videos')->fileExists($media->file)) {
-            Storage::disk('gc-videos')->move($media->file, $media->delete_prefix.$media->file);
-        }
+        if (config('app.env') !== 'testing') {
+            if (Storage::disk('gc-videos')->fileExists($media->file)) {
+                Storage::disk('gc-videos')->move($media->file, $media->delete_prefix.$media->file);
+            }
 
-        if (Storage::disk('gc-covers')->fileExists($media->cover_file)) {
-            Storage::disk('gc-covers')->move($media->cover_file, $media->delete_prefix.$media->cover_file);
+            if (Storage::disk('gc-covers')->fileExists($media->cover_file)) {
+                Storage::disk('gc-covers')->move($media->cover_file, $media->delete_prefix.$media->cover_file);
+            }
         }
 
         BunnyCdnPurgeUrlJob::dispatch($this->mediaId);

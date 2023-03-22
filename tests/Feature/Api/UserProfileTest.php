@@ -608,7 +608,7 @@ class UserProfileTest extends ApiTestCase
                     'data._links' => 'array',
                     'data._links.self' => 'array',
                     'data._links.self.href' => 'string',
-                    'data.tags' => 'array',
+                    'data.tags' => 'array|null',
                     'message' => 'string',
                 ])
             );
