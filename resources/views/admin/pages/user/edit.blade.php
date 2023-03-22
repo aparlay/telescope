@@ -48,7 +48,7 @@
                     <div class="card card-default">
                         <div class="card-body">
                             <ul class="nav nav-tabs">
-                                <li class="nav-item">
+                                <li class="nav-item border-left">
                                     <a class="nav-link active" data-toggle="tab" href="#tab-info">Info</a>
                                 </li>
                                 <li class="nav-item">
@@ -73,7 +73,7 @@
                                 @endif
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane container active" id="tab-info">
+                                <div class="tab-pane container active px-0 mt-2" id="tab-info">
                                     @include('default_view::admin.pages.user.tabs.edit.profile', ['user' => $user])
                                     @include('default_view::admin.pages.user.tabs.edit.user-info', ['user' => $user])
                                     @include('default_view::admin.pages.user.tabs.edit.general', ['user' => $user])

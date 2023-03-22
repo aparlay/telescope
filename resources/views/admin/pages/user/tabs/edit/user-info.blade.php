@@ -28,17 +28,17 @@
         <div class="card-body py-1">
             <div class="tab-pane active">
                 <div class="form-group row m-0">
-                    <label for="id" class="col-sm-2 col-form-label">User ID</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label for="id" class="col-12 col-lg-2 col-form-label">User ID</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             <p>{{ $user->_id }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="gender" class="col-sm-2 col-form-label">Verification Status</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label for="gender" class="col-12 col-lg-2 col-form-label">Verification Status</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             @foreach(UserVerificationStatus::getAllCases() as $key => $label)
                                 @if( $key == $user->verification_status )
                                     <p>{{ Str::ucfirst($label) }}</p>
@@ -53,9 +53,9 @@
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="status" class="col-sm-2 col-form-label">Status</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label for="status" class="col-12 col-lg-2 col-form-label">Status</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             @foreach($user->getStatuses() as $key => $label)
                                 @if( $key == $user->status )
                                     <p>{{ Str::ucfirst($label) }}</p>
@@ -71,8 +71,8 @@
                 </div>
                 @if(auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR))
                     <div class="form-group row m-0">
-                        <label for="role" class="col-sm-2 col-form-label">Role</label>
-                        <div class="col-sm-10">
+                        <label for="role" class="col-12 col-lg-2 col-form-label">Role</label>
+                        <div class="col-12 col-lg-10 form-element">
                             <div class="mt-2 pl-4 data-show">
                                 <p>{{ ucfirst($user->roles()->first()?->name) }}</p>
                             </div>
@@ -86,9 +86,9 @@
                     </div>
                 @endif
                 <div class="form-group row m-0">
-                    <label for="visibility" class="col-sm-2 col-form-label">Public Profile</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label for="visibility" class="col-12 col-lg-2 col-form-label">Public Profile</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             <p>{{ $user->visibility ? 'Yes' : 'No' }}</p>
                         </div>
                         <div class="custom-control custom-switch mt-2 ml-2 data-edit d-none">
@@ -98,42 +98,42 @@
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label class="col-sm-2 col-form-label">Created At</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label class="col-12 col-lg-2 col-form-label">Created At</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             <p>{{ $user->created_at }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label class="col-sm-2 col-form-label">Updated At</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label class="col-12 col-lg-2 col-form-label">Updated At</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             <p>{{ $user->updated_at }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label class="col-sm-2 col-form-label">Last Online</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label class="col-12 col-lg-2 col-form-label">Last Online</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             <p>{{ $user->last_online_at }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="email" class="col-sm-2 col-form-label">Email</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label for="email" class="col-12 col-lg-2 col-form-label">Email</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             <p>{{ $user->email }}</p>
                         </div>
                         <input type="email" class="form-control data-edit d-none" id="email" name="email" value="{{ $user->email }}">
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="email_verified" class="col-sm-2 col-form-label">Email Verified</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label for="email_verified" class="col-12 col-lg-2 col-form-label">Email Verified</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             <p>{{ $user->email_verified ? 'Yes' : 'No' }}</p>
                         </div>
                         <div class="custom-control custom-switch mt-2 ml-2 data-edit d-none">
@@ -143,27 +143,27 @@
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="full_name" class="col-sm-2 col-form-label">Full Name</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label for="full_name" class="col-12 col-lg-2 col-form-label">Full Name</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             <p>{{ $user->full_name }}</p>
                         </div>
                         <input type="text" class="form-control data-edit d-none" id="full_name" name="full_name" value="{{ $user->full_name }}">
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="birthday" class="col-sm-2 col-form-label">Date of Birth</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label for="birthday" class="col-12 col-lg-2 col-form-label">Date of Birth</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             <p>{{ $user->birthday }}</p>
                         </div>
                         <input type="date" class="form-control data-edit d-none" id="birthday" name="birthday" value="{{ $user->birthday }}">
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label class="col-sm-2 col-form-label">Fraud Tier</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label class="col-12 col-lg-2 col-form-label">Fraud Tier</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             @if($user->country_alpha2)
                                 <p>{{ \Aparlay\Core\Helpers\Country::getTier($user->country_alpha2) }}</p>
                             @else
@@ -173,9 +173,9 @@
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="country_alpha2" class="col-sm-2 col-form-label">Registered Country</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label for="country_alpha2" class="col-12 col-lg-2 col-form-label">Registered Country</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             @foreach(\Aparlay\Core\Helpers\Country::getAlpha2AndNames() as $key => $label)
                                 @if ($key == $user->country_alpha2)
                                     <p>{{ Str::ucfirst($label) }}</p>
@@ -191,17 +191,17 @@
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="ip_country_alpha2" class="col-sm-2 col-form-label">IP Country</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label for="ip_country_alpha2" class="col-12 col-lg-2 col-form-label">IP Country</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             {{ $user->country_label }}
                         </div>
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label class="col-sm-2 col-form-label" for="payout_country">Payout Country</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label class="col-12 col-lg-2 col-form-label" for="payout_country">Payout Country</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             @foreach(\Aparlay\Core\Helpers\Country::getAlpha2AndNames() as $key => $label)
                                 @if ($key == $user->payout_country_alpha2)
                                     <p>{{ Str::ucfirst($label) }}</p>
@@ -217,17 +217,17 @@
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label class="col-sm-2 col-form-label">City</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label class="col-12 col-lg-2 col-form-label">City</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             <p>--</p>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="gender" class="col-sm-2 col-form-label">Gender</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label for="gender" class="col-12 col-lg-2 col-form-label">Gender</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             @foreach($user->getGenders() as $key => $label)
                                 @if ($key == $user->gender)
                                     <p>{{ Str::ucfirst($label) }}</p>
@@ -242,9 +242,9 @@
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label class="col-sm-2 col-form-label">Blocked Users</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label class="col-12 col-lg-2 col-form-label">Blocked Users</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             @if($user->stats['counters']['blocks'])
                                 @foreach(Block::query()->creator((string) $user->_id)->get() as $block)
                                     <a class="badge badge-danger mr-1" href="{{ route('core.admin.user.view', $block->userObj) }}">{{ $block->userObj->username }}</a>
