@@ -25,25 +25,25 @@
         <div class="card-body py-1">
             <div class="tab-pane active">
                 <div class="form-group row m-0">
-                    <label for="bank_transfer" class="col-sm-2 col-form-label">Bank Transfer</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label for="bank_transfer" class="col-12 col-lg-2 col-form-label">Bank Transfer</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             <p>--</p>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="crypto_transfer" class="col-sm-2 col-form-label">Crypto Transfer</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label for="crypto_transfer" class="col-12 col-lg-2 col-form-label">Crypto Transfer</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             <p>--</p>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="bank_transfer_select_payer" class="col-sm-2 col-form-label">Bank Transfer Select Payer</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label for="bank_transfer_select_payer" class="col-12 col-lg-2 col-form-label">Bank Transfer Select Payer</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             <p>--</p>
                         </div>
                     </div>

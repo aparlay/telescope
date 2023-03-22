@@ -5,11 +5,11 @@
 <div class="notes-table user-profile-table">
     <div class="pb-2">
         <div class="row">
-            <div class="col-2 col-lg-1 pt-sm-2 pl-sm-3">
+            <div class="col-12 col-lg-1 pt-2 pl-3">
                 <span class="h5">Notes</span>
             </div>
 
-            <div class="col-10 col-lg-11">
+            <div class="col-12 col-lg-11">
                 <livewire:notes-create :userId="$user->_id"/>
             </div>
         </div>

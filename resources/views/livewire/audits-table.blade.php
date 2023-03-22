@@ -1,5 +1,5 @@
-<div class="table-responsive">
-    <table class="table table-striped border">
+<div>
+    <table class="table table-responsive table-striped border">
         <thead>
             <tr class="d-flex">
                 <th scope="col" class="col-2 col-md-2 col-sm-3">
