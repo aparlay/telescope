@@ -3,7 +3,11 @@
 namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Helpers\DT;
+use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserType;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -138,5 +142,30 @@ class UserFactory extends Factory
         }
 
         return $data;
+    }
+
+    public function supportUser(): self
+    {
+        return $this->state(function () {
+            return [
+                'username' => 'support',
+                'email' => config('app.supportEmail'),
+                'email_verified' => true,
+                'remember_token' => null,
+                'full_name' => 'Support',
+                'password_hash' => Hash::make(Str::random()),
+                'password_reset_token' => null,
+                'gender' => UserGender::NOT_MENTION->value,
+                'type' => UserType::ADMIN->value,
+                'visibility' => UserVisibility::PRIVATE->value,
+                'phone_number_verified' => true,
+                'auth_key' => null,
+                'verification_status' => UserVerificationStatus::VERIFIED->value,
+                'blocks' => [],
+                'likes' => [],
+                'followers' => [],
+                'followings' => [],
+            ];
+        });
     }
 }
