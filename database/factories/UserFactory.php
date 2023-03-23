@@ -10,6 +10,7 @@ use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use MongoDB\BSON\ObjectId;
 
