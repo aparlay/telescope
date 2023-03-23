@@ -4,6 +4,8 @@ namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserStatus;
+use Aparlay\Core\Models\Enums\UserVerificationStatus;
+use Aparlay\Core\Models\Enums\UserVisibility;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -43,8 +45,8 @@ class UserFactory extends Factory
             'gender' => $this->faker->randomElement(array_keys(User::getGenders())),
             'type' => $this->faker->randomElement(array_keys(User::getTypes())),
             'status' => UserStatus::ACTIVE->value,
-            'verification_status' => $this->faker->randomElement(array_keys(User::getVerificationStatuses())),
-            'visibility' => $this->faker->randomElement(array_keys(User::getVisibilities())),
+            'verification_status' => $this->faker->randomElement(UserVerificationStatus::getAllValues()),
+            'visibility' => $this->faker->randomElement(UserVisibility::getAllValues()),
             'count_fields_updated_at' => [
                 'followers' => DT::utcNow(),
                 'followings' => DT::utcNow(),
