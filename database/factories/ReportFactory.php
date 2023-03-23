@@ -2,6 +2,8 @@
 
 namespace Aparlay\Core\Database\Factories;
 
+use Aparlay\Core\Models\Enums\ReportStatus;
+use Aparlay\Core\Models\Enums\ReportType;
 use Aparlay\Core\Models\Report;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use MongoDB\BSON\ObjectId;
@@ -31,8 +33,8 @@ class ReportFactory extends Factory
                 return new ObjectId($report['media_id']);
             },
             'comment_id' => null,
-            'type' => $this->faker->randomElement(array_keys(Report::getTypes())),
-            'status' => $this->faker->randomElement(array_keys(Report::getStatuses())),
+            'type' => $this->faker->randomElement(ReportType::getAllValues()),
+            'status' => $this->faker->randomElement(ReportStatus::getAllValues()),
             'created_by' => function ($report) {
                 return new ObjectId($report['user_id']);
             },

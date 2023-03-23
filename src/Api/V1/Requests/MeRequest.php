@@ -79,6 +79,10 @@ class MeRequest extends FormRequest
             'setting.filter_content_gender.*' => ['nullable', 'bool'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string'],
+            'push_subscription.endpoint' => ['nullable', 'string'],
+            'push_subscription.keys.auth' => ['nullable', 'string'],
+            'push_subscription.keys.p256dh' => ['nullable', 'string'],
+            'push_unsubscription.endpoint' => ['nullable', 'string'],
         ];
     }
 

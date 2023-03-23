@@ -47,8 +47,8 @@ class UserFactory extends Factory
             'gender' => $this->faker->randomElement(array_keys(User::getGenders())),
             'type' => $this->faker->randomElement(array_keys(User::getTypes())),
             'status' => UserStatus::ACTIVE->value,
-            'verification_status' => $this->faker->randomElement(array_keys(User::getVerificationStatuses())),
-            'visibility' => $this->faker->randomElement(array_keys(User::getVisibilities())),
+            'verification_status' => $this->faker->randomElement(UserVerificationStatus::getAllValues()),
+            'visibility' => $this->faker->randomElement(UserVisibility::getAllValues()),
             'count_fields_updated_at' => [
                 'followers' => DT::utcNow(),
                 'followings' => DT::utcNow(),

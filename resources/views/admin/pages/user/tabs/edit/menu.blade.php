@@ -134,3 +134,9 @@
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Is Staff Mo</a>
     <a href="#" class="py-1 px-2 list-group-item list-group-item-action disabled"><i class="fas fa-circle mr-1 text-blue"></i>Debug Enabled</a>
 </div>
+
+
+<h5 class="row text-gray text-uppercase">Test Tools</h5>
+<div class="row card card-default list-group">
+    <a href="#" class="py-1 px-2 list-group-item list-group-item-action text-green" data-toggle="modal" data-target="#pushNotificationsModal"><i class="fas fa-circle mr-1 text-blue"></i>Push Notification</a>
+</div>

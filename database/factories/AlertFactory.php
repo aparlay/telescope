@@ -3,6 +3,8 @@
 namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Models\Alert;
+use Aparlay\Core\Models\Enums\AlertStatus;
+use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -32,8 +34,8 @@ class AlertFactory extends Factory
             'media_id' => function ($alert) {
                 return new ObjectId(Media::factory(['user_id' => new ObjectId($alert['user_id'])])->create()->_id);
             },
-            'type' => $this->faker->randomElement(array_keys(Alert::getTypes())),
-            'status' => $this->faker->randomElement(array_keys(Alert::getStatuses())),
+            'type' => $this->faker->randomElement(AlertType::getAllValues()),
+            'status' => $this->faker->randomElement(AlertStatus::getAllValues()),
             'created_by' => function ($alert) {
                 return new ObjectId($alert['user_id']);
             },
