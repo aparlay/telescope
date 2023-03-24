@@ -17,7 +17,7 @@ class HealthCheckJsonResultsController extends Controller
         'DebugMode',
         'CpuLoad',
         'MeilisearchSsl',
-        'Api Ssl',
+        'ApiSsl',
         'SocketSsl',
     ];
 
