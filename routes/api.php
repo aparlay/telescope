@@ -5,6 +5,7 @@ use Aparlay\Core\Api\V1\Controllers\AuthController;
 use Aparlay\Core\Api\V1\Controllers\BlockController;
 use Aparlay\Core\Api\V1\Controllers\ContactUsController;
 use Aparlay\Core\Api\V1\Controllers\FollowController;
+use Aparlay\Core\Api\V1\Controllers\HealthCheckJsonResultsController;
 use Aparlay\Core\Api\V1\Controllers\MediaCommentController;
 use Aparlay\Core\Api\V1\Controllers\MediaController;
 use Aparlay\Core\Api\V1\Controllers\MediaLikeController;
@@ -16,7 +17,6 @@ use Aparlay\Core\Api\V1\Controllers\UserNotificationController;
 use Aparlay\Core\Api\V1\Controllers\VersionController;
 use Aparlay\Core\Api\V1\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
-use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
 /*
 |--------------------------------------------------------------------------
