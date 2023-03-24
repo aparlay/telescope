@@ -21,7 +21,7 @@ class HealthCheckJsonResultsController extends Controller
 
         $response = [
             'finishedAt' => $checkResults->finishedAt->getTimestamp(),
-            'checkResults' => $checkResults->storedCheckResults->map(fn(StoredCheckResult $line) => $line->toArray()),
+            'checkResults' => $checkResults->storedCheckResults->map(fn (StoredCheckResult $line) => $line->toArray()),
         ];
 
         return $this->response($response, '', Response::HTTP_OK);
