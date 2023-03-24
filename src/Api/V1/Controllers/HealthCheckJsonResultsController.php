@@ -41,9 +41,8 @@ class HealthCheckJsonResultsController extends Controller
                 )
                 ->count() !== 0;
 
-        return $result
-            ? $this->error($response, [], Response::HTTP_SERVICE_UNAVAILABLE)
-            :
+        return $result ?
+            $this->error($response, [], Response::HTTP_SERVICE_UNAVAILABLE) :
             $this->response($response, '', Response::HTTP_OK);
     }
 }
