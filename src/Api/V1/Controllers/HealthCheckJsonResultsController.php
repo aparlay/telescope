@@ -14,7 +14,7 @@ class HealthCheckJsonResultsController extends Controller
     protected const IGNORED_CHECKS = [
         'UsedDiskSpace',
         'Environment',
-        'DebugMode'
+        'DebugMode',
     ];
 
     public function __invoke(Request $request, ResultStore $resultStore): Response
@@ -27,13 +27,13 @@ class HealthCheckJsonResultsController extends Controller
 
         $response = [
             'finishedAt' => $checkResults->finishedAt->getTimestamp(),
-            'checkResults' => $checkResults->storedCheckResults->map(fn(StoredCheckResult $line) => $line->toArray()),
+            'checkResults' => $checkResults->storedCheckResults->map(fn (StoredCheckResult $line) => $line->toArray()),
         ];
 
         $result = $checkResults->storedCheckResults
-                ->map(fn(StoredCheckResult $line) => $line->toArray())
+                ->map(fn (StoredCheckResult $line) => $line->toArray())
                 ->filter(
-                    fn(array $check) => $check['status'] === 'ok' || in_array($check['name'], self::IGNORED_CHECKS)
+                    fn (array $check) => $check['status'] === 'ok' || in_array($check['name'], self::IGNORED_CHECKS)
                 )
                 ->count() !== 0;
 
