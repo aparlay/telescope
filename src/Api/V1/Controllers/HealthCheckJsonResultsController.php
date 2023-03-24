@@ -15,6 +15,10 @@ class HealthCheckJsonResultsController extends Controller
         'UsedDiskSpace',
         'Environment',
         'DebugMode',
+        'CpuLoad',
+        'MeilisearchSsl',
+        'Api Ssl',
+        'SocketSsl'
     ];
 
     public function __invoke(Request $request, ResultStore $resultStore): Response
