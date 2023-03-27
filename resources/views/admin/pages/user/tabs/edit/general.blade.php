@@ -25,17 +25,17 @@
         <div class="card-body py-1">
             <div class="tab-pane active">
                 <div class="form-group row m-0">
-                    <label for="banned_countries" class="col-sm-2 col-form-label">Banned Countries</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4">
+                    <label for="banned_countries" class="col-12 col-lg-2 col-form-label">Banned Countries</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2">
                             <p>--</p>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row m-0">
-                    <label for="feature_tips" class="col-sm-2 col-form-label">Feature Tips</label>
-                    <div class="col-sm-10">
-                        <div class="mt-2 pl-4 data-show">
+                    <label for="feature_tips" class="col-12 col-lg-2 col-form-label">Feature Tips</label>
+                    <div class="col-12 col-lg-10 form-element">
+                        <div class="pl-0 pl-lg-4 mt-0 mt-lg-2 data-show">
                             <p>{{ Arr::get($user->features, 'tips') ? 'Yes' : 'No' }}</p>
                         </div>
                         <div class="custom-control custom-switch mt-2 ml-2 data-edit d-none">

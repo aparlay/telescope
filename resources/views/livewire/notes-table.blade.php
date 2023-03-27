@@ -2,8 +2,8 @@
     use Aparlay\Core\Models\Enums\NoteCategory;
 @endphp
 
-<div class="">
-    <table class="table table-striped border">
+<div>
+    <table class="table table-responsive w-100 d-table table-striped border">
         <tbody>
             @foreach($notes as $note)
                 <tr>
@@ -13,7 +13,7 @@
                         </span>
                         {!! $note->message !!}
                     </td>
-                    <td class="col-2 col-md-2 col-sm-3">
+                    <td class="d-none d-md-table-cell col-md-2 col-sm-3">
                         {{ $note->created_at }}
                     </td>
                     <td class="col-1 text-right">

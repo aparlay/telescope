@@ -1,5 +1,5 @@
 <div class="form-inline">
-    <div class="col-6 col-md-1 pb-2 pb-md-0">
+    <div class="col-6 col-xl-1 pb-2 pb-xl-0">
         <button type="button"
                 @class(['w-100', 'btn', 'btn-secondary' => $showAllDates, 'btn-default' => !$showAllDates])
                 data-interval="all"
@@ -8,7 +8,7 @@
             {{__('All')}}
         </button>
     </div>
-    <div class="btn-group col-6 col-md-2 pb-2 pb-md-0">
+    <div class="btn-group col-6 col-xl-2 pb-2 pb-xl-0">
         <button type="button" class="btn btn-default" data-interval="days" data-interval-add="-1">
             <i class="fa fa-angle-double-left"></i>
         </button>
@@ -21,7 +21,7 @@
             <i class="fa fa-angle-double-right"></i>
         </button>
     </div>
-    <div class="btn-group col-6 col-md-3 pb-2 pb-md-0">
+    <div class="btn-group col-6 col-xl-3 pb-2 pb-xl-0">
         <button type="button" class="btn btn-default" data-interval="weeks" data-interval-add="-1">
             <i class="fa fa-angle-double-left"></i>
         </button>
@@ -33,7 +33,7 @@
             <i class="fa fa-angle-double-right"></i>
         </button>
     </div>
-    <div class="btn-group col-6 col-md-3 pb-2 pb-md-0">
+    <div class="btn-group col-6 col-xl-3 pb-2 pb-xl-0">
         <button type="button" class="btn btn-default" data-interval="months" data-interval-add="-1">
             <i class="fa fa-angle-double-left"></i>
         </button>
@@ -46,7 +46,7 @@
             <i class="fa fa-angle-double-right"></i>
         </button>
     </div>
-    <div class="col-12 col-md-3 text-center text-left">
+    <div class="col-12 col-xl-3 text-center text-left">
         <div class="d-flex bd-highlight">
             <div class="flex-grow-1">
                 <input type="text" class="form-control w-100 border-secondary text-center col-12" id="date-range"/>
