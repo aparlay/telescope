@@ -18,6 +18,10 @@ class Permissions
     const VIEW_PAYERS = 'view payers';
     const UPDATE_PAYERS = 'update payers';
 
+    const LIST_BROADCASTS = 'list broadcasts';
+    const VIEW_BROADCASTS = 'view broadcasts';
+    const DELETE_BROADCASTS = 'delete broadcasts';
+
     /**
      * @param $permission
      * @return string
