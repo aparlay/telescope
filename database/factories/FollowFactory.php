@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Database\Factories;
 
+use Aparlay\Core\Models\Enums\FollowStatus;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -43,7 +44,7 @@ class FollowFactory extends Factory
                 ];
             },
             'is_deleted' => $this->faker->boolean(),
-            'status' => $this->faker->randomElement(array_keys(Follow::getStatuses())),
+            'status' => $this->faker->randomElement(FollowStatus::getAllValues()),
         ];
     }
 }
