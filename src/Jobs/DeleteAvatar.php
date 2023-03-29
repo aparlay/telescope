@@ -60,7 +60,7 @@ class DeleteAvatar implements ShouldQueue
         if (Storage::disk('b2-avatars')->fileExists($this->file)) {
             Storage::disk('b2-avatars')->delete($this->file);
         }
-        if (config('app.env') !== 'testing' && Storage::disk('gc-avatars')->fileExists($this->file)) {
+        if (Storage::disk('gc-avatars')->fileExists($this->file)) {
             Storage::disk('gc-avatars')->delete($this->file);
         }
     }

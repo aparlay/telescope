@@ -102,7 +102,7 @@ class MediaObserver extends BaseModelObserver
             DeleteMediaLikes::dispatch((string) $media->_id)->onQueue('low');
             DeleteMediaComments::dispatch((string) $media->_id)->onQueue('low');
             DeleteMediaUserNotifications::dispatch((string) $media->_id)->onQueue('low');
-            PurgeMediaJob::dispatch((string) $media->_id)->onQueue('low');
+            PurgeMediaJob::dispatchIf(! config('app.is_testing'), (string) $media->_id)->onQueue('low');
             $media->unsearchable();
         }
 
