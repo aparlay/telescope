@@ -60,8 +60,8 @@ class DeleteMediaMetadata implements ShouldQueue
         $process->run();
 
         if (! $process->isSuccessful()) {
-            $messageInfo = array_map(fn($key, $value) => "$key: $value", array_keys($this->context), array_values($this->context));
-            Log::error("Metadata removal failed for file ".$this->file."\nContext:\n".implode("\n", $messageInfo));
+            $messageInfo = array_map(fn ($key, $value) => "$key: $value", array_keys($this->context), array_values($this->context));
+            Log::error('Metadata removal failed for file '.$this->file."\nContext:\n".implode("\n", $messageInfo));
             Log::error($process->getErrorOutput());
         }
     }
