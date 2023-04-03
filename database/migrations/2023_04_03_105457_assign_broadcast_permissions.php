@@ -6,7 +6,7 @@ use Aparlay\Core\Constants\Roles;
 use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Role;
 
-class CreateBroadcastPermissions extends Migration {
+return new class extends Migration {
 
     const PERMISSIONS_LIST = [
         Permissions::VIEW_BROADCASTS,
