@@ -6,12 +6,12 @@ use Aparlay\Core\Constants\Roles;
 use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Role;
 
-class CreateBroadcastPermissions extends Migration {
-
+class CreateBroadcastPermissions extends Migration
+{
     const PERMISSIONS_LIST = [
         Permissions::VIEW_BROADCASTS,
         Permissions::LIST_BROADCASTS,
-        Permissions::DELETE_BROADCASTS
+        Permissions::DELETE_BROADCASTS,
     ];
 
     /**
@@ -49,4 +49,4 @@ class CreateBroadcastPermissions extends Migration {
     {
         //
     }
-};
+}
