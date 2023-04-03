@@ -6,8 +6,7 @@ use Aparlay\Core\Constants\Roles;
 use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Role;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     const PERMISSIONS_LIST = [
         Permissions::VIEW_BROADCASTS,
         Permissions::LIST_BROADCASTS,
