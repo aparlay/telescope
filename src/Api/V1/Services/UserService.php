@@ -102,8 +102,8 @@ class UserService
                 ])
                     ->onQueue(config('app.server_specific_queue'))
                     ->dispatch();
+                DeleteAvatar::dispatchIf(! str_contains($oldFileName, 'default_'), basename($oldFileName))->delay(100);
             }
-            DeleteAvatar::dispatchIf(! str_contains($oldFileName, 'default_'), basename($oldFileName))->delay(100);
         }
 
         return false;
