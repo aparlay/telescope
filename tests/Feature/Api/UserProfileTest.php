@@ -505,7 +505,7 @@ class UserProfileTest extends ApiTestCase
      */
     public function updateUserVisibility()
     {
-        $user = User::first();
+        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $user->update(['visibility' => UserVisibility::PUBLIC->value]);
         $user->refresh();
 

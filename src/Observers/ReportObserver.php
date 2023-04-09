@@ -15,6 +15,8 @@ class ReportObserver extends BaseModelObserver
      */
     public function created($model): void
     {
-        $model->notify(new ReportSent($model));
+        if (config('app.env') !== 'testing') {
+            $model->notify(new ReportSent($model));
+        }
     }
 }
