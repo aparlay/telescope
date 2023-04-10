@@ -88,6 +88,8 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->register(\Aparlay\Core\Admin\Providers\AuthServiceProvider::class);
         $this->app->register(\Aparlay\Core\Admin\Providers\EventServiceProvider::class);
 
+        $this->app->register(\Aparlay\Core\Providers\EventServiceProvider::class);
+
         $this->mergeConfig();
     }
 
