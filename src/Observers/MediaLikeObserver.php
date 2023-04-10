@@ -30,7 +30,7 @@ class MediaLikeObserver extends BaseModelObserver
             return;
         }
 
-        UpdateMediaLikeCounter::dispatch((string)$mediaLike->media_id);
+        UpdateMediaLikeCounter::dispatch((string) $mediaLike->media_id);
 
         // Reset the Redis cache
         MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
@@ -64,7 +64,7 @@ class MediaLikeObserver extends BaseModelObserver
             return;
         }
 
-        UpdateMediaLikeCounter::dispatch((string)$mediaLike->media_id);
+        UpdateMediaLikeCounter::dispatch((string) $mediaLike->media_id);
 
         // we don't show notification if there is no liker or the only liker is the owner itself
         $mediaLikes = MediaLike::query()
