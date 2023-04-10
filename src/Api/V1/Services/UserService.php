@@ -97,7 +97,7 @@ class UserService
 
             if (! config('app.is_testing')) {
                 Bus::chain([
-                    new DeleteMediaMetadata('avatars/'.$avatar, 'public'),
+                    new DeleteMediaMetadata('avatars/'.$avatar, 'public', ['Type' => 'Avatar', 'User ID' => (string) $user->_id, 'URL' => $avatarUrl]),
                     (new UploadAvatar((string) $user->_id, 'avatars/'.$avatar))->delay(10),
                 ])
                     ->onQueue(config('app.server_specific_queue'))

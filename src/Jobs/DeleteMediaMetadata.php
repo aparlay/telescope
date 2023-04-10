@@ -36,7 +36,7 @@ class DeleteMediaMetadata implements ShouldQueue
      * @return void
      * @throws Exception
      */
-    public function __construct(public string $file, public string $disk = 'upload')
+    public function __construct(public string $file, public string $disk = 'upload', public array $context = [])
     {
         $this->onQueue(config('app.server_specific_queue'));
     }
@@ -60,7 +60,8 @@ class DeleteMediaMetadata implements ShouldQueue
         $process->run();
 
         if (! $process->isSuccessful()) {
-            Log::error('Metadata removal failed for file '.$this->file);
+            $messageInfo = array_map(fn ($key, $value) => "$key: $value", array_keys($this->context), array_values($this->context));
+            Log::error('Metadata removal failed for file '.$this->file."\nContext:\n".implode("\n", $messageInfo));
             Log::error($process->getErrorOutput());
         }
     }
