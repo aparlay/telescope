@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Observers;
 
+use Aparlay\Core\Jobs\UpdateMediaLikeCounter;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\MediaLike;
@@ -28,12 +29,12 @@ class MediaLikeObserver extends BaseModelObserver
         if ($media === null) {
             return;
         }
-        $media->updateLikes();
-        $media->creatorObj->updateLikes();
+
+        UpdateMediaLikeCounter::dispatch((string)$mediaLike->media_id);
 
         // Reset the Redis cache
         MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
-        $cacheKey = md5('media:'.$media->_id.':likedBy:'.$mediaLike->creator['_id']);
+        $cacheKey = md5('media:'.$mediaLike->media_id.':likedBy:'.$mediaLike->creator['_id']);
         Cache::store('octane')->delete($cacheKey);
 
         // no need to send notification when user is owner of the media
@@ -62,8 +63,8 @@ class MediaLikeObserver extends BaseModelObserver
         if ($media === null) {
             return;
         }
-        $media->updateLikes();
-        $media->userObj->updateLikes();
+
+        UpdateMediaLikeCounter::dispatch((string)$mediaLike->media_id);
 
         // we don't show notification if there is no liker or the only liker is the owner itself
         $mediaLikes = MediaLike::query()
