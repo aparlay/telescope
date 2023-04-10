@@ -8,10 +8,11 @@ use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use MongoDB\BSON\ObjectId;
 
-class MediaLikedNotification extends Notification
+class MediaLikedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
     use UserNotificationArray;
