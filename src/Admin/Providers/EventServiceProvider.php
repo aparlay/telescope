@@ -16,8 +16,9 @@ use Aparlay\Core\Observers\UserObserver;
 use Aparlay\Payment\Events\TipCreatedEvent;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
+class EventServiceProvider extends ServiceProvider
 {
     /**
      * The event listener mappings for the application.
@@ -41,11 +42,11 @@ class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
      */
     public function boot()
     {
-        Alert::observe(new AlertObserver());
-        User::observe(new UserObserver());
-        Media::observe(new MediaObserver());
-        MediaComment::observe(new MediaCommentObserver());
-        Setting::observe(new SettingObserver());
+        Alert::observe(AlertObserver::class);
+        User::observe(UserObserver::class);
+        Media::observe(MediaObserver::class);
+        MediaComment::observe(MediaCommentObserver::class);
+        Setting::observe(SettingObserver::class);
         parent::boot();
     }
 }

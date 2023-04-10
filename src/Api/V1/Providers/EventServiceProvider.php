@@ -18,8 +18,9 @@ use Aparlay\Core\Observers\MediaObserver;
 use Aparlay\Core\Observers\MediaVisitObserver;
 use Aparlay\Core\Observers\ReportObserver;
 use Aparlay\Core\Observers\UserObserver;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-class EventServiceProvider extends \Aparlay\Core\Providers\EventServiceProvider
+class EventServiceProvider extends ServiceProvider
 {
     /**
      * Register any events for your application.

@@ -94,7 +94,7 @@ class SimpleUserCast implements CastsAttributes
         }
 
         if (($userArray = Cache::store('octane')->get($cacheKey, false)) !== false) {
-            return json_decode($userArray, true); // cache already exists
+            return is_string($userArray) ? json_decode($userArray, true) : $userArray; // cache already exists
         }
 
         if (empty($userArray = Cache::store('redis')->get($cacheKey, []))) {
