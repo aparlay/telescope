@@ -37,7 +37,7 @@ class AddUserModerationQueuePermission extends Migration
     private function assignListPermissions()
     {
         $roleNames = [
-            Roles::ADMIN,
+            Roles::ADMINISTRATOR,
             Roles::SUPER_ADMINISTRATOR,
         ];
 
@@ -58,7 +58,7 @@ class AddUserModerationQueuePermission extends Migration
     private function assignQueuePermissions()
     {
         $roleNames = [
-            Roles::ADMIN,
+            Roles::ADMINISTRATOR,
             Roles::SUPER_ADMINISTRATOR,
             Roles::SUPPORT,
         ];
