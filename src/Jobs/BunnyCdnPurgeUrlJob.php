@@ -32,7 +32,7 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries = 5;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -66,14 +66,19 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
-     * @throws Exception
      */
     public function handle()
     {
         $media = Media::media($this->mediaId)->firstOrFail();
-        $fileUrl = Cdn::video($media->file);
-        $coverUrl = Cdn::cover($media->filename.'.jpg');
-        $this->purge([$coverUrl, $fileUrl]);
+        try {
+            $fileUrl = Cdn::video($media->file);
+            $coverUrl = Cdn::cover($media->filename.'.jpg');
+            $this->purge([$coverUrl, $fileUrl]);
+        } catch (Exception $e) {
+            if (($user = User::admin()->first()) !== null) {
+                $user->notify(new JobFailed(self::class, $this->attempts(), $e->getMessage()));
+            }
+        }
     }
 
     public function failed(Throwable $exception): void
