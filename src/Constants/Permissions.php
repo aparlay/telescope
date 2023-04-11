@@ -13,6 +13,7 @@ class Permissions
     const VIEW_CHATS = 'view chats';
     const EDIT_CHATS = 'edit chats';
     const LIST_CHATS = 'list chats';
+    const OPEN_CHAT_AS_SUPPORT = 'chat as support';
 
     const LIST_PAYERS = 'list payers';
     const VIEW_PAYERS = 'view payers';
