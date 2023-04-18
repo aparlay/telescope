@@ -336,7 +336,13 @@ use OpenApi\Annotations as OA;
  *                 format="int32"
  *             )
  *         ),
- *         @OA\JsonContent(ref="#/components/schemas/Login"),
+ *         @OA\JsonContent(
+ *             @OA\Property(property="code", format="integer", example=200),
+ *             @OA\Property(property="status", format="string", example="OK"),
+ *             @OA\Property(property="uuid", format="string", example="1"),
+ *             @OA\Property(property="data", ref="#/components/schemas/Login")
+ *
+ *         ),
  *     ),
  *     @OA\Response(
  *         response=418,
