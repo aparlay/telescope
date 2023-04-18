@@ -249,7 +249,7 @@ class UserService
             $new = true;
 
             foreach ($userAgents as $key => $item) {
-                if ($item['key'] === $currentUserAgentKey) {
+                if (isset($item['key']) && $item['key'] === $currentUserAgentKey) {
                     $needUpdate = $item['device_id'] !== $deviceId;
                     $needUpdate = $needUpdate || $item['ip'] !== $ip;
                     $needUpdate = $needUpdate || now()->subMinutes(5)->isAfter(Carbon::createFromTimestampMsUTC($item['created_at']));
