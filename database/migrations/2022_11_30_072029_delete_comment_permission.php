@@ -20,7 +20,7 @@ return new class() extends Migration {
     public function up()
     {
         $roleNames = [
-            Roles::ADMIN,
+            Roles::ADMINISTRATOR,
             Roles::SUPER_ADMINISTRATOR,
         ];
 

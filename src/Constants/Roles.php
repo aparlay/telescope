@@ -4,7 +4,7 @@ namespace Aparlay\Core\Constants;
 
 final class Roles
 {
-    const ADMIN = 'admin';
+    const ADMINISTRATOR = 'administrator';
     const SUPER_ADMINISTRATOR = 'super-administrator';
     const SUPPORT = 'support';
 
