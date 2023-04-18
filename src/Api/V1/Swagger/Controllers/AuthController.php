@@ -341,7 +341,6 @@ use OpenApi\Annotations as OA;
  *             @OA\Property(property="status", format="string", example="OK"),
  *             @OA\Property(property="uuid", format="string", example="1"),
  *             @OA\Property(property="data", ref="#/components/schemas/Login")
- *
  *         ),
  *     ),
  *     @OA\Response(
