@@ -3,7 +3,7 @@
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
-$rules = [
+$rules  = [
     '@PSR12' => true,
     'align_multiline_comment' => ['comment_type' => 'phpdocs_only'],
     'array_indentation' => true,
@@ -178,12 +178,12 @@ $rules = [
 
 $finder = Finder::create()
     ->in([
-        __DIR__.'/app',
-        __DIR__.'/config',
-        __DIR__.'/database',
-        __DIR__.'/resources',
-        __DIR__.'/routes',
-        __DIR__.'/tests',
+        __DIR__ . '/app',
+        __DIR__ . '/config',
+        __DIR__ . '/database',
+        __DIR__ . '/resources',
+        __DIR__ . '/routes',
+        __DIR__ . '/tests',
     ])
     ->name('*.php')
     ->notName('*.blade.php')
