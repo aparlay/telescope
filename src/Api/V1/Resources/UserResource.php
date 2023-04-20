@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Api\V1\Resources;
 
 use Aparlay\Chat\Models\Chat;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,24 +17,24 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $user = auth()->user() ?: false;
+        $user       = auth()->user() ?: false;
         $isFollowed = $isBlocked = $isOnline = false;
-        $chatId = null;
+        $chatId     = null;
         if ($user) {
             // TODO: $followingIds = collect($user->followings)->pluck('_id')
             $followingIds = array_column($user->followings, '_id');
             // TODO: $isFollowed = collect($user->followings)->where('_id', (string) $this->_id))->isEmpty()
-            $isFollowed = in_array((string) $this->_id, $followingIds);
+            $isFollowed   = in_array((string) $this->_id, $followingIds);
 
             // TODO: $blockedIds = collect($user->blocks)->pluck('_id')
-            $blockedIds = array_column($user->blocks, '_id');
+            $blockedIds   = array_column($user->blocks, '_id');
             // TODO: $isBlocked = collect($user->blocks)->pluck('_id')
-            $isBlocked = in_array((string) $this->_id, $blockedIds);
+            $isBlocked    = in_array((string) $this->_id, $blockedIds);
 
-            $isOnline = $this->is_online; //$isFollowed ? $this->is_online_for_followers : $this->is_online_for_all;
+            $isOnline     = $this->is_online; // $isFollowed ? $this->is_online_for_followers : $this->is_online_for_all;
 
-            $chat = Chat::query()->participants($this->_id, $user->_id)->first();
-            $chatId = $chat !== null ? (string) $chat->_id : null;
+            $chat         = Chat::query()->participants($this->_id, $user->_id)->first();
+            $chatId       = $chat !== null ? (string) $chat->_id : null;
         }
 
         return [

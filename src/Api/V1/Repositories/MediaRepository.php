@@ -8,19 +8,20 @@ use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Media as BaseMedia;
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use InvalidArgumentException;
 use MongoDB\BSON\ObjectId;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class MediaRepository
 {
-    protected Media | BaseMedia $model;
+    protected Media|BaseMedia $model;
 
     public function __construct($model)
     {
-        if (! ($model instanceof BaseMedia)) {
-            throw new \InvalidArgumentException('$model should be of Media type');
+        if (!($model instanceof BaseMedia)) {
+            throw new InvalidArgumentException('$model should be of Media type');
         }
 
         $this->model = $model;
@@ -29,7 +30,6 @@ class MediaRepository
     /**
      * Store a newly created resource in storage.
      *
-     * @param MediaRequest $request
      * @return Media|null
      */
     public function store(MediaRequest $request)
@@ -46,15 +46,15 @@ class MediaRepository
                 'count_fields_updated_at' => [],
                 'visibility' => $request->input('visibility', $user->visibility),
                 'creator' => [
-                    '_id'      => new ObjectId($user->_id),
+                    '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
-                    'avatar'   => $user->avatar,
+                    'avatar' => $user->avatar,
                 ],
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
 
-            return null;
+            return;
         }
 
         $model->refresh();

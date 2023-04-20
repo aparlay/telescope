@@ -2,8 +2,6 @@
 
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration {
     /**
@@ -14,7 +12,7 @@ return new class() extends Migration {
     public function up()
     {
         foreach (User::lazy() as $user) {
-            $setting = $user->setting;
+            $setting                  = $user->setting;
             $setting['notifications'] = [
                 'unread_message_alerts' => true,
                 'news_and_updates' => true,
@@ -25,7 +23,7 @@ return new class() extends Migration {
                 'comments' => true,
             ];
 
-            $user->setting = $setting;
+            $user->setting            = $setting;
             $user->saveQuietly();
         }
     }
@@ -37,6 +35,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

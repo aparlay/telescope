@@ -13,7 +13,7 @@ class ReprocessAllUserVideosListener implements ShouldQueue
 {
     public function handle(UsernameChangedEvent|AvatarChangedEvent $event)
     {
-        $i = 1;
+        $i      = 1;
         $medias = Media::creator($event->user->_id)
             ->whereIn('status', [
                 MediaStatus::COMPLETED->value,
@@ -21,7 +21,7 @@ class ReprocessAllUserVideosListener implements ShouldQueue
                 MediaStatus::DENIED->value, ])
             ->get();
         foreach ($medias as $media) {
-            if (is_array($media->files_history) && ! empty($media->files_history)) {
+            if (is_array($media->files_history) && !empty($media->files_history)) {
                 $lastMediaFile = $media->files_history[array_key_last($media->files_history)];
                 if (isset($lastMediaFile['file'])) {
                     ReprocessMedia::dispatch($media->_id, $lastMediaFile['file'])

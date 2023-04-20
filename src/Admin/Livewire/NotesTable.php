@@ -10,7 +10,7 @@ use Jenssegers\Mongodb\Eloquent\Builder;
 
 class NotesTable extends BaseIndexComponent
 {
-    public $model = Note::class;
+    public $model       = Note::class;
     public $userId;
     public $category;
     public int $perPage = 10;
@@ -47,11 +47,11 @@ class NotesTable extends BaseIndexComponent
     {
         $query = parent::buildQuery()->with(['creatorObj'])->isNotDeleted();
 
-        if (! empty($this->userId)) {
+        if (!empty($this->userId)) {
             $query->user($this->userId);
         }
 
-        if (! empty($this->category)) {
+        if (!empty($this->category)) {
             $query->category($this->category);
         }
 
@@ -66,7 +66,7 @@ class NotesTable extends BaseIndexComponent
     public function render()
     {
         return view('default_view::livewire.notes-table', [
-           'notes' => $this->index(),
+            'notes' => $this->index(),
         ]);
     }
 }

@@ -8,7 +8,6 @@ use Jenssegers\Mongodb\Query\Builder as BaseBuilder;
 class BaseQueryBuilder extends BaseBuilder
 {
     /**
-     * @param array $where
      * @return array
      */
     protected function compileWhereIn(array $where)
@@ -26,7 +25,6 @@ class BaseQueryBuilder extends BaseBuilder
     }
 
     /**
-     * @param array $where
      * @return array
      */
     protected function compileWhereNotIn(array $where)

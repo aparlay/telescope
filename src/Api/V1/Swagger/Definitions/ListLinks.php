@@ -16,6 +16,7 @@ class ListLinks
      * )
      */
     public $self;
+
     /**
      * @OA\Property(
      *     type="object",
@@ -23,6 +24,7 @@ class ListLinks
      * )
      */
     public $first;
+
     /**
      * @OA\Property(
      *     type="object",
@@ -30,6 +32,7 @@ class ListLinks
      * )
      */
     public $last;
+
     /**
      * @OA\Property(
      *     type="object",
@@ -37,6 +40,7 @@ class ListLinks
      * )
      */
     public $next;
+
     /**
      * @OA\Property(
      *     type="object",

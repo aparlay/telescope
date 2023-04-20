@@ -10,7 +10,6 @@ use Livewire\Component;
 class NotesCreate extends Component
 {
     use CurrentUserTrait;
-
     public $userId;
     public $message;
 
@@ -32,8 +31,8 @@ class NotesCreate extends Component
 
         if ($this->currentUser()->can('create notes')) {
             /** @var NoteService $noteService */
-            $noteService = app()->make(NoteService::class);
-            $user = User::find($this->userId);
+            $noteService   = app()->make(NoteService::class);
+            $user          = User::find($this->userId);
             $noteService->addCustomNote($this->currentUser(), $user, $this->message);
             $this->message = '';
         }

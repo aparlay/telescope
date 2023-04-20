@@ -11,16 +11,11 @@ use MongoDB\BSON\ObjectId;
 
 class MediaCommentsTable extends BaseIndexComponent
 {
-    public $model = MediaComment::class;
-
-    public $headerText = 'Media Comment';
-
+    public $model               = MediaComment::class;
+    public $headerText          = 'Media Comment';
     public $showOnlyForApproval = false;
-
-    protected $listeners = ['updateParent'];
-
+    protected $listeners        = ['updateParent'];
     public $mediaId;
-
     public $userId;
 
     public function updateParent()
@@ -58,11 +53,11 @@ class MediaCommentsTable extends BaseIndexComponent
     {
         $query = parent::buildQuery()->with(['creatorObj']);
 
-        if (! empty($this->userId)) {
+        if (!empty($this->userId)) {
             $query->where('creator._id', new ObjectId($this->userId));
         }
 
-        if (! empty($this->mediaId)) {
+        if (!empty($this->mediaId)) {
             $query->where('media_id', new ObjectId($this->mediaId));
         }
 
@@ -79,7 +74,7 @@ class MediaCommentsTable extends BaseIndexComponent
         return view('default_view::livewire.media-comments-table', [
             'models' => $this->index(),
             'hiddenFields' => [
-                'creator_username' => ! empty($this->userId),
+                'creator_username' => !empty($this->userId),
                 'status' => $this->showOnlyForApproval,
             ],
         ]);

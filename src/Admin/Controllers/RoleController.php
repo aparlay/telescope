@@ -27,8 +27,8 @@ class RoleController
     {
         if ($this->roleService->updateRole($role)) {
             return back()->with(['success' => 'Successfully updated role.']);
-        } else {
-            return back()->with(['error' => 'Update role failed.']);
         }
+
+        return back()->with(['error' => 'Update role failed.']);
     }
 }

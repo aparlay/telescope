@@ -3,34 +3,28 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Email;
+use InvalidArgumentException;
 
 /**
  * Class EmailRepository.
  */
 class EmailRepository
 {
-    /**
-     * @var Email
-     */
     protected Email $model;
 
     /**
      * EmailRepository constructor.
-     * @param $model
      */
     public function __construct($model)
     {
-        if (! ($model instanceof Email)) {
-            throw new \InvalidArgumentException('$model should be of Email type');
+        if (!($model instanceof Email)) {
+            throw new InvalidArgumentException('$model should be of Email type');
         }
 
         $this->model = $model;
     }
 
     /**
-     * @param $offset
-     * @param $limit
-     * @param $sort
      * @return mixed
      */
     public function all($offset, $limit, $sort)
@@ -43,9 +37,6 @@ class EmailRepository
     }
 
     /**
-     * @param $offset
-     * @param $limit
-     * @param $sort
      * @return mixed
      */
     public function emailAjax($offset, $limit, $sort)
@@ -58,7 +49,8 @@ class EmailRepository
     }
 
     /**
-     * @param $filters
+     * @param mixed|null $dateRangeFilter
+     *
      * @return mixed
      */
     public function countFilteredEmail($filters, $dateRangeFilter = null)
@@ -73,10 +65,8 @@ class EmailRepository
     }
 
     /**
-     * @param $offset
-     * @param $limit
-     * @param $sort
-     * @param $filters
+     * @param mixed|null $dateRangeFilter
+     *
      * @return mixed
      */
     public function getFilteredEmail($offset, $limit, $sort, $filters, $dateRangeFilter = null)
@@ -93,33 +83,22 @@ class EmailRepository
         return $query->get();
     }
 
-    /**
-     * @param array $data
-     */
     public function create(array $data)
     {
         // TODO: Implement create() method.
     }
 
-    /**
-     * @param array $data
-     * @param $id
-     */
     public function update(array $data, $id)
     {
         // TODO: Implement create() method.
     }
 
-    /**
-     * @param $id
-     */
     public function delete($id)
     {
         // TODO: Implement delete() method.
     }
 
     /**
-     * @param $id
      * @return mixed
      */
     public function find($id)

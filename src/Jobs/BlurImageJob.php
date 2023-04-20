@@ -16,7 +16,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
-use Spatie\Image\Image;
 use Throwable;
 
 /**
@@ -32,7 +31,7 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries         = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -44,14 +43,14 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [3, 10, 15, 30, 60];
+    public $backoff           = [3, 10, 15, 30, 60];
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(private string $mediaId)
     {
@@ -61,28 +60,28 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
     public function handle()
     {
         if (($media = Media::media($this->mediaId)->first()) === null) {
-            Log::error(__CLASS__.PHP_EOL.'Media not found!');
+            Log::error(__CLASS__ . PHP_EOL . 'Media not found!');
 
             return;
         }
 
         try {
-            $storage = Storage::disk('upload');
-            $image = $media->filename.'.jpg';
+            $storage              = Storage::disk('upload');
+            $image                = $media->filename . '.jpg';
 
             if (Storage::disk(StorageType::GC_GALLERIES)->fileMissing($image)) {
-                Log::error("Failed find to {$image} in ".StorageType::GC_GALLERIES.' storage');
+                Log::error("Failed find to {$image} in " . StorageType::GC_GALLERIES . ' storage');
 
                 return;
             }
 
-            if (! $stream = fopen(Cdn::cover($image.'?blur=100'), 'r')) {
-                Log::error("Failed to open {$image} in ".StorageType::GC_GALLERIES.' storage');
+            if (!$stream = fopen(Cdn::cover($image . '?blur=100'), 'r')) {
+                Log::error("Failed to open {$image} in " . StorageType::GC_GALLERIES . ' storage');
 
                 return;
             }
 
-            $blurredImage = Uuid::uuid4().'.jpg';
+            $blurredImage         = Uuid::uuid4() . '.jpg';
             if ($storage->fileMissing($blurredImage)) {
                 $storage->put($blurredImage, $stream);
             }
@@ -94,13 +93,10 @@ class BlurImageJob extends AbstractJob implements ShouldQueue
 
             $storage->delete($blurredImage);
         } catch (Throwable $throwable) {
-            Log::error('Unable to save file: '.$throwable->getMessage());
+            Log::error('Unable to save file: ' . $throwable->getMessage());
         }
     }
 
-    /**
-     * @param  Throwable  $exception
-     */
     public function failed(Throwable $exception): void
     {
         if (($user = User::admin()->first()) !== null) {

@@ -18,12 +18,12 @@ class Cdn
         }
 
         /* Return the input file url if cdn is not enabled */
-        if (! config('app.cdn.enabled')) {
+        if (!config('app.cdn.enabled')) {
             return $url;
         }
 
         /* Prepend the CDN Server Url and return the file url */
-        return config('app.cdn.avatars').$url;
+        return config('app.cdn.avatars') . $url;
     }
 
     /**
@@ -37,11 +37,11 @@ class Cdn
             throw new Exception('cover file is missing');
         }
 
-        if (! config('app.cdn.enabled')) {
+        if (!config('app.cdn.enabled')) {
             return $url;
         }
 
-        return config('app.cdn.covers').$url;
+        return config('app.cdn.covers') . $url;
     }
 
     /**
@@ -55,11 +55,11 @@ class Cdn
             throw new Exception('video file is missing');
         }
 
-        if (! config('app.cdn.enabled')) {
+        if (!config('app.cdn.enabled')) {
             return $url;
         }
 
-        return config('app.cdn.videos').$url;
+        return config('app.cdn.videos') . $url;
     }
 
     /**
@@ -73,11 +73,11 @@ class Cdn
             throw new Exception('gallery file is missing');
         }
 
-        if (! config('app.cdn.enabled')) {
+        if (!config('app.cdn.enabled')) {
             return $url;
         }
 
-        return config('app.cdn.galleries.video').$url;
+        return config('app.cdn.galleries.video') . $url;
     }
 
     /**
@@ -91,11 +91,11 @@ class Cdn
             throw new Exception('gallery file is missing');
         }
 
-        if (! config('app.cdn.enabled')) {
+        if (!config('app.cdn.enabled')) {
             return $url;
         }
 
-        return config('app.cdn.galleries.image').$url;
+        return config('app.cdn.galleries.image') . $url;
     }
 
     /**
@@ -109,10 +109,10 @@ class Cdn
             throw new Exception('document file is missing');
         }
 
-        if (! config('app.cdn.enabled')) {
+        if (!config('app.cdn.enabled')) {
             return $url;
         }
 
-        return config('app.cdn.document').$url;
+        return config('app.cdn.document') . $url;
     }
 }

@@ -5,6 +5,7 @@ namespace Aparlay\Core\Casts;
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\User;
+use Exception;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Support\Facades\Cache;
 use Jenssegers\Mongodb\Eloquent\Model;
@@ -22,27 +23,27 @@ class SimpleUserCast implements CastsAttributes
     /**
      * Cast the given value.
      *
-     * @param  Model  $model
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  array  $attributes
-     * @return array
-     * @throws \Exception
+     * @param Model $model
+     * @param mixed $value
+     *
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws Exception
+     *
+     * @return array
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        if (! isset($value['_id'])) {
+        if (!isset($value['_id'])) {
             return [];
         }
 
         $userArray = self::cacheByUserId($value['_id']);
 
         if (in_array('is_followed', $this->fields, true)) {
-            $isFollowed = false;
-            if (! auth()->guest()) {
+            $isFollowed               = false;
+            if (!auth()->guest()) {
                 $loggedInUserId = auth()->user()->_id;
-                $isFollowed = Follow::checkCreatorIsFollowedByUser(
+                $isFollowed     = Follow::checkCreatorIsFollowedByUser(
                     (string) $userArray['_id'],
                     (string) $loggedInUserId
                 );
@@ -57,16 +58,15 @@ class SimpleUserCast implements CastsAttributes
     /**
      * Prepare the given value for storage.
      *
-     * @param  Model  $model
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  array  $attributes
+     * @param Model $model
+     * @param mixed $value
+     *
      * @return array[]
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        if (! isset($value['_id'])) {
-            return null;
+        if (!isset($value['_id'])) {
+            return;
         }
 
         $user = User::user($value['_id'])->first();
@@ -85,8 +85,8 @@ class SimpleUserCast implements CastsAttributes
      */
     public static function cacheByUserId(ObjectId|string $userId, bool $refresh = false): array
     {
-        $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
-        $cacheKey = 'SimpleUserCast:'.$userId;
+        $userId   = $userId instanceof ObjectId ? (string) $userId : $userId;
+        $cacheKey = 'SimpleUserCast:' . $userId;
 
         if ($refresh) {
             Cache::store('octane')->delete($cacheKey);

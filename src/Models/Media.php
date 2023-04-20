@@ -33,49 +33,50 @@ use MathPHP\Statistics\Significance;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use Psr\SimpleCache\InvalidArgumentException;
+use RedisException;
 
 /**
  * Class Media.
  *
- * @property ObjectId           $_id
- * @property Alert[]            $alertObjs
- * @property int                $comment_count
- * @property array              $comments
- * @property int                $content_gender
- * @property array              $count_fields_updated_at
- * @property string             $cover
- * @property Carbon             $created_at
- * @property ObjectId           $created_by
- * @property array              $creator
- * @property User               $creatorObj
- * @property string             $description
- * @property string             $location
- * @property string             $hash
- * @property string             $image_blurred
- * @property string             $file
- * @property array              $files_history
- * @property array              $hashtags
- * @property bool               $is_protected
- * @property int                $length
- * @property int                $length_watched
- * @property int                $like_count
- * @property array              $likes
- * @property array              $links
- * @property string             $mime_type
- * @property array              $people
- * @property array              $scores
- * @property int                $size
- * @property string             $slug
- * @property array              $sort_scores
- * @property int                $status
- * @property int                $tips
- * @property Carbon             $updated_at
- * @property array              $force_sort_positions
- * @property User               $userObj
- * @property int                $visibility
- * @property int                $visit_count
- * @property array              $visits
- * @property int                $watched_count
+ * @property ObjectId $_id
+ * @property Alert[]  $alertObjs
+ * @property int      $comment_count
+ * @property array    $comments
+ * @property int      $content_gender
+ * @property array    $count_fields_updated_at
+ * @property string   $cover
+ * @property Carbon   $created_at
+ * @property ObjectId $created_by
+ * @property array    $creator
+ * @property User     $creatorObj
+ * @property string   $description
+ * @property string   $file
+ * @property array    $files_history
+ * @property array    $force_sort_positions
+ * @property string   $hash
+ * @property array    $hashtags
+ * @property string   $image_blurred
+ * @property bool     $is_protected
+ * @property int      $length
+ * @property int      $length_watched
+ * @property int      $like_count
+ * @property array    $likes
+ * @property array    $links
+ * @property string   $location
+ * @property string   $mime_type
+ * @property array    $people
+ * @property array    $scores
+ * @property int      $size
+ * @property string   $slug
+ * @property array    $sort_scores
+ * @property int      $status
+ * @property int      $tips
+ * @property Carbon   $updated_at
+ * @property User     $userObj
+ * @property int      $visibility
+ * @property int      $visit_count
+ * @property array    $visits
+ * @property int      $watched_count
  * @property-read string        $admin_url
  * @property-read int           $awesomeness_score
  * @property-read int           $beauty_score
@@ -86,43 +87,42 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property-read string        $delete_prefix
  * @property-read string        $file_url
  * @property-read string        $image_blurred_url
+ * @property-read bool          $is_image
+ * @property-read bool          $is_private
+ * @property-read bool          $is_processing_completed
+ * @property-read bool          $is_video
+ * @property-read int           $sent_tips
  * @property-read int           $skin_score
  * @property-read string        $slack_admin_url
  * @property-read string        $slack_subject_admin_url
  * @property-read int           $time_score
  * @property-read int           $visit_score
- * @property-read int           $sent_tips
- * @property-read bool          $is_private
- * @property-read bool          $is_video
- * @property-read bool          $is_image
- * @property-read bool          $is_processing_completed
  *
- *
- * @method static |self|Builder creator(ObjectId|string $userId)
- * @method static |self|Builder user(ObjectId|string $userId)
- * @method static |self|Builder media(ObjectId|string $userId)
- * @method static |self|Builder availableForFollower()
- * @method static |self|Builder hasForceSortPosition($category)
- * @method static |self|Builder hasNoForceSortPosition($category)
- * @method static |self|Builder availableForOwner()
- * @method static |self|Builder confirmed()
- * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
- * @method static |self|Builder notBlockedFor(ObjectId|string $user)
- * @method static |self|Builder blockedFor(ObjectId|string $user)
- * @method static |self|Builder medias(ObjectId[] $mediaIds)
- * @method static |self|Builder notVisitedByDevice(string $deviceId)
- * @method static |self|Builder hashtag(string $tag)
- * @method static |self|Builder slug(string $slug)
- * @method static |self|Builder sort(string $category)
- * @method static |self|Builder genderContent(array|int $genderContent)
- * @method static |self|Builder public()
- * @method static |self|Builder explicit()
- * @method static |self|Builder withoutExplicit()
- * @method static |self|Builder topless()
- * @method static |self|Builder withoutTopless()
- * @method static |self|Builder private()
- * @method static |self|Builder protected()
- * @method static |self|Builder licensed()
+ * @method static|self|Builder availableForFollower()
+ * @method static|self|Builder availableForOwner()
+ * @method static|self|Builder blockedFor(ObjectId|string $user)
+ * @method static|self|Builder confirmed()
+ * @method static|self|Builder creator(ObjectId|string $userId)
+ * @method static|self|Builder explicit()
+ * @method static|self|Builder genderContent(array|int $genderContent)
+ * @method static|self|Builder hasForceSortPosition($category)
+ * @method static|self|Builder hashtag(string $tag)
+ * @method static|self|Builder hasNoForceSortPosition($category)
+ * @method static|self|Builder licensed()
+ * @method static|self|Builder media(ObjectId|string $userId)
+ * @method static|self|Builder medias(ObjectId[] $mediaIds)
+ * @method static|self|Builder notBlockedFor(ObjectId|string $user)
+ * @method static|self|Builder notVisitedByDevice(string $deviceId)
+ * @method static|self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
+ * @method static|self|Builder private()
+ * @method static|self|Builder protected()
+ * @method static|self|Builder public()
+ * @method static|self|Builder slug(string $slug)
+ * @method static|self|Builder sort(string $category)
+ * @method static|self|Builder topless()
+ * @method static|self|Builder user(ObjectId|string $userId)
+ * @method static|self|Builder withoutExplicit()
+ * @method static|self|Builder withoutTopless()
  */
 class Media extends BaseModel
 {
@@ -562,9 +562,6 @@ class Media extends BaseModel
         return Follow::checkCreatorIsFollowedByUser((string) $this->creator['_id'], (string) $userId);
     }
 
-    /**
-     * @return bool
-     */
     public function getIsPrivateAttribute(): bool
     {
         return $this->visibility === MediaVisibility::PRIVATE->value;
@@ -651,6 +648,8 @@ class Media extends BaseModel
     }
 
     /**
+     * @param mixed $attributeValue
+     *
      * @return void
      */
     public function setCountFieldsUpdatedAtAttribute($attributeValue)
@@ -725,46 +724,31 @@ class Media extends BaseModel
 
     public function getImageBlurredUrlAttribute()
     {
-        return Cdn::cover(($this->is_completed && ! empty($this->image_blurred)) ? $this->image_blurred : 'default.jpg');
+        return Cdn::cover(($this->is_completed && !empty($this->image_blurred)) ? $this->image_blurred : 'default.jpg');
     }
 
-    /**
-     * @param  User|null  $user
-     *
-     * @return string
-     */
     public function fileUrlFor(?User $user = null): string
     {
-        if (! $this->is_private || ! $this->isLockedFor($user)) {
+        if (!$this->is_private || !$this->isLockedFor($user)) {
             return $this->file_url;
         }
 
         return '';
     }
 
-    /**
-     * @param  User|null  $user
-     *
-     * @return string
-     */
     public function coverUrlFor(?User $user = null): string
     {
-        if (! $this->is_private || ! $this->isLockedFor($user)) {
+        if (!$this->is_private || !$this->isLockedFor($user)) {
             return $this->cover_url;
         }
 
         return $this->image_blurred_url;
     }
 
-    /**
-     * @param  User|null  $user
-     *
-     * @return bool
-     */
     public function isLockedFor(?User $user = null): bool
     {
         // content is public no need check more
-        if (! $this->is_private) {
+        if (!$this->is_private) {
             return false;
         }
 
@@ -1006,81 +990,75 @@ class Media extends BaseModel
     }
 
     /**
-     * @return void
-     * @throws \RedisException
+     * @throws RedisException
      */
     private function cacheInPublicToplessMediaIds(): void
     {
         $toplessMediaIdsCacheKey = (new self())->getCollection() . ':topless:ids';
         foreach ($this->sort_scores as $category => $score) {
-            Redis::zAdd($toplessMediaIdsCacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
+            Redis::zAdd($toplessMediaIdsCacheKey . ':' . $category, $this->sort_scores[$category], (string) $this->_id);
         }
     }
 
     /**
-     * @return void
-     * @throws \RedisException
+     * @throws RedisException
      */
     private function cacheInPublicExplicitMediaIds(): void
     {
         $explicitMediaIdsCacheKey = (new self())->getCollection() . ':explicit:ids';
         foreach ($this->sort_scores as $category => $score) {
-            Redis::zAdd($explicitMediaIdsCacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
+            Redis::zAdd($explicitMediaIdsCacheKey . ':' . $category, $this->sort_scores[$category], (string) $this->_id);
         }
     }
 
     /**
-     * @return void
-     * @throws \RedisException
+     * @throws RedisException
      */
     private function cacheInPublicMediaIds(): void
     {
         $cacheKey = (new self())->getCollection() . ':ids';
         foreach ($this->sort_scores as $category => $score) {
             if (is_numeric($this->sort_scores[$category])) {
-                Redis::zAdd($cacheKey.':'.$category, $this->sort_scores[$category], (string) $this->_id);
+                Redis::zAdd($cacheKey . ':' . $category, $this->sort_scores[$category], (string) $this->_id);
             }
         }
     }
 
     /**
-     * @return void
-     * @throws \RedisException
+     * @throws RedisException
      */
     private function cacheInFemaleContentMediaIds(): void
     {
         if ($this->content_gender === MediaContentGender::FEMALE->value) {
-            $cacheKey = (new self())->getCollection().':ids:female';
+            $cacheKey = (new self())->getCollection() . ':ids:female';
             Redis::zAdd($cacheKey, 0, (string) $this->_id);
         }
     }
 
     /**
-     * @return void
-     * @throws \RedisException
+     * @throws RedisException
      */
     private function cacheInMaleContentMediaIds(): void
     {
         if ($this->content_gender === MediaContentGender::MALE->value) {
-            $cacheKey = (new self())->getCollection().':ids:male';
+            $cacheKey = (new self())->getCollection() . ':ids:male';
             Redis::zAdd($cacheKey, 0, (string) $this->_id);
         }
     }
 
     /**
-     * @return void
-     * @throws \RedisException
+     * @throws RedisException
      */
     private function cacheInTransgenderContentMediaIds(): void
     {
         if ($this->content_gender === MediaContentGender::TRANSGENDER->value) {
-            $cacheKey = (new self())->getCollection().':ids:transgender';
+            $cacheKey = (new self())->getCollection() . ':ids:transgender';
             Redis::zAdd($cacheKey, 0, (string) $this->_id);
         }
     }
 
     /**
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function storeInGeneralCaches(): self
     {

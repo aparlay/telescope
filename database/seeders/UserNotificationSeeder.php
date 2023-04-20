@@ -15,8 +15,6 @@ class UserNotificationSeeder extends Seeder
 
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -25,7 +23,7 @@ class UserNotificationSeeder extends Seeder
         UserNotification::factory()->count($this->units)
             ->state(function (array $attributes) use ($user) {
                 return [
-                    'creator' =>  [
+                    'creator' => [
                         '_id' => new ObjectId($user->_id),
                         'username' => $user->username,
                         'avatar' => $user->avatar,

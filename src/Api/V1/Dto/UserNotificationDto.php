@@ -20,9 +20,9 @@ class UserNotificationDto extends DataTransferObject
     private $user;
 
     /**
-     * @param  array  $data
-     * @return static
      * @throws UnknownProperties
+     *
+     * @return static
      */
     public static function fromArray(array $data): self
     {

@@ -4,6 +4,7 @@ namespace Aparlay\Core\Jobs;
 
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
+use Error;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,7 +25,6 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
     private string $fileName;
     private string $fileDisk;
     private Collection $storages;
@@ -33,7 +33,7 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries         = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -45,22 +45,24 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [3, 10, 15, 30, 60];
+    public $backoff           = [3, 10, 15, 30, 60];
 
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param mixed|null $storageFilePath
      *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(string $fileName, string $fileDisk, Collection $storages, $storageFilePath = null)
     {
         parent::__construct();
 
-        $this->fileName = $fileName;
-        $this->fileDisk = $fileDisk;
-        $this->storages = $storages;
+        $this->fileName        = $fileName;
+        $this->fileDisk        = $fileDisk;
+        $this->storages        = $storages;
         $this->storageFilePath = $storageFilePath;
     }
 
@@ -75,21 +77,18 @@ class UploadFileJob extends AbstractJob implements ShouldQueue
                 if ($storage->fileMissing($storageFilePath)) {
                     $storage->writeStream($storageFilePath, Storage::disk($this->fileDisk)->readStream($this->fileName));
                 } else {
-                    Log::debug($storageName.': file already exists '.$storageFilePath);
+                    Log::debug($storageName . ': file already exists ' . $storageFilePath);
                 }
 
                 if ($storage->fileMissing($storageFilePath)) {
-                    throw new \Error("{$storageFilePath} failed to upload to {$storageName}");
+                    throw new Error("{$storageFilePath} failed to upload to {$storageName}");
                 }
             });
         } catch (Throwable $throwable) {
-            Log::error('Unable to save file: '.$throwable->getMessage());
+            Log::error('Unable to save file: ' . $throwable->getMessage());
         }
     }
 
-    /**
-     * @param Throwable $exception
-     */
     public function failed(Throwable $exception): void
     {
         if (($user = User::admin()->first()) !== null) {

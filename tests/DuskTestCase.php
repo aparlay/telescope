@@ -13,9 +13,7 @@ use Laravel\Dusk\TestCase as BaseTestCase;
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
-
     protected $superAdminUser;
-
     protected static bool $isSeeded = false;
 
     public function setUp(): void
@@ -25,7 +23,7 @@ abstract class DuskTestCase extends BaseTestCase
         $this->app->make('config')->set('app.url', env('ADMIN_URL'));
         $this->app->make('config')->set('app.is_testing', true);
 
-        if (! static::$isSeeded) {
+        if (!static::$isSeeded) {
             $this->artisan('db:seed', ['--class' => '\Aparlay\Core\Database\Seeders\DatabaseSeeder', '--database' => 'testing']);
 
             $this->artisan('migrate', ['--path' => 'packages/Aparlay/Core/database/migrations', '--database' => 'testing']);
@@ -48,11 +46,12 @@ abstract class DuskTestCase extends BaseTestCase
      * Prepare for Dusk test execution.
      *
      * @beforeClass
+     *
      * @return void
      */
     public static function prepare()
     {
-        if (! static::runningInSail()) {
+        if (!static::runningInSail()) {
             static::startChromeDriver();
         }
     }
@@ -90,7 +89,6 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function hasHeadlessDisabled()
     {
-        return isset($_SERVER['DUSK_HEADLESS_DISABLED']) ||
-               isset($_ENV['DUSK_HEADLESS_DISABLED']);
+        return isset($_SERVER['DUSK_HEADLESS_DISABLED']) || isset($_ENV['DUSK_HEADLESS_DISABLED']);
     }
 }

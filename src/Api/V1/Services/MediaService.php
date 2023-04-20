@@ -17,13 +17,10 @@ use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaSortCategories;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
-use Aparlay\Core\Models\Queries\MediaQueryBuilder;
-use Aparlay\Core\Models\Subscription;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\ObjectId;
 use Psr\SimpleCache\InvalidArgumentException as InvalidArgumentExceptionAlias;
@@ -124,16 +121,16 @@ class MediaService
 
     public function getBlurredMediaQuery($subscribedModelIds)
     {
-        $user = auth()->user();
+        $user          = auth()->user();
         $injectUserIds = [];
 
-        //Following = Posts from FMs the user has followed.
+        // Following = Posts from FMs the user has followed.
         foreach ($user['followings'] as $following) {
             $injectUserIds[] = $following['_id'];
         }
 
-        //Suggested models = posts from the top 20 FMs on discover.
-        $topModelIds = User::query()
+        // Suggested models = posts from the top 20 FMs on discover.
+        $topModelIds   = User::query()
             ->orderBy('score', -1)
             ->select('_id')
             ->limit(20)
@@ -146,18 +143,18 @@ class MediaService
         }
 
         foreach ($injectUserIds as &$injectUserId) {
-            if (! $injectUserId instanceof ObjectId) {
+            if (!$injectUserId instanceof ObjectId) {
                 $injectUserId = new ObjectId($injectUserId);
             }
         }
 
-        //Don't show blurred content from subscribed models
+        // Don't show blurred content from subscribed models
         $injectUserIds = array_filter($injectUserIds, function ($_id) use ($subscribedModelIds) {
-            return ! in_array($_id, $subscribedModelIds);
+            return !in_array($_id, $subscribedModelIds);
         });
 
-        //Without this array keys are 1 2 3 4 5 7
-        //and $in doesn't work.
+        // Without this array keys are 1 2 3 4 5 7
+        // and $in doesn't work.
         $injectUserIds = array_values($injectUserIds);
 
         return Media::query()
@@ -166,19 +163,14 @@ class MediaService
             ->where('creator._id', ['$in' => $injectUserIds]);
     }
 
-    /**
-     * @param  PublicFeedRequest  $request
-     *
-     * @return LengthAwarePaginator
-     */
     public function getSubscriptions(PublicFeedRequest $request): LengthAwarePaginator
     {
         $subscribedModelIds = Arr::pluck(auth()->user()->subscriptions, 'user_id');
-        $blurredMediaQuery = $this->getBlurredMediaQuery($subscribedModelIds);
+        $blurredMediaQuery  = $this->getBlurredMediaQuery($subscribedModelIds);
 
         if ($subscribedModelIds) {
-            $query = Media::query();
-            $data = $query
+            $query        = Media::query();
+            $data         = $query
                 ->private()
                 ->where('creator._id', ['$in' => $subscribedModelIds])
                 ->recentFirst()
@@ -196,15 +188,15 @@ class MediaService
                 ->withQueryString();
         }
 
-        $visited = [];
+        $visited            = [];
         foreach ($data->items() as &$model) {
             if ($subscribedModelIds) {
-                if (! in_array($model->creator['_id'], $subscribedModelIds)) {
-                    //only posts from not subscribedModelIds are blurred
+                if (!in_array($model->creator['_id'], $subscribedModelIds)) {
+                    // only posts from not subscribedModelIds are blurred
                     $model->blurred = true;
                 }
             } else {
-                //everything is blurred
+                // everything is blurred
                 $model->blurred = true;
             }
 
@@ -215,16 +207,11 @@ class MediaService
         return $data;
     }
 
-    /**
-     * @param  PublicFeedRequest  $request
-     *
-     * @return LengthAwarePaginator
-     */
     public function getSubscriber(PublicFeedRequest $request): LengthAwarePaginator
     {
-        $query = Media::query();
+        $query   = Media::query();
 
-        $data = $query
+        $data    = $query
             ->private()
             ->creator(auth()->user()->_id)
             ->recentFirst()
@@ -240,11 +227,6 @@ class MediaService
         return $data;
     }
 
-    /**
-     * @param  PublicFeedRequest  $request
-     *
-     * @return LengthAwarePaginator
-     */
     public function getFollowingFeed(PublicFeedRequest $request): LengthAwarePaginator
     {
         $query   = Media::query();
@@ -433,13 +415,13 @@ class MediaService
             $this->loadUserVisitedVideos((string) auth()->user()->_id, $request->uuid);
         }
 
-        $mediaIds = $this->topNotVisitedVideoIds(
+        $mediaIds      = $this->topNotVisitedVideoIds(
             $request->uuid,
             $request->show_adult_content,
             $sortCategory,
             $request->filter_content_gender
         );
-        $data = $query->medias($mediaIds)->paginate(5)->withQueryString();
+        $data          = $query->medias($mediaIds)->paginate(5)->withQueryString();
 
         if ($data->isEmpty() || $data->total() <= 5) {
             $this->flushVisitedVideos($request->uuid);
@@ -480,7 +462,7 @@ class MediaService
         }
         $cacheKey = (new MediaVisit())->getCollection() . ':visited:uuid:' . $uuid;
         Redis::unlink($cacheKey);
-        //Redis::unlink(Redis::keys('public_feed:uuid:'.$uuid.':*'));
+        // Redis::unlink(Redis::keys('public_feed:uuid:'.$uuid.':*'));
     }
 
     public function cacheVisitedVideoByUuid(array $mediaIds, string $uuid): void
@@ -495,7 +477,7 @@ class MediaService
             $scoredMediaIds[] = $mediaId;
         }
 
-        if (! empty($scoredMediaIds)) {
+        if (!empty($scoredMediaIds)) {
             $cacheKey = (new MediaVisit())->getCollection() . ':visited:uuid:' . $uuid;
             Redis::zAdd($cacheKey, ...$scoredMediaIds);
             Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
@@ -523,30 +505,22 @@ class MediaService
             })
             ->toArray();
 
-        $scoredMediaIds = [];
+        $scoredMediaIds  = [];
         foreach ($mediaIds as $key => $mediaId) {
             $scoredMediaIds[] = 0;
             $scoredMediaIds[] = $mediaId;
         }
 
-        if (! empty($scoredMediaIds)) {
-            $cacheKey        = (new MediaVisit())->getCollection() . ':visited:uuid:' . $uuid;
+        if (!empty($scoredMediaIds)) {
+            $cacheKey = (new MediaVisit())->getCollection() . ':visited:uuid:' . $uuid;
             Redis::zAdd($cacheKey, ...$scoredMediaIds);
             Redis::expireat($cacheKey, now()->addDays(4)->getTimestamp());
         }
     }
 
-    /**
-     * @param  string  $uuid
-     * @param  int     $explicitVisibility
-     * @param  string  $sortCategory
-     * @param  array   $contentGender
-     *
-     * @return array
-     */
     public function topNotVisitedVideoIds(string $uuid, int $explicitVisibility, string $sortCategory, array $contentGender): array
     {
-        $notVisitedTopVideosCacheKey = 'public_feed:uuid:' . $uuid.':'.crc32($sortCategory.':'.$explicitVisibility.':'.implode('', $contentGender));
+        $notVisitedTopVideosCacheKey = 'public_feed:uuid:' . $uuid . ':' . crc32($sortCategory . ':' . $explicitVisibility . ':' . implode('', $contentGender));
         if (Redis::exists($notVisitedTopVideosCacheKey) < 1) {
             // cache not exists
             [
@@ -557,13 +531,13 @@ class MediaService
                 $maleMediaIdsCacheKey,
                 $transgenderMediaIdsCacheKey,
                 $visitedVideoCacheKey
-            ] = $this->generateHashKeys($sortCategory, $uuid);
+            ]              = $this->generateHashKeys($sortCategory, $uuid);
 
             // adding explicitness filter to filter bucket
             $filterBuckets = match ($explicitVisibility) {
                 UserSettingShowAdultContent::NEVER->value => [$toplessMediaIdsCacheKey, $visitedVideoCacheKey],
                 UserSettingShowAdultContent::TOPLESS->value => [$explicitMediaIdsCacheKey, $visitedVideoCacheKey],
-                default => [$visitedVideoCacheKey]
+                default => [$visitedVideoCacheKey],
             };
 
             // adding content filter to filter bucket
@@ -575,8 +549,8 @@ class MediaService
                 };
             }
 
-            $cacheKey = config('database.redis.options.prefix').$notVisitedTopVideosCacheKey;
-            $args = [$cacheKey, count($filterBuckets) + 1, $mediaIdsCacheKey, ...$filterBuckets];
+            $cacheKey      = config('database.redis.options.prefix') . $notVisitedTopVideosCacheKey;
+            $args          = [$cacheKey, count($filterBuckets) + 1, $mediaIdsCacheKey, ...$filterBuckets];
             Redis::rawCommand('ZDIFFSTORE', ...$args);
             Redis::expireAt($notVisitedTopVideosCacheKey, now()->addHour()->getTimestamp());
         }
@@ -608,23 +582,20 @@ class MediaService
     }
 
     /**
-     * @param  string  $sortCategory
-     * @param  string  $uuid
-     *
      * @return string[]
      */
     private function generateHashKeys(string $sortCategory, string $uuid): array
     {
-        $mediaPrefix = config('database.redis.options.prefix').(new Media())->getCollection();
-        $mediaVisitPrefix = config('database.redis.options.prefix').(new MediaVisit())->getCollection();
+        $mediaPrefix                 = config('database.redis.options.prefix') . (new Media())->getCollection();
+        $mediaVisitPrefix            = config('database.redis.options.prefix') . (new MediaVisit())->getCollection();
 
-        $explicitMediaIdsCacheKey = $mediaPrefix.':explicit:ids:'.$sortCategory;
-        $toplessMediaIdsCacheKey = $mediaPrefix.':topless:ids:'.$sortCategory;
-        $mediaIdsCacheKey = $mediaPrefix.':ids:'.$sortCategory;
-        $femaleMediaIdsCacheKey = $mediaPrefix.':ids:female';
-        $maleMediaIdsCacheKey = $mediaPrefix.':ids:male';
-        $transgenderMediaIdsCacheKey = $mediaPrefix.':ids:transgender';
-        $visitedVideoCacheKey = $mediaVisitPrefix.':visited:uuid:'.$uuid;
+        $explicitMediaIdsCacheKey    = $mediaPrefix . ':explicit:ids:' . $sortCategory;
+        $toplessMediaIdsCacheKey     = $mediaPrefix . ':topless:ids:' . $sortCategory;
+        $mediaIdsCacheKey            = $mediaPrefix . ':ids:' . $sortCategory;
+        $femaleMediaIdsCacheKey      = $mediaPrefix . ':ids:female';
+        $maleMediaIdsCacheKey        = $mediaPrefix . ':ids:male';
+        $transgenderMediaIdsCacheKey = $mediaPrefix . ':ids:transgender';
+        $visitedVideoCacheKey        = $mediaVisitPrefix . ':visited:uuid:' . $uuid;
 
         return [
             $explicitMediaIdsCacheKey,

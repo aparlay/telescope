@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Role;
 
 return new class() extends Migration {
-    const PERMISSIONS_LIST = [
+    public const PERMISSIONS_LIST = [
         Permissions::VIEW_BROADCASTS,
         Permissions::LIST_BROADCASTS,
         Permissions::DELETE_BROADCASTS,
@@ -15,8 +15,6 @@ return new class() extends Migration {
 
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -25,7 +23,7 @@ return new class() extends Migration {
             Roles::SUPER_ADMINISTRATOR,
         ];
 
-        $roles = Role::whereIn('name', $roleNames)
+        $roles     = Role::whereIn('name', $roleNames)
             ->where('guard_name', 'admin')
             ->get();
 
@@ -41,11 +39,9 @@ return new class() extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {
-        //
+
     }
 };

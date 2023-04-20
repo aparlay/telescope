@@ -3,9 +3,7 @@
 namespace Aparlay\Core\Components;
 
 use Aparlay\Core\Models\User;
-use Aparlay\Core\Notifications\JobFailed;
 use Illuminate\Notifications\Notification;
-use Throwable;
 
 trait Loggable
 {

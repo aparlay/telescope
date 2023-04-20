@@ -6,11 +6,6 @@ enum UserSettingShowAdultContent: int implements Enum
 {
     use EnumEnhancements;
 
-    case NEVER = 1;
-    case ASK = 2;
-    case TOPLESS = 3;
-    case ALL = 4;
-
     public function label(): string
     {
         return match ($this) {
@@ -30,4 +25,9 @@ enum UserSettingShowAdultContent: int implements Enum
             self::ALL => 'success',
         };
     }
+
+    case NEVER   = 1;
+    case ASK     = 2;
+    case TOPLESS = 3;
+    case ALL     = 4;
 }

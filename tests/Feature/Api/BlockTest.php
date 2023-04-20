@@ -12,14 +12,14 @@ class BlockTest extends ApiTestCase
     /**
      * @test
      */
-    public function blockUser()
+    public function block_user()
     {
         $model = User::factory()->create();
-        $user = User::factory()->create();
+        $user  = User::factory()->create();
 
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('PUT', '/v1/user/'.$model->_id.'/block', [])
+            ->json('PUT', '/v1/user/' . $model->_id . '/block', [])
             ->assertStatus(201)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 201)
@@ -66,11 +66,11 @@ class BlockTest extends ApiTestCase
     /**
      * @test
      */
-    public function unblockUser()
+    public function unblock_user()
     {
         $blockedUser = User::factory()->create();
-        $user = User::factory()->create();
-        $block = Block::factory()->create([
+        $user        = User::factory()->create();
+        $block       = Block::factory()->create([
             'user' => [
                 '_id' => new ObjectId($blockedUser->_id),
                 'username' => $blockedUser->username,
@@ -85,7 +85,7 @@ class BlockTest extends ApiTestCase
 
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('DELETE', '/v1/user/'.$block->user['_id'].'/block', [])
+            ->json('DELETE', '/v1/user/' . $block->user['_id'] . '/block', [])
             ->assertStatus(204);
 
         $this->assertDatabaseMissing('user_blocks', ['user._id' => new ObjectId($blockedUser->_id), 'creator._id' => new ObjectId($user->_id)]);
@@ -94,11 +94,11 @@ class BlockTest extends ApiTestCase
     /**
      * @test
      */
-    public function followBlockedUser()
+    public function follow_blocked_user()
     {
-        $user = User::factory()->create();
+        $user        = User::factory()->create();
         $blockedUser = User::factory()->create();
-        $block = Block::factory()->create([
+        $block       = Block::factory()->create([
             'user' => [
                 '_id' => new ObjectId($blockedUser->_id),
                 'username' => $blockedUser->username,
@@ -112,7 +112,7 @@ class BlockTest extends ApiTestCase
         ]);
         $this->actingAs($blockedUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('PUT', '/v1/user/'.$block->creator['_id'].'/follow', [])
+            ->json('PUT', '/v1/user/' . $block->creator['_id'] . '/follow', [])
             ->assertStatus(403)
             ->assertJson([
                 'code' => 403,

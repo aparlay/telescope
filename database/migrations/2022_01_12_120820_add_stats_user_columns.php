@@ -2,8 +2,6 @@
 
 use Aparlay\Payment\Models\Tip;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class AddStatsUserColumns extends Migration
 {
@@ -46,6 +44,6 @@ class AddStatsUserColumns extends Migration
      */
     public function down()
     {
-        //
+
     }
 }

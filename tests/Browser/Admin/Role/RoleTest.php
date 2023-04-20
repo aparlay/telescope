@@ -10,9 +10,10 @@ class RoleTest extends DuskTestCase
 {
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function visitRoleTest()
+    public function visit_role_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.role.index'))
@@ -24,9 +25,10 @@ class RoleTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function viewPermissionsListTest()
+    public function view_permissions_list_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.role.index'))
@@ -39,9 +41,10 @@ class RoleTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function attachPermissionTest()
+    public function attach_permission_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.role.index'))
@@ -56,9 +59,10 @@ class RoleTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function removePermissionTest()
+    public function remove_permission_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.role.index'))

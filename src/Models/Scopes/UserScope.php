@@ -23,7 +23,7 @@ trait UserScope
     public function scopeTextSearch(Builder $query, string $text): Builder
     {
         return empty($text) ? $query :
-            $query->where('text_search', 'regex', new Regex('^'.Str::lower($text).'.*'));
+            $query->where('text_search', 'regex', new Regex('^' . Str::lower($text) . '.*'));
     }
 
     /**
@@ -67,8 +67,6 @@ trait UserScope
     }
 
     /**
-     * @param  Builder  $query
-     * @param  array  $usernames
      * @return mixed
      */
     public function scopeUsernames(Builder $query, array $usernames): Builder
@@ -111,12 +109,7 @@ trait UserScope
         ]);
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  ObjectId|string  $userId
-     * @return Builder
-     */
-    public function scopeUpdatedBy(Builder $query, ObjectId | string $userId): Builder
+    public function scopeUpdatedBy(Builder $query, ObjectId|string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 
@@ -149,12 +142,9 @@ trait UserScope
     }
 
     /**
-     * @param  Builder  $query
-     * @param  ObjectId|string  $userId
-     *
      * @return mixed
      */
-    public function scopeUser(Builder $query, ObjectId | string $userId): Builder
+    public function scopeUser(Builder $query, ObjectId|string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
 

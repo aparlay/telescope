@@ -8,9 +8,6 @@ use Aparlay\Core\Models\Enums\UserNotificationStatus;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\UserNotification;
 use Aparlay\Core\Notifications\MediaLikedNotification;
-
-use function Clue\StreamFilter\fun;
-
 use Illuminate\Support\Facades\Cache;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -19,13 +16,13 @@ class MediaLikeObserver extends BaseModelObserver
     /**
      * Handle the MediaLike "created" event.
      *
-     * @param  MediaLike  $mediaLike
-     * @return void
+     * @param MediaLike $mediaLike
+     *
      * @throws InvalidArgumentException
      */
     public function created($mediaLike): void
     {
-        $media = $mediaLike->mediaObj;
+        $media    = $mediaLike->mediaObj;
         if ($media === null) {
             return;
         }
@@ -34,7 +31,7 @@ class MediaLikeObserver extends BaseModelObserver
 
         // Reset the Redis cache
         MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
-        $cacheKey = md5('media:'.$mediaLike->media_id.':likedBy:'.$mediaLike->creator['_id']);
+        $cacheKey = md5('media:' . $mediaLike->media_id . ':likedBy:' . $mediaLike->creator['_id']);
         Cache::store('octane')->delete($cacheKey);
 
         // no need to send notification when user is owner of the media
@@ -53,13 +50,13 @@ class MediaLikeObserver extends BaseModelObserver
     /**
      * Handle the MediaLike "deleted" event.
      *
-     * @param  MediaLike  $mediaLike
-     * @return void
+     * @param MediaLike $mediaLike
+     *
      * @throws InvalidArgumentException
      */
     public function deleted($mediaLike): void
     {
-        $media = $mediaLike->mediaObj;
+        $media      = $mediaLike->mediaObj;
         if ($media === null) {
             return;
         }
@@ -85,7 +82,7 @@ class MediaLikeObserver extends BaseModelObserver
 
         // Reset the Redis cache
         MediaLike::cacheByUserId($mediaLike->creator['_id'], true);
-        $cacheKey = md5('media:'.$media->_id.':likedBy:'.$mediaLike->creator['_id']);
+        $cacheKey   = md5('media:' . $media->_id . ':likedBy:' . $mediaLike->creator['_id']);
         Cache::store('octane')->delete($cacheKey);
     }
 }

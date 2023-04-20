@@ -15,8 +15,7 @@ abstract class TestCase extends Orchestra
      * @var Generator
      */
     protected $faker;
-
-    protected static $seedCoreDB = false;
+    protected static $seedCoreDB     = false;
     protected static $truncateCoreDB = false;
 
     public function setUp(): void
@@ -24,10 +23,10 @@ abstract class TestCase extends Orchestra
         parent::setUp();
         $this->baseUrl = env('TEST_DOMAIN');
 
-        $this->faker = app('Faker');
+        $this->faker   = app('Faker');
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Aparlay\\Core\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
 
         if (static::$truncateCoreDB) {

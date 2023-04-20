@@ -33,7 +33,6 @@ class UserVisibilityRequest extends FormRequest
     }
 
     /**
-     * @param Validator $validator
      * @return void
      */
     public function failedValidation(Validator $validator)

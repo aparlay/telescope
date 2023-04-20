@@ -15,18 +15,18 @@ use MongoDB\BSON\ObjectId;
  * Class MediaCommentLike.
  *
  * @property ObjectId   $_id
- * @property ObjectId   $media_id
- * @property ObjectId   $user_id
- * @property array      $creator
  * @property string     $created_at
- * @property User       $creatorObj
+ * @property array      $creator
  * @property mixed|null $creator_id
+ * @property User       $creatorObj
+ * @property ObjectId   $media_id
  * @property Media      $mediaCommentObj
+ * @property ObjectId   $user_id
  * @property User       $userObj
  *
- * @method static |self|Builder media(ObjectId|string $mediaId)            get liked media
- * @method static |self|Builder user(ObjectId|string $userId)              get user who liked media
- * @method static |self|Builder creator(ObjectId|string $creatorId)        get creator user who liked media
+ * @method static|self|Builder creator(ObjectId|string $creatorId) get creator user who liked media
+ * @method static|self|Builder media(ObjectId|string $mediaId)     get liked media
+ * @method static|self|Builder user(ObjectId|string $userId)       get user who liked media
  */
 class MediaCommentLike extends BaseModel
 {
@@ -44,7 +44,7 @@ class MediaCommentLike extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'media_comment_id',
         'creator',
@@ -58,14 +58,14 @@ class MediaCommentLike extends BaseModel
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends    = [];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -73,8 +73,8 @@ class MediaCommentLike extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
-        'creator' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed,is_verified',
+    protected $casts      = [
+        'creator' => SimpleUserCast::class . ':_id,username,avatar,is_liked,is_followed,is_verified',
     ];
 
     /**
@@ -85,16 +85,12 @@ class MediaCommentLike extends BaseModel
         return MediaCommentLikeFactory::new();
     }
 
-    /**
-     * @return MediaCommentLikeQueryBuilder|Builder
-     */
     public static function query(): MediaCommentLikeQueryBuilder|Builder
     {
         return parent::query();
     }
 
     /**
-     * @param $query
      * @return MediaCommentLikeQueryBuilder
      */
     public function newEloquentBuilder($query)
@@ -105,7 +101,7 @@ class MediaCommentLike extends BaseModel
     /**
      * Get the user associated with the alert.
      */
-    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
@@ -113,7 +109,7 @@ class MediaCommentLike extends BaseModel
     /**
      * Get the media comment associated with the media comment like.
      */
-    public function mediaCommentObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function mediaCommentObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(MediaComment::class, 'media_comment_id');
     }

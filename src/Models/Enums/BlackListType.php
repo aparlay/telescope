@@ -6,8 +6,6 @@ enum BlackListType: string implements Enum
 {
     use EnumEnhancements;
 
-    case TEMPORARY_EMAIL_SERVICE = 'temporary_email_service';
-
     public function label(): string
     {
         return match ($this) {
@@ -18,7 +16,9 @@ enum BlackListType: string implements Enum
     public function badgeColor(): string
     {
         return match ($this) {
-            self::TEMPORARY_EMAIL_SERVICE => 'info'
+            self::TEMPORARY_EMAIL_SERVICE => 'info',
         };
     }
+
+    case TEMPORARY_EMAIL_SERVICE = 'temporary_email_service';
 }

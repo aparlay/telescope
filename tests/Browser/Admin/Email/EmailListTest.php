@@ -11,9 +11,10 @@ class EmailListTest extends DuskTestCase
 {
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function visitEmailTest()
+    public function visit_email_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.email.index'))
@@ -28,9 +29,10 @@ class EmailListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchUserTest()
+    public function search_user_test()
     {
         $email = Email::factory()->create();
 
@@ -46,9 +48,10 @@ class EmailListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchEmailTest()
+    public function search_email_test()
     {
         $email = Email::factory()->create();
 
@@ -64,9 +67,10 @@ class EmailListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchStatusTest()
+    public function search_status_test()
     {
         $email = Email::factory()->create();
 
@@ -82,9 +86,10 @@ class EmailListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchDateRangeTest()
+    public function search_date_range_test()
     {
         $email = Email::factory()->create();
 

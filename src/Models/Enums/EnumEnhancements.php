@@ -11,7 +11,7 @@ trait EnumEnhancements
     {
         $values = [];
         foreach (self::cases() as $enum) {
-            $index = $enum->value ?? $enum->name;
+            $index          = $enum->value ?? $enum->name;
             $values[$index] = $enum->label();
         }
 

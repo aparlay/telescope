@@ -20,24 +20,25 @@ class AuthController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postLogin(AuthRequest $request)
     {
-        $credentials = $request->only(['email', 'password']);
-        $remember = $request->get('remember');
+        $credentials         = $request->only(['email', 'password']);
+        $remember            = $request->get('remember');
 
-        //make sure only admin type user can do login
+        // make sure only admin type user can do login
         $credentials['type'] = UserType::ADMIN->value;
 
         if (Auth::guard('admin')->attempt($credentials, $remember)) {
             return redirect()->intended('dashboard');
-        } else {
-            return back()->withErrors([
-                'error' => 'The provided credentials are incorrect.',
-            ]);
         }
+
+        return back()->withErrors([
+            'error' => 'The provided credentials are incorrect.',
+        ]);
     }
 
     public function logout(Request $request)

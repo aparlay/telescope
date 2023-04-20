@@ -25,13 +25,13 @@ final class FilterArrayElement extends AbstractBaseFilter
                             '$regex' => $value,
                         ],
                     ];
-                } else {
-                    return [
-                        $this->elementFieldName => [
-                            '$eq' => $value,
-                        ],
-                    ];
                 }
+
+                return [
+                    $this->elementFieldName => [
+                        '$eq' => $value,
+                    ],
+                ];
             }, explode(',', $this->fieldValue)),
         ];
 

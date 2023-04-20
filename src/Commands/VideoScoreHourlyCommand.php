@@ -17,7 +17,7 @@ class VideoScoreHourlyCommand extends Command
         $mediaQuery = Media::where('is_fake', ['$exists' => false])
             ->date(DT::utcDateTime(['d' => -1]), DT::utcNow())
             ->availableForFollower();
-        $bar = $this->output->createProgressBar($mediaQuery->count());
+        $bar        = $this->output->createProgressBar($mediaQuery->count());
         foreach ($mediaQuery->lazy() as $media) {
             /** @var Media $media */
             $media->recalculateSortScores();

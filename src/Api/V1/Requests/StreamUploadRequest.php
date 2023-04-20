@@ -6,10 +6,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property string email
+ * @property string gender
+ * @property string password
  * @property string phone_number
  * @property string username
- * @property string password
- * @property string gender
  */
 class StreamUploadRequest extends FormRequest
 {

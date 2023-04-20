@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class UpdateUserCountry extends Migration
 {
@@ -26,6 +24,6 @@ class UpdateUserCountry extends Migration
      */
     public function down()
     {
-        //
+
     }
 }

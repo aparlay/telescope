@@ -16,7 +16,6 @@ class User extends UserBase implements Auditable
     use UserScope;
     use \Aparlay\Core\Admin\Models\Auditable;
     use HasPushSubscriptions;
-
     public string $guard_name = 'admin';
     protected $hidden         = ['password_hash', 'search'];
 
@@ -25,7 +24,7 @@ class User extends UserBase implements Auditable
      *
      * @var bool
      */
-    protected $auditStrict = true;
+    protected $auditStrict    = true;
 
     /**
      * Attributes to exclude from the Audit.
@@ -122,6 +121,6 @@ class User extends UserBase implements Auditable
     {
         $atSignPosition = strpos($this->email, '@');
 
-        return Str::limit(Str::substr($this->email, 0, $atSignPosition)).'@'.Str::substr($this->email, $atSignPosition);
+        return Str::limit(Str::substr($this->email, 0, $atSignPosition)) . '@' . Str::substr($this->email, $atSignPosition);
     }
 }

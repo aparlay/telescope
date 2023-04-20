@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Database\Factories;
 
-use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaCommentLike;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;

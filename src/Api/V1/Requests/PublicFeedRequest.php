@@ -83,7 +83,7 @@ class PublicFeedRequest extends FormRequest
             }
         }
 
-        if (! empty($contentGenders)) {
+        if (!empty($contentGenders)) {
             asort($contentGenders);
         }
 
@@ -102,8 +102,7 @@ class PublicFeedRequest extends FormRequest
             UserSettingShowAdultContent::ALL->label() => UserSettingShowAdultContent::ALL->value,
             default => null,
         };
-        $showAdultContent = $showAdultContent ??
-            (auth()->guest() ? 1 : auth()->user()->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value);
+        $showAdultContent = $showAdultContent ?? (auth()->guest() ? 1 : auth()->user()->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value);
 
         $this->merge([
             'uuid' => request()->cookie('__Secure_uuid', request()->input('__Secure_uuid', '')),

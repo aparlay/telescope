@@ -96,8 +96,8 @@ class UserService
                     new DeleteMediaMetadata('avatars/' . $avatar, 'public', ['Type' => 'Avatar', 'User ID' => (string) $user->_id, 'URL' => $avatarUrl]),
                     (new UploadAvatar((string) $user->_id, 'avatars/' . $avatar))->delay(10),
                 ])
-                ->onQueue(config('app.server_specific_queue'))
-                ->dispatch();
+                    ->onQueue(config('app.server_specific_queue'))
+                    ->dispatch();
             }
             DeleteAvatar::dispatchIf(!str_contains($oldFileName, 'default_'), basename($oldFileName))->delay(100);
         }
@@ -212,6 +212,10 @@ class UserService
 
     /**
      * Verifying the user.
+     *
+     * @param mixed $userAgent
+     * @param mixed $deviceId
+     * @param mixed $ip
      */
     public function logUserDevice(User|Authenticatable|null $user, $userAgent, $deviceId, $ip): void
     {

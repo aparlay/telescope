@@ -21,10 +21,10 @@ use MongoDB\BSON\ObjectId;
 
 /**
  * @property string email
+ * @property string gender
+ * @property string password
  * @property string phone_number
  * @property string username
- * @property string password
- * @property string gender
  */
 class RegisterRequest extends FormRequest
 {
@@ -74,7 +74,7 @@ class RegisterRequest extends FormRequest
             $this->phone_number = $this->username;
         }
 
-        if (! empty($this->referral_id) && ! ($this->referral_id instanceof ObjectId)) {
+        if (!empty($this->referral_id) && !($this->referral_id instanceof ObjectId)) {
             if (($user = User::user($this->referral_id)->first()) !== null) {
                 $this->referral_id = $user->_id;
             } elseif (($user = User::username($this->referral_id)->first()) !== null) {
@@ -89,25 +89,25 @@ class RegisterRequest extends FormRequest
         $this->username = uniqid('', false);
 
         /* Set gender by default value */
-        if (! is_int($this->gender)) {
-            $genderValue = array_search($this->gender, User::getGenders());
+        if (!is_int($this->gender)) {
+            $genderValue  = array_search($this->gender, User::getGenders());
             $this->gender = $genderValue !== false ? $genderValue : UserGender::MALE->value;
         }
 
         /* Set avatar based on Gender */
         if (empty($this->avatar)) {
-            $femaleFilename = 'default_fm_'.random_int(1, 60).'.png';
-            $maleFilename = 'default_m_'.random_int(1, 120).'.png';
-            $filename = match ($this->gender) {
+            $femaleFilename = 'default_fm_' . random_int(1, 60) . '.png';
+            $maleFilename   = 'default_m_' . random_int(1, 120) . '.png';
+            $filename       = match ($this->gender) {
                 UserGender::FEMALE->value => $femaleFilename,
                 UserGender::MALE->value => $maleFilename,
                 default => (random_int(0, 1) ? $maleFilename : $femaleFilename),
             };
 
-            $this->avatar = Cdn::avatar($filename);
+            $this->avatar   = Cdn::avatar($filename);
         }
 
-        $domain = Str::after($this->email, '@');
+        $domain         = Str::after($this->email, '@');
         if (BlackList::query()->temporaryEmailService()->payload($domain)->first()) {
             throw ValidationException::withMessages([
                 'username' => 'Sorry, you cannot register with a temporary email address.',

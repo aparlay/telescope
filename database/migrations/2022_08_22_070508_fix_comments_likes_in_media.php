@@ -1,12 +1,10 @@
 <?php
 
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\MediaComment;
 use Aparlay\Core\Models\MediaLike;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use MongoDB\BSON\ObjectId;
 
 return new class() extends Migration {
     /**
@@ -18,10 +16,11 @@ return new class() extends Migration {
     {
         foreach (MediaComment::lazy() as $mediaComment) {
             /** @var MediaComment $mediaComment */
-            $media = $mediaComment->mediaObj;
+            $media      = $mediaComment->mediaObj;
             $creatorObj = $mediaComment->creatorObj;
             if (empty($media) || empty($creatorObj)) {
                 $mediaComment->deleteQuietly();
+
                 continue;
             }
 
@@ -29,10 +28,11 @@ return new class() extends Migration {
         }
         foreach (MediaLike::lazy() as $mediaLike) {
             /** @var MediaLike $mediaLike */
-            $media = $mediaLike->mediaObj;
+            $media      = $mediaLike->mediaObj;
             $creatorObj = $mediaLike->creatorObj;
             if (empty($media) || empty($creatorObj)) {
                 $mediaLike->deleteQuietly();
+
                 continue;
             }
             $media->updateLikes();
@@ -47,7 +47,7 @@ return new class() extends Migration {
     public function down()
     {
         Schema::table('media', function (Blueprint $table) {
-            //
+
         });
     }
 };

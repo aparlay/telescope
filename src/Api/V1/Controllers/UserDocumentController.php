@@ -24,23 +24,18 @@ class UserDocumentController extends Controller
         $this->userDocumentService = $documentService;
     }
 
-    /**
-     * @return Response
-     */
     public function index(): Response
     {
         if (auth()->check()) {
             $this->userDocumentService->setUser(auth()->user());
         }
         $userDocuments = $this->userDocumentService->index();
-        $collection = new UserDocumentCollection($userDocuments);
+        $collection    = new UserDocumentCollection($userDocuments);
 
         return $this->response($collection, '', Response::HTTP_OK);
     }
 
     /**
-     * @param  UserDocument  $userDocument
-     * @return Response
      * @throws AuthorizationException
      */
     public function view(UserDocument $userDocument): Response
@@ -51,9 +46,6 @@ class UserDocumentController extends Controller
         return $this->response(new UserDocumentResource($userDocument), '', Response::HTTP_OK);
     }
 
-    /**
-     * @return Response
-     */
     public function sendToVerification(): Response
     {
         $this->injectAuthUser($this->userDocumentService);
@@ -63,18 +55,16 @@ class UserDocumentController extends Controller
     }
 
     /**
-     * @param  UserDocumentRequest  $request
-     * @return Response
      * @throws UnknownProperties
      */
     public function store(UserDocumentRequest $request): Response
     {
-        $dto = UserDocumentDto::fromRequest($request);
+        $dto          = UserDocumentDto::fromRequest($request);
         if (auth()->check()) {
             $this->userDocumentService->setUser(auth()->user());
         }
         $userDocument = $this->userDocumentService->store($dto);
-        $resource = (new UserDocumentResource($userDocument))->except('url');
+        $resource     = (new UserDocumentResource($userDocument))->except('url');
 
         return $this->response($resource, '', Response::HTTP_CREATED);
     }

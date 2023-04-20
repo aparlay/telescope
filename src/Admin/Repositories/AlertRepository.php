@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Alert;
+use InvalidArgumentException;
 
 class AlertRepository implements RepositoryInterface
 {
@@ -10,8 +11,8 @@ class AlertRepository implements RepositoryInterface
 
     public function __construct($model)
     {
-        if (! ($model instanceof Alert)) {
-            throw new \InvalidArgumentException('$model should be of Alert type');
+        if (!($model instanceof Alert)) {
+            throw new InvalidArgumentException('$model should be of Alert type');
         }
 
         $this->model = $model;

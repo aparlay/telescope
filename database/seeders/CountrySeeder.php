@@ -11,9 +11,9 @@ class CountrySeeder extends Seeder
     public function run()
     {
         $countriesJson = file_get_contents(base_path('packages/Aparlay/Core/database/data/countries.json'));
-        $countries = json_decode($countriesJson, true);
+        $countries     = json_decode($countriesJson, true);
 
-        $locations = [
+        $locations     = [
             'AD,42.546245,1.601554,Andorra',
             'AE,23.424076,53.847818,United Arab Emirates',
             'AB,33.93911,67.709953,Abkhazia',
@@ -271,29 +271,29 @@ class CountrySeeder extends Seeder
             }
         }
 
-        $flags = [
-            '16' => json_decode(file_get_contents(database_path().'/json/flags/16x16.json'), true),
-            '24' => json_decode(file_get_contents(database_path().'/json/flags/24x24.json'), true),
-            '32' => json_decode(file_get_contents(database_path().'/json/flags/32x32.json'), true),
-            '48' => json_decode(file_get_contents(database_path().'/json/flags/48x48.json'), true),
-            '64' => json_decode(file_get_contents(database_path().'/json/flags/64x64.json'), true),
-            '128' => json_decode(file_get_contents(database_path().'/json/flags/128x128.json'), true),
+        $flags         = [
+            '16' => json_decode(file_get_contents(database_path() . '/json/flags/16x16.json'), true),
+            '24' => json_decode(file_get_contents(database_path() . '/json/flags/24x24.json'), true),
+            '32' => json_decode(file_get_contents(database_path() . '/json/flags/32x32.json'), true),
+            '48' => json_decode(file_get_contents(database_path() . '/json/flags/48x48.json'), true),
+            '64' => json_decode(file_get_contents(database_path() . '/json/flags/64x64.json'), true),
+            '128' => json_decode(file_get_contents(database_path() . '/json/flags/128x128.json'), true),
         ];
 
         foreach ($countries as $index => $country) {
             $countries[$index]['flags'] = [
-                '16' => $flags['16'][$country['alpha2']] ?? '',
-                '24' => $flags['24'][$country['alpha2']] ?? '',
-                '32' => $flags['32'][$country['alpha2']] ?? '',
-                '48' => $flags['48'][$country['alpha2']] ?? '',
-                '64' => $flags['64'][$country['alpha2']] ?? '',
+                '16' => $flags['16'][$country['alpha2']]   ?? '',
+                '24' => $flags['24'][$country['alpha2']]   ?? '',
+                '32' => $flags['32'][$country['alpha2']]   ?? '',
+                '48' => $flags['48'][$country['alpha2']]   ?? '',
+                '64' => $flags['64'][$country['alpha2']]   ?? '',
                 '128' => $flags['128'][$country['alpha2']] ?? '',
             ];
         }
 
         foreach ($countries as $country) {
             $countryExist = Country::query()->where('alpha3', $country['alpha3'])->first();
-            if (! $countryExist) {
+            if (!$countryExist) {
                 $country['is_enabled'] = true;
                 Country::create($country);
             }

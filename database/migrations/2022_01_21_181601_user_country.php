@@ -30,6 +30,6 @@ class UserCountry extends Migration
      */
     public function down()
     {
-        //
+
     }
 }

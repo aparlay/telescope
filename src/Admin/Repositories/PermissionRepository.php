@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Permission;
+use InvalidArgumentException;
 
 class PermissionRepository
 {
@@ -10,8 +11,8 @@ class PermissionRepository
 
     public function __construct($model)
     {
-        if (! ($model instanceof Permission)) {
-            throw new \InvalidArgumentException('$model should be of Permission type');
+        if (!($model instanceof Permission)) {
+            throw new InvalidArgumentException('$model should be of Permission type');
         }
 
         $this->model = $model;

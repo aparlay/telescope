@@ -2,8 +2,6 @@
 
 use Aparlay\Core\Models\Setting;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use MongoDB\BSON\ObjectId;
 
 return new class() extends Migration {

@@ -6,8 +6,6 @@ use Aparlay\Chat\Models\Message;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use MongoDB\BSON\ObjectId;
 
 return new class() extends Migration {
@@ -112,11 +110,11 @@ return new class() extends Migration {
                 ],
                 'user_agents' => [],
                 'text_search' => [
-                        0 => '',
-                        1 => 'support',
-                        2 => 'support@aparlay.com',
-                        3 => null,
-                    ],
+                    0 => '',
+                    1 => 'support',
+                    2 => 'support@aparlay.com',
+                    3 => null,
+                ],
                 'verification_status' => 3,
                 'country_alpha2' => 'us',
                 'last_online_at' => DT::utcNow(),
@@ -133,9 +131,9 @@ return new class() extends Migration {
             $message->update(['created_by' => new ObjectId($aluaSupport->_id), 'created_at' => DT::utcNow()]);
 
             $lastMessage = $message->chatObj->last_message;
-            if (! empty($lastMessage) && (string) $lastMessage['_id'] === (string) $message->_id) {
-                $participants = $message->chatObj->participants;
-                $participants[] = [
+            if (!empty($lastMessage) && (string) $lastMessage['_id'] === (string) $message->_id) {
+                $participants              = $message->chatObj->participants;
+                $participants[]            = [
                     '_id' => new ObjectId($aluaSupport->_id),
                     'username' => $aluaSupport->username,
                     'avatar' => $aluaSupport->avatar,
@@ -165,6 +163,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

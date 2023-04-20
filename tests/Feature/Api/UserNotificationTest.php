@@ -17,8 +17,8 @@ class UserNotificationTest extends ApiTestCase
      */
     public function index()
     {
-        $user = User::factory()->create();
-        $media = Media::factory()->create();
+        $user             = User::factory()->create();
+        $media            = Media::factory()->create();
         $userNotification = UserNotification::factory()->create([
             'category' => UserNotificationCategory::LIKES->value,
             'entity._type' => Media::shortClassName(),
@@ -27,7 +27,7 @@ class UserNotificationTest extends ApiTestCase
             'status' => UserNotificationStatus::NOT_VISITED->value,
         ]);
 
-        $response = $this->actingAs($userNotification->userObj)
+        $response         = $this->actingAs($userNotification->userObj)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('GET', '/v1/user-notification', []);
 

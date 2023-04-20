@@ -105,6 +105,8 @@ class UserObserver extends BaseModelObserver
     /**
      * Create a new event instance.
      *
+     * @param mixed $model
+     *
      * @throws Exception
      */
     public function updated($model): void

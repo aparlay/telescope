@@ -11,12 +11,11 @@ class UserNotificationObserver extends BaseModelObserver
     /**
      * Handle the UserNotification "creating" event.
      *
-     * @param  UserNotification  $model
-     * @return void
+     * @param UserNotification $model
      */
     public function creating($model): void
     {
-        $user = User::user($model->user['_id'])->first();
+        $user        = User::user($model->user['_id'])->first();
 
         $model->user = [
             '_id' => new ObjectId($user->_id),

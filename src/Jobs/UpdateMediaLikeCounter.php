@@ -24,7 +24,7 @@ class UpdateMediaLikeCounter implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries         = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -36,14 +36,14 @@ class UpdateMediaLikeCounter implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 30;
+    public $backoff           = 30;
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(public string $mediaId)
     {

@@ -4,6 +4,7 @@ namespace Aparlay\Core\Api\V1\Resources;
 
 use Aparlay\Core\Api\V1\Traits\FilterableResourceTrait;
 use Aparlay\Core\Models\UserDocument;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,16 +18,17 @@ class UserDocumentResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
+     * @throws Exception
      *
      * @return array
-     * @throws \Exception
      */
     public function toArray($request)
     {
         $alert = $this->alertObjs()->latest()->first();
 
-        $data = [
+        $data  = [
             '_id' => (string) $this->_id,
             'type' => $this->type,
             'status' => $this->status,

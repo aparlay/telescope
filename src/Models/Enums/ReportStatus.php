@@ -6,9 +6,6 @@ enum ReportStatus: int implements Enum
 {
     use EnumEnhancements;
 
-    case REPORTED = 0;
-    case REVISED = 1;
-
     public function label(): string
     {
         return match ($this) {
@@ -24,4 +21,7 @@ enum ReportStatus: int implements Enum
             self::REVISED => 'warning',
         };
     }
+
+    case REPORTED = 0;
+    case REVISED  = 1;
 }

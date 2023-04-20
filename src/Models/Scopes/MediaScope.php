@@ -269,31 +269,19 @@ trait MediaScope
         return $query->whereIn('content_gender', $genders);
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  string   $sortCategory
-     *
-     * @return Builder
-     */
     public function scopeHasForceSortPosition(Builder $query, string $sortCategory): Builder
     {
         if (in_array($sortCategory, MediaSortCategories::getAllValues())) {
-            $query->where('force_sort_positions.'.$sortCategory, '>', 0);
+            $query->where('force_sort_positions.' . $sortCategory, '>', 0);
         }
 
         return $query;
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  string   $sortCategory
-     *
-     * @return Builder
-     */
     public function scopeHasNoForceSortPosition(Builder $query, string $sortCategory): Builder
     {
         if (in_array($sortCategory, MediaSortCategories::getAllValues())) {
-            $query->whereIn('force_sort_positions.'.$sortCategory, [0, null]);
+            $query->whereIn('force_sort_positions.' . $sortCategory, [0, null]);
         }
 
         return $query;

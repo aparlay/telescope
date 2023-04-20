@@ -3,7 +3,6 @@
 namespace Aparlay\Core\Database\Factories;
 
 use Aparlay\Core\Models\ActiveUser;
-use Aparlay\Core\Models\Analytic;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ActiveUserFactory extends Factory

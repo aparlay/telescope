@@ -4,7 +4,6 @@ namespace Aparlay\Core\Admin\Services;
 
 use Aparlay\Core\Admin\Models\Setting;
 use Aparlay\Core\Admin\Repositories\SettingRepository;
-use Aparlay\Core\Helpers\ActionButtonBladeComponent;
 use Aparlay\Core\Helpers\DT;
 use Illuminate\Support\Arr;
 use MongoDB\BSON\UTCDateTime;
@@ -16,17 +15,13 @@ class SettingService extends AdminBaseService
     public function __construct()
     {
         $this->settingRepository = new SettingRepository(new Setting());
-        $this->filterableField = ['group', 'title', 'created_at'];
-        $this->sorterableField = ['group', 'title', 'created_at'];
+        $this->filterableField   = ['group', 'title', 'created_at'];
+        $this->sorterableField   = ['group', 'title', 'created_at'];
     }
 
-    /**
-     * @param $id
-     * @return mixed
-     */
     public function find($id): mixed
     {
-        $setting = $this->settingRepository->find($id);
+        $setting       = $this->settingRepository->find($id);
         $setting->type = $this->getValueDataType($setting->value);
 
         return $setting;
@@ -39,7 +34,7 @@ class SettingService extends AdminBaseService
 
     public function update($id)
     {
-        $data = request()->only(['group', 'title']);
+        $data          = request()->only(['group', 'title']);
 
         $data['value'] = $this->castValue(request()->input('value'));
 
@@ -50,15 +45,15 @@ class SettingService extends AdminBaseService
     {
         $setting = $this->settingRepository->findSettingByTitleByGroup(request()->input('title'), request()->input('group'));
 
-        if (! $setting) {
-            $data = request()->only(['group', 'title']);
+        if (!$setting) {
+            $data          = request()->only(['group', 'title']);
 
             $data['value'] = $this->castValue(request()->input('value'));
 
             return $this->settingRepository->store($data);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function castValue($value)
@@ -77,11 +72,12 @@ class SettingService extends AdminBaseService
     {
         if ($value instanceof UTCDateTime) {
             return Setting::VALUE_TYPE_DATETIME;
-        } elseif (gettype($value) == 'array') {
-            return Setting::VALUE_TYPE_JSON;
-        } else {
-            return array_search(ucfirst(gettype($value)), Setting::getValueTypes());
         }
+        if (gettype($value) == 'array') {
+            return Setting::VALUE_TYPE_JSON;
+        }
+
+        return array_search(ucfirst(gettype($value)), Setting::getValueTypes());
     }
 
     public function delete($id)

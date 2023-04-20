@@ -5,17 +5,14 @@ namespace Aparlay\Core\Models\Enums;
 enum UserFeature: string implements Enum
 {
     use EnumEnhancements;
-
-    case TIPS = 'tips';
-    case DEMO = 'demo';
-    const SUBSCRIPTIONS = 'subscriptions';
+    public const SUBSCRIPTIONS = 'subscriptions';
 
     public function label(): string
     {
         return match ($this) {
             self::TIPS => __('tips'),
             self::DEMO => __('demo'),
-            self::SUBSCRIPTIONS => __('subscriptions')
+            self::SUBSCRIPTIONS => __('subscriptions'),
         };
     }
 
@@ -27,4 +24,7 @@ enum UserFeature: string implements Enum
             self::DEMO => 'info',
         };
     }
+
+    case TIPS                  = 'tips';
+    case DEMO                  = 'demo';
 }

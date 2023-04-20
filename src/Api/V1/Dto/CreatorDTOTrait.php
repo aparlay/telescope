@@ -14,7 +14,7 @@ trait CreatorDTOTrait
 
     public function setCreator(User|Authenticatable $user)
     {
-        $this->creator = [
+        $this->creator    = [
             '_id' => new ObjectId($user->_id),
             'username' => $user->username,
             'avatar' => $user->avatar,

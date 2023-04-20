@@ -28,7 +28,8 @@ trait FilterableResourceTrait
     /**
      * Set properties to exclude specified fields.
      *
-     * @param  array|string $fieldsToFiltrate
+     * @param array|string $fieldsToFiltrate
+     *
      * @return object $this
      */
     public function except(...$fieldsToFiltrate)
@@ -42,6 +43,7 @@ trait FilterableResourceTrait
      * Set properties to make visible specified fields.
      * /**
      * @param mixed ...$fieldsToFiltrate
+     *
      * @return $this
      */
     public function only(...$fieldsToFiltrate)
@@ -54,8 +56,9 @@ trait FilterableResourceTrait
     /**
      * Filtrate fields.
      *
-     * @param  array $data
-     * @return array       [filtrated data]
+     * @param array $data
+     *
+     * @return array [filtrated data]
      */
     public function filtrateFields($data)
     {
@@ -72,23 +75,22 @@ trait FilterableResourceTrait
      * Set properties for filtrating.
      *
      * @param string $method
-     * @param array $fields
+     * @param array  $fields
      */
     protected function setFiltrateProps($method, $fields)
     {
-        $this->filtrateMethod = $method;
+        $this->filtrateMethod   = $method;
         $this->fieldsToFiltrate = is_array($fields[0]) ? $fields[0] : $fields;
     }
 
     /**
      * Send fields to filtrate to Resource while processing the collection.
      *
-     * @param  $request
      * @return array|Collection
      */
     protected function processCollection($request)
     {
-        if (! $this->filtrateMethod) {
+        if (!$this->filtrateMethod) {
             return $this->collection;
         }
 
@@ -100,7 +102,6 @@ trait FilterableResourceTrait
     }
 
     /**
-     * @param $name
      * @return mixed|null
      */
     public function groupOfHiddenFields($name)

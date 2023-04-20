@@ -12,12 +12,12 @@ class ConfigHelper
         $dbSettings = Setting::all([
             'title', 'value', 'group',
         ])
-        ->groupBy('group')
-        ->toArray();
+            ->groupBy('group')
+            ->toArray();
 
         foreach ($dbSettings as $key => $settings) {
             foreach ($settings as $setting) {
-                Config::set($key.'.'.$setting['title'], $setting['value']);
+                Config::set($key . '.' . $setting['title'], $setting['value']);
             }
         }
     }
@@ -26,13 +26,13 @@ class ConfigHelper
     {
         $setting = Setting::find($id);
 
-        Config::set($setting->group.'.'.$setting->title, $setting->value);
+        Config::set($setting->group . '.' . $setting->title, $setting->value);
     }
 
     public static function removeConfig($id)
     {
         $setting = Setting::find($id);
 
-        Config::offsetUnset($setting->group.'.'.$setting->title);
+        Config::offsetUnset($setting->group . '.' . $setting->title);
     }
 }

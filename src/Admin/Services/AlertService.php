@@ -10,7 +10,6 @@ use Aparlay\Core\Admin\Repositories\MediaRepository;
 use Aparlay\Core\Admin\Repositories\UserRepository;
 use Aparlay\Core\Api\V1\Traits\HasUserTrait;
 use Aparlay\Core\Events\UserReceiveAlertEvent;
-use Aparlay\Core\Events\UserStatusChangedEvent;
 use Aparlay\Core\Models\Enums\AlertStatus;
 use Aparlay\Core\Models\Enums\AlertType;
 use Aparlay\Core\Models\Enums\NoteType;
@@ -18,7 +17,6 @@ use Aparlay\Core\Models\Enums\NoteType;
 class AlertService
 {
     use HasUserTrait;
-
     protected AlertRepository $alertRepository;
     protected UserRepository $userRepository;
     protected MediaRepository $mediaRepository;
@@ -27,7 +25,7 @@ class AlertService
     {
         $this->alertRepository = new AlertRepository(new Alert());
         $this->mediaRepository = new MediaRepository(new Media());
-        $this->userRepository = new UserRepository(new User());
+        $this->userRepository  = new UserRepository(new User());
     }
 
     public function forUser($user, $reason)

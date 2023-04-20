@@ -13,51 +13,51 @@ class Crypto
     {
         if (extension_loaded('bcmath')) {
             if ($base < 2 || $base > 256) {
-                die('Invalid Base: '.$base);
+                die('Invalid Base: ' . $base);
             }
             bcscale(0);
             $value = '';
-            if (! $digits) {
+            if (!$digits) {
                 $digits = self::digits($base);
             }
             while ($dec > $base - 1) {
-                $rest = bcmod($dec, $base);
-                $dec = bcdiv($dec, $base);
-                $value = $digits[$rest].$value;
+                $rest  = bcmod($dec, $base);
+                $dec   = bcdiv($dec, $base);
+                $value = $digits[$rest] . $value;
             }
-            $value = $digits[intval($dec)].$value;
+            $value = $digits[intval($dec)] . $value;
 
             return (string) $value;
-        } else {
-            die('Please install BCMATH');
         }
+
+        die('Please install BCMATH');
     }
 
     public static function base2dec($value, $base, $digits = false)
     {
         if (extension_loaded('bcmath')) {
             if ($base < 2 || $base > 256) {
-                die('Invalid Base: '.$base);
+                die('Invalid Base: ' . $base);
             }
             bcscale(0);
             if ($base < 37) {
                 $value = strtolower($value);
             }
-            if (! $digits) {
+            if (!$digits) {
                 $digits = self::digits($base);
             }
             $size = strlen($value);
-            $dec = '0';
+            $dec  = '0';
             for ($loop = 0; $loop < $size; $loop++) {
                 $element = strpos($digits, $value[$loop]);
-                $power = bcpow($base, $size - $loop - 1);
-                $dec = bcadd($dec, bcmul($element, $power));
+                $power   = bcpow($base, $size - $loop - 1);
+                $dec     = bcadd($dec, bcmul($element, $power));
             }
 
             return (string) $dec;
-        } else {
-            die('Please install BCMATH');
         }
+
+        die('Please install BCMATH');
     }
 
     public static function digits($base)

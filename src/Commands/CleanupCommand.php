@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class CleanupCommand extends Command
 {
-    public $signature = 'core:cleanup';
-
+    public $signature   = 'core:cleanup';
     public $description = 'Aparlay Ws Client';
 
     public function handle()

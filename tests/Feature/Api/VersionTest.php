@@ -14,7 +14,7 @@ class VersionTest extends ApiTestCase
     {
         $version = Version::factory()->create();
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('GET', '/v1/version/'.$version->os.'/'.$version->version, [])
+            ->json('GET', '/v1/version/' . $version->os . '/' . $version->version, [])
             ->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)

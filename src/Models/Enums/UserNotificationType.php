@@ -6,10 +6,6 @@ enum UserNotificationType: string implements Enum
 {
     use EnumEnhancements;
 
-    case APPLICATION = 'application';
-    case PUSH = 'push';
-    case EMAIL = 'email';
-
     public function label(): string
     {
         return match ($this) {
@@ -27,4 +23,8 @@ enum UserNotificationType: string implements Enum
             self::EMAIL => 'success',
         };
     }
+
+    case APPLICATION = 'application';
+    case PUSH        = 'push';
+    case EMAIL       = 'email';
 }

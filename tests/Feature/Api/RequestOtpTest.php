@@ -14,11 +14,11 @@ class RequestOtpTest extends ApiTestCase
      *
      * @test
      */
-    public function validRequestOtp()
+    public function valid_request_otp()
     {
         $user = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua_').'@aparlay.com',
+            'email' => uniqid('alua_') . '@aparlay.com',
         ]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/request-otp', ['email' => $user->email])
@@ -46,11 +46,11 @@ class RequestOtpTest extends ApiTestCase
      *
      * @test
      */
-    public function requireEmailInRequestOtp()
+    public function require_email_in_request_otp()
     {
         $user = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua_').'@aparlay.com',
+            'email' => uniqid('alua_') . '@aparlay.com',
         ]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/request-otp', ['email' => ''])
@@ -72,11 +72,11 @@ class RequestOtpTest extends ApiTestCase
      *
      * @test
      */
-    public function exitOtpLimit()
+    public function exit_otp_limit()
     {
         $user = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua_').'@aparlay.com',
+            'email' => uniqid('alua_') . '@aparlay.com',
         ]);
 
         for ($x = 1; $x <= 5; $x++) {
@@ -98,10 +98,10 @@ class RequestOtpTest extends ApiTestCase
      *
      * @test
      */
-    public function userNotExistForRequestOtp()
+    public function user_not_exist_for_request_otp()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->postJson('/v1/request-otp', ['email' => uniqid('alua_').'@aparlay.com'])
+            ->postJson('/v1/request-otp', ['email' => uniqid('alua_') . '@aparlay.com'])
 
             ->assertStatus(200)
             ->assertJson([

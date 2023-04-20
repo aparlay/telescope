@@ -15,7 +15,8 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
     /**
      * Qualify the given column name by the model's table.
      *
-     * @param  string  $column
+     * @param string $column
+     *
      * @return string
      */
     public function qualifyColumn($column)
@@ -32,6 +33,7 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
 
     /**
      * Get only class name without namespace.
+     *
      * @return bool|string
      */
     public static function shortClassName()
@@ -39,13 +41,13 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
         return substr(strrchr(static::class, '\\'), 1);
     }
 
-    public function addToSet(string $attribute, mixed $item, int $length = null): void
+    public function addToSet(string $attribute, mixed $item, ?int $length = null): void
     {
-        if (! is_array($this->$attribute)) {
+        if (!is_array($this->$attribute)) {
             $this->$attribute = [];
         }
-        $values = $this->$attribute;
-        if (! in_array($item, $values, false)) {
+        $values           = $this->$attribute;
+        if (!in_array($item, $values, false)) {
             array_unshift($values, $item);
         }
 
@@ -58,10 +60,10 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
 
     public function removeFromSet(string $attribute, mixed $item): void
     {
-        if (! is_array($this->$attribute)) {
+        if (!is_array($this->$attribute)) {
             $this->$attribute = [];
         }
-        $values = $this->$attribute;
+        $values           = $this->$attribute;
         if (($key = array_search($item, $values, false)) !== false) {
             unset($values[$key]);
             if (is_int($key)) {
@@ -96,21 +98,18 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
                 [],
                 [
                     '$set' => [
-                        $attribute.'$[elem].'.$nestedField => $nestedValue,
+                        $attribute . '$[elem].' . $nestedField => $nestedValue,
                     ],
                 ],
                 [
                     'arrayFilters' => [
-                        'elem.'.$keyName => $keyValue,
+                        'elem.' . $keyName => $keyValue,
                     ],
                 ]
             );
         });
     }
 
-    /**
-     * @return string
-     */
     public function getCollection(): string
     {
         return $this->collection;
@@ -126,7 +125,6 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
     }
 
     /**
-     * @param  User|Authenticatable|ObjectId|string  $user
      * @return bool
      */
     public function creatorIs(User|Authenticatable|ObjectId|string $user)
@@ -142,7 +140,6 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
     }
 
     /**
-     * @param $value
      * @return bool
      */
     public function idEqualTo($value)

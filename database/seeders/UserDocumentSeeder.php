@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Database\Seeders;
 
-use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Database\Seeder;
@@ -14,8 +13,6 @@ class UserDocumentSeeder extends Seeder
 
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -24,7 +21,7 @@ class UserDocumentSeeder extends Seeder
         UserDocument::factory()->count($this->units)
             ->state(function (array $attributes) use ($user) {
                 return [
-                    'creator' =>  [
+                    'creator' => [
                         '_id' => new ObjectId($user->_id),
                         'username' => $user->username,
                         'avatar' => $user->avatar,

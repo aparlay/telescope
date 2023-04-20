@@ -2,11 +2,10 @@
 
 namespace Aparlay\Core\Admin\Requests;
 
-use Aparlay\Core\Admin\Models\Alert;
+use App;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
 
 class AuthRequest extends FormRequest
 {
@@ -32,7 +31,7 @@ class AuthRequest extends FormRequest
             'password' => ['required'],
         ];
 
-        if (! \App::environment('testing', 'local')) {
+        if (!App::environment('testing', 'local')) {
             $rules['g-recaptcha-response'] = ['recaptcha'];
         }
 
@@ -47,12 +46,12 @@ class AuthRequest extends FormRequest
     }
 
     /**
-     * @param Validator $validator
      * @return void
      */
     public function failedValidation(Validator $validator)
     {
         $errors = $validator->errors(); // Here is your array of errors
+
         throw new HttpResponseException(
             redirect()->back()->withErrors($errors)
         );

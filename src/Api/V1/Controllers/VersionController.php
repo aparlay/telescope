@@ -12,7 +12,7 @@ class VersionController extends Controller
      */
     public function show(string $os, string $version): Response
     {
-        $models = Version::query()
+        $models             = Version::query()
             ->os($os)
             ->app('waptap')
             ->latest()

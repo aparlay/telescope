@@ -22,13 +22,12 @@ class DeleteMediaComments implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
     public string $mediaId;
 
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries         = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -40,14 +39,14 @@ class DeleteMediaComments implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [60, 300, 1800, 3600];
+    public $backoff           = [60, 300, 1800, 3600];
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(string $mediaId)
     {
@@ -62,10 +61,10 @@ class DeleteMediaComments implements ShouldQueue
     {
         MediaComment::query()->media($this->mediaId)->delete();
         if (($media = Media::media($this->mediaId)->first()) !== null) {
-            $user = $media->userObj;
+            $user                          = $media->userObj;
 
-            $commentCount = MediaComment::query()->user($media->creator['_id'])->count();
-            $user->comment_count = $commentCount;
+            $commentCount                  = MediaComment::query()->user($media->creator['_id'])->count();
+            $user->comment_count           = $commentCount;
             $user->removeFromSet('comments', [
                 '_id' => new ObjectId($media->creator['_id']),
                 'username' => $media->creator['username'],

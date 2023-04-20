@@ -9,8 +9,7 @@ use Illuminate\Console\Command;
 
 class HashtagScoreCommand extends Command
 {
-    public $signature = 'hashtag:score';
-
+    public $signature   = 'hashtag:score';
     public $description = 'This command is responsible for update hashtag score';
 
     public function handle()
@@ -22,7 +21,7 @@ class HashtagScoreCommand extends Command
             ->public()
             ->each(function ($media) use (&$tags) {
                 foreach ($media->hashtags as $tag) {
-                    if (! isset($tags[$tag])) {
+                    if (!isset($tags[$tag])) {
                         $tags[$tag] = [
                             'like_count' => 0,
                             'visit_count' => 0,
@@ -34,13 +33,13 @@ class HashtagScoreCommand extends Command
             });
 
         foreach ($tags as $tag => $counts) {
-            $hashtag = Hashtag::firstOrCreate(['tag' => $tag]);
-            $hashtag->like_count = Media::hashtag($tag)->sum('like_count');
+            $hashtag              = Hashtag::firstOrCreate(['tag' => $tag]);
+            $hashtag->like_count  = Media::hashtag($tag)->sum('like_count');
             $hashtag->visit_count = Media::hashtag($tag)->sum('visit_count');
             $hashtag->media_count = $count = Media::hashtag($tag)->count();
-            $hashtag->sort_score = (Media::hashtag($tag)->sum('sort_scores.default') / $count);
+            $hashtag->sort_score  = (Media::hashtag($tag)->sum('sort_scores.default') / $count);
             $hashtag->save();
-            $msg5 = '<fg=yellow;options=bold>- adding new hashtag: #'.$tag.':</> '.$count.'</>'.PHP_EOL;
+            $msg5                 = '<fg=yellow;options=bold>- adding new hashtag: #' . $tag . ':</> ' . $count . '</>' . PHP_EOL;
             $this->line($msg5);
             RecalculateHashtag::dispatch($tag);
         }

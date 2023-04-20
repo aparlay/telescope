@@ -45,7 +45,7 @@ class MediaUpdateRequest extends FormRequest
                             )
                             ->first();
                         if ($isOtherMedia) {
-                            $fail('You already set a video at position '.$value.' for the guest.');
+                            $fail('You already set a video at position ' . $value . ' for the guest.');
                         }
                     }
                 },
@@ -62,7 +62,7 @@ class MediaUpdateRequest extends FormRequest
                             )
                             ->first();
                         if ($isOtherMedia) {
-                            $fail('You already set a video at position '.$value.' for the returned.');
+                            $fail('You already set a video at position ' . $value . ' for the returned.');
                         }
                     }
                 },
@@ -79,7 +79,7 @@ class MediaUpdateRequest extends FormRequest
                             )
                             ->first();
                         if ($isOtherMedia) {
-                            $fail('You already set a video at position '.$value.' for the registered.');
+                            $fail('You already set a video at position ' . $value . ' for the registered.');
                         }
                     }
                 },
@@ -107,13 +107,13 @@ class MediaUpdateRequest extends FormRequest
     public function prepareForValidation()
     {
         foreach (['guest', 'returned', 'registered'] as $category) {
-            if (request()->integer('force_sort_positions.'.$category) > 0) {
+            if (request()->integer('force_sort_positions.' . $category) > 0) {
                 $this->merge([
-                    'force_sort_positions.'.$category => request()->integer('force_sort_positions.'.$category),
+                    'force_sort_positions.' . $category => request()->integer('force_sort_positions.' . $category),
                 ]);
             } else {
                 $this->merge([
-                    'force_sort_positions.'.$category => null,
+                    'force_sort_positions.' . $category => null,
                 ]);
             }
         }

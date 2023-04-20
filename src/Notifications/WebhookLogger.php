@@ -17,13 +17,14 @@ class WebhookLogger extends Notification
      */
     public function __construct(public string $ref, public string $service, public string $url, public array $parameters, public string $channel = '')
     {
-        $this->channel = (! empty($channel) ? $channel : config('app.slack_third_party_logger'));
+        $this->channel = (!empty($channel) ? $channel : config('app.slack_third_party_logger'));
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -34,7 +35,8 @@ class WebhookLogger extends Notification
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable)
@@ -46,8 +48,8 @@ class WebhookLogger extends Notification
                 $attachment->title('Open Admin area', $this->ref)
                     ->fields([
                         'Service' => $this->service,
-                        'URL' => '`'.$this->url.'`',
-                        'Parameters' => '```'.json_encode($this->parameters ?? []).'```',
+                        'URL' => '`' . $this->url . '`',
+                        'Parameters' => '```' . json_encode($this->parameters ?? []) . '```',
                     ]);
             })
             ->info();
@@ -56,13 +58,14 @@ class WebhookLogger extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            //
+
         ];
     }
 }

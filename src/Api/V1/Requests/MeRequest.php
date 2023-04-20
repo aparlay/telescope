@@ -150,7 +150,7 @@ class MeRequest extends FormRequest
                 ],
                 'subscriptions' => [
                     'is_paid_content_policy_signed' => $this->setting['subscriptions']['is_paid_content_policy_signed'] ?? $user->setting['subscriptions']['is_paid_content_policy_signed'] ?? false,
-                    'is_refund_policy_signed' => $this->setting['subscriptions']['is_refund_policy_signed'] ?? $user->setting['subscriptions']['is_refund_policy_signed'] ?? false,
+                    'is_refund_policy_signed' => $this->setting['subscriptions']['is_refund_policy_signed']             ?? $user->setting['subscriptions']['is_refund_policy_signed'] ?? false,
                 ],
                 'notifications' => [
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? $user->setting['notifications']['unread_message_alerts'] ?? true,

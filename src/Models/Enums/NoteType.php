@@ -8,23 +8,6 @@ enum NoteType: int implements Enum
 {
     use EnumEnhancements;
 
-    case SUSPEND = 1;
-    case UNSUSPEND = 2;
-    case BAN = 3;
-    case UNBAN = 4;
-    case WARNING_MESSAGE = 5;
-    case BAN_ALL_CC_PAYMENT = 6;
-    case UNBAN_ALL_CC_PAYMENT = 7;
-    case OTHER = 8;
-    case PUBLIC = 9;
-    case PRIVATE = 10;
-    case SET_BAN_PAYOUT = 11;
-    case UNSET_BAN_PAYOUT = 12;
-    case SET_AUTO_BAN_PAYOUT = 13;
-    case UNSET_AUTO_BAN_PAYOUT = 14;
-    case INVISIBLE_BY_ADMIN = 15;
-    case SET_PASSWORD = 16;
-
     public function label(): string
     {
         return match ($this) {
@@ -69,11 +52,6 @@ enum NoteType: int implements Enum
         };
     }
 
-    /**
-     * @param  User  $admin
-     * @param  User  $user
-     * @return string
-     */
     public function message(User $admin, User $user): string
     {
         return match ($this) {
@@ -96,9 +74,6 @@ enum NoteType: int implements Enum
     }
 
     /**
-     * @param  User  $admin
-     * @param  User  $user
-     * @param $message
      * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Translation\Translator|string|null
      */
     public function warningMessage(User $admin, User $user, $message)
@@ -107,13 +82,27 @@ enum NoteType: int implements Enum
     }
 
     /**
-     * @param  User  $admin
-     * @param  User  $user
-     * @param $message
      * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Translation\Translator|string|null
      */
     public function otherMessage(User $admin, User $user, $message)
     {
         return __("<em>\"{$message}\"</em> by {$admin->note_admin_url}");
     }
+
+    case SUSPEND               = 1;
+    case UNSUSPEND             = 2;
+    case BAN                   = 3;
+    case UNBAN                 = 4;
+    case WARNING_MESSAGE       = 5;
+    case BAN_ALL_CC_PAYMENT    = 6;
+    case UNBAN_ALL_CC_PAYMENT  = 7;
+    case OTHER                 = 8;
+    case PUBLIC                = 9;
+    case PRIVATE               = 10;
+    case SET_BAN_PAYOUT        = 11;
+    case UNSET_BAN_PAYOUT      = 12;
+    case SET_AUTO_BAN_PAYOUT   = 13;
+    case UNSET_AUTO_BAN_PAYOUT = 14;
+    case INVISIBLE_BY_ADMIN    = 15;
+    case SET_PASSWORD          = 16;
 }

@@ -5,7 +5,6 @@ namespace Aparlay\Core\Api\V1\Resources;
 use Akaunting\Money\Money;
 use Exception;
 use Illuminate\Http\Request;
-use Laravel\Octane\Facades\Octane;
 
 class MediaResource extends JsonResource
 {

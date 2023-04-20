@@ -13,6 +13,7 @@ use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\UserDocument;
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use MongoDB\BSON\ObjectId;
@@ -41,7 +42,7 @@ class UserDocumentService extends AbstractService
             ->oldest('created_at')
             ->get();
 
-        $output = [];
+        $output    = [];
 
         foreach ($documents as $item) {
             $output[$item['type']] = $item;
@@ -52,29 +53,29 @@ class UserDocumentService extends AbstractService
 
     public function changeToPending()
     {
-        $idCard = UserDocument::query()
+        $idCard                               = UserDocument::query()
             ->creator($this->getUser()->_id)
             ->type(UserDocumentType::ID_CARD->value)
             ->latest()
             ->first();
 
-        $videoSelfie = UserDocument::query()
+        $videoSelfie                          = UserDocument::query()
             ->creator($this->getUser()->_id)
             ->type(UserDocumentType::SELFIE->value)
             ->latest()
             ->first();
 
-        $user = $this->getUser();
+        $user                                 = $this->getUser();
 
         if ($user->verification_status === UserVerificationStatus::PENDING->value) {
             abort(423, __('Your application is already under review'));
         }
 
-        if (! $user->is_eligible_for_verification) {
+        if (!$user->is_eligible_for_verification) {
             abort(423, __('You are currently not eligible for ID verification'));
         }
 
-        if (! $videoSelfie) {
+        if (!$videoSelfie) {
             abort(423, __('You need to upload selfie at first'));
         }
 
@@ -82,7 +83,7 @@ class UserDocumentService extends AbstractService
             abort(423, __('Your selfie was rejected by support team, please upload another one'));
         }
 
-        if (! $idCard) {
+        if (!$idCard) {
             abort(423, __('You need to upload id card at first'));
         }
 
@@ -104,13 +105,13 @@ class UserDocumentService extends AbstractService
     }
 
     /**
-     * @param  UserDocumentDto  $documentDto
+     * @throws Exception
+     *
      * @return \Aparlay\Core\Api\V1\Models\UserDocument|\Illuminate\Database\Eloquent\Model
-     * @throws \Exception
      */
     public function store(UserDocumentDto $documentDto)
     {
-        $user = $this->getUser();
+        $user         = $this->getUser();
 
         $userDocument = UserDocument::create([
             'type' => $documentDto->type,
@@ -134,23 +135,23 @@ class UserDocumentService extends AbstractService
 
     private function uploadDocument(UploadedFile $file, UserDocument $userDocument)
     {
-        $filePrefix = match ($userDocument->type) {
+        $filePrefix      = match ($userDocument->type) {
             UserDocumentType::SELFIE->value => 'selfie_',
             UserDocumentType::ID_CARD->value => 'id_card_',
         };
 
         $this->uploadFileService->setFilePrefix($filePrefix);
 
-        $tempFilePath = $this->uploadFileService->upload($file);
-        $storageDisk = $this->uploadFileService->getDisk();
+        $tempFilePath    = $this->uploadFileService->upload($file);
+        $storageDisk     = $this->uploadFileService->getDisk();
 
-        $documentData = collect([
+        $documentData    = collect([
             'file' => $this->uploadFileService->getBaseFileName(),
             'md5' => $this->uploadFileService->getMd5(),
             'size' => $this->uploadFileService->getSize(),
         ]);
 
-        $storageFilePath = $userDocument->creatorObj->_id.'/'.basename($tempFilePath);
+        $storageFilePath = $userDocument->creatorObj->_id . '/' . basename($tempFilePath);
 
         Bus::chain([
             new UploadFileJob(
@@ -164,7 +165,7 @@ class UserDocumentService extends AbstractService
             },
             new DeleteFileJob($storageDisk, $tempFilePath),
         ])
-        ->onQueue(config('app.server_specific_queue'))
-        ->dispatch();
+            ->onQueue(config('app.server_specific_queue'))
+            ->dispatch();
     }
 }

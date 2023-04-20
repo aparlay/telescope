@@ -3,16 +3,12 @@
 namespace Aparlay\Core\Admin\Livewire;
 
 use Aparlay\Core\Admin\Filters\FilterDateRange;
-use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
-use Aparlay\Core\Admin\Filters\FilterScope;
 use Aparlay\Core\Models\Setting;
-use Jenssegers\Mongodb\Eloquent\Builder;
 
 class SettingsTable extends BaseIndexComponent
 {
-    public $model = Setting::class;
-
+    public $model        = Setting::class;
     protected $listeners = ['updateParent'];
 
     public function updateParent()
@@ -56,7 +52,7 @@ class SettingsTable extends BaseIndexComponent
     public function render()
     {
         return view('default_view::livewire.settings-table', [
-           'settings' => $this->index(),
+            'settings' => $this->index(),
         ]);
     }
 }

@@ -12,7 +12,7 @@ class MediaStatsTipsUpdater
     {
         $order = Order::findOrFail($event->orderId);
 
-        if ($order->is_tip && $order->is_successful && ! empty($order->entityObj->media_id)) {
+        if ($order->is_tip && $order->is_successful && !empty($order->entityObj->media_id)) {
             $media = Media::query()->media($order->entityObj->media_id)->first();
             $media->fillAmountsField([
                 'tips' => Tip::query()->media($order->entityObj->media_id)->successful()->sum('amount'),

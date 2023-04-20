@@ -5,8 +5,7 @@ namespace Aparlay\Core\Services;
 final class CsvService
 {
     private array $headers = [];
-
-    private array $data = [];
+    private array $data    = [];
 
     public function __construct(
         private string $separator = ',',

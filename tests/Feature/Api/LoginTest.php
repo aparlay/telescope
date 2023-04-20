@@ -14,10 +14,10 @@ class LoginTest extends ApiTestCase
      *
      * @test
      */
-    public function validLogin()
+    public function valid_login()
     {
         $activeUser = User::factory()->create([
-            'email' => uniqid('alua_').'@aparly.com',
+            'email' => uniqid('alua_') . '@aparly.com',
             'status' => UserStatus::ACTIVE->value,
             'password' => 'password',
             'settings' => ['otp' => false],
@@ -56,10 +56,10 @@ class LoginTest extends ApiTestCase
      *
      * @test
      */
-    public function invalidEmail()
+    public function invalid_email()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->postJson('/v1/login', ['username' => uniqid('alua_').'@aparly.com', 'password' => 'Demo@12345'])
+            ->postJson('/v1/login', ['username' => uniqid('alua_') . '@aparly.com', 'password' => 'Demo@12345'])
             ->assertStatus(422)
             ->assertJson([
                 'code' => 422,
@@ -79,7 +79,7 @@ class LoginTest extends ApiTestCase
      *
      * @test
      */
-    public function requireUsername()
+    public function require_username()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/login', ['username' => '', 'password' => 'Demo12345'])
@@ -102,11 +102,11 @@ class LoginTest extends ApiTestCase
      *
      * @test
      */
-    public function requirePassword()
+    public function require_password()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/login', [
-                'username' => uniqid('alua_').'@aparly.com',
+                'username' => uniqid('alua_') . '@aparly.com',
                 'password' => '',
             ])
             ->assertStatus(422)
@@ -127,12 +127,13 @@ class LoginTest extends ApiTestCase
      * A basic unit test for request otp.
      *
      * @test
+     *
      * @TODO this test is wrong this must apply some changes in code
      *       to support require OTP in settings
      */
-    public function requestOtp()
+    public function request_otp()
     {
-        $user = User::factory()->create([
+        $user     = User::factory()->create([
             'status' => UserStatus::PENDING->value,
             'setting' => [
                 'otp' => true,
@@ -172,7 +173,7 @@ class LoginTest extends ApiTestCase
      *
      * @test
      */
-    public function validateOtpWithLogin()
+    public function validate_otp_with_login()
     {
         $user = User::factory()->create([
             'status' => UserStatus::PENDING->value,
@@ -180,7 +181,7 @@ class LoginTest extends ApiTestCase
                 'otp' => true,
             ],
         ]);
-        $otp = Otp::factory()->create([
+        $otp  = Otp::factory()->create([
             'identity' => $user->email,
             'incorrect' => 0,
             'validated' => false,
@@ -222,7 +223,7 @@ class LoginTest extends ApiTestCase
      *
      * @test
      */
-    public function inValidateOtpWithLogin()
+    public function in_validate_otp_with_login()
     {
         $user = User::factory()->create([
             'status' => UserStatus::PENDING->value,
@@ -230,7 +231,7 @@ class LoginTest extends ApiTestCase
                 'otp' => true,
             ],
         ]);
-        $otp = Otp::factory()->create([
+        $otp  = Otp::factory()->create([
             'identity' => $user->email,
             'incorrect' => 0,
             'validated' => false,

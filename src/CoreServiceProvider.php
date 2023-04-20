@@ -96,18 +96,19 @@ class CoreServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      *
-     * @return void
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @return void
      */
     public function boot()
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/core.php' => config_path('core.php'),
+                __DIR__ . '/../config/core.php' => config_path('core.php'),
             ], 'config');
 
             $this->publishes([
-                __DIR__.'/../resources/admin' => public_path('admin'),
+                __DIR__ . '/../resources/admin' => public_path('admin'),
             ], 'public');
 
             $this->commands([
@@ -139,19 +140,19 @@ class CoreServiceProvider extends ServiceProvider
             app()->make(\Aparlay\Core\Admin\Http\Kernel::class);
         }
 
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'default_view');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'default_view');
 
         $this->configureRateLimiting();
 
-        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/admin.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/channels.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/console.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/admin.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/channels.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/console.php');
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'core');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'core');
         $this->publishConfig();
         $this->publishMigrations();
 
@@ -192,12 +193,12 @@ class CoreServiceProvider extends ServiceProvider
 
     private function getConfigPath()
     {
-        return __DIR__.'/../config/core.php';
+        return __DIR__ . '/../config/core.php';
     }
 
     private function getMigrationsPath()
     {
-        return __DIR__.'/../database/migrations';
+        return __DIR__ . '/../database/migrations';
     }
 
     public function registerLivewireComponents()

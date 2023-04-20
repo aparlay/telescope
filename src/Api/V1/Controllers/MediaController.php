@@ -8,7 +8,6 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\MediaRequest;
 use Aparlay\Core\Api\V1\Requests\PublicFeedRequest;
 use Aparlay\Core\Api\V1\Requests\UpdateMediaRequest;
-use Aparlay\Core\Api\V1\Resources\AlertResource;
 use Aparlay\Core\Api\V1\Resources\MediaCollection;
 use Aparlay\Core\Api\V1\Resources\MediaFeedsCollection;
 use Aparlay\Core\Api\V1\Resources\MediaResource;
@@ -39,8 +38,8 @@ class MediaController extends Controller
         } else {
             $isGuest     = auth()->guest();
             $isFirstPage = request()->integer('page') === 0;
-            $data = $this->mediaService->getPublicFeeds($request, $isGuest, $isFirstPage);
-            $collection = new MediaFeedsCollection($data);
+            $data        = $this->mediaService->getPublicFeeds($request, $isGuest, $isFirstPage);
+            $collection  = new MediaFeedsCollection($data);
         }
 
         return $this->response($collection, '', Response::HTTP_OK);

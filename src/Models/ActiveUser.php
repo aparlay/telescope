@@ -30,7 +30,7 @@ class ActiveUser extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'date',
         'uuid',
@@ -43,7 +43,7 @@ class ActiveUser extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -51,7 +51,7 @@ class ActiveUser extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -64,18 +64,11 @@ class ActiveUser extends BaseModel
         return ActiveUserFactory::new();
     }
 
-    /**
-     * @return ActiveUserQueryBuilder|Builder
-     */
     public static function query(): ActiveUserQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     * @return ActiveUserQueryBuilder
-     */
     public function newEloquentBuilder($query): ActiveUserQueryBuilder
     {
         return new ActiveUserQueryBuilder($query);

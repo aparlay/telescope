@@ -6,6 +6,7 @@
 namespace Aparlay\Core\Microservices\ffmpeg;
 
 use Aparlay\Core\Microservices\ffmpeg\GPBMetadata\Media;
+use Exception;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
@@ -17,24 +18,27 @@ class UploadRequest extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string bucket_name = 1;</code>.
      */
     private $bucket_name = '';
+
     /**
      * Generated from protobuf field <code>string bucket_id = 2;</code>.
      */
-    private $bucket_id = '';
+    private $bucket_id   = '';
+
     /**
      * Generated from protobuf field <code>string src = 3;</code>.
      */
-    private $src = '';
+    private $src         = '';
+
     /**
      * Generated from protobuf field <code>string des = 4;</code>.
      */
-    private $des = '';
+    private $des         = '';
 
     /**
      * Constructor.
      *
      * @param array $data {
-     *     Optional. Data for populating the Message object.
+     *                    Optional. Data for populating the Message object.
      *
      *     @type string $bucket_name
      *     @type string $bucket_id
@@ -50,6 +54,7 @@ class UploadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string bucket_name = 1;</code>.
+     *
      * @return string
      */
     public function getBucketName()
@@ -59,9 +64,12 @@ class UploadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string bucket_name = 1;</code>.
-     * @param  string  $var
+     *
+     * @param string $var
+     *
+     * @throws Exception
+     *
      * @return $this
-     * @throws \Exception
      */
     public function setBucketName($var)
     {
@@ -73,6 +81,7 @@ class UploadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string bucket_id = 2;</code>.
+     *
      * @return string
      */
     public function getBucketId()
@@ -82,9 +91,12 @@ class UploadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string bucket_id = 2;</code>.
-     * @param  string  $var
+     *
+     * @param string $var
+     *
+     * @throws Exception
+     *
      * @return $this
-     * @throws \Exception
      */
     public function setBucketId($var)
     {
@@ -96,6 +108,7 @@ class UploadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string src = 3;</code>.
+     *
      * @return string
      */
     public function getSrc()
@@ -105,9 +118,12 @@ class UploadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string src = 3;</code>.
-     * @param  string  $var
+     *
+     * @param string $var
+     *
+     * @throws Exception
+     *
      * @return $this
-     * @throws \Exception
      */
     public function setSrc($var)
     {
@@ -119,6 +135,7 @@ class UploadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string des = 4;</code>.
+     *
      * @return string
      */
     public function getDes()
@@ -128,9 +145,12 @@ class UploadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string des = 4;</code>.
-     * @param  string  $var
+     *
+     * @param string $var
+     *
+     * @throws Exception
+     *
      * @return $this
-     * @throws \Exception
      */
     public function setDes($var)
     {

@@ -23,7 +23,8 @@ class EmailErrorNotRecognized extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -34,13 +35,14 @@ class EmailErrorNotRecognized extends Notification
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  Email  $notifiable
+     * @param Email $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable)
     {
         $message = "Email {$notifiable->to} does not receive our {$notifiable->type} email but we couldn't recognize the error:";
-        $message .= PHP_EOL.'_*Error:*_ '.PHP_EOL.'> '.$notifiable->error;
+        $message .= PHP_EOL . '_*Error:*_ ' . PHP_EOL . '> ' . $notifiable->error;
 
         return (new SlackMessage())
             ->to(config('app.slack_error'))
@@ -51,13 +53,14 @@ class EmailErrorNotRecognized extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            //
+
         ];
     }
 }

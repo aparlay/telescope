@@ -17,9 +17,9 @@ use Illuminate\Validation\ValidationException;
  * )
  *
  * @property string email
+ * @property string old_password
  * @property string otp
  * @property string password
- * @property string old_password
  */
 class ChangePasswordRequest extends FormRequest
 {
@@ -62,13 +62,13 @@ class ChangePasswordRequest extends FormRequest
     public function prepareForValidation()
     {
         /* Convert uppercase email charecter into lowercase */
-        $this->email = Str::of($this->email)->trim()->lower()->toString();
+        $this->email        = Str::of($this->email)->trim()->lower()->toString();
         $this->phone_number = Str::of($this->phone_number)->trim()->lower()->toString();
-        $this->username = ! empty($this->email) ? $this->email : $this->phone_number;
+        $this->username     = !empty($this->email) ? $this->email : $this->phone_number;
 
         /* Responsible to match old password */
         if ($this->old_password && auth()->user()) {
-            if (! Hash::check($this->old_password, auth()->user()->password_hash)) {
+            if (!Hash::check($this->old_password, auth()->user()->password_hash)) {
                 throw ValidationException::withMessages([
                     'password' => ['Incorrect Old Password.'],
                 ]);

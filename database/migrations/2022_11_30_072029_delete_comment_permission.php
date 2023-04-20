@@ -6,9 +6,8 @@ use Illuminate\Database\Migrations\Migration;
 use Maklad\Permission\Models\Role;
 
 return new class() extends Migration {
-    const PERMISSION_DELETE_MEDIA_COMMENTS = 'delete media-comments';
-
-    const PERMISSIONS_LIST = [
+    public const PERMISSION_DELETE_MEDIA_COMMENTS = 'delete media-comments';
+    public const PERMISSIONS_LIST                 = [
         self::PERMISSION_DELETE_MEDIA_COMMENTS,
     ];
 
@@ -24,7 +23,7 @@ return new class() extends Migration {
             Roles::SUPER_ADMINISTRATOR,
         ];
 
-        $roles = Role::whereIn('name', $roleNames)
+        $roles     = Role::whereIn('name', $roleNames)
             ->where('guard_name', 'admin')
             ->get();
 
@@ -45,6 +44,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

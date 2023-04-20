@@ -39,57 +39,57 @@ use MongoDB\BSON\UTCDateTime;
 /**
  * User model.
  *
- * @property ObjectId    $_id
- * @property string      $username
- * @property string      $full_name
- * @property string      $password_hash
- * @property string      $password_reset_token
- * @property string      $email
- * @property bool        $email_verified
- * @property string      $phone_number
- * @property bool        $phone_number_verified
- * @property string      $auth_key
- * @property string      $bio
- * @property string      $avatar
- * @property int         $status
- * @property int         $gender
- * @property int         $visibility
- * @property int         $show_online_status
- * @property Carbon      $created_at
- * @property Carbon      $updated_at
- * @property array       $setting
- * @property array       $features
- * @property mixed       $authLogs
- * @property mixed       $id
- * @property string      $password_hash_field
- * @property string      $authKey
- * @property array       $followed_hashtags
- * @property array       $medias
- * @property array       $links
- * @property bool        $require_otp
- * @property bool        $is_protected
- * @property array       $default_setting
- * @property array       $count_fields_updated_at
- * @property array       $user_agents
- * @property array       $subscribed_to
- * @property array       $stats
- * @property array       $last_location
- * @property string      $country_alpha2
- * @property string      $country_flag
- * @property array       $country_flags
- * @property array       $text_search
- * @property int         $verification_status
- * @property array       $likes
- * @property array       $scores
- * @property string      $deactivation_reason
- * @property bool        $has_unread_chat
- * @property bool        $has_unread_notification
+ * @property ObjectId           $_id
+ * @property string             $auth_key
+ * @property string             $authKey
+ * @property mixed              $authLogs
+ * @property string             $avatar
+ * @property string             $bio
+ * @property array              $count_fields_updated_at
+ * @property string             $country_alpha2
+ * @property string             $country_flag
+ * @property array              $country_flags
+ * @property Carbon             $created_at
+ * @property string             $deactivation_reason
+ * @property array              $default_setting
+ * @property string             $email
+ * @property bool               $email_verified
+ * @property array              $features
+ * @property array              $followed_hashtags
+ * @property string             $full_name
+ * @property int                $gender
+ * @property bool               $has_unread_chat
+ * @property bool               $has_unread_notification
+ * @property mixed              $id
+ * @property bool               $is_protected
+ * @property array              $last_location
  * @property Carbon|UTCDateTime $last_online_at
+ * @property array              $likes
+ * @property array              $links
  * @property Media[]            $mediaObjs
+ * @property array              $medias
+ * @property string             $password_hash
+ * @property string             $password_hash_field
+ * @property string             $password_reset_token
+ * @property string             $phone_number
+ * @property bool               $phone_number_verified
  * @property User               $referralObj
+ * @property bool               $require_otp
+ * @property array              $scores
+ * @property array              $setting
+ * @property int                $show_online_status
+ * @property array              $stats
+ * @property int                $status
+ * @property array              $subscribed_to
  * @property array              $subscription_plan
  * @property array              $subscriptions
  * @property array              $tags
+ * @property array              $text_search
+ * @property Carbon             $updated_at
+ * @property array              $user_agents
+ * @property string             $username
+ * @property int                $verification_status
+ * @property int                $visibility
  * @property string             $ws_state
  * @property-read string $admin_url
  * @property-read array  $counters
@@ -137,7 +137,7 @@ class User extends \App\Models\User
     use CountryFields;
     use HasPushSubscriptions;
     public const FEATURE_TIPS             = 'tips';
-    public const FEATURE_SUBSCRIPTIONS = 'subscriptions';
+    public const FEATURE_SUBSCRIPTIONS    = 'subscriptions';
     public const FEATURE_DEMO             = 'demo';
     public const ROLE_SUPER_ADMINISTRATOR = 'super-administrator';
     public const ROLE_ADMINISTRATOR       = 'administrator';
@@ -522,8 +522,8 @@ class User extends \App\Models\User
     public function getIsRiskyAttribute(): bool
     {
         return $this->setting['payment']['block_unverified_cc'] || ($this->is_tier3) || ($this->setting['payment']['unverified_cc_spent_amount'] > config(
-                'payment.fraud.big_spender.maximum_total_amount'
-            ));
+            'payment.fraud.big_spender.maximum_total_amount'
+        ));
     }
 
     /**
@@ -677,6 +677,8 @@ class User extends \App\Models\User
     }
 
     /**
+     * @param mixed $attributeValue
+     *
      * @return void
      */
     public function setCountFieldsUpdatedAtAttribute($attributeValue)

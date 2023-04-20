@@ -23,7 +23,7 @@ class DeleteMediaMetadata implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 1;
+    public int $tries         = 1;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -33,8 +33,9 @@ class DeleteMediaMetadata implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(public string $file, public string $disk = 'upload', public array $context = [])
     {
@@ -44,14 +45,15 @@ class DeleteMediaMetadata implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function handle()
     {
         $storage = Storage::disk($this->disk);
-        if (! $storage->exists($this->file)) {
-            Log::error('File not found: '.$storage->path($this->file));
+        if (!$storage->exists($this->file)) {
+            Log::error('File not found: ' . $storage->path($this->file));
 
             return;
         }
@@ -59,9 +61,9 @@ class DeleteMediaMetadata implements ShouldQueue
         $process = new Process(['exiftool', '-all=', '-overwrite_original', $storage->path($this->file)]);
         $process->run();
 
-        if (! $process->isSuccessful()) {
-            $messageInfo = array_map(fn ($key, $value) => "$key: $value", array_keys($this->context), array_values($this->context));
-            Log::error('Metadata removal failed for file '.$this->file."\nContext:\n".implode("\n", $messageInfo));
+        if (!$process->isSuccessful()) {
+            $messageInfo = array_map(fn ($key, $value) => "{$key}: {$value}", array_keys($this->context), array_values($this->context));
+            Log::error('Metadata removal failed for file ' . $this->file . "\nContext:\n" . implode("\n", $messageInfo));
             Log::error($process->getErrorOutput());
         }
     }

@@ -60,7 +60,6 @@ class MediaUpdateScoreRequest extends FormRequest
     }
 
     /**
-     * @param Validator $validator
      * @return void
      */
     public function failedValidation(Validator $validator)
@@ -75,12 +74,8 @@ class MediaUpdateScoreRequest extends FormRequest
     public function prepareForValidation()
     {
         if (
-            (int) $this->status === MediaStatus::CONFIRMED->value &&
-            (
-                empty($this->skin_score) ||
-                empty($this->awesomeness_score) ||
-                empty($this->beauty_score) ||
-                ! isset($this->content_gender)
+            (int) $this->status === MediaStatus::CONFIRMED->value && (
+                empty($this->skin_score) || empty($this->awesomeness_score) || empty($this->beauty_score) || !isset($this->content_gender)
             )
         ) {
             throw ValidationException::withMessages([

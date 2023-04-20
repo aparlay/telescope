@@ -134,6 +134,7 @@ class UserFactory extends Factory
 
     /**
      * Indicate that user is verified.
+     *
      * @return UserFactory
      */
     public function verified()

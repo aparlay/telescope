@@ -19,24 +19,22 @@ use MongoDB\BSON\ObjectId;
  * Class Email.
  *
  * @property ObjectId      $_id
- * @property ObjectId|null $user_id
- * @property string        $to
+ * @property string        $dsn
+ * @property string        $error
  * @property int           $status
  * @property string        $status_label
- * @property string        $error
- * @property string        $dsn
+ * @property string        $to
  * @property int           $type
+ * @property ObjectId|null $user_id
  * @property User          $userObj
- *
  * @property-read string   $humanized_error
  */
 class Email extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-
-    public const TEMPLATE_EMAIL_VERIFICATION = 'email_verification';
-    public const TEMPLATE_EMAIL_CONTACTUS = 'email_contactus';
+    public const TEMPLATE_EMAIL_VERIFICATION         = 'email_verification';
+    public const TEMPLATE_EMAIL_CONTACTUS            = 'email_contactus';
     public const TEMPLATE_EMAIL_ACCOUNT_VERIFICATION = 'email_account_verification';
 
     /**
@@ -44,14 +42,14 @@ class Email extends BaseModel
      *
      * @var string
      */
-    protected $collection = 'emails';
+    protected $collection                            = 'emails';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable                              = [
         '_id',
         'user',
         'to',
@@ -70,7 +68,7 @@ class Email extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden                                = [
     ];
 
     /**
@@ -78,7 +76,7 @@ class Email extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts                                 = [
         'type' => 'integer',
         'status' => 'integer',
         'created_at' => 'datetime',
@@ -101,27 +99,20 @@ class Email extends BaseModel
         return EmailFactory::new();
     }
 
-    /**
-     * @return EmailQueryBuilder|Builder
-     */
     public static function query(): EmailQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     *
-     * @return EmailQueryBuilder
-     */
     public function newEloquentBuilder($query): EmailQueryBuilder
     {
         return new EmailQueryBuilder($query);
     }
 
     /**
-     * @return array
      * @throws BindingResolutionException
+     *
+     * @return array
      */
     public function getHumanizedErrorAttribute(): string
     {
@@ -130,9 +121,6 @@ class Email extends BaseModel
         return $emailService->humanizeError($this);
     }
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [
@@ -145,9 +133,6 @@ class Email extends BaseModel
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getTypes(): array
     {
         return [
@@ -157,9 +142,6 @@ class Email extends BaseModel
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getTemplates(): array
     {
         return [

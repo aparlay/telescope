@@ -38,8 +38,8 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
 
         Route::middleware(['admin-auth:admin'])->name('alert.')->group(function () {
             Route::post('/alert/create', [AlertController::class, 'create'])
-            ->middleware(['permission:create alerts'])
-            ->name('alert.create');
+                ->middleware(['permission:create alerts'])
+                ->name('alert.create');
         });
 
         /* Media routes */
@@ -162,8 +162,8 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
 
         Route::name('alert.')->group(function () {
             Route::post('alert', [AlertController::class, 'store'])
-               ->middleware('permission:create alerts')
-               ->name('store');
+                ->middleware('permission:create alerts')
+                ->name('store');
 
             Route::post('alert/{user}', [AlertController::class, 'storeForUSer'])
                 ->middleware('permission:create alerts')
@@ -220,8 +220,8 @@ Route::domain(config('core.admin.domain'))->middleware(['admin'])->name('core.ad
 
         Route::name('note.')->group(function () {
             Route::post('note/{user}', [NoteController::class, 'store'])
-            ->middleware(['permission:create notes'])
-            ->name('store');
+                ->middleware(['permission:create notes'])
+                ->name('store');
         });
     });
 

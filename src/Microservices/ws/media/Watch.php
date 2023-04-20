@@ -35,14 +35,14 @@ class Watch implements WsEventDispatcher
             throw new InvalidArgumentException('one of the userId or anonymousId is mandatory field for the "media.watch" event.');
         }
 
-        $this->mediaId = ! empty($this->mediaId) ? new ObjectId($this->mediaId) : null;
-        $this->userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
-        $this->deviceId = ! empty($this->deviceId) ? (string) $this->deviceId : null;
+        $this->mediaId  = !empty($this->mediaId) ? new ObjectId($this->mediaId) : null;
+        $this->userId   = !empty($this->userId) ? new ObjectId($this->userId) : null;
+        $this->deviceId = !empty($this->deviceId) ? (string) $this->deviceId : null;
     }
 
     /**
-     * @throws Exception
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws Exception
      */
     public function execute()
     {
@@ -82,15 +82,15 @@ class Watch implements WsEventDispatcher
     private function userVisit(): void
     {
         if (($model = MediaVisit::query()->user($this->userId)->dateString(date('Y-m-d'))->first()) === null) {
-            $model = new MediaVisit();
-            $model->date = date('Y-m-d');
+            $model          = new MediaVisit();
+            $model->date    = date('Y-m-d');
             $model->user_id = $this->userId;
         }
 
         $model->media_id = $this->mediaId;
         $model->duration = $this->durationWatched;
 
-        $media = $model->mediaObj;
+        $media           = $model->mediaObj;
         if ($model->duration > ($media->length / 4)) {
             if ($model->duration <= $media->length) {
                 $media->length_watched += $model->duration;
@@ -108,7 +108,7 @@ class Watch implements WsEventDispatcher
             $media->save();
         }
 
-        if (! $model->save()) {
+        if (!$model->save()) {
             throw new Exception('Cannot save data.');
         }
     }

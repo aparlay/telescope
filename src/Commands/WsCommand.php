@@ -27,14 +27,13 @@ use Swoole\WebSocket\Frame;
 
 class WsCommand extends Command
 {
-    public $signature = 'core:ws';
-
+    public $signature   = 'core:ws';
     public $description = 'Aparlay Ws Client';
 
     public function handle()
     {
         $requiredClaims = [
-            new Audience('https://'.gethostname()),
+            new Audience('https://' . gethostname()),
             new Issuer(config('app.jwt.sig.issuer')),
             new IssuedAt(Carbon::now('UTC')),
             new Expiration(Carbon::now('UTC')->addYear(1)),
@@ -45,20 +44,20 @@ class WsCommand extends Command
             new Custom('device_id', '0'),
         ];
 
-        $claims = new Collection($requiredClaims);
-        $payload = new Payload($claims, new PayloadValidator());
-        $tokenInstance = JWTAuth::encode($payload);
-        $token = $tokenInstance->get();
+        $claims         = new Collection($requiredClaims);
+        $payload        = new Payload($claims, new PayloadValidator());
+        $tokenInstance  = JWTAuth::encode($payload);
+        $token          = $tokenInstance->get();
         Runtime::enableCoroutine(SWOOLE_HOOK_ALL);
         ini_set('default_socket_timeout', -1);
         \Co\run(function () use ($token) {
             $client = new Client(config('app.websocket.host'), config('app.websocket.port'));
             $client->setHeaders([
-                'Authorization' => 'Bearer '.$token,
+                'Authorization' => 'Bearer ' . $token,
                 'Device_id' => '0',
                 'User_id' => '0',
             ]);
-            $ret = $client->upgrade('/');
+            $ret    = $client->upgrade('/');
             if ($ret) {
                 $this->info('Connection established successfully!');
                 go(function () use ($client) {
@@ -77,12 +76,12 @@ class WsCommand extends Command
                         $this->info($frame->data);
                         $data = json_decode($frame->data, true, 512, JSON_THROW_ON_ERROR);
                         if (isset($data['event'], $data['properties'])) {
-                            $properties = $data['properties'];
-                            $properties['deviceId'] = $data['deviceId'] ?? null;
-                            $properties['userId'] = $data['userId'] ?? null;
+                            $properties                = $data['properties'];
+                            $properties['deviceId']    = $data['deviceId']    ?? null;
+                            $properties['userId']      = $data['userId']      ?? null;
                             $properties['anonymousId'] = $data['anonymousId'] ?? null;
 
-                            $dispatcher = WsDispatcherFactory::construct($data['event'], $properties);
+                            $dispatcher                = WsDispatcherFactory::construct($data['event'], $properties);
                             $dispatcher->execute();
                         }
                     }

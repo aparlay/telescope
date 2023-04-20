@@ -10,6 +10,7 @@ use Aparlay\Core\Models\Enums\EmailStatus;
 use Aparlay\Core\Models\Enums\EmailType;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\ContactUs;
+use Exception;
 use Illuminate\Http\Response;
 
 class ContactUsController extends Controller
@@ -17,25 +18,22 @@ class ContactUsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  ContactUsRequest  $request
-     *
-     * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function send(ContactUsRequest $request): Response
     {
-        $data = $request->input();
+        $data        = $request->input();
         $data['msg'] = $data['message'];
-        $request = [
+        $request     = [
             'to' => config('mail.support_email'),
             'status' => EmailStatus::QUEUED->value,
             'type' => EmailType::CONTACT->value,
         ];
 
-        $email = EmailRepository::create($request);
+        $email       = EmailRepository::create($request);
         Email::dispatch((string) $email->_id, config('mail.support_email'), 'Contact Us notification', EmailModel::TEMPLATE_EMAIL_CONTACTUS, $data);
 
-        $user = User::admin()->first();
+        $user        = User::admin()->first();
         $user->notify(
             new ContactUs($data['email'], $data['name'], 'Contact Us notification', $data['message'])
         );

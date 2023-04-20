@@ -31,25 +31,29 @@ class UserNotificationFactory extends Factory
     {
         $category = $this->faker->randomElement(UserNotificationCategory::getAllValues());
 
-        $user = User::factory()->create();
+        $user     = User::factory()->create();
 
         switch ($category) {
             case UserNotificationCategory::TIPS->value:
                 $entityType = Tip::shortClassName();
-                $entityId = new ObjectId(Tip::factory()->create()->_id);
+                $entityId   = new ObjectId(Tip::factory()->create()->_id);
+
                 break;
             case UserNotificationCategory::LIKES->value:
             case UserNotificationCategory::COMMENTS->value:
                 $entityType = Media::shortClassName();
-                $entityId = new ObjectId(Media::factory()->create()->_id);
+                $entityId   = new ObjectId(Media::factory()->create()->_id);
+
                 break;
             case UserNotificationCategory::FOLLOWS->value:
                 $entityType = Follow::shortClassName();
-                $entityId = new ObjectId(Follow::factory()->create()->_id);
+                $entityId   = new ObjectId(Follow::factory()->create()->_id);
+
                 break;
             default:
                 $entityType = User::shortClassName();
-                $entityId = new ObjectId($user->_id);
+                $entityId   = new ObjectId($user->_id);
+
                 break;
         }
 

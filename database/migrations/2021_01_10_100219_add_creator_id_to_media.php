@@ -15,15 +15,15 @@ class AddCreatorIdToMedia extends Migration
     public function up()
     {
         Media::get()->transform(function ($item) {
-            $media = $item->getRawOriginal();
+            $media   = $item->getRawOriginal();
             $creator = $media['creator'];
 
-            if (! isset($creator['_id']) || User::user($creator['_id'])->first() === null) {
-                $user = User::limit(200)->get()->random()->first();
-                $creator['_id'] = new ObjectId($user->_id);
+            if (!isset($creator['_id']) || User::user($creator['_id'])->first() === null) {
+                $user                = User::limit(200)->get()->random()->first();
+                $creator['_id']      = new ObjectId($user->_id);
                 $creator['username'] = $user->username;
-                $creator['avatar'] = $user->avatar;
-                $media['creator'] = $creator;
+                $creator['avatar']   = $user->avatar;
+                $media['creator']    = $creator;
                 Media::where('_id', $item->_id)->update(['creator' => $creator]);
             }
         });

@@ -7,8 +7,8 @@ use Illuminate\Validation\Rule;
 
 class UserDocumentRequest extends BaseFormRequest
 {
-    const ONE_MB = 1024;
-    private $maxInMb = 20;
+    public const ONE_MB = 1024;
+    private $maxInMb    = 20;
 
     /**
      * Get the validation rules that apply to the request.
@@ -21,7 +21,7 @@ class UserDocumentRequest extends BaseFormRequest
             'file' => [
                 'required',
                 'mimes:jpeg,jpg,png',
-                'max:'.self::ONE_MB * 20,
+                'max:' . self::ONE_MB * 20,
             ],
             'type' => [
                 'required',
@@ -29,7 +29,7 @@ class UserDocumentRequest extends BaseFormRequest
             ],
         ];
 
-        return  $rules;
+        return $rules;
     }
 
     public function messages()

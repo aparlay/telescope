@@ -12,7 +12,7 @@ class ContactUsTest extends ApiTestCase
     /**
      * @test
      */
-    public function sendContactUs()
+    public function send_contact_us()
     {
         Notification::fake();
         // TODO: it seems mocking doesnt work correctly

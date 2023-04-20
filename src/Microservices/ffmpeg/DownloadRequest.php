@@ -6,6 +6,7 @@
 namespace Aparlay\Core\Microservices\ffmpeg;
 
 use Aparlay\Core\Microservices\ffmpeg\GPBMetadata\Media;
+use Exception;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
@@ -17,20 +18,22 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string bucket_name = 1;</code>.
      */
     private $bucket_name = '';
+
     /**
      * Generated from protobuf field <code>string bucket_id = 2;</code>.
      */
-    private $bucket_id = '';
+    private $bucket_id   = '';
+
     /**
      * Generated from protobuf field <code>string file = 3;</code>.
      */
-    private $file = '';
+    private $file        = '';
 
     /**
      * Constructor.
      *
      * @param array $data {
-     *     Optional. Data for populating the Message object.
+     *                    Optional. Data for populating the Message object.
      *
      *     @type string $bucket_name
      *     @type string $bucket_id
@@ -45,6 +48,7 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string bucket_name = 1;</code>.
+     *
      * @return string
      */
     public function getBucketName()
@@ -54,9 +58,12 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string bucket_name = 1;</code>.
-     * @param  string  $var
+     *
+     * @param string $var
+     *
+     * @throws Exception
+     *
      * @return $this
-     * @throws \Exception
      */
     public function setBucketName($var)
     {
@@ -68,6 +75,7 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string bucket_id = 2;</code>.
+     *
      * @return string
      */
     public function getBucketId()
@@ -77,9 +85,12 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string bucket_id = 2;</code>.
-     * @param  string  $var
+     *
+     * @param string $var
+     *
+     * @throws Exception
+     *
      * @return $this
-     * @throws \Exception
      */
     public function setBucketId($var)
     {
@@ -91,6 +102,7 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string file = 3;</code>.
+     *
      * @return string
      */
     public function getFile()
@@ -100,9 +112,12 @@ class DownloadRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string file = 3;</code>.
-     * @param  string  $var
+     *
+     * @param string $var
+     *
+     * @throws Exception
+     *
      * @return $this
-     * @throws \Exception
      */
     public function setFile($var)
     {

@@ -25,7 +25,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries         = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -37,14 +37,14 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [5, 10, 15];
+    public $backoff           = [5, 10, 15];
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct()
     {
@@ -59,7 +59,7 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
         foreach (MediaSortCategories::getAllValues() as $category) {
             $forcedPositionMediaIds = Media::availableForFollower()
                 ->hasForceSortPosition($category)
-                ->orderBy('force_sort_positions.'.$category)
+                ->orderBy('force_sort_positions.' . $category)
                 ->select(['_id'])
                 ->get()
                 ->pluck(['_id'])
@@ -67,25 +67,25 @@ class MediaForceSortPositionRecalculate implements ShouldQueue
             if (empty($forcedPositionMediaIds)) {
                 continue;
             }
-            $forcedMedias = Media::availableForFollower()
+            $forcedMedias           = Media::availableForFollower()
                 ->hasForceSortPosition($category)
-                ->orderBy('force_sort_positions.'.$category)
+                ->orderBy('force_sort_positions.' . $category)
                 ->get();
             foreach ($forcedMedias as $forcedMedia) {
-                $position = $forcedMedia->force_sort_positions[$category];
-                $locatedMediaInPosition = Media::public()
+                $position                 = $forcedMedia->force_sort_positions[$category];
+                $locatedMediaInPosition   = Media::public()
                     ->confirmed()
                     ->sort($category) // desc
                     ->whereNotIn('_id', collect($forcedPositionMediaIds)->map(fn ($mediaId) => new ObjectId($mediaId))->toArray())
                     ->offset($position - 1)
                     ->first();
-                $sortScores = $forcedMedia->sort_scores;
-                $sortScores[$category] = $locatedMediaInPosition->sort_scores[$category] + (0.0000001 * count($forcedPositionMediaIds));
+                $sortScores               = $forcedMedia->sort_scores;
+                $sortScores[$category]    = $locatedMediaInPosition->sort_scores[$category] + (0.0000001 * count($forcedPositionMediaIds));
                 $forcedMedia->sort_scores = $sortScores;
                 $forcedMedia->save();
                 $forcedMedia->storeInGeneralCaches();
 
-                $forcedPositionMediaIds = array_diff($forcedPositionMediaIds, [(string) $forcedMedia->_id]);
+                $forcedPositionMediaIds   = array_diff($forcedPositionMediaIds, [(string) $forcedMedia->_id]);
             }
         }
     }

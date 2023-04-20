@@ -9,8 +9,9 @@ class AlertRolePermission extends Migration
     /**
      * Run the migrations.
      *
-     * @return void
      * @throws ReflectionException
+     *
+     * @return void
      */
     public function up()
     {

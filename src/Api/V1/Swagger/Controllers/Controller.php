@@ -10,22 +10,27 @@ use OpenApi\Annotations as OA;
  *     version="1.0.0",
  *     title="Waptap Api",
  *     termsOfService="https://www.waptap.com/terms/",
+ *
  *     @OA\Contact(
  *         email="info@waptap.com"
  *     ),
+ *
  *     @OA\License(
  *         name="Apache 2.0",
  *         url="https://www.apache.org/licenses/LICENSE-2.0.html"
  *     )
  * )
+ *
  * @OA\Tag(
  *     name="user",
  *     description="Operations about user",
+ *
  *     @OA\ExternalDocumentation(
  *         description="Find out more about store",
  *         url="https://swagger.io"
  *     )
  * )
+ *
  * @OA\Server(
  *     description="SwaggerHUB API Mocking",
  *     url="https://api.waptap.dev"
@@ -34,6 +39,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *      schema="201",
  *      required={"message", "status", "code", "data"},
+ *
  *      @OA\Property(
  *          property="message",
  *          type="string",
@@ -56,6 +62,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *      schema="400",
  *      required={"name", "message", "status", "code"},
+ *
  *      @OA\Property(
  *          property="name",
  *          format="string",
@@ -82,7 +89,9 @@ use OpenApi\Annotations as OA;
  *          property="items",
  *          type="array",
  *          format="array",
+ *
  *          @OA\Items (
+ *
  *              @OA\Property(
  *                  property="field",
  *                  type="string",
@@ -100,6 +109,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *      schema="401",
  *      required={"name", "message", "status", "code"},
+ *
  *      @OA\Property(
  *          property="name",
  *          format="string",
@@ -126,7 +136,9 @@ use OpenApi\Annotations as OA;
  *          property="items",
  *          type="array",
  *          format="array",
+ *
  *          @OA\Items (
+ *
  *              @OA\Property(
  *                  property="field",
  *                  type="string",
@@ -144,6 +156,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *      schema="403",
  *      required={"name", "message", "status", "code"},
+ *
  *      @OA\Property(
  *          property="name",
  *          format="string",
@@ -170,7 +183,9 @@ use OpenApi\Annotations as OA;
  *          property="items",
  *          type="array",
  *          format="array",
+ *
  *          @OA\Items (
+ *
  *              @OA\Property(
  *                  property="field",
  *                  type="string",
@@ -188,6 +203,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *      schema="418",
  *      required={"message", "status", "code", "data"},
+ *
  *      @OA\Property(
  *          property="message",
  *          type="string",
@@ -219,6 +235,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *      schema="422",
  *      required={"name", "message", "status", "code", "items"},
+ *
  *      @OA\Property(
  *          property="name",
  *          format="string",
@@ -245,7 +262,9 @@ use OpenApi\Annotations as OA;
  *          property="items",
  *          type="array",
  *          format="array",
+ *
  *          @OA\Items (
+ *
  *              @OA\Property(
  *                  property="field",
  *                  type="string",
@@ -263,6 +282,7 @@ use OpenApi\Annotations as OA;
  * @OA\Schema(
  *      schema="423",
  *      required={"name", "message", "status", "code"},
+ *
  *      @OA\Property(
  *          property="name",
  *          format="string",
@@ -286,9 +306,11 @@ use OpenApi\Annotations as OA;
  *          example=422
  *      )
  *  )
+ *
  * @OA\Schema(
  *      schema="429",
  *      required={"name", "message", "status", "code"},
+ *
  *      @OA\Property(
  *          property="name",
  *          format="string",

@@ -14,9 +14,10 @@ class SettingTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function visitSettingTest()
+    public function visit_setting_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.setting.index'))
@@ -29,9 +30,10 @@ class SettingTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchGroupTest()
+    public function search_group_test()
     {
         $setting = Setting::factory()->create(['group' => 'group']);
         $this->browse(function (Browser $browser) use ($setting) {
@@ -46,9 +48,10 @@ class SettingTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchTitleTest()
+    public function search_title_test()
     {
         $setting = Setting::factory()->create(['title' => 'name']);
         $this->browse(function (Browser $browser) use ($setting) {
@@ -63,9 +66,10 @@ class SettingTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchDateRangeTest()
+    public function search_date_range_test()
     {
         $setting = Setting::factory()->create();
 
@@ -82,9 +86,10 @@ class SettingTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function viewSettingTest()
+    public function view_setting_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.setting.index'))
@@ -96,9 +101,10 @@ class SettingTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function addSettingTest()
+    public function add_setting_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.setting.index'))
@@ -113,9 +119,10 @@ class SettingTest extends DuskTestCase
 
     /**
      * @test
+     *
      *@throws Throwable
      */
-    public function deleteSettingTest()
+    public function delete_setting_test()
     {
         Setting::factory()->create();
 

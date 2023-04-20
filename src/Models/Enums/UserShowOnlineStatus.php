@@ -6,10 +6,6 @@ enum UserShowOnlineStatus: int implements Enum
 {
     use EnumEnhancements;
 
-    case NONE = 0;
-    case FOLLOWERS = 1;
-    case All = 2;
-
     public function label(): string
     {
         return match ($this) {
@@ -27,4 +23,8 @@ enum UserShowOnlineStatus: int implements Enum
             self::All => 'success',
         };
     }
+
+    case NONE      = 0;
+    case FOLLOWERS = 1;
+    case All       = 2;
 }

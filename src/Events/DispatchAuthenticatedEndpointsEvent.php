@@ -17,6 +17,6 @@ class DispatchAuthenticatedEndpointsEvent
      */
     public function __construct()
     {
-        //
+
     }
 }

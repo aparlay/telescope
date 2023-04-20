@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Commands;
 
-use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\WarmupSimpleUserCacheJob;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;

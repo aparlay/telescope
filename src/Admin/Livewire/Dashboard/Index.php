@@ -8,17 +8,13 @@ use Livewire\Component;
 final class Index extends Component
 {
     use HasDateRangeFilter;
-
-    public string $layout = BaseDashboardComponent::LAYOUT_SIMPLE;
-
-    public bool $showsDateFilter = true;
-
     private const LAYOUTS_WITH_DATE_FILTER = [
         BaseDashboardComponent::LAYOUT_SIMPLE,
         BaseDashboardComponent::LAYOUT_ADVANCED,
     ];
-
-    protected $listeners = [
+    public string $layout                  = BaseDashboardComponent::LAYOUT_SIMPLE;
+    public bool $showsDateFilter           = true;
+    protected $listeners                   = [
         'dateInterval-changed' => 'dateIntervalChanged',
         'showAllDates-changed' => 'showAllDatesChanged',
     ];

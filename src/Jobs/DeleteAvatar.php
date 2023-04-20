@@ -18,13 +18,12 @@ class DeleteAvatar implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
     public string $file;
 
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries         = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -36,7 +35,7 @@ class DeleteAvatar implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [60, 300, 1800, 3600];
+    public $backoff           = [60, 300, 1800, 3600];
 
     /**
      * Create a new job instance.
@@ -54,8 +53,8 @@ class DeleteAvatar implements ShouldQueue
      */
     public function handle(): void
     {
-        if (Storage::disk('public')->exists('avatars/'.$this->file)) {
-            Storage::disk('public')->delete('avatars/'.$this->file);
+        if (Storage::disk('public')->exists('avatars/' . $this->file)) {
+            Storage::disk('public')->delete('avatars/' . $this->file);
         }
         if (Storage::disk('b2-avatars')->fileExists($this->file)) {
             Storage::disk('b2-avatars')->delete($this->file);

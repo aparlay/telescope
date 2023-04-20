@@ -15,15 +15,10 @@ class Permissions
     public const LIST_PAYERS          = 'list payers';
     public const VIEW_PAYERS          = 'view payers';
     public const UPDATE_PAYERS        = 'update payers';
+    public const LIST_BROADCASTS      = 'list broadcasts';
+    public const VIEW_BROADCASTS      = 'view broadcasts';
+    public const DELETE_BROADCASTS    = 'delete broadcasts';
 
-    const LIST_BROADCASTS = 'list broadcasts';
-    const VIEW_BROADCASTS = 'view broadcasts';
-    const DELETE_BROADCASTS = 'delete broadcasts';
-
-    /**
-     * @param $permission
-     * @return string
-     */
     public static function forRouter($permission): string
     {
         return 'permission:' . $permission;

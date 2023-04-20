@@ -6,13 +6,6 @@ enum EmailStatus: int implements Enum
 {
     use EnumEnhancements;
 
-    case QUEUED = 0;
-    case SENT = 1;
-    case DELIVERED = 2;
-    case DEFERRED = 3;
-    case BOUNCED = 4;
-    case FAILED = 5;
-
     public function label(): string
     {
         return match ($this) {
@@ -36,4 +29,11 @@ enum EmailStatus: int implements Enum
             self::FAILED => 'black',
         };
     }
+
+    case QUEUED    = 0;
+    case SENT      = 1;
+    case DELIVERED = 2;
+    case DEFERRED  = 3;
+    case BOUNCED   = 4;
+    case FAILED    = 5;
 }

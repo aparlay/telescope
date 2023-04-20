@@ -25,33 +25,21 @@ class UserReceiveAlertEvent
     ) {
     }
 
-    /**
-     * @return User|Authenticatable
-     */
     public function getCreator(): User|Authenticatable
     {
         return $this->creator;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @return int
-     */
     public function getType(): int
     {
         return $this->type;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

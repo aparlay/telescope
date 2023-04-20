@@ -14,14 +14,10 @@ class ReportPolicy
 
     /**
      * Responsible for check the user can delete the model.
-     *
-     * @param  User|Authenticatable  $user
-     * @param  User  $reportUser
-     * @return Response
      */
-    public function user(User | Authenticatable $user, User $reportUser): Response
+    public function user(User|Authenticatable $user, User $reportUser): Response
     {
-        if (! Gate::forUser($user)->denies('interact', $reportUser->_id)) {
+        if (!Gate::forUser($user)->denies('interact', $reportUser->_id)) {
             return Response::allow();
         }
 
@@ -30,14 +26,10 @@ class ReportPolicy
 
     /**
      * Responsible for check the user can delete the model.
-     *
-     * @param  User|Authenticatable  $user
-     * @param  User  $mediaCreator
-     * @return Response
      */
-    public function comment(User | Authenticatable $user, User $mediaCreator): Response
+    public function comment(User|Authenticatable $user, User $mediaCreator): Response
     {
-        if (! Gate::forUser($user)->denies('interact', $mediaCreator->_id)) {
+        if (!Gate::forUser($user)->denies('interact', $mediaCreator->_id)) {
             return Response::allow();
         }
 
@@ -46,14 +38,10 @@ class ReportPolicy
 
     /**
      * Responsible for check the user can delete the model.
-     *
-     * @param  User|Authenticatable  $user
-     * @param  User  $mediaCreator
-     * @return Response
      */
-    public function media(User | Authenticatable $user, User $mediaCreator): Response
+    public function media(User|Authenticatable $user, User $mediaCreator): Response
     {
-        if (! Gate::forUser($user)->denies('interact', $mediaCreator->_id)) {
+        if (!Gate::forUser($user)->denies('interact', $mediaCreator->_id)) {
             return Response::allow();
         }
 

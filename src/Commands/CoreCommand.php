@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 class CoreCommand extends Command
 {
-    public $signature = 'core:index';
-
+    public $signature   = 'core:index';
     public $description = 'Aparlay Core Command';
 
     public function handle()

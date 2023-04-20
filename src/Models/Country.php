@@ -9,15 +9,15 @@ use MongoDB\BSON\ObjectId;
 /**
  * Class Country.
  *
- * @property ObjectId   $_id
- * @property string     $name
- * @property string     $alpha2
- * @property string     $alpha3
- * @property string     $country_code
- * @property array      $flags
- * @property array      $location
- * @property string     $created_at
- * @property string     $updated_at
+ * @property ObjectId $_id
+ * @property string   $alpha2
+ * @property string   $alpha3
+ * @property string   $country_code
+ * @property string   $created_at
+ * @property array    $flags
+ * @property array    $location
+ * @property string   $name
+ * @property string   $updated_at
  */
 class Country extends BaseModel
 {
@@ -33,7 +33,7 @@ class Country extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'name',
         'alpha2',
@@ -50,7 +50,7 @@ class Country extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
 
     ];
 
@@ -59,16 +59,14 @@ class Country extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
         'is_enabled' => 'boolean',
     ];
-
-    protected $dates = [
+    protected $dates      = [
         'created_at',
         'updated_at',
         'expired_at',
     ];
-
     protected $attributes = [
         'flags' => [
             '16' => '',
@@ -80,18 +78,11 @@ class Country extends BaseModel
         ],
     ];
 
-    /**
-     * @return CountryQueryBuilder|Builder
-     */
     public static function query(): CountryQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     * @return CountryQueryBuilder
-     */
     public function newEloquentBuilder($query): CountryQueryBuilder
     {
         return new CountryQueryBuilder($query);

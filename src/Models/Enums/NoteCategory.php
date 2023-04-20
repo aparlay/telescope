@@ -6,9 +6,6 @@ enum NoteCategory: int implements Enum
 {
     use EnumEnhancements;
 
-    case LOG = 1;
-    case NOTE = 2;
-
     public function label(): string
     {
         return match ($this) {
@@ -24,4 +21,7 @@ enum NoteCategory: int implements Enum
             self::NOTE => __('warning'),
         };
     }
+
+    case LOG  = 1;
+    case NOTE = 2;
 }

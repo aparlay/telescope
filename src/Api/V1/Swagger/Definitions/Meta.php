@@ -13,14 +13,17 @@ class Meta
      * @OA\Property(type="integer", example=65 )
      */
     public $total_count;
+
     /**
      * @OA\Property(type="integer", example=4 )
      */
     public $page_count;
+
     /**
      * @OA\Property(type="integer", example=1 )
      */
     public $current_page;
+
     /**
      * @OA\Property(type="integer", example=20 )
      */

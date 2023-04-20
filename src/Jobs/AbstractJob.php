@@ -7,7 +7,7 @@ abstract class AbstractJob
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 1;
+    public int $tries         = 1;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -19,12 +19,12 @@ abstract class AbstractJob
      *
      * @var int|array
      */
-    public $backoff = 1;
+    public $backoff           = 1;
 
     public function __construct()
     {
-        $this->tries = config('queue.settings.tries');
+        $this->tries         = config('queue.settings.tries');
         $this->maxExceptions = config('queue.settings.max_exceptions');
-        $this->backoff = config('queue.settings.backoff');
+        $this->backoff       = config('queue.settings.backoff');
     }
 }

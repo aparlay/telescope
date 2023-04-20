@@ -11,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use MongoDB\BSON\ObjectId;
 use Throwable;
 
 class DeleteUserMediaLikes implements ShouldQueue
@@ -24,7 +23,7 @@ class DeleteUserMediaLikes implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 20;
+    public int $tries         = 20;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -36,14 +35,14 @@ class DeleteUserMediaLikes implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 60;
+    public $backoff           = 60;
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(public string $userId)
     {

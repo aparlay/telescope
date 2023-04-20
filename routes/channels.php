@@ -2,7 +2,6 @@
 
 use Aparlay\Core\Models\User;
 use Illuminate\Support\Facades\Broadcast;
-use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------

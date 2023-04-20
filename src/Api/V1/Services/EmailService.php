@@ -29,9 +29,6 @@ class EmailService extends AbstractService
 
     /**
      * Responsible to create a more user-friendly error message based on mail server error.
-     *
-     * @param  Email  $email
-     * @return string
      */
     public function humanizeError(Email $email): string
     {

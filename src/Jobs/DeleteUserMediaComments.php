@@ -23,7 +23,7 @@ class DeleteUserMediaComments implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 20;
+    public int $tries         = 20;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -35,14 +35,14 @@ class DeleteUserMediaComments implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 60;
+    public $backoff           = 60;
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(public string $userId)
     {

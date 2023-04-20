@@ -18,7 +18,6 @@ class UserPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  User  $user
      * @return Response|bool
      */
     public function view(User $user)
@@ -29,7 +28,8 @@ class UserPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  User  $user
+     * @param User $user
+     *
      * @return Response|bool
      */
     public function create()
@@ -40,10 +40,9 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  User|null  $user
      * @return Response|bool
      */
-    public function update(User | null $user)
+    public function update(User|null $user)
     {
         if ((string) auth()->user()->_id !== (string) $user->_id) {
             return Response::deny(__('You can only update your account.'));
@@ -55,7 +54,6 @@ class UserPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  User  $user
      * @return Response|bool
      */
     public function delete(User $user)

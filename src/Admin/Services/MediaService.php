@@ -127,13 +127,15 @@ class MediaService extends AdminBaseService
     }
 
     /**
+     * @param mixed $id
+     *
      * @throws InvalidArgumentException
      *
      * @return Media|mixed
      */
     public function update($id, MediaUpdateRequest $request)
     {
-        $data  = $request->only([
+        $data                         = $request->only([
             'description',
             'status',
             'is_protected',
@@ -143,19 +145,21 @@ class MediaService extends AdminBaseService
         ]);
 
         $data['force_sort_positions'] = [
-            MediaSortCategories::DEFAULT->value => $request->integer('force_sort_positions.'.MediaSortCategories::DEFAULT->value),
-            MediaSortCategories::GUEST->value => $request->integer('force_sort_positions.'.MediaSortCategories::GUEST->value),
-            MediaSortCategories::RETURNED->value => $request->integer('force_sort_positions.'.MediaSortCategories::RETURNED->value),
-            MediaSortCategories::REGISTERED->value => $request->integer('force_sort_positions.'.MediaSortCategories::REGISTERED->value),
-            MediaSortCategories::PAID->value => $request->integer('force_sort_positions.'.MediaSortCategories::PAID->value),
+            MediaSortCategories::DEFAULT->value => $request->integer('force_sort_positions.' . MediaSortCategories::DEFAULT->value),
+            MediaSortCategories::GUEST->value => $request->integer('force_sort_positions.' . MediaSortCategories::GUEST->value),
+            MediaSortCategories::RETURNED->value => $request->integer('force_sort_positions.' . MediaSortCategories::RETURNED->value),
+            MediaSortCategories::REGISTERED->value => $request->integer('force_sort_positions.' . MediaSortCategories::REGISTERED->value),
+            MediaSortCategories::PAID->value => $request->integer('force_sort_positions.' . MediaSortCategories::PAID->value),
         ];
 
-        $media = $this->mediaRepository->update($data, $id);
+        $media                        = $this->mediaRepository->update($data, $id);
 
         return $this->calculateSortScores($media, 0);
     }
 
     /**
+     * @param mixed $id
+     *
      * @throws InvalidArgumentException
      *
      * @return Media|mixed
@@ -198,6 +202,7 @@ class MediaService extends AdminBaseService
 
     /**
      * @param Media $media
+     * @param mixed $promote
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      *

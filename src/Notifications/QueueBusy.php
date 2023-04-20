@@ -17,13 +17,14 @@ class QueueBusy extends Notification
      */
     public function __construct(public string $message, public string $channel = '')
     {
-        $this->channel = (! empty($channel) ? $channel : config('app.slack_error'));
+        $this->channel = (!empty($channel) ? $channel : config('app.slack_error'));
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -34,7 +35,8 @@ class QueueBusy extends Notification
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable)
@@ -48,13 +50,14 @@ class QueueBusy extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            //
+
         ];
     }
 }

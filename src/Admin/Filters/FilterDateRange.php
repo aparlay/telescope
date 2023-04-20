@@ -18,14 +18,14 @@ class FilterDateRange extends AbstractBaseFilter
 
     public function __invoke($query)
     {
-        $rangeNameStart = Arr::get($this->rangeNames, 0, 0);
-        $rangeNameEnd = Arr::get($this->rangeNames, 1, 1);
+        $rangeNameStart   = Arr::get($this->rangeNames, 0, 0);
+        $rangeNameEnd     = Arr::get($this->rangeNames, 1, 1);
 
-        $startDate = Arr::get($this->fieldValue, $rangeNameStart, false);
-        $endDate = Arr::get($this->fieldValue, $rangeNameEnd, false);
+        $startDate        = Arr::get($this->fieldValue, $rangeNameStart, false);
+        $endDate          = Arr::get($this->fieldValue, $rangeNameEnd, false);
 
         $isDateStartValid = Carbon::canBeCreatedFromFormat($startDate, 'Y-m-d');
-        $isDateEndValid = Carbon::canBeCreatedFromFormat($endDate, 'Y-m-d');
+        $isDateEndValid   = Carbon::canBeCreatedFromFormat($endDate, 'Y-m-d');
 
         if ($isDateStartValid) {
             $start = new UTCDateTime(Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay());

@@ -13,24 +13,22 @@ class Version extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-
     public const OS_ANDROID = 'android';
-
-    public const OS_IOS = 'ios';
+    public const OS_IOS     = 'ios';
 
     /**
      * The collection associated with the model.
      *
      * @var string
      */
-    protected $collection = 'versions';
+    protected $collection   = 'versions';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable     = [
         '_id',
         'os',
         'app',
@@ -48,7 +46,7 @@ class Version extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden       = [
     ];
 
     /**
@@ -56,7 +54,7 @@ class Version extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts        = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
@@ -70,9 +68,6 @@ class Version extends BaseModel
         return VersionFactory::new();
     }
 
-    /**
-     * @return VersionQueryBuilder|Builder
-     */
     public static function query(): VersionQueryBuilder|Builder
     {
         return parent::query();
@@ -81,8 +76,7 @@ class Version extends BaseModel
     /**
      * Create a new Eloquent query builder for the model.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @return VersionQueryBuilder
+     * @param \Illuminate\Database\Query\Builder $query
      */
     public function newEloquentBuilder($query): VersionQueryBuilder
     {

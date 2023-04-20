@@ -26,7 +26,8 @@ class MediaScoreChanged extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -37,25 +38,26 @@ class MediaScoreChanged extends Notification
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  Media  $notifiable
+     * @param Media $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable)
     {
-        $message = "Video {$notifiable->slack_admin_url} moderation ";
+        $message  = "Video {$notifiable->slack_admin_url} moderation ";
         $message .= "is getting done by {$this->admin->slack_admin_url}.";
-        $fields = [];
+        $fields   = [];
         foreach ($notifiable->scores as $score) {
-            $fields[] = $score['type'].': '.$score['score'];
+            $fields[] = $score['type'] . ': ' . $score['score'];
         }
-        $fields[] = 'gender: '.$notifiable->content_gender_label;
+        $fields[] = 'gender: ' . $notifiable->content_gender_label;
 
-        $fields[] = 'feed: '.match ($notifiable->status) {
+        $fields[] = 'feed: ' . match ($notifiable->status) {
             MediaStatus::CONFIRMED->value => 'Confirmed',
             MediaStatus::DENIED->value => 'Denied',
-            default => ''
+            default => '',
         };
-        $message .= PHP_EOL.implode(', ', $fields);
+        $message .= PHP_EOL . implode(', ', $fields);
 
         return (new SlackMessage())
             ->to(config('app.slack_video_pending'))
@@ -66,13 +68,14 @@ class MediaScoreChanged extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            //
+
         ];
     }
 }

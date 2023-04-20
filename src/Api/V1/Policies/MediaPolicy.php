@@ -16,10 +16,6 @@ class MediaPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * @param  User|Authenticatable|null  $user
-     * @return Response
-     */
     public function viewAny(User|Authenticatable|null $user): Response
     {
         return Response::allow();
@@ -27,10 +23,6 @@ class MediaPolicy
 
     /**
      * Determine whether the user can view the model.
-     *
-     * @param  User|Authenticatable|null  $user
-     * @param  Media  $media
-     * @return Response|bool
      */
     public function view(User|Authenticatable|null $user, Media $media): Response|bool
     {
@@ -44,7 +36,7 @@ class MediaPolicy
             return Response::allow();
         }
 
-        if (! auth()->guest()) {
+        if (!auth()->guest()) {
             $isFollowed = Follow::query()
                 ->select(['created_by', '_id'])
                 ->creator($userId)
@@ -61,8 +53,6 @@ class MediaPolicy
 
     /**
      * Determine whether the user can create models.
-     *
-     * @return Response|bool
      */
     public function create(): Response|bool
     {
@@ -73,10 +63,6 @@ class MediaPolicy
 
     /**
      * Determine whether the user can update the model.
-     *
-     * @param  User|Authenticatable  $user
-     * @param  Media  $media
-     * @return Response|bool
      */
     public function update(User|Authenticatable $user, Media $media): Response|bool
     {
@@ -87,11 +73,6 @@ class MediaPolicy
             : Response::deny(__('You can only update media that you\'ve created.'));
     }
 
-    /**
-     * @param $user
-     * @param $media
-     * @return Response
-     */
     public function delete($user, $media): Response
     {
         $userId = $user->_id ?? null;

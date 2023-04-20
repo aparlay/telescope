@@ -4,7 +4,6 @@ namespace Aparlay\Core\Api\V1\Resources;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use JsonSerializable;
 
 class MediaFeedsCollection extends AbstractResourceCollection
@@ -19,11 +18,9 @@ class MediaFeedsCollection extends AbstractResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param  Request  $request
-     *
-     * @return array|Arrayable|JsonSerializable
+     * @param Request $request
      */
-    public function toArray($request): array | Arrayable | JsonSerializable
+    public function toArray($request): array|Arrayable|JsonSerializable
     {
         $links = [
             'prev' => ['href' => $this->normalizeUrl($this->resource->url($this->resource->lastPage() - 1))],

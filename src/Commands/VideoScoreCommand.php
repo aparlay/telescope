@@ -17,8 +17,8 @@ class VideoScoreCommand extends Command
      */
     public function handle()
     {
-        $headers = ['id', 'awesomeness', 'beauty', 'skin', 'time', 'like', 'watch', 'default', 'guest', 'returned', 'registered'];
-        $this->line(implode(', ', $headers).PHP_EOL);
+        $headers    = ['id', 'awesomeness', 'beauty', 'skin', 'time', 'like', 'watch', 'default', 'guest', 'returned', 'registered'];
+        $this->line(implode(', ', $headers) . PHP_EOL);
 
         $mediaQuery = Media::availableForFollower()->whereNull('is_fake')->orderBy('created_at', 'ASC');
         $bar        = $this->output->createProgressBar($mediaQuery->count());

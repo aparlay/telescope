@@ -7,7 +7,6 @@ use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Jobs\DeleteMediaComments;
 use Aparlay\Core\Jobs\DeleteMediaLikes;
 use Aparlay\Core\Jobs\DeleteMediaUserNotifications;
-use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Jobs\PurgeMediaJob;
 use Aparlay\Core\Jobs\RecalculateHashtag;
 use Aparlay\Core\Jobs\UploadMedia;
@@ -108,9 +107,7 @@ class MediaObserver extends BaseModelObserver
 
         $media->storeInGeneralCaches();
 
-        if ($media->wasChanged(['sort_scores']) &&
-            $media->status === MediaStatus::CONFIRMED->value &&
-            $media->visibility === MediaVisibility::PUBLIC->value) {
+        if ($media->wasChanged(['sort_scores']) && $media->status === MediaStatus::CONFIRMED->value && $media->visibility === MediaVisibility::PUBLIC->value) {
             $media->storeInGeneralCaches();
         }
     }

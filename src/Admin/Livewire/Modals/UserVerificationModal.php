@@ -22,10 +22,8 @@ use MongoDB\BSON\ObjectId;
 class UserVerificationModal extends Component
 {
     use CurrentUserTrait;
-
     public $user;
-    public $documents = [];
-
+    public $documents    = [];
     public $documentsData;
     protected $listeners = ['refreshUserDocuments' => '$refresh'];
 
@@ -35,9 +33,9 @@ class UserVerificationModal extends Component
         $this->loadDocuments();
 
         foreach ($this->documents as $document) {
-            $alert = $document->alertObjs()->latest()->first();
-            $isRejected = $document->status === UserDocumentStatus::REJECTED->value;
-            $this->documentsData[(string) $document->_id]['status'] = ! $isRejected ? UserDocumentStatus::APPROVED->value : UserDocumentStatus::REJECTED->value;
+            $alert                                                  = $document->alertObjs()->latest()->first();
+            $isRejected                                             = $document->status === UserDocumentStatus::REJECTED->value;
+            $this->documentsData[(string) $document->_id]['status'] = !$isRejected ? UserDocumentStatus::APPROVED->value : UserDocumentStatus::REJECTED->value;
             $this->documentsData[(string) $document->_id]['reason'] = $alert ? $alert->reason : '';
         }
     }
@@ -50,7 +48,7 @@ class UserVerificationModal extends Component
                 Rule::in([UserDocumentStatus::REJECTED->value, UserDocumentStatus::APPROVED->value]),
             ],
             'documentsData.*.reason' => [
-                'required_if:documentsData.*.status,'.UserDocumentStatus::REJECTED->value,
+                'required_if:documentsData.*.status,' . UserDocumentStatus::REJECTED->value,
                 'min:5',
             ],
         ];
@@ -66,18 +64,18 @@ class UserVerificationModal extends Component
 
     private function loadDocuments()
     {
-        $user = $this->user;
-        $selfie = $user->userDocumentObjs()
+        $user            = $this->user;
+        $selfie          = $user->userDocumentObjs()
             ->type(UserDocumentType::SELFIE->value)
             ->latest()
             ->first();
 
-        $creditCard = $user->userDocumentObjs()
+        $creditCard      = $user->userDocumentObjs()
             ->type(UserDocumentType::ID_CARD->value)
             ->latest()
             ->first();
 
-        $collection = new Collection();
+        $collection      = new Collection();
 
         if ($creditCard) {
             $collection->push($creditCard);
@@ -94,17 +92,17 @@ class UserVerificationModal extends Component
     {
         $this->validate();
 
-        $user = $this->user;
-        $payload = $approvedTypes = [];
-        $docsApprovedCounter = 0;
+        $user                           = $this->user;
+        $payload                        = $approvedTypes = [];
+        $docsApprovedCounter            = 0;
 
         foreach ($this->documentsData ?? [] as $documentId => $datum) {
-            $document = $user->userDocumentObjs()->find($documentId);
-            $document->status = (int) $datum['status'];
-            $reason = $datum['reason'] ?? '';
-            $isApproved = (int) $datum['status'] === UserDocumentStatus::APPROVED->value;
+            $document                       = $user->userDocumentObjs()->find($documentId);
+            $document->status               = (int) $datum['status'];
+            $reason                         = $datum['reason'] ?? '';
+            $isApproved                     = (int) $datum['status'] === UserDocumentStatus::APPROVED->value;
 
-            if (! $isApproved) {
+            if (!$isApproved) {
                 Alert::create([
                     'created_by' => new ObjectId($this->currentUser()->_id),
                     'entity._id' => new ObjectId($document->_id),
@@ -120,7 +118,7 @@ class UserVerificationModal extends Component
             // check if the given type has any approved document
             $approvedTypes[$document->type] = ($approvedTypes[$document->type] ?? $isApproved) || $isApproved;
 
-            $payload[$document->type] = [
+            $payload[$document->type]       = [
                 'user_document_id' => (string) $document->_id,
                 'reason' => $reason,
                 'type' => $document->type,
@@ -136,9 +134,9 @@ class UserVerificationModal extends Component
             $newVerificationStatus = UserVerificationStatus::REJECTED->value;
         }
 
-        $shouldSendNotification = false;
+        $shouldSendNotification         = false;
 
-        $userRepository = new UserRepository(new User());
+        $userRepository                 = new UserRepository(new User());
 
         if ($user->verification_status !== $newVerificationStatus) {
             $userRepository->updateVerificationStatus(
@@ -158,15 +156,15 @@ class UserVerificationModal extends Component
 
         $payload['verification_status'] = $user->verification_status;
         if ($shouldSendNotification) {
-            $message = match ((int) $newVerificationStatus) {
+            $message                              = match ((int) $newVerificationStatus) {
                 UserVerificationStatus::REJECTED->value => 'Your Creator application has been rejected! 😔',
                 UserVerificationStatus::VERIFIED->value => 'Your Creator application has been approved! 🎉',
-                default => ''
+                default => '',
             };
-            $payload['verification_status'] = $newVerificationStatus;
+            $payload['verification_status']       = $newVerificationStatus;
             $payload['verification_status_label'] = UserVerificationStatus::from($newVerificationStatus)->label();
 
-            $email = [
+            $email                                = [
                 'subject' => 'Oops there was a problem with your verification',
                 'title' => 'Verification Rejected',
                 'body' => 'Unfortunately there was a problem with your ID Verification. Please go back to ‘Request verification’ in the settings to see how to resolve this.',

@@ -4,13 +4,9 @@ namespace Aparlay\Core\Api\V1\Requests;
 
 use Aparlay\Core\Api\V1\Rules\UploadedFileExists;
 use Aparlay\Core\Api\V1\Rules\UploadedFileIsVideo;
-use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\MediaVisibility;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 /**
  * @property string $description
@@ -49,7 +45,7 @@ class MediaRequest extends FormRequest
     public function prepareForValidation()
     {
         $visibility = request()->input('visibility', 'public');
-        if (! is_numeric($visibility)) {
+        if (!is_numeric($visibility)) {
             $visibility = match ($visibility) {
                 MediaVisibility::PRIVATE->label() => MediaVisibility::PRIVATE->value,
                 MediaVisibility::PUBLIC->label() => MediaVisibility::PUBLIC->value,

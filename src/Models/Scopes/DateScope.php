@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Models\Scopes;
 
-use Aparlay\Core\Helpers\DT;
 use Illuminate\Database\Eloquent\Builder;
 use MongoDB\BSON\UTCDateTime;
 

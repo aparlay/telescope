@@ -68,10 +68,10 @@ class MeResource extends JsonResource
                 'otp' => $this->setting['otp']                                     ?? false,
                 'show_adult_content' => $this->setting['show_adult_content']       ?? UserSettingShowAdultContent::ASK->value,
                 'filter_content_gender' => $this->setting['filter_content_gender'] ?? [
-                        MediaContentGender::FEMALE->label() => true,
-                        MediaContentGender::MALE->label() => true,
-                        MediaContentGender::TRANSGENDER->label() => true,
-                    ],
+                    MediaContentGender::FEMALE->label() => true,
+                    MediaContentGender::MALE->label() => true,
+                    MediaContentGender::TRANSGENDER->label() => true,
+                ],
                 'notifications' => [
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? false,
                     'new_followers' => $this->setting['notifications']['new_followers']                 ?? false,
@@ -83,13 +83,13 @@ class MeResource extends JsonResource
                 ],
                 'subscriptions' => [
                     'is_paid_content_policy_signed' => $this->setting['subscriptions']['is_paid_content_policy_signed'] ?? false,
-                    'is_refund_policy_signed' => $this->setting['subscriptions']['is_refund_policy_signed'] ?? false,
+                    'is_refund_policy_signed' => $this->setting['subscriptions']['is_refund_policy_signed']             ?? false,
                 ],
             ],
             'features' => [
-                'tips' => $this->features['tips'] ?? false,
+                'tips' => $this->features['tips']                   ?? false,
                 'subscriptions' => $this->features['subscriptions'] ?? false,
-                'demo' => $this->features['demo'] ?? false,
+                'demo' => $this->features['demo']                   ?? false,
             ],
             'gender' => $this->gender,
             'gender_label' => $this->gender_label,

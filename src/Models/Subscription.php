@@ -17,22 +17,15 @@ final class Subscription extends BaseModel
     /**
      * @var string[]
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
     ];
 
-    /**
-     * @return SubscriptionQueryBuilder|Builder
-     */
     public static function query(): SubscriptionQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     * @return SubscriptionQueryBuilder
-     */
     public function newEloquentBuilder($query): SubscriptionQueryBuilder
     {
         return new SubscriptionQueryBuilder($query);

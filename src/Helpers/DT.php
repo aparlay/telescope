@@ -9,7 +9,6 @@ class DT
 {
     /**
      * In this function we are using Carbon, so we could time-travel in tests.
-     * @return UTCDateTime
      */
     public static function utcNow(): UTCDateTime
     {
@@ -40,6 +39,8 @@ class DT
     }
 
     /**
+     * @param mixed $utcDateTime
+     *
      * @return int
      */
     public static function utcToTimestamp($utcDateTime)

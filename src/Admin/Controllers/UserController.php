@@ -29,20 +29,17 @@ use Maklad\Permission\Models\Role;
 class UserController extends Controller
 {
     protected $userService;
-
     protected $mediaService;
 
     public function __construct(
         UserService $userService,
         MediaService $mediaService
     ) {
-        $this->userService = $userService;
+        $this->userService  = $userService;
         $this->mediaService = $mediaService;
     }
 
     /**
-     * @param $userId
-     * @param $direction
      * @return RedirectResponse
      */
     public function moderationNextOrPrev($userId, $direction)
@@ -89,7 +86,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $userStatuses = $this->userService->getUserStatuses();
+        $userStatuses     = $this->userService->getUserStatuses();
         $userVisibilities = $this->userService->getVisibilities();
 
         return view('default_view::admin.pages.user.index', compact('userStatuses', 'userVisibilities'));
@@ -97,13 +94,13 @@ class UserController extends Controller
 
     public function view(User $user)
     {
-        $user = $this->userService->find($user->_id);
+        $user                    = $this->userService->find($user->_id);
         $moderationQueueNotEmpty = $this->userService->isModerationQueueNotEmpty();
-        $roles = Role::where('guard_name', 'admin')->get();
-        $countries = Country::query()->get();
+        $roles                   = Role::where('guard_name', 'admin')->get();
+        $countries               = Country::query()->get();
 
-        $hasPrev = $this->userService->hasPrevPending($user->_id);
-        $hasNext = $this->userService->hasNextPending($user->_id);
+        $hasPrev                 = $this->userService->hasPrevPending($user->_id);
+        $hasNext                 = $this->userService->hasNextPending($user->_id);
 
         return view('default_view::admin.pages.user.edit', compact(
             'user',
@@ -115,11 +112,6 @@ class UserController extends Controller
         ));
     }
 
-    /**
-     * @param User $user
-     * @param UserProfileUpdateRequest $request
-     * @return RedirectResponse
-     */
     public function updateProfile(User $user, UserProfileUpdateRequest $request): RedirectResponse
     {
         $this->userService->updateProfile($user, $request);
@@ -127,11 +119,6 @@ class UserController extends Controller
         return back()->with('success', 'User updated successfully.');
     }
 
-    /**
-     * @param User $user
-     * @param UserInfoUpdateRequest $request
-     * @return RedirectResponse
-     */
     public function updateInfo(User $user, UserInfoUpdateRequest $request): RedirectResponse
     {
         $this->userService->updateInfo($user, $request);
@@ -139,11 +126,6 @@ class UserController extends Controller
         return back()->with('success', 'User updated successfully.');
     }
 
-    /**
-     * @param User $user
-     * @param UserGeneralUpdateRequest $request
-     * @return RedirectResponse
-     */
     public function updateGeneral(User $user, UserGeneralUpdateRequest $request): RedirectResponse
     {
         $this->userService->updateGeneral($user, $request);
@@ -151,11 +133,6 @@ class UserController extends Controller
         return back()->with('success', 'User updated successfully.');
     }
 
-    /**
-     * @param User $user
-     * @param UserPayoutsUpdateRequest $request
-     * @return RedirectResponse
-     */
     public function updatePayouts(User $user, UserPayoutsUpdateRequest $request): RedirectResponse
     {
         $this->userService->updatePayouts($user, $request);
@@ -163,11 +140,6 @@ class UserController extends Controller
         return back()->with('success', 'User updated successfully.');
     }
 
-    /**
-     * @param User $user
-     * @param UserStatusRequest $request
-     * @return RedirectResponse
-     */
     public function updateStatus(User $user, UserStatusRequest $request): RedirectResponse
     {
         $this->userService->setUser(auth()->user());
@@ -179,17 +151,12 @@ class UserController extends Controller
                 return back()->with('success', 'User Reactivated successfully.');
             }
 
-            return back()->with('success', 'User '.ucfirst(User::getStatuses()[$status]).' successfully.');
+            return back()->with('success', 'User ' . ucfirst(User::getStatuses()[$status]) . ' successfully.');
         }
 
         return back()->with('danger', 'Update status failed.');
     }
 
-    /**
-     * @param User $user
-     * @param PushNotificationRequest $request
-     * @return RedirectResponse
-     */
     public function pushNotifications(User $user, PushNotificationRequest $request): RedirectResponse
     {
         $this->userService->setUser(auth()->user());
@@ -198,7 +165,7 @@ class UserController extends Controller
         if (class_exists($notification) && $user->routeNotificationForWebPush()->count()) {
             $user->notify(new $notification('Administrator', '0'));
 
-            return back()->with('success', 'Notification '.Str::afterLast($notification, '\\').' sent successfully.');
+            return back()->with('success', 'Notification ' . Str::afterLast($notification, '\\') . ' sent successfully.');
         }
 
         return back()->with('danger', 'There is no web push subscribed device for the given user.');
@@ -211,7 +178,7 @@ class UserController extends Controller
         $visibility = (int) $request->input('visibility');
 
         if ($this->userService->updateVisibility($user->_id, $visibility)) {
-            return back()->with('success', 'Set user '.ucfirst(User::getVisibilities()[$visibility]).' successfully.');
+            return back()->with('success', 'Set user ' . ucfirst(User::getVisibilities()[$visibility]) . ' successfully.');
         }
 
         return back()->with('danger', 'Update visibility failed.');
@@ -259,8 +226,8 @@ class UserController extends Controller
 
     public function loginAsUser(User $user)
     {
-        $token = auth('api')->tokenById($user->_id);
-        $result = $this->respondWithToken($token);
+        $token   = auth('api')->tokenById($user->_id);
+        $result  = $this->respondWithToken($token);
         $cookie1 = Cookie::make(
             '__Secure_token',
             $result['token'],
@@ -284,7 +251,7 @@ class UserController extends Controller
     {
         return [
             'token' => $token,
-            'token_expired_at' => auth('api')->factory()->getTTL() * 60,
+            'token_expired_at' => auth('api')->factory()->getTTL()         * 60,
             'refresh_token' => $token,
             'refresh_token_expired_at' => auth('api')->factory()->getTTL() * 60,
         ];

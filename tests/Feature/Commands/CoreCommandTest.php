@@ -9,7 +9,7 @@ class CoreCommandTest extends TestCase
     /**
      * @test
      */
-    public function coreCommandIndex()
+    public function core_command_index()
     {
         $this->artisan('core:index')->assertExitCode(0);
     }

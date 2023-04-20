@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class TextSearchField extends Migration
 {
@@ -14,10 +12,10 @@ class TextSearchField extends Migration
     public function up()
     {
         \Aparlay\Core\Models\User::where('text_search', null)->each(function ($user) {
-            $text_search = explode(' ', $user->full_name);
-            $text_search[] = $user->username;
-            $text_search[] = $user->email;
-            $text_search[] = $user->phone_number;
+            $text_search       = explode(' ', $user->full_name);
+            $text_search[]     = $user->username;
+            $text_search[]     = $user->email;
+            $text_search[]     = $user->phone_number;
             $user->text_search = $text_search;
             $user->save();
         });
@@ -30,6 +28,6 @@ class TextSearchField extends Migration
      */
     public function down()
     {
-        //
+
     }
 }

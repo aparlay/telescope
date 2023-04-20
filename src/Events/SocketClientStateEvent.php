@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Events;
 
-use Aparlay\Core\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 

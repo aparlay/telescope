@@ -14,7 +14,7 @@ class ChangePasswordTest extends ApiTestCase
      *
      * @test
      */
-    public function userNotFound()
+    public function user_not_found()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('PUT', '/v1/change-password', [
@@ -35,11 +35,11 @@ class ChangePasswordTest extends ApiTestCase
      *
      * @test
      */
-    public function changePasswordWithUnverifiedUser()
+    public function change_password_with_unverified_user()
     {
         $user = User::factory()->create([
             'status' => UserStatus::PENDING->value,
-            'email' => uniqid('alua+').'@aparlay.com',
+            'email' => uniqid('alua+') . '@aparlay.com',
             'password_hash' => Hash::make('Demo@12345'),
         ]);
         $this->actingAs($user)
@@ -67,11 +67,11 @@ class ChangePasswordTest extends ApiTestCase
      *
      * @test
      */
-    public function changePasswordLoginUser()
+    public function change_password_login_user()
     {
         $user = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua+').'@aparlay.com',
+            'email' => uniqid('alua+') . '@aparlay.com',
             'password_hash' => Hash::make('Demo@12345'),
         ]);
 
@@ -86,7 +86,7 @@ class ChangePasswordTest extends ApiTestCase
                 'code' => 200,
                 'status' => 'OK',
                 'data' => [],
-        ]);
+            ]);
         $user->refresh();
         $this->assertFalse(Hash::check('Demo@12345', $user->password_hash));
         $this->assertTrue(Hash::check('Demo@demo12', $user->password_hash));
@@ -97,13 +97,13 @@ class ChangePasswordTest extends ApiTestCase
      *
      * @test
      */
-    public function changePasswordWithoutLoginUser()
+    public function change_password_without_login_user()
     {
         $user = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua+').'@aparlay.com',
+            'email' => uniqid('alua+') . '@aparlay.com',
         ]);
-        $otp = Otp::factory()->create([
+        $otp  = Otp::factory()->create([
             'identity' => $user->email,
             'otp' => '123456', 'validated' => true,
         ]);
@@ -128,7 +128,7 @@ class ChangePasswordTest extends ApiTestCase
      *
      * @test
      */
-    public function loginUserOldPassowordRequire()
+    public function login_user_old_passoword_require()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->putJson('/v1/change-password', ['old_password' => '', 'password' => 'demo13215'])
@@ -159,7 +159,7 @@ class ChangePasswordTest extends ApiTestCase
      *
      * @test
      */
-    public function loginUserNewPassowordRequire()
+    public function login_user_new_passoword_require()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->putJson('/v1/change-password', ['old_password' => 'Any@12345', 'password' => ''])
@@ -182,7 +182,7 @@ class ChangePasswordTest extends ApiTestCase
      *
      * @test
      */
-    public function emailRequireWhenNonLoginUser()
+    public function email_require_when_non_login_user()
     {
         $response = $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->putJson('/v1/change-password', [
@@ -213,12 +213,12 @@ class ChangePasswordTest extends ApiTestCase
      *
      * @test
      */
-    public function otpRequireWhenNonLoginUser()
+    public function otp_require_when_non_login_user()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->putJson('/v1/change-password', [
                 'password' => 'Any@12345',
-                'email' => uniqid('alua+').'@aparlay.com',
+                'email' => uniqid('alua+') . '@aparlay.com',
                 'otp' => '',
             ])
             ->assertStatus(422)
@@ -240,12 +240,12 @@ class ChangePasswordTest extends ApiTestCase
      *
      * @test
      */
-    public function passwordRequireWhenNonLoginUser()
+    public function password_require_when_non_login_user()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->putJson('/v1/change-password', [
                 'password' => '',
-                'email' => uniqid('alua+').'@aparlay.com',
+                'email' => uniqid('alua+') . '@aparlay.com',
                 'otp' => '123456',
             ])
             ->assertStatus(422)
@@ -267,11 +267,11 @@ class ChangePasswordTest extends ApiTestCase
      *
      * @test
      */
-    public function invalidOtpWhenNonLoginUser()
+    public function invalid_otp_when_non_login_user()
     {
         $user = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua+').'@aparlay.com',
+            'email' => uniqid('alua+') . '@aparlay.com',
         ]);
         Otp::factory()->create([
             'identity' => $user->email,

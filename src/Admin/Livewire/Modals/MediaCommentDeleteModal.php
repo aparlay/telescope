@@ -4,13 +4,11 @@ namespace Aparlay\Core\Admin\Livewire\Modals;
 
 use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
 use Aparlay\Core\Admin\Models\MediaComment;
-use Aparlay\Core\Admin\Models\Note;
 use Livewire\Component;
 
 class MediaCommentDeleteModal extends Component
 {
     use CurrentUserTrait;
-
     public $selectedItem;
     public $mediaComment;
 

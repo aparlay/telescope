@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Controllers;
 
 use Aparlay\Core\Admin\Models\MediaComment;
 use Aparlay\Core\Admin\Services\MediaCommentService;
+use ErrorException;
 
 class MediaCommentController extends Controller
 {
@@ -20,7 +21,7 @@ class MediaCommentController extends Controller
     }
 
     /**
-     * @throws \ErrorException
+     * @throws ErrorException
      */
     public function delete(MediaComment $comment)
     {

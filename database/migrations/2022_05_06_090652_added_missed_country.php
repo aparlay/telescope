@@ -13,7 +13,7 @@ return new class() extends Migration {
     {
         Artisan::call('db:seed', [
             '--class' => CountrySeeder::class,
-            '--force'   => true,
+            '--force' => true,
         ]);
     }
 
@@ -24,6 +24,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

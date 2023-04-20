@@ -5,9 +5,7 @@ namespace Aparlay\Core\Admin\Livewire;
 use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
-use Aparlay\Core\Admin\Filters\FilterScope;
 use Aparlay\Core\Models\Enums\MediaStatus;
-use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use App\Models\Media;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
@@ -15,8 +13,7 @@ use function view;
 
 class MediasModerationTable extends BaseIndexComponent
 {
-    public $model = Media::class;
-
+    public $model        = Media::class;
     protected $listeners = ['updateParent'];
 
     public function updateParent()
@@ -71,7 +68,7 @@ class MediasModerationTable extends BaseIndexComponent
     public function render()
     {
         return view('default_view::livewire.medias-moderation-table', [
-           'medias' => $this->index(),
+            'medias' => $this->index(),
         ]);
     }
 }

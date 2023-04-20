@@ -9,35 +9,23 @@ class AdminBaseService
 {
     public $filterableField = [];
     public $sorterableField = [];
-    public $sortDefault = ['created_at' => 'desc'];
-    public $tableColumns = [];
+    public $sortDefault     = ['created_at' => 'desc'];
+    public $tableColumns    = [];
 
-    /**
-     * @param string $field
-     * @return bool
-     */
     public function canFilterField(string $field): bool
     {
         return in_array($field, $this->filterableField);
     }
 
-    /**
-     * @param string $field
-     * @return bool
-     */
     public function canSortField(string $field): bool
     {
         return in_array($field, $this->sorterableField);
     }
 
-    /**
-     * @param array $filter
-     * @return array
-     */
     public function cleanFilterFields(array $filter): array
     {
         foreach ($filter as $key => $value) {
-            if (! $this->canFilterField($key) || ! isset($value)) {
+            if (!$this->canFilterField($key) || !isset($value)) {
                 unset($filter[$key]);
             } elseif (is_numeric($value)) {
                 $filter[$key] = intval($value);
@@ -49,16 +37,12 @@ class AdminBaseService
         return $filter;
     }
 
-    /**
-     * @param array $sort
-     * @return array
-     */
     public function cleanSortFields(array $sort): array
     {
         foreach ($sort as $field => $direction) {
-            if (! $this->canSortField($field)) {
+            if (!$this->canSortField($field)) {
                 $sort = $this->sortDefault;
-            } elseif (! isset($sort[$field])) {
+            } elseif (!isset($sort[$field])) {
                 $sort[$field] = 'desc';
             }
         }
@@ -66,20 +50,14 @@ class AdminBaseService
         return $sort;
     }
 
-    /**
-     * @return array
-     */
     public function fillTableColumns(): array
     {
         return $this->tableColumns = request()->columns ?? [];
     }
 
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
-        $columnArr = $this->fillTableColumns();
+        $columnArr    = $this->fillTableColumns();
         $filterFields = [];
         foreach ($columnArr as $column) {
             if ($column['data']) {
@@ -90,27 +68,20 @@ class AdminBaseService
         return $this->cleanFilterFields($filterFields);
     }
 
-    /**
-     * @param int $numberColumn
-     * @return array
-     */
     public function getTableFieldByNumber(int $numberColumn): array
     {
         return $this->tableColumns[$numberColumn] ?? [];
     }
 
-    /**
-     * @return array
-     */
     public function tableSort(): array
     {
-        $sortTable = $this->sortDefault;
+        $sortTable   = $this->sortDefault;
         $sortRequest = request()->order ?? [];
 
         if (isset($sortRequest[0])) {
-            if (isset($sortRequest[0]['column']) && isset($sortRequest[0]['dir'])) {
+            if (isset($sortRequest[0]['column'], $sortRequest[0]['dir'])) {
                 $tableField = $this->getTableFieldByNumber($sortRequest[0]['column']);
-                if (! empty($tableField) && isset($tableField['data'])) {
+                if (!empty($tableField) && isset($tableField['data'])) {
                     $sortTable = [$tableField['data'] => $sortRequest[0]['dir']];
                 }
             }
@@ -119,17 +90,13 @@ class AdminBaseService
         return $this->cleanSortFields($sortTable);
     }
 
-    /**
-     * @param $dates
-     * @return array
-     */
     public function getDateRangeFilter($dates): array
     {
         $dateRangeArr = explode(' - ', $dates);
 
-        return  [
+        return [
             'start' => new UTCDateTime(Carbon::parse($dateRangeArr[0])->startOfDay()),
-            'end'   => new UTCDateTime(Carbon::parse($dateRangeArr[1])->endOfDay()),
+            'end' => new UTCDateTime(Carbon::parse($dateRangeArr[1])->endOfDay()),
         ];
     }
 }

@@ -16,6 +16,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Log;
 use Str;
 use Throwable;
 
@@ -29,7 +30,7 @@ class KeitaroPostback implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries         = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -41,14 +42,14 @@ class KeitaroPostback implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 10;
+    public $backoff           = 10;
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(
         public string $subId,
@@ -61,22 +62,23 @@ class KeitaroPostback implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws FileExistsException
      * @throws FileNotFoundException
+     *
+     * @return void
      */
     public function handle()
     {
         try {
-            $url = $this->trackerUrl.$this->postbackCode.'/postback';
-            $params = [
+            $url      = $this->trackerUrl . $this->postbackCode . '/postback';
+            $params   = [
                 'subid' => $this->subId,
                 'status' => 'lead',
                 'payout' => 0,
             ];
             $response = Http::timeout(240)
                 ->retry(5, 60000, function ($exception, $request) use ($url, $params) {
-                    if (! Str::startsWith($exception->response->status(), '2')) {
+                    if (!Str::startsWith($exception->response->status(), '2')) {
                         User::admin()->first()->notify(
                             new ThirdPartyLogger(
                                 '',
@@ -101,7 +103,8 @@ class KeitaroPostback implements ShouldQueue
             return $response->json();
         } catch (RequestException $e) {
             $responseBodyAsString = $e->response->body();
-            \Log::error('Masspay request error: '.$responseBodyAsString);
+            Log::error('Masspay request error: ' . $responseBodyAsString);
+
             throw new ErrorException($responseBodyAsString);
         }
     }

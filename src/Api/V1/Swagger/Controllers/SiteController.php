@@ -12,33 +12,41 @@ use OpenApi\Annotations as OA;
  *     description="To Login an alreadyregistered user you need to call this endpoint.",
  *     operationId="cache",
  *     security={{"bearerAuth": {}}},
+ *
  *     @OA\Response(
  *         response=200,
  *         description="successful operation",
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Limit",
  *             description="the maximum number of allowed requests during a period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Remaining",
  *             description="the remaining number of allowed requests within the current period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Reset",
  *             description="the number of seconds to wait before having maximum number of allowed requests again",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\JsonContent(ref="#/components/schemas/User"),
  *     ),
  * )
@@ -50,33 +58,41 @@ use OpenApi\Annotations as OA;
  *     description="To Login an alreadyregistered user you need to call this endpoint.",
  *     operationId="health",
  *     security={{"bearerAuth": {}}},
+ *
  *     @OA\Response(
  *         response=200,
  *         description="successful operation",
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Limit",
  *             description="the maximum number of allowed requests during a period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Remaining",
  *             description="the remaining number of allowed requests within the current period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Reset",
  *             description="the number of seconds to wait before having maximum number of allowed requests again",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\JsonContent(ref="#/components/schemas/User"),
  *     ),
  * )

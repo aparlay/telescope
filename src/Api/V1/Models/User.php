@@ -31,8 +31,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property int         $gender
  * @property mixed       $id
  * @property bool        $is_protected
- * @property array       $user_agents
- * @property array       $stats
  * @property array       $last_location
  * @property UTCDateTime $last_online_at
  * @property array       $links
@@ -46,11 +44,13 @@ use MongoDB\BSON\UTCDateTime;
  * @property array       $scores
  * @property array       $setting
  * @property int         $show_online_status
+ * @property array       $stats
  * @property int         $status
  * @property array       $subscription_plan
  * @property array       $subscriptions
  * @property array       $text_search
  * @property UTCDateTime $updated_at
+ * @property array       $user_agents
  * @property string      $username
  * @property int         $verification_status
  * @property int         $visibility

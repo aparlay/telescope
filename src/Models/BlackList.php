@@ -33,7 +33,7 @@ class BlackList extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'payload',
         'type',
@@ -45,7 +45,7 @@ class BlackList extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -53,7 +53,7 @@ class BlackList extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
         'type' => BlackListType::class,
         'expired_at' => 'datetime',
     ];
@@ -66,18 +66,11 @@ class BlackList extends BaseModel
         return BlackListFactory::new();
     }
 
-    /**
-     * @return BlackListQueryBuilder|Builder
-     */
     public static function query(): BlackListQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     * @return BlackListQueryBuilder
-     */
     public function newEloquentBuilder($query): BlackListQueryBuilder
     {
         return new BlackListQueryBuilder($query);

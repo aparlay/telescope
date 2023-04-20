@@ -12,10 +12,8 @@ use function view;
 
 class MediasTable extends BaseIndexComponent
 {
-    public $model = Media::class;
-
+    public $model        = Media::class;
     protected $listeners = ['updateParent'];
-
     public $creatorId;
 
     public function updateParent()
@@ -40,15 +38,13 @@ class MediasTable extends BaseIndexComponent
 
     public function buildQuery(): Builder
     {
-        if (! empty($this->sort['sort_scores.guest'])
-            && $this->sort['sort_scores.guest'] === -1
-            && empty($this->filter['status'])) {
+        if (!empty($this->sort['sort_scores.guest']) && $this->sort['sort_scores.guest'] === -1 && empty($this->filter['status'])) {
             $this->filter['status'] = 5;
         }
 
         $query = parent::buildQuery();
         $query->with(['creatorObj']);
-        if (! empty($this->creatorId)) {
+        if (!empty($this->creatorId)) {
             $query->creator($this->creatorId);
         }
 
@@ -83,7 +79,7 @@ class MediasTable extends BaseIndexComponent
     {
         return view('default_view::livewire.medias-table', [
             'medias' => $this->index(),
-            'hiddenFields' => ['creator_username' => ! empty($this->creatorId)],
+            'hiddenFields' => ['creator_username' => !empty($this->creatorId)],
         ]);
     }
 }

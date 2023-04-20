@@ -18,20 +18,19 @@ use MongoDB\BSON\UTCDateTime;
 /**
  * Class Note.
  *
- * @property ObjectId           $_id
- * @property ObjectId           $created_by
- * @property ObjectId           $updated_by
- * @property UTCDateTime        $created_at
- * @property UTCDateTime        $updated_at
- * @property int                $type
- * @property int                $category
- * @property int                $status
- * @property array              $creator
- * @property array              $user
- * @property string             $message
- *
- * @property User               $userObj
- * @property User               $creatorObj
+ * @property ObjectId    $_id
+ * @property int         $category
+ * @property UTCDateTime $created_at
+ * @property ObjectId    $created_by
+ * @property array       $creator
+ * @property User        $creatorObj
+ * @property string      $message
+ * @property int         $status
+ * @property int         $type
+ * @property UTCDateTime $updated_at
+ * @property ObjectId    $updated_by
+ * @property array       $user
+ * @property User        $userObj
  */
 class Note extends BaseModel
 {
@@ -51,7 +50,7 @@ class Note extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'type',
         'category',
@@ -71,7 +70,18 @@ class Note extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts      = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -83,17 +93,6 @@ class Note extends BaseModel
     }
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime',
-    ];
-
-    /**
      * Create a new factory instance for the model.
      */
     protected static function newFactory(): Factory
@@ -101,27 +100,16 @@ class Note extends BaseModel
         return NoteFactory::new();
     }
 
-    /**
-     * @return NoteQueryBuilder|Builder
-     */
     public static function query(): NoteQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     *
-     * @return NoteQueryBuilder
-     */
     public function newEloquentBuilder($query): NoteQueryBuilder
     {
         return new NoteQueryBuilder($query);
     }
 
-    /**
-     * @return array
-     */
     public static function getTypes(): array
     {
         return [
@@ -136,9 +124,6 @@ class Note extends BaseModel
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getCategories(): array
     {
         return [
