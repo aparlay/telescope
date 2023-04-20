@@ -54,7 +54,6 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property string             $image_blurred
  * @property string             $file
  * @property array              $files_history
- * @property string             $hash
  * @property array              $hashtags
  * @property bool               $is_protected
  * @property int                $length
@@ -62,7 +61,6 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property int                $like_count
  * @property array              $likes
  * @property array              $links
- * @property string             $location
  * @property string             $mime_type
  * @property array              $people
  * @property array              $scores
@@ -72,10 +70,6 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property int                $status
  * @property int                $tips
  * @property Carbon             $updated_at
- * @property array              $links
- * @property bool               $is_protected
- * @property array              $scores
- * @property array              $sort_scores
  * @property array              $force_sort_positions
  * @property User               $userObj
  * @property int                $visibility
@@ -92,16 +86,12 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property-read string        $delete_prefix
  * @property-read string        $file_url
  * @property-read string        $image_blurred_url
- * @property-read int           $beauty_score
- * @property-read int           $awesomeness_score
  * @property-read int           $skin_score
  * @property-read string        $slack_admin_url
  * @property-read string        $slack_subject_admin_url
  * @property-read int           $time_score
  * @property-read int           $visit_score
- * @property-read int           $comment_score
  * @property-read int           $sent_tips
- * @property-read string        $content_gender_label
  * @property-read bool          $is_private
  * @property-read bool          $is_video
  * @property-read bool          $is_image

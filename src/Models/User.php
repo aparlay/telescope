@@ -85,32 +85,11 @@ use MongoDB\BSON\UTCDateTime;
  * @property bool        $has_unread_chat
  * @property bool        $has_unread_notification
  * @property Carbon|UTCDateTime $last_online_at
- * @property array              $likes
- * @property array              $links
  * @property Media[]            $mediaObjs
- * @property array              $medias
- * @property string             $password_hash
- * @property string             $password_hash_field
- * @property string             $password_reset_token
- * @property string             $phone_number
- * @property bool               $phone_number_verified
  * @property User               $referralObj
- * @property bool               $require_otp
- * @property array              $scores
- * @property array              $setting
- * @property int                $show_online_status
- * @property array              $stats
- * @property int                $status
- * @property array              $subscribed_to
  * @property array              $subscription_plan
  * @property array              $subscriptions
  * @property array              $tags
- * @property array              $text_search
- * @property UTCDateTime        $updated_at
- * @property array              $user_agents
- * @property string             $username
- * @property int                $verification_status
- * @property int                $visibility
  * @property string             $ws_state
  * @property-read string $admin_url
  * @property-read array  $counters
