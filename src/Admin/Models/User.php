@@ -6,6 +6,7 @@ use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Scopes\UserScope;
+use Aparlay\Core\Models\Traits\HasPushSubscriptions;
 use Aparlay\Core\Models\User as UserBase;
 use Illuminate\Support\Str;
 use OwenIt\Auditing\Contracts\Auditable;
