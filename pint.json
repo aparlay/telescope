@@ -35,8 +35,8 @@
       "order": [
         "use_trait",
         "constant",
-        "construct",
         "property",
+        "construct",
         "method"
       ],
       "sort_algorithm": "none"
