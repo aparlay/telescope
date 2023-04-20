@@ -103,7 +103,7 @@ $rules = [
     'object_operator_without_whitespace' => true,
     'operator_linebreak' => ['only_booleans' => true, 'position' => 'end'],
     'ordered_class_elements' => [
-        'order' => ['use_trait', 'constant', 'construct', 'property', 'method'],
+        'order' => ['use_trait', 'constant', 'property', 'construct', 'method'],
         'sort_algorithm' => 'none',
     ],
     'ordered_imports' => ['sort_algorithm' => 'alpha'],
