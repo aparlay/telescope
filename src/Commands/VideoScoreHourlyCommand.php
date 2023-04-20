@@ -9,8 +9,7 @@ use Illuminate\Console\Command;
 
 class VideoScoreHourlyCommand extends Command
 {
-    public $signature = 'video:score-hourly';
-
+    public $signature   = 'video:score-hourly';
     public $description = 'This command is responsible for update video score hourly';
 
     public function handle()

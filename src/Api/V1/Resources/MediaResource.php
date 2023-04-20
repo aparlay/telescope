@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Resources;
 
 use Akaunting\Money\Money;
+use Exception;
 use Illuminate\Http\Request;
 use Laravel\Octane\Facades\Octane;
 
@@ -15,20 +16,20 @@ class MediaResource extends JsonResource
      *
      * @param Request $request
      *
-     * @return array
+     * @throws Exception
      *
-     * @throws \Exception
+     * @return array
      */
     public function toArray($request)
     {
         $people = $this->createBatchSimpleUser($this->people);
-        $likes = $this->createBatchSimpleUser($this->likes);
+        $likes  = $this->createBatchSimpleUser($this->likes);
         $visits = $this->createBatchSimpleUser($this->visits);
 
-        $tips = 0;
+        $tips   = 0;
         $alerts = AlertResource::collection([]);
         if (isset(auth()->user()->_id) && (string) auth()->user()->_id === (string) $this->creator['_id']) {
-            // $tips = $this->tips;
+            // $tips   = $this->tips;
             $alerts = AlertResource::collection($this->alertObjs);
         }
 
@@ -43,7 +44,7 @@ class MediaResource extends JsonResource
             'mime_type' => $this->mime_type,
             'visibility' => $this->visibility,
             'status' => $this->status,
-            'hashtags' => $this->hashtags ?? [],
+            'hashtags' => $this->hashtags                       ?? [],
             'people' => $people,
             'file' => $this->fileUrlFor(auth()->user()),
             'cover' => $this->coverUrlFor(auth()->user()),

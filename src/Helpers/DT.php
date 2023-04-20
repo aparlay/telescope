@@ -26,27 +26,20 @@ class DT
         return (new Carbon())->format('Y-m-d H:i:s');
     }
 
-    /**
-     * In this function we are using Carbon, so we could time-travel in tests.
-     * @param $config
-     * @return UTCDateTime
-     */
     public static function utcDateTime($config): UTCDateTime
     {
-        $pastTimestampString[] = ($config['y'] ?? 0).' years';
-        $pastTimestampString[] = ($config['mm'] ?? 0).' months';
-        $pastTimestampString[] = ($config['w'] ?? 0).' weeks';
-        $pastTimestampString[] = ($config['d'] ?? 0).' days';
-        $pastTimestampString[] = ($config['h'] ?? 0).' hours';
-        $pastTimestampString[] = ($config['m'] ?? 0).' minutes';
-        $pastTimestampString[] = ($config['s'] ?? 0).' seconds';
+        $pastTimestampString[] = ($config['y'] ?? 0) . ' years';
+        $pastTimestampString[] = ($config['mm'] ?? 0) . ' months';
+        $pastTimestampString[] = ($config['w'] ?? 0) . ' weeks';
+        $pastTimestampString[] = ($config['d'] ?? 0) . ' days';
+        $pastTimestampString[] = ($config['h'] ?? 0) . ' hours';
+        $pastTimestampString[] = ($config['m'] ?? 0) . ' minutes';
+        $pastTimestampString[] = ($config['s'] ?? 0) . ' seconds';
 
         return new UTCDatetime(Carbon::parse(implode(' ', $pastTimestampString))->valueOf());
     }
 
     /**
-     * @param $utcDateTime
-     *
      * @return int
      */
     public static function utcToTimestamp($utcDateTime)
@@ -54,19 +47,11 @@ class DT
         return $utcDateTime / 1000;
     }
 
-    /**
-     * @param  UTCDateTime  $utcDateTime
-     * @return Carbon
-     */
     public static function utcToCarbon(UTCDateTime $utcDateTime): Carbon
     {
         return new Carbon($utcDateTime->toDateTime());
     }
 
-    /**
-     * @param  UTCDateTime  $utcDateTime
-     * @return float
-     */
     public static function utcToMillisec(UTCDateTime $utcDateTime): float
     {
         return (new Carbon($utcDateTime->toDateTime()))->valueOf();
@@ -87,10 +72,6 @@ class DT
         return $dateTime->toDateTime();
     }
 
-    /**
-     * @param int $millisec
-     * @return UTCDateTime
-     */
     public static function millisecToUtc(int $millisec): UTCDateTime
     {
         return new UTCDatetime($millisec);

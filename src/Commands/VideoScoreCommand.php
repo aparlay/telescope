@@ -9,8 +9,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 class VideoScoreCommand extends Command
 {
-    public $signature = 'video:score';
-
+    public $signature   = 'video:score';
     public $description = 'This command is responsible for update video score';
 
     /**
@@ -22,7 +21,7 @@ class VideoScoreCommand extends Command
         $this->line(implode(', ', $headers).PHP_EOL);
 
         $mediaQuery = Media::availableForFollower()->whereNull('is_fake')->orderBy('created_at', 'ASC');
-        $bar = $this->output->createProgressBar($mediaQuery->count());
+        $bar        = $this->output->createProgressBar($mediaQuery->count());
         foreach ($mediaQuery->lazy() as $media) {
             /** @var Media $media */
             $media->recalculateSortScores();

@@ -39,23 +39,19 @@ class UserNotificationEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('users.'.$this->userId);
+        return new PrivateChannel('users.' . $this->userId);
     }
 
     /**
      * The event's broadcast name.
-     *
-     * @return string
      */
     public function broadcastAs(): string
     {
-        return 'UserNotification.'.$this->eventType;
+        return 'UserNotification.' . $this->eventType;
     }
 
     /**
      * Get the data to broadcast.
-     *
-     * @return array
      */
     public function broadcastWith(): array
     {

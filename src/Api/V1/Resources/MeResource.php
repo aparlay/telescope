@@ -5,6 +5,7 @@ namespace Aparlay\Core\Api\V1\Resources;
 use Aparlay\Core\Models\Enums\MediaContentGender;
 use Aparlay\Core\Models\Enums\UserSettingShowAdultContent;
 use Aparlay\Core\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,19 +20,20 @@ class MeResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
+     * @throws Exception
      *
      * @return array
-     * @throws \Exception
      */
     public function toArray($request)
     {
-        $followers = [];
+        $followers  = [];
         foreach ($this->followers as $follower) {
             $followers[] = $this->createSimpleUser($follower);
         }
 
-        $likes = [];
+        $likes      = [];
         foreach ($this->likes as $like) {
             $likes[] = $this->createSimpleUser($like);
         }
@@ -41,12 +43,12 @@ class MeResource extends JsonResource
             $followings[] = $this->createSimpleUser($following);
         }
 
-        $blocks = [];
+        $blocks     = [];
         foreach ($this->blocks as $block) {
             $blocks[] = $this->createSimpleUser($block);
         }
 
-        $medias = [];
+        $medias     = [];
         foreach ($this->medias as $media) {
             $medias[] = $this->createSimpleMedia($media);
         }
@@ -63,8 +65,8 @@ class MeResource extends JsonResource
             'phone_number_verified' => $this->phone_number_verified,
             'avatar' => $this->avatar,
             'setting' => [
-                'otp' => $this->setting['otp'] ?? false,
-                'show_adult_content' => $this->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
+                'otp' => $this->setting['otp']                                     ?? false,
+                'show_adult_content' => $this->setting['show_adult_content']       ?? UserSettingShowAdultContent::ASK->value,
                 'filter_content_gender' => $this->setting['filter_content_gender'] ?? [
                         MediaContentGender::FEMALE->label() => true,
                         MediaContentGender::MALE->label() => true,
@@ -72,12 +74,12 @@ class MeResource extends JsonResource
                     ],
                 'notifications' => [
                     'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? false,
-                    'new_followers' => $this->setting['notifications']['new_followers'] ?? false,
-                    'news_and_updates' => $this->setting['notifications']['news_and_updates'] ?? false,
-                    'new_subscribers' => $this->setting['notifications']['new_subscribers'] ?? false,
-                    'tips' => $this->setting['notifications']['tips'] ?? false,
-                    'likes' => $this->setting['notifications']['likes'] ?? false,
-                    'comments' => $this->setting['notifications']['comments'] ?? false,
+                    'new_followers' => $this->setting['notifications']['new_followers']                 ?? false,
+                    'news_and_updates' => $this->setting['notifications']['news_and_updates']           ?? false,
+                    'new_subscribers' => $this->setting['notifications']['new_subscribers']             ?? false,
+                    'tips' => $this->setting['notifications']['tips']                                   ?? false,
+                    'likes' => $this->setting['notifications']['likes']                                 ?? false,
+                    'comments' => $this->setting['notifications']['comments']                           ?? false,
                 ],
                 'subscriptions' => [
                     'is_paid_content_policy_signed' => $this->setting['subscriptions']['is_paid_content_policy_signed'] ?? false,
@@ -96,12 +98,12 @@ class MeResource extends JsonResource
             'verification_status_label' => $this->verification_status_label,
             'visibility' => $this->visibility,
             'promo_link' => $this->promo_link,
-            'follower_count' => $this->counters['followers'] ?? 0,
-            'following_count' => $this->counters['followings'] ?? 0,
-            'like_count' => $this->counters['likes'] ?? 0,
-            'block_count' => $this->counters['blocks'] ?? 0,
+            'follower_count' => $this->counters['followers']                 ?? 0,
+            'following_count' => $this->counters['followings']               ?? 0,
+            'like_count' => $this->counters['likes']                         ?? 0,
+            'block_count' => $this->counters['blocks']                       ?? 0,
             'followed_hashtag_count' => $this->counters['followed_hashtags'] ?? 0,
-            'media_count' => $this->counters['medias'] ?? 0,
+            'media_count' => $this->counters['medias']                       ?? 0,
             'has_unread_chat' => $this->has_unread_chat,
             'has_unread_notification' => $this->has_unread_notification,
             'is_followed' => false,
@@ -126,7 +128,7 @@ class MeResource extends JsonResource
             'country_alpha2' => $this->country_alpha2,
             'country_label' => $this->country_label,
             'country_flags' => $this->country_flags,
-            'tags' => $this->tags ?? [],
+            'tags' => $this->tags                                            ?? [],
             $this->mergeWhen($this->is_tier1, fn () => ['is_tier1' => true]),
             $this->mergeWhen($this->is_tier3, fn () => ['is_tier3' => true]),
         ];

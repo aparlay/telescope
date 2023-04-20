@@ -10,8 +10,7 @@ use Illuminate\Contracts\Console\Isolatable;
 
 class WarmupCacheCommand extends Command implements Isolatable
 {
-    public $signature = 'core:warmup';
-
+    public $signature   = 'core:warmup';
     public $description = 'This command is responsible for warm up cache';
 
     public function handle()

@@ -21,14 +21,14 @@ return new class() extends Migration {
                 ->orWhere('is_music_licensed', '!=', true)
                 ->orWhere('status', '!=', MediaStatus::CONFIRMED->value)
                 ->update([
-                    'status' => MediaStatus::CONFIRMED->value,
-                    'is_protected' => true,
+                    'status           ' => MediaStatus::CONFIRMED->value,
+                    'is_protected     ' => true,
                     'is_music_licensed' => true,
                 ]);
         }
         Media::where('is_protected', null)->update([
             'status' => MediaStatus::CONFIRMED->value,
-            'is_protected' => false,
+            'is_protected     ' => false,
             'is_music_licensed' => false,
         ]);
     }

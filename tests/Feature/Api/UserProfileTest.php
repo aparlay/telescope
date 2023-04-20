@@ -17,7 +17,7 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function invalidUsername()
+    public function invalid_username()
     {
         $user = User::factory()->create(['status' => UserStatus::VERIFIED->value]);
         $this->actingAs($user)
@@ -42,7 +42,7 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function usernameExist()
+    public function username_exist()
     {
         User::factory()->create(['username' => 'alua_user']);
         $user = User::factory()->create(['status' => UserStatus::VERIFIED->value]);
@@ -68,7 +68,7 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function invalidAvatarExtension()
+    public function invalid_avatar_extension()
     {
         $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $this->actingAs($user)
@@ -93,14 +93,14 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function userProfileById()
+    public function user_profile_by_id()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $user            = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $userDeactivated = User::factory()->create(['status' => UserStatus::DEACTIVATED->value]);
-        $userViewer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $userViewer      = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$user->_id)
+            ->get('/v1/user/' . $user->_id)
             ->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
@@ -152,12 +152,12 @@ class UserProfileTest extends ApiTestCase
             );
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$userDeactivated->_id)
+            ->get('/v1/user/' . $userDeactivated->_id)
             ->assertStatus(423);
 
         $this->actingAs($userViewer)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$user->_id)
+            ->get('/v1/user/' . $user->_id)
             ->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
@@ -214,14 +214,14 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function userProfileByUsername()
+    public function user_profile_by_username()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $user            = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $userDeactivated = User::factory()->create(['status' => UserStatus::DEACTIVATED->value]);
-        $userViewer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $userViewer      = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/share/'.$user->username)
+            ->get('/v1/user/share/' . $user->username)
             ->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
@@ -273,12 +273,12 @@ class UserProfileTest extends ApiTestCase
             );
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$userDeactivated->_id)
+            ->get('/v1/user/' . $userDeactivated->_id)
             ->assertStatus(423);
 
         $this->actingAs($userViewer)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$user->_id)
+            ->get('/v1/user/' . $user->_id)
             ->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
@@ -335,26 +335,26 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function deleteAccount()
+    public function delete_account()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value, 'password' => 'password']);
+        $user           = User::factory()->create(['status' => UserStatus::ACTIVE->value, 'password' => 'password']);
 
-        $oldEmail = $user->email;
+        $oldEmail       = $user->email;
         $oldPhoneNumber = $user->phone_number;
 
-        $user = \Aparlay\Core\Models\User::factory()->create(['password' => 'password']);
-        $credentials = ['username' => $user->username, 'password' => 'password'];
-        $token = auth()->attempt($credentials);
+        $user           = \Aparlay\Core\Models\User::factory()->create(['password' => 'password']);
+        $credentials    = ['username' => $user->username, 'password' => 'password'];
+        $token          = auth()->attempt($credentials);
 
         $this->actingAs($user)
             ->withHeaders([
-                'Authorization' => 'Bearer '.$token,
+                'Authorization' => 'Bearer ' . $token,
                 'X-DEVICE-ID' => 'random-string',
             ])
             ->json('POST', '/v1/me/delete', [])
             ->assertStatus(204);
 
-        $userDetails = User::where('_id', new ObjectId($user->_id))->first();
+        $userDetails    = User::where('_id', new ObjectId($user->_id))->first();
 
         $this->assertDatabaseHas('users', ['_id' => new ObjectId($userDetails->_id)]);
         $this->assertNotEquals($oldEmail, $userDetails->email);
@@ -366,11 +366,11 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function getUserDetails()
+    public function get_user_details()
     {
         $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
-        $r = $this->actingAs($user)
+        $r    = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->get('/v1/me', []);
 
@@ -503,9 +503,9 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function updateUserVisibility()
+    public function update_user_visibility()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $user        = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $user->update(['visibility' => UserVisibility::PUBLIC->value]);
         $user->refresh();
 
@@ -519,7 +519,7 @@ class UserProfileTest extends ApiTestCase
                 ],
             ]);
 
-        $r = $this->actingAs($user)
+        $r           = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/me?_method=PUT', [
                 'visibility' => UserVisibility::PRIVATE->value,
@@ -623,13 +623,13 @@ class UserProfileTest extends ApiTestCase
      *
      * @test
      */
-    public function updateInvisibleUserVisibility()
+    public function update_invisible_user_visibility()
     {
-        $user = User::first();
+        $user        = User::first();
         $user->update(['visibility' => UserVisibility::INVISIBLE_BY_ADMIN->value]);
         $user->refresh();
 
-        $r = $this->actingAs($user)
+        $r           = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/me?_method=PUT', [
                 'visibility' => UserVisibility::PRIVATE->value,

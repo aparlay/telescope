@@ -27,14 +27,11 @@ class MediaService extends AdminBaseService
     public function __construct()
     {
         $this->mediaRepository = new MediaRepository(new Media());
-        $this->userRepository = new UserRepository(new User());
+        $this->userRepository  = new UserRepository(new User());
         $this->filterableField = ['creator.username', 'status', 'created_at'];
         $this->sorterableField = ['creator.username', 'description', 'status', 'like_count', 'visit_count', 'created_at'];
     }
 
-    /**
-     * @return bool
-     */
     public function isModerationQueueNotEmpty(): bool
     {
         return $this->mediaRepository->countCompleted() > 0;
@@ -66,16 +63,16 @@ class MediaService extends AdminBaseService
 
     public function hasNextItemToReview($mediaId): bool
     {
-        return ! empty($this->mediaRepository->nextItemToReview($mediaId));
+        return !empty($this->mediaRepository->nextItemToReview($mediaId));
     }
 
     /**
      * @param $userId
-     * @return bool
+     * @param mixed $mediaId
      */
     public function hasPrevItemToReview($mediaId): bool
     {
-        return ! empty($this->mediaRepository->prevItemToReview($mediaId));
+        return !empty($this->mediaRepository->prevItemToReview($mediaId));
     }
 
     public function firstItemToReview($currentAdminUser)
@@ -86,7 +83,7 @@ class MediaService extends AdminBaseService
             return $underReviewExists;
         }
 
-        $pendingMedia = $this->mediaRepository->firstToReview();
+        $pendingMedia      = $this->mediaRepository->firstToReview();
 
         if ($pendingMedia) {
             $this->mediaRepository->revertAllToCompleted($currentAdminUser);
@@ -96,13 +93,10 @@ class MediaService extends AdminBaseService
         return $pendingMedia;
     }
 
-    /**
-     * @param $id
-     */
     public function find($id)
     {
-        $media = $this->mediaRepository->find($id);
-        $statusBadge = [
+        $media               = $this->mediaRepository->find($id);
+        $statusBadge         = [
             'status' => $media->status_name,
             'color' => $media->status_color,
         ];
@@ -115,38 +109,31 @@ class MediaService extends AdminBaseService
 
     /**
      * @param $order
+     * @param mixed $page
      */
     public function pending($page)
     {
         return $this->mediaRepository->pending($page);
     }
 
-    /**
-     * @return array
-     */
     public function getMediaStatuses(): array
     {
         return $this->mediaRepository->getMediaStatuses();
     }
 
-    /**
-     * @return array
-     */
     public function getVisibilities(): array
     {
         return $this->userRepository->getVisibilities();
     }
 
     /**
-     * @param                      $id
-     * @param  MediaUpdateRequest  $request
+     * @throws InvalidArgumentException
      *
      * @return Media|mixed
-     * @throws InvalidArgumentException
      */
     public function update($id, MediaUpdateRequest $request)
     {
-        $data = $request->only([
+        $data  = $request->only([
             'description',
             'status',
             'is_protected',
@@ -169,15 +156,13 @@ class MediaService extends AdminBaseService
     }
 
     /**
-     * @param                           $id
-     * @param  MediaUpdateScoreRequest  $request
+     * @throws InvalidArgumentException
      *
      * @return Media|mixed
-     * @throws InvalidArgumentException
      */
     public function updateScore($id, MediaUpdateScoreRequest $request)
     {
-        $data = [
+        $data  = [
             'status' => $request->integer('status'),
             'content_gender' => $request->integer('content_gender'),
             'scores' => [
@@ -213,14 +198,14 @@ class MediaService extends AdminBaseService
 
     /**
      * @param Media $media
-     * @param $promote
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      *
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function calculateSortScores($media, $promote)
     {
-        $cacheKey = (new Media())->getCollection().':promote:'.$media->_id;
+        $cacheKey = (new Media())->getCollection() . ':promote:' . $media->_id;
         if ($promote > 0) {
             Redis::set($cacheKey, $promote, 86400);
         }
@@ -259,9 +244,9 @@ class MediaService extends AdminBaseService
             'visibility' => $user->visibility,
             'status' => MediaStatus::QUEUED->value,
             'creator' => [
-                '_id'      => new ObjectId($user->_id),
+                '_id' => new ObjectId($user->_id),
                 'username' => $user->username,
-                'avatar'   => $user->avatar,
+                'avatar' => $user->avatar,
             ],
         ];
 

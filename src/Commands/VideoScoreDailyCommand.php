@@ -6,12 +6,10 @@ use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Jobs\MediaForceSortPositionRecalculate;
 use Aparlay\Core\Models\Media;
 use Illuminate\Console\Command;
-use Illuminate\Http\Response;
 
 class VideoScoreDailyCommand extends Command
 {
-    public $signature = 'video:score-daily';
-
+    public $signature   = 'video:score-daily';
     public $description = 'This command is responsible for update video score daily';
 
     public function handle()

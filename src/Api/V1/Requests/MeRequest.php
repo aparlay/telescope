@@ -12,12 +12,12 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 /**
- * @property string $username
- * @property int    $visibility
  * @property string $country_alpha2
  * @property string $payout_country_alpha2
  * @property array  $setting
  * @property ?array $tags
+ * @property string $username
+ * @property int    $visibility
  */
 class MeRequest extends FormRequest
 {
@@ -111,7 +111,7 @@ class MeRequest extends FormRequest
             ]);
         }
 
-        if (! auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
+        if (!auth()->guest() && auth()->user()->is_invisible && isset($this->visibility)) {
             throw ValidationException::withMessages([
                 'visibility' => 'Your account is invisible by administrator, you cannot change it to public/private.',
             ]);
@@ -121,17 +121,13 @@ class MeRequest extends FormRequest
             $this->merge(['username' => trim($this->username)]);
         }
 
-        if (! auth()->guest()
-            && auth()->user()->status === UserStatus::ACTIVE->value
-            && $this->has('username')
+        if (!auth()->guest() && auth()->user()->status === UserStatus::ACTIVE->value && $this->has('username')
         ) {
             throw ValidationException::withMessages([
                 'username' => 'You cannot change your username any more.',
             ]);
         }
-        if (! auth()->guest()
-            && ! empty(auth()->user()->payout_country_alpha2)
-            && $this->has('payout_country_alpha2')
+        if (!auth()->guest() && !empty(auth()->user()->payout_country_alpha2) && $this->has('payout_country_alpha2')
         ) {
             throw ValidationException::withMessages([
                 'username' => 'You cannot change your payout country any more.',
@@ -145,45 +141,34 @@ class MeRequest extends FormRequest
                 array_slice(array_unique(array_merge($this->tags, $user->tags)), 0, 50)
             ) : $user->tags,
             'setting' => [
-                'otp' => $this->setting['otp'] ?? $user->setting['otp'] ?? false,
-                'show_adult_content' => $this->setting['show_adult_content'] ??
-                        $user->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
+                'otp' => $this->setting['otp']                               ?? $user->setting['otp'] ?? false,
+                'show_adult_content' => $this->setting['show_adult_content'] ?? $user->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value,
                 'filter_content_gender' => [
-                    'female' => $this->setting['filter_content_gender']['female'] ??
-                            $user->setting['filter_content_gender']['female'] ?? true,
-                    'male' => $this->setting['filter_content_gender']['male'] ??
-                            $user->setting['filter_content_gender']['male'] ?? false,
-                    'transgender' => $this->setting['filter_content_gender']['transgender'] ??
-                            $user->setting['filter_content_gender']['transgender'] ?? false,
+                    'female' => $this->setting['filter_content_gender']['female']           ?? $user->setting['filter_content_gender']['female'] ?? true,
+                    'male' => $this->setting['filter_content_gender']['male']               ?? $user->setting['filter_content_gender']['male'] ?? false,
+                    'transgender' => $this->setting['filter_content_gender']['transgender'] ?? $user->setting['filter_content_gender']['transgender'] ?? false,
                 ],
                 'subscriptions' => [
                     'is_paid_content_policy_signed' => $this->setting['subscriptions']['is_paid_content_policy_signed'] ?? $user->setting['subscriptions']['is_paid_content_policy_signed'] ?? false,
                     'is_refund_policy_signed' => $this->setting['subscriptions']['is_refund_policy_signed'] ?? $user->setting['subscriptions']['is_refund_policy_signed'] ?? false,
                 ],
                 'notifications' => [
-                    'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ??
-                            $user->setting['notifications']['unread_message_alerts'] ?? true,
-                    'new_followers' => $this->setting['notifications']['new_followers'] ??
-                            $user->setting['notifications']['new_followers'] ?? true,
-                    'news_and_updates' => $this->setting['notifications']['news_and_updates'] ??
-                            $user->setting['notifications']['news_and_updates'] ?? true,
-                    'new_subscribers' => $this->setting['notifications']['new_subscribers'] ??
-                            $user->setting['notifications']['new_subscribers'] ?? true,
-                    'tips' => $this->setting['notifications']['tips'] ??
-                            $user->setting['notifications']['tips'] ?? true,
-                    'likes' => $this->setting['notifications']['likes'] ??
-                            $user->setting['notifications']['likes'] ?? true,
-                    'comments' => $this->setting['notifications']['comments'] ??
-                            $user->setting['notifications']['comments'] ?? true,
+                    'unread_message_alerts' => $this->setting['notifications']['unread_message_alerts'] ?? $user->setting['notifications']['unread_message_alerts'] ?? true,
+                    'new_followers' => $this->setting['notifications']['new_followers']                 ?? $user->setting['notifications']['new_followers'] ?? true,
+                    'news_and_updates' => $this->setting['notifications']['news_and_updates']           ?? $user->setting['notifications']['news_and_updates'] ?? true,
+                    'new_subscribers' => $this->setting['notifications']['new_subscribers']             ?? $user->setting['notifications']['new_subscribers'] ?? true,
+                    'tips' => $this->setting['notifications']['tips']                                   ?? $user->setting['notifications']['tips'] ?? true,
+                    'likes' => $this->setting['notifications']['likes']                                 ?? $user->setting['notifications']['likes'] ?? true,
+                    'comments' => $this->setting['notifications']['comments']                           ?? $user->setting['notifications']['comments'] ?? true,
                 ],
                 'payment' => [
                     'allow_unverified_cc' => $user->setting['payment']['allow_unverified_cc'] ?? false,
                     'block_unverified_cc' => $user->setting['payment']['block_unverified_cc'] ?? true,
-                    'block_cc_payments' => $user->setting['payment']['block_cc_payments'] ?? true,
+                    'block_cc_payments' => $user->setting['payment']['block_cc_payments']     ?? true,
                     'unverified_cc_spent_amount' => (int) ($user->setting['payment']['unverified_cc_spent_amount'] ?? 0),
                 ],
                 'payout' => [
-                    'ban_payout' => $user->setting['payout']['ban_payout'] ?? false,
+                    'ban_payout' => $user->setting['payout']['ban_payout']           ?? false,
                     'auto_ban_payout' => $user->setting['payout']['auto_ban_payout'] ?? false,
                 ],
             ],

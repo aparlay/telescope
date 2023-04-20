@@ -28,8 +28,8 @@ class UserObserver extends BaseModelObserver
     /**
      * Handle the User "creating" event.
      *
-     * @param  User  $model
-     * @return void
+     * @param User $model
+     *
      * @throws Exception
      */
     public function creating($model): void
@@ -37,7 +37,7 @@ class UserObserver extends BaseModelObserver
         if (empty($model->status)) {
             $model->status = UserStatus::PENDING->value;
         }
-        if (! in_array($model->gender, array_keys(User::getGenders()), true)) {
+        if (!in_array($model->gender, array_keys(User::getGenders()), true)) {
             $model->gender = UserGender::MALE->value;
         }
         if (empty($model->visibility)) {
@@ -47,9 +47,9 @@ class UserObserver extends BaseModelObserver
             $model->show_online_status = UserShowOnlineStatus::All->value;
         }
         if (empty($model->avatar)) {
-            $maleAvatar = 'default_m_'.random_int(1, 120).'.png';
-            $femaleAvatar = 'default_fm_'.random_int(1, 60).'.png';
-            $filename = match ($model->gender) {
+            $maleAvatar    = 'default_m_' . random_int(1, 120) . '.png';
+            $femaleAvatar  = 'default_fm_' . random_int(1, 60) . '.png';
+            $filename      = match ($model->gender) {
                 UserGender::FEMALE->value => $femaleAvatar,
                 UserGender::MALE->value => $maleAvatar,
                 default => (random_int(0, 1)) ? $maleAvatar : $femaleAvatar,
@@ -68,14 +68,14 @@ class UserObserver extends BaseModelObserver
     /**
      * Handle the User "creating" event.
      *
-     * @param  User  $model
-     * @return void
+     * @param User $model
+     *
      * @throws Exception|\Psr\SimpleCache\InvalidArgumentException
      */
     public function saving($model): void
     {
-        if (! empty($model->promo_link) && ! str_starts_with($model->promo_link, 'http')) {
-            $model->promo_link = 'https://'.$model->promo_link;
+        if (!empty($model->promo_link) && !str_starts_with($model->promo_link, 'http')) {
+            $model->promo_link = 'https://' . $model->promo_link;
         }
 
         // Reset the Redis cache
@@ -84,19 +84,19 @@ class UserObserver extends BaseModelObserver
         }
 
         if ($model->isDirty(['username', 'email', 'phone_number', 'full_name'])) {
-            $text_search = explode(' ', $model->full_name);
-            $text_search[] = $model->username;
-            $text_search[] = $model->email;
-            $text_search[] = $model->phone_number;
+            $text_search        = explode(' ', $model->full_name);
+            $text_search[]      = $model->username;
+            $text_search[]      = $model->email;
+            $text_search[]      = $model->phone_number;
             $model->text_search = array_values(array_filter(array_map('strtolower', $text_search)));
         }
 
         if ($model->isDirty(['country_alpha2'])) {
-            $setting = $model->setting;
-            $setting['payment']['allow_unverified_cc'] = ! $model->is_tier3;
+            $setting                                   = $model->setting;
+            $setting['payment']['allow_unverified_cc'] = !$model->is_tier3;
             $setting['payment']['block_unverified_cc'] = $model->is_tier3;
-            $setting['payment']['block_cc_payments'] = false;
-            $model->setting = $setting;
+            $setting['payment']['block_cc_payments']   = false;
+            $model->setting                            = $setting;
         }
 
         parent::saving($model);
@@ -105,8 +105,6 @@ class UserObserver extends BaseModelObserver
     /**
      * Create a new event instance.
      *
-     * @param  User  $model
-     * @return void
      * @throws Exception
      */
     public function updated($model): void
@@ -126,6 +124,7 @@ class UserObserver extends BaseModelObserver
                     DeleteUserConnect::dispatch((string) $model->_id);
                     DeleteUserMediaComments::dispatch((string) $model->_id);
                     DeleteUserMediaLikes::dispatch((string) $model->id);
+
                     break;
                 case UserStatus::BLOCKED->value:
                     $model->unsearchable();
@@ -133,11 +132,13 @@ class UserObserver extends BaseModelObserver
                     DeleteUserConnect::dispatch((string) $model->_id);
                     DeleteUserMediaComments::dispatch((string) $model->_id);
                     DeleteUserMediaLikes::dispatch((string) $model->id);
+
                     break;
                 case UserStatus::ACTIVE->value:
                     if ($model->getOriginal('status') == UserStatus::SUSPENDED->value) {
                         UpdateUserMediaStatus::dispatch((string) $model->_id, MediaStatus::DENIED->value);
                     }
+
                     break;
             }
         }
@@ -151,7 +152,7 @@ class UserObserver extends BaseModelObserver
 
     public function saved($model)
     {
-        if (empty($model->country_alpha2) && ! empty(IP::trueAddress()) && IP::trueAddress() !== '127.0.0.1') {
+        if (empty($model->country_alpha2) && !empty(IP::trueAddress()) && IP::trueAddress() !== '127.0.0.1') {
             UpdateUserCountry::dispatch((string) $model->_id, IP::trueAddress());
         }
     }

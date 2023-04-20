@@ -25,7 +25,6 @@ class UploadMedia implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
     public User $user;
     public Media $media;
     public string $user_id;
@@ -35,7 +34,7 @@ class UploadMedia implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries         = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -45,57 +44,58 @@ class UploadMedia implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(string|ObjectId $userId, string|ObjectId $mediaId, string $file)
     {
         $this->onQueue(config('app.server_specific_queue'));
         if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'User not found with id '.$userId);
+            throw new Exception(__CLASS__ . PHP_EOL . 'User not found with id ' . $userId);
         }
 
         if (($this->media = Media::media($mediaId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$userId);
+            throw new Exception(__CLASS__ . PHP_EOL . 'Media not found with id ' . $userId);
         }
 
-        $this->user_id = (string) $userId;
+        $this->user_id  = (string) $userId;
         $this->media_id = (string) $mediaId;
-        $this->file = $file;
+        $this->file     = $file;
 
-        if (! Storage::disk('upload')->exists($this->file) && ! config('app.is_testing')) {
-            throw new Exception(__CLASS__.PHP_EOL.'File not exists.');
+        if (!Storage::disk('upload')->exists($this->file) && !config('app.is_testing')) {
+            throw new Exception(__CLASS__ . PHP_EOL . 'File not exists.');
         }
     }
 
     /**
      * Execute the job.
      *
-     * @return void
      * @throws FileExistsException
      * @throws FileNotFoundException
+     *
+     * @return void
      */
     public function handle()
     {
         if (($media = Media::media($this->media_id)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'Media not found!');
+            throw new Exception(__CLASS__ . PHP_EOL . 'Media not found!');
         }
-        $storage = Storage::disk('upload');
-        if (! $storage->exists($this->file)) {
-            throw new Exception(__CLASS__.PHP_EOL.'File not exists '.$this->file);
+        $storage          = Storage::disk('upload');
+        if (!$storage->exists($this->file)) {
+            throw new Exception(__CLASS__ . PHP_EOL . 'File not exists ' . $this->file);
         }
 
-        $newFilename = md5($this->user_id.md5_file($storage->path($this->file))).'.'.pathinfo($this->file, PATHINFO_EXTENSION);
-        $filePath = $storage->path($this->file);
-        $media->hash = sha1_file($filePath);
-        $media->size = $storage->size($this->file);
+        $newFilename      = md5($this->user_id . md5_file($storage->path($this->file))) . '.' . pathinfo($this->file, PATHINFO_EXTENSION);
+        $filePath         = $storage->path($this->file);
+        $media->hash      = sha1_file($filePath);
+        $media->size      = $storage->size($this->file);
         $media->mime_type = $storage->mimeType($this->file);
-        $media->file = $newFilename;
-        $media->status = MediaStatus::UPLOADED->value;
+        $media->file      = $newFilename;
+        $media->status    = MediaStatus::UPLOADED->value;
 
-        $mediaServer = Storage::disk('media-ftp');
-        if (! $mediaServer->exists($newFilename)) {
+        $mediaServer      = Storage::disk('media-ftp');
+        if (!$mediaServer->exists($newFilename)) {
             $mediaServer->writeStream($newFilename, $storage->readStream($this->file));
         }
         $mediaServer->setVisibility($newFilename, Filesystem::VISIBILITY_PUBLIC);
@@ -118,9 +118,6 @@ class UploadMedia implements ShouldQueue
         return $this->attempts() * 60;
     }
 
-    /**
-     * @param  Throwable  $exception
-     */
     public function failed(Throwable $exception): void
     {
         if (($user = User::admin()->first()) !== null) {

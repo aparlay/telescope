@@ -35,8 +35,8 @@
       "order": [
         "use_trait",
         "constant",
-        "construct",
         "property",
+        "construct",
         "method"
       ],
       "sort_algorithm": "none"
@@ -75,7 +75,7 @@
     "binary_operator_spaces": {
       "default": "align_single_space_minimal_by_scope",
       "operators": {
-        "=>": "align_single_space_minimal_by_scope",
+        "=>": "single_space",
         "|": "no_space"
       }
     },

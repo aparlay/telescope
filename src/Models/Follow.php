@@ -19,16 +19,16 @@ use Psr\SimpleCache\InvalidArgumentException;
  * Class Follow.
  *
  * @property ObjectId   $_id
+ * @property string     $aliasModel
+ * @property string     $created_at
+ * @property array      $creator
+ * @property mixed|null $creator_id
+ * @property User       $creatorObj
+ * @property bool       $is_deleted
  * @property int        $status
  * @property array      $user
- * @property array      $creator
- * @property bool       $is_deleted
- * @property string     $created_at
- * @property User       $creatorObj
- * @property User       $userObj
- * @property mixed|null $creator_id
  * @property mixed|null $user_id
- * @property string     $aliasModel
+ * @property User       $userObj
  */
 class Follow extends BaseModel
 {
@@ -47,7 +47,7 @@ class Follow extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'user',
         'creator',
@@ -61,7 +61,7 @@ class Follow extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -69,13 +69,12 @@ class Follow extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
-        'creator' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed,is_verified',
-        'user' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed,is_verified',
+    protected $casts      = [
+        'creator' => SimpleUserCast::class . ':_id,username,avatar,is_liked,is_followed,is_verified',
+        'user' => SimpleUserCast::class . ':_id,username,avatar,is_liked,is_followed,is_verified',
         'is_deleted' => 'boolean',
         'status' => 'integer',
     ];
-
     protected $attributes = [
         'status' => 1,
     ];
@@ -88,18 +87,11 @@ class Follow extends BaseModel
         return FollowFactory::new();
     }
 
-    /**
-     * @return FollowQueryBuilder|Builder
-     */
     public static function query(): FollowQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     * @return FollowQueryBuilder
-     */
     public function newEloquentBuilder($query): FollowQueryBuilder
     {
         return new FollowQueryBuilder($query);
@@ -122,20 +114,18 @@ class Follow extends BaseModel
     }
 
     /**
-     * @param  ObjectId|string  $userId
-     * @param  bool  $refresh
      * @throws InvalidArgumentException
      */
-    public static function cacheByUserId(ObjectId | string $userId, bool $refresh = false): void
+    public static function cacheByUserId(ObjectId|string $userId, bool $refresh = false): void
     {
-        $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
-        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+        $userId   = $userId instanceof ObjectId ? (string) $userId : $userId;
+        $cacheKey = (new self())->getCollection() . ':creator:' . $userId;
 
         if ($refresh) {
             Redis::del($cacheKey);
         }
 
-        if (! Redis::exists($cacheKey)) {
+        if (!Redis::exists($cacheKey)) {
             $followingIds = self::project(['user._id' => true, '_id' => false])
                 ->creator(new ObjectId($userId))
                 ->pluck('user._id')
@@ -153,30 +143,24 @@ class Follow extends BaseModel
     }
 
     /**
-     * @param  string  $creatorId
-     * @param  string  $userId
-     * @return bool
      * @throws InvalidArgumentException
      */
     public static function checkCreatorIsFollowedByUser(string $creatorId, string $userId): bool
     {
-        $octaneCacheKey = md5('user:'.$userId.':followedBy:'.$creatorId);
+        $octaneCacheKey = md5('user:' . $userId . ':followedBy:' . $creatorId);
         if (Cache::store('octane')->has($octaneCacheKey)) {
             return (bool) Cache::store('octane')->get($octaneCacheKey);
         }
 
         self::cacheByUserId($userId);
 
-        $cacheKey = (new self())->getCollection().':creator:'.$userId;
-        $result = Redis::sismember($cacheKey, $creatorId);
+        $cacheKey       = (new self())->getCollection() . ':creator:' . $userId;
+        $result         = Redis::sismember($cacheKey, $creatorId);
         Cache::store('octane')->set($octaneCacheKey, $result, config('app.cache.tenMinutes'));
 
         return (bool) $result;
     }
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [

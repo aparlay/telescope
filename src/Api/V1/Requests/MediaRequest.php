@@ -14,8 +14,8 @@ use Illuminate\Validation\ValidationException;
 
 /**
  * @property string $description
- * @property string $visibility
  * @property string $file
+ * @property string $visibility
  */
 class MediaRequest extends FormRequest
 {

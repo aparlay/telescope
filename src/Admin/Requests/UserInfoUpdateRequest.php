@@ -4,14 +4,12 @@ namespace Aparlay\Core\Admin\Requests;
 
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Helpers\Country;
-use Aparlay\Core\Models\Enums\UserInterestedIn;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use Maklad\Permission\Models\Role;
-use MongoDB\BSON\ObjectId;
 
 class UserInfoUpdateRequest extends FormRequest
 {
@@ -58,7 +56,6 @@ class UserInfoUpdateRequest extends FormRequest
     }
 
     /**
-     * @param Validator $validator
      * @return void
      */
     public function failedValidation(Validator $validator)
