@@ -24,7 +24,6 @@ use Aparlay\Core\Models\Enums\UserVisibility;
 use Hash;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UserService extends AdminBaseService
@@ -34,7 +33,7 @@ class UserService extends AdminBaseService
 
     public function __construct()
     {
-        $this->userRepository = new UserRepository(new User());
+        $this->userRepository  = new UserRepository(new User());
 
         $this->filterableField = ['text_search', 'username', 'email', 'status', 'visibility', 'created_at'];
         $this->sorterableField = ['username', 'email', 'status', 'visibility', 'created_at'];
@@ -69,22 +68,14 @@ class UserService extends AdminBaseService
         return $pendingUser;
     }
 
-    /**
-     * @param $userId
-     * @return bool
-     */
     public function hasNextPending($userId): bool
     {
-        return ! empty($this->userRepository->firstNextPending($userId));
+        return !empty($this->userRepository->firstNextPending($userId));
     }
 
-    /**
-     * @param $userId
-     * @return bool
-     */
     public function hasPrevPending($userId): bool
     {
-        return ! empty($this->userRepository->firstPrevPending($userId));
+        return !empty($this->userRepository->firstPrevPending($userId));
     }
 
     public function firstPending($user)
@@ -95,25 +86,24 @@ class UserService extends AdminBaseService
             return $underReviewExists;
         }
 
-        $pendingUser = $this->userRepository->firstPending();
+        $pendingUser       = $this->userRepository->firstPending();
 
         if ($pendingUser) {
             $this->userRepository->revertAllToPending($user, $pendingUser);
             $pendingUser = $this->userRepository->setToUnderReview($pendingUser);
         }
 
-        return  $pendingUser;
+        return $pendingUser;
     }
 
     /**
-     * @param $id
      * @return User|User[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
     public function find($id)
     {
-        $user = $this->userRepository->find($id);
+        $user               = $this->userRepository->find($id);
 
-        $statusBadge = [
+        $statusBadge        = [
             'status' => $user->status_name,
             'color' => $user->status_color,
         ];
@@ -123,17 +113,11 @@ class UserService extends AdminBaseService
         return $user;
     }
 
-    /**
-     * @return array
-     */
     public function getUserStatuses(): array
     {
         return $this->userRepository->getUserStatuses();
     }
 
-    /**
-     * @return array
-     */
     public function getVisibilities(): array
     {
         return $this->userRepository->getVisibilities();
@@ -161,7 +145,7 @@ class UserService extends AdminBaseService
 
     public function updateInfo(User $user, UserInfoUpdateRequest $request): User
     {
-        $data = $request->only([
+        $data         = $request->only([
             'email',
             'gender',
             'interested_in',
@@ -180,18 +164,18 @@ class UserService extends AdminBaseService
             'visibility' => (int) $request->boolean('visibility'),
         ];
 
-        $data = array_merge($data, $dataBooleans);
+        $data         = array_merge($data, $dataBooleans);
 
         if (auth()->user()->hasRole(Roles::SUPER_ADMINISTRATOR)) {
-            $role = $request->input('role');
+            $role         = $request->input('role');
             $originalRole = $user->roles()->first();
-            $user->type = $role ? UserType::ADMIN->value : UserType::USER->value;
+            $user->type   = $role ? UserType::ADMIN->value : UserType::USER->value;
             $user->syncRoles(($role ?: []));
 
             if ($originalRole?->name !== $user->roles()->first()?->name) {
                 (new SlackMessage())
                     ->to(config('app.slack_support'))
-                    ->content(auth()->user()->username." changed role for {$user->username}!".PHP_EOL.'From _'.($originalRole ? $originalRole->name : 'None')."_ to _{$role}_")
+                    ->content(auth()->user()->username . " changed role for {$user->username}!" . PHP_EOL . 'From _' . ($originalRole ? $originalRole->name : 'None') . "_ to _{$role}_")
                     ->success();
             }
         }
@@ -207,7 +191,7 @@ class UserService extends AdminBaseService
         $data = [
             'features' => [
                 'tips' => $request->boolean('features.tips'),
-//                'demo' => $request->boolean('features.demo'),
+                //                'demo' => $request->boolean('features.demo'),
             ],
         ];
 
@@ -244,27 +228,27 @@ class UserService extends AdminBaseService
 
     public function uploadAvatar($user): bool
     {
-        if (! request()->hasFile('avatar') && ! request()->file('avatar')->isValid()) {
+        if (!request()->hasFile('avatar') && !request()->file('avatar')->isValid()) {
             return false;
         }
 
         $extension = request()->avatar->getClientOriginalExtension();
-        $avatar = uniqid((string) $user->_id, false).'.'.$extension;
+        $avatar    = uniqid((string) $user->_id, false) . '.' . $extension;
 
         if ((request()->avatar->storePubliclyAs('avatars', $avatar, 'public')) !== false) {
             /* Store avatar name in database */
             $oldFileName = $user->avatar;
-            $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/'.$avatar)], $user->_id);
+            $this->userRepository->update(['avatar' => Storage::disk('public')->url('avatars/' . $avatar)], $user->_id);
 
-            if (! config('app.is_testing')) {
+            if (!config('app.is_testing')) {
                 Bus::chain([
-                    new DeleteMediaMetadata('avatars/'.$avatar, 'public', ['Type' => 'Avatar', 'User ID' => (string) $user->_id]),
-                    (new UploadAvatar((string) $user->_id, 'avatars/'.$avatar))->delay(10),
+                    new DeleteMediaMetadata('avatars/' . $avatar, 'public', ['Type' => 'Avatar', 'User ID' => (string) $user->_id]),
+                    (new UploadAvatar((string) $user->_id, 'avatars/' . $avatar))->delay(10),
                 ])
-                ->onQueue(config('app.server_specific_queue'))
-                ->dispatch();
+                    ->onQueue(config('app.server_specific_queue'))
+                    ->dispatch();
 
-                DeleteAvatar::dispatchIf(! str_contains($oldFileName, 'default_'), basename($oldFileName))->delay(100);
+                DeleteAvatar::dispatchIf(!str_contains($oldFileName, 'default_'), basename($oldFileName))->delay(100);
             }
         }
 
@@ -273,7 +257,7 @@ class UserService extends AdminBaseService
 
     public function updateStatus($id, $userStatus): bool
     {
-        $user = $this->find($id);
+        $user     = $this->find($id);
 
         $noteType = match ($userStatus) {
             UserStatus::SUSPENDED->value => NoteType::SUSPEND->value,
@@ -281,9 +265,9 @@ class UserService extends AdminBaseService
             UserStatus::ACTIVE->value => match ($user->status) {
                 UserStatus::SUSPENDED->value => NoteType::UNSUSPEND->value,
                 UserStatus::BLOCKED->value => NoteType::UNBAN->value,
-                default => null
+                default => null,
             },
-            default => null
+            default => null,
         };
 
         UserStatusChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType);
@@ -291,20 +275,15 @@ class UserService extends AdminBaseService
         return $this->userRepository->update(['status' => $userStatus], $id);
     }
 
-    /**
-     * @param mixed $userId
-     * @param int $userVisibility
-     * @return bool
-     */
     public function updateVisibility(mixed $userId, int $userVisibility): bool
     {
-        $user = $this->find($userId);
+        $user     = $this->find($userId);
 
         $noteType = match ($userVisibility) {
             UserVisibility::PUBLIC->value => NoteType::PUBLIC->value,
             UserVisibility::PRIVATE->value => NoteType::PRIVATE->value,
             UserVisibility::INVISIBLE_BY_ADMIN->value => NoteType::INVISIBLE_BY_ADMIN->value,
-            default => null
+            default => null,
         };
 
         UserVisibilityChangedEvent::dispatchIf($noteType, $this->getUser(), $user, $noteType);
@@ -313,30 +292,30 @@ class UserService extends AdminBaseService
     }
 
     /**
-     * @param mixed $userId
      * @param array $userSettings
-     * @return bool
      */
     public function updatePayoutSettings(mixed $userId, array $payoutSettings): bool
     {
-        $user = $this->find($userId);
+        $user     = $this->find($userId);
 
-        $success = true;
+        $success  = true;
         $noteType = null;
 
         foreach ($payoutSettings as $key => $value) {
             if ($success) {
-                $setting = $user['setting'];
+                $setting                 = $user['setting'];
                 $setting['payout'][$key] = (bool) $value;
-                $success = $this->userRepository->update(['setting' => $setting], $userId);
+                $success                 = $this->userRepository->update(['setting' => $setting], $userId);
 
-                switch($key) {
+                switch ($key) {
                     case 'ban_payout':
                         $noteType = ($value ? NoteType::SET_BAN_PAYOUT->value : NoteType::UNSET_BAN_PAYOUT->value);
+
                         break;
 
                     case 'auto_ban_payout':
                         $noteType = ($value ? NoteType::SET_AUTO_BAN_PAYOUT->value : NoteType::UNSET_AUTO_BAN_PAYOUT->value);
+
                         break;
                 }
             }
@@ -347,17 +326,12 @@ class UserService extends AdminBaseService
         return $success;
     }
 
-    /**
-     * @param mixed $userId
-     * @param string $password
-     * @return bool
-     */
     public function setPassword(mixed $userId, string $password): bool
     {
-        $user = $this->find($userId);
+        $user     = $this->find($userId);
         $noteType = NoteType::SET_PASSWORD->value;
 
-        $success = $this->userRepository->update(['password_hash' => Hash::make($password)], $userId);
+        $success  = $this->userRepository->update(['password_hash' => Hash::make($password)], $userId);
 
         UserPasswordChangedEvent::dispatchIf($success, $this->getUser(), $user, $noteType);
 

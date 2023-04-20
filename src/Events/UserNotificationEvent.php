@@ -2,12 +2,7 @@
 
 namespace Aparlay\Core\Events;
 
-use Aparlay\Core\Api\V1\Resources\FollowResource;
-use Aparlay\Core\Api\V1\Resources\MediaResource;
-use Aparlay\Core\Api\V1\Resources\UserResource;
-use Aparlay\Core\Models\Enums\UserNotificationCategory;
 use Aparlay\Core\Models\UserNotification;
-use Aparlay\Payment\Api\V1\Resources\TipResource;
 use Illuminate\Broadcasting\InteractsWithBroadcasting;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -44,23 +39,19 @@ class UserNotificationEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('users.'.$this->userId);
+        return new PrivateChannel('users.' . $this->userId);
     }
 
     /**
      * The event's broadcast name.
-     *
-     * @return string
      */
     public function broadcastAs(): string
     {
-        return 'UserNotification.'.$this->eventType;
+        return 'UserNotification.' . $this->eventType;
     }
 
     /**
      * Get the data to broadcast.
-     *
-     * @return array
      */
     public function broadcastWith(): array
     {

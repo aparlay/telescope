@@ -37,87 +37,85 @@ use Psr\SimpleCache\InvalidArgumentException;
  * Class Media.
  *
  * @property ObjectId           $_id
- * @property ObjectId           $user_id
+ * @property Alert[]            $alertObjs
+ * @property int                $comment_count
+ * @property array              $comments
+ * @property int                $content_gender
+ * @property array              $count_fields_updated_at
+ * @property string             $cover
+ * @property Carbon             $created_at
+ * @property ObjectId           $created_by
+ * @property array              $creator
+ * @property User               $creatorObj
  * @property string             $description
- * @property string             $location
- * @property string             $hash
  * @property string             $file
- * @property string             $mime_type
- * @property int                $size
- * @property int                $visibility
+ * @property array              $files_history
+ * @property string             $hash
+ * @property array              $hashtags
+ * @property bool               $is_protected
  * @property int                $length
  * @property int                $length_watched
- * @property int                $watched_count
  * @property int                $like_count
- * @property int                $comment_count
- * @property int                $visit_count
- * @property array              $count_fields_updated_at
  * @property array              $likes
- * @property array              $visits
- * @property array              $comments
+ * @property array              $links
+ * @property string             $location
+ * @property string             $mime_type
+ * @property array              $people
+ * @property array              $scores
+ * @property int                $size
+ * @property string             $slug
+ * @property array              $sort_scores
  * @property int                $status
  * @property int                $tips
- * @property array              $hashtags
- * @property array              $people
- * @property array              $creator
- * @property string             $cover
- * @property string             $slug
- * @property ObjectId           $created_by
- * @property Carbon             $created_at
  * @property Carbon             $updated_at
- * @property array              $links
- * @property bool               $is_protected
- * @property array              $scores
- * @property array              $sort_scores
- * @property User               $userObj
- * @property User               $creatorObj
- * @property Alert[]            $alertObjs
+ * @property ObjectId           $user_id
  * @property UserNotification[] $userNotificationObjs
- * @property array              $files_history
- * @property int                $content_gender
- *
- * @property-read string        $slack_subject_admin_url
- * @property-read string        $slack_admin_url
- * @property-read string        $filename
- * @property-read string        $cover_file
- * @property-read string        $delete_prefix
+ * @property User               $userObj
+ * @property int                $visibility
+ * @property int                $visit_count
+ * @property array              $visits
+ * @property int                $watched_count
  * @property-read string        $admin_url
- * @property-read string        $cover_url
- * @property-read string        $file_url
- * @property-read int           $beauty_score
  * @property-read int           $awesomeness_score
- * @property-read int           $skin_score
- * @property-read int           $time_score
- * @property-read int           $like_score
- * @property-read int           $visit_score
+ * @property-read int           $beauty_score
  * @property-read int           $comment_score
- * @property-read int           $sent_tips
  * @property-read string        $content_gender_label
+ * @property-read string        $cover_file
+ * @property-read string        $cover_url
+ * @property-read string        $delete_prefix
+ * @property-read string        $file_url
+ * @property-read string        $filename
+ * @property-read int           $like_score
+ * @property-read int           $sent_tips
+ * @property-read int           $skin_score
+ * @property-read string        $slack_admin_url
+ * @property-read string        $slack_subject_admin_url
+ * @property-read int           $time_score
+ * @property-read int           $visit_score
  *
- *
- * @method static |self|Builder creator(ObjectId|string $userId)
- * @method static |self|Builder user(ObjectId|string $userId)
- * @method static |self|Builder media(ObjectId|string $userId)
- * @method static |self|Builder availableForFollower()
- * @method static |self|Builder availableForOwner()
- * @method static |self|Builder confirmed()
- * @method static |self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
- * @method static |self|Builder notBlockedFor(ObjectId|string $user)
- * @method static |self|Builder blockedFor(ObjectId|string $user)
- * @method static |self|Builder medias(ObjectId[] $mediaIds)
- * @method static |self|Builder notVisitedByDevice(string $deviceId)
- * @method static |self|Builder hashtag(string $tag)
- * @method static |self|Builder slug(string $slug)
- * @method static |self|Builder sort(string $category)
- * @method static |self|Builder genderContent(array|int $genderContent)
- * @method static |self|Builder public()
- * @method static |self|Builder explicit()
- * @method static |self|Builder withoutExplicit()
- * @method static |self|Builder topless()
- * @method static |self|Builder withoutTopless()
- * @method static |self|Builder private()
- * @method static |self|Builder protected()
- * @method static |self|Builder licensed()
+ * @method static|self|Builder availableForFollower()
+ * @method static|self|Builder availableForOwner()
+ * @method static|self|Builder blockedFor(ObjectId|string $user)
+ * @method static|self|Builder confirmed()
+ * @method static|self|Builder creator(ObjectId|string $userId)
+ * @method static|self|Builder explicit()
+ * @method static|self|Builder genderContent(array|int $genderContent)
+ * @method static|self|Builder hashtag(string $tag)
+ * @method static|self|Builder licensed()
+ * @method static|self|Builder media(ObjectId|string $userId)
+ * @method static|self|Builder medias(ObjectId[] $mediaIds)
+ * @method static|self|Builder notBlockedFor(ObjectId|string $user)
+ * @method static|self|Builder notVisitedByDevice(string $deviceId)
+ * @method static|self|Builder notVisitedByUserAndDevice(ObjectId|string $userId, string $deviceId)
+ * @method static|self|Builder private()
+ * @method static|self|Builder protected()
+ * @method static|self|Builder public()
+ * @method static|self|Builder slug(string $slug)
+ * @method static|self|Builder sort(string $category)
+ * @method static|self|Builder topless()
+ * @method static|self|Builder user(ObjectId|string $userId)
+ * @method static|self|Builder withoutExplicit()
+ * @method static|self|Builder withoutTopless()
  */
 class Media extends BaseModel
 {
@@ -132,10 +130,8 @@ class Media extends BaseModel
      *
      * @var string
      */
-    protected $collection = 'medias';
-
-    protected string $path = '';
-
+    protected $collection   = 'medias';
+    protected string $path  = '';
     protected string $cover = '';
 
     /**
@@ -143,7 +139,7 @@ class Media extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable     = [
         '_id',
         'description',
         'notes',
@@ -185,8 +181,7 @@ class Media extends BaseModel
         'created_at',
         'updated_at',
     ];
-
-    protected $attributes = [
+    protected $attributes   = [
         'people' => [],
         'likes' => [],
         'visits' => [],
@@ -213,8 +208,8 @@ class Media extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
-        'creator' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed,is_verified',
+    protected $casts        = [
+        'creator' => SimpleUserCast::class . ':_id,username,avatar,is_liked,is_followed,is_verified',
         'status' => 'integer',
         'visibility' => 'integer',
         'like_count' => 'integer',
@@ -230,7 +225,7 @@ class Media extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden       = [
         'deleted_at',
     ];
 
@@ -239,7 +234,7 @@ class Media extends BaseModel
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends      = [];
 
     /**
      * Get the name of the index associated with the model.
@@ -253,13 +248,10 @@ class Media extends BaseModel
 
     /**
      * Determine if the model should be searchable.
-     *
-     * @return bool
      */
     public function shouldBeSearchable(): bool
     {
-        return $this->visibility == MediaVisibility::PUBLIC->value &&
-            in_array($this->status, [MediaStatus::DENIED->value, MediaStatus::CONFIRMED->value]);
+        return $this->visibility == MediaVisibility::PUBLIC->value && in_array($this->status, [MediaStatus::DENIED->value, MediaStatus::CONFIRMED->value]);
     }
 
     /**
@@ -279,8 +271,8 @@ class Media extends BaseModel
             '_id' => (string) $this->_id,
             'type' => 'media',
             'poster' => $this->cover_url,
-            'username' => $this->userObj->username ?? '',
-            'full_name' => $this->slug ?? '',
+            'username' => $this->userObj->username      ?? '',
+            'full_name' => $this->slug                  ?? '',
             'gender' => $gender,
             'description' => $this->description,
             'like_count' => $this->like_count,
@@ -289,11 +281,11 @@ class Media extends BaseModel
             'hashtags' => $this->hashtags,
             'score' => $this->sort_scores['default'],
             'country' => $this->userObj->country_alpha2 ?? '',
-            'is_adult' => $this->is_adult ?? false,
-            'skin_score' => $this->skin_score ?? 5,
+            'is_adult' => $this->is_adult               ?? false,
+            'skin_score' => $this->skin_score           ?? 5,
             'searchable' => implode(' ', $this->hashtags),
             'last_online_at' => 0,
-            '_geo' => $this->userObj->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
+            '_geo' => $this->userObj->last_location     ?? ['lat' => 0.0, 'lng' => 0.0],
         ];
     }
 
@@ -369,7 +361,7 @@ class Media extends BaseModel
      */
     public function getSkinScoreAttribute(): int
     {
-        if (! empty($this->scores)) {
+        if (!empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ('skin' === $score['type']) {
                     return (int) $score['score'];
@@ -385,7 +377,7 @@ class Media extends BaseModel
      */
     public function getAwesomenessScoreAttribute(): int
     {
-        if (! empty($this->scores)) {
+        if (!empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ('awesomeness' === $score['type']) {
                     return (int) $score['score'];
@@ -401,7 +393,7 @@ class Media extends BaseModel
      */
     public function getBeautyScoreAttribute(): int
     {
-        if (! empty($this->scores)) {
+        if (!empty($this->scores)) {
             foreach ($this->scores as $score) {
                 if ('beauty' === $score['type']) {
                     return (int) $score['score'];
@@ -414,8 +406,6 @@ class Media extends BaseModel
 
     /**
      * Get the media's skin score.
-     *
-     * @return array|Collection
      */
     public function getAlertsAttribute(): array|Collection
     {
@@ -464,11 +454,11 @@ class Media extends BaseModel
      */
     public function getLikeScoreAttribute(): int
     {
-        $timestamp = $this->created_at->valueOf();
+        $timestamp      = $this->created_at->valueOf();
         $windowDuration = 86400 * 10;
-        $startTime = DT::timestampToUtc($timestamp - $windowDuration);
-        $endTime = DT::timestampToUtc($timestamp + $windowDuration);
-        $meanLikes = [];
+        $startTime      = DT::timestampToUtc($timestamp - $windowDuration);
+        $endTime        = DT::timestampToUtc($timestamp + $windowDuration);
+        $meanLikes      = [];
         foreach (Analytic::query()->date($startTime, $endTime)->get() as $analytic) {
             if (isset($analytic['media']['mean_likes']) && 0 !== $analytic['media']['mean_likes']) {
                 $meanLikes[] = $analytic['media']['mean_likes'];
@@ -479,25 +469,25 @@ class Media extends BaseModel
             return 0;
         }
 
-        $sigma = Descriptive::sd($meanLikes, true);
+        $sigma          = Descriptive::sd($meanLikes, true);
 
         if (0 == $sigma) {
             return 3;
         }
 
-        $mean = array_sum($meanLikes) / count($meanLikes);
-        $z = Significance::zScore($this->like_count, $mean, $sigma);
+        $mean           = array_sum($meanLikes) / count($meanLikes);
+        $z              = Significance::zScore($this->like_count, $mean, $sigma);
 
         return match (true) {
             $z >= 2.5 => 10,
-            $z >= 2 && $z <= 2.5 => 9,
-            $z >= 1.5 && $z <= 2 => 8,
-            $z >= 1 && $z <= 1.5 => 7,
-            $z >= 0.5 && $z <= 1 => 6,
+            $z >= 2    && $z <= 2.5 => 9,
+            $z >= 1.5  && $z <= 2 => 8,
+            $z >= 1    && $z <= 1.5 => 7,
+            $z >= 0.5  && $z <= 1 => 6,
             $z >= -0.5 && $z <= 0.5 => 5,
-            $z >= -1 && $z <= -0.5 => 4,
+            $z >= -1   && $z <= -0.5 => 4,
             $z >= -1.5 && $z <= -1 => 3,
-            $z >= -2 && $z <= -1.5 => 2,
+            $z >= -2   && $z <= -1.5 => 2,
             $z >= -2.5 && $z <= -2 => 1,
             default => 0,
         };
@@ -509,9 +499,9 @@ class Media extends BaseModel
     public function getVisitScoreAttribute(): int
     {
         $totalLengthWatched = self::availableForFollower()->sum('length_watched');
-        $totalLength = self::availableForFollower()->sum('length');
+        $totalLength        = self::availableForFollower()->sum('length');
 
-        $ratio = $this->length > 0 ? $this->length_watched / $this->length : 0;
+        $ratio              = $this->length > 0 ? $this->length_watched / $this->length : 0;
 
         if ($ratio && $totalLengthWatched && $totalLength) {
             $avgRatio = $totalLengthWatched / $totalLength;
@@ -534,48 +524,34 @@ class Media extends BaseModel
         );
     }
 
-    /**
-     * @return string
-     */
     public function getSlackAdminUrlAttribute(): string
     {
         return "<{$this->admin_url}|video> By {$this->userObj->slack_admin_url}";
     }
 
-    /**
-     * @return string
-     */
     public function getAdminUrlAttribute(): string
     {
         return route('core.admin.media.view', ['media' => $this->_id]);
     }
 
-    /**
-     * @return string
-     */
     public function getFilenameAttribute(): string
     {
-        return basename($this->file, '.'.pathinfo($this->file, PATHINFO_EXTENSION));
+        return basename($this->file, '.' . pathinfo($this->file, PATHINFO_EXTENSION));
     }
 
-    /**
-     * @return string
-     */
     public function getDeletePrefixAttribute(): string
     {
-        return substr(md5($this->file), 0, 5).'_';
+        return substr(md5($this->file), 0, 5) . '_';
     }
 
-    /**
-     * @return string
-     */
     public function getCoverFileAttribute(): string
     {
-        return $this->filename.'.jpg';
+        return $this->filename . '.jpg';
     }
 
     /**
      * Get the user's full name.
+     *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getIsFollowedAttribute(): bool
@@ -591,6 +567,7 @@ class Media extends BaseModel
 
     /**
      * Get the user's full name.
+     *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getIsLikedAttribute(): bool
@@ -599,14 +576,14 @@ class Media extends BaseModel
             return false;
         }
 
-        $userId = auth()->user()->_id;
-        $cacheKey = md5('media:'.$this->_id.':likedBy:'.$userId);
+        $userId   = auth()->user()->_id;
+        $cacheKey = md5('media:' . $this->_id . ':likedBy:' . $userId);
         if (Cache::store('octane')->has($cacheKey)) {
             return Cache::store('octane')->get($cacheKey);
         }
 
         MediaLike::cacheByUserId($userId);
-        $result = MediaLike::checkMediaIsLikedByUser((string) $this->_id, (string) $userId);
+        $result   = MediaLike::checkMediaIsLikedByUser((string) $this->_id, (string) $userId);
 
         Cache::store('octane')->set($cacheKey, $result, config('app.cache.tenMinutes'));
 
@@ -615,6 +592,7 @@ class Media extends BaseModel
 
     /**
      * Get the user's full name.
+     *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getIsVisitedAttribute(): bool
@@ -629,9 +607,6 @@ class Media extends BaseModel
         return MediaVisit::checkMediaIsVisitedByUser((string) $this->_id, (string) $userId);
     }
 
-    /**
-     * @return string
-     */
     public function getContentGenderLabelAttribute(): string
     {
         return in_array($this->content_gender, MediaContentGender::getAllValues()) ?
@@ -649,9 +624,9 @@ class Media extends BaseModel
             return $totalSentTips;
         }
 
-        $tipClass = '\Aparlay\Payment\Models\Tip';
+        $tipClass      = '\Aparlay\Payment\Models\Tip';
         if (class_exists($tipClass)) {
-            $userId = auth()->user()->_id;
+            $userId        = auth()->user()->_id;
 
             $tipClass::cacheByCreatorId($userId);
             $totalSentTips = $tipClass::totalSentTipsForMediaByUser((string) $this->_id, (string) $userId);
@@ -660,10 +635,6 @@ class Media extends BaseModel
         return $totalSentTips;
     }
 
-    /**
-     * @param $attributeValue
-     * @return mixed
-     */
     public function getCountFieldsUpdatedAtAttribute($attributeValue): mixed
     {
         foreach ($attributeValue as $field => $value) {
@@ -675,7 +646,6 @@ class Media extends BaseModel
     }
 
     /**
-     * @param $attributeValue
      * @return void
      */
     public function setCountFieldsUpdatedAtAttribute($attributeValue)
@@ -692,17 +662,12 @@ class Media extends BaseModel
      * Route notifications for the Slack channel.
      *
      * @param Notification $notification
-     *
-     * @return string
      */
     public function routeNotificationForSlack($notification): string
     {
         return config('app.slack_webhook_url');
     }
 
-    /**
-     * @return array
-     */
     public static function getVisibilities(): array
     {
         return [
@@ -711,9 +676,6 @@ class Media extends BaseModel
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [
@@ -738,16 +700,15 @@ class Media extends BaseModel
 
     public function getCoverUrlAttribute()
     {
-        return Cdn::cover($this->is_completed ? $this->filename.'.jpg' : 'default.jpg');
+        return Cdn::cover($this->is_completed ? $this->filename . '.jpg' : 'default.jpg');
     }
 
     /**
-     * @return Media
      * @throws InvalidArgumentException
      */
     public function recalculateSortScores(): self
     {
-        $sortScores = [
+        $sortScores        = [
             'default' => 0,
             'guest' => 0,
             'returned' => 0,
@@ -766,16 +727,13 @@ class Media extends BaseModel
     }
 
     /**
-     * @param  string  $category
-     *
-     * @return float
      * @throws InvalidArgumentException
      */
     public function recalculateSortScoreByCategory(string $category): float
     {
-        $config = config('app.media.score_weights.'.$category);
-        $cacheKey = $this->getCollection().':promote:'.$this->_id;
-        $promote = (int) Redis::get($cacheKey);
+        $config    = config('app.media.score_weights.' . $category);
+        $cacheKey  = $this->getCollection() . ':promote:' . $this->_id;
+        $promote   = (int) Redis::get($cacheKey);
         if ($this->created_at->getTimestamp() > Carbon::yesterday()->getTimestamp()) {
             $promote += match (true) {
                 ($this->skin_score >= 9) => 1,
@@ -785,10 +743,7 @@ class Media extends BaseModel
             };
         }
 
-        $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) +
-            ($this->beauty_score * (float) $config['beauty']) +
-            ($this->skin_score * (float) $config['skin']) +
-            ($promote * (float) $config['promote']);
+        $sortScore = ($this->awesomeness_score * (float) $config['awesomeness']) + ($this->beauty_score * (float) $config['beauty']) + ($this->skin_score * (float) $config['skin']) + ($promote * (float) $config['promote']);
 
         $sortScore += ($this->time_score * (float) $config['time']);
         $sortScore += ($this->like_score * (float) $config['like']);
@@ -799,15 +754,15 @@ class Media extends BaseModel
 
     public function updateLikes()
     {
-        $likeCount = MediaLike::query()->media($this->_id)->count();
-        $this->like_count = $likeCount;
-        $this->likes = MediaLike::query()
+        $likeCount                     = MediaLike::query()->media($this->_id)->count();
+        $this->like_count              = $likeCount;
+        $this->likes                   = MediaLike::query()
             ->media($this->_id)
             ->limit(10)
             ->recentFirst()
             ->get()
             ->filter(function (MediaLike $like) {
-                return isset($like->creator) && ! empty($like->creator['_id']);
+                return isset($like->creator) && !empty($like->creator['_id']);
             })
             ->map(function (MediaLike $like) {
                 return [
@@ -827,19 +782,19 @@ class Media extends BaseModel
 
     public function updateVisits($duration = 0)
     {
-        $length = ($duration > ($this->length * 3)) ? $this->length : $duration;
-        $visitCount = MediaVisit::query()->media($this->_id)->count();
-        $multiplier = config('app.media.visit_multiplier', 1);
+        $length                        = ($duration > ($this->length * 3)) ? $this->length : $duration;
+        $visitCount                    = MediaVisit::query()->media($this->_id)->count();
+        $multiplier                    = config('app.media.visit_multiplier', 1);
         $this->length_watched += ($length * $multiplier);
-        $this->watched_count = $visitCount + $multiplier;
-        $this->visits = MediaVisit::query()
+        $this->watched_count           = $visitCount + $multiplier;
+        $this->visits                  = MediaVisit::query()
             ->with('userObj')
             ->media($this->_id)
             ->limit(10)
             ->recentFirst()
             ->get()
             ->filter(function (MediaVisit $visit) {
-                return ! empty($visit->userObj);
+                return !empty($visit->userObj);
             })
             ->map(function (MediaVisit $visit) {
                 return [
@@ -856,23 +811,23 @@ class Media extends BaseModel
         $this->save();
         $this->refresh();
 
-        $durationCacheKey = 'tracking:media:duration:'.date('Y:m:d');
-        $watchedCacheKey = 'tracking:media:watched:'.date('Y:m:d');
+        $durationCacheKey              = 'tracking:media:duration:' . date('Y:m:d');
+        $watchedCacheKey               = 'tracking:media:watched:' . date('Y:m:d');
         Redis::incrbyfloat($durationCacheKey, $length);
         Redis::incr($watchedCacheKey);
     }
 
     public function updateComments()
     {
-        $commentCount = MediaComment::query()->media($this->_id)->count();
-        $this->comment_count = $commentCount;
-        $this->comments = MediaComment::query()
+        $commentCount                  = MediaComment::query()->media($this->_id)->count();
+        $this->comment_count           = $commentCount;
+        $this->comments                = MediaComment::query()
             ->media($this->_id)
             ->limit(10)
             ->recentFirst()
             ->get()
             ->filter(function (MediaComment $comment) {
-                return isset($comment->creator) && ! empty($comment->creator['_id']);
+                return isset($comment->creator) && !empty($comment->creator['_id']);
             })
             ->map(function (MediaComment $comment) {
                 return [
@@ -890,12 +845,9 @@ class Media extends BaseModel
         $this->refresh();
     }
 
-    /**
-     * @return string
-     */
     public function likesNotificationMessage(): string
     {
-        $mediaLikes = [];
+        $mediaLikes    = [];
         foreach (MediaLike::query()->media($this->_id)->recent()->lazy() as $mediaLike) {
             if ((string) $mediaLike->creator['_id'] !== (string) $this->creator['_id']) {
                 $mediaLikes[(string) $mediaLike->creator['_id']] = $mediaLike;
@@ -906,7 +858,7 @@ class Media extends BaseModel
             }
         }
 
-        $mediaLikes = array_values($mediaLikes);
+        $mediaLikes    = array_values($mediaLikes);
         $twoUserExists = isset(
             $mediaLikes[0]->creatorObj->username,
             $mediaLikes[1]->creatorObj->username,
@@ -931,13 +883,10 @@ class Media extends BaseModel
             default => __(
                 ':username liked your video.',
                 ['username' => $mediaLikes[0]->creatorObj->username]
-            )
+            ),
         };
     }
 
-    /**
-     * @return string
-     */
     public function commentsNotificationMessage(): string
     {
         $mediaComments = [];
@@ -982,7 +931,7 @@ class Media extends BaseModel
 
     public static function CachePublicToplessMediaIds()
     {
-        $toplessMediaIdsCacheKey = (new self())->getCollection().':topless:ids';
+        $toplessMediaIdsCacheKey = (new self())->getCollection() . ':topless:ids';
         Redis::del($toplessMediaIdsCacheKey);
 
         self::public()
@@ -1001,7 +950,7 @@ class Media extends BaseModel
 
     public static function CachePublicExplicitMediaIds()
     {
-        $explicitMediaIdsCacheKey = (new self())->getCollection().':explicit:ids';
+        $explicitMediaIdsCacheKey = (new self())->getCollection() . ':explicit:ids';
         Redis::del($explicitMediaIdsCacheKey);
 
         self::public()
@@ -1020,7 +969,7 @@ class Media extends BaseModel
 
     public static function CachePublicMediaIds()
     {
-        $cacheKey = (new self())->getCollection().':ids';
+        $cacheKey = (new self())->getCollection() . ':ids';
         Redis::del($cacheKey);
         self::public()->confirmed()->select('_id')->chunk(200, function ($medias) use ($cacheKey) {
             $mediaIds = $medias->pluck('_id')->toArray();

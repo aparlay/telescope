@@ -39,95 +39,93 @@ use MongoDB\BSON\UTCDateTime;
 /**
  * User model.
  *
- * @property ObjectId    $_id
- * @property string      $username
- * @property string      $full_name
- * @property string      $password_hash
- * @property string      $password_reset_token
- * @property string      $email
- * @property bool        $email_verified
- * @property string      $phone_number
- * @property bool        $phone_number_verified
- * @property string      $auth_key
- * @property string      $bio
- * @property string      $avatar
- * @property int         $status
- * @property int         $gender
- * @property int         $visibility
- * @property int         $show_online_status
- * @property UTCDateTime $created_at
- * @property UTCDateTime $updated_at
- * @property array       $setting
- * @property array       $features
- * @property mixed       $authLogs
- * @property mixed       $id
- * @property string      $password_hash_field
- * @property string      $authKey
- * @property array       $followed_hashtags
- * @property array       $medias
- * @property array       $links
- * @property bool        $require_otp
- * @property bool        $is_protected
- * @property array       $default_setting
- * @property array       $count_fields_updated_at
- * @property array       $subscriptions
- * @property array       $subscription_plan
- * @property array       $user_agents
- * @property array       $subscribed_to
- * @property array       $stats
- * @property array       $last_location
- * @property string      $country_alpha2
- * @property string      $country_flag
- * @property array       $country_flags
- * @property array       $text_search
- * @property int         $verification_status
- * @property array       $likes
- * @property array       $scores
- * @property string      $deactivation_reason
- * @property bool        $has_unread_chat
- * @property bool        $has_unread_notification
+ * @property ObjectId           $_id
+ * @property string             $auth_key
+ * @property string             $authKey
+ * @property mixed              $authLogs
+ * @property string             $avatar
+ * @property string             $bio
+ * @property array              $count_fields_updated_at
+ * @property string             $country_alpha2
+ * @property string             $country_flag
+ * @property array              $country_flags
+ * @property UTCDateTime        $created_at
+ * @property string             $deactivation_reason
+ * @property array              $default_setting
+ * @property string             $email
+ * @property bool               $email_verified
+ * @property array              $features
+ * @property array              $followed_hashtags
+ * @property string             $full_name
+ * @property int                $gender
+ * @property bool               $has_unread_chat
+ * @property bool               $has_unread_notification
+ * @property mixed              $id
+ * @property bool               $is_protected
+ * @property array              $last_location
  * @property Carbon|UTCDateTime $last_online_at
- * @property array       $tags
- * @property string      $ws_state
- *
- * @property User        $referralObj
- * @property Media[]     $mediaObjs
- *
+ * @property array              $likes
+ * @property array              $links
+ * @property Media[]            $mediaObjs
+ * @property array              $medias
+ * @property string             $password_hash
+ * @property string             $password_hash_field
+ * @property string             $password_reset_token
+ * @property string             $phone_number
+ * @property bool               $phone_number_verified
+ * @property User               $referralObj
+ * @property bool               $require_otp
+ * @property array              $scores
+ * @property array              $setting
+ * @property int                $show_online_status
+ * @property array              $stats
+ * @property int                $status
+ * @property array              $subscribed_to
+ * @property array              $subscription_plan
+ * @property array              $subscriptions
+ * @property array              $tags
+ * @property array              $text_search
+ * @property UTCDateTime        $updated_at
+ * @property array              $user_agents
+ * @property string             $username
+ * @property int                $verification_status
+ * @property int                $visibility
+ * @property string             $ws_state
  * @property-read string $admin_url
- * @property-read string $note_admin_url
- * @property-read string $slack_admin_url
- * @property-read bool   $is_subscribable
- * @property-read bool   $is_online
- * @property-read bool   $is_verified
- * @property-read bool   $is_online_for_followers
- * @property-read bool   $is_tier3
- * @property-read bool   $is_tier1
- * @property-read bool   $is_risky
- * @property-read bool   $is_public
- * @property-read bool   $is_private
- * @property-read bool   $is_invisible
- * @property-read int    $tip_commission_percentage
- * @property-read int    $tip_referral_commission_percentage
- * @property-read int    $subscription_commission_percentage
- * @property-read int    $subscription_referral_commission_percentage
- * @property-read int    $exclusive_content_commission_percentage
- * @property-read int    $exclusive_content_referral_commission_percentage
  * @property-read array  $counters
  * @property-read string $country_label
- * @property-read string $verification_status_label
+ * @property-read int    $exclusive_content_commission_percentage
+ * @property-read int    $exclusive_content_referral_commission_percentage
  * @property-read bool   $is_eligible_for_verification
+ * @property-read bool   $is_invisible
+ * @property-read bool   $is_online
+ * @property-read bool   $is_online_for_followers
+ * @property-read bool   $is_private
+ * @property-read bool   $is_public
+ * @property-read bool   $is_risky
+ * @property-read bool   $is_subscribable
+ * @property-read bool   $is_tier1
+ * @property-read bool   $is_tier3
+ * @property-read bool   $is_verified
  * @property-read bool   $is_ws_state_active
  * @property-read bool   $is_ws_state_inactive
+ * @property-read string $note_admin_url
+ * @property-read string $slack_admin_url
+ * @property-read int    $subscription_commission_percentage
+ * @property-read int    $subscription_referral_commission_percentage
+ * @property-read int    $tip_commission_percentage
+ * @property-read int    $tip_referral_commission_percentage
+ * @property-read string $verification_status_label
  *
- * @method static |self|Builder date(?UTCDateTime $startAt, ?UTCDateTime $endAt, string $field = 'created_at') filter by date
- * @method static |self|Builder active() get activated user
- * @method static |self|Builder idVerified() get id verified user
- * @method static |self|Builder username(string $username) get user
- * @method static |self|Builder email(string $username) get user
- * @method static |self|Builder user(ObjectId|string $userId)    get user
- * @method static |self|Builder availableForFollower()    get available content for followers
- * @method static |self|Builder admin()    get admin user
- * @method static |self|Builder enable()
+ * @method static|self|Builder active()                                                                       get activated user
+ * @method static|self|Builder admin()                                                                        get admin user
+ * @method static|self|Builder availableForFollower()                                                         get available content for followers
+ * @method static|self|Builder date(?UTCDateTime $startAt, ?UTCDateTime $endAt, string $field = 'created_at') filter by date
+ * @method static|self|Builder email(string $username)                                                        get user
+ * @method static|self|Builder enable()
+ * @method static|self|Builder idVerified()                                                                   get id verified user
+ * @method static|self|Builder user(ObjectId|string $userId)                                                  get user
+ * @method static|self|Builder username(string $username)                                                     get user
  */
 class User extends \App\Models\User
 {
@@ -138,27 +136,25 @@ class User extends \App\Models\User
     use Searchable;
     use CountryFields;
     use HasPushSubscriptions;
-
-    public const FEATURE_TIPS = 'tips';
-    public const FEATURE_DEMO = 'demo';
-
+    public const FEATURE_TIPS             = 'tips';
+    public const FEATURE_DEMO             = 'demo';
     public const ROLE_SUPER_ADMINISTRATOR = 'super-administrator';
-    public const ROLE_ADMINISTRATOR = 'administrator';
-    public const ROLE_SUPPORT = 'support';
+    public const ROLE_ADMINISTRATOR       = 'administrator';
+    public const ROLE_SUPPORT             = 'support';
 
     /**
      * The collection associated with the model.
      *
      * @var string
      */
-    protected $collection = 'users';
+    protected $collection                 = 'users';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable                   = [
         '_id',
         'username',
         'email',
@@ -208,8 +204,7 @@ class User extends \App\Models\User
         'tracking',
         'tags',
     ];
-
-    protected $attributes = [
+    protected $attributes                 = [
         'count_fields_updated_at' => [],
         'tracking' => [],
         'verification_status' => 1, // unverified
@@ -301,7 +296,7 @@ class User extends \App\Models\User
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts                      = [
         'username' => 'string',
         'full_name' => 'string',
         'email' => 'string',
@@ -327,8 +322,7 @@ class User extends \App\Models\User
         'type' => 'integer',
         'verification_status' => 'integer',
     ];
-
-    protected $dates = [
+    protected $dates                      = [
         'email_verified_at',
         'phone_number_verified_at',
         'last_online_at',
@@ -342,7 +336,7 @@ class User extends \App\Models\User
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden                     = [
         'password',
         'remember_token',
     ];
@@ -359,14 +353,10 @@ class User extends \App\Models\User
 
     /**
      * Determine if the model should be searchable.
-     *
-     * @return bool
      */
     public function shouldBeSearchable(): bool
     {
-        return ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) &&
-            in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) &&
-            ! config('app.is_testing');
+        return ($this->visibility !== UserVisibility::INVISIBLE_BY_ADMIN->value) && in_array($this->status, [UserStatus::VERIFIED->value, UserStatus::ACTIVE->value]) && !config('app.is_testing');
     }
 
     /**
@@ -393,7 +383,7 @@ class User extends \App\Models\User
             'skin_score' => 0,
             'visit_count' => 0,
             'comment_count' => 0,
-            'searchable' => $this->username.' '.$this->full_name,
+            'searchable' => $this->username . ' ' . $this->full_name,
             '_geo' => $this->last_location ?? ['lat' => 0.0, 'lng' => 0.0],
         ];
     }
@@ -421,7 +411,7 @@ class User extends \App\Models\User
     /**
      * Qualify the given column name by the model's table.
      *
-     * @param  string  $column
+     * @param string $column
      *
      * @return string
      */
@@ -497,33 +487,21 @@ class User extends \App\Models\User
         return $this->belongsTo(self::class, 'referral_id');
     }
 
-    /**
-     * @return string
-     */
     public function getGenderLabelAttribute(): string
     {
         return $this->gender ? UserGender::from($this->gender)->label() : UserGender::FEMALE->label();
     }
 
-    /**
-     * @return string
-     */
     public function getSlackAdminUrlAttribute(): string
     {
         return "<{$this->admin_url}|@{$this->username}>";
     }
 
-    /**
-     * @return string
-     */
     public function getNoteAdminUrlAttribute(): string
     {
         return "<a href='{$this->admin_url}' title='{$this->username}'>{$this->username}</a>";
     }
 
-    /**
-     * @return string
-     */
     public function getAdminUrlAttribute(): string
     {
         return route('core.admin.user.view', ['user' => $this->_id]);
@@ -531,8 +509,6 @@ class User extends \App\Models\User
 
     /**
      * Get the media's skin score.
-     *
-     * @return array|Collection
      */
     public function getAlertsAttribute(): array|Collection
     {
@@ -542,22 +518,17 @@ class User extends \App\Models\User
     /**
      * Get the user risk.
      *
-     * @return bool
      * @todo this method implementation should change and rely on risk score
      */
     public function getIsRiskyAttribute(): bool
     {
-        return $this->setting['payment']['block_unverified_cc'] ||
-            ($this->is_tier3) ||
-            ($this->setting['payment']['unverified_cc_spent_amount'] > config(
+        return $this->setting['payment']['block_unverified_cc'] || ($this->is_tier3) || ($this->setting['payment']['unverified_cc_spent_amount'] > config(
                 'payment.fraud.big_spender.maximum_total_amount'
             ));
     }
 
     /**
      * Get the user country tier.
-     *
-     * @return bool
      */
     public function getIsTier3Attribute(): bool
     {
@@ -566,8 +537,6 @@ class User extends \App\Models\User
 
     /**
      * Get the user country tier.
-     *
-     * @return bool
      */
     public function getIsTier1Attribute(): bool
     {
@@ -587,19 +556,11 @@ class User extends \App\Models\User
         return Follow::checkCreatorIsFollowedByUser((string) $this->_id, (string) $userId);
     }
 
-    /**
-     * @return bool
-     */
     public function getIsSubscribableAttribute(): bool
     {
         return isset($this->subscription_plan['amount'], $this->subscription_plan['currency'], $this->subscription_plan['days']);
     }
 
-    /**
-     * @param $attributeValue
-     *
-     * @return mixed
-     */
     public function getCountFieldsUpdatedAtAttribute($attributeValue): mixed
     {
         if ($attributeValue === null) {
@@ -630,9 +591,9 @@ class User extends \App\Models\User
 
     public function getIsEligibleForVerificationAttribute(): bool
     {
-        $hasMinLikes = $this->counters['likes'] >= config('core.id_verification_thresholds.min_likes', 1000);
+        $hasMinLikes     = $this->counters['likes']     >= config('core.id_verification_thresholds.min_likes', 1000);
         $hasMinFollowers = $this->counters['followers'] >= config('core.id_verification_thresholds.min_followers', 100);
-        $hasMinMedia = $this->counters['medias'] >= config('core.id_verification_thresholds.min_medias', 1);
+        $hasMinMedia     = $this->counters['medias']    >= config('core.id_verification_thresholds.min_medias', 1);
 
         if (($hasMinLikes || $hasMinFollowers) && $hasMinMedia) {
             return true;
@@ -717,8 +678,6 @@ class User extends \App\Models\User
     }
 
     /**
-     * @param $attributeValue
-     *
      * @return void
      */
     public function setCountFieldsUpdatedAtAttribute($attributeValue)
@@ -731,9 +690,6 @@ class User extends \App\Models\User
         $this->attributes['count_fields_updated_at'] = $attributeValue;
     }
 
-    /**
-     * @return string
-     */
     public function getCollection(): string
     {
         return $this->collection;
@@ -748,9 +704,6 @@ class User extends \App\Models\User
         return parent::setAttribute($key, $value);
     }
 
-    /**
-     * @return string
-     */
     public function getAuthPassword(): string
     {
         return $this->password_hash;
@@ -759,9 +712,7 @@ class User extends \App\Models\User
     /**
      * Route notifications for the Slack channel.
      *
-     * @param  Notification  $notification
-     *
-     * @return string
+     * @param Notification $notification
      */
     public function routeNotificationForSlack($notification): string
     {
@@ -771,29 +722,20 @@ class User extends \App\Models\User
     /**
      * Route notifications for the Slack channel.
      *
-     * @param  Notification  $notification
-     *
-     * @return array
+     * @param Notification $notification
      */
     public function routeNotificationForMail($notification): array
     {
         return [$this->email => $this->username];
     }
 
-    /**
-     * @param  string    $attribute
-     * @param  mixed     $item
-     * @param  int|null  $length
-     *
-     * @return void
-     */
-    public function addToSet(string $attribute, mixed $item, int $length = null): void
+    public function addToSet(string $attribute, mixed $item, ?int $length = null): void
     {
-        if (! is_array($this->$attribute)) {
+        if (!is_array($this->$attribute)) {
             $this->$attribute = [];
         }
-        $values = $this->$attribute;
-        if (! in_array($item, $values, false)) {
+        $values           = $this->$attribute;
+        if (!in_array($item, $values, false)) {
             array_unshift($values, $item);
         }
 
@@ -804,18 +746,12 @@ class User extends \App\Models\User
         $this->$attribute = $values;
     }
 
-    /**
-     * @param  string  $attribute
-     * @param  mixed   $item
-     *
-     * @return void
-     */
     public function removeFromSet(string $attribute, mixed $item): void
     {
-        if (! is_array($this->$attribute)) {
+        if (!is_array($this->$attribute)) {
             $this->$attribute = [];
         }
-        $values = $this->$attribute;
+        $values           = $this->$attribute;
         if (($key = array_search($item, $values, false)) !== false) {
             unset($values[$key]);
             if (is_int($key)) {
@@ -826,9 +762,6 @@ class User extends \App\Models\User
         $this->$attribute = $values;
     }
 
-    /**
-     * @return array
-     */
     public static function getFeatures(): array
     {
         return [
@@ -837,9 +770,6 @@ class User extends \App\Models\User
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getGenders(): array
     {
         return [
@@ -850,9 +780,6 @@ class User extends \App\Models\User
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getTypes(): array
     {
         return [
@@ -861,9 +788,6 @@ class User extends \App\Models\User
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getVisibilities(): array
     {
         return [
@@ -873,9 +797,6 @@ class User extends \App\Models\User
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [
@@ -888,9 +809,6 @@ class User extends \App\Models\User
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getVerificationStatuses(): array
     {
         return [
@@ -904,10 +822,10 @@ class User extends \App\Models\User
 
     public static function lastOnlineAtTimestamp($userId): int
     {
-        $cacheKey = 'user:last_online_at:'.$userId;
+        $cacheKey     = 'user:last_online_at:' . $userId;
         $lastOnlineAt = Cache::store('octane')->get($cacheKey, false);
         if ($lastOnlineAt === false) {
-            $user = self::user($userId)->firstOrFail();
+            $user         = self::user($userId)->firstOrFail();
             $lastOnlineAt = $user->last_online_at ?: $user->created_at;
             $lastOnlineAt = $lastOnlineAt->toDateTime()->getTimestamp();
             Cache::store('octane')->put($cacheKey, $lastOnlineAt, config('app.cache.tenMinutes'));
@@ -920,7 +838,7 @@ class User extends \App\Models\User
     {
         [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
 
-        $cacheKey = config('app.cache.keys.online.none').':'.$currentWindow;
+        $cacheKey                     = config('app.cache.keys.online.none') . ':' . $currentWindow;
 
         return Redis::sismember($cacheKey, (string) $userId);
     }
@@ -929,7 +847,7 @@ class User extends \App\Models\User
     {
         [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
 
-        $cacheKey = config('app.cache.keys.online.followings').':'.$currentWindow;
+        $cacheKey                     = config('app.cache.keys.online.followings') . ':' . $currentWindow;
 
         return Redis::sismember($cacheKey, (string) $userId);
     }
@@ -938,16 +856,11 @@ class User extends \App\Models\User
     {
         [$currentWindow, $nextWindow] = OnlineUserService::timeWindows();
 
-        $cacheKey = config('app.cache.keys.online.all').':'.$currentWindow;
+        $cacheKey                     = config('app.cache.keys.online.all') . ':' . $currentWindow;
 
         return Redis::sismember($cacheKey, (string) $userId);
     }
 
-    /**
-     * @param  User|Authenticatable|ObjectId|string|null  $user
-     *
-     * @return bool
-     */
     public function equalTo(self|Authenticatable|ObjectId|string|null $user): bool
     {
         if ($user instanceof ObjectId) {
@@ -973,10 +886,6 @@ class User extends \App\Models\User
 
     /**
      * Get only class name without namespace.
-     *
-     * @param  User|Authenticatable|ObjectId|string  $user
-     *
-     * @return bool
      */
     public function blockedUser(self|Authenticatable|ObjectId|string $user): bool
     {
@@ -988,28 +897,17 @@ class User extends \App\Models\User
             $user = self::findOrFail($user);
         }
 
-        return Block::query()->creator($user->_id)->user($this->_id)->exists() ||
-            Block::query()->user($user->_id)->creator($this->_id)->exists() ||
-            $this->blockedCountry($user->country_alpha2 ?? '');
+        return Block::query()->creator($user->_id)->user($this->_id)->exists() || Block::query()->user($user->_id)->creator($this->_id)->exists() || $this->blockedCountry($user->country_alpha2 ?? '');
     }
 
     /**
      * Get only class name without namespace.
-     *
-     * @param  string  $countryAlpha2
-     *
-     * @return bool
      */
     public function blockedCountry(string $countryAlpha2): bool
     {
-        return ! empty($countryAlpha2) && Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
+        return !empty($countryAlpha2) && Block::query()->creator($this->_id)->country($countryAlpha2)->exists();
     }
 
-    /**
-     * @param  int  $amount
-     *
-     * @return bool
-     */
     public function unverifiedCCSpentAmount(int $amount): bool
     {
         $setting = $this->setting;
@@ -1021,14 +919,14 @@ class User extends \App\Models\User
     public function shouldNotify($category)
     {
         return match ($category) {
-            UserNotificationCategory::LIKES->value => $this->setting['notifications']['likes'] ?? true,
-            UserNotificationCategory::COMMENTS->value => $this->setting['notifications']['comments'] ?? true,
-            UserNotificationCategory::TIPS->value => $this->setting['notifications']['tips'] ?? true,
+            UserNotificationCategory::LIKES->value => $this->setting['notifications']['likes']                   ?? true,
+            UserNotificationCategory::COMMENTS->value => $this->setting['notifications']['comments']             ?? true,
+            UserNotificationCategory::TIPS->value => $this->setting['notifications']['tips']                     ?? true,
             UserNotificationCategory::SUBSCRIPTIONS->value => $this->setting['notifications']['new_subscribers'] ?? true,
-            UserNotificationCategory::FOLLOWS->value => $this->setting['notifications']['new_followers'] ?? true,
-            UserNotificationCategory::SYSTEM->value => true, //$this->setting['notifications']['news_and_updates'] ?? true,
-            UserNotificationCategory::UNREAD_MESSAGE->value => true, //$this->setting['notifications']['unread_message'] ?? true,
-            default => false
+            UserNotificationCategory::FOLLOWS->value => $this->setting['notifications']['new_followers']         ?? true,
+            UserNotificationCategory::SYSTEM->value => true, // $this->setting['notifications']['news_and_updates'] ?? true,
+            UserNotificationCategory::UNREAD_MESSAGE->value => true, // $this->setting['notifications']['unread_message'] ?? true,
+            default => false,
         };
     }
 
@@ -1059,16 +957,11 @@ class User extends \App\Models\User
         }
     }*/
 
-    /**
-     * @param $fields
-     *
-     * @return void
-     */
     public function fillStatsCountersField($fields): void
     {
-        $stats = $this->stats;
+        $stats       = $this->stats;
         foreach ($fields as $type => $value) {
-            $stats['counters'][$type] = $value;
+            $stats['counters'][$type]      = $value;
 
             $this->count_fields_updated_at = array_merge(
                 $this->count_fields_updated_at ?? [],
@@ -1078,23 +971,15 @@ class User extends \App\Models\User
         $this->stats = $stats;
     }
 
-    /**
-     * @param $fields
-     *
-     * @return void
-     */
     public function fillStatsAmountsField($fields): void
     {
-        $stats = $this->stats;
+        $stats       = $this->stats;
         foreach ($fields as $type => $value) {
             $stats['amount'][$type] = $value;
         }
         $this->stats = $stats;
     }
 
-    /**
-     * @return array
-     */
     public function getCountersAttribute(): array
     {
         return $this->stats['counters'] ?? [
@@ -1113,9 +998,9 @@ class User extends \App\Models\User
 
     public function updateLikes()
     {
-        $likeCount = MediaLike::query()->user($this->_id)->count();
-        $this->like_count = $likeCount;
-        $this->likes = MediaLike::query()->user($this->_id)->limit(10)->recentFirst()->get()->map(
+        $likeCount                     = MediaLike::query()->user($this->_id)->count();
+        $this->like_count              = $likeCount;
+        $this->likes                   = MediaLike::query()->user($this->_id)->limit(10)->recentFirst()->get()->map(
             function (MediaLike $like) {
                 return [
                     '_id' => new ObjectId($like->creator['_id']),
@@ -1129,9 +1014,9 @@ class User extends \App\Models\User
             ['likes' => DT::utcNow()]
         );
 
-        $stats = $this->stats;
-        $stats['counters']['likes'] = $likeCount;
-        $this->stats = $stats;
+        $stats                         = $this->stats;
+        $stats['counters']['likes']    = $likeCount;
+        $this->stats                   = $stats;
         $this->save();
 
         $this->refresh();
@@ -1139,11 +1024,11 @@ class User extends \App\Models\User
 
     public function updateMedias()
     {
-        $medias = [];
+        $medias         = [];
         foreach (Media::query()->creator($this->_id)->availableForOwner()->recentFirst()->limit(30)->get() as $media) {
-            $basename = basename($media['file'], '.'.pathinfo($media['file'], PATHINFO_EXTENSION));
-            $file = config('app.cdn.videos').$media['file'];
-            $cover = config('app.cdn.covers').$basename.'.jpg';
+            $basename = basename($media['file'], '.' . pathinfo($media['file'], PATHINFO_EXTENSION));
+            $file     = config('app.cdn.videos') . $media['file'];
+            $cover    = config('app.cdn.covers') . $basename . '.jpg';
             $medias[] = [
                 '_id' => new ObjectId($media['_id']),
                 'file' => $file,
@@ -1151,17 +1036,17 @@ class User extends \App\Models\User
                 'status' => $media['status'],
             ];
         }
-        $this->medias = $medias;
+        $this->medias   = $medias;
 
-        $scores = $this->scores;
+        $scores         = $this->scores;
         $scores['sort'] = 0;
 
-        $count = Media::creator($this->_id)->availableForOwner()->count();
+        $count          = Media::creator($this->_id)->availableForOwner()->count();
         if ($count > 0) {
-            $score = Media::creator($this->_id)->availableForOwner()->sum('sort_scores.default');
+            $score          = Media::creator($this->_id)->availableForOwner()->sum('sort_scores.default');
             $scores['sort'] = $score / $count;
         }
-        $this->scores = $scores;
+        $this->scores   = $scores;
 
         $this->fillStatsCountersField(['medias' => Media::query()->creator($this->_id)->availableForOwner()->count()]);
         $this->save();
@@ -1179,7 +1064,7 @@ class User extends \App\Models\User
 
     public function getIsWsStateActiveAttribute()
     {
-        return ! $this->is_ws_state_inactive;
+        return !$this->is_ws_state_inactive;
     }
 
     public function getIsWsStateInactiveAttribute()

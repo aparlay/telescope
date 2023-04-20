@@ -6,9 +6,6 @@ enum UserFeature: string implements Enum
 {
     use EnumEnhancements;
 
-    case TIPS = 'tips';
-    case DEMO = 'demo';
-
     public function label(): string
     {
         return match ($this) {
@@ -24,4 +21,7 @@ enum UserFeature: string implements Enum
             self::DEMO => 'info',
         };
     }
+
+    case TIPS = 'tips';
+    case DEMO = 'demo';
 }

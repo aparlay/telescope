@@ -11,7 +11,7 @@ use MongoDB\BSON\ObjectId;
 trait SimpleUserTrait
 {
     private string $cacheKeyPrefix = 'SimpleUserCast:';
-    private array $simpleUser = [];
+    private array $simpleUser      = [];
 
     /**
      * Create the simple user attribute.
@@ -24,23 +24,23 @@ trait SimpleUserTrait
         array $userArray,
         array $fields = ['_id', 'username', 'avatar', 'is_followed', 'is_liked', 'is_verified']
     ): array {
-        if (! isset($userArray['_id'])) {
+        if (!isset($userArray['_id'])) {
             return [];
         }
 
         $userData = $this->getSimpleUser($userArray['_id']);
         if (empty($userData)) {
-            $userData = $userArray;
+            $userData           = $userArray;
             $userData['avatar'] = $userArray['avatar'] ?? Cdn::avatar('default.jpg');
         }
 
-        if (! auth()->guest()) {
+        if (!auth()->guest()) {
             $userData['is_followed'] = $this->is_followed;
-            $userData['is_online'] = empty($userArray['is_followed']) ? $this->is_online : $this->is_online_for_followers;
-            $userData['is_liked'] = $this->is_liked;
+            $userData['is_online']   = empty($userArray['is_followed']) ? $this->is_online : $this->is_online_for_followers;
+            $userData['is_liked']    = $this->is_liked;
         }
 
-        $output = [];
+        $output   = [];
         foreach ($fields as $field) {
             $output[$field] = $userData[$field] ?? null;
         }
@@ -54,12 +54,12 @@ trait SimpleUserTrait
      */
     private function getSimpleUser(string|ObjectId $id): array
     {
-        $cacheKey = $this->cacheKeyPrefix.$id;
-        if (! config('app.is_testing') && ($simpleUser = Cache::store('octane')->get($cacheKey, false)) !== false) {
+        $cacheKey = $this->cacheKeyPrefix . $id;
+        if (!config('app.is_testing') && ($simpleUser = Cache::store('octane')->get($cacheKey, false)) !== false) {
             return json_decode($simpleUser, true); // cache already exists
         }
 
-        $user = $this->createSimpleUserById($id);
+        $user     = $this->createSimpleUserById($id);
         $this->cacheSimpleUser($user);
 
         return $user;
@@ -85,8 +85,8 @@ trait SimpleUserTrait
 
     private function cacheSimpleUser($user): void
     {
-        if (! config('app.is_testing') && ! empty($user)) {
-            $cacheKey = $this->cacheKeyPrefix.$user['_id'];
+        if (!config('app.is_testing') && !empty($user)) {
+            $cacheKey = $this->cacheKeyPrefix . $user['_id'];
             Cache::store('octane')->put($cacheKey, json_encode($user), config('app.cache.tenMinutes'));
         }
     }

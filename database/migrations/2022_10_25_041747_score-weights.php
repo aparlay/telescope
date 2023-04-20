@@ -10,9 +10,8 @@ use Maklad\Permission\Models\Role;
 use MongoDB\BSON\ObjectId;
 
 return new class() extends Migration {
-    const PERMISSION_UPDATE_MEDIA_ALGORITHMS = 'update medias-algorithms';
-
-    const PERMISSIONS_LIST = [
+    public const PERMISSION_UPDATE_MEDIA_ALGORITHMS = 'update medias-algorithms';
+    public const PERMISSIONS_LIST                   = [
         self::PERMISSION_UPDATE_MEDIA_ALGORITHMS,
     ];
 
@@ -133,7 +132,7 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 
     private function assignListPermissions()
@@ -142,7 +141,7 @@ return new class() extends Migration {
             Roles::SUPER_ADMINISTRATOR,
         ];
 
-        $roles = Role::whereIn('name', $roleNames)
+        $roles     = Role::whereIn('name', $roleNames)
             ->where('guard_name', 'admin')
             ->get();
 

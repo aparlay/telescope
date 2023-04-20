@@ -15,8 +15,6 @@ class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -30,14 +28,14 @@ class UserSeeder extends Seeder
 
     public function createTestUser()
     {
-        $user = AdminUser::query()->first();
+        $user                = AdminUser::query()->first();
 
-        $user->type = UserType::ADMIN->value;
+        $user->type          = UserType::ADMIN->value;
         $user->password_hash = Hash::make('waptap');
-        $user->status = UserStatus::ACTIVE->value;
-        $user->email = 'user@waptap.com';
+        $user->status        = UserStatus::ACTIVE->value;
+        $user->email         = 'user@waptap.com';
         $user->save();
-        $role = Role::firstOrCreate(['name' => 'super-administrator', 'guard_name' => 'admin']);
+        $role                = Role::firstOrCreate(['name' => 'super-administrator', 'guard_name' => 'admin']);
         $user->assignRole('super-administrator');
     }
 }

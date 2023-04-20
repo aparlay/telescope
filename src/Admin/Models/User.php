@@ -6,7 +6,6 @@ use Aparlay\Core\Models\Enums\UserGender;
 use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
 use Aparlay\Core\Models\Scopes\UserScope;
-use Aparlay\Core\Models\Traits\HasPushSubscriptions;
 use Aparlay\Core\Models\User as UserBase;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -14,21 +13,18 @@ class User extends UserBase implements Auditable
 {
     use UserScope;
     use \Aparlay\Core\Admin\Models\Auditable;
-
     public string $guard_name = 'admin';
-
-    protected $hidden = ['password_hash', 'search'];
+    protected $hidden         = ['password_hash', 'search'];
 
     /**
      * Attributes to exclude from the Audit.
      *
      * @var array
      */
-    protected $auditExclude = [
+    protected $auditExclude   = [
         'password_hash',
     ];
-
-    protected $fillable = [
+    protected $fillable       = [
         'username',
         'full_name',
         'email',
@@ -55,7 +51,7 @@ class User extends UserBase implements Auditable
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts          = [
         'type' => 'integer',
         'status' => 'integer',
         'gender' => 'integer',
@@ -64,9 +60,6 @@ class User extends UserBase implements Auditable
         'verification_status' => 'integer',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateTags(): array
     {
         return [
@@ -75,41 +68,26 @@ class User extends UserBase implements Auditable
         ];
     }
 
-    /**
-     * @return string
-     */
     public function getStatusColorAttribute(): string
     {
         return UserStatus::from($this->status)->badgeColor();
     }
 
-    /**
-     * @return string
-     */
     public function getStatusNameAttribute(): string
     {
         return UserStatus::from($this->status)->label();
     }
 
-    /**
-     * @return string
-     */
     public function getGenderColorAttribute(): string
     {
         return UserGender::from($this->gender)->badgeColor();
     }
 
-    /**
-     * @return string
-     */
     public function getGenderNameAttribute(): string
     {
         return UserGender::from($this->gender)->label();
     }
 
-    /**
-     * @return string
-     */
     public function getVerificationStatusNameAttribute(): string
     {
         return UserVerificationStatus::from($this->verification_status)->label();

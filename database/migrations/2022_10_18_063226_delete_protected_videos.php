@@ -18,15 +18,15 @@ return new class() extends Migration {
         foreach (User::where('verification_status', UserVerificationStatus::VERIFIED->value)->get() as $user) {
             foreach (Media::where('creator._id', new ObjectId($user->_id))->get() as $media) {
                 if ($media->is_protected !== true || $media->is_music_licensed !== true || $media->status !== MediaStatus::CONFIRMED->value) {
-                    $media->status = MediaStatus::CONFIRMED->value;
-                    $media->is_protected = true;
+                    $media->status            = MediaStatus::CONFIRMED->value;
+                    $media->is_protected      = true;
                     $media->is_music_licensed = true;
                     $media->save();
                 }
             }
         }
         foreach (Media::where('is_protected', null)->get() as $media) {
-            $media->is_protected = false;
+            $media->is_protected      = false;
             $media->is_music_licensed = false;
             $media->save();
         }

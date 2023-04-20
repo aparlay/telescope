@@ -10,10 +10,10 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * @property string $uuid
- * @property int    $show_adult_content
  * @property array  $filter_content_gender
  * @property string $password
+ * @property int    $show_adult_content
+ * @property string $uuid
  */
 class PublicFeedRequest extends FormRequest
 {
@@ -48,11 +48,11 @@ class PublicFeedRequest extends FormRequest
      */
     public function prepareForValidation()
     {
-        $contentGenders = [];
-        $items = request()->input('filter_content_gender', 'female,male,transgender');
-        if (! empty($items)) {
+        $contentGenders   = [];
+        $items            = request()->input('filter_content_gender', 'female,male,transgender');
+        if (!empty($items)) {
             foreach (explode(',', $items) as $item) {
-                if (! is_numeric($item)) {
+                if (!is_numeric($item)) {
                     $contentGenders[] = match ($item) {
                         MediaContentGender::FEMALE->label() => MediaContentGender::FEMALE->value,
                         MediaContentGender::MALE->label() => MediaContentGender::MALE->value,
@@ -96,7 +96,7 @@ class PublicFeedRequest extends FormRequest
             UserSettingShowAdultContent::ASK->label() => UserSettingShowAdultContent::ASK->value,
             UserSettingShowAdultContent::TOPLESS->label() => UserSettingShowAdultContent::TOPLESS->value,
             UserSettingShowAdultContent::ALL->label() => UserSettingShowAdultContent::ALL->value,
-            default => null
+            default => null,
         };
         $showAdultContent = $showAdultContent ?? (auth()->guest() ? 1 : auth()->user()->setting['show_adult_content'] ?? UserSettingShowAdultContent::ASK->value);
 

@@ -14,7 +14,6 @@ use Aparlay\Core\Api\V1\Resources\MediaResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UploadService;
 use Aparlay\Core\Api\V1\Services\UserService;
-use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -37,9 +36,9 @@ class MediaController extends Controller
         if (($type = request()?->input('type')) !== null) {
             $collection = new MediaCollection($this->mediaService->getFeedByType($request, $type));
         } else {
-            $isGuest = auth()->guest();
+            $isGuest     = auth()->guest();
             $isFirstPage = request()->integer('page') === 0;
-            $collection = new MediaFeedsCollection(
+            $collection  = new MediaFeedsCollection(
                 $this->mediaService->getPublicFeeds($request, $isGuest, $isFirstPage)
             );
         }
@@ -63,9 +62,6 @@ class MediaController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param MediaRequest $request
-     * @return Response
      */
     public function store(MediaRequest $request): Response
     {
@@ -111,7 +107,6 @@ class MediaController extends Controller
     /**
      * Upload media file.
      *
-     * @param  Request  $request
      * @return Response
      */
     public function streamUpload(Request $request)
@@ -124,8 +119,6 @@ class MediaController extends Controller
     /**
      * Upload media file.
      *
-     * @param  Request  $request
-     * @return Response
      * @throws \Flow\FileLockException
      * @throws \Flow\FileOpenException
      */
@@ -136,14 +129,9 @@ class MediaController extends Controller
         return response($result['data'], $result['code'], []);
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return Response
-     */
     public function watched(Request $request): Response
     {
-        $uuid = $request->cookie('__Secure_uuid', $request->header('X-DEVICE-ID', ''));
+        $uuid   = $request->cookie('__Secure_uuid', $request->header('X-DEVICE-ID', ''));
         $medias = $request->all();
         $this->mediaService->watchedMedia($medias, $uuid);
 
@@ -151,12 +139,9 @@ class MediaController extends Controller
     }
 
     /**
-     * @param  string|null  $slug
-     *
-     * @return Response
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function showBySlug(string $slug = null): Response
+    public function showBySlug(?string $slug = null): Response
     {
         $media = Media::slug($slug)->firstOrFail();
         $this->mediaService->incrementMediaVisitCounter([$media->_id]);

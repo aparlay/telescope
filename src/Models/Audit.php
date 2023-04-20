@@ -19,15 +19,24 @@ use Jenssegers\Mongodb\Eloquent\Model;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- * @property array $old_values
- * @property string $parsed_old
- * @property array $new_values
- * @property string $parsed_new
  * @property UTCDateTime $created_at
+ * @property array       $new_values
+ * @property array       $old_values
+ * @property string      $parsed_new
+ * @property string      $parsed_old
  */
 class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
 {
     use \OwenIt\Auditing\Audit;
+
+    protected $guarded = [];
+
+    protected $casts   = [
+        'old_values' => 'json',
+        'new_values' => 'json',
+        'auditable_id' => ObjectIdCast::class,
+        'user_id' => ObjectIdCast::class,
+    ];
 
     public static function boot()
     {
@@ -41,32 +50,11 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected $guarded = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $casts = [
-        'old_values'   => 'json',
-        'new_values'   => 'json',
-        'auditable_id' => ObjectIdCast::class,
-        'user_id' => ObjectIdCast::class,
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
     public function auditable()
     {
         return $this->morphTo();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function user()
     {
         return $this->morphTo();
@@ -76,7 +64,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
     {
         $result = [];
         foreach (Arr::dot($this->parseValues($this->old_values)) as $title => $value) {
-            $result[] = Str::substr($title, strpos($title, '.') + 1).': '.$value;
+            $result[] = Str::substr($title, strpos($title, '.') + 1) . ': ' . $value;
         }
 
         return implode("\n", $result);
@@ -86,7 +74,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
     {
         $result = [];
         foreach (Arr::dot($this->parseValues($this->new_values)) as $title => $value) {
-            $result[] = Str::substr($title, strpos($title, '.') + 1).': '.$value;
+            $result[] = Str::substr($title, strpos($title, '.') + 1) . ': ' . $value;
         }
 
         return implode("\n", $result);
@@ -97,7 +85,7 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
         return match ($this->auditable_type) {
             'Media' => $this->parseMediaValues($values),
             'User' => $this->parseUserValues($values),
-            default => $values
+            default => $values,
         };
     }
 
@@ -125,10 +113,10 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                     'MdSc. Awesomeness' => Arr::get(Arr::keyBy($value, 'type'), 'awesomeness.score'),
                 ],
                 'description' => ['Description' => $value],
-                default => null
+                default => null,
             };
 
-            if (! empty($parsedValue)) {
+            if (!empty($parsedValue)) {
                 $parsedValues[] = $parsedValue;
             }
         }
@@ -149,15 +137,15 @@ class Audit extends Model implements \OwenIt\Auditing\Contracts\Audit
                 'status' => ['Status' => UserStatus::from($value)->label()],
                 'verification_status' => ['ID Verif.' => UserVerificationStatus::from($value)->label()],
                 'visibility' => ['User Verif.' => UserVisibility::from($value)->label()],
-                'country_alpha2' => ['Country' => ! empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
-                'payout_country_alpha2' => ['Payout Country' => ! empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
+                'country_alpha2' => ['Country' => !empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
+                'payout_country_alpha2' => ['Payout Country' => !empty($value) ? CountryHelper::getNameByAlpha2($value) : ''],
                 'type' => ['Type' => UserType::from($value)->label()],
                 'promo_link' => ['Prom Link' => $value],
-                'referral_id' => ['Referrer' => (! empty($value) && is_array($value)) ? User::user(array_values($value)[0])->first()?->username : ''],
-                default => null
+                'referral_id' => ['Referrer' => (!empty($value) && is_array($value)) ? User::user(array_values($value)[0])->first()?->username : ''],
+                default => null,
             };
 
-            if (! empty($parsedValue)) {
+            if (!empty($parsedValue)) {
                 $parsedValues[] = $parsedValue;
             }
         }

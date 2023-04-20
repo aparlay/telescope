@@ -3,6 +3,7 @@
 namespace Aparlay\Core\Api\V1\Resources;
 
 use Akaunting\Money\Money;
+use Exception;
 use Illuminate\Http\Request;
 
 class MediaResource extends JsonResource
@@ -14,9 +15,9 @@ class MediaResource extends JsonResource
      *
      * @param Request $request
      *
-     * @return array
+     * @throws Exception
      *
-     * @throws \Exception
+     * @return array
      */
     public function toArray($request)
     {
@@ -25,7 +26,7 @@ class MediaResource extends JsonResource
             $people[] = $this->createSimpleUser($person);
         }
 
-        $likes = [];
+        $likes  = [];
         foreach ($this->likes as $like) {
             $likes[] = $this->createSimpleUser($like);
         }
@@ -35,10 +36,10 @@ class MediaResource extends JsonResource
             $visits[] = $this->createSimpleUser($visit);
         }
 
-        $tips = 0;
+        $tips   = 0;
         $alerts = [];
         if (isset(auth()->user()->_id) && (string) auth()->user()->_id === (string) $this->creator['_id']) {
-            $tips = $this->tips;
+            $tips   = $this->tips;
             $alerts = $this->alertObjs;
         }
 
@@ -53,7 +54,7 @@ class MediaResource extends JsonResource
             'mime_type' => $this->mime_type,
             'visibility' => $this->visibility,
             'status' => $this->status,
-            'hashtags' => $this->hashtags ?? [],
+            'hashtags' => $this->hashtags                       ?? [],
             'people' => $people,
             'file' => $this->file_url,
             'cover' => $this->cover_url,

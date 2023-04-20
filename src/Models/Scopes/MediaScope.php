@@ -10,18 +10,13 @@ use Aparlay\Core\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use MongoDB\BSON\ObjectId;
+use RedisException;
 
 trait MediaScope
 {
     use BaseScope;
     use DateScope;
 
-    /**
-     * @param  Builder          $query
-     * @param  ObjectId|string  $creatorId
-     *
-     * @return Builder
-     */
     public function scopeCreator(Builder $query, ObjectId|string $creatorId): Builder
     {
         $creatorId = $creatorId instanceof ObjectId ? $creatorId : new ObjectId($creatorId);
@@ -29,12 +24,6 @@ trait MediaScope
         return $query->where('creator._id', $creatorId);
     }
 
-    /**
-     * @param  Builder          $query
-     * @param  ObjectId|string  $userId
-     *
-     * @return Builder
-     */
     public function scopeUpdatedBy(Builder $query, ObjectId|string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
@@ -42,12 +31,6 @@ trait MediaScope
         return $query->where('updated_by', $userId);
     }
 
-    /**
-     * @param  Builder          $query
-     * @param  ObjectId|string  $mediaId
-     *
-     * @return Builder
-     */
     public function scopeMedia(Builder $query, ObjectId|string $mediaId): Builder
     {
         $mediaId = $mediaId instanceof ObjectId ? $mediaId : new ObjectId($mediaId);
@@ -55,12 +38,6 @@ trait MediaScope
         return $query->where('_id', $mediaId);
     }
 
-    /**
-     * @param  Builder  $query
-     * @param  array    $mediaIds
-     *
-     * @return Builder
-     */
     public function scopeMedias(Builder $query, array $mediaIds): Builder
     {
         foreach ($mediaIds as $key => $mediaId) {
@@ -126,16 +103,10 @@ trait MediaScope
         return $query->where('status', $status);
     }
 
-    /**
-     * @param  Builder          $query
-     * @param  ObjectId|string  $userId
-     *
-     * @return Builder
-     */
     public function scopeFollowing(Builder $query, ObjectId|string $userId): Builder
     {
-        $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
-        $user = User::user($userId)->first();
+        $userId  = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
+        $user    = User::user($userId)->first();
 
         $userIds = [];
         foreach ($user['followings'] as $following) {
@@ -145,12 +116,6 @@ trait MediaScope
         return $query->whereIn('creator._id', $userIds);
     }
 
-    /**
-     * @param  Builder          $query
-     * @param  ObjectId|string  $userId
-     *
-     * @return Builder
-     */
     public function scopeNotBlockedFor(Builder $query, ObjectId|string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
@@ -158,12 +123,6 @@ trait MediaScope
         return $query->where('blocked_user_ids', '!=', $userId);
     }
 
-    /**
-     * @param  Builder          $query
-     * @param  ObjectId|string  $userId
-     *
-     * @return Builder
-     */
     public function scopeBlockedFor(Builder $query, ObjectId|string $userId): Builder
     {
         $userId = $userId instanceof ObjectId ? $userId : new ObjectId($userId);
@@ -177,23 +136,18 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder          $query
-     * @param  ObjectId|string  $userId
-     * @param  string           $deviceId
-     *
-     * @return Builder
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function scopeNotVisitedByUserAndDevice(Builder $query, ObjectId|string $userId, string $deviceId): Builder
     {
-        $visitedIds = [];
+        $visitedIds          = [];
         foreach (MediaVisit::query()->select('media_ids')->user($userId)->get()->toArray() as $mediaVisit) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $mediaVisit), SORT_REGULAR));
         }
 
-        $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
+        $cacheKey            = (new MediaVisit())->getCollection() . ':device:' . $deviceId;
         $visitedIdsFromCache = Cache::store('redis')->get($cacheKey, []);
-        if (! empty($visitedIdsFromCache)) {
+        if (!empty($visitedIdsFromCache)) {
             $visitedIds = array_values(array_unique(array_merge($visitedIds, $visitedIdsFromCache), SORT_REGULAR));
         }
 
@@ -201,11 +155,7 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string   $deviceId
-     *
-     * @return Builder
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function scopeNotVisitedByDevice(Builder $query, string $deviceId): Builder
     {
@@ -213,9 +163,9 @@ trait MediaScope
             return $query;
         }
 
-        $cacheKey = (new MediaVisit())->getCollection().':device:'.$deviceId;
+        $cacheKey   = (new MediaVisit())->getCollection() . ':device:' . $deviceId;
         $visitedIds = Cache::store('redis')->get($cacheKey, []);
-        if (! empty($visitedIds)) {
+        if (!empty($visitedIds)) {
             $visitedIds = array_values(array_unique($visitedIds, SORT_REGULAR));
             $query->whereNotIn('_id', $visitedIds);
         }
@@ -244,9 +194,6 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder          $query
-     * @param  ObjectId|string  $userId
-     *
      * @return mixed
      */
     public function scopeUser(Builder $query, ObjectId|string $userId): Builder
@@ -257,20 +204,14 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string   $category
-     *
      * @return mixed
      */
     public function scopeSort(Builder $query, string $category = 'default'): Builder
     {
-        return $query->orderBy('sort_scores.'.$category, 'desc');
+        return $query->orderBy('sort_scores.' . $category, 'desc');
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string   $tag
-     *
      * @return mixed
      */
     public function scopeHashtag(Builder $query, string $tag): Builder
@@ -279,8 +220,6 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder  $query
-     *
      * @return mixed
      */
     public function scopeExplicit(Builder $query): Builder
@@ -289,8 +228,6 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder  $query
-     *
      * @return mixed
      */
     public function scopeWithoutExplicit(Builder $query): Builder
@@ -299,8 +236,6 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder  $query
-     *
      * @return mixed
      */
     public function scopeTopless(Builder $query): Builder
@@ -309,8 +244,6 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder  $query
-     *
      * @return mixed
      */
     public function scopeWithoutTopless(Builder $query): Builder
@@ -319,9 +252,6 @@ trait MediaScope
     }
 
     /**
-     * @param  Builder    $query
-     * @param  array|int  $genders
-     *
      * @return mixed
      */
     public function scopeGenderContent(Builder $query, array|int $genders): Builder

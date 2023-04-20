@@ -4,7 +4,6 @@ namespace Aparlay\Core\Api\V1\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\ValidationException;
 
 class UploadedFileIsMedia implements Rule
 {
@@ -15,14 +14,15 @@ class UploadedFileIsMedia implements Rule
      */
     public function __construct()
     {
-        //
+
     }
 
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed  $value
+     *
      * @return bool
      */
     public function passes($attribute, $value)
