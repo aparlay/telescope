@@ -87,10 +87,23 @@ class UserFactory extends Factory
             'user_agents' => [],
             'stats' => [
                 'amounts' => [
-                    'sent_tips' => 0,
-                    'received_tips' => 0,
-                    'subscriptions' => 0,
-                    'subscribers' => 0,
+                    'spent' => [
+                        'tips' => 0,
+                        'subscriptions' => 0,
+                        'exclusive_contents' => 0,
+                    ],
+                    'earned' => [
+                        'commissions' => [
+                            'tips' => 0,
+                            'subscriptions' => 0,
+                            'exclusive_contents' => 0,
+                        ],
+                        'referral' => [
+                            'tips' => 0,
+                            'subscriptions' => 0,
+                            'exclusive_contents' => 0,
+                        ],
+                    ],
                 ],
                 'counters' => [
                     'followers' => 0,

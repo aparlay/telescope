@@ -34,7 +34,7 @@ class UserStatsTipsUpdater
             if (isset($order->entityObj->creator['_id'])) {
                 $sender = User::user($order->entityObj->creator['_id'])->first();
                 $senderStats = $sender->stats;
-                $senderStats['amounts']['sent_tips'] = Tip::query()->creator(
+                $senderStats['amounts']['sent']['tips'] = Tip::query()->creator(
                     $order->entityObj->creatorObj->_id
                 )->successful()->sum('amount');
                 $sender->fill(['stats' => $senderStats])->save();
