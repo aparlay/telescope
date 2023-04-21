@@ -14,7 +14,6 @@ class DatePicker extends Component
      */
     public function __construct()
     {
-
     }
 
     /**

@@ -44,6 +44,5 @@ class AddUserColumns extends Migration
      */
     public function down()
     {
-
     }
 }

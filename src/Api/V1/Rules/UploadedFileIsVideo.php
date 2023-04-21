@@ -14,7 +14,6 @@ class UploadedFileIsVideo implements Rule
      */
     public function __construct()
     {
-
     }
 
     /**

@@ -23,6 +23,5 @@ class AddVerificationStatusColumnOnUser extends Migration
      */
     public function down()
     {
-
     }
 }

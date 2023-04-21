@@ -14,7 +14,6 @@ abstract class BaseDashboardComponent extends Component
     public const LAYOUT_ADVANCED      = 'advanced';
     public const LAYOUT_FUNNEL        = 'funnel';
     public const LAYOUT_MESSAGE_STATS = 'message-stats';
-
     public string $layout             = self::LAYOUT_SIMPLE;
     protected string $view;
     protected $listeners              = [
