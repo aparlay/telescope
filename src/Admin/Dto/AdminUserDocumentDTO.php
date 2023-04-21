@@ -10,6 +10,8 @@ class AdminUserDocumentDTO extends DataTransferObject
     public $reject_reason;
 
     /**
+     * @param mixed $request
+     *
      * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
      *
      * @return AdminUserDocumentDTO

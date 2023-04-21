@@ -18,6 +18,8 @@ class Controller extends BaseController
 
     /**
      * success response method.
+     *
+     * @param mixed $result
      */
     public function response($result, string $message = '', int $code = 200, array $headers = []): Response
     {
@@ -36,6 +38,8 @@ class Controller extends BaseController
 
     /**
      * return error response.
+     *
+     * @param mixed $error
      */
     public function error($error, array $errorMessages = [], int $code = 400, array $headers = []): Response
     {

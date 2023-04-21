@@ -40,6 +40,9 @@ class MediaController extends Controller
     }
 
     /**
+     * @param mixed $mediaId
+     * @param mixed $direction
+     *
      * @return RedirectResponse
      */
     public function moderationNextOrPrev($mediaId, $direction)

@@ -126,7 +126,6 @@ class UserDocument extends BaseModel
         if ($this->creatorObj) {
             return $this->creatorObj->_id . '/' . $this->file;
         }
-
     }
 
     /**

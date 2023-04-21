@@ -28,6 +28,5 @@ class TextSearchField extends Migration
      */
     public function down()
     {
-
     }
 }

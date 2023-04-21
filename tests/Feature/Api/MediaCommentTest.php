@@ -33,19 +33,19 @@ class MediaCommentTest extends ApiTestCase
         'data.creator.avatar' => 'string',
     ];
     public const MEDIA_COMMENT_REPLY_STRUCTURE = [
+        '_id',
+        'created_at',
+        'parent_id',
+        'text',
+        'creator' => [
             '_id',
-            'created_at',
-            'parent_id',
-            'text',
-            'creator' => [
-                '_id',
-                'username',
-                'avatar',
-            ],
-            'is_liked',
-            'media_id',
-            'user_id',
-        ];
+            'username',
+            'avatar',
+        ],
+        'is_liked',
+        'media_id',
+        'user_id',
+    ];
     public const MEDIA_COMMENT_STRUCTURE       = [
         '_id',
         'created_at',

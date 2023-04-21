@@ -19,6 +19,8 @@ class LogAuthenticatedListener
     /**
      * Handle the event.
      *
+     * @param mixed $event
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      *
      * @return void

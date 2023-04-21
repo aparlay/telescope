@@ -13,7 +13,6 @@ class OnlineUsersListener
      */
     public function __construct()
     {
-
     }
 
     /**

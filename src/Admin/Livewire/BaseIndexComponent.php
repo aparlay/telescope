@@ -77,6 +77,7 @@ abstract class BaseIndexComponent extends Component
 
     /**
      * @param mixed $order
+     * @param mixed $field
      *
      * @return void
      */

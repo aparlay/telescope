@@ -58,6 +58,8 @@ class QueryBuilder
     }
 
     /**
+     * @param mixed $filters
+     *
      * @throws ErrorException
      *
      * @return QueryBuilder
@@ -102,6 +104,8 @@ class QueryBuilder
     }
 
     /**
+     * @param mixed $allowedSorts
+     *
      * @throws ErrorException
      *
      * @return QueryBuilder

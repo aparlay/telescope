@@ -24,6 +24,5 @@ class UpdateUserCountry extends Migration
      */
     public function down()
     {
-
     }
 }
