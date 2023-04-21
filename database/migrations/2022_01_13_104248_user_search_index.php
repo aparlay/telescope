@@ -25,6 +25,6 @@ class UserSearchIndex extends Migration
      */
     public function down()
     {
-        //
+
     }
 }

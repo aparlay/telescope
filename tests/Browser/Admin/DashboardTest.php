@@ -11,9 +11,10 @@ class DashboardTest extends DuskTestCase
 {
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function analyticsFilterTest()
+    public function analytics_filter_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.dashboard'))
@@ -26,11 +27,12 @@ class DashboardTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function analyticsFilterDateRangeErrorTest()
+    public function analytics_filter_date_range_error_test()
     {
-        $dateNow = Carbon::now()->format('m/d/Y');
+        $dateNow  = Carbon::now()->format('m/d/Y');
         $datePast = Carbon::now()->subDays(35)->format('m/d/Y');
 
         $this->browse(function (Browser $browser) use ($dateNow, $datePast) {
@@ -46,9 +48,10 @@ class DashboardTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function dashboardDisplayTest()
+    public function dashboard_display_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.dashboard'))

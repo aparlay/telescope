@@ -17,15 +17,15 @@ use MongoDB\BSON\ObjectId;
  * Class MediaLike.
  *
  * @property ObjectId   $_id
+ * @property string     $created_at
+ * @property array      $creator
+ * @property mixed|null $creator_id
+ * @property User       $creatorObj
  * @property string     $hashtag
  * @property ObjectId   $media_id
- * @property ObjectId   $user_id
- * @property array      $creator
- * @property string     $created_at
- * @property mixed|null $creator_id
  * @property Media      $mediaObj
+ * @property ObjectId   $user_id
  * @property User       $userObj
- * @property User       $creatorObj
  */
 class MediaLike extends BaseModel
 {
@@ -44,7 +44,7 @@ class MediaLike extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'media_id',
         'user_id',
@@ -59,14 +59,14 @@ class MediaLike extends BaseModel
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends    = [];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -74,8 +74,8 @@ class MediaLike extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
-        'creator' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed,is_verified',
+    protected $casts      = [
+        'creator' => SimpleUserCast::class . ':_id,username,avatar,is_liked,is_followed,is_verified',
     ];
 
     /**
@@ -86,18 +86,11 @@ class MediaLike extends BaseModel
         return MediaLikeFactory::new();
     }
 
-    /**
-     * @return MediaLikeQueryBuilder|Builder
-     */
     public static function query(): MediaLikeQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     * @return MediaLikeQueryBuilder
-     */
     public function newEloquentBuilder($query): MediaLikeQueryBuilder
     {
         return new MediaLikeQueryBuilder($query);
@@ -106,7 +99,7 @@ class MediaLike extends BaseModel
     /**
      * Get the user associated with the alert.
      */
-    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -114,7 +107,7 @@ class MediaLike extends BaseModel
     /**
      * Get the user associated with the alert.
      */
-    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
@@ -122,26 +115,24 @@ class MediaLike extends BaseModel
     /**
      * Get the media associated with the alert.
      */
-    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
     }
 
     /**
-     * @param  ObjectId|string  $userId
-     * @param  bool  $refresh
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public static function cacheByUserId(ObjectId | string $userId, bool $refresh = false): void
+    public static function cacheByUserId(ObjectId|string $userId, bool $refresh = false): void
     {
-        $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
-        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+        $userId   = $userId instanceof ObjectId ? (string) $userId : $userId;
+        $cacheKey = (new self())->getCollection() . ':creator:' . $userId;
 
         if ($refresh) {
             Redis::del($cacheKey);
         }
 
-        if (! Redis::exists($cacheKey)) {
+        if (!Redis::exists($cacheKey)) {
             $likedMediaIds = self::project(['media_id' => true, '_id' => false])
                 ->creator($userId)
                 ->pluck('media_id')
@@ -159,14 +150,11 @@ class MediaLike extends BaseModel
     }
 
     /**
-     * @param  string  $mediaId
-     * @param  string  $userId
-     * @return bool
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function checkMediaIsLikedByUser(string $mediaId, string $userId): bool
     {
-        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+        $cacheKey = (new self())->getCollection() . ':creator:' . $userId;
 
         return (bool) Redis::sismember($cacheKey, $mediaId);
     }

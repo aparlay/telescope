@@ -13,10 +13,11 @@ class UtcDateTimeCast implements CastsAttributes
     /**
      * Cast the given value.
      *
-     * @param  Model  $model
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  array  $attributes
+     * @param Model  $model
+     * @param string $key
+     * @param mixed  $value
+     * @param array  $attributes
+     *
      * @return Carbon
      */
     public function get($model, $key, $value, $attributes)
@@ -32,10 +33,11 @@ class UtcDateTimeCast implements CastsAttributes
     /**
      * Prepare the given value for storage.
      *
-     * @param  Model  $model
-     * @param  string  $key
-     * @param  array  $value
-     * @param  array  $attributes
+     * @param Model  $model
+     * @param string $key
+     * @param array  $value
+     * @param array  $attributes
+     *
      * @return UTCDateTime
      */
     public function set($model, $key, $value, $attributes)

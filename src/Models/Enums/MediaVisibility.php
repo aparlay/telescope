@@ -6,9 +6,6 @@ enum MediaVisibility: int implements Enum
 {
     use EnumEnhancements;
 
-    case PRIVATE = 0;
-    case PUBLIC = 1;
-
     public function label(): string
     {
         return match ($this) {
@@ -24,4 +21,7 @@ enum MediaVisibility: int implements Enum
             self::PUBLIC => 'success',
         };
     }
+
+    case PRIVATE = 0;
+    case PUBLIC  = 1;
 }

@@ -7,10 +7,9 @@ use Illuminate\Validation\ValidationException;
 trait ValidationErrorTrait
 {
     /**
-     * @param string $field
-     * @param string $error
-     * @return mixed
      * @throws ValidationException
+     *
+     * @return mixed
      */
     public function throwClientError(string $field, string $error)
     {

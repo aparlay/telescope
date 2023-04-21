@@ -22,6 +22,7 @@ use Google\Analytics\Data\V1beta\Metric;
 use Google\ApiCore\ApiException;
 use Illuminate\Support\Facades\Redis;
 use MongoDB\BSON\UTCDateTime;
+use RedisException;
 
 final class AnalyticsCalculatorService
 {
@@ -29,18 +30,13 @@ final class AnalyticsCalculatorService
 
     public function __construct()
     {
-        putenv('GOOGLE_APPLICATION_CREDENTIALS='.config('app.google-analytics.key_file'));
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=' . config('app.google-analytics.key_file'));
         $this->client = new BetaAnalyticsDataClient();
     }
 
     /**
-     * @param  UTCDateTime  $startAt
-     * @param  UTCDateTime  $endAt
-     * @param  bool         $saveResults
-     *
-     * @return array
      * @throws ApiException
-     * @throws \RedisException
+     * @throws RedisException
      */
     public function calculateAnalytics(
         UTCDateTime $startAt,
@@ -48,9 +44,9 @@ final class AnalyticsCalculatorService
         bool $saveResults = true,
         bool $ga = false
     ): array {
-        $availableMedia = Media::date(null, $endAt)->count();
+        $availableMedia   = Media::date(null, $endAt)->count();
 
-        $date = date('Y-m-d', $startAt->toDateTime()->getTimestamp() + 20000);
+        $date             = date('Y-m-d', $startAt->toDateTime()->getTimestamp() + 20000);
 
         $mediaVisitCounts = 0;
 
@@ -58,7 +54,7 @@ final class AnalyticsCalculatorService
             $mediaVisitCounts += count($mediaVisits->media_ids);
         }
 
-        $analytics = [
+        $analytics        = [
             'date' => $date,
             'media' => [
                 'uploaded' => Media::date($startAt, $endAt)->count(),
@@ -74,17 +70,17 @@ final class AnalyticsCalculatorService
                 'comments' => MediaComment::date($startAt, $endAt)->count(),
                 'mean_likes' => $availableMedia ? MediaLike::date($startAt, $endAt)->count() / $availableMedia : 0,
                 'visits' => $mediaVisitCounts,
-                'mean_visits' => $availableMedia ? $mediaVisitCounts / $availableMedia : 0,
+                'mean_visits' => $availableMedia ? $mediaVisitCounts                         / $availableMedia : 0,
             ],
             'user' => [
                 'registered' => User::date($startAt, $endAt)->count(),
                 'active' => User::date($startAt, $endAt)->active()->count(),
                 'login' => User::date($startAt, $endAt, 'last_online_at')->count(),
                 'verified' => User::date($startAt, $endAt)->idVerified()->count(),
-                'unique' => Redis::sCard('tracking:users:unique:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
-                'returned' => Redis::sCard('tracking:users:returned:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
-                'duration' => (int) Redis::get('tracking:media:duration:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
-                'watched' => (int) Redis::get('tracking:media:watched:'.date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000), 0),
+                'unique' => Redis::sCard('tracking:users:unique:' . date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
+                'returned' => Redis::sCard('tracking:users:returned:' . date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
+                'duration' => (int) Redis::get('tracking:media:duration:' . date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000)),
+                'watched' => (int) Redis::get('tracking:media:watched:' . date('Y:m:d', $startAt->toDateTime()->getTimestamp() + 20000), 0),
             ],
             'email' => [
                 'sent' => Email::query()->date($startAt, $endAt)->sent()->count(),
@@ -138,38 +134,28 @@ final class AnalyticsCalculatorService
         return $analytics;
     }
 
-    /**
-     * @param $from
-     * @param $to
-     *
-     * @return void
-     */
     public function storeActiveUsers($from, $to): void
     {
         foreach (CarbonPeriod::create($from, $to) as $date) {
             /** @var Carbon $date */
-            $data = [];
-            $returnedCacheKey = 'tracking:users:returned:'.date('Y:m:d', $date->getTimestamp());
+            $data             = [];
+            $returnedCacheKey = 'tracking:users:returned:' . date('Y:m:d', $date->getTimestamp());
             if (Redis::exists($returnedCacheKey)) {
-                $dateString = date('Y-m-d', $date->getTimestamp());
+                $dateString  = date('Y-m-d', $date->getTimestamp());
                 $storedUuids = ActiveUser::query()->stringDate($dateString)->select(['uuid'])->pluck('uuid')->toArray();
-                $freshUuids = array_diff(Redis::smembers($returnedCacheKey), $storedUuids);
+                $freshUuids  = array_diff(Redis::smembers($returnedCacheKey), $storedUuids);
                 foreach ($freshUuids as $uuid) {
                     $data[] = ['date' => $dateString, 'uuid' => $uuid, 'created_at' => new UTCDateTime()];
                 }
             }
 
-            if (! empty($data)) {
+            if (!empty($data)) {
                 ActiveUser::insert($data);
             }
         }
     }
 
     /**
-     * @param $from
-     * @param $to
-     *
-     * @return array
      * @throws ApiException
      */
     public function reportActiveUsers($from, $to): array
@@ -178,10 +164,6 @@ final class AnalyticsCalculatorService
     }
 
     /**
-     * @param $from
-     * @param $to
-     *
-     * @return array
      * @throws ApiException
      */
     public function reportNewUsers($from, $to): array
@@ -190,10 +172,6 @@ final class AnalyticsCalculatorService
     }
 
     /**
-     * @param $from
-     * @param $to
-     *
-     * @return array
      * @throws ApiException
      */
     public function reportTotalUsers($from, $to): array
@@ -202,10 +180,6 @@ final class AnalyticsCalculatorService
     }
 
     /**
-     * @param $from
-     * @param $to
-     *
-     * @return array
      * @throws ApiException
      */
     public function reportUserEngagementDuration($from, $to): array
@@ -214,17 +188,12 @@ final class AnalyticsCalculatorService
     }
 
     /**
-     * @param  string  $metric
-     * @param  string  $from
-     * @param  string  $to
-     *
-     * @return array
      * @throws ApiException
      */
     private function getMetricResults(string $metric, string $from, string $to): array
     {
-        $response = $this->client->runReport([
-            'property' => 'properties/'.config('app.google-analytics.property_id'),
+        $response  = $this->client->runReport([
+            'property' => 'properties/' . config('app.google-analytics.property_id'),
             'dateRanges' => [
                 new DateRange([
                     'start_date' => $from,
@@ -248,7 +217,7 @@ final class AnalyticsCalculatorService
         ]);
 
         $countries = [];
-        $total = 0;
+        $total     = 0;
         foreach ($response->getRows() as $row) {
             foreach ($row->getDimensionValues() as $key => $dimensionValue) {
                 $countries[$dimensionValue->getValue()] = $row->getMetricValues()[$key]->getValue();

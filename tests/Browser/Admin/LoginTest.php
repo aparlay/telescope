@@ -27,14 +27,16 @@ class LoginTest extends DuskTestCase
      * A test if admin login page is working.
      *
      * @test
-     * @return void
+     *
      * @throws Throwable
+     *
+     * @return void
      */
-    public function visitAdmin()
+    public function visit_admin()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.login'))
-                    ->assertSee('Admin Dashboard');
+                ->assertSee('Admin Dashboard');
         });
     }
 
@@ -42,13 +44,15 @@ class LoginTest extends DuskTestCase
      * A test for admin login.
      *
      * @test
-     * @return void
+     *
      * @throws Throwable
+     *
+     * @return void
      */
-    public function loginAdmin()
+    public function login_admin()
     {
         $super_admin = User::factory()->create([
-            'email' => uniqid('alua_').'@aparly.com',
+            'email' => uniqid('alua_') . '@aparly.com',
             'status' => UserStatus::ACTIVE->value,
             'type' => 1,
             'password_hash' => Hash::make('password'),
@@ -61,20 +65,21 @@ class LoginTest extends DuskTestCase
 
         $this->browse(function ($browser) use ($super_admin) {
             $browser->visit(route('core.admin.login'))
-                    ->type('email', $super_admin->email)
-                    ->type('password', 'password')
-                    ->press('Sign In')
-                    ->assertPathIs('/dashboard')
-                    ->clickLink('Log Out')
-                    ->assertGuest();
+                ->type('email', $super_admin->email)
+                ->type('password', 'password')
+                ->press('Sign In')
+                ->assertPathIs('/dashboard')
+                ->clickLink('Log Out')
+                ->assertGuest();
         });
     }
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function loginIncorrectCredentials()
+    public function login_incorrect_credentials()
     {
         $this->browse(function ($browser) {
             $browser->visit(route('core.admin.login'))

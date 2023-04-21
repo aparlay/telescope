@@ -26,9 +26,9 @@ class NoteFactory extends Factory
      */
     public function definition()
     {
-        $creator = User::factory()->create();
-        $user = User::factory()->create();
-        $type = $this->faker->randomElement([
+        $creator  = User::factory()->create();
+        $user     = User::factory()->create();
+        $type     = $this->faker->randomElement([
             NoteType::SUSPEND->value,
             NoteType::UNSUSPEND->value,
             NoteType::BAN->value,
@@ -55,9 +55,9 @@ class NoteFactory extends Factory
             'message' => $this->faker->sentence(5),
             'status' => $this->faker->numberBetween($min = 0, $max = 1),
             'created_by' => new ObjectId($creator['_id']),
-            'updated_by' =>  new ObjectId($creator['_id']),
+            'updated_by' => new ObjectId($creator['_id']),
             'created_at' => DT::utcNow(),
-            'updated_at' =>  DT::utcNow(),
+            'updated_at' => DT::utcNow(),
         ];
     }
 }

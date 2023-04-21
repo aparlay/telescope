@@ -6,9 +6,6 @@ enum FollowStatus: int implements Enum
 {
     use EnumEnhancements;
 
-    case ACCEPTED = 1;
-    case PENDING = 2;
-
     public function label(): string
     {
         return match ($this) {
@@ -24,4 +21,7 @@ enum FollowStatus: int implements Enum
             self::ACCEPTED => 'success',
         };
     }
+
+    case ACCEPTED = 1;
+    case PENDING  = 2;
 }

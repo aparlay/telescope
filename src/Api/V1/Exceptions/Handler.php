@@ -29,7 +29,7 @@ class Handler extends ExceptionHandler
      *
      * @var array
      */
-    protected $dontFlash = [
+    protected $dontFlash  = [
         'current_password',
         'password',
         'password_confirmation',
@@ -47,14 +47,13 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * @param Request             $request
-     * @param Exception|Throwable $e
-     *
-     * @return JsonResponse|Response|\Symfony\Component\HttpFoundation\Response
+     * @param Request $request
      *
      * @throws Throwable
+     *
+     * @return JsonResponse|Response|\Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Exception | Throwable $e)
+    public function render($request, Exception|Throwable $e)
     {
         // detect instance
         if ($e instanceof UnauthorizedHttpException) {
@@ -64,17 +63,17 @@ class Handler extends ExceptionHandler
                 'message' => __('UNAUTHORIZED_REQUEST'),
             ];
             if ($e->getPrevious() instanceof TokenExpiredException) {
-                $response['code'] = $e->getStatusCode();
+                $response['code']    = $e->getStatusCode();
                 $response['message'] = __('TOKEN_EXPIRED');
             }
 
             if ($e->getPrevious() instanceof TokenInvalidException) {
-                $response['code'] = $e->getStatusCode();
+                $response['code']    = $e->getStatusCode();
                 $response['message'] = __('TOKEN_INVALID');
             }
 
             if ($e->getPrevious() instanceof TokenBlacklistedException) {
-                $response['code'] = $e->getStatusCode();
+                $response['code']    = $e->getStatusCode();
                 $response['message'] = __('TOKEN_BLACKLISTED');
             }
 

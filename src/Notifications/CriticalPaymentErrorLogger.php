@@ -17,13 +17,14 @@ class CriticalPaymentErrorLogger extends Notification
      */
     public function __construct(public string $ref, public string $service, public string $message, public string $channel = '')
     {
-        $this->channel = (! empty($channel) ? $channel : config('app.slack_payment_failed'));
+        $this->channel = (!empty($channel) ? $channel : config('app.slack_payment_failed'));
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -34,7 +35,8 @@ class CriticalPaymentErrorLogger extends Notification
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable)
@@ -47,9 +49,9 @@ class CriticalPaymentErrorLogger extends Notification
                 $attachment->title('Open Admin area', $this->ref)
                     ->fields([
                         'Service' => $this->service,
-                        'URL' => '`'.$this->ref.'`',
-                        'Request' => '```'.json_encode($this->req ?? []).'```',
-                        'Response' => '```'.json_encode($this->res ?? []).'```',
+                        'URL' => '`' . $this->ref . '`',
+                        'Request' => '```' . json_encode($this->req ?? []) . '```',
+                        'Response' => '```' . json_encode($this->res ?? []) . '```',
                     ]);
             })
             ->error();
@@ -58,13 +60,14 @@ class CriticalPaymentErrorLogger extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            //
+
         ];
     }
 }

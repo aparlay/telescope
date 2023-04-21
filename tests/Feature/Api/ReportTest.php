@@ -18,13 +18,13 @@ class ReportTest extends ApiTestCase
     /**
      * @test
      */
-    public function reasonRequired()
+    public function reason_required()
     {
-        $user = User::factory()->create();
+        $user  = User::factory()->create();
         $modal = User::factory()->create();
         $this->actingAs($modal)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('POST', '/v1/user/'.$user->_id.'/report', ['reason' => ''])
+            ->json('POST', '/v1/user/' . $user->_id . '/report', ['reason' => ''])
             ->assertStatus(422)
             ->assertJson([
                 'code' => 422,
@@ -42,13 +42,13 @@ class ReportTest extends ApiTestCase
     /**
      * @test
      */
-    public function userReportUser()
+    public function user_report_user()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value, 'visibility' => UserVisibility::PUBLIC->value]);
+        $user  = User::factory()->create(['status' => UserStatus::ACTIVE->value, 'visibility' => UserVisibility::PUBLIC->value]);
         $modal = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $this->actingAs($modal)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('POST', '/v1/user/'.$user->_id.'/report', ['reason' => 'Reason Test Case'])
+            ->json('POST', '/v1/user/' . $user->_id . '/report', ['reason' => 'Reason Test Case'])
             ->assertStatus(201)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 201)
@@ -86,13 +86,13 @@ class ReportTest extends ApiTestCase
     /**
      * @test
      */
-    public function guestReportMedia()
+    public function guest_report_media()
     {
         $media = Media::factory()
             ->for(User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]), 'userObj')
-            ->create(['status'=> MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
+            ->create(['status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('POST', '/v1/media/'.$media->_id.'/report', [
+            ->json('POST', '/v1/media/' . $media->_id . '/report', [
                 'reason' => 'bad image for guest',
             ])
             ->assertStatus(201)
@@ -135,13 +135,13 @@ class ReportTest extends ApiTestCase
     /**
      * @test
      */
-    public function userReportMedia()
+    public function user_report_media()
     {
-        $user = User::factory()->create();
+        $user  = User::factory()->create();
         $media = Media::factory()->for(User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]), 'userObj')
-                        ->create(['status'=> MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
+            ->create(['status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('POST', '/v1/media/'.$media->_id.'/report', [
+            ->json('POST', '/v1/media/' . $media->_id . '/report', [
                 'reason' => 'bad image',
             ])
             ->assertStatus(201)
@@ -187,9 +187,9 @@ class ReportTest extends ApiTestCase
     /**
      * @test
      */
-    public function reportUserWithPermission()
+    public function report_user_with_permission()
     {
-        $user = User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]);
+        $user        = User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]);
         $blockedUser = User::factory()->create();
         Block::factory()->create([
             'user' => [
@@ -205,7 +205,7 @@ class ReportTest extends ApiTestCase
         ]);
         $this->actingAs($blockedUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('POST', '/v1/user/'.$user->_id.'/report', ['reason' => 'Test Case For Policy'])
+            ->json('POST', '/v1/user/' . $user->_id . '/report', ['reason' => 'Test Case For Policy'])
             ->assertStatus(403)
             ->assertJson([
                 'code' => 403,
@@ -218,10 +218,10 @@ class ReportTest extends ApiTestCase
     /**
      * @test
      */
-    public function reportMediaWithPermission()
+    public function report_media_with_permission()
     {
         $mediaCreator = User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]);
-        $blockedUser = User::factory()->create();
+        $blockedUser  = User::factory()->create();
         Block::factory()->create([
             'user' => [
                 '_id' => new ObjectId($blockedUser->_id),
@@ -234,7 +234,7 @@ class ReportTest extends ApiTestCase
                 'avatar' => $mediaCreator->avatar,
             ],
         ]);
-        $media = Media::factory()->for($mediaCreator, 'userObj')->create([
+        $media        = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
             'status' => MediaStatus::COMPLETED->value,
             'visibility' => MediaVisibility::PUBLIC->value,
@@ -247,7 +247,7 @@ class ReportTest extends ApiTestCase
         ]);
         $this->actingAs($blockedUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('POST', '/v1/media/'.$media->_id.'/report', ['reason' => 'Test Case For Policy'])
+            ->json('POST', '/v1/media/' . $media->_id . '/report', ['reason' => 'Test Case For Policy'])
             ->assertStatus(403)
             ->assertJson([
                 'code' => 403,
@@ -260,11 +260,11 @@ class ReportTest extends ApiTestCase
     /**
      * @test
      */
-    public function reportMedia()
+    public function report_media()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $user         = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $mediaCreator = User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]);
-        $media = Media::factory()->for($mediaCreator, 'userObj')->create([
+        $media        = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
             'status' => MediaStatus::COMPLETED->value,
             'visibility' => MediaVisibility::PUBLIC->value,
@@ -278,7 +278,7 @@ class ReportTest extends ApiTestCase
 
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('POST', '/v1/media/'.$media->_id.'/report', ['reason' => 'Reason Test Case For Media'])
+            ->json('POST', '/v1/media/' . $media->_id . '/report', ['reason' => 'Reason Test Case For Media'])
             ->assertStatus(201)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 201)

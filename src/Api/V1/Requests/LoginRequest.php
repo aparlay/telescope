@@ -7,9 +7,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
 /**
- * @property string $username
- * @property string $password
  * @property string $otp
+ * @property string $password
+ * @property string $username
  */
 class LoginRequest extends FormRequest
 {

@@ -11,10 +11,9 @@ class DeviceId
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
      * @throws ValidationException
+     *
+     * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {

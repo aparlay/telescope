@@ -3,8 +3,6 @@
 namespace Aparlay\Core\Models;
 
 use Aparlay\Core\Api\V1\Models\Media;
-use Aparlay\Core\Api\V1\Models\MediaComment;
-use Aparlay\Core\Api\V1\Models\MediaLike;
 use Aparlay\Core\Database\Factories\UserNotificationFactory;
 use Aparlay\Core\Helpers\DT;
 use Aparlay\Core\Models\Enums\UserNotificationCategory;
@@ -22,17 +20,16 @@ use MongoDB\BSON\ObjectId;
  * Class Alert.
  *
  * @property ObjectId $_id
- * @property array $entity
- * @property string $reason
- * @property int $status
- * @property int $category
- * @property array $user
+ * @property int      $category
+ * @property string   $created_at
  * @property ObjectId $created_by
+ * @property array    $entity
+ * @property mixed    $entityObj
+ * @property string   $reason
+ * @property int      $status
+ * @property string   $updated_at
  * @property ObjectId $updated_by
- * @property string $created_at
- * @property string $updated_at
- * @property mixed $entityObj
- *
+ * @property array    $user
  * @property-read string $category_label
  * @property-read string $status_label
  * @property-read User $userObj
@@ -53,7 +50,7 @@ class UserNotification extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'user_id',
         'entity._id',
@@ -73,7 +70,7 @@ class UserNotification extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
         'message' => 'string',
         'category' => 'integer',
         'status' => 'integer',
@@ -99,9 +96,6 @@ class UserNotification extends BaseModel
         return UserNotificationFactory::new();
     }
 
-    /**
-     * @return UserNotificationQueryBuilder|Builder
-     */
     public static function query(): UserNotificationQueryBuilder|Builder
     {
         return parent::query();
@@ -110,8 +104,7 @@ class UserNotification extends BaseModel
     /**
      * Create a new Eloquent query builder for the model.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @return UserNotificationQueryBuilder
+     * @param \Illuminate\Database\Query\Builder $query
      */
     public function newEloquentBuilder($query): UserNotificationQueryBuilder
     {
@@ -121,7 +114,7 @@ class UserNotification extends BaseModel
     /**
      * Get the user associated with the alert.
      */
-    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -144,9 +137,6 @@ class UserNotification extends BaseModel
         return UserNotificationCategory::from($this->category)->label();
     }
 
-    /**
-     * @return void
-     */
     public function regenerateMessage(): void
     {
         if ($this->category === UserNotificationCategory::LIKES->value) {
@@ -162,35 +152,26 @@ class UserNotification extends BaseModel
         }
     }
 
-    /**
-     * @return bool
-     */
     private function regenerateLikeNotification(): bool
     {
         /** @var Media $media */
-        $media = $this->entityObj;
-        $this->message = $media->likesNotificationMessage();
+        $media            = $this->entityObj;
+        $this->message    = $media->likesNotificationMessage();
         $this->created_at = DT::utcNow();
 
         return $this->save();
     }
 
-    /**
-     * @return bool
-     */
     private function regenerateCommentNotification(): bool
     {
         /** @var Media $media */
-        $media = $this->entityObj;
-        $this->message = $media->commentsNotificationMessage();
+        $media            = $this->entityObj;
+        $this->message    = $media->commentsNotificationMessage();
         $this->created_at = DT::utcNow();
 
         return $this->save();
     }
 
-    /**
-     * @return bool
-     */
     private function regenerateFollowNotification(): bool
     {
         $this->created_at = DT::utcNow();

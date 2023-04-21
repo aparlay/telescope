@@ -9,15 +9,11 @@ use Aparlay\Core\Api\V1\Resources\MeResource;
 use Aparlay\Core\Api\V1\Resources\UserResource;
 use Aparlay\Core\Api\V1\Services\MediaService;
 use Aparlay\Core\Api\V1\Services\UserService;
-use Aparlay\Core\Helpers\Country;
 use Aparlay\Core\Models\Enums\UserStatus;
-use Aparlay\Core\Models\Enums\UserVisibility;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -32,9 +28,6 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return Response
      */
     public function index(Request $request): Response
     {
@@ -43,8 +36,6 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @return Response
      */
     public function me(): Response
     {
@@ -56,8 +47,6 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Request  $request
-     * @return Response
      * @throws AuthorizationException
      */
     public function destroy(Request $request): Response
@@ -74,9 +63,9 @@ class UserController extends Controller
             if (auth()->user()->getRememberToken()) {
                 auth()->logout();
             }
-            $cookie1 = Cookie::forget('__Secure_token');
-            $cookie2 = Cookie::forget('__Secure_refresh_token');
-            $cookie3 = Cookie::forget('__Secure_username');
+            $cookie1      = Cookie::forget('__Secure_token');
+            $cookie2      = Cookie::forget('__Secure_refresh_token');
+            $cookie3      = Cookie::forget('__Secure_username');
 
             return $this->response([], '', Response::HTTP_NO_CONTENT)
                 ->cookie($cookie1)
@@ -90,8 +79,6 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  MeRequest  $request
-     * @return object
      * @throws ValidationException
      */
     public function update(MeRequest $request): object
@@ -111,23 +98,20 @@ class UserController extends Controller
             if ($request->has('avatar') && empty($request->avatar)) {
                 $request->merge(['avatar' => $this->userService->changeDefaultAvatar()]);
             }
-            if ($request->has('push_subscription') &&
-                ! empty($request->push_subscription['endpoint']) &&
-                ! empty($request->push_subscription['keys']['p256dh']) &&
-                ! empty($request->push_subscription['keys']['auth'])) {
+            if ($request->has('push_subscription') && !empty($request->push_subscription['endpoint']) && !empty($request->push_subscription['keys']['p256dh']) && !empty($request->push_subscription['keys']['auth'])) {
                 $this->userService->getUser()->updatePushSubscription(
                     $request->push_subscription['endpoint'],
                     $request->push_subscription['keys']['p256dh'],
                     $request->push_subscription['keys']['auth'],
                 );
             }
-            if ($request->has('push_unsubscription') && ! empty($request->push_unsubscription['endpoint'])) {
+            if ($request->has('push_unsubscription') && !empty($request->push_unsubscription['endpoint'])) {
                 $this->userService->getUser()->deletePushSubscription($request->push_unsubscription['endpoint']);
             }
 
             /* Update User Profile Information */
             $this->userService->getUser()->fill($request->all());
-            if ($this->userService->getUser()->status == UserStatus::VERIFIED->value && ! empty($request->username)) {
+            if ($this->userService->getUser()->status == UserStatus::VERIFIED->value && !empty($request->username)) {
                 $this->userService->getUser()->status = UserStatus::ACTIVE->value;
             }
             $this->userService->getUser()->save();
@@ -138,10 +122,6 @@ class UserController extends Controller
         return $this->response(new MeResource($this->userService->getUser()), Response::HTTP_OK);
     }
 
-    /**
-     * @param  User  $user
-     * @return Response
-     */
     public function show(User $user): Response
     {
         if ($this->userService->isUserEligible($user)) {
@@ -151,11 +131,6 @@ class UserController extends Controller
         return $this->error('Account not found!', [], Response::HTTP_NOT_FOUND);
     }
 
-    /**
-     * @param  string  $username
-     *
-     * @return Response
-     */
     public function showByUsername(string $username): Response
     {
         $user = User::username($username)->active()->firstOrFail();

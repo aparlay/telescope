@@ -14,12 +14,12 @@ class MediaCommentPolicy
 {
     use HandlesAuthorization;
 
-    public function view(User | Authenticatable $user, Media $media)
+    public function view(User|Authenticatable $user, Media $media)
     {
-        $userId = $user?->_id;
+        $userId    = $user?->_id;
 
         $isBlocked = Block::query()->select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
-        if (! $isBlocked) {
+        if (!$isBlocked) {
             return Response::allow();
         }
 
@@ -29,13 +29,11 @@ class MediaCommentPolicy
     /**
      * Responsible for check the user can create models.
      *
-     * @param  User|Authenticatable  $user
-     * @param  Media  $media
      * @return Response
      */
-    public function create(User | Authenticatable $user, Media $media)
+    public function create(User|Authenticatable $user, Media $media)
     {
-        $userId = $user?->_id;
+        $userId    = $user?->_id;
 
         $isBlocked = Block::query()->select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
 
@@ -43,7 +41,7 @@ class MediaCommentPolicy
             return Response::deny(__('You cannot create comment for this video at the moment.'));
         }
 
-        if (! $media->is_comments_enabled) {
+        if (!$media->is_comments_enabled) {
             return Response::deny(__('Comments are disabled for this video.'));
         }
 
@@ -53,11 +51,11 @@ class MediaCommentPolicy
     /**
      * Responsible for check the user can delete the model.
      *
-     * @param  User|Authenticatable  $user
-     * @param  Media  $media
+     * @param Media $media
+     *
      * @return Response
      */
-    public function delete(User | Authenticatable $user, MediaComment $mediaComment)
+    public function delete(User|Authenticatable $user, MediaComment $mediaComment)
     {
         $userId = $user?->_id;
 

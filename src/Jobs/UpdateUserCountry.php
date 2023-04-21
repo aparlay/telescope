@@ -21,7 +21,6 @@ class UpdateUserCountry implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
     public User $user;
     public string $ip;
     public string $userId;
@@ -29,7 +28,7 @@ class UpdateUserCountry implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries         = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -41,19 +40,19 @@ class UpdateUserCountry implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 30;
+    public $backoff           = 30;
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(string $userId, string $ip)
     {
         $this->onQueue('low');
-        $this->ip = $ip;
+        $this->ip     = $ip;
         $this->userId = $userId;
         User::findOrFail(new ObjectId($userId));
     }
@@ -61,18 +60,19 @@ class UpdateUserCountry implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     *
+     * @return void
      */
     public function handle()
     {
-        $user = User::findOrFail(new ObjectId($this->userId));
+        $user   = User::findOrFail(new ObjectId($this->userId));
         $client = new Client(config('app.maxmind.accountId'), config('app.maxmind.licenseKey'), ['en']);
         $record = $client->city($this->ip);
 
-        if (isset($record->country->isoCode) && ! empty($record->country->isoCode)) {
+        if (isset($record->country->isoCode) && !empty($record->country->isoCode)) {
             $user->country_alpha2 = Str::lower($record->country->isoCode);
-            $user->last_location = [
+            $user->last_location  = [
                 'lat' => $record->location->latitude,
                 'lng' => $record->location->longitude,
             ];

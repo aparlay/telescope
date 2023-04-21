@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Repositories;
 
 use Aparlay\Core\Admin\Models\Analytic;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 class AnalyticRepository implements RepositoryInterface
 {
@@ -11,8 +12,8 @@ class AnalyticRepository implements RepositoryInterface
 
     public function __construct($model)
     {
-        if (! ($model instanceof Analytic)) {
-            throw new \InvalidArgumentException('$model should be of User type');
+        if (!($model instanceof Analytic)) {
+            throw new InvalidArgumentException('$model should be of User type');
         }
 
         $this->model = $model;

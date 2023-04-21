@@ -9,7 +9,6 @@ use Aparlay\Core\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use MongoDB\BSON\ObjectId;
@@ -18,13 +17,14 @@ class UserDocumentTest extends ApiTestCase
 {
     /**
      * @see UserDocumentController::index()
+     *
      * @return void
      */
-    public function testIndex()
+    public function test_index()
     {
         $userDocument = UserDocument::first();
 
-        $r = $this->actingAs($userDocument->creatorObj)
+        $r            = $this->actingAs($userDocument->creatorObj)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->get('/v1/user-document');
 
@@ -48,16 +48,17 @@ class UserDocumentTest extends ApiTestCase
 
     /**
      * @see UserDocumentController::view()
+     *
      * @return void
      */
-    public function testView()
+    public function test_view()
     {
         /** @var UserDocument $userDocument */
         $userDocument = UserDocument::first();
 
-        $r = $this->actingAs($userDocument->creatorObj)
+        $r            = $this->actingAs($userDocument->creatorObj)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get("/v1/user-document/$userDocument->_id");
+            ->get("/v1/user-document/{$userDocument->_id}");
 
         $r->assertStatus(200);
         $r->assertJsonStructure([
@@ -83,16 +84,16 @@ class UserDocumentTest extends ApiTestCase
     /**
      * @see UserDocumentController::store()
      */
-    public function testCreate()
+    public function test_create()
     {
         Bus::fake();
         Event::fake();
         Storage::fake('upload');
 
-        $user = User::factory()->create();
+        $user          = User::factory()->create();
 
-        $idCardFile = UploadedFile::fake()->create('id_card.jpg', 100);
-        $selfie = UploadedFile::fake()->create('selfie.jpg', 100);
+        $idCardFile    = UploadedFile::fake()->create('id_card.jpg', 100);
+        $selfie        = UploadedFile::fake()->create('selfie.jpg', 100);
 
         $documentTypes = [
             UserDocumentType::ID_CARD->value => $idCardFile,
@@ -100,7 +101,7 @@ class UserDocumentTest extends ApiTestCase
         ];
 
         foreach ($documentTypes as $documentType => $uploadedFile) {
-            $r = $this->actingAs($user)
+            $r             = $this->actingAs($user)
                 ->withHeaders(['X-DEVICE-ID' => 'random-string'])
                 ->post('/v1/user-document', [
                     'file' => $uploadedFile,
@@ -125,11 +126,11 @@ class UserDocumentTest extends ApiTestCase
                 ])
             );
 
-            $dR = $r->decodeResponseJson();
+            $dR            = $r->decodeResponseJson();
             $rDocumentType = Arr::get($dR, 'data.type');
             $this->assertSame($documentType, $rDocumentType);
 
-            $modelId = Arr::get($dR, 'data._id');
+            $modelId       = Arr::get($dR, 'data._id');
             $this->assertDatabaseHas('user_documents', ['_id' => new ObjectId($modelId), 'creator._id' => new ObjectId($user->_id)]);
         }
     }

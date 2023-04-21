@@ -16,25 +16,23 @@ use MongoDB\BSON\ObjectId;
 /**
  * Class Report.
  *
- * @property ObjectId $_id
- * @property ObjectId $user_id
- * @property ObjectId $media_id
- * @property ObjectId $comment_id
- * @property int      $type
- * @property int      $status
- * @property string   $reason
- * @property ObjectId $created_by
- * @property ObjectId $updated_by
- * @property string   $created_at
- * @property string   $updated_at
- * @property string   $deleted_at
- * @property array    $links
- *
- * @property User $userObj
- * @property User $creatorObj
+ * @property ObjectId     $_id
+ * @property ObjectId     $comment_id
+ * @property string       $created_at
+ * @property ObjectId     $created_by
+ * @property User         $creatorObj
+ * @property string       $deleted_at
+ * @property array        $links
+ * @property ObjectId     $media_id
  * @property MediaComment $mediaCommentObj
- * @property Media $mediaObj
- *
+ * @property Media        $mediaObj
+ * @property string       $reason
+ * @property int          $status
+ * @property int          $type
+ * @property string       $updated_at
+ * @property ObjectId     $updated_by
+ * @property ObjectId     $user_id
+ * @property User         $userObj
  * @property-read string slack_subject_admin_url
  */
 class Report extends BaseModel
@@ -54,7 +52,7 @@ class Report extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'reason',
         'user_id',
@@ -73,7 +71,7 @@ class Report extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -81,7 +79,7 @@ class Report extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
         'reason' => 'string',
         'type' => 'integer',
         'status' => 'integer',
@@ -95,9 +93,6 @@ class Report extends BaseModel
         return ReportFactory::new();
     }
 
-    /**
-     * @return ReportQueryBuilder|Builder
-     */
     public static function query(): ReportQueryBuilder|Builder
     {
         return parent::query();
@@ -106,8 +101,7 @@ class Report extends BaseModel
     /**
      * Create a new Eloquent query builder for the model.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @return ReportQueryBuilder
+     * @param \Illuminate\Database\Query\Builder $query
      */
     public function newEloquentBuilder($query): ReportQueryBuilder
     {
@@ -141,27 +135,21 @@ class Report extends BaseModel
     /**
      * Get the user associated with the report.
      */
-    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function creatorObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    /**
-     * @return string
-     */
     public function getSlackSubjectAdminUrlAttribute(): string
     {
         return match ($this->type) {
             ReportType::COMMENT->value => $this->mediaCommentObj->slack_admin_url ?? '',
-            ReportType::USER->value => $this->userObj->slack_admin_url ?? '',
-            ReportType::MEDIA->value => $this->mediaObj->slack_admin_url ?? '',
+            ReportType::USER->value => $this->userObj->slack_admin_url            ?? '',
+            ReportType::MEDIA->value => $this->mediaObj->slack_admin_url          ?? '',
             default => '',
         };
     }
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [
@@ -170,9 +158,6 @@ class Report extends BaseModel
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getTypes(): array
     {
         return [
@@ -186,8 +171,6 @@ class Report extends BaseModel
      * Route notifications for the Slack channel.
      *
      * @param Notification $notification
-     *
-     * @return string
      */
     public function routeNotificationForSlack($notification): string
     {

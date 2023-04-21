@@ -7,13 +7,12 @@ use MeiliSearch\Client;
 
 class MeilisearchSettingCommand extends Command
 {
-    public $signature = 'meilisearch:setting';
-
+    public $signature   = 'meilisearch:setting';
     public $description = 'This command is responsible for recreating Search Engine Settings';
 
     public function handle()
     {
-        $client = new Client(config('scout.meilisearch.host'), config('scout.meilisearch.key'));
+        $client   = new Client(config('scout.meilisearch.host'), config('scout.meilisearch.key'));
 
         $settings = [
             'displayedAttributes' => ['*'],

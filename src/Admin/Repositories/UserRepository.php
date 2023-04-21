@@ -5,6 +5,7 @@ namespace Aparlay\Core\Admin\Repositories;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Events\UserVerificationStatusChangedEvent;
 use Aparlay\Core\Models\Enums\UserVerificationStatus;
+use InvalidArgumentException;
 
 class UserRepository
 {
@@ -12,8 +13,8 @@ class UserRepository
 
     public function __construct($model)
     {
-        if (! ($model instanceof User)) {
-            throw new \InvalidArgumentException('$model should be of User type');
+        if (!($model instanceof User)) {
+            throw new InvalidArgumentException('$model should be of User type');
         }
 
         $this->model = $model;
@@ -40,7 +41,6 @@ class UserRepository
     }
 
     /**
-     * @param $user
      * @return mixed
      */
     public function firstUnderReview($user)
@@ -96,7 +96,6 @@ class UserRepository
     }
 
     /**
-     * @param $user
      * @return mixed
      */
     public function setToUnderReview($user)
@@ -109,13 +108,12 @@ class UserRepository
 
     public function updateVerificationStatus($adminUser, $user, int $verificationStatus)
     {
-        $oldVerificationStatus = $user->verification_status;
+        $oldVerificationStatus     = $user->verification_status;
         $user->verification_status = $verificationStatus;
         $user->save();
 
         UserVerificationStatusChangedEvent::dispatchIf(
-            ($oldVerificationStatus !== $verificationStatus) &&
-            (in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])),
+            ($oldVerificationStatus !== $verificationStatus) && (in_array(UserVerificationStatus::VERIFIED->value, [$verificationStatus, $oldVerificationStatus])),
             $adminUser,
             $user,
             $verificationStatus

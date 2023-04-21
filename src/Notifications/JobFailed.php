@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notification;
 class JobFailed extends Notification
 {
     use Queueable;
-
     public string $job;
     public int $tried;
     public string $exception;
@@ -22,16 +21,17 @@ class JobFailed extends Notification
      */
     public function __construct(string $job, int $tried, string $exception, string $channel = '')
     {
-        $this->job = $job;
-        $this->tried = $tried;
+        $this->job       = $job;
+        $this->tried     = $tried;
         $this->exception = $exception;
-        $this->channel = (! empty($channel) ? $channel : config('app.slack_job_error'));
+        $this->channel   = (!empty($channel) ? $channel : config('app.slack_job_error'));
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -42,13 +42,14 @@ class JobFailed extends Notification
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable)
     {
-        $message = $this->job.' failed after '.$this->tried.' attempts.';
-        $message .= PHP_EOL.'_*Exceptions:*_ '.! empty($this->exception) ? $this->exception : ' attempts done.';
+        $message = $this->job . ' failed after ' . $this->tried . ' attempts.';
+        $message .= PHP_EOL . '_*Exceptions:*_ ' . !empty($this->exception) ? $this->exception : ' attempts done.';
 
         return (new SlackMessage())
             ->to($this->channel)
@@ -59,13 +60,14 @@ class JobFailed extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            //
+
         ];
     }
 }

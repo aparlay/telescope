@@ -2,8 +2,6 @@
 
 namespace Aparlay\Core\Api\V1\Policies;
 
-use Aparlay\Core\Api\V1\Models\Block;
-use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Models\UserDocument;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -14,7 +12,7 @@ class UserDocumentPolicy
 {
     use HandlesAuthorization;
 
-    public function view(User | Authenticatable $user, UserDocument $userDocument)
+    public function view(User|Authenticatable $user, UserDocument $userDocument)
     {
         $userId = $user?->_id;
 

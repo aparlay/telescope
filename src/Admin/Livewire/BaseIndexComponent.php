@@ -4,6 +4,7 @@ namespace Aparlay\Core\Admin\Livewire;
 
 use Aparlay\Core\Admin\Filters\QueryBuilder;
 use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
+use Arr;
 use Illuminate\Contracts\Database\Query\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,16 +13,19 @@ abstract class BaseIndexComponent extends Component
 {
     use CurrentUserTrait;
     use WithPagination;
-
     public $currentUser;
     protected $paginationTheme = 'bootstrap';
-    protected $listeners = ['updateParent'];
-    public int $perPage = 15;
-    public array $filter = [];
-    public array $sort = [];
+    protected $listeners       = ['updateParent'];
+    public int $perPage        = 15;
+    public array $filter       = [];
+    public array $sort         = [];
     protected $model;
+    public string $dateFormat  = 'm/d/Y H:i:s';
 
-    public string $dateFormat = 'm/d/Y H:i:s';
+    /**
+     * @var Builder
+     */
+    protected $query;
 
     public function mount()
     {
@@ -32,11 +36,6 @@ abstract class BaseIndexComponent extends Component
     {
         $this->render();
     }
-
-    /**
-     * @var Builder
-     */
-    protected $query;
 
     public function updatingSearch()
     {
@@ -70,26 +69,27 @@ abstract class BaseIndexComponent extends Component
             ->applyFilters($this->getFilters())
             ->applySorts($this->getAllowedSorts());
 
-        $query = $queryBuilder->getQuery();
+        $query        = $queryBuilder->getQuery();
         $query->options(['allowDiskUse' => true]);
 
         return $query;
     }
 
     /**
-     * @param $field
+     * @param mixed $order
+     *
      * @return void
      */
     public function sort($field, $order = 1)
     {
-        $value = \Arr::get($this->sort, $field);
+        $value              = Arr::get($this->sort, $field);
         if ($value === -1) {
             $this->sort = [];
 
             return;
         }
-        $newSort = $order * ($value ?? -1) * -1;
-        $this->sort = [];
+        $newSort            = $order * ($value ?? -1) * -1;
+        $this->sort         = [];
         $this->sort[$field] = $newSort;
     }
 

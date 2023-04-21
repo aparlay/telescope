@@ -6,10 +6,6 @@ enum UserNotificationStatus: int implements Enum
 {
     use EnumEnhancements;
 
-    case NOT_VISITED = -1;
-    case VISITED = 1;
-    case INVISIBLE = 2;
-
     public function label(): string
     {
         return match ($this) {
@@ -27,4 +23,8 @@ enum UserNotificationStatus: int implements Enum
             self::INVISIBLE => 'danger',
         };
     }
+
+    case NOT_VISITED = -1;
+    case VISITED     = 1;
+    case INVISIBLE   = 2;
 }

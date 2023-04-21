@@ -14,7 +14,7 @@ class AddUserColumns extends Migration
         \Aparlay\Core\Models\User::where('user_agents', null)->chunk(200, function ($models) {
             foreach ($models as $user) {
                 $user->user_agents = [];
-                $user->stats = [
+                $user->stats       = [
                     'amounts' => [
                         'sent_tips' => 0,
                         'received_tips' => 0,
@@ -44,6 +44,6 @@ class AddUserColumns extends Migration
      */
     public function down()
     {
-        //
+
     }
 }

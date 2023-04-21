@@ -7,14 +7,12 @@ use Aparlay\Core\Models\Enums\UserStatus;
 use Aparlay\Core\Tests\DuskTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Dusk\Browser;
 use Throwable;
 
 class UserEditViewTest extends DuskTestCase
 {
     use WithFaker;
-
     protected $user;
 
     /**
@@ -29,9 +27,10 @@ class UserEditViewTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function userAlertTest()
+    public function user_alert_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
@@ -45,9 +44,10 @@ class UserEditViewTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function userSuspendTest()
+    public function user_suspend_test()
     {
         $super_admin = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
@@ -64,9 +64,10 @@ class UserEditViewTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function userReactivateTest()
+    public function user_reactivate_test()
     {
         $super_admin = User::factory()->create([
             'status' => UserStatus::SUSPENDED->value,
@@ -83,9 +84,10 @@ class UserEditViewTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function userBanTest()
+    public function user_ban_test()
     {
         $super_admin = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
@@ -102,21 +104,22 @@ class UserEditViewTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function EditUserTest()
+    public function edit_user_test()
     {
         $file = UploadedFile::fake()->create('random.jpg')->store('public/dusk/avatars');
 
         $this->browse(function (Browser $browser) use ($file) {
             $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
-                ->attach('avatar', storage_path('app/'.$file))
+                ->attach('avatar', storage_path('app/' . $file))
                 ->type('username', $this->faker()->userName)
                 ->type('email', $this->faker()->email)
                 ->type('bio', $this->faker()->text)
-                ->clickAtXPath('//*[@id="user-info"]/form/div[4]/label') //email verified
-                ->clickAtXPath('//*[@id="user-info"]/form/div[6]/label') //feature tips
-                ->clickAtXPath('//*[@id="user-info"]/form/div[7]/label') //feature demo user
+                ->clickAtXPath('//*[@id="user-info"]/form/div[4]/label') // email verified
+                ->clickAtXPath('//*[@id="user-info"]/form/div[6]/label') // feature tips
+                ->clickAtXPath('//*[@id="user-info"]/form/div[7]/label') // feature demo user
                 ->select('gender')
                 ->select('type')
                 ->select('role')
@@ -129,35 +132,37 @@ class UserEditViewTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function UserMediaListTest()
+    public function user_media_list_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
-               ->clickLink('Medias')
-               ->assertSee('Cover')
-               ->assertSee('Created By')
-               ->assertSee('Description')
-               ->assertSee('Status')
-               ->assertSee('Likes')
-               ->assertSee('Sort Score')
-               ->assertSee('Created At');
+                ->clickLink('Medias')
+                ->assertSee('Cover')
+                ->assertSee('Created By')
+                ->assertSee('Description')
+                ->assertSee('Status')
+                ->assertSee('Likes')
+                ->assertSee('Sort Score')
+                ->assertSee('Created At');
         });
     }
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function UserReuploadMediaTest()
+    public function user_reupload_media_test()
     {
         $file = UploadedFile::fake()->create('random.mp4')->store('public/dusk/medias');
 
         $this->browse(function (Browser $browser) use ($file) {
             $browser->visit(route('core.admin.user.view', ['user' => $this->user]))
                 ->clickLink('Upload')
-                ->attach('.flow-browse input', storage_path('app/'.$file))
+                ->attach('.flow-browse input', storage_path('app/' . $file))
                 ->assertSee('Uploading')
                 ->assertSee('completed')
                 ->type('description', $this->faker()->text)
@@ -168,9 +173,10 @@ class UserEditViewTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function UserPaymentsTest()
+    public function user_payments_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.user.view', ['user' => $this->user]))

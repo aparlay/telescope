@@ -43,8 +43,8 @@ class UserAppliedForCreatorAccount extends Notification implements ShouldQueue
     {
         $message = $notifiable->slack_admin_url;
         $message .= ' is applied for content creator account';
-        $message .= PHP_EOL.'_*Country:*_ '.$notifiable->country_label;
-        $message .= PHP_EOL.'_*Gender:*_ '.$notifiable->gender_label;
+        $message .= PHP_EOL . '_*Country:*_ ' . $notifiable->country_label;
+        $message .= PHP_EOL . '_*Gender:*_ ' . $notifiable->gender_label;
 
         return (new SlackMessage())
             ->to(config('app.slack_apply_for_verification'))

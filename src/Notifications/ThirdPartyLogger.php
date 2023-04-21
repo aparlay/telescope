@@ -17,13 +17,14 @@ class ThirdPartyLogger extends Notification
      */
     public function __construct(public string $ref, public string $service, public string $url, public array $req, public array $res, public string $channel = '')
     {
-        $this->channel = (! empty($channel) ? $channel : config('app.slack_third_party_logger'));
+        $this->channel = (!empty($channel) ? $channel : config('app.slack_third_party_logger'));
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -34,7 +35,8 @@ class ThirdPartyLogger extends Notification
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable)
@@ -46,9 +48,9 @@ class ThirdPartyLogger extends Notification
                 $attachment->title('Open Admin area', $this->ref)
                     ->fields([
                         'Service' => $this->service,
-                        'URL' => '`'.$this->url.'`',
-                        'Request' => '```'.json_encode($this->req ?? []).'```',
-                        'Response' => '```'.json_encode($this->res ?? []).'```',
+                        'URL' => '`' . $this->url . '`',
+                        'Request' => '```' . json_encode($this->req ?? []) . '```',
+                        'Response' => '```' . json_encode($this->res ?? []) . '```',
                     ]);
             })
             ->info();
@@ -57,13 +59,14 @@ class ThirdPartyLogger extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            //
+
         ];
     }
 }

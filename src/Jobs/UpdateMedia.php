@@ -20,16 +20,14 @@ class UpdateMedia implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
     public User $user;
     public string $userId;
-
     public array $attributes;
 
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries         = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -41,20 +39,20 @@ class UpdateMedia implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 30;
+    public $backoff           = 30;
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(string $userId, array $attributes)
     {
         $this->onQueue('low');
         $this->attributes = $attributes;
-        $this->userId = $userId;
+        $this->userId     = $userId;
         User::findOrFail(new ObjectId($userId));
     }
 

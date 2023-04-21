@@ -20,13 +20,12 @@ class RecalculateHashtag implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
     public string $tag;
 
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries         = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -38,14 +37,14 @@ class RecalculateHashtag implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [60, 300, 1800, 3600];
+    public $backoff           = [60, 300, 1800, 3600];
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(string $tag)
     {
@@ -58,8 +57,8 @@ class RecalculateHashtag implements ShouldQueue
      */
     public function handle(): void
     {
-        $hashtag = Hashtag::firstOrCreate(['tag' => $this->tag]);
-        $count = Media::hashtag($this->tag)->public()->confirmed()->count();
+        $hashtag              = Hashtag::firstOrCreate(['tag' => $this->tag]);
+        $count                = Media::hashtag($this->tag)->public()->confirmed()->count();
 
         if ($count === 0) {
             $hashtag->delete();
@@ -68,9 +67,9 @@ class RecalculateHashtag implements ShouldQueue
         }
 
         $hashtag->media_count = $count;
-        $hashtag->like_count = Media::hashtag($this->tag)->public()->confirmed()->sum('like_count');
+        $hashtag->like_count  = Media::hashtag($this->tag)->public()->confirmed()->sum('like_count');
         $hashtag->visit_count = Media::hashtag($this->tag)->public()->confirmed()->sum('visit_count');
-        $hashtag->sort_score = (Media::hashtag($this->tag)->public()->confirmed()->sum('sort_scores.default') / $count);
+        $hashtag->sort_score  = (Media::hashtag($this->tag)->public()->confirmed()->sum('sort_scores.default') / $count);
         $hashtag->save();
     }
 

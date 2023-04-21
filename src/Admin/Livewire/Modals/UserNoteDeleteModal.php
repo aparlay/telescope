@@ -9,14 +9,13 @@ use Livewire\Component;
 class UserNoteDeleteModal extends Component
 {
     use CurrentUserTrait;
-
     public $selectedItem;
     public $note;
 
     public function mount($noteId)
     {
         $this->selectedItem = $noteId;
-        $this->note = Note::find($noteId);
+        $this->note         = Note::find($noteId);
     }
 
     public function delete()

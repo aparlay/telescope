@@ -13,7 +13,7 @@ class GlobalSearchService
 {
     public static function search(string $searchQuery): array
     {
-        $orders = $payouts = $chats = $medias = [];
+        $orders           = $payouts = $chats = $medias = [];
 
         try {
             $users = self::searchUsers($searchQuery);
@@ -22,32 +22,32 @@ class GlobalSearchService
         }
 
         if (strlen($searchQuery) === 24 && strspn($searchQuery, '0123456789ABCDEFabcdef') === 24) {
-            $orders = Order::query()->user($searchQuery)->limit(5)->get()->merge(
+            $orders  = Order::query()->user($searchQuery)->limit(5)->get()->merge(
                 Order::query()->order($searchQuery)->get()
             );
             $payouts = UserPayout::query()->user($searchQuery)->limit(5)->get()->merge(
                 UserPayout::query()->userPayout($searchQuery)->get()
             );
-            $chats = Chat::query()->participants($searchQuery)->limit(5)->get()->merge(
+            $chats   = Chat::query()->participants($searchQuery)->limit(5)->get()->merge(
                 Chat::query()->chat($searchQuery)->get()
             );
-            $users = User::query()->user($searchQuery)->limit(5)->get()->merge(
+            $users   = User::query()->user($searchQuery)->limit(5)->get()->merge(
                 $users
             );
-            $medias = Media::query()->media($searchQuery)->limit(5)->get();
+            $medias  = Media::query()->media($searchQuery)->limit(5)->get();
         }
 
         if (strlen($searchQuery) === 6) {
             $medias = Media::query()->slug($searchQuery)->limit(5)->get();
         }
 
-        $result = [];
+        $result           = [];
 
-        $result['User'] = $users;
-        $result['Order'] = $orders;
+        $result['User']   = $users;
+        $result['Order']  = $orders;
         $result['Payout'] = $payouts;
-        $result['Chat'] = $chats;
-        $result['Media'] = $medias;
+        $result['Chat']   = $chats;
+        $result['Media']  = $medias;
 
         return $result;
     }
@@ -55,7 +55,7 @@ class GlobalSearchService
     private static function searchUsers(string $searchQuery): Collection
     {
         if (mb_substr($searchQuery, 0, 1) === '@') {
-            return User::query()->where('username', 'LIKE', trim($searchQuery, '@').'%')->limit(5)->get();
+            return User::query()->where('username', 'LIKE', trim($searchQuery, '@') . '%')->limit(5)->get();
         }
 
         $users = User::query()->textSearch($searchQuery)->limit(5)->get();

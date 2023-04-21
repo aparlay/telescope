@@ -32,7 +32,7 @@ class Analytic extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'date',
         'media',
@@ -50,7 +50,7 @@ class Analytic extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -58,7 +58,7 @@ class Analytic extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -71,18 +71,11 @@ class Analytic extends BaseModel
         return AnalyticFactory::new();
     }
 
-    /**
-     * @return AnalyticQueryBuilder|Builder
-     */
     public static function query(): AnalyticQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     * @return AnalyticQueryBuilder
-     */
     public function newEloquentBuilder($query): AnalyticQueryBuilder
     {
         return new AnalyticQueryBuilder($query);

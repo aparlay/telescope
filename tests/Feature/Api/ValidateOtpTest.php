@@ -14,10 +14,10 @@ class ValidateOtpTest extends ApiTestCase
      *
      * @test
      */
-    public function validOtp()
+    public function valid_otp()
     {
-        $email = uniqid('alua_').'@aparlay.com';
-        $otp = '123456';
+        $email = uniqid('alua_') . '@aparlay.com';
+        $otp   = '123456';
 
         User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
@@ -51,11 +51,11 @@ class ValidateOtpTest extends ApiTestCase
      *
      * @test
      */
-    public function invalidOtp()
+    public function invalid_otp()
     {
         $user = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua_').'@aparlay.com',
+            'email' => uniqid('alua_') . '@aparlay.com',
         ]);
         Otp::factory()->create(['identity' => $user->email, 'otp' => '123456']);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
@@ -82,7 +82,7 @@ class ValidateOtpTest extends ApiTestCase
      *
      * @test
      */
-    public function emailRequire()
+    public function email_require()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->patchJson('/v1/validate-otp', ['email' => '', 'otp' => '123456'])
@@ -105,11 +105,11 @@ class ValidateOtpTest extends ApiTestCase
      *
      * @test
      */
-    public function otpRequire()
+    public function otp_require()
     {
-        $user = User::factory()->create([
+        $user     = User::factory()->create([
             'status' => UserStatus::ACTIVE->value,
-            'email' => uniqid('alua_').'@aparlay.com',
+            'email' => uniqid('alua_') . '@aparlay.com',
         ]);
         $response = $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->patchJson('/v1/validate-otp', ['email' => $user->email, 'otp' => ''])

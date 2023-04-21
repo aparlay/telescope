@@ -18,16 +18,14 @@ class MediaCommentSeeder extends Seeder
 
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
-        $users = User::query()->limit(5)->get();
-        $medias = Media::query()->limit(10)->get();
+        $users                  = User::query()->limit(5)->get();
+        $medias                 = Media::query()->limit(10)->get();
 
-        $this->command->getOutput()->block('Creating media comments'."\n\r");
-        $mediaCommentBar = $this->command->getOutput()->createProgressBar(50);
+        $this->command->getOutput()->block('Creating media comments' . "\n\r");
+        $mediaCommentBar        = $this->command->getOutput()->createProgressBar(50);
 
         MediaComment::factory()
             ->count(50)
@@ -44,12 +42,12 @@ class MediaCommentSeeder extends Seeder
         $mediaCommentBar->finish();
 
         $this->command->getOutput()->block("\n\r");
-        $this->command->getOutput()->block('Creating media comments replies'."\n\r");
+        $this->command->getOutput()->block('Creating media comments replies' . "\n\r");
         $mediaCommentRepliesBar = $this->command->getOutput()->createProgressBar(50);
 
         foreach (MediaComment::lazy() as $mediaComment) {
-            $rand = rand(3, 11);
-            $mediaReplies = MediaComment::factory()
+            $rand                        = rand(3, 11);
+            $mediaReplies                = MediaComment::factory()
                 ->count($rand)
                 ->state(function (array $attributes) use ($mediaComment, $users, $medias) {
                     $mediaComment->load('creatorObj');
@@ -70,11 +68,11 @@ class MediaCommentSeeder extends Seeder
                 })
                 ->create();
 
-            $firstReply = $mediaReplies[0];
-            $firstReply->is_first = true;
+            $firstReply                  = $mediaReplies[0];
+            $firstReply->is_first        = true;
             $firstReply->save();
 
-            $mediaComment->first_reply = (new MediaCommentResource($firstReply))->resolve();
+            $mediaComment->first_reply   = (new MediaCommentResource($firstReply))->resolve();
             $mediaCommentRepliesBar->advance();
             $mediaComment->replies_count = $rand;
             $mediaComment->save();

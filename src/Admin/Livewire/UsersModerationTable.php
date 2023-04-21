@@ -12,7 +12,7 @@ use Jenssegers\Mongodb\Eloquent\Builder;
 
 class UsersModerationTable extends BaseIndexComponent
 {
-    public $model = User::class;
+    public $model        = User::class;
     protected $listeners = ['updateParent'];
 
     public function updateParent()
@@ -75,7 +75,7 @@ class UsersModerationTable extends BaseIndexComponent
     public function render()
     {
         return view('default_view::livewire.users-moderation-table', [
-           'users' => $this->index(),
+            'users' => $this->index(),
         ]);
     }
 }

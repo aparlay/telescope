@@ -2,8 +2,6 @@
 
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration {
     /**
@@ -33,7 +31,7 @@ return new class() extends Migration {
             ],
         ];
         foreach (User::lazy() as $user) {
-            $setting = $user->setting;
+            $setting       = $user->setting;
 
             if (empty($setting)) {
                 $setting = $default;
@@ -55,6 +53,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

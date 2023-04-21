@@ -18,27 +18,19 @@ class UserNotificationUnreadStatusUpdatedEvent implements ShouldBroadcast
     ) {
     }
 
-    /**
-     * @return PrivateChannel
-     */
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('users.'.$this->userId);
+        return new PrivateChannel('users.' . $this->userId);
     }
 
     /**
      * The event's broadcast name.
-     *
-     * @return string
      */
     public function broadcastAs(): string
     {
         return 'User.NotificationUnreadStatusUpdated';
     }
 
-    /**
-     * @return array
-     */
     public function broadcastWith(): array
     {
         return [

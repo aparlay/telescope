@@ -5,7 +5,6 @@ namespace Aparlay\Core\Tests\Browser\Admin\Media;
 use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Models\Enums\MediaStatus;
 use Aparlay\Core\Tests\DuskTestCase;
-use Facebook\WebDriver\WebDriverBy;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Laravel\Dusk\Browser;
@@ -14,7 +13,6 @@ use Throwable;
 class MediaEditTest extends DuskTestCase
 {
     use WithFaker;
-
     protected $media;
 
     /**
@@ -30,7 +28,7 @@ class MediaEditTest extends DuskTestCase
     /**
      * @test
      */
-    public function mediaReprocessTest()
+    public function media_reprocess_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.media.view', ['media' => $this->media]))
@@ -44,7 +42,7 @@ class MediaEditTest extends DuskTestCase
     /**
      * @test
      */
-    public function mediaAlertTest()
+    public function media_alert_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.media.view', ['media' => $this->media]))
@@ -59,7 +57,7 @@ class MediaEditTest extends DuskTestCase
     /**
      * @test
      */
-    public function mediaDeleteAlertTest()
+    public function media_delete_alert_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.media.view', ['media' => $this->media]))
@@ -74,7 +72,7 @@ class MediaEditTest extends DuskTestCase
     /**
      * @test
      */
-    public function mediaDeniedTest()
+    public function media_denied_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.media.view', ['media' => $this->media]))
@@ -86,7 +84,7 @@ class MediaEditTest extends DuskTestCase
     /**
      * @test
      */
-    public function mediaEditTest()
+    public function media_edit_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.media.view', ['media' => $this->media]))
@@ -100,9 +98,9 @@ class MediaEditTest extends DuskTestCase
     /**
      * @test
      */
-    public function mediaSkinAwesomenessBeautyTest()
+    public function media_skin_awesomeness_beauty_test()
     {
-        $media = Media::factory()->create(['status' => MediaStatus::COMPLETED->value]);
+        $media       = Media::factory()->create(['status' => MediaStatus::COMPLETED->value]);
 
         $randomScore = rand(0, 10);
         $this->browse(function (Browser $browser) use ($media) {
@@ -122,16 +120,17 @@ class MediaEditTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function mediaUploadTest()
+    public function media_upload_test()
     {
         $file = UploadedFile::fake()->create('random.mp4')->store('public/dusk/medias');
 
         $this->browse(function (Browser $browser) use ($file) {
             $browser->visit(route('core.admin.media.view', ['media' => $this->media]))
                 ->clickLink('Upload')
-                ->attach('.flow-browse input', storage_path('app/'.$file))
+                ->attach('.flow-browse input', storage_path('app/' . $file))
                 ->assertSee('Uploading')
                 ->assertSee('completed')
                 ->click('.upload-video-button')

@@ -15,11 +15,6 @@ class EmailEnvelope extends Mailable
 
     /**
      * SendEmail Construct.
-     *
-     * @param  string  $emailId
-     * @param  string  $emailSubject
-     * @param  string  $template
-     * @param  array   $payload
      */
     public function __construct(
         protected string $emailId,
@@ -38,24 +33,22 @@ class EmailEnvelope extends Mailable
     public function headers()
     {
         return new Headers(
-            messageId: $this->emailId.'@'.config('app.main_domain'),
+            messageId: $this->emailId . '@' . config('app.main_domain'),
             references: [$this->emailId],
             text: [
                 'X-Email-Id' => $this->emailId,
-                'List-Unsubscribe' => '<https://www.waptap.com/unsubscribe/?email_id='.$this->emailId.'>, <mailto:unsubscribe@waptap.com?subject=unsubscribe.'.$this->emailId.'>',
+                'List-Unsubscribe' => '<https://www.waptap.com/unsubscribe/?email_id=' . $this->emailId . '>, <mailto:unsubscribe@waptap.com?subject=unsubscribe.' . $this->emailId . '>',
             ],
         );
     }
 
     /**
      * Build the message.
-     *
-     * @return void
      */
     public function build(): void
     {
-        $data = $this->payload;
-        $data['unsubscribe_url'] = 'https://www.waptap.com/unsubscribe/?email_id='.$this->emailId;
+        $data                    = $this->payload;
+        $data['unsubscribe_url'] = 'https://www.waptap.com/unsubscribe/?email_id=' . $this->emailId;
         $this->subject($this->emailSubject)->view($this->getTemplate())->with($data);
     }
 
@@ -68,31 +61,35 @@ class EmailEnvelope extends Mailable
     {
         switch ($this->template) {
             case Email::TEMPLATE_EMAIL_VERIFICATION:
-                $template = 'default_view::email_verification';
-                $verificationTemplate = config('app.email.templates.email_verification', 'default_view::email_verification');
+                $template                    = 'default_view::email_verification';
+                $verificationTemplate        = config('app.email.templates.email_verification', 'default_view::email_verification');
                 if (view()->exists($verificationTemplate)) {
                     $template = 'email_verification';
                 }
+
                 break;
 
             case Email::TEMPLATE_EMAIL_CONTACTUS:
-                $template = 'default_view::email_contactus';
-                $contactUsTemplate = config('app.email.templates.email_contactus', 'default_view::email_contactus');
+                $template                    = 'default_view::email_contactus';
+                $contactUsTemplate           = config('app.email.templates.email_contactus', 'default_view::email_contactus');
                 if (view()->exists($contactUsTemplate)) {
                     $template = $contactUsTemplate;
                 }
+
                 break;
 
             case Email::TEMPLATE_EMAIL_ACCOUNT_VERIFICATION:
-                $template = 'default_view::email_account_verification';
+                $template                    = 'default_view::email_account_verification';
                 $accountVerificationTemplate = config('app.email.templates.email_account_verification', 'default_view::email_account_verification');
                 if (view()->exists($accountVerificationTemplate)) {
                     $template = $accountVerificationTemplate;
                 }
+
                 break;
 
             default:
-                $template = '';
+                $template                    = '';
+
                 break;
         }
 

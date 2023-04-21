@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
-use Aparlay\Core\Models\Enums\UserNotificationCategory;
-use Aparlay\Core\Models\UserDocument;
-use Aparlay\Payment\Api\V1\Resources\TipResource;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -13,10 +11,11 @@ class UserNotificationResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
+     * @throws Exception
      *
      * @return array
-     * @throws \Exception
      */
     public function toArray($request)
     {

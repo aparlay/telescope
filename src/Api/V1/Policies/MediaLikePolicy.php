@@ -20,16 +20,14 @@ class MediaLikePolicy
     /**
      * Responsible for check the user can create models.
      *
-     * @param  User|Authenticatable  $user
-     * @param  Media  $media
      * @return Response
      */
-    public function create(User | Authenticatable $user, Media $media)
+    public function create(User|Authenticatable $user, Media $media)
     {
-        $userId = $user?->_id;
+        $userId    = $user?->_id;
 
         $isBlocked = Block::query()->select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
-        if (! $isBlocked) {
+        if (!$isBlocked) {
             return Response::allow();
         }
 
@@ -43,13 +41,11 @@ class MediaLikePolicy
     /**
      * Responsible for check the user can delete the model.
      *
-     * @param  User|Authenticatable  $user
-     * @param  Media  $media
      * @return Response
      */
-    public function delete(User | Authenticatable $user, Media $media)
+    public function delete(User|Authenticatable $user, Media $media)
     {
-        $userId = $user?->_id;
+        $userId    = $user?->_id;
 
         $isBlocked = Block::query()->select(['created_by', '_id'])->creator($media->created_by)->user($userId)->exists();
         if ($isBlocked) {

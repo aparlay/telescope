@@ -10,8 +10,7 @@ use Spatie\Health\Checks\Result;
 
 class CacheCheck extends Check
 {
-    protected ?string $driver = null;
-
+    protected ?string $driver   = null;
     protected ?string $cacheKey = 'health:checks:cache';
 
     public function driver(string $driver): self
@@ -49,7 +48,7 @@ class CacheCheck extends Check
 
         Cache::driver($driver)->put($this->cacheKey, $expectedValue, 10);
 
-        $actualValue = Cache::driver($driver)->get($this->cacheKey);
+        $actualValue   = Cache::driver($driver)->get($this->cacheKey);
 
         return $actualValue === $expectedValue;
     }

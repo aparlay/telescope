@@ -6,10 +6,6 @@ enum EmailType: int implements Enum
 {
     use EnumEnhancements;
 
-    case OTP = 0;
-    case CONTACT = 1;
-    case ACCOUNT_VERIFICATION = 2;
-
     public function label(): string
     {
         return match ($this) {
@@ -27,4 +23,8 @@ enum EmailType: int implements Enum
             self::ACCOUNT_VERIFICATION => 'danger',
         };
     }
+
+    case OTP                  = 0;
+    case CONTACT              = 1;
+    case ACCOUNT_VERIFICATION = 2;
 }

@@ -29,17 +29,17 @@ class HealthCheckJsonResultsController extends Controller
 
         $checkResults = $resultStore->latestResults();
 
-        $response = [
+        $response     = [
             'finishedAt' => $checkResults->finishedAt->getTimestamp(),
             'checkResults' => $checkResults->storedCheckResults->map(fn (StoredCheckResult $line) => $line->toArray()),
         ];
 
-        $result = $checkResults->storedCheckResults
-                ->map(fn (StoredCheckResult $line) => $line->toArray())
-                ->filter(
-                    fn (array $check) => $check['status'] === 'ok' || in_array($check['name'], self::IGNORED_CHECKS)
-                )
-                ->count() !== 0;
+        $result       = $checkResults->storedCheckResults
+            ->map(fn (StoredCheckResult $line) => $line->toArray())
+            ->filter(
+                fn (array $check) => $check['status'] === 'ok' || in_array($check['name'], self::IGNORED_CHECKS)
+            )
+            ->count() !== 0;
 
         return $result ?
             $this->error($response, [], Response::HTTP_SERVICE_UNAVAILABLE) :

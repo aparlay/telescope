@@ -5,7 +5,6 @@ namespace Aparlay\Core\Api\V1\Controllers;
 use Aparlay\Core\Api\V1\Models\UserNotification;
 use Aparlay\Core\Api\V1\Requests\UserNotificationReadRequest;
 use Aparlay\Core\Api\V1\Resources\UserNotificationCollection;
-use Aparlay\Core\Api\V1\Resources\UserNotificationResource;
 use Aparlay\Core\Api\V1\Services\UserNotificationService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -23,10 +22,6 @@ class UserNotificationController extends Controller
         $this->userNotificationService = $userNotificationService;
     }
 
-    /**
-     * @param  Request  $request
-     * @return Response
-     */
     public function index(Request $request): Response
     {
         if (auth()->check()) {
@@ -39,8 +34,6 @@ class UserNotificationController extends Controller
     }
 
     /**
-     * @param  UserNotificationReadRequest  $request
-     * @return Response
      * @throws AuthorizationException
      */
     public function read(UserNotificationReadRequest $request): Response

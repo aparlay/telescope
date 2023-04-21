@@ -6,9 +6,6 @@ enum UserType: int implements Enum
 {
     use EnumEnhancements;
 
-    case USER = 0;
-    case ADMIN = 1;
-
     public function label(): string
     {
         return match ($this) {
@@ -24,4 +21,7 @@ enum UserType: int implements Enum
             self::ADMIN => 'success',
         };
     }
+
+    case USER  = 0;
+    case ADMIN = 1;
 }

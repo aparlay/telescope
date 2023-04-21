@@ -4,6 +4,7 @@ namespace Aparlay\Core\Events;
 
 use Aparlay\Core\Helpers\Cdn;
 use Aparlay\Core\Models\Media;
+use Exception;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -40,7 +41,7 @@ class MediaProcessingCompletedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('users.'.$this->media->creator['_id']);
+        return new PrivateChannel('users.' . $this->media->creator['_id']);
     }
 
     /**
@@ -56,8 +57,9 @@ class MediaProcessingCompletedEvent implements ShouldBroadcast
     /**
      * Get the data to broadcast.
      *
+     * @throws Exception
+     *
      * @return array
-     * @throws \Exception
      */
     public function broadcastWith()
     {
@@ -65,7 +67,7 @@ class MediaProcessingCompletedEvent implements ShouldBroadcast
             'media' => [
                 '_id' => (string) $this->media->_id,
                 'file' => Cdn::video($this->media->is_completed ? $this->media->file : 'default.mp4'),
-                'cover' => Cdn::cover($this->media->is_completed ? $this->media->filename.'.jpg' : 'default.jpg'),
+                'cover' => Cdn::cover($this->media->is_completed ? $this->media->filename . '.jpg' : 'default.jpg'),
                 'status' => $this->media->status,
             ],
             'message' => 'All done',

@@ -6,18 +6,6 @@ enum MediaStatus: int implements Enum
 {
     use EnumEnhancements;
 
-    case QUEUED = 0;
-    case UPLOADED = 1;
-    case IN_PROGRESS = 2;
-    case COMPLETED = 3;
-    case FAILED = 4;
-    case CONFIRMED = 5;
-    case DENIED = 6;
-    case IN_REVIEW = 7;
-    case USER_SUSPENDED = 8;
-    case ADMIN_DELETED = 9;
-    case USER_DELETED = 10;
-
     public function label(): string
     {
         return match ($this) {
@@ -45,4 +33,16 @@ enum MediaStatus: int implements Enum
             self::CONFIRMED => 'success',
         };
     }
+
+    case QUEUED         = 0;
+    case UPLOADED       = 1;
+    case IN_PROGRESS    = 2;
+    case COMPLETED      = 3;
+    case FAILED         = 4;
+    case CONFIRMED      = 5;
+    case DENIED         = 6;
+    case IN_REVIEW      = 7;
+    case USER_SUSPENDED = 8;
+    case ADMIN_DELETED  = 9;
+    case USER_DELETED   = 10;
 }

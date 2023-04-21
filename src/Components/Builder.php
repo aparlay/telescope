@@ -6,9 +6,6 @@ use Jenssegers\Mongodb\Eloquent\Builder as EloquentBuilder;
 
 class Builder extends EloquentBuilder
 {
-    /**
-     * @inheritdoc
-     */
     protected function ensureOrderForCursorPagination($shouldReverse = false)
     {
         if (empty($this->query->orders)) {

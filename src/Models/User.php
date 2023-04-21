@@ -523,8 +523,8 @@ class User extends \App\Models\User
     public function getIsRiskyAttribute(): bool
     {
         return $this->setting['payment']['block_unverified_cc'] || ($this->is_tier3) || ($this->setting['payment']['unverified_cc_spent_amount'] > config(
-                'payment.fraud.big_spender.maximum_total_amount'
-            ));
+            'payment.fraud.big_spender.maximum_total_amount'
+        ));
     }
 
     /**
@@ -678,6 +678,8 @@ class User extends \App\Models\User
     }
 
     /**
+     * @param mixed $attributeValue
+     *
      * @return void
      */
     public function setCountFieldsUpdatedAtAttribute($attributeValue)

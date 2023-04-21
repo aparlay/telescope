@@ -8,7 +8,6 @@ use Spatie\DataTransferObject\DataTransferObject;
 class ReportDTO extends DataTransferObject
 {
     public string $reason;
-
     public $created_by;
     public $updated_by;
 

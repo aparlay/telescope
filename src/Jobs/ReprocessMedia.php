@@ -21,7 +21,6 @@ class ReprocessMedia implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
     public Media $media;
     public string $file;
     public string $media_id;
@@ -29,38 +28,40 @@ class ReprocessMedia implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(string $mediaId, string $file)
     {
         if (($this->media = Media::media($mediaId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$mediaId);
+            throw new Exception(__CLASS__ . PHP_EOL . 'Media not found with id ' . $mediaId);
         }
 
-        $this->file = $file;
+        $this->file     = $file;
         $this->media_id = $mediaId;
     }
 
     /**
      * Execute the job.
      *
-     * @return void
      * @throws \Illuminate\Contracts\Filesystem\FileExistsException
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @return void
      */
     public function handle()
     {
-        $b2 = Storage::disk('b2-videos');
+        $b2          = Storage::disk('b2-videos');
         $mediaServer = Storage::disk('media-ftp');
-        $storage = Storage::disk('upload');
+        $storage     = Storage::disk('upload');
 
         try {
             $b2File = $this->file;
             if ($b2->fileExists($this->file)) {
-                if (! $mediaServer->exists($b2File)) {
+                if (!$mediaServer->exists($b2File)) {
                     $copiedToMediaServer = $mediaServer->writeStream($b2File, $b2->readStream($this->file));
-                    throw_if(! $copiedToMediaServer, new Exception(__CLASS__.PHP_EOL.'Nighter video file nor media object found!'));
+                    throw_if(!$copiedToMediaServer, new Exception(__CLASS__ . PHP_EOL . 'Nighter video file nor media object found!'));
                 }
 
                 ProcessMedia::dispatch($this->media_id, $b2File)->onQueue('low');
@@ -74,9 +75,9 @@ class ReprocessMedia implements ShouldQueue
                 return;
             }
 
-            throw new Exception(__CLASS__.PHP_EOL.'Nighter video file nor media object found!');
+            throw new Exception(__CLASS__ . PHP_EOL . 'Nighter video file nor media object found!');
         } catch (FileOpenException $e) {
-            throw new Exception(__CLASS__.PHP_EOL.$e->getMessage());
+            throw new Exception(__CLASS__ . PHP_EOL . $e->getMessage());
         }
     }
 

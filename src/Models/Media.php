@@ -646,6 +646,8 @@ class Media extends BaseModel
     }
 
     /**
+     * @param mixed $attributeValue
+     *
      * @return void
      */
     public function setCountFieldsUpdatedAtAttribute($attributeValue)

@@ -6,11 +6,6 @@ enum UserGender: int implements Enum
 {
     use EnumEnhancements;
 
-    case FEMALE = 0;
-    case MALE = 1;
-    case TRANSGENDER = 2;
-    case NOT_MENTION = 3;
-
     public function label(): string
     {
         return match ($this) {
@@ -30,4 +25,9 @@ enum UserGender: int implements Enum
             self::NOT_MENTION => 'indigo',
         };
     }
+
+    case FEMALE      = 0;
+    case MALE        = 1;
+    case TRANSGENDER = 2;
+    case NOT_MENTION = 3;
 }

@@ -8,8 +8,7 @@ use Maklad\Permission\Models\Role;
 
 class RoleCommand extends Command
 {
-    public $signature = 'core:role {email} {role}';
-
+    public $signature   = 'core:role {email} {role}';
     public $description = 'Assign role to user';
 
     public function handle()

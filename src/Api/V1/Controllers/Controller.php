@@ -14,17 +14,10 @@ class Controller extends BaseController
     use AuthorizesRequests;
     use DispatchesJobs;
     use ValidatesRequests;
-
     public $repository;
 
     /**
      * success response method.
-     *
-     * @param $result
-     * @param  string  $message
-     * @param  int  $code
-     * @param  array  $headers
-     * @return Response
      */
     public function response($result, string $message = '', int $code = 200, array $headers = []): Response
     {
@@ -34,7 +27,7 @@ class Controller extends BaseController
             'data' => $result,
         ];
 
-        if (! empty($message)) {
+        if (!empty($message)) {
             $response['message'] = $message;
         }
 
@@ -43,12 +36,6 @@ class Controller extends BaseController
 
     /**
      * return error response.
-     *
-     * @param $error
-     * @param  array  $errorMessages
-     * @param  int  $code
-     * @param  array  $headers
-     * @return Response
      */
     public function error($error, array $errorMessages = [], int $code = 400, array $headers = []): Response
     {
@@ -58,7 +45,7 @@ class Controller extends BaseController
             'message' => $error,
         ];
 
-        if (! empty($errorMessages)) {
+        if (!empty($errorMessages)) {
             $response['data'] = $errorMessages;
         }
 

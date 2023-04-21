@@ -7,10 +7,9 @@ use Maklad\Permission\Models\Role;
 
 class AddUserNotePermission extends Migration
 {
-    const PERMISSION_CREATE_NOTES = 'create notes';
-    const PERMISSION_DELETE_NOTES = 'delete notes';
-
-    const PERMISSIONS_LIST = [
+    public const PERMISSION_CREATE_NOTES = 'create notes';
+    public const PERMISSION_DELETE_NOTES = 'delete notes';
+    public const PERMISSIONS_LIST        = [
         self::PERMISSION_CREATE_NOTES,
         self::PERMISSION_DELETE_NOTES,
     ];
@@ -27,7 +26,7 @@ class AddUserNotePermission extends Migration
             Roles::SUPER_ADMINISTRATOR,
         ];
 
-        $roles = Role::whereIn('name', $roleNames)
+        $roles     = Role::whereIn('name', $roleNames)
             ->where('guard_name', 'admin')
             ->get();
 
@@ -48,6 +47,6 @@ class AddUserNotePermission extends Migration
      */
     public function down()
     {
-        //
+
     }
 }

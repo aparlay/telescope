@@ -8,7 +8,6 @@ use Aparlay\Core\Api\V1\Requests\LoginRequest;
 use Aparlay\Core\Api\V1\Requests\RegisterRequest;
 use Aparlay\Core\Api\V1\Requests\RequestOtpRequest;
 use Aparlay\Core\Api\V1\Requests\ValidateOtpRequest;
-use Aparlay\Core\Api\V1\Resources\RegisterResource;
 use Aparlay\Core\Api\V1\Services\OtpService;
 use Aparlay\Core\Api\V1\Services\UserService;
 use Aparlay\Core\Jobs\KeitaroPostback;
@@ -31,7 +30,7 @@ class AuthController extends Controller
     public function __construct(UserService $userService, OtpService $otpService)
     {
         $this->userService = $userService;
-        $this->otpService = $otpService;
+        $this->otpService  = $otpService;
 
         $this->middleware('auth:api', [
             'except' => [
@@ -46,8 +45,6 @@ class AuthController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @return Response
      */
     public function token(): Response
     {
@@ -55,8 +52,6 @@ class AuthController extends Controller
     }
 
     /**
-     * @param  ChangePasswordRequest  $request
-     * @return Response
      * @throws BlockedException
      * @throws ValidationException
      */
@@ -80,7 +75,7 @@ class AuthController extends Controller
             $this->userService->resetPassword($request->password);
         } else {
             /* Forgot password scenario */
-            if (! ($user = $this->userService->findByIdentity($request->username))) {
+            if (!($user = $this->userService->findByIdentity($request->username))) {
                 throw new BlockedException('User not found', null, null, Response::HTTP_NOT_FOUND);
             }
 
@@ -96,7 +91,7 @@ class AuthController extends Controller
             $this->userService->resetPassword($request->password);
         }
 
-        $loginRequest = new LoginRequest(['username' => $user->username, 'password' => $request->password]);
+        $loginRequest          = new LoginRequest(['username' => $user->username, 'password' => $request->password]);
         $loginRequest->headers = $request->headers;
 
         return $this->login($loginRequest);
@@ -105,15 +100,13 @@ class AuthController extends Controller
     /**
      * Validate request OTP.
      *
-     * @param  ValidateOtpRequest  $request
-     * @return Response
      * @throws BlockedException
      * @throws ValidationException
      */
     public function validateOtp(ValidateOtpRequest $request): Response
     {
         /* Find the user based on username */
-        if (! ($user = $this->userService->findByIdentity($request->username))) {
+        if (!($user = $this->userService->findByIdentity($request->username))) {
             throw new BlockedException(
                 'Your user account not found or does not match with password!',
                 null,
@@ -133,17 +126,15 @@ class AuthController extends Controller
             $this->otpService->validateOtp($request->otp, $request->username, true);
         }
 
-        /* Find the identityField (Email/Phone Number/Username) based on username and return the response*/
+        /* Find the identityField (Email/Phone Number/Username) based on username and return the response */
         return $this->response([
-            'message' => 'OTP is matched with your '.ucfirst(str_replace('_', ' ', $this->userService->getIdentityType($request->username))),
+            'message' => 'OTP is matched with your ' . ucfirst(str_replace('_', ' ', $this->userService->getIdentityType($request->username))),
         ], '', Response::HTTP_OK);
     }
 
     /**
      * Request for otp.
      *
-     * @param  RequestOtpRequest  $request
-     * @return Response
      * @throws BlockedException
      */
     public function requestOtp(RequestOtpRequest $request): Response
@@ -151,7 +142,7 @@ class AuthController extends Controller
         /* Find the user based on username */
         $user = $this->userService->findByIdentity($request->username);
 
-        if (! empty($user)) {
+        if (!empty($user)) {
             /* Through exception for suspended/banned/NotFound accounts */
             $this->userService->isUserEligibleForLogin($user);
 
@@ -159,7 +150,7 @@ class AuthController extends Controller
             $this->otpService->sendOtp($user, $request->header('X-DEVICE-ID'));
         }
 
-        /* Find the identityField (Email/PhoneNumber/Username) based on username and return the response*/
+        /* Find the identityField (Email/PhoneNumber/Username) based on username and return the response */
         if ($this->userService->getIdentityType($request->username) === Login::IDENTITY_EMAIL) {
             $response = [
                 'message' => 'If you enter your email correctly you will receive an OTP email in your inbox soon.',
@@ -177,11 +168,10 @@ class AuthController extends Controller
     /**
      * Login a user.
      *
-     * @param  LoginRequest  $request
-     * @return Response|void
-     *
      * @throws BlockedException
      * @throws ValidationException
+     *
+     * @return Response|void
      */
     public function login(LoginRequest $request)
     {
@@ -189,14 +179,14 @@ class AuthController extends Controller
         $identityField = $this->userService->getIdentityType($request->username);
 
         /** Prepare Credentials and attempt the login */
-        $credentials = [$identityField => $request->username, 'password' => $request->password];
+        $credentials   = [$identityField => $request->username, 'password' => $request->password];
 
-        if (! ($token = auth()->attempt($credentials))) {
+        if (!($token = auth()->attempt($credentials))) {
             throw ValidationException::withMessages(['password' => ['Incorrect username or password.']]);
         }
 
         /** Through exception for suspended/banned/NotFound accounts */
-        $user = auth()->user();
+        $user          = auth()->user();
         $this->userService->isUserEligibleForLogin($user);
 
         if ($this->userService->requireOtp() && $request->otp) {
@@ -205,18 +195,18 @@ class AuthController extends Controller
         }
 
         /** Prepare and return the json response */
-        $result = $this->respondWithToken($token);
-        $cookie1 = Cookie::make(
+        $result        = $this->respondWithToken($token);
+        $cookie1       = Cookie::make(
             '__Secure_token',
             $result['token'],
             $result['token_expired_at'] / 60
         );
-        $cookie2 = Cookie::make(
+        $cookie2       = Cookie::make(
             '__Secure_refresh_token',
             $result['refresh_token'],
             $result['refresh_token_expired_at'] / 60
         );
-        $cookie3 = Cookie::make(
+        $cookie3       = Cookie::make(
             '__Secure_username',
             auth()->user()->username,
             $result['refresh_token_expired_at'] / 60
@@ -232,7 +222,7 @@ class AuthController extends Controller
     {
         return [
             'token' => $token,
-            'token_expired_at' => auth()->factory()->getTTL() * 60,
+            'token_expired_at' => auth()->factory()->getTTL()         * 60,
             'refresh_token' => $token, // auth()->user()->createToken('web-app')->plainTextToken,
             'refresh_token_expired_at' => auth()->factory()->getTTL() * 60,
         ];
@@ -243,10 +233,10 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request): Response
     {
-        $user = User::create($request->all());
+        $user                  = User::create($request->all());
 
-        $trackerSubId = $request->cookie('__Secure_tracker_subid');
-        $trackerToken = $request->cookie('__Secure_tracker_token');
+        $trackerSubId          = $request->cookie('__Secure_tracker_subid');
+        $trackerToken          = $request->cookie('__Secure_tracker_token');
         if ($trackerSubId && $trackerToken) {
             KeitaroPostback::dispatch($trackerSubId, $trackerToken);
             $user->tracking = [
@@ -257,11 +247,11 @@ class AuthController extends Controller
             ];
         }
 
-        $deviceId = $request->header('X-DEVICE-ID');
+        $deviceId              = $request->header('X-DEVICE-ID');
 
         $this->otpService->sendOtp($user, $deviceId);
 
-        $loginRequest = new LoginRequest(['username' => $request->email, 'password' => $request->password]);
+        $loginRequest          = new LoginRequest(['username' => $request->email, 'password' => $request->password]);
         $loginRequest->headers = $request->headers;
 
         return $this->login($loginRequest);

@@ -6,10 +6,6 @@ enum MediaContentGender: int implements Enum
 {
     use EnumEnhancements;
 
-    case FEMALE = 0;
-    case MALE = 1;
-    case TRANSGENDER = 2;
-
     public function label(): string
     {
         return match ($this) {
@@ -27,4 +23,8 @@ enum MediaContentGender: int implements Enum
             self::TRANSGENDER => 'warning',
         };
     }
+
+    case FEMALE      = 0;
+    case MALE        = 1;
+    case TRANSGENDER = 2;
 }

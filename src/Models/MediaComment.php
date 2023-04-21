@@ -17,21 +17,20 @@ use MongoDB\BSON\ObjectId;
  * Class MediaComment.
  *
  * @property ObjectId     $_id
+ * @property string       $created_at
+ * @property array        $creator
+ * @property mixed|null   $creator_id
+ * @property User         $creatorObj
+ * @property array|null   $first_reply
+ * @property bool         $is_first
  * @property ObjectId     $media_id
+ * @property Media        $mediaObj
+ * @property MediaComment $parentObj
+ * @property string       $text
  * @property ObjectId     $tip_id
  * @property ObjectId     $user_id
- * @property array        $creator
- * @property string       $text
- * @property string       $created_at
- * @property User         $creatorObj
- * @property mixed|null   $creator_id
- * @property Media        $mediaObj
- * @property bool         $is_first
- * @property array|null   $first_reply
- * @property MediaComment $parentObj
- *
- * @property-read string  $slack_admin_url
  * @property-read string  $admin_url
+ * @property-read string  $slack_admin_url
  */
 class MediaComment extends BaseModel
 {
@@ -50,7 +49,7 @@ class MediaComment extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'media_id',
         'tip_id',
@@ -70,14 +69,14 @@ class MediaComment extends BaseModel
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends    = [];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -85,8 +84,8 @@ class MediaComment extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
-        'creator' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed,is_verified',
+    protected $casts      = [
+        'creator' => SimpleUserCast::class . ':_id,username,avatar,is_liked,is_followed,is_verified',
     ];
 
     /**
@@ -97,19 +96,11 @@ class MediaComment extends BaseModel
         return MediaCommentFactory::new();
     }
 
-    /**
-     * @return MediaCommentQueryBuilder|Builder
-     */
     public static function query(): MediaCommentQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     *
-     * @return MediaCommentQueryBuilder
-     */
     public function newEloquentBuilder($query): MediaCommentQueryBuilder
     {
         return new MediaCommentQueryBuilder($query);
@@ -148,25 +139,17 @@ class MediaComment extends BaseModel
      * Route notifications for the Slack channel.
      *
      * @param Notification $notification
-     *
-     * @return string
      */
     public function routeNotificationForSlack($notification): string
     {
         return config('app.slack_webhook_url');
     }
 
-    /**
-     * @return string
-     */
     public function getSlackAdminUrlAttribute(): string
     {
         return "<{$this->admin_url}|comment> By {$this->creatorObj->slack_admin_url}";
     }
 
-    /**
-     * @return string
-     */
     public function getAdminUrlAttribute(): string
     {
         return route('core.admin.media.comment.view', ['comment' => $this->_id]);

@@ -19,9 +19,9 @@ class LogAuthenticatedListener
     /**
      * Handle the event.
      *
-     * @param  $event
-     * @return void
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @return void
      */
     public function handle($event)
     {

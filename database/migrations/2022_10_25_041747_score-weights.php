@@ -132,7 +132,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-
     }
 
     private function assignListPermissions()

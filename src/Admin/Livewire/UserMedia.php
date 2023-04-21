@@ -2,9 +2,6 @@
 
 namespace Aparlay\Core\Admin\Livewire;
 
-use Aparlay\Core\Admin\Filters\FilterDateRange;
-use Aparlay\Core\Admin\Filters\FilterExact;
-use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Models\User;
 use Jenssegers\Mongodb\Eloquent\Builder;
@@ -13,13 +10,10 @@ use function view;
 
 class UserMedia extends BaseIndexComponent
 {
-    public $model = Media::class;
-
+    public $model        = Media::class;
     protected $listeners = ['updateParent'];
-
     public $creatorId;
-
-    public int $perPage = 9;
+    public int $perPage  = 9;
 
     public function updateParent()
     {
@@ -30,7 +24,7 @@ class UserMedia extends BaseIndexComponent
     {
         $query = parent::buildQuery();
         $query->with(['creatorObj']);
-        if (! empty($this->creatorId)) {
+        if (!empty($this->creatorId)) {
             $query->creator($this->creatorId);
         }
 

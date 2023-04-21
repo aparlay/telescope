@@ -5,7 +5,6 @@ namespace Aparlay\Core\Models;
 use Aparlay\Core\Casts\SimpleUserCast;
 use Aparlay\Core\Database\Factories\BlockFactory;
 use Aparlay\Core\Models\Queries\BlockQueryBuilder;
-use Aparlay\Core\Models\Queries\MediaCommentQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,16 +16,16 @@ use MongoDB\BSON\ObjectId;
  * Class Block.
  *
  * @property ObjectId   $_id
- * @property string     $hashtag
- * @property array      $user
- * @property array      $creator
- * @property bool       $is_deleted
- * @property string     $created_at
- * @property User       $creatorObj
- * @property User       $userObj
- * @property mixed|null $creator_id
- * @property mixed|null $user_id
  * @property string     $aliasModel
+ * @property string     $created_at
+ * @property array      $creator
+ * @property mixed|null $creator_id
+ * @property User       $creatorObj
+ * @property string     $hashtag
+ * @property bool       $is_deleted
+ * @property array      $user
+ * @property mixed|null $user_id
+ * @property User       $userObj
  */
 class Block extends BaseModel
 {
@@ -45,7 +44,7 @@ class Block extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'user',
         'creator',
@@ -59,7 +58,7 @@ class Block extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -67,9 +66,9 @@ class Block extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
-        'creator' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed,is_verified',
-        'user' => SimpleUserCast::class.':_id,username,avatar,is_liked,is_followed,is_verified',
+    protected $casts      = [
+        'creator' => SimpleUserCast::class . ':_id,username,avatar,is_liked,is_followed,is_verified',
+        'user' => SimpleUserCast::class . ':_id,username,avatar,is_liked,is_followed,is_verified',
     ];
 
     /**
@@ -80,18 +79,11 @@ class Block extends BaseModel
         return BlockFactory::new();
     }
 
-    /**
-     * @return BlockQueryBuilder|Builder
-     */
     public static function query(): BlockQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     * @return BlockQueryBuilder
-     */
     public function newEloquentBuilder($query): BlockQueryBuilder
     {
         return new BlockQueryBuilder($query);

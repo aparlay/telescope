@@ -2,7 +2,6 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Models\Media;
 use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
@@ -12,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use MongoDB\BSON\ObjectId;
 use Throwable;
 
 class BlockedUserDeleteMediaLikes implements ShouldQueue
@@ -25,7 +23,7 @@ class BlockedUserDeleteMediaLikes implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries         = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -37,14 +35,14 @@ class BlockedUserDeleteMediaLikes implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [60, 300, 1800, 3600];
+    public $backoff           = [60, 300, 1800, 3600];
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(public string $creatorId, public string $userId)
     {

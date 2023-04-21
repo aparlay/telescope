@@ -13,9 +13,9 @@ class CookiesAuthenticate
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  $guard
+     * @param \Illuminate\Http\Request $request
+     * @param string|null              $guard
+     *
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
@@ -23,16 +23,14 @@ class CookiesAuthenticate
         if ($request->header('Authorization') == null && Cookie::has('__Secure_token')) {
             try {
                 $rawToken = Cookie::get('__Secure_token');
-                $token = new Token($rawToken);
+                $token    = new Token($rawToken);
             } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException $e) {
             }
-            $request->headers->set('Authorization', 'Bearer '.$token);
+            $request->headers->set('Authorization', 'Bearer ' . $token);
         }
 
         // Log out suspended or blocked users
-        if ($request->header('Authorization') !== null &&
-            auth()->check() &&
-            in_array(auth()->user()->status, [UserStatus::BLOCKED->value, UserStatus::SUSPENDED->value])) {
+        if ($request->header('Authorization') !== null && auth()->check() && in_array(auth()->user()->status, [UserStatus::BLOCKED->value, UserStatus::SUSPENDED->value])) {
             auth()->logout(true);
 
             $cookie1 = Cookie::forget('__Secure_token');

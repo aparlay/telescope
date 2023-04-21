@@ -12,6 +12,7 @@ use Aparlay\Core\Models\Enums\EmailStatus;
 use Aparlay\Core\Models\Enums\EmailType;
 use Aparlay\Core\Models\Enums\OtpType;
 use App\Exceptions\BlockedException;
+use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
@@ -26,10 +27,10 @@ class OtpService
 
     /**
      * send otp if status in pending and request otp is null.
-     * @param User|Authenticatable $user
-     * @param string $deviceId
-     * @return bool
+     *
      * @throws BlockedException
+     *
+     * @return bool
      */
     public function sendOtp(User|Authenticatable $user, string $deviceId)
     {
@@ -41,16 +42,16 @@ class OtpService
 
     /**
      * Generate OTP.
-     * @param string $identity
-     * @param string|null $device_id
-     * @return \Aparlay\Core\Models\Otp
+     *
      * @throws BlockedException
+     *
+     * @return \Aparlay\Core\Models\Otp
      */
-    public function generateOtp(string $identity, string $device_id = null)
+    public function generateOtp(string $identity, ?string $device_id = null)
     {
-        $lastMinute = DT::timestampToUtc(now()->subMinutes(5)->timestamp);
+        $lastMinute      = DT::timestampToUtc(now()->subMinutes(5)->timestamp);
 
-        $previousOTP = Otp::query()->identity($identity)->whereDate('created_at', '>=', $lastMinute)->get();
+        $previousOTP     = Otp::query()->identity($identity)->whereDate('created_at', '>=', $lastMinute)->get();
 
         $minOtpCreatedAt = $previousOTP->pluck('created_at')->min();
 
@@ -69,7 +70,7 @@ class OtpService
         if (count($previousOTP) > 0) {
             foreach ($previousOTP as $model) {
                 if (strpos($model->otp, 'expired_') === false) {
-                    $model->otp = 'expired_'.random_int(
+                    $model->otp = 'expired_' . random_int(
                         config('app.otp.length.min'),
                         config('app.otp.length.max')
                     );
@@ -80,41 +81,37 @@ class OtpService
 
         /** Prepare request params for new OTP request */
         return Otp::create([
-            'identity'      => $identity,
-            'otp'           => (string) random_int(
+            'identity' => $identity,
+            'otp' => (string) random_int(
                 config('app.otp.length.min'),
                 config('app.otp.length.max')
             ),
-            'expired_at'    => DT::utcDateTime(['s' => config('app.otp.duration')]),
-            'type'          => Str::contains($identity, '@') ? OtpType::EMAIL->value : OtpType::SMS->value,
-            'device_id'     => $device_id,
-            'incorrect'     => 0,
-            'validated'     => false,
+            'expired_at' => DT::utcDateTime(['s' => config('app.otp.duration')]),
+            'type' => Str::contains($identity, '@') ? OtpType::EMAIL->value : OtpType::SMS->value,
+            'device_id' => $device_id,
+            'incorrect' => 0,
+            'validated' => false,
         ]);
     }
 
     /**
      * Send OTP by email.
      *
-     * @param  User|Authenticatable  $user
-     * @param  object                $otp
+     * @throws Exception
      *
      * @return bool
-     * @throws \Exception
      */
     public function sendByEmail(User|Authenticatable $user, object $otp)
     {
         /* @var Email $lastSentEmail */
         $lastSentEmail = Email::query()->to($otp->identity)->processed()->recentFirst()->first();
-        if ($lastSentEmail != null &&
-            $lastSentEmail->status !== EmailStatus::DELIVERED->value &&
-            $lastSentEmail->status !== EmailStatus::SENT->value) {
-            //$otp->delete();
-            //throw ValidationException::withMessages(['email' => $lastSentEmail->humanized_error,]);
+        if ($lastSentEmail != null && $lastSentEmail->status !== EmailStatus::DELIVERED->value && $lastSentEmail->status !== EmailStatus::SENT->value) {
+            // $otp->delete();
+            // throw ValidationException::withMessages(['email' => $lastSentEmail->humanized_error,]);
         }
 
         /** Prepare email request data and insert in Email table */
-        $request = [
+        $request       = [
             'to' => $otp->identity,
             'user' => [
                 '_id' => new ObjectId($user->_id),
@@ -125,38 +122,31 @@ class OtpService
             'type' => EmailType::OTP->value,
         ];
 
-        $email = EmailRepository::create($request);
+        $email         = EmailRepository::create($request);
 
         /** Prepare email content and dispatch the job to schedule the email */
-        $to = $otp->identity;
-        $subject = __(':code is your :app verification code', [
+        $to            = $otp->identity;
+        $subject       = __(':code is your :app verification code', [
             'code' => $otp->otp,
             'app' => config('app.name'),
         ]);
-        $type = Email::TEMPLATE_EMAIL_VERIFICATION;
-        $payload = [
+        $type          = Email::TEMPLATE_EMAIL_VERIFICATION;
+        $payload       = [
             'otp' => $otp->otp,
             'otpLink' => '',
-            'tracking_url' => config('app.frontend_url').'/t/'.$otp->_id,
+            'tracking_url' => config('app.frontend_url') . '/t/' . $otp->_id,
         ];
         EmailJob::dispatch((string) $email->_id, $to, $subject, $type, $payload);
 
         return true;
     }
 
-    /**
-     * @param  string  $otp
-     * @param  string  $identity
-     * @param  bool  $validateOnly
-     * @param  bool  $checkValidated
-     * @return bool
-     */
     public function validateOtp(string $otp, string $identity, bool $validateOnly = false, bool $checkValidated = false): bool
     {
         // Validate the otp for the given user
-        $limit = config('app.otp.invalid_attempt_limit');
+        $limit       = config('app.otp.invalid_attempt_limit');
         $limit--;
-        $model = Otp::query()->identity($identity)->otp($otp)->validated($checkValidated)->remainingAttempt($limit)->first();
+        $model       = Otp::query()->identity($identity)->otp($otp)->validated($checkValidated)->remainingAttempt($limit)->first();
 
         if ($model) {
             if ($validateOnly) {
@@ -176,10 +166,10 @@ class OtpService
             throw ValidationException::withMessages([
                 'otp' => ['Too many failed attempts, please try again by requesting new code.'],
             ]);
-        } else {
-            throw ValidationException::withMessages([
-                'otp' => ['Invalid Code.'],
-            ]);
         }
+
+        throw ValidationException::withMessages([
+            'otp' => ['Invalid Code.'],
+        ]);
     }
 }

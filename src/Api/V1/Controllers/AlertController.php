@@ -21,9 +21,6 @@ class AlertController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Alert  $alert
-     * @param  Request  $request
-     * @return Response
      * @throws AuthorizationException
      */
     public function update(Alert $alert, Request $request): Response

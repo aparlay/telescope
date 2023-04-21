@@ -24,7 +24,7 @@ class Email implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries         = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -36,16 +36,10 @@ class Email implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 10;
+    public $backoff           = 10;
 
     /**
      * Create a new job instance.
-     *
-     * @param  string  $emailId
-     * @param  string  $emailAddress
-     * @param  string  $subject
-     * @param  string  $type
-     * @param  array   $payload
      */
     public function __construct(
         protected string $emailId,
@@ -68,9 +62,6 @@ class Email implements ShouldQueue
         \Aparlay\Core\Models\Email::query()->email($this->emailId)->update(['status' => EmailStatus::SENT->value]);
     }
 
-    /**
-     * @param  Throwable  $exception
-     */
     public function failed(Throwable $exception): void
     {
         if (($user = User::admin()->first()) !== null) {

@@ -7,10 +7,9 @@ use Aparlay\Core\Api\V1\Models\Media;
 use Aparlay\Core\Api\V1\Models\MediaComment;
 use Aparlay\Core\Api\V1\Models\Report;
 use Aparlay\Core\Api\V1\Models\User;
-use Aparlay\Core\Api\V1\Repositories\ReportRepository;
-use Aparlay\Core\Api\V1\Requests\ReportRequest;
 use Aparlay\Core\Models\Enums\ReportStatus;
 use Aparlay\Core\Models\Enums\ReportType;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use MongoDB\BSON\ObjectId;
@@ -19,10 +18,6 @@ class ReportService extends AbstractService
 {
     /**
      * Responsible to create report for given user.
-     *
-     * @param User $user
-     * @param ReportDTO $reportDTO
-     * @return Model|Report|null
      */
     public function createUserReport(User $user, ReportDTO $reportDTO): Model|Report|null
     {
@@ -35,19 +30,13 @@ class ReportService extends AbstractService
                 'created_by' => $reportDTO->created_by ? new ObjectId($reportDTO->created_by) : null,
                 'updated_by' => $reportDTO->updated_by ? new ObjectId($reportDTO->updated_by) : null,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
 
             return null;
         }
     }
 
-    /**
-     * @param  MediaComment  $comment
-     * @param  ReportDTO     $reportDTO
-     *
-     * @return Model|Report|null
-     */
     public function createCommentReport(MediaComment $comment, ReportDTO $reportDTO): Model|Report|null
     {
         try {
@@ -59,7 +48,7 @@ class ReportService extends AbstractService
                 'created_by' => $reportDTO->created_by ? new ObjectId($reportDTO->created_by) : null,
                 'updated_by' => $reportDTO->updated_by ? new ObjectId($reportDTO->updated_by) : null,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
 
             return null;
@@ -68,10 +57,6 @@ class ReportService extends AbstractService
 
     /**
      * Responsible to create report for given media.
-     *
-     * @param  Media  $media
-     * @param  ReportDTO  $reportDTO
-     * @return Model|Report|null
      */
     public function createMediaReport(Media $media, ReportDTO $reportDTO): Model|Report|null
     {
@@ -84,7 +69,7 @@ class ReportService extends AbstractService
                 'created_by' => $reportDTO->created_by ? new ObjectId($reportDTO->created_by) : null,
                 'updated_by' => $reportDTO->updated_by ? new ObjectId($reportDTO->updated_by) : null,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
 
             return null;

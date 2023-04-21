@@ -24,7 +24,7 @@ class Setting extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'group',
         'title',
@@ -40,7 +40,7 @@ class Setting extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -48,7 +48,7 @@ class Setting extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
@@ -62,9 +62,6 @@ class Setting extends BaseModel
         return SettingFactory::new();
     }
 
-    /**
-     * @return string
-     */
     public function getAdminUrlAttribute(): string
     {
         return route('core.admin.setting.view', ['setting' => $this->_id]);

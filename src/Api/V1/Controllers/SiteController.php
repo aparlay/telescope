@@ -3,9 +3,6 @@
 namespace Aparlay\Core\Api\V1\Controllers;
 
 use Illuminate\Http\Request;
-use Laravel\Octane\Octane;
-use Laravel\Octane\Swoole\ServerStateFile;
-use Laravel\Octane\Swoole\WorkerState;
 use Swoole\Http\Server;
 
 class SiteController extends Controller
@@ -16,10 +13,10 @@ class SiteController extends Controller
     public function cache()
     {
         include_once app_path('preload.php');
-        $current = realpath_cache_size();
-        $value = ini_get('realpath_cache_size');
-        $value = trim($value);
-        $last = strtolower(substr($value, -1));
+        $current     = realpath_cache_size();
+        $value       = ini_get('realpath_cache_size');
+        $value       = trim($value);
+        $last        = strtolower(substr($value, -1));
         if (in_array($last, ['g', 'm', 'k'], true)) {
             $value = (int) substr($value, 0, -1);
 
@@ -29,15 +26,15 @@ class SiteController extends Controller
                 'k' => 1024,
             };
         }
-        $ttl = ini_get('realpath_cache_ttl');
+        $ttl         = ini_get('realpath_cache_ttl');
         $percentUsed = $current * 100 / $value;
 
         return $this->response([
-                    'current' => $current,
-                    'max' => $value,
-                    'percent' => $percentUsed,
-                    'ttl' => $ttl,
-                ]);
+            'current' => $current,
+            'max' => $value,
+            'percent' => $percentUsed,
+            'ttl' => $ttl,
+        ]);
     }
 
     /**

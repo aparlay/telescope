@@ -10,8 +10,7 @@ use Illuminate\Console\Command;
 
 class VideoReprocessCommand extends Command
 {
-    public $signature = 'video:reprocess';
-
+    public $signature   = 'video:reprocess';
     public $description = 'This command is responsible for update video reprocess';
 
     public function handle()
@@ -25,8 +24,8 @@ class VideoReprocessCommand extends Command
             $media->status = MediaStatus::QUEUED->value;
             $media->save();
 
-            $msg = '<fg=yellow;options=bold>';
-            $msg .= 'Video '.$media->_id.' need to send for reprocessing'.'</>';
+            $msg           = '<fg=yellow;options=bold>';
+            $msg .= 'Video ' . $media->_id . ' need to send for reprocessing' . '</>';
             $msg .= PHP_EOL;
             $this->line($msg);
         }

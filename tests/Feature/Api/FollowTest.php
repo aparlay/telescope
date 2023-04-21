@@ -13,13 +13,13 @@ class FollowTest extends ApiTestCase
     /**
      * @test
      */
-    public function followUser()
+    public function follow_user()
     {
         $model = User::factory()->create();
-        $user = User::factory()->create();
+        $user  = User::factory()->create();
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('PUT', '/v1/user/'.$model->_id.'/follow', [])
+            ->json('PUT', '/v1/user/' . $model->_id . '/follow', [])
             ->assertStatus(201)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 201)
@@ -66,10 +66,10 @@ class FollowTest extends ApiTestCase
     /**
      * @test
      */
-    public function unfollowUser()
+    public function unfollow_user()
     {
-        $model = User::factory()->create();
-        $user = User::factory()->create();
+        $model  = User::factory()->create();
+        $user   = User::factory()->create();
         $follow = Follow::factory()->create([
             'user' => [
                 '_id' => new ObjectId($model->_id),
@@ -84,7 +84,7 @@ class FollowTest extends ApiTestCase
         ]);
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('DELETE', '/v1/user/'.$follow->user['_id'].'/follow', [])
+            ->json('DELETE', '/v1/user/' . $follow->user['_id'] . '/follow', [])
             ->assertStatus(204);
 
         $this->assertDatabaseMissing('user_follows', ['user._id' => new ObjectId($model->_id), 'creator._id' => new ObjectId($user->_id)]);
@@ -93,11 +93,11 @@ class FollowTest extends ApiTestCase
     /**
      * @test
      */
-    public function followUserWithPermission()
+    public function follow_user_with_permission()
     {
-        $user = User::factory()->create();
+        $user        = User::factory()->create();
         $blockedUser = User::factory()->create();
-        $block = Block::factory()->create([
+        $block       = Block::factory()->create([
             'user' => [
                 '_id' => new ObjectId($blockedUser->_id),
                 'username' => $blockedUser->username,
@@ -111,7 +111,7 @@ class FollowTest extends ApiTestCase
         ]);
         $this->actingAs($blockedUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('PUT', '/v1/user/'.$user->_id.'/follow', [])
+            ->json('PUT', '/v1/user/' . $user->_id . '/follow', [])
             ->assertStatus(403)
             ->assertJson([
                 'code' => 403,

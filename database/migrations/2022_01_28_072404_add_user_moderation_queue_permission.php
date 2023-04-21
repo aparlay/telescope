@@ -7,18 +7,15 @@ use Maklad\Permission\Models\Role;
 
 class AddUserModerationQueuePermission extends Migration
 {
-    const PERMISSION_QUEUE_USER_MODERATION = 'queue users-moderation';
-    const PERMISSION_QUEUE_MEDIA_MODERATION = 'queue medias-moderation';
-
-    const PERMISSION_LIST_MEDIA_MODERATION = 'list medias-moderation';
-    const PERMISSION_LIST_USER_MODERATION = 'list users-moderation';
-
-    const PERMISSIONS_QUEUE = [
+    public const PERMISSION_QUEUE_USER_MODERATION  = 'queue users-moderation';
+    public const PERMISSION_QUEUE_MEDIA_MODERATION = 'queue medias-moderation';
+    public const PERMISSION_LIST_MEDIA_MODERATION  = 'list medias-moderation';
+    public const PERMISSION_LIST_USER_MODERATION   = 'list users-moderation';
+    public const PERMISSIONS_QUEUE                 = [
         self::PERMISSION_QUEUE_MEDIA_MODERATION,
         self::PERMISSION_QUEUE_USER_MODERATION,
     ];
-
-    const PERMISSIONS_LIST = [
+    public const PERMISSIONS_LIST                  = [
         self::PERMISSION_LIST_MEDIA_MODERATION,
         self::PERMISSION_LIST_USER_MODERATION,
     ];
@@ -41,7 +38,7 @@ class AddUserModerationQueuePermission extends Migration
             Roles::SUPER_ADMINISTRATOR,
         ];
 
-        $roles = Role::whereIn('name', $roleNames)
+        $roles     = Role::whereIn('name', $roleNames)
             ->where('guard_name', 'admin')
             ->get();
 
@@ -63,7 +60,7 @@ class AddUserModerationQueuePermission extends Migration
             Roles::SUPPORT,
         ];
 
-        $roles = Role::whereIn('name', $roleNames)
+        $roles     = Role::whereIn('name', $roleNames)
             ->where('guard_name', 'admin')
             ->get();
 
@@ -84,6 +81,6 @@ class AddUserModerationQueuePermission extends Migration
      */
     public function down()
     {
-        //
+
     }
 }

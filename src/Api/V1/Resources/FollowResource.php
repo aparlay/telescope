@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Api\V1\Resources;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,10 +11,11 @@ class FollowResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
+     * @throws Exception
      *
      * @return array
-     * @throws \Exception
      */
     public function toArray($request)
     {

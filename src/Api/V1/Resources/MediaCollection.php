@@ -18,11 +18,9 @@ class MediaCollection extends AbstractResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param  Request  $request
-     *
-     * @return array|Arrayable|JsonSerializable
+     * @param Request $request
      */
-    public function toArray($request): array | Arrayable | JsonSerializable
+    public function toArray($request): array|Arrayable|JsonSerializable
     {
         $links = [
             'first' => ['href' => $this->resource->url($this->resource->onFirstPage())],

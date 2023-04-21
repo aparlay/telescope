@@ -55,62 +55,38 @@ class UserNotificationQueryBuilder extends EloquentQueryBuilder
 
     public function category(int|string $category): self
     {
-        if (is_string($category) && ! empty($category)) {
+        if (is_string($category) && !empty($category)) {
             $category = array_search($category, UserNotificationCategory::getAllCases());
         }
 
         return $this->where('category', $category);
     }
 
-    /**
-     * @param  ObjectId|string  $userId
-     * @return self
-     */
-    public function user(ObjectId | string $userId): self
+    public function user(ObjectId|string $userId): self
     {
         return $this->whereId($userId, 'user_id');
     }
 
-    /**
-     * @param  string|ObjectId  $entityId
-     * @param  string  $entityType
-     * @return self
-     */
     public function entity(ObjectId|string $entityId, string $entityType): self
     {
         return $this->whereId($entityId, 'entity._id')->where('entity._type', $entityType);
     }
 
-    /**
-     * @param  string|ObjectId  $tipId
-     * @return self
-     */
     public function tipEntity(ObjectId|string $tipId): self
     {
         return $this->entity($tipId, 'Tip');
     }
 
-    /**
-     * @param  string|ObjectId  $mediaId
-     * @return self
-     */
     public function mediaEntity(ObjectId|string $mediaId): self
     {
         return $this->entity($mediaId, 'Media');
     }
 
-    /**
-     * @param  string|ObjectId  $userId
-     * @return self
-     */
     public function userEntity(ObjectId|string $userId): self
     {
         return $this->entity($userId, 'User');
     }
 
-    /**
-     * @return self
-     */
     public function visible(): self
     {
         return $this->status([UserNotificationStatus::VISITED->value, UserNotificationStatus::NOT_VISITED->value]);

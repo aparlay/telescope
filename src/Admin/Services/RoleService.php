@@ -14,7 +14,7 @@ class RoleService
 
     public function __construct()
     {
-        $this->roleRepository = new RoleRepository(new Role());
+        $this->roleRepository       = new RoleRepository(new Role());
         $this->permissionRepository = new PermissionRepository(new Permission());
     }
 

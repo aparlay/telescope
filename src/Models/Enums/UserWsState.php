@@ -6,9 +6,6 @@ enum UserWsState: string implements Enum
 {
     use EnumEnhancements;
 
-    case ACTIVE = 'active';
-    case INACTIVE = 'inactive';
-
     public function label(): string
     {
         return match ($this) {
@@ -24,4 +21,7 @@ enum UserWsState: string implements Enum
             self::INACTIVE => 'warning',
         };
     }
+
+    case ACTIVE   = 'active';
+    case INACTIVE = 'inactive';
 }

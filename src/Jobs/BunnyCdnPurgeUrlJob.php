@@ -18,7 +18,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
-use MongoDB\BSON\ObjectId;
+use Log;
 use Str;
 use Throwable;
 
@@ -32,7 +32,7 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 5;
+    public int $tries         = 5;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -44,13 +44,14 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 10;
+    public $backoff           = 10;
 
     /**
      * Create a new job instance.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(public string $mediaId)
     {
@@ -71,8 +72,8 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
     {
         $media = Media::media($this->mediaId)->firstOrFail();
         try {
-            $fileUrl = Cdn::video($media->file);
-            $coverUrl = Cdn::cover($media->filename.'.jpg');
+            $fileUrl  = Cdn::video($media->file);
+            $coverUrl = Cdn::cover($media->filename . '.jpg');
             $this->purge([$coverUrl, $fileUrl]);
         } catch (Exception $e) {
             if (($user = User::admin()->first()) !== null) {
@@ -97,7 +98,7 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
                         return true;
                     }
 
-                    if (isset($exception->response) && ! Str::startsWith($exception->response->status(), '2')) {
+                    if (isset($exception->response) && !Str::startsWith($exception->response->status(), '2')) {
                         User::admin()->first()->notify(new ThirdPartyLogger(
                             '',
                             self::class,
@@ -137,7 +138,8 @@ class BunnyCdnPurgeUrlJob implements ShouldQueue
             return $response->json();
         } catch (RequestException $e) {
             $responseBodyAsString = $e->response->body();
-            \Log::error('Bunny CDN request error: '.$responseBodyAsString);
+            Log::error('Bunny CDN request error: ' . $responseBodyAsString);
+
             throw new ErrorException($responseBodyAsString);
         }
     }

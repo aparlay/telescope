@@ -16,6 +16,7 @@ class ViewLinks
      * )
      */
     public $self;
+
     /**
      * @OA\Property(
      *     type="object",

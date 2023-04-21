@@ -9,7 +9,6 @@ use OwenIt\Auditing\Contracts\Auditable;
 class SimpleUser implements \OwenIt\Auditing\Contracts\Resolver
 {
     /**
-     * @param  Auditable  $auditable
      * @return null
      */
     public static function resolve(Auditable $auditable)

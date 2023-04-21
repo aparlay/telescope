@@ -64,9 +64,9 @@ class AddNoteListener
             $noteService->addCustomNote(
                 $event->creator,
                 $event->user,
-                'Admin '.$event->creator->note_admin_url.
-                ' changed '.$event->user->note_admin_url.
-                '\'s verification status to '.UserVerificationStatus::from($event->verificationStatus)->label(),
+                'Admin ' . $event->creator->note_admin_url .
+                ' changed ' . $event->user->note_admin_url .
+                '\'s verification status to ' . UserVerificationStatus::from($event->verificationStatus)->label(),
             );
         }
 
@@ -74,8 +74,8 @@ class AddNoteListener
             $noteService->addCustomNote(
                 $event->creditCard->userObj,
                 $event->creditCard->userObj,
-                $event->creditCard->userObj->note_admin_url.
-                '\'s unverified credit card recognized as risky with score '.
+                $event->creditCard->userObj->note_admin_url .
+                '\'s unverified credit card recognized as risky with score ' .
                 $event->creditCard->risk_score,
             );
         }
@@ -84,8 +84,8 @@ class AddNoteListener
             $noteService->addCustomNote(
                 $event->creator,
                 $event->creator,
-                $event->creator->note_admin_url.
-                '\'s order recognized as risky with score '.
+                $event->creator->note_admin_url .
+                '\'s order recognized as risky with score ' .
                 $event->order->risk_score,
             );
         }
@@ -94,8 +94,8 @@ class AddNoteListener
             $noteService->addCustomNote(
                 $event->user,
                 $event->user,
-                $event->user->note_admin_url.
-                '\'s user recognized as risky with score '.
+                $event->user->note_admin_url .
+                '\'s user recognized as risky with score ' .
                 $event->user->scores['risk'],
             );
         }

@@ -12,43 +12,54 @@ use OpenApi\Annotations as OA;
  *     description="Fetch current login user information.",
  *     operationId="me",
  *     security={{"bearerAuth": {}}},
+ *
  *     @OA\Parameter(
  *         name="X-DEVICE-ID",
  *         in="header",
  *         description="unique id of the device user is going to send this request it can be segment.com anonymousId.",
  *         required=true,
+ *
  *         @OA\Schema(
  *             type="string"
  *         )
  *     ),
+ *
  *     @OA\Response(
  *         response=200,
  *         description="successful operation",
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Limit",
  *             description="the maximum number of allowed requests during a period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Remaining",
  *             description="the remaining number of allowed requests within the current period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Reset",
  *             description="the number of seconds to wait before having maximum number of allowed requests again",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\JsonContent(
+ *
  *              @OA\Property(
  *                  property="data",
  *                  type="object",
@@ -66,19 +77,25 @@ use OpenApi\Annotations as OA;
  *              )
  *         )
  *     ),
+ *
  *     @OA\Response(
  *         response=401,
  *         description="Unauthorized",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/401"),
  *     ),
+ *
  *     @OA\Response(
  *         response=422,
  *         description="DATA VALIDATION FAILED",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/422"),
  *     ),
+ *
  *     @OA\Response(
  *         response=429,
  *         description="TOO MANY REQUESTS",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     ),
  * )
@@ -90,20 +107,26 @@ use OpenApi\Annotations as OA;
  *     description="To deactive a user you need to call this endpoint.",
  *     operationId="deactiveUser",
  *     security={{"bearerAuth": {}}},
+ *
  *     @OA\Parameter(
  *         name="X-DEVICE-ID",
  *         in="header",
  *         description="unique id of the device user is going to send this request it can be segment.com anonymousId.",
  *         required=true,
+ *
  *         @OA\Schema(
  *             type="string"
  *         )
  *     ),
+ *
  *     @OA\RequestBody(
  *         required=true,
+ *
  *         @OA\MediaType(
  *             mediaType="multipart/form-data",
+ *
  *             @OA\Schema(
+ *
  *                 @OA\Property(
  *                     example="why user want to delete their accounts",
  *                     property="reason",
@@ -112,47 +135,60 @@ use OpenApi\Annotations as OA;
  *             )
  *         )
  *     ),
+ *
  *     @OA\Response(
  *         response=204,
  *         description="successful operation",
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Limit",
  *             description="the maximum number of allowed requests during a period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Remaining",
  *             description="the remaining number of allowed requests within the current period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Reset",
  *             description="the number of seconds to wait before having maximum number of allowed requests again",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
  *     ),
+ *
  *     @OA\Response(
  *         response=401,
  *         description="Unauthorized",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/401"),
  *     ),
+ *
  *     @OA\Response(
  *         response=422,
  *         description="DATA VALIDATION FAILED",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/422"),
  *     ),
+ *
  *     @OA\Response(
  *         response=429,
  *         description="TOO MANY REQUESTS",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     ),
  * )
@@ -164,20 +200,26 @@ use OpenApi\Annotations as OA;
  *     description="To update user profile you can send your request to this endpoint.",
  *     operationId="updateProfile",
  *     security={{"bearerAuth": {}}},
+ *
  *     @OA\Parameter(
  *         name="X-DEVICE-ID",
  *         in="header",
  *         description="unique id of the device user is going to send this request it can be segment.com anonymousId.",
  *         required=true,
+ *
  *         @OA\Schema(
  *             type="string"
  *         )
  *     ),
+ *
  *     @OA\RequestBody(
  *         required=true,
+ *
  *         @OA\MediaType(
  *             mediaType="multipart/form-data",
+ *
  *             @OA\Schema(
+ *
  *                 @OA\Property(
  *                     example="A short string to show as bio in user profile",
  *                     property="bio",
@@ -207,48 +249,62 @@ use OpenApi\Annotations as OA;
  *             )
  *         )
  *     ),
+ *
  *     @OA\Response(
  *         response=200,
  *         description="successful operation",
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Limit",
  *             description="the maximum number of allowed requests during a period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Remaining",
  *             description="the remaining number of allowed requests within the current period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Reset",
  *             description="the number of seconds to wait before having maximum number of allowed requests again",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\JsonContent(ref="#/components/schemas/User"),
  *     ),
+ *
  *     @OA\Response(
  *         response=401,
  *         description="Unauthorized",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/401"),
  *     ),
+ *
  *     @OA\Response(
  *         response=422,
  *         description="DATA VALIDATION FAILED",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/422"),
  *     ),
+ *
  *     @OA\Response(
  *         response=429,
  *         description="TOO MANY REQUESTS",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     ),
  * )
@@ -259,52 +315,65 @@ use OpenApi\Annotations as OA;
  *     summary="Get the user data",
  *     description="Fetch the user information.",
  *     operationId="userView",
+ *
  *     @OA\Parameter(
  *         name="X-DEVICE-ID",
  *         in="header",
  *         description="unique id of the device user is going to send this request it can be segment.com anonymousId.",
  *         required=true,
+ *
  *         @OA\Schema(
  *             type="string"
  *         )
  *     ),
+ *
  *     @OA\Parameter(
  *         name="user_id",
  *         in="path",
  *         description="user id or username.",
  *         required=true,
+ *
  *         @OA\Schema(
  *             type="string"
  *         )
  *     ),
+ *
  *     @OA\Response(
  *         response=200,
  *         description="successful operation",
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Limit",
  *             description="the maximum number of allowed requests during a period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Remaining",
  *             description="the remaining number of allowed requests within the current period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Reset",
  *             description="the number of seconds to wait before having maximum number of allowed requests again",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\JsonContent(
+ *
  *              @OA\Property(
  *                  property="data",
  *                  type="object",
@@ -322,19 +391,25 @@ use OpenApi\Annotations as OA;
  *              )
  *         )
  *     ),
+ *
  *     @OA\Response(
  *         response=401,
  *         description="Unauthorized",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/401"),
  *     ),
+ *
  *     @OA\Response(
  *         response=422,
  *         description="DATA VALIDATION FAILED",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/422"),
  *     ),
+ *
  *     @OA\Response(
  *         response=429,
  *         description="TOO MANY REQUESTS",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     ),
  * )
@@ -345,52 +420,65 @@ use OpenApi\Annotations as OA;
  *     summary="Get the user data",
  *     description="Fetch the user information.",
  *     operationId="userViewByUsername",
+ *
  *     @OA\Parameter(
  *         name="X-DEVICE-ID",
  *         in="header",
  *         description="unique id of the device user is going to send this request it can be segment.com anonymousId.",
  *         required=true,
+ *
  *         @OA\Schema(
  *             type="string"
  *         )
  *     ),
+ *
  *     @OA\Parameter(
  *         name="username",
  *         in="path",
  *         description="user username.",
  *         required=true,
+ *
  *         @OA\Schema(
  *             type="string"
  *         )
  *     ),
+ *
  *     @OA\Response(
  *         response=200,
  *         description="successful operation",
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Limit",
  *             description="the maximum number of allowed requests during a period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Remaining",
  *             description="the remaining number of allowed requests within the current period",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\Header(
  *             header="X-Rate-Limit-Reset",
  *             description="the number of seconds to wait before having maximum number of allowed requests again",
+ *
  *             @OA\Schema(
  *                 type="integer",
  *                 format="int32"
  *             )
  *         ),
+ *
  *         @OA\JsonContent(
+ *
  *              @OA\Property(
  *                  property="data",
  *                  type="object",
@@ -408,19 +496,25 @@ use OpenApi\Annotations as OA;
  *              )
  *         )
  *     ),
+ *
  *     @OA\Response(
  *         response=401,
  *         description="Unauthorized",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/401"),
  *     ),
+ *
  *     @OA\Response(
  *         response=422,
  *         description="DATA VALIDATION FAILED",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/422"),
  *     ),
+ *
  *     @OA\Response(
  *         response=429,
  *         description="TOO MANY REQUESTS",
+ *
  *         @OA\JsonContent(ref="#/components/schemas/429"),
  *     ),
  * )

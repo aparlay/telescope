@@ -2,35 +2,27 @@
 
 namespace Aparlay\Core\Admin\Filters;
 
+use ErrorException;
 use Illuminate\Support\Arr;
-use Jenssegers\Mongodb\Eloquent\Builder;
 
 class QueryBuilder
 {
     protected $query;
     protected $filter;
     protected $sort;
-
     private $allowedFilters;
     protected $defaultSort;
 
-    /**
-     * @param $subject
-     * @param $filter
-     * @param $sort
-     * @return QueryBuilder
-     */
     public function for($subject, $filter, $sort): self
     {
-        $this->query = $subject::query();
+        $this->query  = $subject::query();
         $this->filter = $filter;
-        $this->sort = $sort;
+        $this->sort   = $sort;
 
         return $this;
     }
 
     /**
-     * @param $sort
      * @return $this
      */
     public function applyDefaultSort(array $sort)
@@ -66,9 +58,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $filters
+     * @throws ErrorException
+     *
      * @return QueryBuilder
-     * @throws \ErrorException
      */
     public function applyFilters($filters)
     {
@@ -77,8 +69,8 @@ class QueryBuilder
         /** @var AbstractBaseFilter $filter */
         foreach ($preparedFilters as $fieldName => $value) {
             $filter = $this->allowedFilters[$fieldName];
-            if (! $filter) {
-                throw new \ErrorException('This filter not allowed: '.$fieldName);
+            if (!$filter) {
+                throw new ErrorException('This filter not allowed: ' . $fieldName);
             }
             $filter($this->query);
         }
@@ -94,7 +86,7 @@ class QueryBuilder
         $sortField = array_key_first($this->sort);
 
         if ($sortField) {
-            $orders = [
+            $orders    = [
                 -1 => 'DESC', 1 => 'ASC',
             ];
 
@@ -110,9 +102,9 @@ class QueryBuilder
     }
 
     /**
-     * @param $allowedSorts
+     * @throws ErrorException
+     *
      * @return QueryBuilder
-     * @throws \ErrorException
      */
     public function applySorts($allowedSorts)
     {
@@ -120,7 +112,7 @@ class QueryBuilder
             $sort = collect($allowedSorts)->search($sortKey);
 
             if ($sort === false) {
-                throw new \ErrorException('This sort is not allowed: '.$sortKey);
+                throw new ErrorException('This sort is not allowed: ' . $sortKey);
             }
         }
 
@@ -128,7 +120,7 @@ class QueryBuilder
 
         if ($sort) {
             $this->query->orderBy($sort->get('column'), $sort->get('direction'));
-        } elseif (! empty($this->defaultSort)) {
+        } elseif (!empty($this->defaultSort)) {
             $this->query->orderBy($this->defaultSort[0], $this->defaultSort[1]);
         }
 

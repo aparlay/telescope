@@ -2,15 +2,8 @@
 
 namespace Aparlay\Core\Helpers;
 
-use Carbon\Carbon;
-use MongoDB\BSON\UTCDateTime;
-
 class NumberHelper
 {
-    /**
-     * @param int|float $number
-     * @return string
-     */
     public static function shorten(int|float $number): string
     {
         $divisors = [
@@ -27,6 +20,6 @@ class NumberHelper
             }
         }
 
-        return number_format(floor($number / $divisor)).$shorthand.(($divisor > 1) ? '+' : '');
+        return number_format(floor($number / $divisor)) . $shorthand . (($divisor > 1) ? '+' : '');
     }
 }

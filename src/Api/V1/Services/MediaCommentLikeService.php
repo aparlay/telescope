@@ -13,34 +13,30 @@ class MediaCommentLikeService
     use HasUserTrait;
 
     /**
-     * @param string $mediaCommentId
-     * @return bool
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function isLikedByUser(string $mediaCommentId): bool
     {
         $this->cacheByUserId();
 
-        $cacheKey = (new MediaCommentLike())->getCollection().':creator:'.$this->getUser()->_id;
+        $cacheKey = (new MediaCommentLike())->getCollection() . ':creator:' . $this->getUser()->_id;
 
         return Redis::sismember($cacheKey, $mediaCommentId);
     }
 
     /**
-     * @param bool $refresh
-     * @return void
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function cacheByUserId(bool $refresh = false): void
     {
-        $userId = $this->getUser()->_id;
-        $cacheKey = (new MediaCommentLike())->getCollection().':creator:'.$userId;
+        $userId   = $this->getUser()->_id;
+        $cacheKey = (new MediaCommentLike())->getCollection() . ':creator:' . $userId;
 
         if ($refresh) {
             Redis::del($cacheKey);
         }
 
-        if (! Redis::exists($cacheKey)) {
+        if (!Redis::exists($cacheKey)) {
             $likedCommentIds = MediaCommentLike::query()
                 ->creator($userId)
                 ->pluck('media_comment_id')
@@ -58,15 +54,14 @@ class MediaCommentLikeService
     }
 
     /**
-     * @param MediaComment $mediaComment
      * @return MediaComment
      */
     public function like(MediaComment $mediaComment)
     {
-        $creator = $this->getUser();
+        $creator          = $this->getUser();
         $mediaCommentLike = MediaCommentLike::comment($mediaComment->_id)->creator($creator->_id)->first();
 
-        if (! $mediaCommentLike) {
+        if (!$mediaCommentLike) {
             MediaCommentLike::create([
                 'media_comment_id' => new ObjectId($mediaComment->_id),
                 'created_by' => new ObjectId($creator->_id),
@@ -87,7 +82,7 @@ class MediaCommentLikeService
 
     public function unlike(MediaComment $mediaComment)
     {
-        $creator = $this->getUser();
+        $creator          = $this->getUser();
         $mediaCommentLike = MediaCommentLike::comment($mediaComment->_id)->creator($creator->_id)->first();
 
         if ($mediaCommentLike) {
@@ -104,8 +99,8 @@ class MediaCommentLikeService
     private function refreshFirstReplyLikes(MediaComment $mediaComment)
     {
         if ($mediaComment->is_first && $mediaComment->parentObj) {
-            $firstReply = $mediaComment->parentObj->first_reply;
-            $firstReply['likes_count'] = $mediaComment->likes_count;
+            $firstReply                           = $mediaComment->parentObj->first_reply;
+            $firstReply['likes_count']            = $mediaComment->likes_count;
             $mediaComment->parentObj->first_reply = $firstReply;
             $mediaComment->parentObj->save();
         }

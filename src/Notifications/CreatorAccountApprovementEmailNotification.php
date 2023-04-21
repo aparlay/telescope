@@ -28,14 +28,16 @@ class CreatorAccountApprovementEmailNotification extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -46,12 +48,11 @@ class CreatorAccountApprovementEmailNotification extends Notification
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  User  $notifiable
-     * @return SlackMessage
+     * @param User $notifiable
      */
     public function toSlack($notifiable): SlackMessage
     {
-        $data = [
+        $data    = [
             'to' => $notifiable->email,
             'user' => [
                 '_id' => new ObjectId($notifiable->_id),
@@ -62,11 +63,11 @@ class CreatorAccountApprovementEmailNotification extends Notification
             'type' => EmailType::ACCOUNT_VERIFICATION->value,
         ];
 
-        $email = Email::create($data);
+        $email   = Email::create($data);
 
         /** Prepare email content and dispatch the job to schedule the email */
-        $to = $notifiable->email;
-        $type = Email::TEMPLATE_EMAIL_ACCOUNT_VERIFICATION;
+        $to      = $notifiable->email;
+        $type    = Email::TEMPLATE_EMAIL_ACCOUNT_VERIFICATION;
         $payload = [
             'title' => $this->title,
             'body' => $this->body,
@@ -76,10 +77,10 @@ class CreatorAccountApprovementEmailNotification extends Notification
 
         // sending Slack notification
         $message = 'Content Creator Application Proceeded';
-        $message .= PHP_EOL.'_*User:*_ '.$notifiable->slack_admin_url;
-        $message .= PHP_EOL.'_*Email:*_ '.$notifiable->email;
-        $message .= PHP_EOL.'_*Country:*_ '.$notifiable->country_label;
-        $message .= PHP_EOL.PHP_EOL.'_*Result:*_ '.$notifiable->verification_status_label;
+        $message .= PHP_EOL . '_*User:*_ ' . $notifiable->slack_admin_url;
+        $message .= PHP_EOL . '_*Email:*_ ' . $notifiable->email;
+        $message .= PHP_EOL . '_*Country:*_ ' . $notifiable->country_label;
+        $message .= PHP_EOL . PHP_EOL . '_*Result:*_ ' . $notifiable->verification_status_label;
 
         return (new SlackMessage())
             ->to(config('app.slack_apply_for_verification'))
@@ -90,13 +91,14 @@ class CreatorAccountApprovementEmailNotification extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            //
+
         ];
     }
 }

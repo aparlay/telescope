@@ -6,12 +6,6 @@ enum MediaSortCategories: string implements Enum
 {
     use EnumEnhancements;
 
-    case DEFAULT = 'default';
-    case GUEST = 'guest';
-    case RETURNED = 'returned';
-    case REGISTERED = 'registered';
-    case PAID = 'paid';
-
     public function label(): string
     {
         return match ($this) {
@@ -33,4 +27,10 @@ enum MediaSortCategories: string implements Enum
             self::PAID => 'success',
         };
     }
+
+    case DEFAULT    = 'default';
+    case GUEST      = 'guest';
+    case RETURNED   = 'returned';
+    case REGISTERED = 'registered';
+    case PAID       = 'paid';
 }

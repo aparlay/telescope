@@ -12,7 +12,7 @@ final class Stats extends BaseDashboardComponent
 
     public function mount()
     {
-        $today = now()->format('Y-m-d');
+        $today              = now()->format('Y-m-d');
 
         $this->dateInterval = [
             $today, $today,
@@ -31,9 +31,9 @@ final class Stats extends BaseDashboardComponent
         if ($this->showAllDates) {
             $start = $end = null;
         } else {
-            if (! empty($this->dateInterval)) {
+            if (!empty($this->dateInterval)) {
                 $start = $this->startDate();
-                $end = $this->endDate();
+                $end   = $this->endDate();
             } else {
                 $start = $end = today();
             }
@@ -81,7 +81,7 @@ final class Stats extends BaseDashboardComponent
             ],
             [
                 'label' => 'Video Watched',
-                'value' => round(\Carbon\CarbonInterval::seconds(Arr::get($results, 'user_duration'))->cascade()->totalHours).'H.',
+                'value' => round(\Carbon\CarbonInterval::seconds(Arr::get($results, 'user_duration'))->cascade()->totalHours) . 'H.',
             ],
             [
                 'label' => 'Likes',
@@ -105,8 +105,7 @@ final class Stats extends BaseDashboardComponent
             [
                 'label' => 'Total Billed (subs/rebill/tips)',
                 'value' => (
-                    Arr::get($results, 'payment_subscriptions_amount', 0) +
-                    Arr::get($results, 'payment_tips_amount', 0)
+                    Arr::get($results, 'payment_subscriptions_amount', 0) + Arr::get($results, 'payment_tips_amount', 0)
                 ),
             ],
             [

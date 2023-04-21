@@ -125,6 +125,8 @@ class MediaService extends AdminBaseService
     }
 
     /**
+     * @param mixed $id
+     *
      * @throws InvalidArgumentException
      *
      * @return Media|mixed
@@ -145,6 +147,8 @@ class MediaService extends AdminBaseService
     }
 
     /**
+     * @param mixed $id
+     *
      * @throws InvalidArgumentException
      *
      * @return Media|mixed
@@ -187,6 +191,7 @@ class MediaService extends AdminBaseService
 
     /**
      * @param Media $media
+     * @param mixed $promote
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      *

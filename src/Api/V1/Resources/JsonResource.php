@@ -9,7 +9,8 @@ class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
     /**
      * Resolve the resource to an array.
      *
-     * @param  \Illuminate\Http\Request|null  $request
+     * @param \Illuminate\Http\Request|null $request
+     *
      * @return array
      */
     public function resolve($request = null)

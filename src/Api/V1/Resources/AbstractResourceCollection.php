@@ -8,7 +8,7 @@ use JsonSerializable;
 
 abstract class AbstractResourceCollection extends ResourceCollection
 {
-    public function toArray($request): array | Arrayable | JsonSerializable
+    public function toArray($request): array|Arrayable|JsonSerializable
     {
         return $this->preparePagination();
     }
@@ -46,12 +46,12 @@ abstract class AbstractResourceCollection extends ResourceCollection
             $links['self'] = ['href' => $this->normalizeUrl($this->resource->url($this->resource->cursor()))];
         }
 
-        if (! $this->resource->onFirstPage() && $this->resource->previousPageUrl()) {
-            $links['prev'] = ['href' =>  $this->normalizeUrl($this->resource->previousPageUrl())];
+        if (!$this->resource->onFirstPage() && $this->resource->previousPageUrl()) {
+            $links['prev'] = ['href' => $this->normalizeUrl($this->resource->previousPageUrl())];
         }
 
         if ($this->resource->hasMorePages() && $this->resource->nextPageUrl()) {
-            $links['next'] = ['href' =>  $this->normalizeUrl($this->resource->nextPageUrl())];
+            $links['next'] = ['href' => $this->normalizeUrl($this->resource->nextPageUrl())];
         }
 
         return [

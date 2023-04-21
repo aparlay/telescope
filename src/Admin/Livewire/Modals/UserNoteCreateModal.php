@@ -3,17 +3,13 @@
 namespace Aparlay\Core\Admin\Livewire\Modals;
 
 use Aparlay\Core\Admin\Livewire\Traits\CurrentUserTrait;
-use Aparlay\Core\Admin\Models\Note;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Admin\Services\NoteService;
-use Aparlay\Core\Models\Enums\NoteType;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class UserNoteCreateModal extends Component
 {
     use CurrentUserTrait;
-
     public $userId;
     public $message;
 
@@ -36,7 +32,7 @@ class UserNoteCreateModal extends Component
         if ($this->currentUser()->can('create notes')) {
             /** @var NoteService $noteService */
             $noteService = app()->make(NoteService::class);
-            $user = User::find($this->userId);
+            $user        = User::find($this->userId);
             $noteService->addCustomNote($this->currentUser(), $user, $this->message);
         }
 

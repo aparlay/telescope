@@ -27,11 +27,9 @@ class AlertPolicy
     /**
      * Responsible for check the user can delete the model.
      *
-     * @param  User|Authenticatable  $user
-     * @param  Alert  $alert
      * @return Response
      */
-    public function update(User | Authenticatable $user, Alert $alert)
+    public function update(User|Authenticatable $user, Alert $alert)
     {
         $userId = $user?->_id;
 

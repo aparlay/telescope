@@ -25,7 +25,7 @@ class MediaWatched implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries         = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -37,14 +37,14 @@ class MediaWatched implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [5, 10, 15];
+    public $backoff           = [5, 10, 15];
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(
         public array|ObjectId $mediaIds,
@@ -60,8 +60,8 @@ class MediaWatched implements ShouldQueue
      */
     public function handle(): void
     {
-        $mediaService = app()->make(MediaService::class);
-        $userId = ! empty($this->userId) ? new ObjectId($this->userId) : null;
+        $mediaService   = app()->make(MediaService::class);
+        $userId         = !empty($this->userId) ? new ObjectId($this->userId) : null;
         $this->mediaIds = is_array($this->mediaIds) ? $this->mediaIds : [$this->mediaIds];
         foreach (Media::query()->whereIn('_id', $this->mediaIds)->get() as $media) {
             $mediaService->watched($media, $this->duration, $userId, $this->uuid);

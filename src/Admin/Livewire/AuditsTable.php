@@ -6,7 +6,6 @@ use Aparlay\Core\Admin\Filters\FilterDateRange;
 use Aparlay\Core\Admin\Filters\FilterExact;
 use Aparlay\Core\Admin\Filters\FilterPartial;
 use Aparlay\Core\Models\Audit;
-use Aparlay\Core\Models\Note;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use MongoDB\BSON\ObjectId;
 
@@ -46,10 +45,10 @@ class AuditsTable extends BaseIndexComponent
     {
         $query = parent::buildQuery()->with(['user']);
 
-        if (! empty($this->auditableType)) {
+        if (!empty($this->auditableType)) {
             $query->where('auditable_type', $this->auditableType);
         }
-        if (! empty($this->auditableId)) {
+        if (!empty($this->auditableId)) {
             $query->where('auditable_id', new ObjectId($this->auditableId));
         }
 

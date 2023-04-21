@@ -13,10 +13,10 @@ return new class() extends Migration {
     {
         User::query()->chunk(100, function ($users) {
             foreach ($users as $user) {
-                $text_search = explode(' ', $user->full_name);
-                $text_search[] = $user->username;
-                $text_search[] = $user->email;
-                $text_search[] = $user->phone_number;
+                $text_search       = explode(' ', $user->full_name);
+                $text_search[]     = $user->username;
+                $text_search[]     = $user->email;
+                $text_search[]     = $user->phone_number;
                 $user->text_search = array_values(array_filter(array_map('strtolower', $text_search)));
                 $user->saveQuietly();
             }
@@ -30,6 +30,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

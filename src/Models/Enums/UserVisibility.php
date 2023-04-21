@@ -6,10 +6,6 @@ enum UserVisibility: int implements Enum
 {
     use EnumEnhancements;
 
-    case PRIVATE = 0;
-    case PUBLIC = 1;
-    case INVISIBLE_BY_ADMIN = 2;
-
     public function label(): string
     {
         return match ($this) {
@@ -27,4 +23,8 @@ enum UserVisibility: int implements Enum
             self::INVISIBLE_BY_ADMIN => 'danger',
         };
     }
+
+    case PRIVATE            = 0;
+    case PUBLIC             = 1;
+    case INVISIBLE_BY_ADMIN = 2;
 }

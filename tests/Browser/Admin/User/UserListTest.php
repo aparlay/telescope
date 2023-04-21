@@ -11,9 +11,10 @@ class UserListTest extends DuskTestCase
 {
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function visitUserListingTest()
+    public function visit_user_listing_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.user.index'))
@@ -32,9 +33,10 @@ class UserListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function clickViewUserTest()
+    public function click_view_user_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.user.index'))
@@ -46,9 +48,10 @@ class UserListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchUsernameTest()
+    public function search_username_test()
     {
         $user = User::factory()->create();
 
@@ -64,9 +67,10 @@ class UserListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchEmailTest()
+    public function search_email_test()
     {
         $user = User::factory()->create();
 
@@ -82,9 +86,10 @@ class UserListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchStatusTest()
+    public function search_status_test()
     {
         $user = User::factory()->create();
 
@@ -100,9 +105,10 @@ class UserListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchVisibilityTest()
+    public function search_visibility_test()
     {
         $user = User::factory()->create();
 
@@ -118,9 +124,10 @@ class UserListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchDateRangeTest()
+    public function search_date_range_test()
     {
         $user = User::factory()->create();
 

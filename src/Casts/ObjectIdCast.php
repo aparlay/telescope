@@ -11,10 +11,9 @@ class ObjectIdCast implements CastsAttributes
     /**
      * Cast the given value.
      *
-     * @param  Model  $model
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  array  $attributes
+     * @param Model $model
+     * @param mixed $value
+     *
      * @return string
      */
     public function get($model, string $key, $value, array $attributes)
@@ -25,14 +24,13 @@ class ObjectIdCast implements CastsAttributes
     /**
      * Prepare the given value for storage.
      *
-     * @param  Model  $model
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  array  $attributes
+     * @param Model $model
+     * @param mixed $value
+     *
      * @return ObjectId
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        return (is_string($value) && ! empty($value)) ? new ObjectId($value) : $value;
+        return (is_string($value) && !empty($value)) ? new ObjectId($value) : $value;
     }
 }

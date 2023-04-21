@@ -17,20 +17,18 @@ use MongoDB\BSON\ObjectId;
  * Class MediaVisit.
  *
  * @property ObjectId $_id
- * @property string $date
- * @property ObjectId $user_id
- * @property array $media_ids
- * @property string $created_at
- *
- * @property-read User $userObj
+ * @property string   $aliasModel
+ * @property string   $created_at
+ * @property string   $date
+ * @property array    $media_ids
  * @property-read Media $mediaObj
- * @property string $aliasModel
+ * @property-read User $userObj
+ * @property ObjectId $user_id
  */
 class MediaVisit extends BaseModel
 {
     use HasFactory;
     use Notifiable;
-
     public $media_id;
     public $duration;
 
@@ -46,7 +44,7 @@ class MediaVisit extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'user_id',
         'media_ids',
@@ -61,7 +59,7 @@ class MediaVisit extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -69,7 +67,7 @@ class MediaVisit extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
     ];
 
     /**
@@ -80,54 +78,39 @@ class MediaVisit extends BaseModel
         return MediaVisitFactory::new();
     }
 
-    /**
-     * @return MediaVisitQueryBuilder|Builder
-     */
     public static function query(): MediaVisitQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     * @return MediaVisitQueryBuilder
-     */
     public function newEloquentBuilder($query): MediaVisitQueryBuilder
     {
         return new MediaVisitQueryBuilder($query);
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function userObj(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function mediaObj(): BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
     }
 
     /**
-     * @param  ObjectId|string  $userId
-     * @param  bool  $refresh
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public static function cacheByUserId(ObjectId | string $userId, bool $refresh = false): void
+    public static function cacheByUserId(ObjectId|string $userId, bool $refresh = false): void
     {
-        $userId = $userId instanceof ObjectId ? (string) $userId : $userId;
-        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+        $userId   = $userId instanceof ObjectId ? (string) $userId : $userId;
+        $cacheKey = (new self())->getCollection() . ':creator:' . $userId;
 
         if ($refresh) {
             Redis::del($cacheKey);
         }
 
-        if (! Redis::exists($cacheKey)) {
+        if (!Redis::exists($cacheKey)) {
             $visitedMediaIds = self::project(['media_ids' => true, '_id' => false])
                 ->user($userId)
                 ->pluck('media_ids')
@@ -145,14 +128,11 @@ class MediaVisit extends BaseModel
     }
 
     /**
-     * @param  string  $mediaId
-     * @param  string  $userId
-     * @return bool
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function checkMediaIsVisitedByUser(string $mediaId, string $userId): bool
     {
-        $cacheKey = (new self())->getCollection().':creator:'.$userId;
+        $cacheKey = (new self())->getCollection() . ':creator:' . $userId;
 
         return (bool) Redis::sismember($cacheKey, $mediaId);
     }

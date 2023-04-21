@@ -18,7 +18,7 @@ class AnalyticService
     public function getAnalytics($fromDate = null, $toDate = null): Collection
     {
         $fromDate = $fromDate ?? date('Y-m-d', strtotime('-7 days'));
-        $toDate = $toDate ?? date('Y-m-d');
+        $toDate   = $toDate   ?? date('Y-m-d');
 
         return $this->analyticRepository->getAnalytics($fromDate, $toDate);
     }

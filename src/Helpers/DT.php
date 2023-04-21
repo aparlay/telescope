@@ -36,6 +36,8 @@ class DT
     }
 
     /**
+     * @param mixed $utcDateTime
+     *
      * @return int
      */
     public static function utcToTimestamp($utcDateTime)

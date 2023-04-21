@@ -22,16 +22,14 @@ class UploadAvatar implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
     public User $user;
-
     public string $file;
     public string $user_id;
 
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 1;
+    public int $tries         = 1;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -43,51 +41,48 @@ class UploadAvatar implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 1;
+    public $backoff           = 1;
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(string $userId, string $file)
     {
         $this->onQueue(config('app.server_specific_queue'));
-        $this->file = $file;
+        $this->file    = $file;
         $this->user_id = $userId;
         if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'User not found!');
+            throw new Exception(__CLASS__ . PHP_EOL . 'User not found!');
         }
     }
 
     /**
      * Execute the job.
      *
-     * @return void
-     *
+     * @throws Exception
      * @throws FileExistsException
      * @throws FileNotFoundException
-     * @throws Exception
+     *
+     * @return void
      */
     public function handle()
     {
-        $local = Storage::disk('public');
-        $b2 = Storage::disk('b2-avatars');
-        $gc = Storage::disk('gc-avatars');
-        $filename = basename($this->file);
+        $local              = Storage::disk('public');
+        $b2                 = Storage::disk('b2-avatars');
+        $gc                 = Storage::disk('gc-avatars');
+        $filename           = basename($this->file);
         $b2->writeStream($filename, $local->readStream($this->file));
         $gc->writeStream($filename, $local->readStream($this->file));
 
         $this->user->avatar = Cdn::avatar($filename);
-        $safeToDelete = ($this->user->save() && $b2->fileExists($filename) && $gc->fileExists($filename));
+        $safeToDelete       = ($this->user->save() && $b2->fileExists($filename) && $gc->fileExists($filename));
         DeleteAvatar::dispatchIf($safeToDelete, $this->file)->delay(300);
     }
 
-    /**
-     * @param  Throwable  $exception
-     */
     public function failed(Throwable $exception): void
     {
         if (($user = User::admin()->first()) !== null) {

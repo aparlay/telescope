@@ -2,8 +2,6 @@
 
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration {
     /**
@@ -14,8 +12,8 @@ return new class() extends Migration {
     public function up()
     {
         foreach (User::lazy() as $user) {
-            $setting = $user->setting;
-            if (! isset($user->setting['payment'])) {
+            $setting       = $user->setting;
+            if (!isset($user->setting['payment'])) {
                 $setting['payment'] = [
                     'allow_unverified_cc' => false,
                     'block_unverified_cc' => false,
@@ -38,6 +36,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

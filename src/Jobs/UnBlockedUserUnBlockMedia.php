@@ -2,9 +2,7 @@
 
 namespace Aparlay\Core\Jobs;
 
-use Aparlay\Core\Models\Follow;
 use Aparlay\Core\Models\Media;
-use Aparlay\Core\Models\MediaLike;
 use Aparlay\Core\Models\User;
 use Aparlay\Core\Notifications\JobFailed;
 use Exception;
@@ -26,7 +24,7 @@ class UnBlockedUserUnBlockMedia implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 10;
+    public int $tries         = 10;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -38,14 +36,14 @@ class UnBlockedUserUnBlockMedia implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = [60, 300, 1800, 3600];
+    public $backoff           = [60, 300, 1800, 3600];
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(public string $creatorId, public string $userId)
     {

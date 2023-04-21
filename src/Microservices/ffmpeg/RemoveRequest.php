@@ -22,7 +22,7 @@ class RemoveRequest extends \Google\Protobuf\Internal\Message
      * Constructor.
      *
      * @param array $data {
-     *     Optional. Data for populating the Message object.
+     *                    Optional. Data for populating the Message object.
      *
      *     @type string $file
      * }
@@ -35,6 +35,7 @@ class RemoveRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string file = 1;</code>.
+     *
      * @return string
      */
     public function getFile()
@@ -44,7 +45,9 @@ class RemoveRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string file = 1;</code>.
+     *
      * @param string $var
+     *
      * @return $this
      */
     public function setFile($var)

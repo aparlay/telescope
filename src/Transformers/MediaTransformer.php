@@ -11,7 +11,7 @@ class MediaTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $defaultIncludes = [
+    protected $defaultIncludes   = [
 
     ];
 

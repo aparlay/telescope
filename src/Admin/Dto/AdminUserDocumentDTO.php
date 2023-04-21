@@ -10,9 +10,9 @@ class AdminUserDocumentDTO extends DataTransferObject
     public $reject_reason;
 
     /**
-     * @param $request
-     * @return AdminUserDocumentDTO
      * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     *
+     * @return AdminUserDocumentDTO
      */
     public static function fromRequest($request)
     {

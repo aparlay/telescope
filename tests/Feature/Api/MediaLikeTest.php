@@ -16,11 +16,11 @@ class MediaLikeTest extends ApiTestCase
     /**
      * @test
      */
-    public function likeMedia()
+    public function like_media()
     {
-        $likeCreator = User::factory()->create();
+        $likeCreator  = User::factory()->create();
         $mediaCreator = User::factory()->create(['like_count' => 0]);
-        $media = \Aparlay\Core\Models\Media::factory()->for($mediaCreator, 'userObj')->create([
+        $media        = \Aparlay\Core\Models\Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => false,
             'created_by' => $mediaCreator->_id,
             'like_count' => 0,
@@ -38,7 +38,7 @@ class MediaLikeTest extends ApiTestCase
 
         $this->actingAs($likeCreator)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('PUT', '/v1/media/'.$media->_id.'/like', [])
+            ->json('PUT', '/v1/media/' . $media->_id . '/like', [])
             ->assertStatus(201)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 201)
@@ -91,16 +91,16 @@ class MediaLikeTest extends ApiTestCase
     /**
      * @test
      */
-    public function unlikeMedia()
+    public function unlike_media()
     {
-        $user = User::factory()->create();
-        $mediaCreator = User::factory()->create();
-        $media = Media::factory()->for($mediaCreator, 'userObj')
+        $user             = User::factory()->create();
+        $mediaCreator     = User::factory()->create();
+        $media            = Media::factory()->for($mediaCreator, 'userObj')
             ->create(['status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
 
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('PUT', '/v1/media/'.$media->_id.'/like', [])
+            ->json('PUT', '/v1/media/' . $media->_id . '/like', [])
             ->assertStatus(201)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 201)
@@ -124,12 +124,12 @@ class MediaLikeTest extends ApiTestCase
             'media_id' => new ObjectId($media->_id),
         ]);
 
-        $likeCountOfMedia = $media->like_count + 1;
-        $likeCountOfUser = $mediaCreator->like_count + 1;
+        $likeCountOfMedia = $media->like_count        + 1;
+        $likeCountOfUser  = $mediaCreator->like_count + 1;
 
         $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('DELETE', '/v1/media/'.$media->_id.'/like', [])
+            ->json('DELETE', '/v1/media/' . $media->_id . '/like', [])
             ->assertStatus(204);
         $this->assertDatabaseMissing('media_likes', [
             'created_by' => new ObjectId($user->_id),
@@ -143,23 +143,23 @@ class MediaLikeTest extends ApiTestCase
     /**
      * @test
      */
-    public function mediaLikePermission()
+    public function media_like_permission()
     {
         $mediaCreator = User::factory()->create();
-        $blockedUser = User::factory()->create();
-        $block = Block::factory()->create([
-                'user' => [
-                    '_id' => new ObjectId($blockedUser->_id),
-                    'username' => $blockedUser->username,
-                    'avatar' => $blockedUser->avatar,
-                ],
-                'creator' => [
-                    '_id' => new ObjectId($mediaCreator->_id),
-                    'username' => $mediaCreator->username,
-                    'avatar' => $mediaCreator->avatar,
-                ],
-            ]);
-        $media = Media::factory()->for($mediaCreator, 'userObj')->create([
+        $blockedUser  = User::factory()->create();
+        $block        = Block::factory()->create([
+            'user' => [
+                '_id' => new ObjectId($blockedUser->_id),
+                'username' => $blockedUser->username,
+                'avatar' => $blockedUser->avatar,
+            ],
+            'creator' => [
+                '_id' => new ObjectId($mediaCreator->_id),
+                'username' => $mediaCreator->username,
+                'avatar' => $mediaCreator->avatar,
+            ],
+        ]);
+        $media        = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
             'status' => MediaStatus::COMPLETED->value,
             'visibility' => MediaVisibility::PUBLIC->value,
@@ -172,7 +172,7 @@ class MediaLikeTest extends ApiTestCase
         ]);
         $this->actingAs($blockedUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('PUT', '/v1/media/'.$media->_id.'/like', [])
+            ->json('PUT', '/v1/media/' . $media->_id . '/like', [])
             ->assertStatus(403)
             ->assertJson([
                 'code' => 403,

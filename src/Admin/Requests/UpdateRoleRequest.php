@@ -33,7 +33,6 @@ class UpdateRoleRequest extends FormRequest
     }
 
     /**
-     * @param Validator $validator
      * @return void
      */
     public function failedValidation(Validator $validator)

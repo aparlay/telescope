@@ -6,14 +6,6 @@ enum UserNotificationCategory: int implements Enum
 {
     use EnumEnhancements;
 
-    case LIKES = 1;
-    case COMMENTS = 2;
-    case TIPS = 3;
-    case FOLLOWS = 4;
-    case SUBSCRIPTIONS = 5;
-    case UNREAD_MESSAGE = 6;
-    case SYSTEM = 10;
-
     public function label(): string
     {
         return match ($this) {
@@ -39,4 +31,12 @@ enum UserNotificationCategory: int implements Enum
             self::SYSTEM => 'danger',
         };
     }
+
+    case LIKES          = 1;
+    case COMMENTS       = 2;
+    case TIPS           = 3;
+    case FOLLOWS        = 4;
+    case SUBSCRIPTIONS  = 5;
+    case UNREAD_MESSAGE = 6;
+    case SYSTEM         = 10;
 }

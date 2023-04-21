@@ -5,6 +5,7 @@ namespace Aparlay\Core\Admin\Repositories;
 use Aparlay\Core\Admin\Models\Media;
 use Aparlay\Core\Admin\Models\User;
 use Aparlay\Core\Models\Enums\MediaStatus;
+use InvalidArgumentException;
 
 class MediaRepository
 {
@@ -12,8 +13,8 @@ class MediaRepository
 
     public function __construct($model)
     {
-        if (! ($model instanceof Media)) {
-            throw new \InvalidArgumentException('$model should be of Media type');
+        if (!($model instanceof Media)) {
+            throw new InvalidArgumentException('$model should be of Media type');
         }
 
         $this->model = $model;
@@ -38,6 +39,8 @@ class MediaRepository
 
     /**
      * @param $user
+     * @param mixed $currentAdminUser
+     *
      * @return mixed
      */
     public function firstUnderReview($currentAdminUser)
@@ -49,8 +52,8 @@ class MediaRepository
     }
 
     /**
-     * @param $currentUser
      * @param $exeptMedia
+     *
      * @return mixed
      */
     public function revertAllToCompleted($currentUser)
@@ -62,7 +65,6 @@ class MediaRepository
     }
 
     /**
-     * @param $currentItemId
      * @return mixed
      */
     public function prevItemToReview($currentItemId)
@@ -75,7 +77,6 @@ class MediaRepository
     }
 
     /**
-     * @param $currentItemId
      * @return mixed
      */
     public function nextItemToReview($currentItemId)
@@ -88,7 +89,6 @@ class MediaRepository
     }
 
     /**
-     * @param $media
      * @return mixed
      */
     public function setToUnderReview($media)

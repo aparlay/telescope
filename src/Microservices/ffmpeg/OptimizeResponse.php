@@ -17,16 +17,17 @@ class OptimizeResponse extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string result = 1;</code>.
      */
     private $result = '';
+
     /**
      * Generated from protobuf field <code>string error = 2;</code>.
      */
-    private $error = '';
+    private $error  = '';
 
     /**
      * Constructor.
      *
      * @param array $data {
-     *     Optional. Data for populating the Message object.
+     *                    Optional. Data for populating the Message object.
      *
      *     @type string $result
      *     @type string $error
@@ -40,6 +41,7 @@ class OptimizeResponse extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string result = 1;</code>.
+     *
      * @return string
      */
     public function getResult()
@@ -49,7 +51,9 @@ class OptimizeResponse extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string result = 1;</code>.
+     *
      * @param string $var
+     *
      * @return $this
      */
     public function setResult($var)
@@ -62,6 +66,7 @@ class OptimizeResponse extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string error = 2;</code>.
+     *
      * @return string
      */
     public function getError()
@@ -71,7 +76,9 @@ class OptimizeResponse extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string error = 2;</code>.
+     *
      * @param string $var
+     *
      * @return $this
      */
     public function setError($var)

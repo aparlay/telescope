@@ -2,6 +2,7 @@
 
 namespace Aparlay\Core\Admin\Repositories;
 
+use InvalidArgumentException;
 use Maklad\Permission\Models\Role;
 
 class RoleRepository
@@ -10,8 +11,8 @@ class RoleRepository
 
     public function __construct($model)
     {
-        if (! ($model instanceof Role)) {
-            throw new \InvalidArgumentException('$model should be of Role type');
+        if (!($model instanceof Role)) {
+            throw new InvalidArgumentException('$model should be of Role type');
         }
 
         $this->model = $model;

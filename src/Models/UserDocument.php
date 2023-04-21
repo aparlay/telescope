@@ -21,20 +21,20 @@ use MongoDB\BSON\ObjectId;
  * Class UserDocument.
  *
  * @property ObjectId $_id
- * @property ObjectId $user_id
- * @property int $type
- * @property int $status
- * @property string $md5
- * @property string $file
- * @property string $size
- * @property string $mime
- * @property array $creator
- * @property User $creatorObj
- * @property User $userObj
+ * @property string   $created_at
  * @property ObjectId $created_by
+ * @property array    $creator
+ * @property User     $creatorObj
+ * @property string   $file
+ * @property string   $md5
+ * @property string   $mime
+ * @property string   $size
+ * @property int      $status
+ * @property int      $type
+ * @property string   $updated_at
  * @property ObjectId $updated_by
- * @property string $created_at
- * @property string $updated_at
+ * @property ObjectId $user_id
+ * @property User     $userObj
  */
 class UserDocument extends BaseModel
 {
@@ -54,7 +54,7 @@ class UserDocument extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'type',
         'status',
@@ -74,13 +74,12 @@ class UserDocument extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
         'status' => 'integer',
         'type' => 'integer',
-        'creator' => SimpleUserCast::class.':_id,username,avatar,is_verified',
+        'creator' => SimpleUserCast::class . ':_id,username,avatar,is_verified',
     ];
-
-    protected $dates = [
+    protected $dates      = [
         'created_at',
         'updated_at',
         'deleted_at',
@@ -94,9 +93,6 @@ class UserDocument extends BaseModel
         return UserDocumentFactory::new();
     }
 
-    /**
-     * @return UserDocumentQueryBuilder|Builder
-     */
     public static function query(): UserDocumentQueryBuilder|Builder
     {
         return parent::query();
@@ -105,8 +101,7 @@ class UserDocument extends BaseModel
     /**
      * Create a new Eloquent query builder for the model.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @return UserDocumentQueryBuilder
+     * @param \Illuminate\Database\Query\Builder $query
      */
     public function newEloquentBuilder($query): UserDocumentQueryBuilder
     {
@@ -129,10 +124,9 @@ class UserDocument extends BaseModel
     public function getFilePath()
     {
         if ($this->creatorObj) {
-            return $this->creatorObj->_id.'/'.$this->file;
+            return $this->creatorObj->_id . '/' . $this->file;
         }
 
-        return null;
     }
 
     /**

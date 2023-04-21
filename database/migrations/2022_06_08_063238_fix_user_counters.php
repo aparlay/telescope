@@ -2,8 +2,6 @@
 
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration {
     /**
@@ -15,7 +13,7 @@ return new class() extends Migration {
     {
         foreach (User::lazy() as $user) {
             /** @var User $user */
-            $counters = [
+            $counters          = [
                 'followers' => $user->follower_count,
                 'followings' => $user->following_count,
                 'likes' => $user->like_count,
@@ -29,9 +27,9 @@ return new class() extends Migration {
             ];
 
             $user->drop(['follower_count', 'following_count', 'like_count', 'block_count', 'followed_hashtag_count', 'media_count']);
-            $stats = $user->stats;
+            $stats             = $user->stats;
             $stats['counters'] = $counters;
-            $user->stats = $stats;
+            $user->stats       = $stats;
             $user->saveQuietly();
         }
     }
@@ -43,6 +41,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

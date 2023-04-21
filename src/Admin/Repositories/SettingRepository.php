@@ -5,6 +5,7 @@ namespace Aparlay\Core\Admin\Repositories;
 use Aparlay\Core\Admin\Models\Setting;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
 
 class SettingRepository
 {
@@ -12,8 +13,8 @@ class SettingRepository
 
     public function __construct($model)
     {
-        if (! ($model instanceof Setting)) {
-            throw new \InvalidArgumentException('$model should be of Setting type');
+        if (!($model instanceof Setting)) {
+            throw new InvalidArgumentException('$model should be of Setting type');
         }
 
         $this->model = $model;
@@ -58,7 +59,6 @@ class SettingRepository
     }
 
     /**
-     * @param $id
      * @return Setting|Setting[]|Collection|Model
      */
     public function find($id): Model|Collection|Setting|array

@@ -13,10 +13,9 @@ class UserAgent
     protected $prefix;
     protected $version;
     protected $engine;
-    protected $device = 'Desktop';
-    protected $isBot = false;
-
-    protected $oss = [
+    protected $device   = 'Desktop';
+    protected $isBot    = false;
+    protected $oss      = [
         'Android' => ['Android'],
         'Linux' => ['linux', 'Linux'],
         'Mac OS X' => ['Macintosh', 'Mac OS X'],
@@ -37,7 +36,7 @@ class UserAgent
         'cURL' => ['curl'],
         'Wget' => ['Wget'],
     ];
-    protected $engines = [
+    protected $engines  = [
         'OKHttp' => ['OkHttp'],
         'Gecko' => ['Gecko'],
         'Blink' => ['AppleWebKit'],
@@ -45,7 +44,7 @@ class UserAgent
         'EdgeHTML' => ['Edge'],
         'Trident' => ['Trident', 'MSIE'],
     ];
-    protected $devices = [
+    protected $devices  = [
         'iPad' => ['iPad'],
         'iPhone' => ['iPhone'],
         'Samsung' => ['SAMSUNG', 'SM-G'],
@@ -64,7 +63,7 @@ class UserAgent
         'HTC' => ['HTC'],
         'OnePlus' => ['OnePlus'],
     ];
-    protected $bots = [
+    protected $bots     = [
         'Baidu' => ['Baidu', 'Baiduspider'],
         'BingBot' => ['bingbot', 'Bingbot'],
         'DuckDuckGo' => ['DuckDuckBot'],
@@ -81,7 +80,7 @@ class UserAgent
 
     public function __construct($agent = null)
     {
-        if (! $agent && isset($_SERVER['HTTP_USER_AGENT'])) {
+        if (!$agent && isset($_SERVER['HTTP_USER_AGENT'])) {
             $agent = $_SERVER['HTTP_USER_AGENT'];
         }
 
@@ -97,6 +96,7 @@ class UserAgent
             foreach ($patterns as $pattern) {
                 if (strpos($this->agent, $pattern) !== false) {
                     $this->os = $os;
+
                     break 2;
                 }
             }
@@ -107,7 +107,8 @@ class UserAgent
             foreach ($patterns as $pattern) {
                 if (strpos($this->agent, $pattern) !== false) {
                     $this->browser = $browser;
-                    $this->prefix = $pattern;
+                    $this->prefix  = $pattern;
+
                     break 2;
                 }
             }
@@ -118,6 +119,7 @@ class UserAgent
             foreach ($patterns as $pattern) {
                 if (strpos($this->agent, $pattern) !== false) {
                     $this->engine = $engine;
+
                     break 2;
                 }
             }
@@ -128,13 +130,14 @@ class UserAgent
             foreach ($patterns as $pattern) {
                 if (strpos($this->agent, $pattern) !== false) {
                     $this->device = $device;
+
                     break 2;
                 }
             }
         }
 
         // Browser version
-        $pattern = '#(?<browser>'.implode('|', ['Version', $this->prefix, 'other']).')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
+        $pattern       = '#(?<browser>' . implode('|', ['Version', $this->prefix, 'other']) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
         preg_match_all($pattern, $this->agent, $matches);
 
         $this->version = $matches['version'][0] ?? 0;
@@ -147,8 +150,9 @@ class UserAgent
         foreach ($this->bots as $bot => $patterns) {
             foreach ($patterns as $pattern) {
                 if (strpos($this->agent, $pattern) !== false) {
-                    $this->isBot = true;
+                    $this->isBot  = true;
                     $this->device = 'BOT';
+
                     break 2;
                 }
             }

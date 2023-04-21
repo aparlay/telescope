@@ -6,10 +6,6 @@ enum ReportType: int implements Enum
 {
     use EnumEnhancements;
 
-    case USER = 0;
-    case MEDIA = 1;
-    case COMMENT = 2;
-
     public function label(): string
     {
         return match ($this) {
@@ -27,4 +23,8 @@ enum ReportType: int implements Enum
             self::COMMENT => 'primary',
         };
     }
+
+    case USER    = 0;
+    case MEDIA   = 1;
+    case COMMENT = 2;
 }

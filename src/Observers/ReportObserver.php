@@ -10,8 +10,7 @@ class ReportObserver extends BaseModelObserver
     /**
      * Handle the Report "created" event.
      *
-     * @param  Report  $model
-     * @return void
+     * @param Report $model
      */
     public function created($model): void
     {

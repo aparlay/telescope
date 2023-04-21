@@ -29,7 +29,7 @@ return new class() extends Migration {
             'block_unverified_cc' => false,
         ];
         foreach (User::lazy() as $user) {
-            $setting = $user->setting;
+            $setting       = $user->setting;
 
             if (empty($setting)) {
                 $setting = $default;
@@ -70,6 +70,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

@@ -12,16 +12,16 @@ use MongoDB\BSON\ObjectId;
 /**
  * User model.
  *
- * @property ObjectId    $_id
- * @property string      $tag
- * @property int         $like_count
- * @property int         $media_count
- * @property int         $visit_count
- * @property int         $comment_count
- * @property float       $sort_score
- * @property float       $sort_score_for_male
- * @property float       $sort_score_for_female
- * @property float       $sort_score_for_transgender
+ * @property ObjectId $_id
+ * @property int      $comment_count
+ * @property int      $like_count
+ * @property int      $media_count
+ * @property float    $sort_score
+ * @property float    $sort_score_for_female
+ * @property float    $sort_score_for_male
+ * @property float    $sort_score_for_transgender
+ * @property string   $tag
+ * @property int      $visit_count
  */
 class Hashtag extends BaseModel
 {
@@ -42,7 +42,7 @@ class Hashtag extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'tag',
         'like_count',
@@ -53,7 +53,6 @@ class Hashtag extends BaseModel
         'created_at',
         'updated_at',
     ];
-
     protected $attributes = [
         'like_count' => 0,
         'visit_count' => 0,
@@ -67,15 +66,14 @@ class Hashtag extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
         'tag' => 'string',
         'like_count' => 'integer',
         'visit_count' => 'integer',
         'media_count' => 'integer',
         'sort_score' => 'float',
     ];
-
-    protected $dates = [
+    protected $dates      = [
         'created_at',
         'updated_at',
         'deleted_at',
@@ -86,7 +84,7 @@ class Hashtag extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
     ];
 
     /**
@@ -101,14 +99,12 @@ class Hashtag extends BaseModel
 
     /**
      * Determine if the model should be searchable.
-     *
-     * @return bool
      */
     public function shouldBeSearchable(): bool
     {
         $media = Media::hashtag($this->tag)->public()->availableForFollower()->first();
 
-        return ! empty($media);
+        return !empty($media);
     }
 
     /**
@@ -118,7 +114,7 @@ class Hashtag extends BaseModel
      */
     public function toSearchableArray()
     {
-        $media = Media::hashtag($this->tag)->public()->availableForFollower()->limit(500)->get()->random();
+        $media   = Media::hashtag($this->tag)->public()->availableForFollower()->limit(500)->get()->random();
         $genders = Media::select(['content_gender'])
             ->hashtag($this->tag)
             ->public()
@@ -148,7 +144,7 @@ class Hashtag extends BaseModel
             'country' => '',
             'like_count' => $this->like_count,
             'visit_count' => $this->visit_count,
-            'is_adult' => $media?->is_adult ?? false,
+            'is_adult' => $media?->is_adult     ?? false,
             'skin_score' => $media?->skin_score ?? 5,
             'last_online_at' => 0,
             'comment_count' => $this->comment_count,

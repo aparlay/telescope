@@ -2,8 +2,6 @@
 
 use Aparlay\Core\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration {
     /**
@@ -14,12 +12,12 @@ return new class() extends Migration {
     public function up()
     {
         foreach (User::lazy() as $user) {
-            $setting = $user->setting;
+            $setting           = $user->setting;
             $setting['payout'] = [
                 'ban_payout' => false,
                 'auto_ban_payout' => false,
             ];
-            $user->setting = $setting;
+            $user->setting     = $setting;
             $user->saveQuietly();
         }
     }
@@ -31,6 +29,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

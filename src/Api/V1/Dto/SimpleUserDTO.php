@@ -18,8 +18,6 @@ class SimpleUserDTO extends DataTransferObject
     public string $avatar;
 
     /**
-     * @param  User  $user
-     * @return SimpleUserDTO
      * @throws UnknownProperties
      */
     public static function fromUserObj(User $user): self

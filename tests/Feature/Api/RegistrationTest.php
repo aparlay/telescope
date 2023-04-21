@@ -13,10 +13,10 @@ class RegistrationTest extends ApiTestCase
      *
      * @test
      */
-    public function validRegister()
+    public function valid_register()
     {
         $payload = [
-            'email' => uniqid('alua_').'@aparlay.com',
+            'email' => uniqid('alua_') . '@aparlay.com',
             'password' => 'password@123',
             'gender' => 1,
         ];
@@ -52,12 +52,12 @@ class RegistrationTest extends ApiTestCase
      *
      * @test
      */
-    public function usernameAsEmail()
+    public function username_as_email()
     {
         $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
-        $payload = [
-            'username' => uniqid('alua_').'@apaly.com',
+        $payload  = [
+            'username' => uniqid('alua_') . '@apaly.com',
             'password' => 'Demo@123',
             'gender' => 0,
             'referral_id' => $referrer->_id,
@@ -95,13 +95,13 @@ class RegistrationTest extends ApiTestCase
      *
      * @test
      */
-    public function invalidPassword()
+    public function invalid_password()
     {
         $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
-                'email' => uniqid('alua_').'@aparlay.com',
+                'email' => uniqid('alua_') . '@aparlay.com',
                 'password' => 'Demo@',
                 'gender' => 0,
                 'referral_id' => $referrer->_id,
@@ -124,13 +124,13 @@ class RegistrationTest extends ApiTestCase
      *
      * @test
      */
-    public function passwordRequire()
+    public function password_require()
     {
         $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
-                'email' => uniqid('alua_').'@aparlay.com',
+                'email' => uniqid('alua_') . '@aparlay.com',
                 'password' => '',
                 'gender' => 0,
                 'referral_id' => $referrer->_id,
@@ -153,7 +153,7 @@ class RegistrationTest extends ApiTestCase
      *
      * @test
      */
-    public function emailNotValid()
+    public function email_not_valid()
     {
         $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
@@ -182,13 +182,13 @@ class RegistrationTest extends ApiTestCase
      *
      * @test
      */
-    public function genderNotValid()
+    public function gender_not_valid()
     {
         $referrer = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
-                'email' => uniqid('alua_').'@aparlay.com',
+                'email' => uniqid('alua_') . '@aparlay.com',
                 'password' => 'Demo@123',
                 'gender' => 5,
                 'referral_id' => $referrer->_id,
@@ -211,11 +211,11 @@ class RegistrationTest extends ApiTestCase
      *
      * @test
      */
-    public function invalidPhoneNumberWithDigits()
+    public function invalid_phone_number_with_digits()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
-                'email' => uniqid('alua_').'@aparlay.com',
+                'email' => uniqid('alua_') . '@aparlay.com',
                 'password' => 'Demo@123',
                 'gender' => 2,
                 'phone_number' => '12345',
@@ -238,11 +238,11 @@ class RegistrationTest extends ApiTestCase
      *
      * @test
      */
-    public function phoneNumberInvalid()
+    public function phone_number_invalid()
     {
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->postJson('/v1/register', [
-                'email' => uniqid('alua_').'@gmail.com',
+                'email' => uniqid('alua_') . '@gmail.com',
                 'password' => 'Demo@123',
                 'gender' => 2,
                 'phone_number' => 'asdasd',

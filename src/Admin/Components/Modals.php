@@ -7,8 +7,7 @@ use Livewire\Component;
 class Modals extends Component
 {
     public $alias;
-    public $params = [];
-
+    public $params       = [];
     protected $listeners = ['showModal', 'resetModal'];
 
     public function render()
@@ -18,7 +17,7 @@ class Modals extends Component
 
     public function showModal($alias, ...$params)
     {
-        $this->alias = $alias;
+        $this->alias  = $alias;
         $this->params = $params;
 
         $this->emit('showBootstrapModal');

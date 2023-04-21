@@ -20,13 +20,13 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function getMediaId()
+    public function get_media_id()
     {
         $media = Media::factory()->create([
             'status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value,
         ]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('GET', '/v1/media/'.$media->_id, [])
+            ->json('GET', '/v1/media/' . $media->_id, [])
             ->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
@@ -108,13 +108,13 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function getMediaSlug()
+    public function get_media_slug()
     {
         $media = Media::factory()->create([
             'status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value,
         ]);
         $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('GET', '/v1/media/share/'.$media->slug, [])
+            ->json('GET', '/v1/media/share/' . $media->slug, [])
             ->assertStatus(200)
             ->assertJsonPath('status', 'OK')
             ->assertJsonPath('code', 200)
@@ -196,33 +196,33 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function createMediaBySplitUpload()
+    public function create_media_by_split_upload()
     {
-        $activeUser = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $activeUser    = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $nonActiveUser = User::factory()->create(['status' => UserStatus::PENDING->value]);
-        $taggedUser = User::factory()->create();
+        $taggedUser    = User::factory()->create();
 
-        $videoFilePath = __DIR__.'/assets/video.mp4';
+        $videoFilePath = __DIR__ . '/assets/video.mp4';
         $this->assertTrue(file_exists($videoFilePath));
-        $videoFile = UploadedFile::fake()->createWithContent('video.mp4', file_get_contents($videoFilePath));
+        $videoFile     = UploadedFile::fake()->createWithContent('video.mp4', file_get_contents($videoFilePath));
 
         $this->actingAs($nonActiveUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/media', [
-                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
+                'description' => 'This is test description #test #testAPi @' . $taggedUser->username,
                 'file' => $videoFile,
             ])
             ->assertStatus(403);
 
-        $response = $this->actingAs($activeUser)
+        $response      = $this->actingAs($activeUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/media/upload/split', [
-                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
+                'description' => 'This is test description #test #testAPi @' . $taggedUser->username,
                 'flowChunkNumber' => 1,
                 'flowChunkSize' => 31457280,
                 'flowCurrentChunkSize' => $videoFile->getSize(),
                 'flowTotalSize' => $videoFile->getSize(),
-                'flowIdentifier' => $videoFile->getClientOriginalName().'-'.$videoFile->getSize(),
+                'flowIdentifier' => $videoFile->getClientOriginalName() . '-' . $videoFile->getSize(),
                 'flowFilename' => $videoFile->getClientOriginalName(),
                 'flowRelativePath' => $videoFile->getClientOriginalName(),
                 'flowTotalChunks' => 1,
@@ -240,7 +240,7 @@ class MediaTest extends ApiTestCase
         $this->actingAs($nonActiveUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/media', [
-                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
+                'description' => 'This is test description #test #testAPi @' . $taggedUser->username,
                 'file' => $videoFile,
             ])
             ->assertStatus(403);
@@ -248,7 +248,7 @@ class MediaTest extends ApiTestCase
         $this->actingAs($activeUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/media', [
-                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
+                'description' => 'This is test description #test #testAPi @' . $taggedUser->username,
                 'file' => $response['data']['file'],
             ])
             ->assertStatus(201)
@@ -349,17 +349,17 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function createMediaByStreamUpload()
+    public function create_media_by_stream_upload()
     {
-        $activeUser = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $activeUser    = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $nonActiveUser = User::factory()->create(['status' => UserStatus::PENDING->value]);
-        $taggedUser = User::factory()->create();
+        $taggedUser    = User::factory()->create();
 
-        $fileData = [
-            'file' => UploadedFile::fake()->create(uniqid().'.mp4', 100),
+        $fileData      = [
+            'file' => UploadedFile::fake()->create(uniqid() . '.mp4', 100),
         ];
 
-        $response = $this->actingAs($activeUser)
+        $response      = $this->actingAs($activeUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/media/upload/stream', $fileData)
             ->assertStatus(201)
@@ -374,15 +374,15 @@ class MediaTest extends ApiTestCase
         $this->actingAs($nonActiveUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/media', [
-                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
+                'description' => 'This is test description #test #testAPi @' . $taggedUser->username,
                 'file' => $fileData,
             ])
             ->assertStatus(403);
 
-        $r = $this->actingAs($activeUser)
+        $r             = $this->actingAs($activeUser)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->post('/v1/media', [
-                'description' => 'This is test description #test #testAPi @'.$taggedUser->username,
+                'description' => 'This is test description #test #testAPi @' . $taggedUser->username,
                 'file' => $response['data']['file'],
             ]);
 
@@ -483,13 +483,13 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function testUploadStream()
+    public function test_upload_stream()
     {
         $fileData = [
-            'file' => UploadedFile::fake()->create(uniqid().'.mp4', 100),
+            'file' => UploadedFile::fake()->create(uniqid() . '.mp4', 100),
         ];
 
-        $user = User::factory()->create();
+        $user     = User::factory()->create();
 
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('POST', 'v1/media/upload/stream', $fileData)
@@ -514,11 +514,11 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function mediaCreatePolicy()
+    public function media_create_policy()
     {
-        $user = User::factory()->create(['status' => 0]);
-        $videoFile = UploadedFile::fake()->create(Str::random(6).'.mp4', 1024 * 1024 * 300, 'video/mp4');
-        $media = Media::factory()->for(User::factory()->create(['status' => 0]), 'userObj')->create();
+        $user      = User::factory()->create(['status' => 0]);
+        $videoFile = UploadedFile::fake()->create(Str::random(6) . '.mp4', 1024 * 1024 * 300, 'video/mp4');
+        $media     = Media::factory()->for(User::factory()->create(['status' => 0]), 'userObj')->create();
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
             ->json('POST', '/v1/media/', [
                 'description' => 'image',
@@ -533,14 +533,14 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function mediaUpdatePolicy()
+    public function media_update_policy()
     {
-        $user = User::factory()->create(['status' => 0]);
+        $user  = User::factory()->create(['status' => 0]);
         $media = Media::factory()->for(User::factory()->create(['status' => 0]), 'userObj')->create([
             'status' => MediaStatus::COMPLETED->value,
         ]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('PUT', '/v1/media/'.$media->_id, [
+            ->json('PUT', '/v1/media/' . $media->_id, [
                 'description' => 'image 12',
             ])
             ->assertStatus(403)
@@ -555,14 +555,14 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function mediaViewPolicy()
+    public function media_view_policy()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $user  = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
         $media = Media::factory()
             ->for(User::factory()->create(['visibility' => UserVisibility::PRIVATE->value]), 'userObj')
             ->create(['status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PRIVATE->value]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('GET', '/v1/media/'.$media->_id, [])
+            ->json('GET', '/v1/media/' . $media->_id, [])
             ->assertStatus(403)
             ->assertJson([
                 'code' => 403,
@@ -575,14 +575,14 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function mediaDeletePolicy()
+    public function media_delete_policy()
     {
-        $user = User::factory()->create();
+        $user  = User::factory()->create();
         $media = Media::factory()
             ->for(User::factory()->create(['visibility' => UserVisibility::PUBLIC->value]), 'userObj')
             ->create(['status' => MediaStatus::COMPLETED->value, 'visibility' => MediaVisibility::PUBLIC->value]);
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('delete', '/v1/media/'.$media->_id, [])
+            ->json('delete', '/v1/media/' . $media->_id, [])
             ->assertStatus(403)
             ->assertJson([
                 'code' => 403,
@@ -595,10 +595,10 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function isProtectedMediaDeletePolicy()
+    public function is_protected_media_delete_policy()
     {
         $mediaCreator = User::factory()->create();
-        $media = Media::factory()->for($mediaCreator, 'userObj')->create([
+        $media        = Media::factory()->for($mediaCreator, 'userObj')->create([
             'is_protected' => true,
             'status' => MediaStatus::COMPLETED->value,
             'visibility' => MediaVisibility::PUBLIC->value,
@@ -610,7 +610,7 @@ class MediaTest extends ApiTestCase
             ],
         ]);
         $this->actingAs($mediaCreator)->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('delete', '/v1/media/'.$media->_id, [])
+            ->json('delete', '/v1/media/' . $media->_id, [])
             ->assertStatus(403)
             ->assertJson([
                 'code' => 403,
@@ -623,7 +623,7 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function deleteMedia()
+    public function delete_media()
     {
         // Shortens a number and attaches K, M, B, etc. accordingly
         function numberShorten($number, $precision = 1)
@@ -643,12 +643,12 @@ class MediaTest extends ApiTestCase
                 }
             }
 
-            return number_format($number / $divisor, $precision).$shorthand;
+            return number_format($number / $divisor, $precision) . $shorthand;
         }
 
-        $user = User::factory()->create(['media_count' => 2]);
+        $user      = User::factory()->create(['media_count' => 2]);
         $otherUser = User::factory()->create();
-        $media = Media::factory()->create(
+        $media     = Media::factory()->create(
             [
                 'status' => MediaStatus::COMPLETED->value,
                 'created_by' => new ObjectId($user->_id),
@@ -676,11 +676,11 @@ class MediaTest extends ApiTestCase
             'stats.counters.medias' => 2,
         ]);
         $this->actingAs($otherUser)->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('DELETE', '/v1/media/'.$media->_id)
+            ->json('DELETE', '/v1/media/' . $media->_id)
             ->assertStatus(403);
 
         $this->actingAs($user)->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('DELETE', '/v1/media/'.$media->_id)
+            ->json('DELETE', '/v1/media/' . $media->_id)
             ->assertStatus(204);
 
         $this->assertDatabaseHas((new Media())->getCollection(), [
@@ -698,10 +698,10 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function getByUser()
+    public function get_by_user()
     {
-        $user = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
-        $userMediaOwner = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $user                = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
+        $userMediaOwner      = User::factory()->create(['status' => UserStatus::ACTIVE->value]);
 
         Media::factory()->count(2)->create(
             [
@@ -793,7 +793,7 @@ class MediaTest extends ApiTestCase
             ],
         ];
 
-        $assertableJson = [
+        $assertableJson      = [
             'code' => 'integer',
             'uuid' => 'string',
             'status' => 'string',
@@ -836,8 +836,8 @@ class MediaTest extends ApiTestCase
             'data.items.0._links.index.href' => 'string',
         ];
 
-        $r = $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$userMediaOwner->_id.'/media');
+        $r                   = $this->withHeaders(['X-DEVICE-ID' => 'random-string'])
+            ->get('/v1/user/' . $userMediaOwner->_id . '/media');
 
         $r->assertStatus(200)
             ->assertJsonPath('status', 'OK')
@@ -848,9 +848,9 @@ class MediaTest extends ApiTestCase
             )
             ->assertJsonFragment(['total_count' => 2]);
 
-        $r = $this->actingAs($user)
+        $r                   = $this->actingAs($user)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$userMediaOwner->_id.'/media');
+            ->get('/v1/user/' . $userMediaOwner->_id . '/media');
 
         $r->assertStatus(200)
             ->assertJsonPath('status', 'OK')
@@ -861,9 +861,9 @@ class MediaTest extends ApiTestCase
             )
             ->assertJsonFragment(['total_count' => 2]);
 
-        $r = $this->actingAs($userMediaOwner)
+        $r                   = $this->actingAs($userMediaOwner)
             ->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->get('/v1/user/'.$userMediaOwner->_id.'/media');
+            ->get('/v1/user/' . $userMediaOwner->_id . '/media');
 
         $r->assertStatus(200)
             ->assertJsonPath('status', 'OK')
@@ -878,10 +878,10 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function getMedias()
+    public function get_medias()
     {
-        $user = User::factory()->create();
-        $followerUser = User::factory()->create();
+        $user                          = User::factory()->create();
+        $followerUser                  = User::factory()->create();
         Media::factory()->count(3)->create(
             [
                 'visibility' => MediaVisibility::PUBLIC->value,
@@ -910,7 +910,7 @@ class MediaTest extends ApiTestCase
             ]
         );
 
-        $expectedJsonStructure = [
+        $expectedJsonStructure         = [
             'data' => [
                 'items' => [
                     [
@@ -1050,7 +1050,7 @@ class MediaTest extends ApiTestCase
             ],
         ];
 
-        $assertableJson = [
+        $assertableJson                = [
             'code' => 'integer',
             'status' => 'string',
             'uuid' => 'string',
@@ -1108,7 +1108,7 @@ class MediaTest extends ApiTestCase
             'data._meta.total_count' => 'integer',
         ];
 
-        $assertableJsonFollower = [
+        $assertableJsonFollower        = [
             'code' => 'integer',
             'status' => 'string',
             'uuid' => 'string',
@@ -1198,10 +1198,10 @@ class MediaTest extends ApiTestCase
     /**
      * @test
      */
-    public function isProtectedMediaViewPolicy()
+    public function is_protected_media_view_policy()
     {
         $mediaCreator = User::factory()->create();
-        $media = Media::factory()->for($mediaCreator, 'userObj')->create([
+        $media        = Media::factory()->for($mediaCreator, 'userObj')->create([
             'visibility' => MediaVisibility::PRIVATE->value,
             'created_by' => $mediaCreator->_id,
             'status' => MediaStatus::COMPLETED->value,
@@ -1211,9 +1211,9 @@ class MediaTest extends ApiTestCase
                 'avatar' => $mediaCreator->avatar,
             ],
         ]);
-        $mediaViewer = User::factory()->create();
+        $mediaViewer  = User::factory()->create();
         $this->actingAs($mediaViewer)->withHeaders(['X-DEVICE-ID' => 'random-string'])
-            ->json('GET', '/v1/media/'.$media->_id, [])
+            ->json('GET', '/v1/media/' . $media->_id, [])
             ->assertStatus(403)
             ->assertJson([
                 'code' => 403,

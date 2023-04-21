@@ -6,9 +6,6 @@ enum UserDocumentType: int implements Enum
 {
     use EnumEnhancements;
 
-    case ID_CARD = 0;
-    case SELFIE = 1;
-
     public function label(): string
     {
         return match ($this) {
@@ -24,4 +21,7 @@ enum UserDocumentType: int implements Enum
             self::SELFIE => 'success',
         };
     }
+
+    case ID_CARD = 0;
+    case SELFIE  = 1;
 }

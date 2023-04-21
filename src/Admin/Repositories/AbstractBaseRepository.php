@@ -7,9 +7,6 @@ class AbstractBaseRepository
     protected static $model;
 
     /**
-     * @param $offset
-     * @param $limit
-     * @param $sort
      * @return mixed
      */
     public function all($offset, $limit, $sort)
@@ -21,15 +18,11 @@ class AbstractBaseRepository
     }
 
     /**
-     * @param $offset
-     * @param $limit
-     * @param $sort
-     * @param $filters
      * @return mixed
      */
     public function getFiltered($offset, $limit, $sort, $filters)
     {
-        $query = static::$model::filter($filters)
+        $query  = static::$model::filter($filters)
             ->sortBy($sort)
             ->skip($offset)
             ->take($limit);

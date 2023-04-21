@@ -17,7 +17,7 @@ class Media extends MediaBase implements Auditable
      *
      * @var bool
      */
-    protected $auditStrict = true;
+    protected $auditStrict  = true;
 
     /**
      * Attributes to exclude from the Audit.

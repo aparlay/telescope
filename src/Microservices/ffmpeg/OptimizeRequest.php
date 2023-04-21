@@ -16,11 +16,13 @@ class OptimizeRequest extends \Google\Protobuf\Internal\Message
     /**
      * Generated from protobuf field <code>string src = 1;</code>.
      */
-    private $src = '';
+    private $src      = '';
+
     /**
      * Generated from protobuf field <code>string des = 2;</code>.
      */
-    private $des = '';
+    private $des      = '';
+
     /**
      * Generated from protobuf field <code>string username = 3;</code>.
      */
@@ -30,7 +32,7 @@ class OptimizeRequest extends \Google\Protobuf\Internal\Message
      * Constructor.
      *
      * @param array $data {
-     *     Optional. Data for populating the Message object.
+     *                    Optional. Data for populating the Message object.
      *
      *     @type string $src
      *     @type string $des
@@ -45,6 +47,7 @@ class OptimizeRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string src = 1;</code>.
+     *
      * @return string
      */
     public function getSrc()
@@ -54,7 +57,9 @@ class OptimizeRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string src = 1;</code>.
+     *
      * @param string $var
+     *
      * @return $this
      */
     public function setSrc($var)
@@ -67,6 +72,7 @@ class OptimizeRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string des = 2;</code>.
+     *
      * @return string
      */
     public function getDes()
@@ -76,7 +82,9 @@ class OptimizeRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string des = 2;</code>.
+     *
      * @param string $var
+     *
      * @return $this
      */
     public function setDes($var)
@@ -89,6 +97,7 @@ class OptimizeRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string username = 3;</code>.
+     *
      * @return string
      */
     public function getUsername()
@@ -98,7 +107,9 @@ class OptimizeRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * Generated from protobuf field <code>string username = 3;</code>.
+     *
      * @param string $var
+     *
      * @return $this
      */
     public function setUsername($var)

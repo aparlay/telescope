@@ -12,9 +12,6 @@ class AlertService extends AbstractService
 
     /**
      * Responsible to create Alert for given user.
-     *
-     * @param  Alert  $alert
-     * @return Alert
      */
     public function visited(Alert $alert): Alert
     {

@@ -19,9 +19,9 @@ class WebhookController extends Controller
     public function socket(Request $request): Response|Application|ResponseFactory
     {
         // environmental variable must be set
-        $appSecret = config('broadcasting.broadcaster.secret');
+        $appSecret         = config('broadcasting.broadcaster.secret');
 
-        $webhookSignature = $request->header('X-PUSHER-SIGNATURE', 'default');
+        $webhookSignature  = $request->header('X-PUSHER-SIGNATURE', 'default');
         $expectedSignature = hash_hmac('sha256', $request->getContent(), $appSecret, false);
 
         abort_unless($webhookSignature === $expectedSignature, 401);
@@ -47,10 +47,10 @@ class WebhookController extends Controller
     public function statusEmailUpdate(Request $request): Response|Application|ResponseFactory
     {
         // environmental variable must be set
-        //$appSecret = config('services.postfix.secret');
-        //$webhookSignature = $request->header('X-EMAIL-SIGNATURE', 'default');
-        //$expectedSignature = hash_hmac('sha256', $request->getContent(), $appSecret, false);
-        //abort_unless($webhookSignature === $expectedSignature, 401);
+        // $appSecret = config('services.postfix.secret');
+        // $webhookSignature = $request->header('X-EMAIL-SIGNATURE', 'default');
+        // $expectedSignature = hash_hmac('sha256', $request->getContent(), $appSecret, false);
+        // abort_unless($webhookSignature === $expectedSignature, 401);
 
         /*
          {
@@ -73,16 +73,16 @@ class WebhookController extends Controller
           }
          */
         $messages = $request->input('messages', []);
-        $message = end($messages);
+        $message  = end($messages);
 
-        $result = 422;
+        $result   = 422;
         if (isset($message['status'])) {
             $emailId = str_replace(['<', '>', '@waptap.com'], '', $request->input('message_id', ''));
             if (strlen($emailId) === 24) {
                 $result = Email::query()->email($emailId)->update([
                     'server' => $request->input('hostname', ''),
                     'error' => $message['error'] ?? null,
-                    'dsn' => $message['dsn'] ?? null,
+                    'dsn' => $message['dsn']     ?? null,
                     'status_label' => $message['status'],
                     'status' => match ($message['status']) {
                         'sent' => EmailStatus::DELIVERED->value,
@@ -95,7 +95,7 @@ class WebhookController extends Controller
                 $result = Email::query()->to($message['to'])->sent()->update([
                     'server' => $request->input('hostname', ''),
                     'error' => $message['error'] ?? null,
-                    'dsn' => $message['dsn'] ?? null,
+                    'dsn' => $message['dsn']     ?? null,
                     'status_label' => $message['status'],
                     'status' => match ($message['status']) {
                         'sent' => EmailStatus::DELIVERED->value,
@@ -107,7 +107,7 @@ class WebhookController extends Controller
             }
         }
 
-        $code = ($result > 0) ? Response::HTTP_CREATED : Response::HTTP_OK;
+        $code     = ($result > 0) ? Response::HTTP_CREATED : Response::HTTP_OK;
 
         return response('', $code, []);
     }

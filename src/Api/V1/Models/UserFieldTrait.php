@@ -9,11 +9,13 @@ trait UserFieldTrait
     /**
      * Set the follow user attribute.
      *
+     * @param mixed $user
+     *
      * @return void
      */
     public function setUserAttribute($user)
     {
-        $user = User::user($user['_id'])->first();
+        $user                     = User::user($user['_id'])->first();
 
         $this->attributes['user'] = [
             '_id' => new ObjectId($user->_id),

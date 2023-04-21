@@ -11,9 +11,10 @@ class MediaListTest extends DuskTestCase
 {
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function visitMediaListingTest()
+    public function visit_media_listing_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.media.index'))
@@ -31,9 +32,10 @@ class MediaListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function clickViewMediaTest()
+    public function click_view_media_test()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(route('core.admin.media.index'))
@@ -45,9 +47,10 @@ class MediaListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchCreatedByTest()
+    public function search_created_by_test()
     {
         $media = Media::factory()->create();
 
@@ -63,9 +66,10 @@ class MediaListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchStatusTest()
+    public function search_status_test()
     {
         $media = Media::factory()->create();
 
@@ -81,9 +85,10 @@ class MediaListTest extends DuskTestCase
 
     /**
      * @test
+     *
      * @throws Throwable
      */
-    public function searchDateRangeTest()
+    public function search_date_range_test()
     {
         $media = Media::factory()->create();
 

@@ -13,15 +13,17 @@ class OnlineUsersListener
      */
     public function __construct()
     {
-        //
+
     }
 
     /**
      * Handle the event.
      *
-     * @param  object  $event
-     * @return void
+     * @param object $event
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @return void
      */
     public function handle($event)
     {

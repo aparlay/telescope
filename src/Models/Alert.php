@@ -18,20 +18,20 @@ use MongoDB\BSON\ObjectId;
  * Class Alert.
  *
  * @property ObjectId $_id
- * @property ObjectId $user_id
- * @property ObjectId $media_id
- * @property string $reason
- * @property int $status
- * @property int $type
+ * @property string   $aliasModel
+ * @property string   $created_at
  * @property ObjectId $created_by
+ * @property User     $creator
+ * @property ObjectId $media_id
+ * @property Media    $mediaObj
+ * @property string   $reason
+ * @property string   $slack_subject_admin_url
+ * @property int      $status
+ * @property int      $type
+ * @property string   $updated_at
  * @property ObjectId $updated_by
- * @property string $created_at
- * @property string $updated_at
- * @property User $userObj
- * @property Media $mediaObj
- * @property User $creator
- * @property string $slack_subject_admin_url
- * @property string $aliasModel
+ * @property ObjectId $user_id
+ * @property User     $userObj
  */
 class Alert extends BaseModel
 {
@@ -50,7 +50,7 @@ class Alert extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'reason',
         'user_id',
@@ -70,7 +70,7 @@ class Alert extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
         'reason' => 'string',
         'type' => 'integer',
         'status' => 'integer',
@@ -84,18 +84,11 @@ class Alert extends BaseModel
         return AlertFactory::new();
     }
 
-    /**
-     * @return AlertQueryBuilder|Builder
-     */
     public static function query(): AlertQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     * @return AlertQueryBuilder
-     */
     public function newEloquentBuilder($query): AlertQueryBuilder
     {
         return new AlertQueryBuilder($query);
@@ -104,7 +97,7 @@ class Alert extends BaseModel
     /**
      * Get the user associated with the alert.
      */
-    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function userObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -117,14 +110,11 @@ class Alert extends BaseModel
     /**
      * Get the media associated with the alert.
      */
-    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo | BelongsTo
+    public function mediaObj(): \Illuminate\Database\Eloquent\Relations\BelongsTo|BelongsTo
     {
         return $this->belongsTo(Media::class, 'media_id');
     }
 
-    /**
-     * @return array
-     */
     public static function getStatuses(): array
     {
         return [
@@ -133,9 +123,6 @@ class Alert extends BaseModel
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getTypes(): array
     {
         return [

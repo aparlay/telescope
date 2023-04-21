@@ -17,13 +17,14 @@ class SlowQueryLogger extends Notification
      */
     public function __construct(public array $queryLog = [], public string $channel = '')
     {
-        $this->channel = (! empty($channel) ? $channel : config('app.slack_slow_query'));
+        $this->channel = (!empty($channel) ? $channel : config('app.slack_slow_query'));
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -34,7 +35,8 @@ class SlowQueryLogger extends Notification
     /**
      * Get the Slack representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable)
@@ -45,7 +47,7 @@ class SlowQueryLogger extends Notification
             ->attachment(function ($attachment) {
                 $attachment->title('Slow query details')
                     ->fields([
-                        'Query Log' => '```'.json_encode($this->queryLog ?? []).'```',
+                        'Query Log' => '```' . json_encode($this->queryLog ?? []) . '```',
                     ]);
             })
             ->info();
@@ -54,13 +56,14 @@ class SlowQueryLogger extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            //
+
         ];
     }
 }

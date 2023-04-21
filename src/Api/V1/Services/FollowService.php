@@ -18,16 +18,13 @@ class FollowService
 
     /**
      * Responsible to create follow for given user.
-     *
-     * @param  User  $user
-     * @return array
      */
     public function follow(User $user): array
     {
         $statusCode = Response::HTTP_OK;
-        $creator = $this->getUser();
+        $creator    = $this->getUser();
         if (($follow = Follow::query()->creator($creator->_id)->user($user->_id)->first()) === null) {
-            $follow = Follow::create([
+            $follow     = Follow::create([
                 'user' => [
                     '_id' => new ObjectId($user->_id),
                     'username' => $user->username,
@@ -48,9 +45,6 @@ class FollowService
 
     /**
      * Responsible to unfollow the given user.
-     *
-     * @param  User  $user
-     * @return array
      */
     public function unfollow(User $user): array
     {

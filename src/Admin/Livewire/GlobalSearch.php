@@ -8,8 +8,7 @@ use Livewire\Component;
 final class GlobalSearch extends Component
 {
     public string $searchQuery = '';
-
-    public array $results = [];
+    public array $results      = [];
 
     public function render()
     {

@@ -12,9 +12,9 @@ class OptionalAuthenticate extends Authenticate
     /**
      * Handle an incoming request.
      *
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @param  mixed  ...$guards
+     * @param Request $request
+     * @param mixed   ...$guards
+     *
      * @return mixed
      */
     public function handle($request, Closure $next, ...$guards)

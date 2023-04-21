@@ -13,7 +13,7 @@ class CreateCountriesCollection extends Migration
      */
     public function up()
     {
-        if (! Schema::hasTable('countries')) {
+        if (!Schema::hasTable('countries')) {
             Schema::create('countries', function ($collection) {
                 $collection->geospatial('location', '2dsphere');
             });
@@ -21,7 +21,7 @@ class CreateCountriesCollection extends Migration
 
         Artisan::call('db:seed', [
             '--class' => CountrySeeder::class,
-            '--force'   => true,
+            '--force' => true,
         ]);
     }
 

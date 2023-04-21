@@ -6,9 +6,6 @@ enum OtpType: string implements Enum
 {
     use EnumEnhancements;
 
-    case EMAIL = 'email';
-    case SMS = 'sms';
-
     public function label(): string
     {
         return match ($this) {
@@ -24,4 +21,7 @@ enum OtpType: string implements Enum
             self::SMS => 'indigo',
         };
     }
+
+    case EMAIL = 'email';
+    case SMS   = 'sms';
 }

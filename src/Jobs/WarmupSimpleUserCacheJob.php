@@ -24,7 +24,7 @@ class WarmupSimpleUserCacheJob implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries         = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -36,13 +36,14 @@ class WarmupSimpleUserCacheJob implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 10;
+    public $backoff           = 10;
 
     /**
      * Create a new job instance.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct()
     {
@@ -52,15 +53,16 @@ class WarmupSimpleUserCacheJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function handle()
     {
         User::chunk(500, function ($users) {
             $data = [];
             foreach ($users as $user) {
-                $data['SimpleUserCast:'.$user->_id] = [
+                $data['SimpleUserCast:' . $user->_id] = [
                     '_id' => (string) $user->_id,
                     'username' => $user->username,
                     'avatar' => $user->avatar ?? Cdn::avatar('default.jpg'),

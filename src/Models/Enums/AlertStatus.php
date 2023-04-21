@@ -6,9 +6,6 @@ enum AlertStatus: int implements Enum
 {
     use EnumEnhancements;
 
-    case NOT_VISITED = -1;
-    case VISITED = 1;
-
     public function label(): string
     {
         return match ($this) {
@@ -24,4 +21,7 @@ enum AlertStatus: int implements Enum
             self::VISITED => 'warning',
         };
     }
+
+    case NOT_VISITED = -1;
+    case VISITED     = 1;
 }

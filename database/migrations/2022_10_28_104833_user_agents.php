@@ -15,7 +15,7 @@ return new class() extends Migration {
     {
         User::whereNotNull('user_agents')->chunk(200, function ($models) {
             foreach ($models as $user) {
-                $userAgents = [];
+                $userAgents        = [];
                 foreach ($user->user_agents as $key => $agent) {
                     $userAgents[] = [
                         'key' => $key,
@@ -42,6 +42,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        //
+
     }
 };

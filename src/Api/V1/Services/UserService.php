@@ -212,6 +212,10 @@ class UserService
 
     /**
      * Verifying the user.
+     *
+     * @param mixed $userAgent
+     * @param mixed $deviceId
+     * @param mixed $ip
      */
     public function logUserDevice(User|Authenticatable|null $user, $userAgent, $deviceId, $ip): void
     {

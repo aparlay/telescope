@@ -23,7 +23,6 @@ class BackblazeVideoUploader implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
-
     public User $user;
     public Media $media;
     public string $user_id;
@@ -33,7 +32,7 @@ class BackblazeVideoUploader implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries         = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -45,51 +44,52 @@ class BackblazeVideoUploader implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 10;
+    public $backoff           = 10;
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(string $userId, string $mediaId, string $file)
     {
         $this->onQueue(config('app.server_specific_queue'));
         if (($this->user = User::user($userId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'User not found with id '.$userId);
+            throw new Exception(__CLASS__ . PHP_EOL . 'User not found with id ' . $userId);
         }
 
         if (($this->media = Media::media($mediaId)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$userId);
+            throw new Exception(__CLASS__ . PHP_EOL . 'Media not found with id ' . $userId);
         }
 
-        $this->user_id = (string) $userId;
+        $this->user_id  = (string) $userId;
         $this->media_id = (string) $mediaId;
-        $this->file = $file;
+        $this->file     = $file;
     }
 
     /**
      * Execute the job.
      *
-     * @return void
      * @throws FileExistsException
      * @throws FileNotFoundException
+     *
+     * @return void
      */
     public function handle()
     {
         if (($this->user = User::user($this->user_id)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'User not found with id '.$this->user_id);
+            throw new Exception(__CLASS__ . PHP_EOL . 'User not found with id ' . $this->user_id);
         }
 
         if (($this->media = Media::media($this->media_id)->first()) === null) {
-            throw new Exception(__CLASS__.PHP_EOL.'Media not found with id '.$this->media_id);
+            throw new Exception(__CLASS__ . PHP_EOL . 'Media not found with id ' . $this->media_id);
         }
-        $storage = Storage::disk('upload');
-        $b2 = Storage::disk('b2-videos');
+        $storage     = Storage::disk('upload');
+        $b2          = Storage::disk('b2-videos');
 
-        $newFilename = md5_file($storage->path($this->file)).'.'.pathinfo($this->file, PATHINFO_EXTENSION);
+        $newFilename = md5_file($storage->path($this->file)) . '.' . pathinfo($this->file, PATHINFO_EXTENSION);
         $fileHistory = [
             'mime_type' => '',
             'hash' => '',
@@ -98,9 +98,9 @@ class BackblazeVideoUploader implements ShouldQueue
             'created_at' => DT::utcNow(),
         ];
         if ($storage->exists($this->file)) {
-            $filePath = $storage->path($this->file);
-            $fileHistory['hash'] = sha1_file($filePath);
-            $fileHistory['size'] = $storage->size($this->file);
+            $filePath                 = $storage->path($this->file);
+            $fileHistory['hash']      = sha1_file($filePath);
+            $fileHistory['size']      = $storage->size($this->file);
             $fileHistory['mime_type'] = $storage->mimeType($this->file);
             if ($b2->fileMissing($newFilename)) {
                 $b2->writeStream($newFilename, $storage->readStream($this->file));

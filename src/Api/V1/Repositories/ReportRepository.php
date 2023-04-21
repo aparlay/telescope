@@ -9,7 +9,9 @@ use Aparlay\Core\Api\V1\Models\User;
 use Aparlay\Core\Api\V1\Requests\ReportRequest;
 use Aparlay\Core\Models\Enums\ReportStatus;
 use Aparlay\Core\Models\Enums\ReportType;
+use Exception;
 use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 use MongoDB\BSON\ObjectId;
 
 class ReportRepository
@@ -18,8 +20,8 @@ class ReportRepository
 
     public function __construct($model)
     {
-        if (! ($model instanceof Report)) {
-            throw new \InvalidArgumentException('$model should be of Report type');
+        if (!($model instanceof Report)) {
+            throw new InvalidArgumentException('$model should be of Report type');
         }
 
         $this->model = $model;
@@ -28,8 +30,8 @@ class ReportRepository
     /**
      * Responsible to create report for given user.
      *
-     * @param User $user
      * @param ReportRequest $request
+     *
      * @return \Illuminate\Database\Eloquent\Model|Report|null
      */
     public function createUserReport(User $user, ReportDTO $reportDTO)
@@ -41,18 +43,18 @@ class ReportRepository
                 'status' => ReportStatus::REPORTED->value,
                 'user_id' => new ObjectId($user->_id),
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
 
-            return null;
+            return;
         }
     }
 
     /**
      * Responsible to create report for given media.
      *
-     * @param Media $media
      * @param ReportRequest $request
+     *
      * @return \Illuminate\Database\Eloquent\Model|Report|null
      */
     public function createMediaReport(Media $media, ReportDTO $reportDTO)
@@ -64,10 +66,10 @@ class ReportRepository
                 'status' => ReportStatus::REPORTED->value,
                 'media_id' => new ObjectId($media->_id),
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
 
-            return null;
+            return;
         }
     }
 }

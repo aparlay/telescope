@@ -6,11 +6,6 @@ enum VersionOs: string implements Enum
 {
     use EnumEnhancements;
 
-    case ANDROID = 'android';
-    case IOS = 'ios';
-    case WINDOWS = 'windows';
-    case LINUX = 'linux';
-
     public function label(): string
     {
         return match ($this) {
@@ -30,4 +25,9 @@ enum VersionOs: string implements Enum
             self::LINUX => 'indigo',
         };
     }
+
+    case ANDROID = 'android';
+    case IOS     = 'ios';
+    case WINDOWS = 'windows';
+    case LINUX   = 'linux';
 }

@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use MongoDB\BSON\ObjectId;
+use InvalidArgumentException;
 use Throwable;
 
 class UpdateUserMediaStatus implements ShouldQueue
@@ -25,7 +25,7 @@ class UpdateUserMediaStatus implements ShouldQueue
     /**
      * The number of times the job may be attempted.
      */
-    public int $tries = 30;
+    public int $tries         = 30;
 
     /**
      * The maximum number of unhandled exceptions to allow before failing.
@@ -37,21 +37,21 @@ class UpdateUserMediaStatus implements ShouldQueue
      *
      * @var int|array
      */
-    public $backoff = 300;
+    public $backoff           = 300;
 
     /**
      * Create a new job instance.
      *
-     * @return void
-     *
      * @throws Exception
+     *
+     * @return void
      */
     public function __construct(public string $userId, public int $status)
     {
         $this->onQueue('low');
 
-        if (! in_array($this->status, MediaStatus::getAllValues())) {
-            throw new \InvalidArgumentException(_('Status is not supported'));
+        if (!in_array($this->status, MediaStatus::getAllValues())) {
+            throw new InvalidArgumentException(_('Status is not supported'));
         }
     }
 

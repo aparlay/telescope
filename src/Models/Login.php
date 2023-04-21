@@ -7,7 +7,7 @@ namespace Aparlay\Core\Models;
  */
 class Login extends BaseModel
 {
-    public const IDENTITY_EMAIL = 'email';
+    public const IDENTITY_EMAIL        = 'email';
     public const IDENTITY_PHONE_NUMBER = 'phone_number';
-    public const IDENTITY_USERNAME = 'username';
+    public const IDENTITY_USERNAME     = 'username';
 }

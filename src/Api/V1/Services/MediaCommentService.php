@@ -14,12 +14,9 @@ use MongoDB\BSON\ObjectId;
 class MediaCommentService
 {
     use HasUserTrait;
-
-    const PER_PAGE = 10;
+    public const PER_PAGE = 10;
 
     /**
-     * @param Media $media
-     *
      * @return CursorPaginator
      */
     public function list(Media $media)
@@ -41,16 +38,12 @@ class MediaCommentService
     }
 
     /**
-     * @param  Media  $media
-     * @param         $text
-     * @param  array  $additionalData
-     *
-     * @return MediaComment
+     * @param array $additionalData
      */
     public function create(Media $media, $text, $additionalData = []): MediaComment
     {
-        $creator = $this->getUser();
-        $defaultData = [
+        $creator      = $this->getUser();
+        $defaultData  = [
             'text' => $text,
             'media_id' => new ObjectId($media->_id),
             'user_id' => new ObjectId($media->creator['_id']),
@@ -73,11 +66,11 @@ class MediaCommentService
     public function createReply(MediaComment $replyTo, $text)
     {
         /** @var Media $mediaObj */
-        $mediaObj = $replyTo->mediaObj;
-        $replyToUser = $replyTo->creatorObj;
-        $parent = $replyTo->parentObj ?? $replyTo;
+        $mediaObj          = $replyTo->mediaObj;
+        $replyToUser       = $replyTo->creatorObj;
+        $parent            = $replyTo->parentObj ?? $replyTo;
 
-        $additionalData = [
+        $additionalData    = [
             'reply_to_user' => [
                 '_id' => new ObjectId($replyToUser->_id),
                 'username' => $replyToUser->username,
@@ -91,8 +84,8 @@ class MediaCommentService
         $mediaCommentReply = $this->create($mediaObj, $text, $additionalData);
 
         $parent->replies_count++;
-        if (! $parent->first_reply) {
-            $parent->first_reply = (new MediaCommentResource($mediaCommentReply))->resolve();
+        if (!$parent->first_reply) {
+            $parent->first_reply         = (new MediaCommentResource($mediaCommentReply))->resolve();
             $mediaCommentReply->is_first = true;
             $mediaCommentReply->save();
         }
@@ -103,7 +96,6 @@ class MediaCommentService
     }
 
     /**
-     * @param MediaComment $mediaComment
      * @return mixed
      */
     public function delete(MediaComment $mediaComment)

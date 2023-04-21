@@ -21,21 +21,19 @@ class MediaCommentController extends Controller
     }
 
     /**
-     * @param Media $media
-     * @return Response
      * @throws AuthorizationException
+     *
+     * @return Response
      */
     public function list(Media $media)
     {
         $this->authorize('view', [MediaComment::class, $media]);
         $response = $this->mediaCommentService->list($media);
 
-        return $this->response(new MediaCommentCollection($response), '', );
+        return $this->response(new MediaCommentCollection($response), '');
     }
 
     /**
-     * @param  Media  $media
-     * @param  MediaComment  $mediaComment
      * @return Response
      */
     public function like(Media $media, MediaComment $mediaComment)
@@ -47,12 +45,10 @@ class MediaCommentController extends Controller
         $this->mediaCommentLikeService->like($mediaComment);
         $mediaCommentResource = (new MediaCommentResource($mediaComment));
 
-        return $this->response($mediaCommentResource, '', );
+        return $this->response($mediaCommentResource, '');
     }
 
     /**
-     * @param  Media  $media
-     * @param  MediaComment  $mediaComment
      * @return Response
      */
     public function unlike(Media $media, MediaComment $mediaComment)
@@ -64,27 +60,23 @@ class MediaCommentController extends Controller
         $this->mediaCommentLikeService->unlike($mediaComment);
         $mediaCommentResource = (new MediaCommentResource($mediaComment));
 
-        return $this->response($mediaCommentResource, '', );
+        return $this->response($mediaCommentResource, '');
     }
 
     /**
-     * @param  Media  $media
-     * @param  MediaComment  $mediaComment
-     * @return Response
      * @throws AuthorizationException
+     *
+     * @return Response
      */
     public function listReplies(Media $media, MediaComment $mediaComment)
     {
         $this->authorize('view', [MediaComment::class, $media]);
         $response = $this->mediaCommentService->listReplies($mediaComment);
 
-        return $this->response(new MediaCommentCollection($response), '', );
+        return $this->response(new MediaCommentCollection($response), '');
     }
 
     /**
-     * @param  MediaCommentRequest  $request
-     * @param  Media  $media
-     * @return Response
      * @throws AuthorizationException
      */
     public function store(MediaCommentRequest $request, Media $media): Response
@@ -95,17 +87,13 @@ class MediaCommentController extends Controller
             $this->mediaCommentService->setUser(auth()->user());
         }
 
-        $text = $request->input('text');
+        $text     = $request->input('text');
         $response = $this->mediaCommentService->create($media, $text);
 
         return $this->response(new MediaCommentResource($response), '', 201);
     }
 
     /**
-     * @param  Media  $media
-     * @param  MediaCommentRequest  $request
-     * @param  MediaComment  $mediaComment
-     * @return Response
      * @throws AuthorizationException
      */
     public function reply(Media $media, MediaCommentRequest $request, MediaComment $mediaComment): Response
@@ -116,16 +104,13 @@ class MediaCommentController extends Controller
             $this->mediaCommentService->setUser(auth()->user());
         }
 
-        $text = $request->input('text');
+        $text     = $request->input('text');
         $response = $this->mediaCommentService->createReply($mediaComment, $text);
 
         return $this->response(new MediaCommentResource($response), '', 201);
     }
 
     /**
-     * @param  Media  $media
-     * @param  MediaComment  $mediaComment
-     * @return Response
      * @throws AuthorizationException
      */
     public function destroy(Media $media, MediaComment $mediaComment): Response

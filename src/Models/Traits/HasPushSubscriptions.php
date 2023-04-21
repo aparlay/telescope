@@ -21,10 +21,11 @@ trait HasPushSubscriptions
     /**
      * Update (or create) subscription.
      *
-     * @param  string  $endpoint
-     * @param  string|null  $key
-     * @param  string|null  $token
-     * @param  string|null  $contentEncoding
+     * @param string      $endpoint
+     * @param string|null $key
+     * @param string|null $token
+     * @param string|null $contentEncoding
+     *
      * @return PushSubscription
      */
     public function updatePushSubscription($endpoint, $key = null, $token = null, $contentEncoding = null)
@@ -32,15 +33,15 @@ trait HasPushSubscriptions
         $subscription = PushSubscription::findByEndpoint($endpoint);
 
         if ($subscription && $this->ownsPushSubscription($subscription)) {
-            $subscription->public_key = $key;
-            $subscription->auth_token = $token;
+            $subscription->public_key       = $key;
+            $subscription->auth_token       = $token;
             $subscription->content_encoding = $contentEncoding;
             $subscription->save();
 
             return $subscription;
         }
 
-        if ($subscription && ! $this->ownsPushSubscription($subscription)) {
+        if ($subscription && !$this->ownsPushSubscription($subscription)) {
             $subscription->delete();
         }
 
@@ -57,19 +58,20 @@ trait HasPushSubscriptions
     /**
      * Determine if the model owns the given subscription.
      *
-     * @param  PushSubscription  $subscription
+     * @param PushSubscription $subscription
+     *
      * @return bool
      */
     public function ownsPushSubscription($subscription)
     {
-        return (string) $subscription->entity['_id'] === (string) $this->getKey() &&
-                        $subscription->entity['_type'] === Str::afterLast($this->getMorphClass(), '\\');
+        return (string) $subscription->entity['_id'] === (string) $this->getKey() && $subscription->entity['_type'] === Str::afterLast($this->getMorphClass(), '\\');
     }
 
     /**
      * Delete subscription by endpoint.
      *
-     * @param  string  $endpoint
+     * @param string $endpoint
+     *
      * @return void
      */
     public function deletePushSubscription($endpoint)

@@ -16,14 +16,14 @@ use MongoDB\BSON\UTCDateTime;
  *
  * @property ObjectId    $_id
  * @property UTCDateTime $created_at
- * @property UTCDateTime $updated_at
- * @property UTCDateTime $expired_at
- * @property int         $incorrect
- * @property int         $type
- * @property int         $validation
  * @property string      $device_id
+ * @property UTCDateTime $expired_at
  * @property string      $identity
+ * @property int         $incorrect
  * @property string      $otp
+ * @property int         $type
+ * @property UTCDateTime $updated_at
+ * @property int         $validation
  */
 class Otp extends BaseModel
 {
@@ -42,7 +42,7 @@ class Otp extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable   = [
         '_id',
         'identity',
         'otp',
@@ -60,7 +60,7 @@ class Otp extends BaseModel
      *
      * @var array
      */
-    protected $hidden = [
+    protected $hidden     = [
 
     ];
 
@@ -69,10 +69,9 @@ class Otp extends BaseModel
      *
      * @var array
      */
-    protected $casts = [
+    protected $casts      = [
     ];
-
-    protected $dates = [
+    protected $dates      = [
         'created_at',
         'updated_at',
         'expired_at',
@@ -86,19 +85,11 @@ class Otp extends BaseModel
         return OtpFactory::new();
     }
 
-    /**
-     * @return OtpQueryBuilder|Builder
-     */
     public static function query(): OtpQueryBuilder|Builder
     {
         return parent::query();
     }
 
-    /**
-     * @param $query
-     *
-     * @return OtpQueryBuilder
-     */
     public function newEloquentBuilder($query): OtpQueryBuilder
     {
         return new OtpQueryBuilder($query);

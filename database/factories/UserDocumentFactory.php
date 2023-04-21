@@ -6,7 +6,6 @@ use Aparlay\Core\Models\Enums\UserDocumentStatus;
 use Aparlay\Core\Models\Enums\UserDocumentType;
 use Aparlay\Core\Models\UserDocument;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use MongoDB\BSON\ObjectId;
 
 class UserDocumentFactory extends Factory
 {
@@ -24,7 +23,7 @@ class UserDocumentFactory extends Factory
      */
     public function definition()
     {
-        $type = $this->faker->randomElement([
+        $type      = $this->faker->randomElement([
             UserDocumentType::ID_CARD->value,
             UserDocumentType::SELFIE->value,
         ]);
@@ -42,7 +41,7 @@ class UserDocumentFactory extends Factory
                 UserDocumentStatus::REJECTED->value,
             ]),
             'md5' => $this->faker->md5(),
-            'file' => $docPrefix.uniqid().'.jpg',
+            'file' => $docPrefix . uniqid() . '.jpg',
             'mime_type' => 'image/jpg',
         ];
     }
