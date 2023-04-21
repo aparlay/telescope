@@ -10,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use Maklad\Permission\Models\Role;
+use MongoDB\BSON\ObjectId;
 
 class UserInfoUpdateRequest extends FormRequest
 {
