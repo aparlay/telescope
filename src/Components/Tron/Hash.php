@@ -7,7 +7,8 @@ class Hash
     /**
      * Hashing SHA-256.
      *
-     * @param bool $raw
+     * @param bool  $raw
+     * @param mixed $data
      *
      * @return string
      */
@@ -19,6 +20,8 @@ class Hash
     /**
      * Double hashing SHA-256.
      *
+     * @param mixed $data
+     *
      * @return string
      */
     public static function sha256d($data)
@@ -29,7 +32,8 @@ class Hash
     /**
      * Hashing RIPEMD160.
      *
-     * @param bool $raw
+     * @param bool  $raw
+     * @param mixed $data
      *
      * @return string
      */

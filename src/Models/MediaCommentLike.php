@@ -91,6 +91,8 @@ class MediaCommentLike extends BaseModel
     }
 
     /**
+     * @param mixed $query
+     *
      * @return MediaCommentLikeQueryBuilder
      */
     public function newEloquentBuilder($query)

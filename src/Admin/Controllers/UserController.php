@@ -40,6 +40,9 @@ class UserController extends Controller
     }
 
     /**
+     * @param mixed $userId
+     * @param mixed $direction
+     *
      * @return RedirectResponse
      */
     public function moderationNextOrPrev($userId, $direction)

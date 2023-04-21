@@ -86,6 +86,8 @@ trait FilterableResourceTrait
     /**
      * Send fields to filtrate to Resource while processing the collection.
      *
+     * @param mixed $request
+     *
      * @return array|Collection
      */
     protected function processCollection($request)
@@ -102,6 +104,8 @@ trait FilterableResourceTrait
     }
 
     /**
+     * @param mixed $name
+     *
      * @return mixed|null
      */
     public function groupOfHiddenFields($name)

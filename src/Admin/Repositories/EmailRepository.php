@@ -14,6 +14,8 @@ class EmailRepository
 
     /**
      * EmailRepository constructor.
+     *
+     * @param mixed $model
      */
     public function __construct($model)
     {
@@ -25,6 +27,10 @@ class EmailRepository
     }
 
     /**
+     * @param mixed $offset
+     * @param mixed $limit
+     * @param mixed $sort
+     *
      * @return mixed
      */
     public function all($offset, $limit, $sort)
@@ -37,6 +43,10 @@ class EmailRepository
     }
 
     /**
+     * @param mixed $offset
+     * @param mixed $limit
+     * @param mixed $sort
+     *
      * @return mixed
      */
     public function emailAjax($offset, $limit, $sort)
@@ -50,6 +60,7 @@ class EmailRepository
 
     /**
      * @param mixed|null $dateRangeFilter
+     * @param mixed      $filters
      *
      * @return mixed
      */
@@ -66,6 +77,10 @@ class EmailRepository
 
     /**
      * @param mixed|null $dateRangeFilter
+     * @param mixed      $offset
+     * @param mixed      $limit
+     * @param mixed      $sort
+     * @param mixed      $filters
      *
      * @return mixed
      */
@@ -99,6 +114,8 @@ class EmailRepository
     }
 
     /**
+     * @param mixed $id
+     *
      * @return mixed
      */
     public function find($id)

@@ -11,13 +11,9 @@ use Illuminate\Contracts\Database\Eloquent\Castable;
 class SimpleUser implements Castable
 {
     public string $_id;
-
     public string $username;
-
     public string $avatar;
-
     public bool $is_followed;
-
     public bool $is_liked;
 
     public static function castUsing(array $arguments): string

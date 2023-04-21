@@ -25,6 +25,5 @@ class UserVerificationStatusIndex extends Migration
      */
     public function down()
     {
-
     }
 }

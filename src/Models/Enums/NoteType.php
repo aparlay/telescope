@@ -74,6 +74,8 @@ enum NoteType: int implements Enum
     }
 
     /**
+     * @param mixed $message
+     *
      * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Translation\Translator|string|null
      */
     public function warningMessage(User $admin, User $user, $message)
@@ -82,6 +84,8 @@ enum NoteType: int implements Enum
     }
 
     /**
+     * @param mixed $message
+     *
      * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Translation\Translator|string|null
      */
     public function otherMessage(User $admin, User $user, $message)

@@ -39,6 +39,7 @@ class MediaCommentService
 
     /**
      * @param array $additionalData
+     * @param mixed $text
      */
     public function create(Media $media, $text, $additionalData = []): MediaComment
     {

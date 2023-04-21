@@ -59,6 +59,8 @@ class SettingRepository
     }
 
     /**
+     * @param mixed $id
+     *
      * @return Setting|Setting[]|Collection|Model
      */
     public function find($id): Model|Collection|Setting|array

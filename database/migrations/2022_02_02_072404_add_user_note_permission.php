@@ -47,6 +47,5 @@ class AddUserNotePermission extends Migration
      */
     public function down()
     {
-
     }
 }

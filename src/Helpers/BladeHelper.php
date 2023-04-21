@@ -5,6 +5,8 @@ namespace Aparlay\Core\Helpers;
 class BladeHelper
 {
     /**
+     * @param mixed $bytes
+     *
      * @return string
      */
     public static function fileSize($bytes)

@@ -81,6 +81,5 @@ class AddUserModerationQueuePermission extends Migration
      */
     public function down()
     {
-
     }
 }

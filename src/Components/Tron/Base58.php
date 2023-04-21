@@ -7,7 +7,8 @@ class Base58
     /**
      * Encodes the passed whole string to base58.
      *
-     * @param int $length
+     * @param int   $length
+     * @param mixed $num
      */
     public static function encode($num, $length = 58): string
     {

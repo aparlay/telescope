@@ -7,6 +7,10 @@ class AbstractBaseRepository
     protected static $model;
 
     /**
+     * @param mixed $offset
+     * @param mixed $limit
+     * @param mixed $sort
+     *
      * @return mixed
      */
     public function all($offset, $limit, $sort)
@@ -18,6 +22,11 @@ class AbstractBaseRepository
     }
 
     /**
+     * @param mixed $offset
+     * @param mixed $limit
+     * @param mixed $sort
+     * @param mixed $filters
+     *
      * @return mixed
      */
     public function getFiltered($offset, $limit, $sort, $filters)
