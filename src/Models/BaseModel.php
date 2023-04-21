@@ -140,6 +140,8 @@ class BaseModel extends \Jenssegers\Mongodb\Eloquent\Model
     }
 
     /**
+     * @param mixed $value
+     *
      * @return bool
      */
     public function idEqualTo($value)

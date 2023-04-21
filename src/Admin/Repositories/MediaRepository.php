@@ -53,6 +53,7 @@ class MediaRepository
 
     /**
      * @param $exeptMedia
+     * @param mixed $currentUser
      *
      * @return mixed
      */
@@ -65,6 +66,8 @@ class MediaRepository
     }
 
     /**
+     * @param mixed $currentItemId
+     *
      * @return mixed
      */
     public function prevItemToReview($currentItemId)
@@ -77,6 +80,8 @@ class MediaRepository
     }
 
     /**
+     * @param mixed $currentItemId
+     *
      * @return mixed
      */
     public function nextItemToReview($currentItemId)
@@ -89,6 +94,8 @@ class MediaRepository
     }
 
     /**
+     * @param mixed $media
+     *
      * @return mixed
      */
     public function setToUnderReview($media)

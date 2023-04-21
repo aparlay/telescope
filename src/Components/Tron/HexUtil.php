@@ -24,6 +24,8 @@ class HexUtil
 
     /**
      * Check if the string is a 16th notation.
+     *
+     * @param mixed $str
      */
     public static function isHex($str): bool
     {
@@ -50,6 +52,8 @@ class HexUtil
     }
 
     /**
+     * @param mixed $address
+     *
      * @throws Exception
      */
     public static function validate($address): bool

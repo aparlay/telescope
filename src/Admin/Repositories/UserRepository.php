@@ -41,6 +41,8 @@ class UserRepository
     }
 
     /**
+     * @param mixed $user
+     *
      * @return mixed
      */
     public function firstUnderReview($user)
@@ -96,6 +98,8 @@ class UserRepository
     }
 
     /**
+     * @param mixed $user
+     *
      * @return mixed
      */
     public function setToUnderReview($user)

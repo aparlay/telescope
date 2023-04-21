@@ -51,6 +51,8 @@ abstract class AbstractBaseFilter
     }
 
     /**
+     * @param mixed $internalName
+     *
      * @return $this
      */
     public function setInternalFieldName($internalName)

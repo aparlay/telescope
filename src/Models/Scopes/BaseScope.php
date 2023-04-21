@@ -8,6 +8,9 @@ use MongoDB\BSON\UTCDateTime;
 trait BaseScope
 {
     /**
+     * @param mixed $query
+     * @param mixed $filters
+     *
      * @return mixed
      */
     // TODO: scope too general, must refactor

@@ -619,6 +619,7 @@ trait Auditable
      * @param \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array $ids
      * @param bool                                                                     $detaching
      * @param bool                                                                     $skipUnchanged
+     * @param mixed                                                                    $relationName
      *
      * @throws AuditingException
      *

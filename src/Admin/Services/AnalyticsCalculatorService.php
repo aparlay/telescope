@@ -156,6 +156,9 @@ final class AnalyticsCalculatorService
     }
 
     /**
+     * @param mixed $from
+     * @param mixed $to
+     *
      * @throws ApiException
      */
     public function reportActiveUsers($from, $to): array
@@ -164,6 +167,9 @@ final class AnalyticsCalculatorService
     }
 
     /**
+     * @param mixed $from
+     * @param mixed $to
+     *
      * @throws ApiException
      */
     public function reportNewUsers($from, $to): array
@@ -172,6 +178,9 @@ final class AnalyticsCalculatorService
     }
 
     /**
+     * @param mixed $from
+     * @param mixed $to
+     *
      * @throws ApiException
      */
     public function reportTotalUsers($from, $to): array
@@ -180,6 +189,9 @@ final class AnalyticsCalculatorService
     }
 
     /**
+     * @param mixed $from
+     * @param mixed $to
+     *
      * @throws ApiException
      */
     public function reportUserEngagementDuration($from, $to): array
