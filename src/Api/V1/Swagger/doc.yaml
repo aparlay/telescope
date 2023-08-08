@@ -1,0 +1,3155 @@
+openapi: 3.0.0
+info:
+  title: Waptap Api
+  description: Waptap is creating an elegant web/mobile solution to share adult media
+    (video/photo) among a network of your followers.
+  termsOfService: https://www.waptap.com/terms/
+  contact:
+    email: info@waptap.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://api.waptap.dev
+    description: SwaggerHUB API Mocking
+paths:
+  "/chat/v1/broadcast":
+    get:
+      tags:
+        - Chat | Broadcast
+      summary: Get all broadcasts
+      description: Gets all broadcasts for authenticated user with a paginator
+      operationId: fetchBroadcasts
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Broadcast"
+                  code:
+                    format: integer
+                    example: 201
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Chat | Broadcast
+      summary: Create and send a broadcast
+      description: Creates a broadcast for authenticated user and starts sending
+      operationId: storeBroadcast
+      parameters:
+        - name: categories
+          in: query
+          description: array of chat categories to send the broadcast to, one or many
+          required: true
+          schema:
+            type: array
+            items:
+              description: Currently only 'subscribers' and 'fans' is supported
+              type: string
+        - name: message
+          in: query
+          description: The message for the broadcast. REQUIRED IF gallery_item_id is
+            missing
+          required: false
+          schema:
+            type: string
+        - name: gallery_item_id
+          in: query
+          description: gallery_item_id for broadcast attachment. REQUIRED IF message
+            is missing
+          required: false
+          schema:
+            type: string
+        - name: excluded_chat_ids
+          in: query
+          description: Optional array of chat_ids that are explicitly excluded from
+            getting the broadcast
+          required: false
+          schema:
+            type: array
+            items:
+              description: chat_id
+              type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Broadcast"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/broadcast/{broadcast_id}":
+    get:
+      tags:
+        - Chat | Broadcast
+      summary: Get broadcast
+      description: Get specific brodcast
+      operationId: showBroadcasts
+      parameters:
+        - name: broadcast_id
+          in: path
+          description: ID of the broadcast that should be updated
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Broadcast"
+                  code:
+                    format: integer
+                    example: 201
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/{chat_id}/call":
+    post:
+      tags:
+        - Chat | Call
+      summary: create new video call
+      description: To create a new video call from chat use this endpoint
+      operationId: createCall
+      parameters:
+        - name: chat_id
+          in: path
+          description: chat id realted to new call
+          required: true
+          schema:
+            type: string
+        - name: price
+          in: query
+          description: price of minute, for free 0
+          required: true
+          schema:
+            type: integer
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Call"
+                  code:
+                    format: integer
+                    example: 201
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/{chat_id}/call/{call_id}/reject":
+    patch:
+      tags:
+        - Chat | Call
+      summary: Reject incoming call
+      description: To reject by receiver incoming call use this endpoint
+      operationId: rejectCall
+      parameters:
+        - name: chat_id
+          in: path
+          description: id of the chat related to call
+          required: true
+          schema:
+            type: string
+        - name: call_id
+          in: path
+          description: id of the call that is going to be updated.
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/{chat_id}/call/{call_id}/answer":
+    post:
+      tags:
+        - Chat | Call
+      summary: Answer incoming call
+      description: To answer by receiver incoming call use this endpoint
+      operationId: answerCall
+      parameters:
+        - name: chat_id
+          in: path
+          description: id of the chat related to call
+          required: true
+          schema:
+            type: string
+        - name: call_id
+          in: path
+          description: id of the call that is going to be updated.
+          required: true
+          schema:
+            type: string
+        - name: credit_card_id
+          in: query
+          description: id of payment credit card
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/{chat_id}/call/{call_id}/end":
+    patch:
+      tags:
+        - Chat | Call
+      summary: End call
+      description: To end by any side active call use this endpoint
+      operationId: endCall
+      parameters:
+        - name: chat_id
+          in: path
+          description: id of the chat related to call
+          required: true
+          schema:
+            type: string
+        - name: call_id
+          in: path
+          description: id of the call that is going to be updated.
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/inboxes":
+    get:
+      tags:
+        - Chat | Chat
+      summary: get all inboxes and chat counts
+      description: User for fetching all inboxes and chat counts for each inbox
+      operationId: inboxes
+      parameters:
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Inboxes"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/user/{user_id}/chat":
+    post:
+      tags:
+        - Chat | Chat
+      summary: create new chat chat
+      description: To create a new user chat chat use this endpoint
+      operationId: createChat
+      parameters:
+        - name: user_id
+          in: query
+          description: the other chat participant user id
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Chat"
+                  message:
+                    format: string
+                    example: Entity has been created successfully!
+                  code:
+                    format: integer
+                    example: 201
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/{chat_id}":
+    get:
+      tags:
+        - Chat | Chat
+      summary: Fetch a signle chat for current user
+      description: Fetch a signle chat for current user
+      operationId: fetchChat
+      parameters:
+        - name: chat_id
+          in: path
+          description: id of the media that is going to be updated.
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Chat"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Chat | Chat
+      summary: delete user chat
+      description: To delete a user chat you need to call this endpoint
+      operationId: deleteChat
+      parameters:
+        - name: chat_id
+          in: path
+          description: id of the chat that is going to be updated.
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/many/{action}":
+    patch:
+      tags:
+        - Chat | Chat
+      summary: Perform given action on 'chat_ids' or all chats with any given 'categories'
+      description: 'Perform given action on many chat_ids or all chats with any given
+        categories. Actions: ''hide'', ''unhide'', ''mute'', ''unmute'', ''favorite'',
+        ''unfavorite'', ''block'', ''unblock'''
+      operationId: updateManyChats
+      parameters:
+        - name: chat_ids
+          in: query
+          description: array of chat ids
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: "['60237caf5e41025e1e3c80b1']"
+        - name: categories
+          in: query
+          description: array of strings. update all chats what have one or more of the
+            given cateogories (if both chat_ids and categories parameters are present,
+            both filters will be applied) 'inbox', 'vip', 'subscribers', 'followers',
+            'support', 'muted', 'favorite', 'hidden'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: index
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Chat"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/list/{category}?q={q}&filters[]={filter}":
+    get:
+      tags:
+        - Chat | Chat
+      summary: Fetch all chats for current user in a category
+      description: Fetch all chats to chat for current user
+      operationId: listChats
+      parameters:
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+        - name: category
+          in: path
+          description: list of chat under specific category. possible values would be
+            inbox, vip, subscribers, followers, followings, support
+          required: true
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: username start with
+          required: false
+          schema:
+            type: string
+        - name: filters[]
+          in: query
+          description: 'array of string, with each string representing a filter. Available
+          filters: recent, creator, unreplied'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Chat"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/delete-many":
+    post:
+      tags:
+        - Chat | Chat
+      summary: delete multiple chats at once
+      description: To delete a user chat you need to call this endpoint
+      operationId: deleteManyChat
+      parameters:
+        - name: chat_ids
+          in: query
+          description: ids of the chats that is going to be deleted.
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              example: 60237caf5e41025e1e3c80b1
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/{chat_id}/rate":
+    put:
+      tags:
+        - Chat | Chat
+      summary: Change the chat rate for the specific chat
+      description: Set the rate for the specific chat. Limited from 0 - 5
+      operationId: setChatRate
+      parameters:
+        - name: chat_id
+          in: path
+          description: chat id
+          required: true
+          schema:
+              type: string
+              example: 60237caf5e41025e1e3c80b1
+        - name: rate
+          in: query
+          description: the credit rate you want to set for this chat. 0 - 5
+          required: true
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Chat"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/gallery-item/upload/stream":
+    post:
+      tags:
+        - Chat | Gallery Item
+      summary: upload a new media into the gallery
+      description: To upload a new media file into your gallery you need to call this
+        endpoint.
+      operationId: uploadMediaFileIntoGalleryStream
+      parameters:
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+        '201':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/GalleryItem"
+                  message:
+                    format: string
+                    example: Entity has been created successfully!
+                  code:
+                    format: integer
+                    example: 201
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/400"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/gallery-item/upload/split":
+    get:
+      tags:
+        - Chat | Gallery Item
+      summary: upload a new movie
+      description: To upload a new media file you need to call this endpoint.
+      operationId: uploadMediaFileIntoGallerySplit
+      parameters:
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/GalleryItem"
+                  message:
+                    format: string
+                    example: Entity has been created successfully!
+                  code:
+                    format: integer
+                    example: 201
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '204':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/400"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/gallery-item":
+    post:
+      tags:
+        - Chat | Gallery Item
+      summary: create new gallery item
+      description: To create a new gallery item use this endpoint
+      operationId: createGalleryItem
+      parameters:
+        - name: category
+          in: query
+          description: the category of gallery item
+          required: false
+          schema:
+            type: string
+        - name: file
+          in: query
+          description: file can be form-data/multipart or it can send as string of filename
+            which is generate via upload endpoint.
+          required: false
+          schema:
+            type: string
+        - name: handler
+          in: query
+          description: file handler.
+          required: false
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/GalleryItem"
+                  message:
+                    format: string
+                    example: Entity has been created successfully!
+                  code:
+                    format: integer
+                    example: 201
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/gallery-item/category/{category}":
+    get:
+      tags:
+        - Chat | Gallery Item
+      summary: Fetch all gallery items belong to given gallery
+      description: Fetch all items inside a gallery
+      operationId: fetchGalleryItems
+      parameters:
+        - name: category
+          in: path
+          description: the category of gallery items.
+          required: true
+          schema:
+            type: string
+            example: "inbox"
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/GalleryItem"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/gallery-item/{gallery-item_id}":
+    get:
+      tags:
+        - Chat | Gallery Item
+      summary: Fetch details of a gallery item
+      description: Fetch all details of a single gallery item
+      operationId: viewGalleryById
+      parameters:
+        - name: gallery-item_id
+          in: path
+          description: id of a specific gallery item.
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/GalleryItem"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/gallery-item/handler/{handler_string}":
+    get:
+      tags:
+        - Chat | Gallery Item
+      summary: Fetch details of a gallery item
+      description: Fetch all details of a single gallery item
+      operationId: viewGalleryByHandler
+      parameters:
+        - name: handler_string
+          in: path
+          description: handler string of a specific gallery item.
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/GalleryItem"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/gallery-item/hash/{hash_string}":
+    get:
+      tags:
+        - Chat | Gallery Item
+      summary: Fetch details of a gallery item
+      description: Fetch all details of a single gallery item
+      operationId: viewGalleryByHash
+      parameters:
+        - name: hash_string
+          in: path
+          description: hash string of a specific gallery item.
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/GalleryItem"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/gallery-item/{gallery_item_id}":
+    delete:
+      tags:
+        - Chat | Gallery Item
+      summary: delete gallery
+      description: To delete a gallery you need to call this endpoint
+      operationId: deleteGallery
+      parameters:
+        - name: gallery_item_id
+          in: path
+          description: id of the media that is going to be updated.
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/{chat_id}/message":
+    get:
+      tags:
+        - Chat | Message
+      summary: Fetch messages of a chat
+      description: Fetch messages of a chat for current user
+      operationId: fetchMessages
+      parameters:
+        - name: chat_id
+          in: query
+          description: the chat id
+          required: true
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/Message"
+                  code:
+                    format: integer
+                    example: 200
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Chat | Message
+      summary: create new chat message
+      description: To create a new user chat message use this endpoint
+      operationId: createMessage
+      parameters:
+        - name: chat_id
+          in: query
+          description: the chat id
+          required: true
+          schema:
+            type: string
+        - name: gallery_item_id
+          in: query
+          description: the gallery item id
+          required: false
+          schema:
+            type: string
+        - name: text
+          in: query
+          description: the message text
+          required: false
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: the message type
+          required: false
+          schema:
+            type: string
+        - name: parent_message_id
+          in: query
+          description: Reply to specific message
+          required: false
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/Message"
+                  message:
+                    format: string
+                    example: Entity has been created successfully!
+                  code:
+                    format: integer
+                    example: 201
+                  status:
+                    format: string
+                    example: OK
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+  "/chat/v1/chat/{chat_id}/message/{message_id}?visibility=-2":
+    delete:
+      tags:
+        - Chat | Message
+      summary: delete user's message for both visibility=-2 or herself visibility=-1
+      description: To delete a user message you need to call this endpoint
+      operationId: deleteMessage
+      parameters:
+        - name: chat_id
+          in: path
+          description: id of the chat that is going to be updated.
+          required: true
+          schema:
+            type: string
+        - name: message_id
+          in: path
+          description: id of the message that is going to be updated.
+          required: true
+          schema:
+            type: string
+        - name: visibility
+          in: query
+          description: message should be deleted for all participants or current user
+            only. All=-2 only works when user is the creator of the message
+          required: false
+          schema:
+            type: string
+        - name: X-DEVICE-ID
+          in: header
+          description: unique id of the device user is going to send this request it
+            can be segment.com anonymousId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            X-Rate-Limit-Limit:
+              description: the maximum number of allowed requests during a period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Remaining:
+              description: the remaining number of allowed requests within the current
+                period
+              schema:
+                type: integer
+                format: int32
+            X-Rate-Limit-Reset:
+              description: the number of seconds to wait before having maximum number
+                of allowed requests again
+              schema:
+                type: integer
+                format: int32
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/401"
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/403"
+        '422':
+          description: DATA VALIDATION FAILED
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/422"
+        '429':
+          description: TOO MANY REQUESTS
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/429"
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    '201':
+      required:
+        - message
+        - status
+        - code
+        - data
+      properties:
+        message:
+          type: string
+          example: Entity has been created successfully!
+        status:
+          type: string
+          format: string
+          example: OK
+        code:
+          type: integer
+          format: int32
+          example: 201
+      type: object
+    '400':
+      required:
+        - name
+        - message
+        - status
+        - code
+      properties:
+        name:
+          format: string
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid chunk uploaded.
+        status:
+          type: string
+          format: string
+          example: ERROR
+        code:
+          type: integer
+          format: int32
+          example: 401
+        items:
+          type: array
+          format: array
+          items:
+            properties:
+              field:
+                type: string
+                example: username
+              message:
+                type: string
+                example: Username is not a valid email address.
+            type: object
+      type: object
+    '401':
+      required:
+        - name
+        - message
+        - status
+        - code
+      properties:
+        name:
+          format: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Unable to load and verify the token.
+        status:
+          type: string
+          format: string
+          example: ERROR
+        code:
+          type: integer
+          format: int32
+          example: 401
+        items:
+          type: array
+          format: array
+          items:
+            properties:
+              field:
+                type: string
+                example: username
+              message:
+                type: string
+                example: Username is not a valid email address.
+            type: object
+      type: object
+    '403':
+      required:
+        - name
+        - message
+        - status
+        - code
+      properties:
+        name:
+          format: string
+          example: Unauthorized
+        message:
+          type: string
+          example: You are not allowed to perform this action
+        status:
+          type: string
+          format: string
+          example: ERROR
+        code:
+          type: integer
+          format: int32
+          example: 401
+        items:
+          type: array
+          format: array
+          items:
+            properties:
+              field:
+                type: string
+                example: username
+              message:
+                type: string
+                example: Username is not a valid email address.
+            type: object
+      type: object
+    '418':
+      required:
+        - message
+        - status
+        - code
+        - data
+      properties:
+        message:
+          type: string
+          example: OTP has been sent.
+        status:
+          type: string
+          format: string
+          example: ERROR
+        code:
+          type: integer
+          format: int32
+          example: 418
+        data:
+          properties:
+            message:
+              type: string
+              example: OTP has been sent to your email.
+          type: object
+      type: object
+    '422':
+      required:
+        - name
+        - message
+        - status
+        - code
+        - items
+      properties:
+        name:
+          format: string
+          example: Data Validation Failed
+        message:
+          type: string
+          example: There are some errors in your provided data.
+        status:
+          type: string
+          format: string
+          example: ERROR
+        code:
+          type: integer
+          format: int32
+          example: 422
+        items:
+          type: array
+          format: array
+          items:
+            properties:
+              field:
+                type: string
+                example: username
+              message:
+                type: string
+                example: Username is not a valid email address.
+            type: object
+      type: object
+    '423':
+      required:
+        - name
+        - message
+        - status
+        - code
+      properties:
+        name:
+          format: string
+          example: Locked
+        message:
+          type: string
+          example: You cannot create more OTP, please wait a while to receive an otp
+            or try again later.
+        status:
+          type: string
+          format: string
+          example: ERROR
+        code:
+          type: integer
+          format: int32
+          example: 422
+      type: object
+    '429':
+      required:
+        - name
+        - message
+        - status
+        - code
+      properties:
+        name:
+          format: string
+          example: Too Many Requests
+        message:
+          type: string
+          example: Rate limit exceeded.
+        status:
+          type: string
+          format: string
+          example: ERROR
+        code:
+          type: integer
+          format: int32
+          example: 429
+      type: object
+    ChatParticipantUser:
+      title: ChatParticipantUser
+      description: Class ChatParticipantUser.
+      properties:
+        _id:
+          type: string
+          example: 602e125eb2a01c3838414439
+        username:
+          type: string
+          example: ramram
+        avatar:
+          type: string
+          example: 60237dacc7dd4171920af0e9_602a1aca94494.jpg
+        is_online:
+          type: boolean
+          example: true
+        is_verified:
+          type: boolean
+          example: false
+        categories:
+          type: array
+          items:
+            properties:
+              categories:
+                type: string
+                example: index
+            type: object
+          example: "['inbox']"
+        status:
+          type: integer
+          example: 1
+        status_label:
+          type: string
+          example: "['active']"
+        has_unread_message:
+          type: boolean
+          example: true
+        badges:
+          type: array
+          items:
+            properties:
+              type:
+                type: string
+                example: unread
+              value:
+                type: integer
+                example: 1
+            type: object
+        joined_at:
+          type: integer
+          example: 1645460470269
+        last_visited_at:
+          type: integer
+          example: 1645460470269
+      type: object
+    Broadcast:
+      properties:
+        _id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        status:
+          type: string
+          example: pending
+        categories:
+          type: array
+          items:
+            type: string
+            example: subscribers
+        message:
+          type: string
+          example: this is a text message
+        gallery_item:
+          "$ref": "#/components/schemas/GalleryItem"
+        created_by:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        created_at:
+          type: string
+          example: '1612850111566'
+        updated_at:
+          type: string
+          example: '1612850111566'
+      type: object
+    Call:
+      properties:
+        _id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        creator:
+          "$ref": "#/components/schemas/SimpleUser"
+        creator_token:
+          type: string
+          example: 007eJxTYJjYfT+o9tnzNW+mXE412/bc4duE4qD+D8f9VdxPsWWkurIrMFiamBsbmSWlJlkkm5gkGaYkmhsnmqcaGaRaGBslp6WmuS+NTxbgY2CYUP6fmZmBEQxBfHYGQyPjeBNTM2YQgwkuDuayonIBlNYiSw==
+        creator_int_id:
+          type: integer
+          example: '950922325946'
+        receiver:
+          "$ref": "#/components/schemas/SimpleUser"
+        receiver_token:
+          type: string
+          example: 007eJxTYJjYfT+o9tnzNW+mXE412/bc4duE4qD+D8f9VdxPsWWkurIrMFiamBsbmSWlJlkkm5gkGaYkmhsnmqcaGaRaGBslp6WmuS+NTxbgY2CYUP6fmZmBEQxBfHYGQyPjeBNTM2YQgwkuDuayonIBlNYiSw==
+        receiver_int_id:
+          type: integer
+          example: '950922325946'
+        status:
+          type: integer
+          example: '1'
+        status_label:
+          type: integer
+          example: '950922325946'
+        created_by:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        created_at:
+          type: string
+          example: '1612850111566'
+      type: object
+    Chat:
+      properties:
+        _id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        creator:
+          "$ref": "#/components/schemas/SimpleUser"
+        participants:
+          type: array
+          items:
+            properties:
+              participants:
+                "$ref": "#/components/schemas/ChatParticipantUser"
+            type: object
+        created_by:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        updated_by:
+          type: string
+          example:
+        created_at:
+          type: string
+          example: '1612850111566'
+        updated_at:
+          type: string
+          example: '1612850111566'
+      type: object
+    GalleryItem:
+      properties:
+        _id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        creator:
+          "$ref": "#/components/schemas/SimpleUser"
+        file:
+          type: string
+          example: https://vcdn.waptap.dev/galleries/603c7355dd67632fba3a02c2/video/7de1deee209ec960b32a1cf8cd8971b2.mov
+        cover:
+          type: string
+          example: https://acdn.waptap.dev/galleries/603c7355dd67632fba3a02c2/video/7de1deee209ec960b32a1cf8cd8971b2.jpg
+        handler:
+          type: string
+          example: 7de1deee209ec960b32a1cf8cd8971b2
+        hash:
+          type: string
+          example: 7de1deee209ec960b32a1cf8cd8971b2
+        mime_type:
+          type: string
+          example: video/quicktime
+        type:
+          description: image=1,video=2,gif=3
+          type: integer
+          example: '1'
+        type_label:
+          description: image,video,gif
+          type: string
+          example: image
+        metadata:
+          "$ref": "#/components/schemas/GalleryItemMetadata"
+        status_label:
+          type: string
+          example: completed
+        status:
+          type: integer
+          example: 3
+        media_id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        created_by:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        created_at:
+          type: string
+          example: '1612850111566'
+      type: object
+    GalleryItemMetadata:
+      properties:
+        width:
+          type: string
+          example: 1920
+        height:
+          type: integer
+          example: 1080
+        duration:
+          type: number
+          format: float
+          example: 5.85
+      type: object
+    Inboxes:
+      properties:
+        inbox:
+          type: integer
+          example: '325'
+        fans:
+          type: integer
+          example: '50'
+        subscribers:
+          type: integer
+          example: '32'
+        unreplied:
+          type: integer
+          example: '14'
+        favorites:
+          type: integer
+          example: '0'
+        vip:
+          type: integer
+          example: '0'
+        recent:
+          type: integer
+          example: '12'
+        sent_recent:
+          type: integer
+          example: '6'
+        unread:
+          type: integer
+          example: '20'
+      type: object
+    Message:
+      properties:
+        _id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        chat_id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        creator:
+          "$ref": "#/components/schemas/SimpleUser"
+        text:
+          type: string
+          example: this is a text message
+        status:
+          description: "-1,1,2,3"
+          type: integer
+          example: 1
+        status_label:
+          description: deleted,sent,delivered,seen
+          type: string
+          example: sent
+        type:
+          description: '1,2,3,4,5,6,7,8,9,50'
+          type: integer
+          example: 1
+        type_label:
+          description: text,image,gif,video,tip,subscription,exclusive content,voice
+            call,video call,system
+          type: string
+          example: text
+        visible_for:
+          type: array
+          items:
+            type: string
+            example: 60237caf5e41025e1e3c80b1
+        gallery_item:
+          "$ref": "#/components/schemas/GalleryItem"
+        parent_message_id:
+          "$ref": "#/components/schemas/Message"
+        created_by:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        created_at:
+          type: string
+          example: '1612850111566'
+      type: object
+    ListLinks:
+      title: List Links
+      description: List Links response
+      properties:
+        self:
+          properties:
+            href:
+              type: string
+              example: https://api.waptap.test/v1/media/list/602e125eb2a01c3838414439?page=1
+          type: object
+        first:
+          properties:
+            href:
+              type: string
+              example: https://api.waptap.test/v1/media/list/602e125eb2a01c3838414439?page=1
+          type: object
+        last:
+          properties:
+            href:
+              type: string
+              example: https://api.waptap.test/v1/media/list/602e125eb2a01c3838414439?page=1
+          type: object
+        next:
+          properties:
+            href:
+              type: string
+              example: https://api.waptap.test/v1/media/list/602e125eb2a01c3838414439?page=1
+          type: object
+        prev:
+          properties:
+            href:
+              type: string
+              example: https://api.waptap.test/v1/media/list/602e125eb2a01c3838414439?page=1
+          type: object
+      type: object
+    MediaWatched:
+      title: MediaWatched
+      description: Media Watched
+      properties:
+        media_id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        duration:
+          type: number
+          example: 14.32423
+      type: object
+    Meta:
+      title: Meta
+      description: Meta response
+      properties:
+        total_count:
+          type: integer
+          example: 65
+        page_count:
+          type: integer
+          example: 4
+        current_page:
+          type: integer
+          example: 1
+        per_page:
+          type: integer
+          example: 20
+      type: object
+    Register:
+      properties:
+        data:
+          "$ref": "#/components/schemas/User"
+        message:
+          type: string
+          format: string
+          example: Entity has been created successfully!
+        code:
+          type: integer
+          format: integer
+          example: 201
+        status:
+          type: string
+          format: string
+          example: OK
+      type: object
+    SimpleUser:
+      title: SimpleUser
+      description: Class SimpleUser.
+      properties:
+        _id:
+          type: string
+          example: 602e125eb2a01c3838414439
+        username:
+          type: string
+          example: ramram
+        avatar:
+          type: string
+          example: 60237dacc7dd4171920af0e9_602a1aca94494.jpg
+        is_followed:
+          type: boolean
+          example: true
+        is_liked:
+          type: boolean
+          example: true
+      type: object
+    UploadToken:
+      title: UploadToken
+      description: upload token response
+      properties:
+        data:
+          properties:
+            account_id:
+              type: string
+              example: 0a6daeaf64b4
+            api_url:
+              type: string
+              example: https://api000.backblazeb2.com
+            bucket_name:
+              type: string
+              example: waptap-videos
+            bucket_id:
+              type: string
+              example: e0fa06dd2a4eba4f76740b14
+            authorization_token:
+              type: string
+              example: 4_0000a6daeaf64b40000000002_019a68b0_803eb3_acct_m0G7t4RJShhBGxL4YfWNZaaCRO8=
+            absolute_minimum_part_size:
+              type: integer
+              example: 5000000
+            recommended_part_size:
+              type: integer
+              example: 100000000
+            filename:
+              type: string
+              example: 602e125eb2a01c3838414439_602f5a96b2276
+            upload_url:
+              type: string
+              example: https://pod-000-1077-12.backblaze.com/b2api/v2/b2_upload_file/e0fa06dd2a4eba4f76740b14/c000_v0001077_t0017
+          type: object
+        message:
+          type: string
+          format: string
+          example: Entity has been created successfully!
+        code:
+          type: integer
+          format: integer
+          example: 201
+        status:
+          type: string
+          format: string
+          example: OK
+      type: object
+    ViewLinks:
+      title: ViewLinks
+      description: View Links response
+      properties:
+        self:
+          properties:
+            href:
+              type: string
+              example: https://api.waptap.test/v1/media/602f5306613ed7487830eb14
+          type: object
+        index:
+          properties:
+            href:
+              type: string
+              example: https://api.waptap.test/v1/media/list/602f5306613ed7487830eb14
+          type: object
+      type: object
+    Block:
+      properties:
+        _id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        created_at:
+          type: string
+          example: '1612850111566'
+        creator:
+          "$ref": "#/components/schemas/SimpleUser"
+        user:
+          "$ref": "#/components/schemas/SimpleUser"
+      type: object
+    Email:
+      description: Email model.
+    Follow:
+      description: Class Follow.
+      properties:
+        _id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        status:
+          description: ACCEPTED = 1, PENDING = 0
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          example: '1612850111566'
+        creator:
+          "$ref": "#/components/schemas/SimpleUser"
+        user:
+          "$ref": "#/components/schemas/SimpleUser"
+      type: object
+    Login:
+      properties:
+        token:
+          type: string
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLmFsdWE1NTUuY29tL3YxL2xvZ2luIiwiaWF0IjoxNjgxODA0MDU0LCJleHAiOjE2ODIwMjAwNTQsIm5iZiI6MTY4MTgwNDA1NCwianRpIjoiN1AxakpTVGNVcHM1b0JYOCIsInN1YiI6IjY0M2U0YWU1OWEwNmQyZGM4MjBjY2EzMiIsInBydiI6ImMyOTQxN2E1ZDU2MjAxYzI0OWU0ODk5MjA1ODA1NDhjMWQxMGQyMWYiLCJkZXZpY2VfaWQiOiIxIn0.cUfsbTZRFUnLExSaKnwHVCckKRfMVXUaAEQGfQrKo
+        token_expired_at:
+          type: integer
+          example: 216000
+        refresh_token:
+          type: string
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLmFsdWE1NTUuY29tL3YxL2xvZ2luIiwiaWF0IjoxNjgxODA0MDU0LCJleHAiOjE2ODIwMjAwNTQsIm5iZiI6MTY4MTgwNDA1NCwianRpIjoiN1AxakpTVGNVcHM1b0JYOCIsInN1YiI6IjY0M2U0YWU1OWEwNmQyZGM4MjBjY2EzMiIsInBydiI6ImMyOTQxN2E1ZDU2MjAxYzI0OWU0ODk5MjA1ODA1NDhjMWQxMGQyMWYiLCJkZXZpY2VfaWQiOiIxIn0.cUfsbTZRFUnLExSaKnwHVCckKRfMVXUaAEQGfQrKo
+        refresh_token_expired_at:
+          type: integer
+          example: 216000
+      type: object
+    Me:
+      properties:
+        _id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        referral_id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        username:
+          type: string
+          example: john
+        full_name:
+          type: string
+          example: John Walker
+        display_name:
+          type: string
+          example: John a.k.a Walker
+        title:
+          type: string
+          example: Blogger and more
+        email:
+          type: string
+          example: john@waptap.com
+        email_verified:
+          type: boolean
+          example: true
+        phone_number:
+          type: string
+          example: "+989153023386"
+        phone_number_verified:
+          type: boolean
+          example: true
+        status:
+          description: pending=0, verified=0, active=2, suspended=3, blocked=4
+          type: integer
+          example: 1
+        bio:
+          type: string
+          example: My boo boo is the best!
+        avatar:
+          type: string
+          example: https://assets.waptap.com/avatars/60237dacc7dd4171920af0e9_602a1aca94494.jpg
+        setting:
+          type: object
+          example: "{otp: true}"
+        features:
+          type: object
+          example: "{tips: true}"
+        gender:
+          description: female=0, male=1, trans=2, not_mention=3
+          type: integer
+          example: 1
+        visibility:
+          description: private=0, public=1
+          type: integer
+          example: 1
+        block_count:
+          type: integer
+          example: 2323
+        follower_count:
+          type: integer
+          example: 2323
+        following_count:
+          type: integer
+          example: 2323
+        has_unread_chat:
+          type: boolean
+          example: true
+        has_unread_notification:
+          type: boolean
+          example: true
+        is_followed:
+          type: boolean
+          example: false
+        is_blocked:
+          type: boolean
+          example: false
+        is_limited:
+          description: Returns true if user (hasn't verified email AND doesn't have
+            successful order)
+          type: boolean
+          example: false
+        is_verified:
+          description: Returns true if user is verified OR has verification byppassed
+          type: boolean
+          example: false
+        is_verified_officially:
+          description: Returns true if user is verified oficially(This will return
+            false for verification bypassed)
+          type: boolean
+          example: false
+        like_count:
+          type: integer
+          example: 2323
+        followed_hashtag_count:
+          type: integer
+          example: 2323
+        media_count:
+          type: integer
+          example: 23
+        payout_country_alpha2:
+          type: string
+          example: us
+        country_alpha2:
+          type: string
+          example: US
+        country_alpha3:
+          type: string
+          example: USA
+        country_label:
+          type: string
+          example: United State of America
+        payout_country_label:
+          type: string
+          example: United State of America
+        country_flags:
+          type: array
+          items: {}
+        followers:
+          type: array
+          items:
+            "$ref": "#/components/schemas/User"
+        followings:
+          type: array
+          items:
+            "$ref": "#/components/schemas/User"
+        created_at:
+          type: number
+          example: 1612850111566
+        updated_at:
+          type: number
+          example: 1612850111566
+      type: object
+    Otp: {}
+    Report:
+      properties:
+        _id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        media_id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        user_id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        comment_id:
+          type: string
+          example:
+        created_at:
+          type: string
+          example: '1612850111566'
+        updated_at:
+          type: string
+          example: '1612850111566'
+        reason:
+          type: string
+          example: The video is bad
+      type: object
+    User:
+      properties:
+        _id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        referral_id:
+          type: string
+          example: 60237caf5e41025e1e3c80b1
+        username:
+          type: string
+          example: john
+        display_name:
+          type: string
+          example: John a.k.a Walker
+        title:
+          type: string
+          example: Blogger and more
+        email:
+          type: string
+          example: john@waptap.com
+        email_verified:
+          type: boolean
+          example: true
+        phone_number:
+          type: string
+          example: "+989153023386"
+        phone_number_verified:
+          type: boolean
+          example: true
+        status:
+          description: pending=0, verified=0, active=2, suspended=3, blocked=4
+          type: integer
+          example: 1
+        verification_status:
+          description: |-
+            unverified=3, pending=1, verified=2, rejected=-1, under_review=4.
+                 *
+                 * Initially user has unverified status, when he uploads some new documents he can change his status to  pending,
+                 * That indicates to admin user to pickup and moderate this user so status will be under_review. it prevents other admins
+                 * to pick up and moderate same documents and user. When admin user moderates current user and their document he can approve both documents then user status will became verified,
+                 * or reject one or both documents, then user status will be rejected and one or both documents will has rejected status
+          type: integer
+          example: 2
+        bio:
+          type: string
+          example: My boo boo is the best!
+        avatar:
+          type: string
+          example: https://assets.waptap.com/avatars/60237dacc7dd4171920af0e9_602a1aca94494.jpg
+        setting:
+          type: object
+          example: "{otp: true}"
+        features:
+          type: object
+          example: "{tips: true}"
+        gender:
+          description: female=0, male=1, trans=2, not_mention=3
+          type: integer
+          example: 1
+        visibility:
+          description: private=0, public=1
+          type: integer
+          example: 1
+        image_medias_count:
+          type: integer
+          example: 69
+        video_medias_count:
+          type: integer
+          example: 69
+        block_count:
+          type: integer
+          example: 2323
+        follower_count:
+          type: integer
+          example: 2323
+        following_count:
+          type: integer
+          example: 2323
+        is_followed:
+          type: boolean
+          example: false
+        is_blocked:
+          type: boolean
+          example: false
+        like_count:
+          type: integer
+          example: 2323
+        followed_hashtag_count:
+          type: integer
+          example: 2323
+        media_count:
+          type: integer
+          example: 23
+        followers:
+          type: array
+          items:
+            "$ref": "#/components/schemas/User"
+        followings:
+          type: array
+          items:
+            "$ref": "#/components/schemas/User"
+        country_alpha2:
+          type: string
+          example: LT
+        country_label:
+          type: string
+          example: Lithuania
+        city:
+          type: string
+          example: Kaunas
+        created_at:
+          type: number
+          example: 1612850111566
+        updated_at:
+          type: number
+          example: 1612850111566
+        last_online_at:
+          type: number
+          example: 1612850111566
+      type: object
+    Version: {}
+  parameters:
+    X-DEVICE-ID:
+      name: X-DEVICE-ID
+      in: header
+      description: unique id of the device user is going to send this request it can
+        be segment.com anonymousId.
+      required: true
+      schema:
+        type: string
+  headers:
+    X-Rate-Limit-Limit:
+      description: the maximum number of allowed requests during a period
+      schema:
+        type: integer
+        format: int32
+    X-Rate-Limit-Remaining:
+      description: the remaining number of allowed requests within the current period
+      schema:
+        type: integer
+        format: int32
+    X-Rate-Limit-Reset:
+      description: the number of seconds to wait before having maximum number of allowed
+        requests again
+      schema:
+        type: integer
+        format: int32
+  securitySchemes:
+    bearerAuth:
+      type: http
+      bearerFormat: JWT
+      scheme: bearer
+tags:
+  - name: user
+    description: Operations about user
+    externalDocs:
+      description: Find out more about store
+      url: https://swagger.io
